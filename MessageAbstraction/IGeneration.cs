@@ -1,8 +1,10 @@
-﻿namespace XPoster.MessageAbstraction;
+﻿using System.Threading.Tasks;
+
+namespace XPoster.MessageAbstraction;
 
 public interface IGeneration
 {
-    public string GenerateMessage();
+    public Task<string> GenerateMessage();
     public bool SendIt { get; }
     public string Name { get; }
 }

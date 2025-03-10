@@ -43,7 +43,7 @@ namespace XPoster
                 }
 
                 // Generate message
-                var message = generator.GenerateMessage();
+                var message = await generator.GenerateMessage();
 
                 // Check if the message is empty or null
                 if (string.IsNullOrWhiteSpace(message))
