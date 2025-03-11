@@ -28,7 +28,7 @@ public class MessageBTCPowerLaw : IGeneration
         var actualValue = await CryptoUtilities.GetCryptoValue("BTC");
         if (actualValue > 0)
         {
-            msg += $"\n{100.00m - (actualValue / (decimal)value * 100):F2}% of actual";
+            msg += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}% of actual";
         }
 
         return msg;
