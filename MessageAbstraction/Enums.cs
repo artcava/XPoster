@@ -3,5 +3,6 @@
 public enum MessageSender
 {
     NoSend,
-    PowerLaw
+    PowerLaw,
+    SummaryFeed
 }

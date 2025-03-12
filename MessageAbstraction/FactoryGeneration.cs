@@ -12,6 +12,8 @@ public static class FactoryGeneration
         {
             case MessageSender.PowerLaw:
                 return new MessageBTCPowerLaw();
+            case MessageSender.SummaryFeed:
+                return new MessageBTCFeed();
             case MessageSender.NoSend:
             default:
                 return new MessageNoSend();
@@ -22,7 +24,7 @@ public static class FactoryGeneration
     {
         { 0, MessageSender.NoSend },
         { 4, MessageSender.NoSend },
-        { 8, MessageSender.NoSend },
+        { 8, MessageSender.SummaryFeed },
         { 12, MessageSender.NoSend },
         { 16, MessageSender.PowerLaw },
         { 20, MessageSender.NoSend },

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace XPoster.Utilities;
 
-static class CryptoUtilities
+public static class CryptoUtilities
 {
     private static readonly HttpClient _client = new();
     public static async Task<decimal> GetCryptoValue(string symbol)

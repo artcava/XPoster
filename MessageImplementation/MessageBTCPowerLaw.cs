@@ -7,7 +7,8 @@ namespace XPoster.MessageImplementation;
 
 public class MessageBTCPowerLaw : IGeneration
 {
-    public bool SendIt => true;
+    private bool _sendIt = true;
+    public bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
 
     public string Name => "BTC Power Law message generator";
 

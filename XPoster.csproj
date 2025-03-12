@@ -8,6 +8,7 @@
     <PackageReference Include="linqtotwitter" Version="6.15.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.4.0" />
+    <PackageReference Include="System.ServiceModel.Syndication" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
