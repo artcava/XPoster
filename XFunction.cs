@@ -48,12 +48,22 @@ namespace XPoster
                 // Check if the message is empty or null
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                    log.LogInformation($"Empty message with {generator.Name}");
+                    log.LogInformation("Empty message with {0}", generator.Name);
                     return;
                 }
 
                 // Append a firm
                 message += "\n\n#XPoster generated";
+
+                // Check if the message is too long
+                if (message.Length > 280)
+                {
+                    log.LogInformation("Message too long: {0}", message.Length);
+                    return;
+                }
+
+                // Log message
+                log.LogInformation("Generated message: {0}", message);
 
                 // Publsh tweet
                 var tweet = await twitterContext.TweetAsync(message);
