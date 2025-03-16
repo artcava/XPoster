@@ -20,9 +20,9 @@ public static class AIUtilities
             messages = new[]
             {
                 new { role = "system", content = "You are an assistant that summarizes text concisely." },
-                new { role = "user", content = $"Summarize this text in a few sentences: {text}" }
+                new { role = "user", content = $"Summarize this text in a few sentences, keeping the summary under 250 characters: {text}" }
             },
-            max_tokens = 200, // Limit summary to 200 tokens
+            max_tokens = 60, // Limit summary to 60 tokens
             temperature = 0.7 // Manage creativity (0 = more deterministic, 1 = more creative)
         };
 
