@@ -34,6 +34,6 @@ public class MessageBTCFeed() : IGeneration
             SendIt = false;
             return string.Empty;
         }
-        return summary += "\nSummary of the latest news on #Bitcoin";
+        return summary;
     }
 }
