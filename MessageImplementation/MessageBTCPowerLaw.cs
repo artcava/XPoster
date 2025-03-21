@@ -1,16 +1,19 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using XPoster.MessageAbstraction;
 using XPoster.Utilities;
 
 namespace XPoster.MessageImplementation;
 
-public class MessageBTCPowerLaw : IGeneration
+public class MessageBTCPowerLaw(ILogger log) : IGeneration
 {
     private bool _sendIt = true;
     public bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
 
     public string Name => "BTC Power Law message generator";
+
+    public bool ProduceImage { get => false; set => throw new NotImplementedException(); }
 
     public async Task<string> GenerateMessage()
     {
@@ -18,7 +21,9 @@ public class MessageBTCPowerLaw : IGeneration
         DateTime date = DateTime.Now.Date;
         if (date <= gemini)
         {
-            throw new Exception("Invalid date!");
+            log.LogError("Invalid date!");
+            _sendIt = false;
+            return string.Empty;
         }
 
         var days = (date - gemini).Days;
@@ -27,11 +32,19 @@ public class MessageBTCPowerLaw : IGeneration
         var msg = $"Value of #BTC for the #powerlaw today would be: {value:F2} #USD";
 
         var actualValue = await CryptoUtilities.GetCryptoValue("BTC");
-        if (actualValue > 0)
+        if (actualValue <= 0)
         {
-            msg += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}% of actual";
+            log.LogError("Unable to get Actual BTC value!");
+            return msg;
         }
 
+        msg += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}% of actual";
+
         return msg;
+    }
+
+    public Task<ImageMessage> GenerateMessageWithImage()
+    {
+        throw new NotImplementedException();
     }
 }

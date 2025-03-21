@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using XPoster.MessageImplementation;
 
@@ -6,14 +7,14 @@ namespace XPoster.MessageAbstraction;
 
 public static class FactoryGeneration
 {
-    public static IGeneration Generate()
+    public static IGeneration Generate(ILogger log)
     {
         switch (sendParameters[DateTimeOffset.UtcNow.Hour])
         {
             case MessageSender.PowerLaw:
-                return new MessageBTCPowerLaw();
+                return new MessageBTCPowerLaw(log);
             case MessageSender.SummaryFeed:
-                return new MessageBTCFeed();
+                return new MessageBTCFeed(log);
             case MessageSender.NoSend:
             default:
                 return new MessageNoSend();

@@ -4,6 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using XPoster.Models;
+using Azure.AI.OpenAI;
+using Azure;
+using OpenAI.Images;
 
 namespace XPoster.Utilities;
 
@@ -38,6 +41,27 @@ public static class AIUtilities
         return text;
     }
 
+    public static async Task<byte[]> GenerateImageWithOpenAI(string prompt)
+    {
+        var openAIEndpoint = "https://x-poster.openai.azure.com/";
+
+        var client = new AzureOpenAIClient(
+                        new Uri(openAIEndpoint),
+                        new AzureKeyCredential(Environment.GetEnvironmentVariable("OPENAI_IMAGE_API_KEY")));
+
+        var imageClient = client.GetImageClient("dall-e-3");
+
+        var imageResult = await imageClient.GenerateImageAsync(prompt, new()
+        {
+            Quality = GeneratedImageQuality.Standard,
+            Size = GeneratedImageSize.W1024xH1024,
+            ResponseFormat = GeneratedImageFormat.Bytes
+        });
+
+        GeneratedImage image = imageResult.Value;
+        return image.ImageBytes.ToArray();
+    }
+
     private static object GetRequestBody(string text) 
     {
         return new
@@ -52,4 +76,6 @@ public static class AIUtilities
             temperature = 0.7 // Manage creativity (0 = more deterministic, 1 = more creative)
         };
     }
+
+
 }

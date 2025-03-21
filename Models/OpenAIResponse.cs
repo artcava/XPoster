@@ -1,4 +1,6 @@
-﻿namespace XPoster.Models;
+﻿using System.Collections.Generic;
+
+namespace XPoster.Models;
 
 // Handle OpenAI response to deserialize  
 public class OpenAIResponse
@@ -15,3 +17,14 @@ public class Message
 {
     public string content { get; set; }
 }
+
+public class OpenAIImageResponse
+{
+    public List<ImageData> data { get; set; }
+}
+
+public class ImageData
+{
+    public string url { get; set; }
+}
+

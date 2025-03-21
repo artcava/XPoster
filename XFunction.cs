@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LinqToTwitter;
 using LinqToTwitter.OAuth;
@@ -14,6 +15,8 @@ namespace XPoster
         public async Task Run([TimerTrigger("0 0 */4 * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation("Twitter Function started at: {0}", DateTimeOffset.UtcNow);
+
+            const string firm = "\n\n#XPoster generated #AI powered";
 
             try
             {
@@ -33,41 +36,57 @@ namespace XPoster
                 var twitterContext = new TwitterContext(auth);
 
                 // Create message generator
-                var generator = FactoryGeneration.Generate();
+                var generator = FactoryGeneration.Generate(log);
 
-                // Check if there are messages to send
-                if (!generator.SendIt)
+                // Check if generator is enabled to send
+                if (!generator.SendIt) throw new Exception("Generator is not able to create messages to send");
+
+                var tweetId = string.Empty;
+
+                if (generator.ProduceImage)
                 {
-                    log.LogInformation("No messages to send");
-                    return;
+                    var image = await generator.GenerateMessageWithImage();
+
+                    if (!generator.SendIt) throw new Exception($"Generator {generator.Name} cannot generate messages to send");
+
+                    if (image == null) throw new Exception($"Empty image with {generator.Name}");
+
+                    if (string.IsNullOrWhiteSpace(image.Message)) throw new Exception($"Empty message with {generator.Name}");
+
+                    var media = await twitterContext.UploadMediaAsync(image.Image, "image/jpeg", "tweet_image");
+
+                    if (media == null) throw new Exception("Error uploading media");
+
+                    var imageTweet = await twitterContext.TweetMediaAsync(
+                                    text: image.Message + firm,
+                                    mediaIds: new List<string> { media.MediaID.ToString() }
+                                );
+                    if (imageTweet == null) throw new Exception("Error tweeting");
+
+                    tweetId = imageTweet.ID;
+                }
+                else
+                {
+                    var message = await generator.GenerateMessage();
+
+                    if (!generator.SendIt) throw new Exception($"Generator {generator.Name} cannot generate messages to send");
+
+                    if (string.IsNullOrWhiteSpace(message)) throw new Exception($"Empty message with {generator.Name}");
+
+                    message += firm;
+
+                    if (message.Length > 280) throw new Exception($"Message too long: {message.Length}");
+
+                    log.LogInformation("Generated message: {0}", message);
+
+                    var tweet = await twitterContext.TweetAsync(message);
+
+                    if (tweet == null) throw new Exception("Error tweeting");
+
+                    tweetId = tweet.ID;
                 }
 
-                // Generate message
-                var message = await generator.GenerateMessage();
-
-                // Check if the message is empty or null
-                if (string.IsNullOrWhiteSpace(message))
-                {
-                    log.LogInformation("Empty message with {0}", generator.Name);
-                    return;
-                }
-
-                // Append a firm
-                message += "\n\n#XPoster generated";
-
-                // Check if the message is too long
-                if (message.Length > 280)
-                {
-                    log.LogInformation("Message too long: {0}", message.Length);
-                    return;
-                }
-
-                // Log message
-                log.LogInformation("Generated message: {0}", message);
-
-                // Publsh tweet
-                var tweet = await twitterContext.TweetAsync(message);
-                log.LogInformation("Published tweet: {0} (ID: {1})", message, tweet?.ID);
+                log.LogInformation("Published tweet: (ID: {0})", tweetId);
             }
             catch (Exception ex)
             {
