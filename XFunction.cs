@@ -6,6 +6,7 @@ using LinqToTwitter.OAuth;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using XPoster.MessageAbstraction;
+using XPoster.Models;
 
 namespace XPoster
 {
@@ -39,7 +40,7 @@ namespace XPoster
                 var generator = FactoryGeneration.Generate(log);
 
                 // Check if generator is enabled to send
-                if (!generator.SendIt) throw new Exception("Generator is not able to create messages to send");
+                if (!generator.SendIt) { log.LogInformation("Generator {0} is disabled", generator.Name); return; }
 
                 var tweetId = string.Empty;
 
@@ -47,11 +48,15 @@ namespace XPoster
                 {
                     var image = await generator.GenerateMessageWithImage();
 
-                    if (!generator.SendIt) throw new Exception($"Generator {generator.Name} cannot generate messages to send");
+                    if (!generator.SendIt) { log.LogInformation($"Generator {generator.Name} cannot generate messages to send"); return; }
 
-                    if (image == null) throw new Exception($"Empty image with {generator.Name}");
+                    if (image == null) { log.LogInformation($"Empty image with {generator.Name}"); return; }
 
-                    if (string.IsNullOrWhiteSpace(image.Message)) throw new Exception($"Empty message with {generator.Name}");
+                    if (string.IsNullOrWhiteSpace(image.Message)) { log.LogInformation($"Empty message with {generator.Name}"); return; }
+
+                    if (image.Message.Length > 280) throw new Exception($"Message too long: {image.Message.Length}");
+
+                    log.LogInformation("Generated message: {0}", image.Message);
 
                     var media = await twitterContext.UploadMediaAsync(image.Image, "image/jpeg", "tweet_image");
 
@@ -69,9 +74,9 @@ namespace XPoster
                 {
                     var message = await generator.GenerateMessage();
 
-                    if (!generator.SendIt) throw new Exception($"Generator {generator.Name} cannot generate messages to send");
+                    if (!generator.SendIt) { log.LogInformation($"Generator {generator.Name} cannot generate messages to send"); return; }
 
-                    if (string.IsNullOrWhiteSpace(message)) throw new Exception($"Empty message with {generator.Name}");
+                    if (string.IsNullOrWhiteSpace(message)) { log.LogInformation($"Empty message with {generator.Name}"); return; }
 
                     message += firm;
 

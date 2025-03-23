@@ -43,7 +43,10 @@ public class MessageBTCFeed(ILogger log) : IGeneration
             return string.Empty;
         }
 
-        summary = ReplaceEveryFirstOccurenceOf(summary, new Dictionary<string, string> {{ "bitcoin", "#Bitcoin" }, { "btc", "#BTC" } });
+        summary = ReplaceEveryFirstOccurenceOf(summary, new Dictionary<string, string> {
+            { "bitcoin", "#Bitcoin" }, 
+            { "btc", "#BTC" }, 
+        });
 
         return summary;
     }
