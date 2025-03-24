@@ -95,7 +95,7 @@ namespace XPoster
             }
             catch (Exception ex)
             {
-                log.LogError("Twitter Function causes an error: {0}", ex.Message);
+                log.LogError(ex, "Twitter Function causes an error: {0}", ex.Message);
                 throw; // Throw exception for Azure monitoring
             }
 

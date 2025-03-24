@@ -35,13 +35,15 @@ public class MessageBTCFeed(ILogger log) : IGeneration
 
         string feedContent = feeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
 
-        var summary = await AIUtilities.GetSummaryFromOpenAI(feedContent);
+        var summary = await AIUtilities.GetSummaryFromOpenAI(log, feedContent);
         if (string.IsNullOrWhiteSpace(summary))
         {
             log.LogError("Unable to get summary from OpenAI");
             SendIt = false;
             return string.Empty;
         }
+
+        log.LogInformation("Generated summary: {0}", summary);
 
         summary = ReplaceEveryFirstOccurenceOf(summary, new Dictionary<string, string> {
             { "bitcoin", "#Bitcoin" }, 
@@ -53,15 +55,22 @@ public class MessageBTCFeed(ILogger log) : IGeneration
 
     public async Task<ImageMessage> GenerateMessageWithImage()
     {
-        var message = await GenerateMessage();
-        if (message == null) 
+        var summary = await GenerateMessage();
+        if (summary == null) 
         {
-            log.LogInformation("No message generated");
+            log.LogInformation("No summary generated");
             SendIt = false;
             return null;
         }
 
-        var image = await AIUtilities.GenerateImageWithOpenAI(message);
+        var prompt4Image = await AIUtilities.GetImagePromptFromOpenAI(log, summary);
+        if (string.IsNullOrWhiteSpace(prompt4Image))
+        {
+            log.LogError("Unable to get image prompt from OpenAI");
+            prompt4Image = summary;
+        }
+
+        var image = await AIUtilities.GenerateImageWithOpenAI(log, prompt4Image);
         if (image == null) 
         {
             log.LogInformation("No image generated");
@@ -71,7 +80,7 @@ public class MessageBTCFeed(ILogger log) : IGeneration
 
         return new ImageMessage
         {
-            Message = message,
+            Message = summary,
             Image = image
         };
     }
