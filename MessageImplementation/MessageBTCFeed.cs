@@ -85,7 +85,7 @@ public class MessageBTCFeed(ILogger log) : IGeneration
         };
     }
 
-    private string ReplaceEveryFirstOccurenceOf(string text, Dictionary<string,string> replacements)
+    private string ReplaceEveryFirstOccurenceOf(string text, Dictionary<string, string> replacements)
     {
         var sb = new StringBuilder(text);
 
@@ -94,10 +94,10 @@ public class MessageBTCFeed(ILogger log) : IGeneration
             string key = entry.Key;
             string value = entry.Value;
 
-            int index = Regex.Match(sb.ToString(), Regex.Escape(key), RegexOptions.IgnoreCase).Index;
-
-            if (index != -1)
+            Match match = Regex.Match(sb.ToString(), Regex.Escape(key), RegexOptions.IgnoreCase);
+            if (match.Success)
             {
+                int index = match.Index;
                 sb.Remove(index, key.Length);
                 sb.Insert(index, value);
             }

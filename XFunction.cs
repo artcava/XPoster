@@ -56,8 +56,6 @@ namespace XPoster
 
                     if (image.Message.Length > 280) throw new Exception($"Message too long: {image.Message.Length}");
 
-                    log.LogInformation("Generated message: {0}", image.Message);
-
                     var media = await twitterContext.UploadMediaAsync(image.Image, "image/jpeg", "tweet_image");
 
                     if (media == null) throw new Exception("Error uploading media");
