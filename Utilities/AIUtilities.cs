@@ -24,7 +24,7 @@ public static class AIUtilities
 
         int tries =0;
 
-        while (text != null && text.Length > 250 && tries <= 2)
+        while (text != null && text.Length > 230 && tries <= 2)
         {
             tries++;
             var response = await _client.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", GetSummary(text));
@@ -99,11 +99,11 @@ public static class AIUtilities
             model = "gpt-4o-mini",
             messages = new[]
             {
-                new { role = "system", content = "You are an assistant that summarizes text concisely. It's very important that you keep summaries under 250 characters." },
+                new { role = "system", content = "You are an assistant that summarizes text concisely. It's very important that you keep summaries under 230 characters." },
                 new { role = "user", content = $"Summarize this text in a few sentences. text: {text}" }
             },
             max_tokens = 50, // Limit summary to 50 tokens
-            temperature = 0.7 // Manage creativity (0 = more deterministic, 1 = more creative)
+            temperature = 0.5 // Manage creativity (0 = more deterministic, 1 = more creative)
         };
     }
 
@@ -118,7 +118,7 @@ public static class AIUtilities
                 new { role = "user", content = $"Generate an image prompt based on this summary: {summary}" }
             },
             max_tokens = 60, // Limita l'output a un prompt breve
-            temperature = 0.5 // Meno creatività, più aderenza al riassunto
+            temperature = 0.7 // Meno creatività, più aderenza al riassunto
         };
     }
 }
