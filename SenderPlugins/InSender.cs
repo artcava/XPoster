@@ -26,8 +26,8 @@ public class InSender : ISender
     {
         try
         {
-            var postText = message.Content + message.Firm;
             var inOwner = Environment.GetEnvironmentVariable("IN_OWNER");
+            var postText = message.Content + message.Firm;
             dynamic postPayload;
 
             if (message.Image.Length > 0) 
@@ -78,12 +78,12 @@ public class InSender : ISender
                     }
                 }
                 // Step 3: Prepare PayLoad
-                postPayload = generatePayLoad(asset, inOwner, message.Content);
+                postPayload = generatePayLoad(asset, inOwner, postText);
             }
             else
             {
                 // Step 3: Prepare PayLoad
-                postPayload = generatePayLoad(null, inOwner, message.Content);
+                postPayload = generatePayLoad(null, inOwner, postText);
             }
 
             var json = JsonSerializer.Serialize(postPayload);
@@ -97,89 +97,6 @@ public class InSender : ISender
         {
             _log.LogError(ex, ex.Message);
             return false;
-        }
-    }
-    private async Task PublishToLinkedInWithImage(string accessToken, string urn, string text, byte[] imageBytes, ILogger log)
-    {
-        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-
-        // Step 1: Initialize image upload
-        var initPayload = new
-        {
-            registerUploadRequest = new
-            {
-                recipes = new[] { "urn:li:digitalmediaRecipe:feedshare-image" },
-                owner = urn,
-                serviceRelationships = new[]
-                {
-                    new { relationshipType = "OWNER", identifier = "urn:li:userGeneratedContent" }
-                }
-            }
-        };
-
-        var initJson = JsonSerializer.Serialize(initPayload);
-        var initContent = new StringContent(initJson, Encoding.UTF8, "application/json");
-        var initResponse = await httpClient.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", initContent);
-
-        if (!initResponse.IsSuccessStatusCode)
-        {
-            log.LogError($"Failed to initialize image upload: {await initResponse.Content.ReadAsStringAsync()}");
-            return;
-        }
-
-        var initData = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(await initResponse.Content.ReadAsStringAsync());
-        string uploadUrl = initData["value"]["uploadMechanism"]["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]["uploadUrl"];
-        string asset = initData["value"]["asset"];
-
-        // Step 2: Upload image
-        using (var memoryStream = new MemoryStream(imageBytes))
-        {
-            var imageContent = new StreamContent(memoryStream);
-            imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"); // Modifica se è PNG o altro
-            var uploadResponse = await httpClient.PostAsync(uploadUrl, imageContent);
-
-            if (!uploadResponse.IsSuccessStatusCode)
-            {
-                log.LogError($"Failed to upload image: {await uploadResponse.Content.ReadAsStringAsync()}");
-                return;
-            }
-        }
-
-        // Step 3: Publish image post
-        var postPayload = new
-        {
-            author = urn,
-            lifecycleState = "PUBLISHED",
-            specificContent = new
-            {
-                shareContent = new
-                {
-                    shareCommentary = new { text = text },
-                    shareMediaCategory = "IMAGE",
-                    media = new[]
-                    {
-                            new
-                            {
-                                status = "READY",
-                                media = asset
-                            }
-                        }
-                }
-            },
-            visibility = new { visibility = "PUBLIC" }
-        };
-
-        var postJson = JsonSerializer.Serialize(postPayload);
-        var postContent = new StringContent(postJson, Encoding.UTF8, "application/json");
-        var postResponse = await httpClient.PostAsync("https://api.linkedin.com/v2/ugcPosts", postContent);
-
-        if (postResponse.IsSuccessStatusCode)
-        {
-            log.LogInformation("Successfully posted to LinkedIn with image.");
-        }
-        else
-        {
-            log.LogError($"Failed to post to LinkedIn: {await postResponse.Content.ReadAsStringAsync()}");
         }
     }
 

@@ -1,9 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
 
@@ -11,24 +8,11 @@ namespace XPoster
 {
     public class XFunction
     {
-        //[FunctionName("XPosterTest")]
-        //public static async Task<IActionResult> RunTest([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
-        //{
-        //    await ExecuteXPoster(log); // Chiama la logica del timer
-        //    return new OkResult();
-        //}
-
         [FunctionName("XPosterFunction")]
         public async Task Run([TimerTrigger("0 0 */2 * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
 
-            await ExecuteXPoster(log);
-
-            log.LogInformation($"XPoster Function ended at: {DateTimeOffset.UtcNow}");
-        }
-        private static async Task ExecuteXPoster(ILogger log)
-        {
             try
             {
                 // Create message generator
@@ -53,7 +37,8 @@ namespace XPoster
                 log.LogError(ex, "XPoster Function causes an error: {0}", ex.Message);
                 throw; // Throw exception for Azure monitoring
             }
-        }
 
+            log.LogInformation($"XPoster Function ended at: {DateTimeOffset.UtcNow}");
+        }
     }
 }
