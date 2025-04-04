@@ -15,7 +15,7 @@ namespace XPoster.Utilities;
 public static class AIUtilities
 {
     private static readonly HttpClient _client = new();
-    public static async Task<string> GetSummaryFromOpenAI(ILogger log, string text)
+    public static async Task<string> GetSummaryFromOpenAI(ILogger log, string text, int messageMaxLenght)
     {
         if (!_client.DefaultRequestHeaders.Contains("Authorization"))
         {
@@ -24,10 +24,10 @@ public static class AIUtilities
 
         int tries =0;
 
-        while (text != null && text.Length > 230 && tries <= 2)
+        while (text != null && text.Length > messageMaxLenght && tries <= 2)
         {
             tries++;
-            var response = await _client.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", GetSummary(text));
+            var response = await _client.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", GetSummary(text, messageMaxLenght));
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
                 log.LogInformation("Too many requests. Please try again later.");
@@ -92,17 +92,19 @@ public static class AIUtilities
         return image.ImageBytes.ToArray();
     }
 
-    private static object GetSummary(string text) 
+    private static object GetSummary(string text, int messageMaxLenght) 
     {
+        var maxTokens = messageMaxLenght / 5; // Approximate token count (1 token ~ 4 characters)
+        var underCharacters = messageMaxLenght - 50; // Leave space for the firm
         return new
         {
             model = "gpt-4o-mini",
             messages = new[]
             {
-                new { role = "system", content = "You are an assistant that summarizes text concisely. It's very important that you keep summaries under 230 characters." },
+                new { role = "system", content = $"You are an assistant that summarizes text concisely. It's very important that you keep summaries under {underCharacters} characters." },
                 new { role = "user", content = $"Summarize this text in a few sentences. text: {text}" }
             },
-            max_tokens = 50, // Limit summary to 50 tokens
+            max_tokens = maxTokens, // Limit summary to maxTokens tokens
             temperature = 0.5 // Manage creativity (0 = more deterministic, 1 = more creative)
         };
     }
@@ -114,7 +116,7 @@ public static class AIUtilities
             model = "gpt-4o-mini",
             messages = new[]
             {
-                new { role = "system", content = "You are an assistant that generates image prompts for DALL-E 3 based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Keep it under 200 characters." },
+                new { role = "system", content = "You are an assistant that generates image prompts for DALL-E 3 based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect policy for generating images with prompt." },
                 new { role = "user", content = $"Generate an image prompt based on this summary: {summary}" }
             },
             max_tokens = 60, // Limita l'output a un prompt breve

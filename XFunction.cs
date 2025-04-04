@@ -1,103 +1,59 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using LinqToTwitter;
-using LinqToTwitter.OAuth;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using XPoster.MessageAbstraction;
-using XPoster.Models;
+using XPoster.Abstraction;
 
 namespace XPoster
 {
     public class XFunction
     {
+        //[FunctionName("XPosterTest")]
+        //public static async Task<IActionResult> RunTest([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        //{
+        //    await ExecuteXPoster(log); // Chiama la logica del timer
+        //    return new OkResult();
+        //}
+
         [FunctionName("XPosterFunction")]
-        public async Task Run([TimerTrigger("0 0 */4 * * *")]TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("0 0 */2 * * *")]TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation("Twitter Function started at: {0}", DateTimeOffset.UtcNow);
+            log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
 
-            const string firm = "\n\n#XPoster generated #AI powered";
+            await ExecuteXPoster(log);
 
+            log.LogInformation($"XPoster Function ended at: {DateTimeOffset.UtcNow}");
+        }
+        private static async Task ExecuteXPoster(ILogger log)
+        {
             try
             {
-                // Configure credentials
-                var auth = new SingleUserAuthorizer
-                {
-                    CredentialStore = new SingleUserInMemoryCredentialStore
-                    {
-                        ConsumerKey = Environment.GetEnvironmentVariable("X_API_KEY"),
-                        ConsumerSecret = Environment.GetEnvironmentVariable("X_API_SECRET"),
-                        AccessToken = Environment.GetEnvironmentVariable("X_ACCESS_TOKEN"),
-                        AccessTokenSecret = Environment.GetEnvironmentVariable("X_ACCESS_TOKEN_SECRET")
-                    }
-                };
-
-                // Create context
-                var twitterContext = new TwitterContext(auth);
-
                 // Create message generator
                 var generator = FactoryGeneration.Generate(log);
 
                 // Check if generator is enabled to send
                 if (!generator.SendIt) { log.LogInformation("Generator {0} is disabled", generator.Name); return; }
 
-                var tweetId = string.Empty;
+                var message = await generator.GenerateAsync();
 
-                if (generator.ProduceImage)
+                if (message == null) { log.LogError($"Failed to generate {message}"); return; }
+
+                var result = await generator.SendMessageAsync(message);
+                if (!result)
                 {
-                    var image = await generator.GenerateMessageWithImage();
-
-                    if (!generator.SendIt) { log.LogInformation($"Generator {generator.Name} cannot generate messages to send"); return; }
-
-                    if (image == null) { log.LogInformation($"Empty image with {generator.Name}"); return; }
-
-                    if (string.IsNullOrWhiteSpace(image.Message)) { log.LogInformation($"Empty message with {generator.Name}"); return; }
-
-                    if (image.Message.Length > 280) throw new Exception($"Message too long: {image.Message.Length}");
-
-                    var media = await twitterContext.UploadMediaAsync(image.Image, "image/jpeg", "tweet_image");
-
-                    if (media == null) throw new Exception("Error uploading media");
-
-                    var imageTweet = await twitterContext.TweetMediaAsync(
-                                    text: image.Message + firm,
-                                    mediaIds: new List<string> { media.MediaID.ToString() }
-                                );
-                    if (imageTweet == null) throw new Exception("Error tweeting");
-
-                    tweetId = imageTweet.ID;
-                }
-                else
-                {
-                    var message = await generator.GenerateMessage();
-
-                    if (!generator.SendIt) { log.LogInformation($"Generator {generator.Name} cannot generate messages to send"); return; }
-
-                    if (string.IsNullOrWhiteSpace(message)) { log.LogInformation($"Empty message with {generator.Name}"); return; }
-
-                    message += firm;
-
-                    if (message.Length > 280) throw new Exception($"Message too long: {message.Length}");
-
-                    log.LogInformation("Generated message: {0}", message);
-
-                    var tweet = await twitterContext.TweetAsync(message);
-
-                    if (tweet == null) throw new Exception("Error tweeting");
-
-                    tweetId = tweet.ID;
+                    log.LogError($"Failed to send Message with {generator.Name}");
                 }
 
-                log.LogInformation("Published tweet: (ID: {0})", tweetId);
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "Twitter Function causes an error: {0}", ex.Message);
+                log.LogError(ex, "XPoster Function causes an error: {0}", ex.Message);
                 throw; // Throw exception for Azure monitoring
             }
-
-            log.LogInformation($"Twitter Function ended at: {DateTimeOffset.UtcNow}");
         }
+
     }
 }
