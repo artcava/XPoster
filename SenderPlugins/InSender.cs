@@ -13,7 +13,7 @@ namespace XPoster.SenderPlugins;
 public class InSender : ISender
 {
     private static readonly HttpClient httpClient = new();
-    public int MessageMaxLenght => 800;
+    public int MessageMaxLenght => 1200;
     private readonly ILogger _log;
 
     public InSender(ILogger log)
