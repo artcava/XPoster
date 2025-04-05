@@ -30,7 +30,7 @@ namespace XPoster.SenderPlugins
 
         }
 
-        public int MessageMaxLenght => 280;
+        public int MessageMaxLenght => 250;
 
         public async Task<bool> SendAsync(Message message)
         {
@@ -40,7 +40,7 @@ namespace XPoster.SenderPlugins
 
                 var tweetId = string.Empty;
 
-                if (message.Image.Length > 0)
+                if (message.Image != null && message.Image.Length > 0)
                 {
                     var media = await _twitterContext.UploadMediaAsync(message.Image, "image/jpeg", "tweet_image");
 

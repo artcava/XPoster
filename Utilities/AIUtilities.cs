@@ -22,7 +22,7 @@ public static class AIUtilities
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
         }
 
-        int tries =0;
+        int tries = 0;
 
         while (text != null && text.Length > messageMaxLenght && tries <= 2)
         {

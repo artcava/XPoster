@@ -30,7 +30,7 @@ public class InSender : ISender
             var postText = message.Content + message.Firm;
             dynamic postPayload;
 
-            if (message.Image.Length > 0) 
+            if (message.Image != null && message.Image.Length > 0)
             {
                 // Step 1: Initialize image upload
                 var initPayload = new
