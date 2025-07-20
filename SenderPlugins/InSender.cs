@@ -13,9 +13,8 @@ namespace XPoster.SenderPlugins;
 public class InSender : ISender
 {
     private static readonly HttpClient httpClient = new();
-    public int MessageMaxLenght => 800;
     private readonly ILogger _log;
-
+    public int MessageMaxLenght => 800;
     public InSender(ILogger log)
     {
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));

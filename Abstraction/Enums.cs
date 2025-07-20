@@ -5,6 +5,8 @@ public enum MessageSender
     NoSend,
     XPowerLaw,
     InPowerLaw,
+    IgPowerLow,
     XSummaryFeed,
-    InSummaryFeed
+    InSummaryFeed,
+    IgSummaryFeed,
 }

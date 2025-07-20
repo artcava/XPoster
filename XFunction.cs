@@ -8,37 +8,46 @@ namespace XPoster
 {
     public class XFunction
     {
-        [FunctionName("XPosterFunction")]
-        public async Task Run([TimerTrigger("0 0 */2 * * *")]TimerInfo myTimer, ILogger log)
+        private readonly IGeneratorFactory _generatorFactory;
+        private readonly ILogger<XFunction> _log;
+
+        public XFunction(IGeneratorFactory generatorFactory, ILogger<XFunction> log)
         {
-            log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
+            _generatorFactory = generatorFactory;
+            _log = log;
+        }
+
+        [FunctionName("XPosterFunction")]
+        public async Task Run([TimerTrigger("0 0 */2 * * *")]TimerInfo myTimer)
+        {
+            _log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
 
             try
             {
                 // Create message generator
-                var generator = FactoryGeneration.Generate(log);
+                var generator = _generatorFactory.Generate();
 
                 // Check if generator is enabled to send
-                if (!generator.SendIt) { log.LogInformation("Generator {0} is disabled", generator.Name); return; }
+                if (!generator.SendIt) { _log.LogInformation("Generator {0} is disabled", generator.Name); return; }
 
                 var message = await generator.GenerateAsync();
 
-                if (message == null) { log.LogError($"Failed to generate {message}"); return; }
+                if (message == null) { _log.LogError($"Failed to generate message with {generator.Name}"); return; }
 
                 var result = await generator.SendMessageAsync(message);
                 if (!result)
                 {
-                    log.LogError($"Failed to send Message with {generator.Name}");
+                    _log.LogError($"Failed to send Message with {generator.Name}");
                 }
 
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "XPoster Function causes an error: {0}", ex.Message);
+                _log.LogError(ex, "XPoster Function causes an error: {0}", ex.Message);
                 throw; // Throw exception for Azure monitoring
             }
 
-            log.LogInformation($"XPoster Function ended at: {DateTimeOffset.UtcNow}");
+            _log.LogInformation($"XPoster Function ended at: {DateTimeOffset.UtcNow}");
         }
     }
 }

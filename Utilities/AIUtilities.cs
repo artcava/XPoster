@@ -7,7 +7,6 @@ using XPoster.Models;
 using Azure.AI.OpenAI;
 using Azure;
 using OpenAI.Images;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
 namespace XPoster.Utilities;
