@@ -32,5 +32,7 @@ public class Startup : FunctionsStartup
         // Registriamo i servizi necessari
         builder.Services.AddTransient<ICryptoService, CryptoService>();
         builder.Services.AddSingleton<ITimeProvider, TimeProvider>();
+        builder.Services.AddTransient<IFeedService, FeedService>();
+        builder.Services.AddTransient<IAiService, AiService>();
     }
 }
