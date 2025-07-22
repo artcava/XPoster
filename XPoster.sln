@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPoster", "XPoster.csproj", "{1DE55169-2F26-4A6F-9C34-BF2F323AD40F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPoster.Tests", "..\XPoster.Tests\XPoster.Tests.csproj", "{4CD93D7E-E307-4F1E-BE01-831C216E6F80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{1DE55169-2F26-4A6F-9C34-BF2F323AD40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DE55169-2F26-4A6F-9C34-BF2F323AD40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DE55169-2F26-4A6F-9C34-BF2F323AD40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CD93D7E-E307-4F1E-BE01-831C216E6F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CD93D7E-E307-4F1E-BE01-831C216E6F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CD93D7E-E307-4F1E-BE01-831C216E6F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CD93D7E-E307-4F1E-BE01-831C216E6F80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CCF3EE4-D229-4EAE-9A97-C48A6E280027}
 	EndGlobalSection
 EndGlobal

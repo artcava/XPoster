@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XPoster.Abstraction;
 using XPoster.Implementation;
 using XPoster.SenderPlugins;
+using XPoster.Services;
 
 [assembly: FunctionsStartup(typeof(XPoster.Startup))]
 
@@ -27,5 +28,11 @@ public class Startup : FunctionsStartup
 
         // Registriamo la nuova factory come servizio
         builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
+
+        // Registriamo i servizi necessari
+        builder.Services.AddTransient<ICryptoService, CryptoService>();
+        builder.Services.AddSingleton<ITimeProvider, TimeProvider>();
+        builder.Services.AddTransient<IFeedService, FeedService>();
+        builder.Services.AddTransient<IAiService, AiService>();
     }
 }

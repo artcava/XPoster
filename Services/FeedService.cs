@@ -1,28 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using XPoster.Abstraction;
 using XPoster.Models;
 
-namespace XPoster.Utilities;
+namespace XPoster.Services;
 
-public static class FeedUtilities
+public class FeedService : IFeedService
 {
-    public static async Task<IEnumerable<RSSFeed>> GetFeeds(string url, DateTimeOffset start, DateTimeOffset end)
+    // Logger può essere iniettato se necessario
+    public async Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end)
     {
         var feeds = new List<RSSFeed>();
         try
         {
-            using var reader = XmlReader.Create(url);
+            using var reader = XmlReader.Create(url, new XmlReaderSettings { Async = true });
             var feed = SyndicationFeed.Load(reader);
-            if (feed == null)
-            {
-                return null;
-            }
+            if (feed == null) return Enumerable.Empty<RSSFeed>();
 
             feeds.AddRange(feed.Items.Where(x =>
                             x.PublishDate >= start &&
@@ -36,12 +34,8 @@ public static class FeedUtilities
                     PublishDate = item.PublishDate
                 }));
         }
-        catch (Exception)
-        {
-            return null;
-        }
-        await Task.Run(() => { });
+        catch (Exception) { return Enumerable.Empty<RSSFeed>(); }
 
-        return feeds;
+        return await Task.FromResult(feeds);
     }
 }

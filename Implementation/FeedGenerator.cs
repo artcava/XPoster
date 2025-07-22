@@ -6,12 +6,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using XPoster.Abstraction;
-using XPoster.Utilities;
 
 namespace XPoster.Implementation;
 
-public class FeedGenerator(ISender sender, ILogger logger) : BaseGenerator(sender, logger)
+public class FeedGenerator : BaseGenerator
 {
+    private readonly IFeedService _feedService;
+    private readonly IAiService _aiService;
+    private readonly ILogger _logger;
     private bool _sendIt = true;
     public override string Name => typeof(FeedGenerator).Name;
 
@@ -19,27 +21,36 @@ public class FeedGenerator(ISender sender, ILogger logger) : BaseGenerator(sende
 
     public override bool ProduceImage { get => true; set => throw new NotImplementedException(); }
 
+    public FeedGenerator(ISender sender, ILogger<FeedGenerator> logger, IFeedService feedService, IAiService aiService)
+        : base(sender, logger)
+    {
+        _logger = logger;
+        _feedService = feedService;
+        _aiService = aiService;
+    }
+
+
     public override async Task<Message> GenerateAsync()
     {
         var summary = await GenerateMessage();
         if (summary == null) 
         {
-            logger.LogInformation("No summary generated");
+            _logger.LogInformation("No summary generated");
             SendIt = false;
             return null;
         }
 
-        var prompt4Image = await AIUtilities.GetImagePromptFromOpenAI(logger, summary);
+        var prompt4Image = await _aiService.GetImagePromptAsync(summary);
         if (string.IsNullOrWhiteSpace(prompt4Image))
         {
-            logger.LogError("Unable to get image prompt from OpenAI");
+            _logger.LogError("Unable to get image prompt from OpenAI");
             prompt4Image = summary;
         }
 
-        var image = await AIUtilities.GenerateImageWithOpenAI(logger, prompt4Image);
+        var image = await _aiService.GenerateImageAsync(prompt4Image);
         if (image == null) 
         {
-            logger.LogInformation("No image generated");
+            _logger.LogInformation("No image generated");
             SendIt = false;
             return null;
         }
@@ -56,26 +67,26 @@ public class FeedGenerator(ISender sender, ILogger logger) : BaseGenerator(sende
         string url = "https://cointelegraph.com/rss/tag/bitcoin";
         var end = DateTimeOffset.UtcNow;
         var start = end.AddDays(-1);
-        var feeds = await FeedUtilities.GetFeeds(url, start, end);
+        var feeds = await _feedService.GetFeedsAsync(url, start, end);
 
         if (feeds == null || !feeds.Any())
         {
-            logger.LogInformation("No feeds found");
+            _logger.LogInformation("No feeds found");
             SendIt = false;
             return string.Empty;
         }
 
         string feedContent = feeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
 
-        var summary = await AIUtilities.GetSummaryFromOpenAI(logger, feedContent, _sender.MessageMaxLenght);
+        var summary = await _aiService.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
         if (string.IsNullOrWhiteSpace(summary))
         {
-            logger.LogError("Unable to get summary from OpenAI");
+            _logger.LogError("Unable to get summary from OpenAI");
             SendIt = false;
             return string.Empty;
         }
 
-        logger.LogInformation("Generated summary: {0}", summary);
+        _logger.LogInformation("Generated summary: {0}", summary);
 
         summary = ReplaceEveryFirstOccurenceOf(summary, new Dictionary<string, string> {
             { "bitcoin", "#Bitcoin" },
