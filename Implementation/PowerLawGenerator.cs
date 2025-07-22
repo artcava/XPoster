@@ -2,25 +2,35 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
-using XPoster.Utilities;
 
 namespace XPoster.Implementation
 {
-    public class PowerLawGenerator(ISender sender, ILogger logger) : BaseGenerator(sender, logger)
+    public class PowerLawGenerator : BaseGenerator
     {
         private bool _sendIt = true;
+        private readonly ICryptoService _cryptoService;
+        private readonly ITimeProvider _timeProvider;
+        private readonly ILogger _logger;
         public override string Name => typeof(PowerLawGenerator).Name;
 
         public override bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
         public override bool ProduceImage { get => false; set => throw new NotImplementedException(); }
 
+        public PowerLawGenerator(ISender sender, ILogger<PowerLawGenerator> logger, ICryptoService cryptoService, ITimeProvider timeProvider)
+        : base(sender, logger)
+        {
+            _logger = logger;
+            _cryptoService = cryptoService;
+            _timeProvider = timeProvider;
+        }
+
         public override async Task<Message> GenerateAsync()
         {
             DateTime gemini = new DateTime(2009, 1, 3);
-            DateTime date = DateTime.Now.Date;
+            DateTime date = _timeProvider.GetCurrentTime().Date;
             if (date <= gemini)
             {
-                logger.LogError("Invalid date!");
+                _logger.LogError("Invalid date!");
                 _sendIt = false;
                 return null;
             }
@@ -30,10 +40,10 @@ namespace XPoster.Implementation
 
             var msg = new Message { Content = $"Value of #BTC for the #powerlaw today would be: {value:F2} #USD", Image = null };
 
-            var actualValue = await CryptoUtilities.GetCryptoValue("BTC");
+            var actualValue = await _cryptoService.GetCryptoValue("BTC");
             if (actualValue <= 0)
             {
-                logger.LogError("Unable to get Actual BTC value!");
+                _logger.LogError("Unable to get Actual BTC value!");
                 return msg;
             }
 
