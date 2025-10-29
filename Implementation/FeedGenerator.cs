@@ -69,6 +69,10 @@ public class FeedGenerator : BaseGenerator
         var start = end.AddDays(-1);
         var feeds = await _feedService.GetFeedsAsync(url, start, end);
 
+        url = "https://www.coindesk.com/arc/outboundfeeds/rss";
+        var moreFeeds = await _feedService.GetFeedsAsync(url, start, end);
+        feeds = feeds.Concat(moreFeeds);
+
         if (feeds == null || !feeds.Any())
         {
             _logger.LogInformation("No feeds found");
