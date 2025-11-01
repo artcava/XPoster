@@ -1,15 +1,11 @@
-﻿using LinqToTwitter;
-using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 using XPoster.Abstraction;
 using XPoster.Models;
