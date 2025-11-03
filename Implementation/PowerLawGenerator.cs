@@ -10,7 +10,6 @@ namespace XPoster.Implementation
         private bool _sendIt = true;
         private readonly ICryptoService _cryptoService;
         private readonly ITimeProvider _timeProvider;
-        private new readonly ILogger _logger;
         public override string Name => typeof(PowerLawGenerator).Name;
 
         public override bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
@@ -19,7 +18,6 @@ namespace XPoster.Implementation
         public PowerLawGenerator(ISender sender, ILogger<PowerLawGenerator> logger, ICryptoService cryptoService, ITimeProvider timeProvider)
         : base(sender, logger)
         {
-            _logger = logger;
             _cryptoService = cryptoService;
             _timeProvider = timeProvider;
         }

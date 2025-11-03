@@ -13,7 +13,6 @@ public class FeedGenerator : BaseGenerator
 {
     private readonly IFeedService _feedService;
     private readonly IAiService _aiService;
-    private new readonly ILogger _logger;
     private bool _sendIt = true;
     public override string Name => typeof(FeedGenerator).Name;
 
@@ -24,7 +23,6 @@ public class FeedGenerator : BaseGenerator
     public FeedGenerator(ISender sender, ILogger<FeedGenerator> logger, IFeedService feedService, IAiService aiService)
         : base(sender, logger)
     {
-        _logger = logger;
         _feedService = feedService;
         _aiService = aiService;
     }

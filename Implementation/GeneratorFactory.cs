@@ -45,14 +45,25 @@ public class GeneratorFactory : IGeneratorFactory
 
             case MessageSender.NoSend:
             default:
-                return _serviceProvider.GetService(typeof(NoGenerator)) as NoGenerator;
+                // Uniformiamo: usiamo GetInstance senza sender per NoGenerator (assumendo non lo richieda)
+                return GetInstance<NoGenerator>(null); // O adatta se NoGenerator non ha bisogno di sender
         }
     }
     private T GetInstance<T>(ISender sender) where T : BaseGenerator
     {
-        // Per creare i generator, abbiamo bisogno del sender e del logger.
-        // Usiamo ActivatorUtilities per creare un'istanza passando le dipendenze che il container non può risolvere automaticamente in questo contesto (sender).
-        return (T)ActivatorUtilities.CreateInstance(this._serviceProvider, typeof(T), sender);
+        // Risolvi il logger specifico per il tipo T
+        var logger = _serviceProvider.GetRequiredService<ILogger<T>>();
+
+        // Per creare i generator, usiamo ActivatorUtilities per passare le dipendenze manuali (sender) e resolvibili (logger)
+        if (sender == null)
+        {
+            // Caso speciale per NoGenerator o simili senza sender
+            return (T)ActivatorUtilities.CreateInstance(_serviceProvider, typeof(T), logger);
+        }
+        else
+        {
+            return (T)ActivatorUtilities.CreateInstance(_serviceProvider, typeof(T), sender, logger);
+        }
     }
     private static readonly Dictionary<int, MessageSender> sendParameters = new()
         {

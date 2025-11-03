@@ -4,7 +4,7 @@ using XPoster.Abstraction;
 
 namespace XPoster.Implementation
 {
-    public class NoGenerator(ISender sender, ILogger logger) : BaseGenerator(sender, logger)
+    public class NoGenerator(ILogger logger) : BaseGenerator(null, logger)
     {
         public override string Name => typeof(NoGenerator).Name;
 

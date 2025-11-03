@@ -21,6 +21,8 @@ public abstract class BaseGenerator(ISender sender, ILogger logger) : IGenerator
 
         if (string.IsNullOrWhiteSpace(message.Content)) { _logger.LogInformation($"Empty message with {Name}"); return false; }
 
+        if (_sender == null) { _logger.LogInformation($"No sender configured with {Name}"); return false; }
+
         return await _sender.SendAsync(message);
     }
 }
