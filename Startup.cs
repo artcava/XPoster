@@ -15,6 +15,7 @@ public class Startup : FunctionsStartup
     {
         // Registra HttpClient come singleton per riutilizzare l'istanza
         builder.Services.AddHttpClient();
+        builder.Services.AddLogging();
 
         // Registra i tuoi Sender. Saranno creati quando necessari.
         builder.Services.AddTransient<XSender>();
