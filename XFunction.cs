@@ -30,11 +30,11 @@ namespace XPoster
                 // Check if generator is enabled to send
                 if (!generator.SendIt) { _log.LogInformation("Generator {0} is disabled", generator.Name); return; }
 
-                var message = await generator.GenerateAsync();
+                var post = await generator.GenerateAsync();
 
-                if (message == null) { _log.LogError($"Failed to generate message with {generator.Name}"); return; }
+                if (post == null) { _log.LogError($"Failed to generate message with {generator.Name}"); return; }
 
-                var result = await generator.SendMessageAsync(message);
+                var result = await generator.PostAsync(post);
                 if (!result)
                 {
                     _log.LogError($"Failed to send Message with {generator.Name}");

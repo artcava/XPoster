@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XPoster.Abstraction;
+using XPoster.Models;
 
 namespace XPoster.SenderPlugins;
 
@@ -32,17 +33,17 @@ public class XSender : ISender
 
     public int MessageMaxLenght => 250;
 
-    public async Task<bool> SendAsync(Message message)
+    public async Task<bool> SendAsync(Post post)
     {
         try
         {
-            var postText = message.Content + message.Firm;
+            var postText = post.Content + post.Firm;
 
             var tweetId = string.Empty;
 
-            if (message.Image != null && message.Image.Length > 0)
+            if (post.Image != null && post.Image.Length > 0)
             {
-                var media = await _twitterContext.UploadMediaAsync(message.Image, "image/jpeg", "tweet_image");
+                var media = await _twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image");
 
                 if (media == null) throw new Exception("Error uploading media");
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using XPoster.Models;
 
 namespace XPoster.Abstraction;
 
@@ -11,9 +12,9 @@ public abstract class BaseGenerator(ISender sender, ILogger logger) : IGenerator
     protected ISender _sender { get; } = sender;
     protected ILogger _logger { get; } = logger;
 
-    public abstract Task<Message> GenerateAsync();
+    public abstract Task<Post> GenerateAsync();
 
-    public virtual async Task<bool> SendMessageAsync(Message message)
+    public virtual async Task<bool> PostAsync(Post message)
     {
         if (!SendIt) { _logger.LogInformation($"Generator {Name} cannot generate messages to send"); return false; }
 

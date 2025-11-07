@@ -7,29 +7,30 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
+using XPoster.Models;
 
 namespace XPoster.SenderPlugins;
 
 public class InSender : ISender
 {
     private static readonly HttpClient httpClient = new();
-    private readonly ILogger _log;
+    private readonly ILogger _logger;
     public int MessageMaxLenght => 800;
     public InSender(ILogger log)
     {
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));
-        _log = log;
+        _logger = log;
 
     }
-    public async Task<bool> SendAsync(Message message)
+    public async Task<bool> SendAsync(Post post)
     {
         try
         {
             var inOwner = Environment.GetEnvironmentVariable("IN_OWNER");
-            var postText = message.Content + message.Firm;
+            var postText = post.Content + post.Firm;
             dynamic postPayload;
 
-            if (message.Image != null && message.Image.Length > 0)
+            if (post.Image != null && post.Image.Length > 0)
             {
                 // Step 1: Initialize image upload
                 var initPayload = new
@@ -51,7 +52,7 @@ public class InSender : ISender
 
                 if (!initResponse.IsSuccessStatusCode)
                 {
-                    _log.LogError($"Failed to initialize image upload: {await initResponse.Content.ReadAsStringAsync()}");
+                    _logger.LogError($"Failed to initialize image upload: {await initResponse.Content.ReadAsStringAsync()}");
                     return false;
                 }
 
@@ -64,7 +65,7 @@ public class InSender : ISender
                 string asset = valueElement.GetProperty("asset").GetString();
 
                 // Step 2: Upload image
-                using (var memoryStream = new MemoryStream(message.Image))
+                using (var memoryStream = new MemoryStream(post.Image))
                 {
                     var imageContent = new StreamContent(memoryStream);
                     imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"); // Modifica se è PNG o altro
@@ -72,7 +73,7 @@ public class InSender : ISender
 
                     if (!uploadResponse.IsSuccessStatusCode)
                     {
-                        _log.LogError($"Failed to upload image: {await uploadResponse.Content.ReadAsStringAsync()}");
+                        _logger.LogError($"Failed to upload image: {await uploadResponse.Content.ReadAsStringAsync()}");
                         return false;
                     }
                 }
@@ -90,11 +91,14 @@ public class InSender : ISender
             var response = await httpClient.PostAsync("https://api.linkedin.com/v2/ugcPosts", content);
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"Failed to post to LinkedIn: {await response.Content.ReadAsStringAsync()}");
+
+            _logger.LogInformation($"Post published: {await response.Content.ReadAsStringAsync()}.");
+
             return true;
         }
         catch (Exception ex)
         {
-            _log.LogError(ex, ex.Message);
+            _logger.LogError(ex, ex.Message);
             return false;
         }
     }
