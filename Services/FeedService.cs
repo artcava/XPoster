@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,9 +16,28 @@ namespace XPoster.Services;
 
 public class FeedService : IFeedService
 {
+    private readonly IMemoryCache _cache;
     // Logger può essere iniettato se necessario
-    public async Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end)
+    private readonly ILogger<FeedService> _logger;
+
+    public FeedService(IMemoryCache cache, ILogger<FeedService> logger)
     {
+        _cache = cache;
+        _logger = logger;
+    }
+
+    public async Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end, IEnumerable<string> keywords)
+    {
+        // Cache key basata su URL e intervallo temporale
+        var cacheKey = $"feeds_{url}_{start:yyyyMMdd}_{end:yyyyMMdd}";
+
+        if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed> cachedFeeds))
+        {
+            _logger.LogInformation($"Feed served from cache for {url}");
+            return cachedFeeds;
+        }
+
+
         var feeds = new List<RSSFeed>();
 
         using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
@@ -83,8 +104,10 @@ public class FeedService : IFeedService
 
                     string title = x.Title ?? string.Empty;
 
-                    return title.Contains("bitcoin", StringComparison.OrdinalIgnoreCase) ||
-                           title.Contains("btc", StringComparison.OrdinalIgnoreCase);
+                    return keywords.Any(keyword => title.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+
+                    //return title.Contains("bitcoin", StringComparison.OrdinalIgnoreCase) ||
+                    //       title.Contains("btc", StringComparison.OrdinalIgnoreCase);
                 })
                 .Select(item => new RSSFeed
                 {
@@ -99,6 +122,9 @@ public class FeedService : IFeedService
                 }));
         }
         catch (Exception) { return Enumerable.Empty<RSSFeed>(); }
+
+        // Cache per 1 giorno
+        _cache.Set(cacheKey, feeds, TimeSpan.FromHours(24));
 
         return await Task.FromResult(feeds);
     }

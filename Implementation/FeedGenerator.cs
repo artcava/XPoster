@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using XPoster.Abstraction;
+using XPoster.Models;
 
 namespace XPoster.Implementation;
 
@@ -14,6 +15,8 @@ public class FeedGenerator : BaseGenerator
     private readonly IFeedService _feedService;
     private readonly IAiService _aiService;
     private bool _sendIt = true;
+    private List<string> _feedUrls = new List<string> { "https://cointelegraph.com/rss/tag/bitcoin", "https://www.coindesk.com/arc/outboundfeeds/rss" };
+    private Dictionary<string,string> _replacements = new Dictionary<string, string> { { "bitcoin", "#Bitcoin" }, { "btc", "#BTC" }, { "blockchain", "#Blockchain" }, { "fed", "#FED" } };
     public override string Name => typeof(FeedGenerator).Name;
 
     public override bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
@@ -28,7 +31,7 @@ public class FeedGenerator : BaseGenerator
     }
 
 
-    public override async Task<Message> GenerateAsync()
+    public override async Task<Post> GenerateAsync()
     {
         var summary = await GenerateMessage();
         if (summary == null) 
@@ -53,7 +56,7 @@ public class FeedGenerator : BaseGenerator
             return null;
         }
 
-        return new Message
+        return new Post
         {
             Content = summary,
             Image = image
@@ -62,23 +65,27 @@ public class FeedGenerator : BaseGenerator
 
     private async Task<string> GenerateMessage()
     {
-        string url = "https://cointelegraph.com/rss/tag/bitcoin";
         var end = DateTimeOffset.UtcNow;
         var start = end.AddDays(-1);
-        var feeds = await _feedService.GetFeedsAsync(url, start, end);
 
-        url = "https://www.coindesk.com/arc/outboundfeeds/rss";
-        var moreFeeds = await _feedService.GetFeedsAsync(url, start, end);
-        feeds = feeds.Concat(moreFeeds);
+        var allFeeds = new List<RSSFeed>();
+        foreach (string url in _feedUrls)
+        {
+            var feeds = await _feedService.GetFeedsAsync(url, start, end, _replacements.Keys);
+            if (feeds != null && feeds.Any())
+            {
+                allFeeds.AddRange(feeds);
+            }
+        }
 
-        if (feeds == null || !feeds.Any())
+        if (!allFeeds.Any())
         {
             _logger.LogInformation("No feeds found");
             SendIt = false;
             return string.Empty;
         }
 
-        string feedContent = feeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
+        string feedContent = allFeeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
 
         var summary = await _aiService.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
         if (string.IsNullOrWhiteSpace(summary))
@@ -90,11 +97,7 @@ public class FeedGenerator : BaseGenerator
 
         _logger.LogInformation("Generated summary: {0}", summary);
 
-        summary = ReplaceEveryFirstOccurenceOf(summary, new Dictionary<string, string> {
-            { "bitcoin", "#Bitcoin" },
-            { "btc", "#BTC" },
-            { "fed", "#FED" },
-        });
+        summary = ReplaceEveryFirstOccurenceOf(summary, _replacements);
 
         return summary;
     }
@@ -107,8 +110,10 @@ public class FeedGenerator : BaseGenerator
         {
             string key = entry.Key;
             string value = entry.Value;
+            string pattern = @"\b" + Regex.Escape(key) + @"\b";
 
-            Match match = Regex.Match(sb.ToString(), Regex.Escape(key), RegexOptions.IgnoreCase);
+            Match match = Regex.Match(sb.ToString(), pattern, RegexOptions.IgnoreCase);
+
             if (match.Success)
             {
                 int index = match.Index;

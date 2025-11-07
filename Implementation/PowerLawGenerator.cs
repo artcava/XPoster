@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
+using XPoster.Models;
 
 namespace XPoster.Implementation
 {
@@ -22,7 +23,7 @@ namespace XPoster.Implementation
             _timeProvider = timeProvider;
         }
 
-        public override async Task<Message> GenerateAsync()
+        public override async Task<Post> GenerateAsync()
         {
             DateTime gemini = new DateTime(2009, 1, 3);
             DateTime date = _timeProvider.GetCurrentTime().Date;
@@ -36,18 +37,18 @@ namespace XPoster.Implementation
             var days = (date - gemini).Days;
             var value = Math.Pow(10, -17) * Math.Pow(days, 5.83d);
 
-            var msg = new Message { Content = $"Value of #BTC for the #powerlaw today would be: {value:F2} #USD", Image = null };
+            var post = new Post { Content = $"Value of #BTC for the #powerlaw today would be: {value:F2} #USD", Image = null };
 
             var actualValue = await _cryptoService.GetCryptoValue("BTC");
             if (actualValue <= 0)
             {
                 _logger.LogError("Unable to get Actual BTC value!");
-                return msg;
+                return post;
             }
 
-            msg.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}% of actual";
+            post.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}% of actual";
 
-            return msg;
+            return post;
         }
     }
 }

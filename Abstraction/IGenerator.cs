@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using XPoster.Models;
+
 namespace XPoster.Abstraction;
 public interface IGenerator
 {
     public string Name { get; }
     public bool SendIt { get; set; }
     public bool ProduceImage { get; set; }
-    public Task<Message> GenerateAsync();
-    public Task<bool> SendMessageAsync(Message message);
+    public Task<Post> GenerateAsync();
+    public Task<bool> PostAsync(Post message);
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using XPoster.Abstraction;
+using XPoster.Models;
 
 namespace XPoster.SenderPlugins
 {
@@ -30,21 +31,21 @@ namespace XPoster.SenderPlugins
 
         public int MessageMaxLenght => 2200; // Limite di Instagram per le didascalie
 
-        public async Task<bool> SendAsync(Message message)
+        public async Task<bool> SendAsync(Post post)
         {
             try
             {
-                string caption = $"{message.Content}{message.Firm}";
+                string caption = $"{post.Content}{post.Firm}";
                 if (caption.Length > MessageMaxLenght)
                 {
                     _logger.LogWarning($"Il messaggio supera il limite di {MessageMaxLenght} caratteri. Verrà troncato.");
                     caption = caption.Substring(0, MessageMaxLenght);
                 }
 
-                if (message.Image != null && message.Image.Length > 0)
+                if (post.Image != null && post.Image.Length > 0)
                 {
                     // Step 1: Carica l'immagine su un URL pubblico (es. Azure Blob Storage)
-                    string imageUrl = await UploadImageToPublicUrl(message.Image);
+                    string imageUrl = await UploadImageToPublicUrl(post.Image);
                     if (string.IsNullOrEmpty(imageUrl))
                     {
                         _logger.LogError("Impossibile caricare l'immagine per Instagram.");
