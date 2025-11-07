@@ -14,12 +14,12 @@ namespace XPoster.SenderPlugins;
 public class InSender : ISender
 {
     private static readonly HttpClient httpClient = new();
-    private readonly ILogger _logger;
+    private readonly ILogger<InSender> _logger;
     public int MessageMaxLenght => 800;
-    public InSender(ILogger log)
+    public InSender(ILogger<InSender> logger)
     {
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));
-        _logger = log;
+        _logger = logger;
 
     }
     public async Task<bool> SendAsync(Post post)

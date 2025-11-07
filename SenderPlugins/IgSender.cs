@@ -12,14 +12,14 @@ namespace XPoster.SenderPlugins
     public class IgSender : ISender
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger _logger;
+        private readonly ILogger<IgSender> _logger;
         private readonly string _accessToken;
         private readonly string _instagramAccountId;
 
-        public IgSender(ILogger log)
+        public IgSender(ILogger<IgSender> logger)
         {
             _httpClient = new HttpClient();
-            _logger = log;
+            _logger = logger;
             _accessToken = Environment.GetEnvironmentVariable("IG_ACCESS_TOKEN");
             _instagramAccountId = Environment.GetEnvironmentVariable("IG_ACCOUNT_ID");
 

@@ -12,10 +12,10 @@ namespace XPoster.SenderPlugins;
 public class XSender : ISender
 {
     private readonly TwitterContext _twitterContext;
-    private readonly ILogger _logger;
-    public XSender(ILogger log) 
+    private readonly ILogger<XSender> _logger;
+    public XSender(ILogger<XSender> loggger) 
     {
-        _logger = log;
+        _logger = loggger;
         // Configure credentials
         var auth = new SingleUserAuthorizer
         {
@@ -64,7 +64,7 @@ public class XSender : ISender
                 tweetId = tweet.ID;
             }
 
-            //_logger.LogInformation("Published tweet: (ID: {0})", tweetId);
+            _logger.LogInformation("Published tweet: (ID: {0})", tweetId);
 
             return true;
         }

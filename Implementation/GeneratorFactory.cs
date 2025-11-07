@@ -67,19 +67,11 @@ public class GeneratorFactory : IGeneratorFactory
     }
     private static readonly Dictionary<int, MessageSender> sendParameters = new()
         {
-            { 0, MessageSender.NoSend },
-            { 2, MessageSender.NoSend },
-            { 4, MessageSender.NoSend },
             { 6, MessageSender.InSummaryFeed },
             { 8, MessageSender.XSummaryFeed },
-            { 10, MessageSender.NoSend },
             //{ 10, MessageSender.IgSummaryFeed },
-            { 12, MessageSender.NoSend },
             { 14, MessageSender.InPowerLaw },
             { 16, MessageSender.XPowerLaw },
-            { 18, MessageSender.NoSend},
             //{ 18, MessageSender.IgPowerLow },
-            { 20, MessageSender.NoSend },
-            { 22, MessageSender.NoSend },
         };
 }
