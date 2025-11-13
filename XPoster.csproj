@@ -8,14 +8,6 @@
 	<FunctionsWorkerRuntime>dotnet-isolated</FunctionsWorkerRuntime>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="host.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="local.settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	<PackageReference Include="Azure.Identity" Version="1.13.2" />
 	<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.2.0" />
