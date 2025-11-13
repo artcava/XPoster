@@ -1,6 +1,4 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
 
@@ -17,7 +15,7 @@ namespace XPoster
             _log = log;
         }
 
-        [FunctionName("XPosterFunction")]
+        [Function("XPosterFunction")]
         public async Task Run([TimerTrigger("0 0 */2 * * *")]TimerInfo myTimer)
         {
             _log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
