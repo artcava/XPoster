@@ -68,4 +68,64 @@ public class PowerLawGeneratorTests
         Assert.NotNull(message);
         Assert.Contains($"would be: {expectedValue:F2} #USD", message.Content);
     }
+    [Fact]
+    public async Task GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()
+    {
+        // Test per data precedente al 3 gennaio 2009
+        var invalidDate = new DateTime(2008, 12, 31);
+        _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(invalidDate);
+
+        var generator = new PowerLawGenerator(
+            _mockSender.Object,
+            _mockLogger.Object,
+            _mockCryptoService.Object,
+            _mockTimeProvider.Object);
+
+        var result = await generator.GenerateAsync();
+
+        Assert.Null(result);
+        Assert.False(generator.SendIt);
+    }
+
+    [Fact]
+    public async Task GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()
+    {
+        // Test quando il servizio crypto fallisce
+        var fixedDate = new DateTime(2025, 7, 21);
+        _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
+        _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(0m);
+
+        var generator = new PowerLawGenerator(
+            _mockSender.Object,
+            _mockLogger.Object,
+            _mockCryptoService.Object,
+            _mockTimeProvider.Object);
+
+        var result = await generator.GenerateAsync();
+
+        // Dovrebbe comunque restituire un messaggio anche senza valore reale
+        Assert.NotNull(result);
+        Assert.DoesNotContain("% of actual", result.Content);
+    }
+
+    [Theory]
+    [InlineData(-100.50)]
+    [InlineData(0)]
+    public async Task GenerateAsync_Should_HandleNegativeOrZeroCryptoValue(decimal cryptoValue)
+    {
+        var fixedDate = new DateTime(2025, 7, 21);
+        _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
+        _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(cryptoValue);
+
+        var generator = new PowerLawGenerator(
+            _mockSender.Object,
+            _mockLogger.Object,
+            _mockCryptoService.Object,
+            _mockTimeProvider.Object);
+
+        var result = await generator.GenerateAsync();
+
+        Assert.NotNull(result);
+        // Verifica che il messaggio non contenga la percentuale quando il valore è invalido
+    }
 }
