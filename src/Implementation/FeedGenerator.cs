@@ -34,7 +34,7 @@ public class FeedGenerator : BaseGenerator
     public override async Task<Post> GenerateAsync()
     {
         var summary = await GenerateMessage();
-        if (summary == null) 
+        if (string.IsNullOrWhiteSpace(summary)) 
         {
             _logger.LogInformation("No summary generated");
             SendIt = false;

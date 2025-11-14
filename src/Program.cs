@@ -20,10 +20,10 @@ var host = new HostBuilder()
         services.AddTransient<FeedGenerator>();
         services.AddTransient<NoGenerator>();
 
+        services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
         services.AddTransient<IGeneratorFactory, GeneratorFactory>();
 
         services.AddTransient<ICryptoService, CryptoService>();
-        services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
         services.AddTransient<IFeedService, FeedService>();
         services.AddTransient<IAiService, AiService>();
     })

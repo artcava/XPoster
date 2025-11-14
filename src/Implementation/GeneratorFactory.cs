@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using XPoster.Abstraction;
+﻿using XPoster.Abstraction;
 using XPoster.SenderPlugins;
 
 namespace XPoster.Implementation;
@@ -11,21 +7,22 @@ public class GeneratorFactory : IGeneratorFactory
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<GeneratorFactory> _log;
+    private readonly ITimeProvider _timeProvider;
 
-    // Il costruttore ora riceve i servizi necessari tramite DI
-    public GeneratorFactory(IServiceProvider serviceProvider, ILogger<GeneratorFactory> log)
+    public GeneratorFactory(IServiceProvider serviceProvider, ILogger<GeneratorFactory> log, ITimeProvider timeProvider)
     {
         _serviceProvider = serviceProvider;
         _log = log;
+        _timeProvider = timeProvider;
     }
     public BaseGenerator Generate()
     {
-        var senderType = sendParameters.GetValueOrDefault(DateTimeOffset.UtcNow.Hour, MessageSender.NoSend);
+        var currentHour = _timeProvider.GetCurrentTime().Hour;
+        var senderType = sendParameters.GetValueOrDefault(currentHour, MessageSender.NoSend);
 
         switch (senderType)
         {
             case MessageSender.XPowerLaw:
-                // Risolviamo il generator dal container e gli passiamo il sender corretto
                 return GetInstance<PowerLawGenerator>(_serviceProvider.GetService(typeof(XSender)) as ISender);
 
             case MessageSender.XSummaryFeed:
@@ -45,8 +42,7 @@ public class GeneratorFactory : IGeneratorFactory
 
             case MessageSender.NoSend:
             default:
-                // Uniformiamo: usiamo GetInstance senza sender per NoGenerator (assumendo non lo richieda)
-                return GetInstance<NoGenerator>(null); // O adatta se NoGenerator non ha bisogno di sender
+                return GetInstance<NoGenerator>(null); 
         }
     }
     private T GetInstance<T>(ISender sender) where T : BaseGenerator
