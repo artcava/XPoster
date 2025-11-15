@@ -20,6 +20,9 @@ public class GeneratorFactory : IGeneratorFactory
         var currentHour = _timeProvider.GetCurrentTime().Hour;
         var senderType = sendParameters.GetValueOrDefault(currentHour, MessageSender.NoSend);
 
+        _log.LogInformation("Creating {senderType} at hour {Hour}", senderType, currentHour);
+
+
         switch (senderType)
         {
             case MessageSender.XPowerLaw:
@@ -61,6 +64,7 @@ public class GeneratorFactory : IGeneratorFactory
             return (T)ActivatorUtilities.CreateInstance(_serviceProvider, typeof(T), sender, logger);
         }
     }
+
     private static readonly Dictionary<int, MessageSender> sendParameters = new()
         {
             { 6, MessageSender.InSummaryFeed },
