@@ -11,6 +11,7 @@ var host = new HostBuilder()
         services.ConfigureFunctionsApplicationInsights();
         services.AddHttpClient();
         services.AddLogging();
+        services.AddMemoryCache();
 
         services.AddTransient<XSender>();
         services.AddTransient<InSender>();
