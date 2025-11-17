@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
 using XPoster.Models;
 
@@ -27,7 +21,7 @@ public class InSender : ISender
         try
         {
             var inOwner = Environment.GetEnvironmentVariable("IN_OWNER");
-            var postText = post.Content + post.Firm;
+            var postText = post.Content + Post.Firm;
             dynamic postPayload;
 
             if (post.Image != null && post.Image.Length > 0)

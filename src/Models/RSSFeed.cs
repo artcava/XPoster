@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace XPoster.Models;
+﻿namespace XPoster.Models;
 
 public record RSSFeed
 {
-    public string Title { get; init; }
-    public string Content { get; init; }
-    public string Link { get; init; }
+    public required string Title { get; init; }
+    public required string Content { get; init; }
+    public required string Link { get; init; }
     public DateTimeOffset PublishDate { get; init; }
 }

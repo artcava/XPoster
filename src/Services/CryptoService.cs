@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using XPoster.Abstraction;
+﻿using XPoster.Abstraction;
 
 namespace XPoster.Services;
 

@@ -48,7 +48,7 @@ public class GeneratorFactory : IGeneratorFactory
                 return GetInstance<NoGenerator>(null); 
         }
     }
-    private T GetInstance<T>(ISender sender) where T : BaseGenerator
+    private T GetInstance<T>(ISender? sender) where T : BaseGenerator
     {
         // Risolvi il logger specifico per il tipo T
         var logger = _serviceProvider.GetRequiredService<ILogger<T>>();

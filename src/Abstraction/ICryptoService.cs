@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace XPoster.Abstraction;
+﻿namespace XPoster.Abstraction;
 
 public interface ICryptoService
 {

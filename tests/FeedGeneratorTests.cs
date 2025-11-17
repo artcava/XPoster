@@ -25,7 +25,7 @@ public class FeedGeneratorTests
     public async Task GenerateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()
     {
         // ARRANGE
-        var fakeFeeds = new List<RSSFeed> { new() { Content = "Notizia su Bitcoin" } };
+        var fakeFeeds = new List<RSSFeed> { new() {Title = "Il Bitcoin", Content = "Notizia su Bitcoin", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Questo è un riassunto";
         var fakePrompt = "Prompt per immagine";
         var fakeImage = new byte[] { 1, 2, 3 };
@@ -88,7 +88,7 @@ public class FeedGeneratorTests
     public async Task GenerateAsync_Should_ReturnNull_When_SummaryGenerationFails()
     {
         // ARRANGE
-        var fakeFeeds = new List<RSSFeed> { new() { Content = "Test content" } };
+        var fakeFeeds = new List<RSSFeed> { new() {Title = "Il Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -119,7 +119,7 @@ public class FeedGeneratorTests
     public async Task GenerateAsync_Should_ReturnNull_When_ImageGenerationFails()
     {
         // ARRANGE
-        var fakeFeeds = new List<RSSFeed> { new() { Content = "Test" } };
+        var fakeFeeds = new List<RSSFeed> { new() {Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
         var fakePrompt = "Prompt";
 
@@ -155,7 +155,7 @@ public class FeedGeneratorTests
     public async Task GenerateAsync_Should_ApplyHashtagsCorrectly()
     {
         // ARRANGE
-        var fakeFeeds = new List<RSSFeed> { new() { Content = "News about bitcoin and BTC and fed policy" } };
+        var fakeFeeds = new List<RSSFeed> { new() {Title = "Il Bitcoin", Content = "News about bitcoin and BTC and fed policy", Link = "https://bitcoin.org/" } };
         var fakeSummary = "News about bitcoin and btc. The fed decided...";
         var fakePrompt = "Image prompt";
         var fakeImage = new byte[] { 1, 2, 3 };

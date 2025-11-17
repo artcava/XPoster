@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using XPoster.Abstraction;
+﻿using XPoster.Abstraction;
 using XPoster.Models;
 
 namespace XPoster.Implementation
