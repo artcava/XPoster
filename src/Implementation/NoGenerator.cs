@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using XPoster.Abstraction;
+﻿using XPoster.Abstraction;
 using XPoster.Models;
 
 namespace XPoster.Implementation
@@ -12,7 +10,7 @@ namespace XPoster.Implementation
         public override bool SendIt { get => false; set => throw new System.NotImplementedException(); }
         public override bool ProduceImage { get => false; set => throw new System.NotImplementedException(); }
 
-        public override Task<Post> GenerateAsync()
+        public override Task<Post>? GenerateAsync()
         {
             return null;
         }

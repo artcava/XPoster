@@ -1,10 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using XPoster.Abstraction;
 using XPoster.Models;
 
@@ -31,7 +26,7 @@ public class FeedGenerator : BaseGenerator
     }
 
 
-    public override async Task<Post> GenerateAsync()
+    public override async Task<Post>? GenerateAsync()
     {
         var summary = await GenerateMessage();
         if (string.IsNullOrWhiteSpace(summary)) 

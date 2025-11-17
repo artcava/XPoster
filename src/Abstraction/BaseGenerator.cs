@@ -1,18 +1,16 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using XPoster.Models;
+﻿using XPoster.Models;
 
 namespace XPoster.Abstraction;
 
-public abstract class BaseGenerator(ISender sender, ILogger logger) : IGenerator
+public abstract class BaseGenerator(ISender? sender, ILogger logger) : IGenerator
 {
     public abstract string Name { get; }
     public abstract bool SendIt { get; set; }
     public abstract bool ProduceImage { get; set; }
-    protected ISender _sender { get; } = sender;
+    protected ISender? _sender { get; } = sender;
     protected ILogger _logger { get; } = logger;
 
-    public abstract Task<Post> GenerateAsync();
+    public abstract Task<Post>? GenerateAsync();
 
     public virtual async Task<bool> PostAsync(Post message)
     {

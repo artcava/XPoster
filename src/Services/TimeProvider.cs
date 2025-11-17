@@ -1,5 +1,4 @@
-﻿using System;
-using XPoster.Abstraction;
+﻿using XPoster.Abstraction;
 
 namespace XPoster.Services;
 

@@ -1,9 +1,5 @@
 ﻿using LinqToTwitter;
 using LinqToTwitter.OAuth;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using XPoster.Abstraction;
 using XPoster.Models;
 
@@ -37,7 +33,7 @@ public class XSender : ISender
     {
         try
         {
-            var postText = post.Content + post.Firm;
+            var postText = post.Content + Post.Firm;
 
             var tweetId = string.Empty;
 

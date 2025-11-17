@@ -1,9 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using XPoster.Abstraction;
 using XPoster.Models;
 
@@ -35,7 +31,7 @@ namespace XPoster.SenderPlugins
         {
             try
             {
-                string caption = $"{post.Content}{post.Firm}";
+                string caption = $"{post.Content}{Post.Firm}";
                 if (caption.Length > MessageMaxLenght)
                 {
                     _logger.LogWarning($"Il messaggio supera il limite di {MessageMaxLenght} caratteri. Verrà troncato.");

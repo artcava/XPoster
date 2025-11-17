@@ -2,7 +2,7 @@
 
 public record Post
 {
-    internal string Firm => "\n\n#XPoster #AI";
-    public string Content { get; set; }
-    public byte[] Image { get; set; }
+    internal static string Firm => "\n\n#XPoster #AI";
+    public required string Content { get; set; }
+    public byte[]? Image { get; set; }
 }
