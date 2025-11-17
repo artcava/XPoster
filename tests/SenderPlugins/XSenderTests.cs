@@ -2,7 +2,7 @@
 using Moq;
 using XPoster.SenderPlugins;
 
-namespace XPoster.Tests;
+namespace XPoster.Tests.SenderPlugins;
 
 public class XSenderTests
 {
@@ -29,18 +29,4 @@ public class XSenderTests
         // Questo test richiede di wrappare TwitterContext per poterlo mockare
         // Suggerisco di creare un'interfaccia ITwitterClient
     }
-}
-
-public class InSenderTests
-{
-    [Fact]
-    public void MessageMaxLength_Should_Return_800()
-    {
-        var mockLogger = new Mock<ILogger<InSender>>();
-        var sender = new InSender(mockLogger.Object);
-
-        Assert.Equal(800, sender.MessageMaxLenght);
-    }
-
-    // Test per upload immagini, gestione errori API, ecc.
 }

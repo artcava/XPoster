@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Abstraction;
 using XPoster.Implementation;
 using XPoster.SenderPlugins;
 
-namespace XPoster.Tests;
+namespace XPoster.Tests.Implementation;
 
 public class GeneratorFactoryTests
 {
