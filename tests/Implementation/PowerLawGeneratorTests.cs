@@ -3,7 +3,7 @@ using Moq;
 using XPoster.Abstraction;
 using XPoster.Implementation;
 
-namespace XPoster.Tests;
+namespace XPoster.Tests.Implementation;
 
 public class PowerLawGeneratorTests
 {

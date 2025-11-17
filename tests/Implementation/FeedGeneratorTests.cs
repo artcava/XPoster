@@ -4,7 +4,7 @@ using XPoster.Abstraction;
 using XPoster.Implementation;
 using XPoster.Models;
 
-namespace XPoster.Tests;
+namespace XPoster.Tests.Implementation;
 
 public class FeedGeneratorTests
 {
