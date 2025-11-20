@@ -3,7 +3,7 @@ using XPoster.Models;
 
 namespace XPoster.Implementation
 {
-    public class NoGenerator(ILogger logger) : BaseGenerator(null, logger)
+    public class NoGenerator(ILogger<NoGenerator> logger) : BaseGenerator(null, logger)
     {
         public override string Name => typeof(NoGenerator).Name;
 

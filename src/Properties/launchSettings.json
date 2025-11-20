@@ -2,7 +2,7 @@
   "profiles": {
     "XPoster": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7203",
+      "commandLineArgs": "--port 7203 --verbose",
       "launchBrowser": false
     }
   }
