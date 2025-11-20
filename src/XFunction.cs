@@ -15,7 +15,7 @@ namespace XPoster
         }
 
         [Function("XPosterFunction")]
-        public async Task Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer) // Local: 0 */5 * * * * Prod: 0 0 */2 * * *
+        public async Task Run([TimerTrigger("0 0 */2 * * *")]TimerInfo myTimer) // Local: 0 */5 * * * * Prod: 0 0 */2 * * *
         {
             _log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
 
