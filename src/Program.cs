@@ -7,8 +7,8 @@ using XPoster.Services;
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .ConfigureServices(services => {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
+        services.AddApplicationInsightsTelemetryWorkerService()
+        .ConfigureFunctionsApplicationInsights();
         services.AddHttpClient();
         services.AddLogging();
         services.AddMemoryCache();

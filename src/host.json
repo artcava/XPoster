@@ -5,8 +5,9 @@
       "samplingSettings": {
         "isEnabled": true,
         "excludedTypes": "Request"
-      },
-      "enableLiveMetricsFilters": true
+      }
+        //,
+      //"enableLiveMetricsFilters": true
     },
     "logLevel": {
       "Default": "Information"
