@@ -1,0 +1,13 @@
+# Default owner for everything
+* @artcava
+
+# Specific areas (se avrai altri maintainer in futuro)
+/src/SenderPlugins/ @artcava
+/src/Services/AiService.cs @artcava
+/.github/ @artcava
+/docs/ @artcava
+
+# Require review for critical files
+/src/Program.cs @artcava
+/src/XFunction.cs @artcava
+/.github/workflows/ @artcava
