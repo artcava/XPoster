@@ -1,0 +1,31 @@
+name: Branch Naming Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const validPrefixes = ['feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/'];
+            
+            const isValid = validPrefixes.some(prefix => branch.startsWith(prefix));
+            
+            if (!isValid) {
+              core.setFailed(
+                `❌ Invalid branch name: "${branch}"\n\n` +
+                `Branch names must start with one of: ${validPrefixes.join(', ')}\n\n` +
+                `Examples:\n` +
+                `- feature/add-mastodon-support\n` +
+                `- fix/twitter-auth-error\n` +
+                `- docs/update-readme`
+              );
+            } else {
+              console.log(`✅ Branch name "${branch}" is valid`);
+            }
