@@ -15,7 +15,7 @@ public class XFunction
     }
 
     [Function("XPosterFunction")]
-    public async Task Run([TimerTrigger("0 5 */2 * * *")]TimerInfo myTimer)
+    public async Task Run([TimerTrigger("%CronSchedule%")]TimerInfo myTimer)
     {
         _log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
 
