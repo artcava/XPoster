@@ -1,0 +1,67 @@
+# Status Labels
+- name: "needs-triage"
+  color: "d73a4a"
+  description: "Needs maintainer review"
+
+- name: "approved"
+  color: "0e8a16"
+  description: "Approved by maintainer - ready for development"
+
+- name: "in-progress"
+  color: "fbca04"
+  description: "Currently being worked on"
+
+- name: "needs-review"
+  color: "0052cc"
+  description: "PR ready for maintainer review"
+
+- name: "blocked"
+  color: "b60205"
+  description: "Blocked by dependency or decision"
+
+# Type Labels
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+# Priority Labels
+- name: "priority: critical"
+  color: "b60205"
+  description: "Critical priority"
+
+- name: "priority: high"
+  color: "d93f0b"
+  description: "High priority"
+
+- name: "priority: medium"
+  color: "fbca04"
+  description: "Medium priority"
+
+- name: "priority: low"
+  color: "0e8a16"
+  description: "Low priority"
+
+# Area Labels
+- name: "area: ai"
+  color: "5319e7"
+  description: "AI/OpenAI related"
+
+- name: "area: social-media"
+  color: "1d76db"
+  description: "Social media integration"
+
+- name: "area: scheduling"
+  color: "0e8a16"
+  description: "Scheduling and timing"
+
+- name: "area: testing"
+  color: "d4c5f9"
+  description: "Testing related"
