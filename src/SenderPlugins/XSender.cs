@@ -9,9 +9,9 @@ public class XSender : ISender
 {
     private readonly TwitterContext _twitterContext;
     private readonly ILogger<XSender> _logger;
-    public XSender(ILogger<XSender> loggger) 
+    public XSender(ILogger<XSender> logger) 
     {
-        _logger = loggger;
+        _logger = logger ?? throw new ArgumentNullException("logger");
         // Configure credentials
         var auth = new SingleUserAuthorizer
         {
@@ -31,6 +31,18 @@ public class XSender : ISender
 
     public async Task<bool> SendAsync(Post post)
     {
+        if (post == null)
+        {
+            _logger.LogWarning("Post cannot be null");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(post.Content))
+        {
+            _logger.LogWarning("Post content cannot be empty");
+            return false;
+        }
+
         try
         {
             var postText = post.Content + Post.Firm;

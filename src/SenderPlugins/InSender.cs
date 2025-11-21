@@ -13,11 +13,23 @@ public class InSender : ISender
     public InSender(ILogger<InSender> logger)
     {
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));
-        _logger = logger;
+        _logger = logger ?? throw new ArgumentNullException("logger");
 
     }
     public async Task<bool> SendAsync(Post post)
     {
+        if (post == null)
+        {
+            _logger.LogWarning("Post cannot be null");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(post.Content))
+        {
+            _logger.LogWarning("Post content cannot be empty");
+            return false;
+        }
+
         try
         {
             var inOwner = Environment.GetEnvironmentVariable("IN_OWNER");
