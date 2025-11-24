@@ -9,70 +9,72 @@
 
 > **AI-Powered Social Media Automation Platform**
 > 
-> XPoster è una Azure Function che automatizza la pubblicazione di contenuti su multiple piattaforme social (Twitter/X, LinkedIn, Instagram) utilizzando intelligenza artificiale per la generazione e curation dei contenuti.
+> XPoster is an Azure Function that automates content publishing across multiple social media platforms (Twitter/X, LinkedIn, Instagram) using artificial intelligence for content generation and curation.
 
 ---
 
-## 📋 Indice
+## 📋 Table of Contents
 
 - [Features](#-features)
-- [Architettura](#-architettura)
-- [Tecnologie](#-tecnologie)
+- [Architecture](#-architecture)
+- [Technologies](#-technologies)
 - [Getting Started](#-getting-started)
-- [Configurazione](#-configurazione)
+- [Configuration](#-configuration)
 - [Deployment](#-deployment)
-- [Utilizzo](#-utilizzo)
-- [Schedulazione](#-schedulazione)
-- [Estensibilità](#-estensibilità)
+- [Usage](#-usage)
+- [Scheduling](#-scheduling)
+- [Extensibility](#-extensibility)
 - [Testing](#-testing)
 - [Monitoring](#-monitoring)
 - [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
 - [License](#-license)
 
+
 ---
 
 ## ✨ Features
 
 ### 🤖 Content Generation
-- **AI-Powered Summarization**: Riassunti intelligenti di feed RSS utilizzando GPT-4
-- **Image Generation**: Creazione automatica di immagini contestuali con DALL-E 3
-- **Smart Hashtags**: Conversione automatica di keyword in hashtag ottimizzati
-- **Multi-Strategy**: Supporto per diversi algoritmi di generazione contenuti
+- **AI-Powered Summarization**: Intelligent RSS feed summaries using GPT-4
+- **Image Generation**: Automatic contextual image creation with DALL-E 3
+- **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
+- **Multi-Strategy**: Support for different content generation algorithms
 
 ### 🌐 Multi-Platform Publishing
-- **Twitter/X**: Pubblicazione automatica con supporto immagini
-- **LinkedIn**: Post su profili personali e pagine aziendali
-- **Instagram**: Publishing via Graph API (in sviluppo)
+- **Twitter/X**: Automated posting with image support
+- **LinkedIn**: Posts on personal profiles and company pages
+- **Instagram**: Publishing via Graph API (in development)
 
 ### ⚙️ Automation & Scheduling
-- **Timer-Based Execution**: Esecuzione automatica ogni 2 ore
-- **Smart Scheduling**: Diverse strategie di posting basate sull'orario
-- **Conditional Logic**: Pubblicazione solo quando appropriato
+- **Timer-Based Execution**: Configurable automatic execution
+- **Smart Scheduling**: Different posting strategies based on time
+- **Conditional Logic**: Publishing only when appropriate
+- **Flexible Configuration**: Customizable schedule via environment variables
 
 ### 📊 Enterprise Features
-- **Application Insights**: Monitoring completo e telemetria
-- **Structured Logging**: Log dettagliati per debugging e audit
-- **Error Handling**: Gestione robusta degli errori con retry logic
-- **Dependency Injection**: Architettura modulare e testabile
+- **Application Insights**: Complete monitoring and telemetry
+- **Structured Logging**: Detailed logs for debugging and audit
+- **Error Handling**: Robust error management with retry logic
+- **Dependency Injection**: Modular and testable architecture
 
 ---
 
-## 🏗️ Architettura
+## 🏗️ Architecture
 
 ### High-Level Overview
 
 ```
-┌─────────────────────────┐
-│   Azure Timer Trigger   │
-│   (ogni 2h alle :05)    │
-└───────────┬─────────────┘
+┌────────────────────────────┐
+│   Azure Timer Trigger      │
+│   (configurable schedule)  │
+└───────────┬────────────────┘
             │
             ▼
-┌─────────────────────────┐
-│   Generator Factory     │ ◄─── Strategy Pattern
-│   (Selettore Orario)    │
-└───────────┬─────────────┘
+┌────────────────────────────┐
+│   Generator Factory        │ ◄─── Strategy Pattern
+│   (Time-based Selector)    │
+└───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
     ▼                ▼              ▼
@@ -102,58 +104,58 @@
     └────────────────┘
 ```
 
-### Componenti Principali
+### Core Components
 
 #### 1. **XFunction** (Entry Point)
-Azure Function timer-triggered che orchestra l'intero flusso di pubblicazione.
+Timer-triggered Azure Function that orchestrates the entire publishing workflow.
 
-**Cron Expression**: `0 5 */2 * * *` (ogni 2 ore al minuto 05)
+**Cron Expression**: Configurable via environment variable (default: `0 5 * * * *`)
 
 #### 2. **GeneratorFactory** (Factory + Strategy Pattern)
-Seleziona dinamicamente il generatore appropriato basandosi sull'orario corrente.
+Dynamically selects the appropriate generator based on current time.
 
-| Ora | Piattaforma | Strategia |
-|-----|-------------|-----------|
+| Time | Platform | Strategy |
+|------|----------|----------|
 | 06:00 | LinkedIn | Feed Summary |
 | 08:00 | Twitter/X | Feed Summary |
 | 14:00 | LinkedIn | Power Law |
 | 16:00 | Twitter/X | Power Law |
 
 #### 3. **Generators** (Content Strategy)
-- **FeedGenerator**: Analizza feed RSS crypto, genera riassunti AI, crea immagini
-- **PowerLawGenerator**: Genera contenuti basati su distribuzione statistica
-- **NoGenerator**: Placeholder per slot orari senza pubblicazione
+- **FeedGenerator**: Analyzes crypto RSS feeds, generates AI summaries, creates images
+- **PowerLawGenerator**: Generates content based on statistical distribution
+- **NoGenerator**: Placeholder for time slots without publishing
 
 #### 4. **Services Layer**
-- **AiService**: Interfaccia con Azure OpenAI (GPT-4, DALL-E 3)
-- **FeedService**: Parser RSS con caching e filtraggio intelligente
-- **CryptoService**: Utility crittografiche per sicurezza
+- **AiService**: Interface with Azure OpenAI (GPT-4, DALL-E 3)
+- **FeedService**: RSS parser with caching and intelligent filtering
+- **CryptoService**: Crypto-currencies utilities
 
 #### 5. **Sender Plugins** (Platform Abstraction)
 - **XSender**: Twitter/X via LinqToTwitter
 - **InSender**: LinkedIn via HTTP API
-- **IgSender**: Instagram via Graph API (in sviluppo)
+- **IgSender**: Instagram via Graph API (in development)
 
 ---
 
-## 🛠️ Tecnologie
+## 🛠️ Technologies
 
 ### Core Framework
-- **.NET 8.0** - Framework principale
+- **.NET 8.0** - Main framework
 - **Azure Functions v4** - Serverless compute
-- **C# 12** - Linguaggio
+- **C# 12** - Programming language
 
 ### AI & ML
-- **Azure OpenAI** - GPT-4 per summarization
-- **DALL-E 3** - Generazione immagini
+- **Azure OpenAI** - GPT-4 for summarization
+- **DALL-E 3** - Image generation
 
 ### Social Media APIs
 - **LinqToTwitter 6.15.0** - Twitter/X integration
 - **LinkedIn REST API v2** - LinkedIn publishing
-- **Instagram Graph API** - Instagram (in sviluppo)
+- **Instagram Graph API** - Instagram (in development)
 
 ### Monitoring & Logging
-- **Application Insights** - Telemetria e monitoring
+- **Application Insights** - Telemetry and monitoring
 - **ILogger** - Structured logging
 
 ### Utilities
@@ -164,34 +166,34 @@ Seleziona dinamicamente il generatore appropriato basandosi sull'orario corrente
 
 ## 🚀 Getting Started
 
-### Prerequisiti
+### Prerequisites
 
 - **.NET 8.0 SDK** ([Download](https://dotnet.microsoft.com/download/dotnet/8.0))
 - **Azure Functions Core Tools** ([Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local))
-- **Visual Studio 2022** o **Visual Studio Code**
-- **Account Azure** (con sottoscrizione attiva)
-- **Azure OpenAI Service** (con deployment GPT-4 e DALL-E 3)
+- **Visual Studio 2022** or **Visual Studio Code**
+- **Azure Account** (with active subscription)
+- **Azure OpenAI Service** (with GPT-4 and DALL-E 3 deployments)
 
-### Clona il Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/artcava/XPoster.git
 cd XPoster
 ```
 
-### Ripristina Dipendenze
+### Restore Dependencies
 
 ```bash
 dotnet restore
 ```
 
-### Build del Progetto
+### Build the Project
 
 ```bash
 dotnet build
 ```
 
-### Esegui i Test
+### Run Tests
 
 ```bash
 dotnet test
@@ -199,16 +201,17 @@ dotnet test
 
 ---
 
-## ⚙️ Configurazione
+## ⚙️ Configuration
 
 ### 1. Local Development
 
-Crea un file `local.settings.json` nella directory `src/`:
+Create a `local.settings.json` file in the `src/` directory:
 
 ```json
 {
   "IsEncrypted": false,
   "Values": {
+    "CronSchedule": "0 5 * * * *",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     
@@ -234,19 +237,19 @@ Crea un file `local.settings.json` nella directory `src/`:
 
 #### App Settings (Azure Portal)
 
-Naviga su **Azure Portal** → **Function App** → **Configuration** → **Application Settings**
+Navigate to **Azure Portal** → **Function App** → **Configuration** → **Application Settings**
 
-Aggiungi le stesse variabili di `local.settings.json`.
+Add the same variables from `local.settings.json`.
 
 #### Managed Identity (Recommended)
 
-Per sicurezza avanzata, usa Azure Managed Identity:
+For enhanced security, use Azure Managed Identity:
 
-1. Abilita **System Assigned Managed Identity** sulla Function App
-2. Assegna ruoli appropriati su:
+1. Enable **System Assigned Managed Identity** on the Function App
+2. Assign appropriate roles on:
    - Azure OpenAI Service
-   - Azure Key Vault (per secrets)
-3. Modifica `Program.cs` per usare `DefaultAzureCredential`
+   - Azure Key Vault (for secrets)
+3. Modify `Program.cs` to use `DefaultAzureCredential`
 
 ```csharp
 builder.Services.AddSingleton<OpenAIClient>(sp =>
@@ -260,34 +263,34 @@ builder.Services.AddSingleton<OpenAIClient>(sp =>
 
 ## 📦 Deployment
 
-### Opzione 1: GitHub Actions (CI/CD Automatizzato)
+### Option 1: GitHub Actions (Automated CI/CD)
 
-Il repository include già una workflow GitHub Actions (`.github/workflows/master_xposterfunction.yml`).
+The repository includes a GitHub Actions workflow (`.github/workflows/master_xposterfunction.yml`).
 
 **Setup**:
-1. Crea una Function App su Azure Portal
-2. Scarica il **Publish Profile** dalla Function App
-3. Aggiungi il contenuto come **Secret** su GitHub:
-   - Nome: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
-4. Ogni push su `master` triggera il deployment automatico
+1. Create a Function App in Azure Portal
+2. Download the **Publish Profile** from the Function App
+3. Add the content as a **Secret** in GitHub:
+   - Name: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+4. Every push to `master` triggers automatic deployment
 
-### Opzione 2: Azure CLI
+### Option 2: Azure CLI
 
 ```bash
 # Login
 az login
 
-# Crea Resource Group
+# Create Resource Group
 az group create --name XPosterRG --location westeurope
 
-# Crea Storage Account
+# Create Storage Account
 az storage account create \
   --name xposterstorage \
   --resource-group XPosterRG \
   --location westeurope \
   --sku Standard_LRS
 
-# Crea Function App
+# Create Function App
 az functionapp create \
   --name xposterfunction \
   --resource-group XPosterRG \
@@ -302,37 +305,37 @@ cd src
 func azure functionapp publish xposterfunction
 ```
 
-### Opzione 3: Visual Studio
+### Option 3: Visual Studio
 
-1. Right-click sul progetto `XPoster`
+1. Right-click on the `XPoster` project
 2. Select **Publish**
 3. Choose **Azure** → **Azure Function App (Windows)**
-4. Seleziona o crea una Function App
+4. Select or create a Function App
 5. Click **Publish**
 
 ---
 
-## 🎯 Utilizzo
+## 🎯 Usage
 
-### Esecuzione Locale
+### Local Execution
 
 ```bash
 cd src
 func start
 ```
 
-La function sarà disponibile localmente e eseguirà secondo la cron expression configurata.
+The function will run locally according to the configured cron expression.
 
-### Trigger Manuale (Azure Portal)
+### Manual Trigger (Azure Portal)
 
-1. Vai su **Azure Portal** → **Function App** → **Functions**
-2. Seleziona `XPosterFunction`
-3. Click su **Test/Run**
-4. Click su **Run**
+1. Go to **Azure Portal** → **Function App** → **Functions**
+2. Select `XPosterFunction`
+3. Click **Test/Run**
+4. Click **Run**
 
-### Trigger via HTTP (opzionale)
+### HTTP Trigger (Optional)
 
-Aggiungi un HTTP trigger per testing:
+Add an HTTP trigger for testing:
 
 ```csharp
 [Function("XPosterHttpTrigger")]
@@ -348,49 +351,77 @@ public async Task<HttpResponseData> RunHttp(
 
 ---
 
-## ⏰ Schedulazione
+## ⏰ Scheduling
 
-### Configurazione Oraria
+### Schedule Configuration
 
-Modifica `GeneratorFactory.cs` per personalizzare la schedulazione:
+The execution frequency is configurable via the `CronSchedule` environment variable:
+
+**Format**: 6-field cron expression: `{second} {minute} {hour} {day} {month} {dayOfWeek}`
+
+**Configuration**:
+
+
+```json
+//local.settings.json
+{
+  "Values": {
+    "CronSchedule": "0 5 * * * *"
+  }
+}
+```
+
+```bash
+//Azure CLI
+az functionapp config appsettings set
+--name xposterfunction
+--resource-group XPosterRG
+--settings "CronSchedule=0 5 * * * *"
+```
+
+### Cron Expression Examples
+
+| Schedule | Cron Expression | Description |
+|----------|-----------------|-------------|
+| **Default** | `0 5 */2 * * *` | Every 2 hours at :05 |
+| **Hourly** | `0 0 * * * *` | Every hour on the hour |
+| **Every 4 hours** | `0 0 */4 * * *` | Every 4 hours |
+| **Business Hours** | `0 0 9,12,15,18 * * 1-5` | 9, 12, 15, 18 (Mon-Fri) |
+| **Morning/Evening** | `0 0 8,20 * * *` | At 8:00 and 20:00 |
+| **Daily** | `0 0 9 * * *` | Every day at 9:00 |
+| **Quick Test** | `*/30 * * * * *` | Every 30 seconds (dev only) |
+
+### Time-based Strategy (GeneratorFactory)
+
+Modify `GeneratorFactory.cs` to customize which generator to use at each hour:
 
 ```csharp
 private static readonly Dictionary<int, MessageSender> sendParameters = new()
 {
-    { 6, MessageSender.InSummaryFeed },   // LinkedIn Feed
-    { 8, MessageSender.XSummaryFeed },    // Twitter Feed
-    { 10, MessageSender.IgSummaryFeed },  // Instagram Feed (attiva se pronto)
-    { 14, MessageSender.InPowerLaw },     // LinkedIn Power Law
-    { 16, MessageSender.XPowerLaw },      // Twitter Power Law
-    { 18, MessageSender.IgPowerLow },     // Instagram Power Law
+{ 6, MessageSender.InSummaryFeed }, // LinkedIn Feed
+{ 8, MessageSender.XSummaryFeed }, // Twitter Feed
+{ 10, MessageSender.IgSummaryFeed }, // Instagram Feed (enable when ready)
+{ 14, MessageSender.InPowerLaw }, // LinkedIn Power Law
+{ 16, MessageSender.XPowerLaw }, // Twitter Power Law
+{ 18, MessageSender.IgPowerLow }, // Instagram Power Law
 };
 ```
+---
 
-### Modifica Cron Expression
+### Best Practices
 
-Cambia la frequenza di esecuzione in `XFunction.cs`:
-
-```csharp
-// Ogni 2 ore (default)
-[TimerTrigger("0 5 */2 * * *")]
-
-// Ogni ora
-[TimerTrigger("0 5 * * * *")]
-
-// Ogni 4 ore
-[TimerTrigger("0 5 */4 * * *")]
-
-// Giorni feriali alle 9:00 e 17:00
-[TimerTrigger("0 0 9,17 * * 1-5")]
-```
+✅ **Testing**: Use frequent schedules in development (`*/5 * * * * *` = every 5 secs)
+✅ **Production**: More conservative schedules to avoid rate limiting
+✅ **Multi-environment**: Different schedules for Dev/Staging/Prod
+✅ **Monitoring**: Check logs to confirm correct execution
 
 ---
 
-## 🔌 Estensibilità
+## 🔌 Extensibility
 
-### Aggiungere una Nuova Piattaforma
+### Adding a New Platform
 
-**1. Crea il Sender Plugin**
+**1. Create the Sender Plugin**
 
 ```csharp
 // src/SenderPlugins/TikTokSender.cs
@@ -400,20 +431,20 @@ public class TikTokSender : ISender
 
     public async Task<bool> SendAsync(Post post)
     {
-        // Implementa logica TikTok API
+        // Implement TikTok API logic
         return true;
     }
 }
 ```
 
-**2. Registra nel DI Container**
+**2. Register in DI Container**
 
 ```csharp
 // src/Program.cs
 builder.Services.AddTransient<TikTokSender>();
 ```
 
-**3. Aggiungi Enum**
+**3. Add Enum**
 
 ```csharp
 // src/Abstraction/Enums.cs
@@ -424,7 +455,7 @@ public enum MessageSender
 }
 ```
 
-**4. Configura Factory**
+**4. Configure Factory**
 
 ```csharp
 // src/Implementation/GeneratorFactory.cs
@@ -434,7 +465,7 @@ case MessageSender.TikTokSummaryFeed:
     );
 ```
 
-### Aggiungere un Nuovo Generatore
+### Adding a New Generator
 
 ```csharp
 // src/Implementation/QuoteGenerator.cs
@@ -442,7 +473,7 @@ public class QuoteGenerator : BaseGenerator
 {
     public override async Task<Post>? GenerateAsync()
     {
-        // Logica per generare quote motivazionali
+        // Logic to generate motivational quotes
         var quote = await _aiService.GetQuoteAsync();
         return new Post { Content = quote };
     }
@@ -453,7 +484,7 @@ public class QuoteGenerator : BaseGenerator
 
 ## 🧪 Testing
 
-### Struttura Test
+### Test Structure
 
 ```
 tests/
@@ -469,20 +500,20 @@ tests/
 │       └── InSenderTests.cs
 ```
 
-### Eseguire i Test
+### Running Tests
 
 ```bash
-# Tutti i test
+# All tests
 dotnet test
 
-# Test specifici
+# Specific tests
 dotnet test --filter "FullyQualifiedName~FeedGenerator"
 
-# Con coverage
+# With coverage
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-### Mock di Servizi Esterni
+### Mocking External Services
 
 ```csharp
 [Fact]
@@ -516,16 +547,16 @@ public async Task FeedGenerator_ShouldGenerateSummary()
 
 ### Application Insights
 
-**Metriche Chiave**:
-- **Execution Count**: Numero di esecuzioni funzione
-- **Success Rate**: % esecuzioni riuscite
-- **Average Duration**: Tempo medio esecuzione
-- **AI Token Usage**: Consumo token OpenAI
+**Key Metrics**:
+- **Execution Count**: Number of function executions
+- **Success Rate**: % of successful executions
+- **Average Duration**: Average execution time
+- **AI Token Usage**: OpenAI token consumption
 
-**Query KQL Utili**:
+**Useful KQL Queries**:
 
 ```kql
-// Esecuzioni ultime 24h
+// Executions last 24h
 requests
 | where timestamp > ago(24h)
 | where name == "XPosterFunction"
@@ -547,19 +578,20 @@ dependencies
 | summarize totalTokens = sum(tokenUsage), totalCost = sum(tokenUsage) * 0.00006
 ```
 
+
 ### Alerting
 
-Configura alert su:
-- **Errori consecutivi** (> 3 in 1 ora)
-- **Token usage** (> budget mensile)
-- **Latency** (> 60 secondi)
+Configure alerts for:
+- **Consecutive errors** (> 3 in 1 hour)
+- **Token usage** (> monthly budget)
+- **Latency** (> 60 seconds)
 - **Function downtime**
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Fase 1: Foundation (Completato)
+### ✅ Phase 1: Foundation (Complete)
 - [x] Azure Function setup
 - [x] Multi-platform sender architecture
 - [x] AI integration (GPT-4, DALL-E)
@@ -568,15 +600,14 @@ Configura alert su:
 - [x] RSS feed parsing
 - [x] CI/CD pipeline
 
-### 🚧 Fase 2: Stabilization (In Corso)
-- [ ] Instagram publishing (completare setup)
-- [ ] Retry logic con Polly
-- [ ] Duplicate detection
+### 🚧 Phase 2: Stabilization (In Progress)
+- [ ] AI migration to Azure Foundry
+- [ ] Linkedin auto-update authorization token
 - [ ] Configuration externalization
 - [ ] Enhanced error handling
 - [ ] Comprehensive testing (80%+ coverage)
 
-### 📅 Fase 3: Intelligence (Q1 2026)
+### 📅 Phase 3: Intelligence (Q1 2026)
 - [ ] Post-publication analytics
 - [ ] ML-based optimal timing
 - [ ] Sentiment analysis
@@ -584,15 +615,16 @@ Configura alert su:
 - [ ] Trending hashtag detection
 - [ ] Multi-language support
 
-### 🎨 Fase 4: Admin Dashboard (Q2 2026)
-- [ ] Blazor WebAssembly UI
+### 🎨 Phase 4: Admin Dashboard (Q2 2026)
+- [ ] Web based UI
 - [ ] Real-time analytics
 - [ ] Manual post scheduling
 - [ ] Content calendar
 - [ ] Performance metrics
 - [ ] Mobile app (MAUI)
 
-### 🌍 Fase 5: Expansion (Q3 2026)
+### 🌍 Phase 5: Expansion (Q3 2026)
+- [ ] Instagram publishing (complete setup)
 - [ ] Threads (Meta) integration
 - [ ] Mastodon support
 - [ ] BlueSky protocol
@@ -603,28 +635,28 @@ Configura alert su:
 
 ## 🤝 Contributing
 
-Contributi, issue e feature request sono benvenuti!
+Contributions, issues, and feature requests are welcome!
 
-### Come Contribuire
+### How to Contribute
 
-1. **Fork** il progetto
-2. **Crea** il tuo feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** le modifiche (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** al branch (`git push origin feature/AmazingFeature`)
-5. **Apri** una Pull Request
+1. **Fork** the project
+2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
 
 ### Guidelines
 
-- Segui le convenzioni di codice C# (.NET)
-- Aggiungi test unitari per nuove feature
-- Aggiorna la documentazione
-- Mantieni i commit atomici e descrittivi
-- Rispetta i design pattern esistenti
+- Follow C# (.NET) coding conventions
+- Add unit tests for new features
+- Update documentation
+- Keep commits atomic and descriptive
+- Respect existing design patterns
 
 ### Coding Standards
 
 ```csharp
-// ✅ Buono
+// ✅ Good
 public async Task<Post> GenerateAsync()
 {
     var summary = await _aiService.GetSummaryAsync(content, maxLength);
@@ -636,7 +668,7 @@ public async Task<Post> GenerateAsync()
     return new Post { Content = summary };
 }
 
-// ❌ Evitare
+// ❌ Avoid
 public async Task<Post> GenerateAsync() {
     var summary = await _aiService.GetSummaryAsync(content, maxLength);
     if (summary == null || summary == "") return null;
@@ -648,7 +680,7 @@ public async Task<Post> GenerateAsync() {
 
 ## 📄 License
 
-Questo progetto è distribuito con licenza **MIT**. Vedi il file [LICENSE](LICENSE) per dettagli.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ```
 MIT License
@@ -670,17 +702,18 @@ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ```
 
+
 ---
 
-## 👤 Autore
+## 👤 Author
 
 **Marco Cavallo**
 
-- 🌐 Website: [artcava.net](https://artcava.net/)
-- 💼 LinkedIn: [Marco Cavallo](https://linkedin.com/in/marcocavallo)
+- 🌐 Website: [xposter.artcava.net](https://xposter.artcava.net)
+- 💼 LinkedIn: [Marco Cavallo](https://linkedin.com/in/artcava)
 - 🐦 Twitter: [@artcava](https://twitter.com/artcava)
 - 📧 Email: cavallo.marco@gmail.com
-- 🏢 Location: Torino, Italy
+- 🏢 Location: Turin, Italy
 
 ---
 
@@ -689,7 +722,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 - [Azure Functions](https://azure.microsoft.com/services/functions/) - Serverless platform
 - [OpenAI](https://openai.com/) - AI models (GPT-4, DALL-E)
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
-- [.NET Foundation](https://dotnetfoundation.org/) - Framework e community
+- [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
 ---
 
@@ -703,7 +736,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ## 🌟 Star History
 
-Se trovi questo progetto utile, considera di lasciare una ⭐ su GitHub!
+If you find this project useful, consider leaving a ⭐ on GitHub!
 
 [![Star History Chart](https://api.star-history.com/svg?repos=artcava/XPoster&type=Date)](https://star-history.com/#artcava/XPoster&Date)
 
@@ -711,9 +744,9 @@ Se trovi questo progetto utile, considera di lasciare una ⭐ su GitHub!
 
 <div align="center">
 
-**Made with ❤️ in Torino, Italy**
+**Made with ❤️ in Turin, Italy**
 
-[🏠 Homepage](https://xposterfunction.azurewebsites.net/) • 
+[🏠 Homepage](https://xposter.artcava.net/) • 
 [📖 Documentation](https://github.com/artcava/XPoster/wiki) • 
 [🐛 Report Bug](https://github.com/artcava/XPoster/issues) • 
 [💡 Request Feature](https://github.com/artcava/XPoster/issues)
