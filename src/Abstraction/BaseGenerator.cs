@@ -4,7 +4,7 @@ namespace XPoster.Abstraction;
 
 public abstract class BaseGenerator(ISender? sender, ILogger logger) : IGenerator
 {
-    public abstract string Name { get; };
+    public abstract string Name { get; }
     public abstract bool SendIt { get; set; }
     public abstract bool ProduceImage { get; set; }
     protected ISender? _sender { get; } = sender;
