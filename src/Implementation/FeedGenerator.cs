@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.RegularExpressions;
 using XPoster.Abstraction;
 using XPoster.Models;
@@ -43,14 +43,22 @@ public class FeedGenerator : BaseGenerator
             prompt4Image = summary;
         }
 
-        var image = await _aiService.GenerateImageAsync(prompt4Image);
-        if (image == null) 
+        byte[]? image = null;
+        try
         {
-            _logger.LogInformation("No image generated");
-            SendIt = false;
-            return null;
+            image = await _aiService.GenerateImageAsync(prompt4Image);
+            
+            if (image == null)
+            {
+                _logger.LogWarning("Image generation returned null for prompt: {Prompt}. Message will be posted without image.", prompt4Image);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred while generating image with prompt: {Prompt}. Message will be posted without image.", prompt4Image);
         }
 
+        // Always return Post, even if image is null - senders handle posts without images
         return new Post
         {
             Content = summary,

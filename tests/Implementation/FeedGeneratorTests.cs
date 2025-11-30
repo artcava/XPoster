@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Abstraction;
 using XPoster.Implementation;
@@ -55,6 +55,7 @@ public class FeedGeneratorTests
         _mockAiService.Verify(s => s.GetImagePromptAsync(fakeSummary), Times.Once);
         _mockAiService.Verify(s => s.GenerateImageAsync(fakePrompt), Times.Once);
     }
+    
     [Fact]
     public async Task GenerateAsync_Should_ReturnNull_When_NoFeedsFound()
     {
@@ -116,7 +117,7 @@ public class FeedGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnNull_When_ImageGenerationFails()
+    public async Task GenerateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() {Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
@@ -146,9 +147,49 @@ public class FeedGeneratorTests
         // ACT
         var result = await generator.GenerateAsync();
 
-        // ASSERT
-        Assert.Null(result);
-        Assert.False(generator.SendIt);
+        // ASSERT - Now we expect the Post to be returned even without image
+        Assert.NotNull(result);
+        Assert.Equal(fakeSummary, result.Content);
+        Assert.Null(result.Image);
+        Assert.True(generator.SendIt); // SendIt should remain true
+    }
+
+    [Fact]
+    public async Task GenerateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()
+    {
+        // ARRANGE
+        var fakeFeeds = new List<RSSFeed> { new() {Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeSummary = "Summary";
+        var fakePrompt = "Prompt";
+
+        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+            It.IsAny<string>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+            .ReturnsAsync(fakeSummary);
+        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary))
+            .ReturnsAsync(fakePrompt);
+        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt))
+            .ThrowsAsync(new Exception("Image generation failed")); // Simula eccezione
+
+        var generator = new FeedGenerator(
+            _mockSender.Object,
+            _mockLogger.Object,
+            _mockFeedService.Object,
+            _mockAiService.Object);
+
+        // ACT
+        var result = await generator.GenerateAsync();
+
+        // ASSERT - Post should be returned even when exception occurs
+        Assert.NotNull(result);
+        Assert.Equal(fakeSummary, result.Content);
+        Assert.Null(result.Image);
+        Assert.True(generator.SendIt); // SendIt should remain true
     }
 
     [Fact]
