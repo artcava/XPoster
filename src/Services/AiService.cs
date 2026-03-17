@@ -1,1 +1,134 @@
-dXNpbmcgU3lzdGVtLk5ldDsKdXNpbmcgU3lzdGVtLk5ldC5IdHRwLkpzb247CnVzaW5nIFN5c3RlbS5UZXh0Lkpzb247CnVzaW5nIFhQb3N0ZXIuQWJzdHJhY3Rpb247CnVzaW5nIFhQb3N0ZXIuTW9kZWxzOwoKbmFtZXNwYWNlIFhQb3N0ZXIuU2VydmljZXM7CgpwdWJsaWMgY2xhc3MgQWlTZXJ2aWNlIDogSUFpU2VydmljZQp7CiAgICBwcml2YXRlIHJlYWRvbmx5IEh0dHBDbGllbnQgX2NsaWVudDsKICAgIHByaXZhdGUgcmVhZG9ubHkgSUxvZ2dlcjxBaVNlcnZpY2U+IF9sb2dnZXI7CiAgICBwdWJsaWMgQWlTZXJ2aWNlKElIdHRwQ2xpZW50RmFjdG9yeSBodHRwQ2xpZW50RmFjdG9yeSwgSUxvZ2dlcjxBaVNlcnZpY2U+IGxvZ2dlcikKICAgIHsKICAgICAgICBfbG9nZ2VyID0gbG9nZ2VyOwogICAgICAgIF9jbGllbnQgPSBodHRwQ2xpZW50RmFjdG9yeS5DcmVhdGVDbGllbnQoKTsKICAgICAgICBfY2xpZW50LkRlZmF1bHRSZXF1ZXN0SGVhZGVycy5BZGQoIkF1dGhvcml6YXRpb24iLCAkIkJlYXJlciB7RW52aXJvbm1lbnQuR2V0RW52aXJvbm1lbnRWYXJpYWJsZSgiT1BFTkFJX0FQSV9LRVkiKX0iKTsKICAgIH0KCiAgICBwdWJsaWMgYXN5bmMgVGFzazxzdHJpbmc+IEdldFN1bW1hcnlBc3luYyhzdHJpbmcgdGV4dCwgaW50IG1lc3NhZ2VNYXhMZW5ndGgpCiAgICB7CiAgICAgICAgaWYgKCFfY2xpZW50LkRlZmF1bHRSZXF1ZXN0SGVhZGVycy5Db250YWlucygiQXV0aG9yaXphdGlvbiIpKQogICAgICAgIHsKICAgICAgICAgICAgX2NsaWVudC5EZWZhdWx0UmVxdWVzdEhlYWRlcnMuQWRkKCJBdXRob3JpemF0aW9uIiwgJCJCZWFyZXIge0Vudmlyb25tZW50LkdldEVudmlyb25tZW50VmFyaWFibGUoIk9QRU5BSV9BUElfS0VZIil9Iik7CiAgICAgICAgfQoKICAgICAgICBpbnQgdHJpZXMgPSAwOwoKICAgICAgICB3aGlsZSAodGV4dCAhPSBudWxsICYmIHRleHQuTGVuZ3RoID4gbWVzc2FnZU1heExlbmd0aCAmJiB0cmllcyA8PSAyKQogICAgICAgIHsKICAgICAgICAgICAgdHJpZXMrKzsKICAgICAgICAgICAgdmFyIHJlc3BvbnNlID0gYXdhaXQgX2NsaWVudC5Qb3N0QXNKc29uQXN5bmMoImh0dHBzOi8vYXBpLm9wZW5haS5jb20vdjEvY2hhdC9jb21wbGV0aW9ucyIsIEdldFN1bW1hcnkodGV4dCwgbWVzc2FnZU1heExlbmd0aCkpOwogICAgICAgICAgICBpZiAocmVzcG9uc2UuU3RhdHVzQ29kZSA9PSBIdHRwU3RhdHVzQ29kZS5Ub29NYW55UmVxdWVzdHMpCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgIF9sb2dnZXIuTG9nSW5mb3JtYXRpb24oIlRvbyBtYW55IHJlcXVlc3RzLiBQbGVhc2UgdHJ5IGFnYWluIGxhdGVyLiIpOwogICAgICAgICAgICAgICAgcmV0dXJuIHN0cmluZy5FbXB0eTsKICAgICAgICAgICAgfQoKICAgICAgICAgICAgaWYgKCFyZXNwb25zZS5Jc1N1Y2Nlc3NTdGF0dXNDb2RlKQogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICBfbG9nZ2VyLkxvZ0luZm9ybWF0aW9uKCQiRXJyb3I6IHtyZXNwb25zZS5TdGF0dXNDb2RlfSIpOwogICAgICAgICAgICAgICAgcmV0dXJuIHN0cmluZy5FbXB0eTsKICAgICAgICAgICAgfQoKICAgICAgICAgICAgdmFyIHJlc3VsdCA9IGF3YWl0IHJlc3BvbnNlLkNvbnRlbnQuUmVhZEZyb21Kc29uQXN5bmM8T3BlbkFJUmVzcG9uc2U+KCk7CiAgICAgICAgICAgIHRleHQgPSByZXN1bHQ/LmNob2ljZXNbMF0ubWVzc2FnZS5jb250ZW50LlRyaW0oKSA/PyBzdHJpbmcuRW1wdHk7CiAgICAgICAgfQogICAgICAgIHJldHVybiB0ZXh0OwogICAgfQoKICAgIHB1YmxpYyBhc3luYyBUYXNrPHN0cmluZz4gR2V0SW1hZ2VQcm9tcHRBc3luYyhzdHJpbmcgdGV4dCkKICAgIHsKICAgICAgICBpZiAoIV9jbGllbnQuRGVmYXVsdFJlcXVlc3RIZWFkZXJzLkNvbnRhaW5zKCJBdXRob3JpemF0aW9uIikpCiAgICAgICAgewogICAgICAgICAgICBfY2xpZW50LkRlZmF1bHRSZXF1ZXN0SGVhZGVycy5BZGQoIkF1dGhvcml6YXRpb24iLCAkIkJlYXJlciB7RW52aXJvbm1lbnQuR2V0RW52aXJvbm1lbnRWYXJpYWJsZSgiT1BFTkFJX0FQSV9LRVkiKX0iKTsKICAgICAgICB9CgogICAgICAgIHZhciByZXNwb25zZSA9IGF3YWl0IF9jbGllbnQuUG9zdEFzSnNvbkFzeW5jKCJodHRwczovL2FwaS5vcGVuYWkuY29tL3YxL2NoYXQvY29tcGxldGlvbnMiLCBHZXRQcm9tcHRGb3JJbWFnZSh0ZXh0KSk7CiAgICAgICAgaWYgKHJlc3BvbnNlLlN0YXR1c0NvZGUgPT0gSHR0cFN0YXR1c0NvZGUuVG9vTWFueVJlcXVlc3RzKQogICAgICAgIHsKICAgICAgICAgICAgX2xvZ2dlci5Mb2dJbmZvcm1hdGlvbigiVG9vIG1hbnkgcmVxdWVzdHMuIFBsZWFzZSB0cnkgYWdhaW4gbGF0ZXIuIik7CiAgICAgICAgICAgIHJldHVybiBzdHJpbmcuRW1wdHk7CiAgICAgICAgfQoKICAgICAgICBpZiAoIXJlc3BvbnNlLklzU3VjY2Vzc1N0YXR1c0NvZGUpCiAgICAgICAgewogICAgICAgICAgICBfbG9nZ2VyLkxvZ0luZm9ybWF0aW9uKCQiRXJyb3I6IHtyZXNwb25zZS5TdGF0dXNDb2RlfSIpOwogICAgICAgICAgICByZXR1cm4gc3RyaW5nLkVtcHR5OwogICAgICAgIH0KCiAgICAgICAgdmFyIHJlc3VsdCA9IGF3YWl0IHJlc3BvbnNlLkNvbnRlbnQuUmVhZEZyb21Kc29uQXN5bmM8T3BlbkFJUmVzcG9uc2U+KCk7CiAgICAgICAgcmV0dXJuIHJlc3VsdD8uY2hvaWNlc1swXS5tZXNzYWdlLmNvbnRlbnQuVHJpbSgpID8/IHN0cmluZy5FbXB0eTsKICAgIH0KCiAgICBwdWJsaWMgYXN5bmMgVGFzazxieXRlW10+IEdlbmVyYXRlSW1hZ2VBc3luYyhzdHJpbmcgcHJvbXB0KQogICAgewogICAgICAgIC8vIF9jbGllbnQgaGFzIEF1dGhvcml6YXRpb246IEJlYXJlciB7T1BFTkFJX0FQSV9LRVl9IGFscmVhZHkgc2V0IGZyb20gY29uc3RydWN0b3IKICAgICAgICBfbG9nZ2VyLkxvZ0luZm9ybWF0aW9uKCQiR2VuZXJhdGluZyBpbWFnZSB3aXRoIGdwdC1pbWFnZS0xLCBwcm9tcHQ6IHtwcm9tcHR9Iik7CgogICAgICAgIHZhciBib2R5ID0gbmV3CiAgICAgICAgewogICAgICAgICAgICBtb2RlbCA9ICJncHQtaW1hZ2UtMSIsCiAgICAgICAgICAgIHByb21wdCwKICAgICAgICAgICAgbiA9IDEsCiAgICAgICAgICAgIHNpemUgPSAiMTAyNHgxMDI0IiwKICAgICAgICAgICAgcmVzcG9uc2VfZm9ybWF0ID0gImI2NF9qc29uIgogICAgICAgIH07CgogICAgICAgIHZhciByZXNwb25zZSA9IGF3YWl0IF9jbGllbnQuUG9zdEFzSnNvbkFzeW5jKAogICAgICAgICAgICAiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MS9pbWFnZXMvZ2VuZXJhdGlvbnMiLCBib2R5KTsKCiAgICAgICAgaWYgKCFyZXNwb25zZS5Jc1N1Y2Nlc3NTdGF0dXNDb2RlKQogICAgICAgIHsKICAgICAgICAgICAgX2xvZ2dlci5Mb2dFcnJvcigkIkltYWdlIGdlbmVyYXRpb24gZmFpbGVkOiB7cmVzcG9uc2UuU3RhdHVzQ29kZX0iKTsKICAgICAgICAgICAgcmV0dXJuIEFycmF5LkVtcHR5PGJ5dGU+KCk7CiAgICAgICAgfQoKICAgICAgICB2YXIgcmVzdWx0ID0gYXdhaXQgcmVzcG9uc2UuQ29udGVudC5SZWFkRnJvbUpzb25Bc3luYzxKc29uRWxlbWVudD4oKTsKICAgICAgICB2YXIgYmFzZTY0ID0gcmVzdWx0LkdldFByb3BlcnR5KCJkYXRhIilbMF0uR2V0UHJvcGVydHkoImI2NF9qc29uIikuR2V0U3RyaW5nKCk7CiAgICAgICAgcmV0dXJuIENvbnZlcnQuRnJvbUJhc2U2NFN0cmluZyhiYXNlNjQhKTsKICAgIH0KCiAgICBwcml2YXRlIHN0YXRpYyBvYmplY3QgR2V0U3VtbWFyeShzdHJpbmcgdGV4dCwgaW50IG1lc3NhZ2VNYXhMZW5naHQpCiAgICB7CiAgICAgICAgdmFyIG1heFRva2VucyA9IG1lc3NhZ2VNYXhMZW5naHQgLyA1OyAvLyBBcHByb3hpbWF0ZSB0b2tlbiBjb3VudCAoMSB0b2tlbiB+IDQgY2hhcmFjdGVycykKICAgICAgICB2YXIgdW5kZXJDaGFyYWN0ZXJzID0gbWVzc2FnZU1heExlbmdodCAtIDUwOyAvLyBMZWF2ZSBzcGFjZSBmb3IgdGhlIGZpcm0KICAgICAgICByZXR1cm4gbmV3CiAgICAgICAgewogICAgICAgICAgICBtb2RlbCA9ICJncHQtNG8tbWluaSIsCiAgICAgICAgICAgIG1lc3NhZ2VzID0gbmV3W10KICAgICAgICAgICAgewogICAgICAgICAgICAgICAgbmV3IHsgcm9sZSA9ICJzeXN0ZW0iLCBjb250ZW50ID0gJCJZb3UgYXJlIGFuIGFzc2lzdGFudCB0aGF0IHN1bW1hcml6ZXMgdGV4dCBjb25jaXNlbHkuIEl0J3MgdmVyeSBpbXBvcnRhbnQgdGhhdCB5b3Uga2VlcCBzdW1tYXJpZXMgdW5kZXIge3VuZGVyQ2hhcmFjdGVyc30gY2hhcmFjdGVycy4iIH0sCiAgICAgICAgICAgICAgICBuZXcgeyByb2xlID0gInVzZXIiLCBjb250ZW50ID0gJCJTdW1tYXJpemUgdGhpcyB0ZXh0IGluIGEgZmV3IHNlbnRlbmNlcy4gdGV4dDoge3RleHR9IiB9CiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIG1heF90b2tlbnMgPSBtYXhUb2tlbnMsIC8vIExpbWl0IHN1bW1hcnkgdG8gbWF4VG9rZW5zIHRva2VucwogICAgICAgICAgICB0ZW1wZXJhdHVyZSA9IDAuNSAvLyBNYW5hZ2UgY3JlYXRpdml0eSAoMCA9IG1vcmUgZGV0ZXJtaW5pc3RpYywgMSA9IG1vcmUgY3JlYXRpdmUpCiAgICAgICAgfTsKICAgIH0KCiAgICBwcml2YXRlIHN0YXRpYyBvYmplY3QgR2V0UHJvbXB0Rm9ySW1hZ2Uoc3RyaW5nIHN1bW1hcnkpCiAgICB7CiAgICAgICAgcmV0dXJuIG5ldwogICAgICAgIHsKICAgICAgICAgICAgbW9kZWwgPSAiZ3B0LTRvLW1pbmkiLAogICAgICAgICAgICBtZXNzYWdlcyA9IG5ld1tdCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgIG5ldyB7IHJvbGUgPSAic3lzdGVtIiwgY29udGVudCA9ICJZb3UgYXJlIGFuIGFzc2lzdGFudCB0aGF0IGdlbmVyYXRlcyBpbWFnZSBwcm9tcHRzIGZvciBhbiBBSSBpbWFnZSBnZW5lcmF0aW9uIG1vZGVsIGJhc2VkIG9uIHRleHQgc3VtbWFyaWVzLiBDcmVhdGUgYSBjb25jaXNlLCB2aXZpZCBwcm9tcHQgaW4gRW5nbGlzaCB0aGF0IHJlZmxlY3RzIHRoZSBzdW1tYXJ5J3MgY29udGVudCwgaW5jbHVkZXMgYSBCaXRjb2luLXJlbGF0ZWQgZWxlbWVudCAoZS5nLiwgYSBjb2luKSwgYW5kIGF2b2lkcyB0ZXh0LCBzaWducywgb3Igd29yZHMgaW4gdGhlIGltYWdlLiBSZXNwZWN0IGNvbnRlbnQgcG9saWN5IGZvciBnZW5lcmF0aW5nIGltYWdlcy4iIH0sCiAgICAgICAgICAgICAgICBuZXcgeyByb2xlID0gInVzZXIiLCBjb250ZW50ID0gJCJHZW5lcmF0ZSBhbiBpbWFnZSBwcm9tcHQgYmFzZWQgb24gdGhpcyBzdW1tYXJ5OiB7c3VtbWFyeX0iIH0KICAgICAgICAgICAgfSwKICAgICAgICAgICAgbWF4X3Rva2VucyA9IDYwLAogICAgICAgICAgICB0ZW1wZXJhdHVyZSA9IDAuNwogICAgICAgIH07CiAgICB9Cn0=
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
+using XPoster.Abstraction;
+using XPoster.Models;
+
+namespace XPoster.Services;
+
+public class AiService : IAiService
+{
+    private readonly HttpClient _client;
+    private readonly ILogger<AiService> _logger;
+    public AiService(IHttpClientFactory httpClientFactory, ILogger<AiService> logger)
+    {
+        _logger = logger;
+        _client = httpClientFactory.CreateClient();
+        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
+    }
+
+    public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
+    {
+        if (!_client.DefaultRequestHeaders.Contains("Authorization"))
+        {
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
+        }
+
+        int tries = 0;
+
+        while (text != null && text.Length > messageMaxLength && tries <= 2)
+        {
+            tries++;
+            var response = await _client.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", GetSummary(text, messageMaxLength));
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+            {
+                _logger.LogInformation("Too many requests. Please try again later.");
+                return string.Empty;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation($"Error: {response.StatusCode}");
+                return string.Empty;
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
+            text = result?.choices[0].message.content.Trim() ?? string.Empty;
+        }
+        return text;
+    }
+
+    public async Task<string> GetImagePromptAsync(string text)
+    {
+        if (!_client.DefaultRequestHeaders.Contains("Authorization"))
+        {
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
+        }
+
+        var response = await _client.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", GetPromptForImage(text));
+        if (response.StatusCode == HttpStatusCode.TooManyRequests)
+        {
+            _logger.LogInformation("Too many requests. Please try again later.");
+            return string.Empty;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogInformation($"Error: {response.StatusCode}");
+            return string.Empty;
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
+        return result?.choices[0].message.content.Trim() ?? string.Empty;
+    }
+
+    public async Task<byte[]> GenerateImageAsync(string prompt)
+    {
+        // _client has Authorization: Bearer {OPENAI_API_KEY} already set from constructor
+        _logger.LogInformation($"Generating image with gpt-image-1, prompt: {prompt}");
+
+        var body = new
+        {
+            model = "gpt-image-1",
+            prompt,
+            n = 1,
+            size = "1024x1024",
+            response_format = "b64_json"
+        };
+
+        var response = await _client.PostAsJsonAsync(
+            "https://api.openai.com/v1/images/generations", body);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogError($"Image generation failed: {response.StatusCode}");
+            return Array.Empty<byte>();
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
+        return Convert.FromBase64String(base64!);
+    }
+
+    private static object GetSummary(string text, int messageMaxLenght)
+    {
+        var maxTokens = messageMaxLenght / 5; // Approximate token count (1 token ~ 4 characters)
+        var underCharacters = messageMaxLenght - 50; // Leave space for the firm
+        return new
+        {
+            model = "gpt-4o-mini",
+            messages = new[]
+            {
+                new { role = "system", content = $"You are an assistant that summarizes text concisely. It's very important that you keep summaries under {underCharacters} characters." },
+                new { role = "user", content = $"Summarize this text in a few sentences. text: {text}" }
+            },
+            max_tokens = maxTokens, // Limit summary to maxTokens tokens
+            temperature = 0.5 // Manage creativity (0 = more deterministic, 1 = more creative)
+        };
+    }
+
+    private static object GetPromptForImage(string summary)
+    {
+        return new
+        {
+            model = "gpt-4o-mini",
+            messages = new[]
+            {
+                new { role = "system", content = "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images." },
+                new { role = "user", content = $"Generate an image prompt based on this summary: {summary}" }
+            },
+            max_tokens = 60,
+            temperature = 0.7
+        };
+    }
+}
