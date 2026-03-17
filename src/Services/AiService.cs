@@ -75,11 +75,11 @@ public class AiService : IAiService
     public async Task<byte[]> GenerateImageAsync(string prompt)
     {
         // _client has Authorization: Bearer {OPENAI_API_KEY} already set from constructor
-        _logger.LogInformation($"Generating image with gpt-image-1, prompt: {prompt}");
+        _logger.LogInformation($"Generating image with gpt-image-1-mini, prompt: {prompt}");
 
         var body = new
         {
-            model = "gpt-image-1",
+            model = "gpt-image-1-mini",
             prompt,
             n = 1,
             size = "1024x1024",
