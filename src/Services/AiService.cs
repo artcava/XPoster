@@ -75,15 +75,15 @@ public class AiService : IAiService
     public async Task<byte[]> GenerateImageAsync(string prompt)
     {
         // _client has Authorization: Bearer {OPENAI_API_KEY} already set from constructor
-        _logger.LogInformation($"Generating image with gpt-image-1-mini, prompt: {prompt}");
+        // gpt-image-1 always returns b64_json by default; response_format param is not supported
+        _logger.LogInformation($"Generating image with gpt-image-1, prompt: {prompt}");
 
         var body = new
         {
-            model = "gpt-image-1-mini",
+            model = "gpt-image-1",
             prompt,
             n = 1,
-            size = "1024x1024",
-            response_format = "b64_json"
+            size = "1024x1024"
         };
 
         var response = await _client.PostAsJsonAsync(
