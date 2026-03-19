@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Memory;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -8,21 +8,42 @@ using XPoster.Models;
 
 namespace XPoster.Services;
 
+/// <summary>
+/// Fetches, parses, and caches RSS feed items from remote sources,
+/// filtering by publication date range and keyword match on the item title.
+/// Results are cached for 24 hours to avoid redundant network calls.
+/// </summary>
 public class FeedService : IFeedService
 {
     private readonly IMemoryCache _cache;
-    // Logger può essere iniettato se necessario
     private readonly ILogger<FeedService> _logger;
 
+    /// <summary>
+    /// Initialises a new instance of <see cref="FeedService"/>.
+    /// </summary>
+    /// <param name="cache">The in-memory cache used to store fetched feed results.</param>
+    /// <param name="logger">The logger for diagnostic output.</param>
     public FeedService(IMemoryCache cache, ILogger<FeedService> logger)
     {
         _cache = cache;
         _logger = logger;
     }
 
+    /// <summary>
+    /// Retrieves RSS items from <paramref name="url"/> published between <paramref name="start"/> and <paramref name="end"/>
+    /// whose title contains at least one of the supplied <paramref name="keywords"/>.
+    /// Results are served from an in-memory cache when available.
+    /// </summary>
+    /// <param name="url">The URL of the RSS feed to fetch.</param>
+    /// <param name="start">The inclusive lower bound of the publication date range.</param>
+    /// <param name="end">The inclusive upper bound of the publication date range.</param>
+    /// <param name="keywords">Keywords to match against item titles (case-insensitive).</param>
+    /// <returns>
+    /// A collection of matching <see cref="RSSFeed"/> entries, or an empty enumerable
+    /// if the feed cannot be fetched or no items match the criteria.
+    /// </returns>
     public async Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end, IEnumerable<string> keywords)
     {
-        // Cache key basata su URL e intervallo temporale
         var cacheKey = $"feeds_{url}_{start:yyyyMMdd}_{end:yyyyMMdd}";
 
         if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed> cachedFeeds))
@@ -30,7 +51,6 @@ public class FeedService : IFeedService
             _logger.LogInformation($"Feed served from cache for {url}");
             return cachedFeeds;
         }
-
 
         var feeds = new List<RSSFeed>();
 
@@ -41,24 +61,6 @@ public class FeedService : IFeedService
 
         try
         {
-            /* OLD Code
-            using var reader = XmlReader.Create(url, new XmlReaderSettings { Async = true });
-            var feed = SyndicationFeed.Load(reader);
-            if (feed == null) return Enumerable.Empty<RSSFeed>();
-
-            feeds.AddRange(feed.Items.Where(x =>
-                            x.PublishDate >= start &&
-                            x.PublishDate <= end &&
-                            (x.Title.Text.Contains("bitcoin", StringComparison.OrdinalIgnoreCase) || x.Title.Text.Contains("btc", StringComparison.OrdinalIgnoreCase)))
-                .Select(item => new RSSFeed
-                {
-                    Title = item.Title.Text,
-                    Content = System.Net.WebUtility.HtmlDecode(Regex.Replace(item.Summary.Text, "<[^>]+>", " ").Trim()),
-                    Link = item.Links.FirstOrDefault()?.Uri.ToString() ?? string.Empty,
-                    PublishDate = item.PublishDate
-                }));
-            */
-            /* NEW code */
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; ConsoleApp/1.0)");
             using var response = httpClient.GetAsync(url).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
@@ -97,27 +99,19 @@ public class FeedService : IFeedService
                     }
 
                     string title = x.Title ?? string.Empty;
-
                     return keywords.Any(keyword => title.Contains(keyword, StringComparison.OrdinalIgnoreCase));
-
-                    //return title.Contains("bitcoin", StringComparison.OrdinalIgnoreCase) ||
-                    //       title.Contains("btc", StringComparison.OrdinalIgnoreCase);
                 })
                 .Select(item => new RSSFeed
                 {
                     Title = item.Title,
-
                     Content = WebUtility.HtmlDecode(
                         Regex.Replace(item.ItemElement.Element("description")?.Value ?? string.Empty, "<[^>]+>", " ").Trim()),
-
                     Link = item.ItemElement.Element("link")?.Value,
-
                     PublishDate = (DateTimeOffset)item.PublishDate
                 }));
         }
         catch (Exception) { return Enumerable.Empty<RSSFeed>(); }
 
-        // Cache per 1 giorno
         _cache.Set(cacheKey, feeds, TimeSpan.FromHours(24));
 
         return await Task.FromResult(feeds);

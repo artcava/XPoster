@@ -6,10 +6,21 @@ using XPoster.Models;
 
 namespace XPoster.Services;
 
+/// <summary>
+/// Implements <see cref="IAiService"/> by calling the OpenAI Chat Completions and Image Generations APIs.
+/// Uses <c>gpt-4o-mini</c> for text tasks and <c>gpt-image-1</c> for image generation.
+/// </summary>
 public class AiService : IAiService
 {
     private readonly HttpClient _client;
     private readonly ILogger<AiService> _logger;
+
+    /// <summary>
+    /// Initialises a new instance of <see cref="AiService"/>, configuring the HTTP client
+    /// with the OpenAI Bearer token read from the <c>OPENAI_API_KEY</c> environment variable.
+    /// </summary>
+    /// <param name="httpClientFactory">The factory used to create the underlying <see cref="HttpClient"/>.</param>
+    /// <param name="logger">The logger for diagnostic output.</param>
     public AiService(IHttpClientFactory httpClientFactory, ILogger<AiService> logger)
     {
         _logger = logger;
@@ -17,6 +28,7 @@ public class AiService : IAiService
         _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
     }
 
+    /// <inheritdoc/>
     public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
     {
         if (!_client.DefaultRequestHeaders.Contains("Authorization"))
@@ -48,6 +60,7 @@ public class AiService : IAiService
         return text;
     }
 
+    /// <inheritdoc/>
     public async Task<string> GetImagePromptAsync(string text)
     {
         if (!_client.DefaultRequestHeaders.Contains("Authorization"))
@@ -72,10 +85,9 @@ public class AiService : IAiService
         return result?.choices[0].message.content.Trim() ?? string.Empty;
     }
 
+    /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt)
     {
-        // _client has Authorization: Bearer {OPENAI_API_KEY} already set from constructor
-        // gpt-image-1 always returns b64_json by default; response_format param is not supported
         _logger.LogInformation($"Generating image with gpt-image-1, prompt: {prompt}");
 
         var body = new
@@ -100,10 +112,17 @@ public class AiService : IAiService
         return Convert.FromBase64String(base64!);
     }
 
+    /// <summary>
+    /// Builds the request payload for the Chat Completions API to summarise <paramref name="text"/>
+    /// within the given character budget.
+    /// </summary>
+    /// <param name="text">The text to summarise.</param>
+    /// <param name="messageMaxLenght">The character limit that the summary must respect.</param>
+    /// <returns>An anonymous object serialisable as a valid OpenAI Chat Completions request body.</returns>
     private static object GetSummary(string text, int messageMaxLenght)
     {
-        var maxTokens = messageMaxLenght / 5; // Approximate token count (1 token ~ 4 characters)
-        var underCharacters = messageMaxLenght - 50; // Leave space for the firm
+        var maxTokens = messageMaxLenght / 5;
+        var underCharacters = messageMaxLenght - 50;
         return new
         {
             model = "gpt-4o-mini",
@@ -112,11 +131,17 @@ public class AiService : IAiService
                 new { role = "system", content = $"You are an assistant that summarizes text concisely. It's very important that you keep summaries under {underCharacters} characters." },
                 new { role = "user", content = $"Summarize this text in a few sentences. text: {text}" }
             },
-            max_tokens = maxTokens, // Limit summary to maxTokens tokens
-            temperature = 0.5 // Manage creativity (0 = more deterministic, 1 = more creative)
+            max_tokens = maxTokens,
+            temperature = 0.5
         };
     }
 
+    /// <summary>
+    /// Builds the request payload for the Chat Completions API to derive an image generation prompt
+    /// from a news <paramref name="summary"/>.
+    /// </summary>
+    /// <param name="summary">The text summary to base the image prompt on.</param>
+    /// <returns>An anonymous object serialisable as a valid OpenAI Chat Completions request body.</returns>
     private static object GetPromptForImage(string summary)
     {
         return new
