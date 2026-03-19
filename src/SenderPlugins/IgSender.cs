@@ -1,10 +1,15 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using XPoster.Abstraction;
 using XPoster.Models;
 
 namespace XPoster.SenderPlugins
 {
+    /// <summary>
+    /// Publishes image posts to Instagram using the Instagram Graph API (v20.0).
+    /// Requires an image; text-only posts are not supported by the API and will return <c>false</c>.
+    /// Credentials are read from the <c>IG_ACCESS_TOKEN</c> and <c>IG_ACCOUNT_ID</c> environment variables.
+    /// </summary>
     public class IgSender : ISender
     {
         private readonly HttpClient _httpClient;
@@ -12,6 +17,14 @@ namespace XPoster.SenderPlugins
         private readonly string _accessToken;
         private readonly string _instagramAccountId;
 
+        /// <summary>
+        /// Initialises a new instance of <see cref="IgSender"/>, reading Instagram credentials
+        /// from environment variables.
+        /// </summary>
+        /// <param name="logger">The logger for diagnostic output.</param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when <c>IG_ACCESS_TOKEN</c> or <c>IG_ACCOUNT_ID</c> are not set.
+        /// </exception>
         public IgSender(ILogger<IgSender> logger)
         {
             _httpClient = new HttpClient();
@@ -25,8 +38,15 @@ namespace XPoster.SenderPlugins
             }
         }
 
-        public int MessageMaxLenght => 2200; // Limite di Instagram per le didascalie
+        /// <summary>Gets the maximum caption length allowed by Instagram (2200 characters).</summary>
+        public int MessageMaxLenght => 2200;
 
+        /// <summary>
+        /// Publishes <paramref name="post"/> to Instagram via a two-step Graph API flow:
+        /// create a media container, then publish it. Requires a non-null image.
+        /// </summary>
+        /// <param name="post">The post to publish. Must include a non-null <see cref="Post.Image"/>.</param>
+        /// <returns><c>true</c> if the post was published successfully; <c>false</c> otherwise.</returns>
         public async Task<bool> SendAsync(Post post)
         {
             try
@@ -40,7 +60,6 @@ namespace XPoster.SenderPlugins
 
                 if (post.Image != null && post.Image.Length > 0)
                 {
-                    // Step 1: Carica l'immagine su un URL pubblico (es. Azure Blob Storage)
                     string imageUrl = await UploadImageToPublicUrl(post.Image);
                     if (string.IsNullOrEmpty(imageUrl))
                     {
@@ -48,7 +67,6 @@ namespace XPoster.SenderPlugins
                         return false;
                     }
 
-                    // Step 2: Crea un media object
                     var mediaPayload = new
                     {
                         image_url = imageUrl,
@@ -67,7 +85,6 @@ namespace XPoster.SenderPlugins
                     var mediaData = JsonSerializer.Deserialize<dynamic>(await mediaResponse.Content.ReadAsStringAsync());
                     string creationId = mediaData.GetProperty("id").GetString();
 
-                    // Step 3: Pubblica il media
                     var publishPayload = new
                     {
                         creation_id = creationId,
@@ -88,7 +105,7 @@ namespace XPoster.SenderPlugins
                 else
                 {
                     _logger.LogWarning("Instagram richiede un'immagine per i post. Pubblicazione non eseguita.");
-                    return false; // Instagram non supporta post solo testo tramite API
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -98,17 +115,20 @@ namespace XPoster.SenderPlugins
             }
         }
 
+        /// <summary>
+        /// Uploads the given image bytes to a publicly accessible URL so that the Instagram API
+        /// can retrieve it during media container creation.
+        /// </summary>
+        /// <param name="image">The raw image bytes to upload.</param>
+        /// <returns>The public URL of the uploaded image.</returns>
+        /// <exception cref="NotImplementedException">
+        /// Always thrown — this method is a placeholder pending integration with a public storage service
+        /// such as Azure Blob Storage.
+        /// </exception>
         private async Task<string> UploadImageToPublicUrl(byte[] image)
         {
-            // TODO: Implementa il caricamento su un servizio pubblico (es. Azure Blob Storage)
-            // Questo è un placeholder: dovrai sostituirlo con la tua logica reale
             _logger.LogInformation("Caricamento immagine su URL pubblico (da implementare).");
             throw new NotImplementedException("Caricamento immagine su URL pubblico non implementato.");
-            // Esempio con Azure Blob Storage:
-            // var blobClient = new BlobClient(connectionString, containerName, "image.jpg");
-            // using var stream = new MemoryStream(image);
-            // await blobClient.UploadAsync(stream);
-            // return blobClient.Uri.ToString();
         }
     }
 }
