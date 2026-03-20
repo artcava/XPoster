@@ -15,25 +15,25 @@
 
 ## 📋 Table of Contents
 
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Technologies](#-technologies)
-- [Getting Started](#-getting-started)
-- [Configuration](#-configuration)
-- [Deployment](#-deployment)
-- [Usage](#-usage)
-- [Scheduling](#-scheduling)
-- [Extensibility](#-extensibility)
-- [Testing](#-testing)
-- [Monitoring](#-monitoring)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Technologies](#technologies)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+- [Deployment](#deployment)
+- [Usage](#usage)
+- [Scheduling](#scheduling)
+- [Extensibility](#extensibility)
+- [Testing](#testing)
+- [Monitoring](#monitoring)
 - [Roadmap](#roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [Contributing](#contributing)
+- [License](#license)
 
 
 ---
 
-## ✨ Features
+## Features
 
 ### 🤖 Content Generation
 - **AI-Powered Summarization**: Intelligent RSS feed summaries using GPT-4
@@ -60,7 +60,7 @@
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### High-Level Overview
 
@@ -138,7 +138,7 @@ Dynamically selects the appropriate generator based on current time.
 
 ---
 
-## 🛠️ Technologies
+## Technologies
 
 ### Core Framework
 - **.NET 8.0** - Main framework
@@ -164,7 +164,7 @@ Dynamically selects the appropriate generator based on current time.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -201,7 +201,7 @@ dotnet test
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### 1. Local Development
 
@@ -261,7 +261,7 @@ builder.Services.AddSingleton<OpenAIClient>(sp =>
 
 ---
 
-## 📦 Deployment
+## Deployment
 
 ### Option 1: GitHub Actions (Automated CI/CD)
 
@@ -315,7 +315,7 @@ func azure functionapp publish xposterfunction
 
 ---
 
-## 🎯 Usage
+## Usage
 
 ### Local Execution
 
@@ -351,7 +351,7 @@ public async Task<HttpResponseData> RunHttp(
 
 ---
 
-## ⏰ Scheduling
+## Scheduling
 
 ### Schedule Configuration
 
@@ -417,7 +417,7 @@ private static readonly Dictionary<int, MessageSender> sendParameters = new()
 
 ---
 
-## 🔌 Extensibility
+## Extensibility
 
 ### Adding a New Platform
 
@@ -482,7 +482,7 @@ public class QuoteGenerator : BaseGenerator
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Test Structure
 
@@ -543,7 +543,7 @@ public async Task FeedGenerator_ShouldGenerateSummary()
 
 ---
 
-## 📊 Monitoring
+## Monitoring
 
 ### Application Insights
 
@@ -589,7 +589,7 @@ Configure alerts for:
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 ### ✅ Phase 1: Foundation (Complete)
 - [x] Azure Function setup
@@ -633,7 +633,7 @@ Configure alerts for:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and feature requests are welcome!
 
@@ -678,7 +678,7 @@ public async Task<Post> GenerateAsync() {
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
@@ -705,7 +705,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ---
 
-## 👤 Author
+## Author
 
 **Marco Cavallo**
 
@@ -717,7 +717,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Azure Functions](https://azure.microsoft.com/services/functions/) - Serverless platform
 - [OpenAI](https://openai.com/) - AI models (GPT-4, DALL-E)
@@ -726,7 +726,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ---
 
-## 📞 Support
+## Support
 
 - **Issues**: [GitHub Issues](https://github.com/artcava/XPoster/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/artcava/XPoster/discussions)
@@ -734,7 +734,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ---
 
-## 🌟 Star History
+## Star History
 
 If you find this project useful, consider leaving a ⭐ on GitHub!
 
