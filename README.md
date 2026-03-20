@@ -26,7 +26,7 @@
 - [Extensibility](#-extensibility)
 - [Testing](#-testing)
 - [Monitoring](#-monitoring)
-- [Roadmap](#-roadmap)
+- [Roadmap](#roadmap)
 - [Contributing](#-contributing)
 - [License](#-license)
 
