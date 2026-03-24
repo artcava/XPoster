@@ -1,50 +1,47 @@
-## Description
-<!-- Provide a clear description of the changes -->
+## Summary
 
-## Related Issue
-<!-- Link to the approved issue -->
-Closes #
+<!-- Briefly describe what this PR does and why. -->
+
+Closes #<!-- issue number -->
+
+---
 
 ## Type of Change
-<!-- Mark with an 'x' -->
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📝 Documentation update
-- [ ] ♻️ Code refactoring
-- [ ] ⚡ Performance improvement
-- [ ] 🧪 Test addition/update
 
-## Changes Made
-<!-- List the key changes -->
-- 
-- 
-- 
+- [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
+- [ ] ✨ New feature (non-breaking change that adds functionality)
+- [ ] 📖 Documentation update
+- [ ] ♻️ Refactor (no functional change)
+- [ ] ✅ Tests only
+- [ ] 🚨 Breaking change (fix or feature that would cause existing behaviour to change)
 
-## Testing
-<!-- Describe the tests you ran -->
-- [ ] Unit tests pass (`dotnet test`)
-- [ ] Integration tests pass
-- [ ] Manual testing completed
-- [ ] New tests added for this change
+---
 
-## Screenshots (if applicable)
-<!-- Add screenshots for UI changes -->
+## Testing Checklist
 
-## Checklist
-<!-- Mark completed items with 'x' -->
-- [ ] My code follows the project's coding standards
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published
+- [ ] `dotnet build` passes with no warnings
+- [ ] `dotnet test` passes locally
+- [ ] New/modified code is covered by unit tests
+- [ ] Code coverage has not decreased
 
-## Maintainer Review Notes
-<!-- For maintainer use only -->
-- [ ] Code quality approved
-- [ ] Tests adequate
-- [ ] Documentation updated
-- [ ] Ready to merge
+---
+
+## Documentation
+
+- [ ] Relevant `docs/` pages updated
+- [ ] `tests/README.md` updated if testing approach changed
+- [ ] `CONTRIBUTING.md` still accurate
+- [ ] No dead links introduced
+
+---
+
+## Breaking Changes
+
+<!-- If this PR introduces breaking changes, describe what breaks and the migration path. -->
+N/A
+
+---
+
+## Screenshots / Logs (if applicable)
+
+<!-- Add screenshots or log excerpts that help reviewers understand the change. -->
