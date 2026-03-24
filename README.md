@@ -202,6 +202,20 @@ dotnet build
 dotnet test
 ```
 
+### Configure Local Settings
+
+A template file with all required keys and inline documentation is versioned at [`src/local.settings.json.example`](src/local.settings.json.example).
+
+Copy it and fill in your credentials before running the function locally:
+
+```bash
+cp src/local.settings.json.example src/local.settings.json
+```
+
+Then open `src/local.settings.json` and replace every empty string `""` with the actual value for each service. See the [Configuration](#configuration) section for details on where to obtain each credential.
+
+> ⚠️ `local.settings.json` is listed in `.gitignore` and will **never** be committed. The `.example` variant is safe to version because it contains no real secrets.
+
 ---
 
 ## Configuration
