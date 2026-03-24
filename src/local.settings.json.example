@@ -15,6 +15,13 @@
     //   "*/30 * * * * *" → every 30 seconds (dev/testing only)
     "CronSchedule": "0 5 * * * *",
 
+    // ─── Application Insights ─────────────────────────────────────────────────
+    // Obtain from Azure Portal → Application Insights resource → Overview blade.
+    // Copy the full "Connection String" (begins with "InstrumentationKey=").
+    // Setting this key locally enables Live Metrics and log streaming during
+    // `func start`. Leave empty to disable local telemetry.
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": "",
+
     // ─── Twitter / X API ──────────────────────────────────────────────────────
     // Obtain from https://developer.twitter.com → Projects & Apps → your app → Keys and Tokens
     // Requires "Read and Write" permissions on the app.
