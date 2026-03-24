@@ -573,15 +573,85 @@ public async Task FeedGenerator_ShouldGenerateSummary()
 
 ## Monitoring
 
-### Application Insights
+### Application Insights Setup
 
-**Key Metrics**:
+#### 1. Create the Application Insights Resource
+
+1. In the **Azure Portal**, search for **Application Insights** and click **Create**
+2. Fill in the details:
+   - **Name**: e.g. `xposter-appinsights`
+   - **Resource Group**: same as your Function App (`XPosterRG`)
+   - **Region**: same region as the Function App
+   - **Resource Mode**: Workspace-based (recommended)
+3. Click **Review + Create**, then **Create**
+4. Once created, navigate to the resource and copy the **Connection String** (shown on the Overview blade)
+
+#### 2. Link Application Insights to the Function App
+
+Add the connection string as an **Application Setting** in the Function App:
+
+**Via Azure Portal**:
+1. Go to **Function App** → **Configuration** → **Application Settings**
+2. Click **+ New application setting**
+3. Name: `APPLICATIONINSIGHTS_CONNECTION_STRING`
+4. Value: paste the full connection string copied above
+5. Click **Save** and confirm the restart
+
+**Via Azure CLI**:
+```bash
+az functionapp config appsettings set \
+  --name xposterfunction \
+  --resource-group XPosterRG \
+  --settings "APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
+```
+
+#### 3. SDK Wiring in Program.cs
+
+The `Microsoft.Azure.Functions.Worker.ApplicationInsights` package is used. It is automatically registered when the connection string is present in the environment. No explicit SDK code is required in `Program.cs` for Azure Functions v4 isolated worker beyond the standard host builder:
+
+```csharp
+// Program.cs — Application Insights is enabled automatically
+// when APPLICATIONINSIGHTS_CONNECTION_STRING is set.
+var host = new HostBuilder()
+    .ConfigureFunctionsWebApplication()
+    .ConfigureServices(services =>
+    {
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
+        // ... other registrations
+    })
+    .Build();
+```
+
+#### 4. Connection String Configuration
+
+Add the following key to `local.settings.json` for local telemetry (optional but recommended for debugging):
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
+  }
+}
+```
+
+> ⚠️ The key is already included in [`src/local.settings.json.example`](src/local.settings.json.example). See [#29](https://github.com/artcava/XPoster/issues/29) for the full settings template.
+
+---
+
+### Key Metrics
+
 - **Execution Count**: Number of function executions
 - **Success Rate**: % of successful executions
 - **Average Duration**: Average execution time
 - **AI Token Usage**: OpenAI token consumption
 
-**Useful KQL Queries**:
+---
+
+### KQL Queries
+
+All queries below are verified against the Azure Functions v4 isolated worker table schema (`requests`, `traces`, `dependencies`).
 
 ```kql
 // Executions last 24h
@@ -591,7 +661,7 @@ requests
 | summarize count() by bin(timestamp, 1h)
 | render timechart
 
-// Error rate
+// Error rate (severity >= 3 = Warning+)
 traces
 | where timestamp > ago(7d)
 | where severityLevel >= 3
@@ -606,15 +676,109 @@ dependencies
 | summarize totalTokens = sum(tokenUsage), totalCost = sum(tokenUsage) * 0.00006
 ```
 
+> 💡 **Tip**: To pin any query result to an Azure Dashboard, run it in the **Logs** blade, click the **Pin to dashboard** icon (📌) in the top-right corner of the results panel, choose your dashboard, and click **Pin**.
+
+---
+
+### Live Metrics (Local Development)
+
+Application Insights **Live Metrics** streams telemetry in near real-time with sub-second latency — useful to verify the function is behaving correctly during local development.
+
+1. Start the function locally:
+   ```bash
+   cd src
+   func start
+   ```
+2. In the Azure Portal, open your **Application Insights** resource
+3. Click **Live Metrics** in the left-hand menu
+4. Trigger a function execution (timer fires automatically, or use an HTTP trigger)
+5. Observe incoming requests, dependency calls, exceptions, and custom traces in real time
+
+> ℹ️ Live Metrics works even in local development as long as `APPLICATIONINSIGHTS_CONNECTION_STRING` is set in `local.settings.json`.
+
+---
+
+### Alerting Configuration
+
+#### Step-by-Step: Create an Alert via Azure Portal
+
+The following example creates an alert for **more than 3 consecutive errors within 1 hour**:
+
+1. In the Azure Portal, navigate to your **Application Insights** resource
+2. Select **Alerts** → **+ Create** → **Alert rule**
+3. **Scope**: confirm it points to the Application Insights resource
+4. **Condition**:
+   - Click **+ Add condition**
+   - Signal type: **Custom log search**
+   - Enter the following KQL query:
+     ```kql
+     traces
+     | where severityLevel >= 3
+     | where timestamp > ago(1h)
+     | summarize errorCount = count()
+     ```
+   - Alert logic: **Greater than** threshold **3**
+   - Evaluation frequency: `5 minutes`
+   - Lookback period: `1 hour`
+5. **Actions**:
+   - Click **+ Add action group** → **Create action group**
+   - Add a notification: type **Email/SMS/Push/Voice**, fill in your email
+   - Optionally add a **Webhook** action (e.g. to a Slack/Teams incoming webhook URL)
+6. **Details**:
+   - Severity: **2 – Warning**
+   - Alert rule name: `XPoster - Consecutive Errors`
+7. Click **Review + Create**
+
+#### Recommended Alert Rules
+
+| Alert | KQL signal | Threshold | Severity |
+|-------|-----------|-----------|----------|
+| Consecutive errors | `traces \| where severityLevel >= 3` | > 3 in 1h | Sev 2 – Warning |
+| Token budget exceeded | `dependencies \| where target contains "openai" \| extend t = toint(customDimensions.tokenCount) \| summarize sum(t)` | > monthly budget | Sev 2 – Warning |
+| High latency | `requests \| where name == "XPosterFunction" \| summarize avg(duration)` | > 60 000 ms | Sev 3 – Informational |
+| Function downtime | Built-in **Availability** test on the Function App URL | < 100% | Sev 1 – Error |
+
+#### IaC: Bicep Snippet for Alert Provisioning
+
+Use the following Bicep snippet to provision the consecutive-errors alert rule as Infrastructure-as-Code:
+
+```bicep
+resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-15' = {
+  name: 'XPoster-ConsecutiveErrors'
+  location: resourceGroup().location
+  properties: {
+    description: 'Fires when more than 3 errors are logged within 1 hour'
+    severity: 2
+    enabled: true
+    scopes: [
+      appInsights.id
+    ]
+    evaluationFrequency: 'PT5M'
+    windowSize: 'PT1H'
+    criteria: {
+      allOf: [
+        {
+          query: 'traces | where severityLevel >= 3 | summarize errorCount = count()'
+          timeAggregation: 'Count'
+          operator: 'GreaterThan'
+          threshold: 3
+          failingPeriods: {
+            numberOfEvaluationPeriods: 1
+            minFailingPeriodsToAlert: 1
+          }
+        }
+      ]
+    }
+    actions: {
+      actionGroups: [
+        actionGroup.id
+      ]
+    }
+  }
+}
+```
+
 > 📖 Full KQL queries, alert thresholds, and live debugging instructions: [docs/monitoring.md](docs/monitoring.md).
-
-### Alerting
-
-Configure alerts for:
-- **Consecutive errors** (> 3 in 1 hour)
-- **Token usage** (> monthly budget)
-- **Latency** (> 60 seconds)
-- **Function downtime**
 
 ---
 
