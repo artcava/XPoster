@@ -6,6 +6,7 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-Powered-412991?logo=openai&logoColor=white)](https://openai.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deployment](https://img.shields.io/badge/Deployed-Azure-blue)](https://xposterfunction.azurewebsites.net/)
+[![Build and Deploy](https://github.com/artcava/XPoster/actions/workflows/master_xposterfunction.yml/badge.svg)](https://github.com/artcava/XPoster/actions/workflows/master_xposterfunction.yml)
 
 > **AI-Powered Social Media Automation Platform**
 > 
