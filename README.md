@@ -30,6 +30,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 
+> 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
@@ -61,6 +62,8 @@
 ---
 
 ## Architecture
+
+> 📐 For the full architectural rationale, ADRs, design patterns, and Mermaid data-flow diagram, see **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ### High-Level Overview
 
