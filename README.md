@@ -216,6 +216,8 @@ Then open `src/local.settings.json` and replace every empty string `""` with the
 
 > ⚠️ `local.settings.json` is listed in `.gitignore` and will **never** be committed. The `.example` variant is safe to version because it contains no real secrets.
 
+> 📖 For the full expanded setup guide with troubleshooting tips, see [docs/getting-started.md](docs/getting-started.md).
+
 ---
 
 ## Configuration
@@ -249,6 +251,8 @@ Create a `local.settings.json` file in the `src/` directory:
   }
 }
 ```
+
+> 📖 Full configuration reference with types, defaults, and where to obtain each credential: [docs/configuration.md](docs/configuration.md).
 
 ### 2. Azure Configuration
 
@@ -329,6 +333,8 @@ func azure functionapp publish xposterfunction
 3. Choose **Azure** → **Azure Function App (Windows)**
 4. Select or create a Function App
 5. Click **Publish**
+
+> 📖 Step-by-step guide with post-deployment checklist: [docs/deployment.md](docs/deployment.md).
 
 ---
 
@@ -482,6 +488,8 @@ case MessageSender.TikTokSummaryFeed:
     );
 ```
 
+> 📖 Full extension guide with services and design constraints: [docs/extending-xposter.md](docs/extending-xposter.md).
+
 ### Adding a New Generator
 
 ```csharp
@@ -529,6 +537,8 @@ dotnet test --filter "FullyQualifiedName~FeedGenerator"
 # With coverage
 dotnet test --collect:"XPlat Code Coverage"
 ```
+
+> 📖 Full testing strategy, mocking patterns, and coverage goals: [tests/README.md](tests/README.md).
 
 ### Mocking External Services
 
@@ -595,6 +605,7 @@ dependencies
 | summarize totalTokens = sum(tokenUsage), totalCost = sum(tokenUsage) * 0.00006
 ```
 
+> 📖 Full KQL queries, alert thresholds, and live debugging instructions: [docs/monitoring.md](docs/monitoring.md).
 
 ### Alerting
 
@@ -764,7 +775,7 @@ If you find this project useful, consider leaving a ⭐ on GitHub!
 **Made with ❤️ in Turin, Italy**
 
 [🏠 Homepage](https://xposter.artcava.net/) • 
-[📖 Documentation](https://github.com/artcava/XPoster/wiki) • 
+[📖 Documentation](docs/index.md) • 
 [🐛 Report Bug](https://github.com/artcava/XPoster/issues) • 
 [💡 Request Feature](https://github.com/artcava/XPoster/issues)
 
