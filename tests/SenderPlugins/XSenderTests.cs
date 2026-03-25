@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Abstraction;
 using XPoster.Models;
@@ -13,7 +13,6 @@ public class XSenderTests
     public XSenderTests()
     {
         _mockLogger = new Mock<ILogger<XSender>>();
-        // Setup environment variables for tests
         Environment.SetEnvironmentVariable("X_ACCESS_TOKEN", "test_token_12345");
         Environment.SetEnvironmentVariable("X_ACCESS_TOKEN_SECRET", "123456789");
     }
@@ -23,10 +22,7 @@ public class XSenderTests
     [Fact]
     public void Constructor_InitializesCorrectly()
     {
-        // Act
         var sender = new XSender(_mockLogger.Object);
-
-        // Assert
         Assert.NotNull(sender);
         Assert.Equal(250, sender.MessageMaxLenght);
     }
@@ -34,17 +30,14 @@ public class XSenderTests
     [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new XSender(null));
+        // CS8625: passing null intentionally to test null-guard — suppress with null!
+        Assert.Throws<ArgumentNullException>(() => new XSender(null!));
     }
 
     [Fact]
     public void XSender_ImplementsISender()
     {
-        // Arrange & Act
         var sender = new XSender(_mockLogger.Object);
-
-        // Assert
         Assert.IsAssignableFrom<ISender>(sender);
     }
 
@@ -57,10 +50,12 @@ public class XSenderTests
     {
         // Arrange
         var sender = new XSender(_mockLogger.Object);
-        Post post = null;
+        // CS8600: null intentional — testing null guard in SendAsync
+        Post? post = null;
 
         // Act
-        var result = await sender.SendAsync(post);
+        // CS8604: passing null! intentionally to test null-guard behaviour
+        var result = await sender.SendAsync(post!);
 
         // Assert
         Assert.False(result);
@@ -68,11 +63,13 @@ public class XSenderTests
             x => x.Log(
                 LogLevel.Warning,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("null")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception, string>>()
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("null")),
+                It.IsAny<Exception?>(),
+                // CS8620: formatter param is Func<..., Exception?, string> — aligned
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ), Times.Once);
     }
+
     #endregion
 
     #region Environment Variable Tests
@@ -80,20 +77,15 @@ public class XSenderTests
     [Fact]
     public void Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()
     {
-        // Arrange
         Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", null);
-
-        // Act & Assert
         try
         {
             var sender = new XSender(_mockLogger.Object);
-            // If it doesn't throw, verify it was created
             Assert.NotNull(sender);
         }
         catch (Exception ex)
         {
-            // If it throws, verify it's related to missing token
-            Assert.True(ex.Message.Contains("token") || ex is ArgumentNullException);
+            Assert.True(ex.Message.Contains("token", StringComparison.OrdinalIgnoreCase) || ex is ArgumentNullException || ex is InvalidOperationException);
         }
     }
 

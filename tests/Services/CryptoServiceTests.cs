@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using System.Net;
@@ -23,16 +23,16 @@ public class CryptoServiceTests
     [Fact]
     public async Task GetCryptoValue_ReturnsParsedValue_WhenNumericString()
     {
-        // ARRANGE
         var expectedValue = 39750.55m;
         var responseString = expectedValue.ToString();
 
-        var service = MakeService(out var handlerMock, out var loggerMock);
+        var service = MakeService(out var handlerMock, out _);
 
         handlerMock.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(req => req.RequestUri.ToString().Contains("BTC")),
+                // CS8602: RequestUri can be null; use null-forgiving only in test setup where URL is always set
+                ItExpr.Is<HttpRequestMessage>(req => req.RequestUri!.ToString().Contains("BTC")),
                 ItExpr.IsAny<CancellationToken>()
             )
             .ReturnsAsync(new HttpResponseMessage
@@ -42,18 +42,14 @@ public class CryptoServiceTests
             })
             .Verifiable();
 
-        // ACT
         var value = await service.GetCryptoValue("BTC");
-
-        // ASSERT
         Assert.Equal(expectedValue, value);
     }
 
     [Fact]
     public async Task GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()
     {
-        // ARRANGE
-        var service = MakeService(out var handlerMock, out var loggerMock);
+        var service = MakeService(out var handlerMock, out _);
 
         handlerMock.Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -67,17 +63,13 @@ public class CryptoServiceTests
                 Content = new StringContent("N/A"),
             });
 
-        // ACT
         var value = await service.GetCryptoValue("BTC");
-
-        // ASSERT
         Assert.Equal(0m, value);
     }
 
     [Fact]
     public async Task GetCryptoValue_ReturnsZero_AndLogsError_OnException()
     {
-        // ARRANGE
         var service = MakeService(out var handlerMock, out var loggerMock);
 
         handlerMock.Protected()
@@ -88,18 +80,17 @@ public class CryptoServiceTests
             )
             .ThrowsAsync(new HttpRequestException("Timeout"));
 
-        // ACT
         var value = await service.GetCryptoValue("BTC");
-
-        // ASSERT
         Assert.Equal(0m, value);
+
         loggerMock.Verify(
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Failed to get crypto value")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception, string>>()
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Failed to get crypto value")),
+                It.IsAny<Exception?>(),
+                // CS8620: formatter aligned to Func<..., Exception?, string>
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ), Times.Once);
     }
 }
