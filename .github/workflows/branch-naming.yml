@@ -13,10 +13,25 @@ jobs:
         with:
           script: |
             const branch = context.payload.pull_request.head.ref;
+            const baseBranch = context.payload.pull_request.base.ref;
+
+            // Skip naming check for Git Flow promotion PRs (develop -> master)
+            const exemptBranches = ['develop'];
+            if (exemptBranches.includes(branch)) {
+              console.log(`✅ Branch "${branch}" is a Git Flow integration branch — naming check skipped.`);
+              return;
+            }
+
+            // Skip if target is master (only develop should merge into master,
+            // source validation is handled by branch-protection.yml)
+            if (baseBranch === 'master') {
+              console.log(`✅ PR targeting master from "${branch}" — naming check skipped (handled by branch-protection.yml).`);
+              return;
+            }
+
             const validPrefixes = ['feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/'];
-            
             const isValid = validPrefixes.some(prefix => branch.startsWith(prefix));
-            
+
             if (!isValid) {
               core.setFailed(
                 `❌ Invalid branch name: "${branch}"\n\n` +

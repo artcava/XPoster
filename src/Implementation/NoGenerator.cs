@@ -22,9 +22,10 @@ namespace XPoster.Implementation
         /// Returns <c>null</c> unconditionally — no content is generated in a no-send slot.
         /// </summary>
         /// <returns><c>null</c></returns>
-        public override Task<Post>? GenerateAsync()
+        // CS8609: return type aligned to Task<Post?> (nullable Post, not nullable Task) to match BaseGenerator signature
+        public override Task<Post?> GenerateAsync()
         {
-            return null;
+            return Task.FromResult<Post?>(null);
         }
     }
 }

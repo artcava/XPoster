@@ -50,7 +50,8 @@ namespace XPoster.Implementation
         /// or a partial post (without deviation) if the live price cannot be retrieved.
         /// Returns <c>null</c> if the current date precedes the Bitcoin genesis block.
         /// </returns>
-        public override async Task<Post> GenerateAsync()
+        // CS8603: return type is Post? because null is a valid sentinel when date <= genesis
+        public override async Task<Post?> GenerateAsync()
         {
             DateTime gemini = new DateTime(2009, 1, 3);
             DateTime date = _timeProvider.GetCurrentTime().Date;

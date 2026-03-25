@@ -52,13 +52,15 @@ public class InSender : ISender
 
         try
         {
-            var inOwner = Environment.GetEnvironmentVariable("IN_OWNER");
+            // CS8600/CS8604: inOwner from env var is nullable — guard before use
+            var inOwner = Environment.GetEnvironmentVariable("IN_OWNER")
+                ?? throw new InvalidOperationException("IN_OWNER environment variable is not set.");
+
             var postText = post.Content + Post.Firm;
             dynamic postPayload;
 
             if (post.Image != null && post.Image.Length > 0)
             {
-                // Step 1: Initialize image upload
                 var initPayload = new
                 {
                     registerUploadRequest = new
@@ -83,14 +85,17 @@ public class InSender : ISender
                 }
 
                 var initData = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(await initResponse.Content.ReadAsStringAsync());
-                var valueElement = initData["value"] as JsonElement? ?? throw new InvalidOperationException("Value element missing");
+                var valueElement = initData?["value"] as JsonElement? ?? throw new InvalidOperationException("Value element missing");
 
                 var uploadMechanism = valueElement.GetProperty("uploadMechanism");
                 var mediaUploadRequest = uploadMechanism.GetProperty("com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest");
-                string uploadUrl = mediaUploadRequest.GetProperty("uploadUrl").GetString();
-                string asset = valueElement.GetProperty("asset").GetString();
 
-                // Step 2: Upload image
+                // CS8602/CS8600: GetString() can return null — guard with null-coalescing throw
+                string uploadUrl = mediaUploadRequest.GetProperty("uploadUrl").GetString()
+                    ?? throw new InvalidOperationException("uploadUrl missing in LinkedIn response.");
+                string asset = valueElement.GetProperty("asset").GetString()
+                    ?? throw new InvalidOperationException("asset missing in LinkedIn response.");
+
                 using (var memoryStream = new MemoryStream(post.Image))
                 {
                     var imageContent = new StreamContent(memoryStream);

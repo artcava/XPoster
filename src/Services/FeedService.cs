@@ -46,7 +46,7 @@ public class FeedService : IFeedService
     {
         var cacheKey = $"feeds_{url}_{start:yyyyMMdd}_{end:yyyyMMdd}";
 
-        if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed> cachedFeeds))
+        if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed>? cachedFeeds) && cachedFeeds != null)
         {
             _logger.LogInformation($"Feed served from cache for {url}");
             return cachedFeeds;
@@ -76,8 +76,10 @@ public class FeedService : IFeedService
                 Console.WriteLine("No feeds found");
                 throw new Exception("Invalid RSS feed format");
             }
+
             feeds.AddRange(channel.Elements("item")
-                .Select(item => {
+                .Select(item =>
+                {
                     bool success = DateTimeOffset.TryParseExact(
                         item.Element("pubDate")?.Value,
                         DateFormat,
@@ -92,28 +94,28 @@ public class FeedService : IFeedService
                         Title = item.Element("title")?.Value
                     };
                 })
-                .Where(x => {
+                .Where(x =>
+                {
                     if (!x.PublishDate.HasValue || x.PublishDate.Value < start || x.PublishDate.Value > end)
-                    {
                         return false;
-                    }
 
                     string title = x.Title ?? string.Empty;
                     return keywords.Any(keyword => title.Contains(keyword, StringComparison.OrdinalIgnoreCase));
                 })
                 .Select(item => new RSSFeed
                 {
-                    Title = item.Title,
+                    // CS8601: Title and Link from XML are string? — fallback to empty string to satisfy required string
+                    Title = item.Title ?? string.Empty,
                     Content = WebUtility.HtmlDecode(
                         Regex.Replace(item.ItemElement.Element("description")?.Value ?? string.Empty, "<[^>]+>", " ").Trim()),
-                    Link = item.ItemElement.Element("link")?.Value,
-                    PublishDate = (DateTimeOffset)item.PublishDate
+                    Link = item.ItemElement.Element("link")?.Value ?? string.Empty,
+                    // CS8629: .Value is safe here — guarded by HasValue in .Where above
+                    PublishDate = item.PublishDate!.Value
                 }));
         }
         catch (Exception) { return Enumerable.Empty<RSSFeed>(); }
 
         _cache.Set(cacheKey, feeds, TimeSpan.FromHours(24));
-
         return await Task.FromResult(feeds);
     }
 }
