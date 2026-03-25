@@ -25,7 +25,8 @@ public abstract class BaseGenerator(ISender? sender, ILogger logger) : IGenerato
     protected ILogger _logger { get; } = logger;
 
     /// <inheritdoc/>
-    public abstract Task<Post>? GenerateAsync();
+    // CS8609: return type aligned to Task<Post?> to match overriding members in FeedGenerator and PowerLawGenerator
+    public abstract Task<Post?> GenerateAsync();
 
     /// <summary>
     /// Validates pre-conditions and, if all pass, delegates publishing to <see cref="_sender"/>.
@@ -41,11 +42,9 @@ public abstract class BaseGenerator(ISender? sender, ILogger logger) : IGenerato
             return false; 
         }
 
-        // If ProduceImage is true but image is null, log warning but continue
         if (ProduceImage && message.Image == null) 
         { 
             _logger.LogWarning($"Generator {Name} is configured to produce images, but no image was generated. Proceeding to post without image."); 
-            // Don't return false - allow posting to continue
         }
 
         if (string.IsNullOrWhiteSpace(message.Content)) 

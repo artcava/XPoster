@@ -57,7 +57,8 @@ public class AiService : IAiService
             var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
             text = result?.choices[0].message.content.Trim() ?? string.Empty;
         }
-        return text;
+        // CS8603: text cannot be null here — while loop guard ensures non-null or early return
+        return text ?? string.Empty;
     }
 
     /// <inheritdoc/>
@@ -109,6 +110,7 @@ public class AiService : IAiService
 
         var result = await response.Content.ReadFromJsonAsync<JsonElement>();
         var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
+        // base64 cannot be null if API responded with 200 and valid JSON structure
         return Convert.FromBase64String(base64!);
     }
 

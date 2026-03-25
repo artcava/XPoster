@@ -29,13 +29,12 @@ namespace XPoster.SenderPlugins
         {
             _httpClient = new HttpClient();
             _logger = logger;
-            _accessToken = Environment.GetEnvironmentVariable("IG_ACCESS_TOKEN");
-            _instagramAccountId = Environment.GetEnvironmentVariable("IG_ACCOUNT_ID");
 
-            if (string.IsNullOrEmpty(_accessToken) || string.IsNullOrEmpty(_instagramAccountId))
-            {
-                throw new InvalidOperationException("InstagramAccessToken o InstagramAccountId non configurati.");
-            }
+            // CS8601: GetEnvironmentVariable returns string? — throw early if missing (fail-fast)
+            _accessToken = Environment.GetEnvironmentVariable("IG_ACCESS_TOKEN")
+                ?? throw new InvalidOperationException("IG_ACCESS_TOKEN environment variable is not set.");
+            _instagramAccountId = Environment.GetEnvironmentVariable("IG_ACCOUNT_ID")
+                ?? throw new InvalidOperationException("IG_ACCOUNT_ID environment variable is not set.");
         }
 
         /// <summary>Gets the maximum caption length allowed by Instagram (2200 characters).</summary>
@@ -82,8 +81,10 @@ namespace XPoster.SenderPlugins
                         return false;
                     }
 
-                    var mediaData = JsonSerializer.Deserialize<dynamic>(await mediaResponse.Content.ReadAsStringAsync());
-                    string creationId = mediaData.GetProperty("id").GetString();
+                    var mediaData = JsonSerializer.Deserialize<JsonElement>(await mediaResponse.Content.ReadAsStringAsync());
+                    // CS8602: GetString() can return null — guard with null-coalescing throw
+                    string creationId = mediaData.GetProperty("id").GetString()
+                        ?? throw new InvalidOperationException("id missing in Instagram media response.");
 
                     var publishPayload = new
                     {

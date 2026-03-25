@@ -33,10 +33,6 @@ public class FeedGenerator : BaseGenerator
     /// <summary>
     /// Initialises a new instance of <see cref="FeedGenerator"/>.
     /// </summary>
-    /// <param name="sender">The sender used to publish the post to the target platform.</param>
-    /// <param name="logger">The logger for diagnostic output.</param>
-    /// <param name="feedService">The service used to fetch RSS feed items.</param>
-    /// <param name="aiService">The service used to summarise text and generate images.</param>
     public FeedGenerator(ISender sender, ILogger<FeedGenerator> logger, IFeedService feedService, IAiService aiService)
         : base(sender, logger)
     {
@@ -49,8 +45,7 @@ public class FeedGenerator : BaseGenerator
     /// and returns a <see cref="Post"/> ready for publishing.
     /// Posting is disabled and <c>null</c> is returned if no relevant news is found or summarisation fails.
     /// </summary>
-    /// <returns>A <see cref="Post"/> with text content and an optional image, or <c>null</c> on failure.</returns>
-    public override async Task<Post>? GenerateAsync()
+    public override async Task<Post?> GenerateAsync()
     {
         var summary = await GenerateMessage();
         if (string.IsNullOrWhiteSpace(summary))
@@ -71,7 +66,6 @@ public class FeedGenerator : BaseGenerator
         try
         {
             image = await _aiService.GenerateImageAsync(prompt4Image);
-
             if (image == null)
             {
                 _logger.LogWarning("Image generation returned null for prompt: {Prompt}. Message will be posted without image.", prompt4Image);
@@ -89,11 +83,6 @@ public class FeedGenerator : BaseGenerator
         };
     }
 
-    /// <summary>
-    /// Aggregates RSS items from all configured feed URLs published in the last 24 hours,
-    /// concatenates their content, and requests an AI-generated summary.
-    /// </summary>
-    /// <returns>The summarised text with hashtag replacements applied, or an empty string if no feeds or summary are available.</returns>
     private async Task<string> GenerateMessage()
     {
         var end = DateTimeOffset.UtcNow;
@@ -116,9 +105,9 @@ public class FeedGenerator : BaseGenerator
             return string.Empty;
         }
 
+        // CS8602: _sender is guaranteed non-null here — FeedGenerator ctor takes ISender (non-nullable)
         string feedContent = allFeeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
-
-        var summary = await _aiService.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
+        var summary = await _aiService.GetSummaryAsync(feedContent, _sender!.MessageMaxLenght);
         if (string.IsNullOrWhiteSpace(summary))
         {
             _logger.LogError("Unable to get summary from OpenAI");
@@ -127,31 +116,19 @@ public class FeedGenerator : BaseGenerator
         }
 
         _logger.LogInformation("Generated summary: {0}", summary);
-
         summary = ReplaceEveryFirstOccurenceOf(summary, _replacements);
-
         return summary;
     }
 
-    /// <summary>
-    /// Replaces the first case-insensitive occurrence of each key in <paramref name="replacements"/>
-    /// with its corresponding value, preserving the original casing of surrounding text.
-    /// </summary>
-    /// <param name="text">The text in which replacements should be applied.</param>
-    /// <param name="replacements">A map of plain words to their hashtag equivalents.</param>
-    /// <returns>The modified text with all first occurrences replaced.</returns>
     private string ReplaceEveryFirstOccurenceOf(string text, Dictionary<string, string> replacements)
     {
         var sb = new StringBuilder(text);
-
         foreach (var entry in replacements)
         {
             string key = entry.Key;
             string value = entry.Value;
             string pattern = @"\b" + Regex.Escape(key) + @"\b";
-
             Match match = Regex.Match(sb.ToString(), pattern, RegexOptions.IgnoreCase);
-
             if (match.Success)
             {
                 int index = match.Index;
@@ -159,7 +136,6 @@ public class FeedGenerator : BaseGenerator
                 sb.Insert(index, value);
             }
         }
-
         return sb.ToString();
     }
 }

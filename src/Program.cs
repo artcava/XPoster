@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using XPoster.Abstraction;
 using XPoster.Implementation;
@@ -13,7 +13,8 @@ builder.Services
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
-    LoggerFilterRule defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
+    // CS8600: FirstOrDefault can return null — annotated as nullable
+    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
         == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
     if (defaultRule is not null)
     {
