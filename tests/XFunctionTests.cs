@@ -17,11 +17,11 @@ public class XFunctionTests
         _mockLogger = new Mock<ILogger<XFunction>>();
 
         // BaseGenerator ctor: (ISender? sender, ILogger logger)
-        // CS8625: sender is ISender? (nullable) — pass typed null to avoid ambiguity
-        // ILogger is non-generic — Mock.Of<ILogger>() satisfies the non-nullable constraint
+        // CS8620: Mock<T>(MockBehavior, params object[]) requires object[], not object?[]
+        // Sender is intentionally null (ISender? is nullable by design); cast suppresses nullability mismatch
         _mockGenerator = new Mock<BaseGenerator>(
             MockBehavior.Strict,
-            new object?[] { (ISender?)null, Mock.Of<ILogger>() });
+            new object[] { (ISender?)null!, Mock.Of<ILogger>() });
     }
 
     [Fact]
