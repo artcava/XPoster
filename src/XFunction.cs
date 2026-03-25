@@ -42,6 +42,7 @@ public class XFunction
 
             var post = await generator.GenerateAsync();
 
+            // CS8602: post can be null — guard before use
             if (post == null) { _log.LogError($"Failed to generate message with {generator.Name}"); return; }
 
             var result = await generator.PostAsync(post);

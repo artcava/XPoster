@@ -46,7 +46,8 @@ public class FeedService : IFeedService
     {
         var cacheKey = $"feeds_{url}_{start:yyyyMMdd}_{end:yyyyMMdd}";
 
-        if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed> cachedFeeds))
+        // CS8600: TryGetValue out param is nullable — annotated correctly
+        if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed>? cachedFeeds) && cachedFeeds != null)
         {
             _logger.LogInformation($"Feed served from cache for {url}");
             return cachedFeeds;
@@ -88,6 +89,7 @@ public class FeedService : IFeedService
                     return new
                     {
                         ItemElement = item,
+                        // CS8629: Nullable<DateTimeOffset> used safely via HasValue check below
                         PublishDate = success ? (DateTimeOffset?)parsedDate : null,
                         Title = item.Element("title")?.Value
                     };
@@ -103,11 +105,13 @@ public class FeedService : IFeedService
                 })
                 .Select(item => new RSSFeed
                 {
+                    // CS8601: Title and Link are nullable strings — kept as nullable in RSSFeed
                     Title = item.Title,
                     Content = WebUtility.HtmlDecode(
                         Regex.Replace(item.ItemElement.Element("description")?.Value ?? string.Empty, "<[^>]+>", " ").Trim()),
                     Link = item.ItemElement.Element("link")?.Value,
-                    PublishDate = (DateTimeOffset)item.PublishDate
+                    // CS8629: .Value is safe here — guarded by HasValue in .Where above
+                    PublishDate = item.PublishDate!.Value
                 }));
         }
         catch (Exception) { return Enumerable.Empty<RSSFeed>(); }

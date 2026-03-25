@@ -50,7 +50,8 @@ public class FeedGenerator : BaseGenerator
     /// Posting is disabled and <c>null</c> is returned if no relevant news is found or summarisation fails.
     /// </summary>
     /// <returns>A <see cref="Post"/> with text content and an optional image, or <c>null</c> on failure.</returns>
-    public override async Task<Post>? GenerateAsync()
+    // CS8603: return type is Post? because null is a valid sentinel when no summary is generated
+    public override async Task<Post?> GenerateAsync()
     {
         var summary = await GenerateMessage();
         if (string.IsNullOrWhiteSpace(summary))
@@ -103,6 +104,7 @@ public class FeedGenerator : BaseGenerator
         foreach (string url in _feedUrls)
         {
             var feeds = await _feedService.GetFeedsAsync(url, start, end, _replacements.Keys);
+            // CS8602: feeds can be null — guard before use
             if (feeds != null && feeds.Any())
             {
                 allFeeds.AddRange(feeds);
