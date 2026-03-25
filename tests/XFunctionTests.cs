@@ -16,8 +16,8 @@ public class XFunctionTests
         _mockFactory = new Mock<IGeneratorFactory>();
         _mockLogger = new Mock<ILogger<XFunction>>();
 
-        // CS8625: null args to BaseGenerator ctor are intentional in tests — constructor is (ISender?, ILogger)
-        _mockGenerator = new Mock<BaseGenerator>(MockBehavior.Strict, (ISender?)null, Mock.Of<ILogger>());
+        // CS8625: BaseGenerator ctor is (ISender?, ILogger) — sender is nullable, logger must be non-null
+        _mockGenerator = new Mock<BaseGenerator>(MockBehavior.Strict, (ISender?)null, Mock.Of<ILogger<XFunction>>());
     }
 
     [Fact]
@@ -31,7 +31,6 @@ public class XFunctionTests
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
 
         // ACT
-        // CS8625: TimerInfo can be null in unit tests — function handles it gracefully
         await function.Run(null!);
 
         // ASSERT
@@ -47,8 +46,6 @@ public class XFunctionTests
 
         _mockGenerator.Setup(g => g.SendIt).Returns(true);
         _mockGenerator.Setup(g => g.Name).Returns("EnabledTestGenerator");
-
-        // CS8620: GenerateAsync returns Task<Post?> — ReturnsAsync aligned accordingly
         _mockGenerator.Setup(g => g.GenerateAsync()).ReturnsAsync((Post?)testMessage);
         _mockGenerator.Setup(g => g.PostAsync(testMessage)).ReturnsAsync(true);
         _mockFactory.Setup(f => f.Generate()).Returns(_mockGenerator.Object);
