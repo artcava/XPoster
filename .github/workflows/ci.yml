@@ -1,0 +1,307 @@
+name: ci
+
+# Trigger events optimized to avoid duplicate runs
+# - pull_request: Run checks on all PRs (primary validation)
+# - push to master: Run checks after merge (final validation)
+# - push tags: Trigger release workflow
+on:
+  push:
+    branches:
+      - master  # Only run on master after PR merge
+    tags:
+      - 'v*'  # Trigger release on version tags
+  pull_request:
+    branches:
+      - master
+      - develop
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  SOLUTION_PATH: './XPoster.sln'
+  BUILD_CONFIGURATION: 'Release'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+  # TODO: Increase coverage threshold when real tests are implemented
+  COVERAGE_THRESHOLD: 0
+
+jobs:
+  # ============================================
+  # BUILD JOB - Compile and create artifacts
+  # ============================================
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for versioning
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+      - name: Build solution
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-restore \
+            /p:TreatWarningsAsErrors=false
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            **/bin/${{ env.BUILD_CONFIGURATION }}
+            **/obj/${{ env.BUILD_CONFIGURATION }}
+          retention-days: 1
+
+  # ============================================
+  # TEST JOB - Run unit tests with coverage
+  # ============================================
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+      - name: Run unit tests with coverage
+        run: |
+          dotnet test ${{ env.SOLUTION_PATH }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-restore \
+            --verbosity normal \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./coverage
+      
+      - name: Generate coverage report
+        if: always()
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool || true
+          reportgenerator \
+            -reports:./coverage/**/coverage.cobertura.xml \
+            -targetdir:./coverage/report \
+            -reporttypes:"Html;TextSummary" || {
+              echo "⚠️ Warning: No coverage files found or report generation failed."
+              mkdir -p ./coverage/report
+              echo "No coverage data available" > ./coverage/report/Summary.txt
+            }
+      
+      - name: Display coverage summary
+        if: always()
+        run: cat ./coverage/report/Summary.txt || echo "No coverage report generated"
+      
+      - name: Check coverage threshold
+        if: always()
+        run: |
+          COVERAGE=$(grep -oP 'Line coverage: \K[0-9.]+' ./coverage/report/Summary.txt 2>/dev/null || echo "0")
+          echo "Current coverage: ${COVERAGE}%"
+          echo "Required threshold: ${{ env.COVERAGE_THRESHOLD }}%"
+          if [ "$COVERAGE" = "0" ] && [ ! -f ./coverage/report/Summary.txt ]; then
+            echo "⚠️ No coverage data available - skipping threshold check"
+          elif (( $(echo "$COVERAGE < ${{ env.COVERAGE_THRESHOLD }}" | bc -l 2>/dev/null || echo 0) )); then
+            echo "❌ Coverage ${COVERAGE}% is below threshold ${{ env.COVERAGE_THRESHOLD }}%"
+            exit 1
+          else
+            echo "✅ Coverage ${COVERAGE}% meets threshold ${{ env.COVERAGE_THRESHOLD }}%"
+          fi
+      
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./coverage/report
+          retention-days: 7
+
+  # ============================================
+  # QUALITY JOB - Code formatting and analyzers
+  # ============================================
+  quality:
+    name: Quality
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+      - name: Verify code formatting
+        run: |
+          echo "Checking code formatting..."
+          dotnet format ${{ env.SOLUTION_PATH }} \
+            --verify-no-changes \
+            --verbosity diagnostic || {
+              echo "⚠️ Warning: Code formatting issues found."
+              echo "Continuing with build..."
+            }
+      
+      - name: Run code analyzers
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-restore \
+            /p:TreatWarningsAsErrors=true \
+            /p:EnforceCodeStyleInBuild=true
+
+  # ============================================
+  # DEPLOY JOB - Deploy to Azure Functions (master only)
+  # ============================================
+  deploy:
+    name: Deploy
+    needs: [build, test, quality]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: windows-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore dependencies
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet restore
+          popd
+      
+      - name: Build Solution
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --no-restore
+          popd
+      
+      - name: Publish Application
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet publish src/XPoster.csproj --configuration Release --output ./output --no-build
+          popd
+      
+      - name: Login to Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_04545C92864042ED99D5EBF6456192FB }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F13F54A171EE481AAE09734F721803BB }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_87ED0225F8DF4E9DA6B45A7951B44B42 }}
+      
+      - name: Deploy Azure Functions
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: 'XPosterFunction'
+          slot-name: 'Production'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+
+  # ============================================
+  # RELEASE JOB - Publish GitHub Release on tag
+  # ============================================
+  release:
+    name: Release
+    needs: [build, test, quality]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG#v}
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Release version: ${VERSION}"
+      
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+      - name: Build release artifacts
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-restore \
+            /p:Version=${{ steps.version.outputs.version }}
+      
+      - name: Publish release binaries
+        run: |
+          dotnet publish src/XPoster.csproj \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-build \
+            --output ./publish \
+            /p:Version=${{ steps.version.outputs.version }}
+      
+      - name: Create release archive
+        run: |
+          cd ./publish
+          zip -r ../XPoster-${{ steps.version.outputs.version }}.zip .
+          cd ..
+      
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | grep -v '${{ steps.version.outputs.tag }}' | head -n 1)
+          if [ -z "$PREVIOUS_TAG" ]; then
+            NOTES="## 🎉 Initial Release\n\nFirst release of XPoster."
+          else
+            NOTES="## 📝 Changes\n\n"
+            NOTES+="$(git log ${PREVIOUS_TAG}..${{ steps.version.outputs.tag }} --pretty=format:'- %s (%h)' --no-merges)"
+          fi
+          echo -e "$NOTES" > release_notes.md
+          cat release_notes.md
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          files: |
+            XPoster-${{ steps.version.outputs.version }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

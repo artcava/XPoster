@@ -1,0 +1,39 @@
+name: branch-protection
+
+# Enforce merge policy: master can only receive PRs from develop
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  # ============================================
+  # ENFORCE JOB - Validate PR source branch
+  # ============================================
+  enforce-source-branch:
+    name: Enforce Source Branch
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Validate source branch
+        run: |
+          echo "ℹ️ Pull Request Information:"
+          echo "  Base branch:   ${{ github.base_ref }}"
+          echo "  Source branch: ${{ github.head_ref }}"
+          echo ""
+          
+          if [ "${{ github.base_ref }}" = "master" ] && [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "❌ ERROR: Invalid merge source detected!"
+            echo ""
+            echo "The branch 'master' can only receive Pull Requests from 'develop'."
+            echo "This is enforced by the project's Git Flow policy."
+            echo ""
+            echo "Current PR: ${{ github.head_ref }} -> master (REJECTED)"
+            echo "Required:   develop -> master"
+            echo ""
+            echo "Please refer to CONTRIBUTING.md for the correct branching strategy."
+            exit 1
+          else
+            echo "✅ Source branch validation passed."
+            echo "This PR follows the correct Git Flow policy."
+          fi
