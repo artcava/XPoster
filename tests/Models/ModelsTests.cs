@@ -63,12 +63,17 @@ public class ModelsTests
     }
 
     [Fact]
-    public void RSSFeed_DefaultValues_AreNull()
+    public void RSSFeed_PublishDate_DefaultsToMinValue()
     {
-        var feed = new RSSFeed();
-        Assert.Null(feed.Title);
-        Assert.Null(feed.Content);
-        Assert.Null(feed.Link);
+        // Title, Content, Link are required — PublishDate defaults to DateTimeOffset.MinValue
+        var feed = new RSSFeed
+        {
+            Title = "Test",
+            Content = "Test content",
+            Link = "https://example.com"
+        };
+
+        Assert.Equal(default, feed.PublishDate);
     }
 
     // ── OpenAIResponse / Choice / Message ────────────────────────────────────

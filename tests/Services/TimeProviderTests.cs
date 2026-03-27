@@ -1,4 +1,5 @@
-using XPoster.Services;
+// CS0104: disambiguate between XPoster.Services.TimeProvider and System.TimeProvider
+using XPosterTimeProvider = XPoster.Services.TimeProvider;
 
 namespace XPoster.Tests.Services;
 
@@ -10,7 +11,7 @@ public class TimeProviderTests
     [Fact]
     public void GetCurrentTime_ReturnsCurrentDateTime()
     {
-        var provider = new TimeProvider();
+        var provider = new XPosterTimeProvider();
         var before = DateTime.Now;
         var result = provider.GetCurrentTime();
         var after = DateTime.Now;
@@ -21,7 +22,7 @@ public class TimeProviderTests
     [Fact]
     public void GetCurrentTime_ReturnsLocalTime()
     {
-        var provider = new TimeProvider();
+        var provider = new XPosterTimeProvider();
         var result = provider.GetCurrentTime();
 
         // DateTime.Now is always Local or Unspecified, never Utc
