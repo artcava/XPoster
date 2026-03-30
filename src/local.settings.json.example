@@ -31,10 +31,21 @@
     "X_ACCESS_TOKEN_SECRET": "",
 
     // ─── LinkedIn API ─────────────────────────────────────────────────────────
-    // Obtain from https://developer.linkedin.com → your app → Auth tab
-    // LINKEDIN_ACCESS_TOKEN: OAuth 2.0 token with r_liteprofile, w_member_social, rw_organization_admin scopes.
-    // LINKEDIN_ORGANIZATION_ID: numeric ID of the Company Page (visible in the page URL on LinkedIn).
+    // In PRODUCTION: use Azure Key Vault References (see docs/configuration.md).
+    // The three secrets below must be stored in Azure Key Vault (xposter-kv)
+    // under the secret names shown.
+    //
+    // PRODUCTION App Settings (set in Azure Portal / IaC — do NOT put values here):
+    //   LINKEDIN_ACCESS_TOKEN  → @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInAccessToken)
+    //   LINKEDIN_CLIENT_ID     → @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInClientId)
+    //   LINKEDIN_CLIENT_SECRET → @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInClientSecret)
+    //   KEYVAULT_URI           → https://xposter-kv.vault.azure.net/
+    //
+    // LOCAL DEVELOPMENT: supply raw values below (file is git-ignored).
+    "KEYVAULT_URI": "https://xposter-kv.vault.azure.net/",
     "LINKEDIN_ACCESS_TOKEN": "",
+    "LINKEDIN_CLIENT_ID": "",
+    "LINKEDIN_CLIENT_SECRET": "",
     "LINKEDIN_ORGANIZATION_ID": "",
 
     // ─── Instagram Graph API ──────────────────────────────────────────────────
