@@ -1,0 +1,85 @@
+name: LinkedIn Token Expiry Reminder
+
+# Runs every Monday at 09:00 UTC
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  check-token-expiry:
+    name: Check LinkedIn Token Expiry
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check expiry and open reminder issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const expiryDateStr = process.env.LINKEDIN_TOKEN_EXPIRY;
+
+            if (!expiryDateStr) {
+              core.warning('LINKEDIN_TOKEN_EXPIRY variable is not set. Skipping check.');
+              return;
+            }
+
+            const expiry = new Date(expiryDateStr);
+            const now = new Date();
+            const daysLeft = Math.floor((expiry - now) / (1000 * 60 * 60 * 24));
+
+            console.log(`Token expiry: ${expiry.toDateString()}`);
+            console.log(`Days left: ${daysLeft}`);
+
+            if (daysLeft > 14) {
+              console.log('Token is healthy. No action needed.');
+              return;
+            }
+
+            // Check if a reminder issue is already open to avoid duplicates
+            const { data: openIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'token-rotation'
+            });
+
+            const alreadyOpen = openIssues.some(issue =>
+              issue.title.includes('LinkedIn Access Token')
+            );
+
+            if (alreadyOpen) {
+              console.log('A reminder issue is already open. Skipping.');
+              return;
+            }
+
+            const urgency = daysLeft <= 0
+              ? '🔴 EXPIRED'
+              : daysLeft <= 7
+                ? '🔴 CRITICAL'
+                : '⚠️ WARNING';
+
+            const body = daysLeft <= 0
+              ? `## 🔴 LinkedIn Access Token EXPIRED\n\nThe LinkedIn Access Token has **expired** on ${expiry.toDateString()}.\nXPoster is no longer able to post on LinkedIn until the token is renewed.`
+              : `## ⚠️ LinkedIn Access Token expiring soon\n\nThe LinkedIn Access Token will expire on **${expiry.toDateString()}** (in **${daysLeft} days**).`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `${urgency} - LinkedIn Access Token expires on ${expiry.toDateString()}`,
+              body: body + `\n\n## Steps to renew\n\n` +
+                `1. Open Postman and run the LinkedIn OAuth 2.0 Authorization Code flow\n` +
+                `2. Copy the new \`access_token\` from the response\n` +
+                `3. Update the secret in Azure Key Vault:\n` +
+                `\`\`\`bash\n` +
+                `az keyvault secret set --vault-name kv-xposter --name LinkedInAccessToken --value "<new_token>"\n` +
+                `\`\`\`\n` +
+                `4. Update the \`LINKEDIN_TOKEN_EXPIRY\` variable in GitHub repository settings to the new expiry date (+60 days)\n` +
+                `5. Close this issue`,
+              labels: ['infrastructure', 'token-rotation']
+            });
+
+            console.log(`Reminder issue created. Days left: ${daysLeft}`);
+        env:
+          LINKEDIN_TOKEN_EXPIRY: ${{ vars.LINKEDIN_TOKEN_EXPIRY }}
