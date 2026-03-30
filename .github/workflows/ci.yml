@@ -20,8 +20,7 @@ env:
   SOLUTION_PATH: './XPoster.sln'
   BUILD_CONFIGURATION: 'Release'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
-  # TODO: Increase coverage threshold when real tests are implemented
-  COVERAGE_THRESHOLD: 0
+  COVERAGE_THRESHOLD: 70
 
 jobs:
   # ============================================

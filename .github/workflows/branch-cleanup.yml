@@ -1,0 +1,52 @@
+name: Branch Cleanup
+
+# Automatically deletes the head branch of a PR after it is merged,
+# unless it is a protected system branch (master, develop).
+# This compensates for the GitHub setting "Automatically delete head branches"
+# being disabled (which was disabled to protect develop from being deleted).
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete-branch:
+    name: Delete merged branch
+    runs-on: ubuntu-latest
+    # Only run when the PR was actually merged (not just closed)
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Skip protected branches
+        id: check
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          echo "Head branch: $BRANCH"
+          if [[ "$BRANCH" == "master" || "$BRANCH" == "develop" ]]; then
+            echo "Protected branch — skipping deletion."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Delete head branch
+        if: steps.check.outputs.skip == 'false'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const owner  = context.repo.owner;
+            const repo   = context.repo.repo;
+            try {
+              await github.rest.git.deleteRef({
+                owner,
+                repo,
+                ref: `heads/${branch}`,
+              });
+              console.log(`✅ Deleted branch: ${branch}`);
+            } catch (err) {
+              // Branch may have already been deleted — not an error
+              console.warn(`⚠️ Could not delete branch '${branch}': ${err.message}`);
+            }
