@@ -3,51 +3,67 @@ using XPoster.Models;
 namespace XPoster.Tests.Models;
 
 /// <summary>
-/// Covers missing branches of <see cref="RSSFeed"/> to reach 100% line coverage.
+/// Covers <see cref="RSSFeed"/> record properties to reach 100% line coverage.
+/// RSSFeed is a record with required Title, Content, Link and optional PublishDate.
 /// </summary>
 public class RSSFeedMissingBranchTests
 {
     [Fact]
-    public void RSSFeed_DefaultItemsIsNull()
-    {
-        var feed = new RSSFeed();
-        Assert.Null(feed.Items);
-    }
-
-    [Fact]
-    public void RSSFeed_CanSetAndGetTitle()
-    {
-        var feed = new RSSFeed { Title = "My Feed" };
-        Assert.Equal("My Feed", feed.Title);
-    }
-
-    [Fact]
-    public void RSSFeed_CanSetItemsList()
+    public void RSSFeed_CanCreateWithRequiredProperties()
     {
         var feed = new RSSFeed
         {
-            Items = new List<RSSItem>
-            {
-                new RSSItem { Title = "Item 1", Link = "https://example.com" }
-            }
+            Title = "Bitcoin hits new ATH",
+            Content = "Bitcoin has reached a new all-time high today.",
+            Link = "https://example.com/article"
         };
-        Assert.Single(feed.Items);
-        Assert.Equal("Item 1", feed.Items[0].Title);
+
+        Assert.Equal("Bitcoin hits new ATH", feed.Title);
+        Assert.Equal("Bitcoin has reached a new all-time high today.", feed.Content);
+        Assert.Equal("https://example.com/article", feed.Link);
     }
 
     [Fact]
-    public void RSSItem_CanSetAndGetAllProperties()
+    public void RSSFeed_DefaultPublishDateIsMinValue()
     {
-        var item = new RSSItem
+        var feed = new RSSFeed
         {
             Title = "Title",
-            Link = "https://example.com",
-            Description = "Desc",
-            PubDate = "2026-01-01"
+            Content = "Content",
+            Link = "https://example.com"
         };
-        Assert.Equal("Title", item.Title);
-        Assert.Equal("https://example.com", item.Link);
-        Assert.Equal("Desc", item.Description);
-        Assert.Equal("2026-01-01", item.PubDate);
+
+        Assert.Equal(default, feed.PublishDate);
+    }
+
+    [Fact]
+    public void RSSFeed_CanSetPublishDate()
+    {
+        var date = new DateTimeOffset(2026, 1, 15, 9, 0, 0, TimeSpan.Zero);
+        var feed = new RSSFeed
+        {
+            Title = "Title",
+            Content = "Content",
+            Link = "https://example.com",
+            PublishDate = date
+        };
+
+        Assert.Equal(date, feed.PublishDate);
+    }
+
+    [Fact]
+    public void RSSFeed_RecordEquality_SameValues_AreEqual()
+    {
+        var a = new RSSFeed { Title = "T", Content = "C", Link = "L" };
+        var b = new RSSFeed { Title = "T", Content = "C", Link = "L" };
+        Assert.Equal(a, b);
+    }
+
+    [Fact]
+    public void RSSFeed_RecordEquality_DifferentValues_AreNotEqual()
+    {
+        var a = new RSSFeed { Title = "T1", Content = "C", Link = "L" };
+        var b = new RSSFeed { Title = "T2", Content = "C", Link = "L" };
+        Assert.NotEqual(a, b);
     }
 }
