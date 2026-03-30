@@ -1,6 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
-using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -40,9 +38,7 @@ public class AiServiceTests
     }
 
     private static string ChatCompletionJson(string content) =>
-        $$$"""
-        {{"choices":[{{"message":{{"content":"{{{content}}}"}}}}]}}
-        """;
+        "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
     // ── GetSummaryAsync ──────────────────────────────────────────────────────
 
@@ -112,7 +108,7 @@ public class AiServiceTests
     {
         var imageBytes = new byte[] { 1, 2, 3, 4 };
         var base64 = Convert.ToBase64String(imageBytes);
-        var json = $$$"""{"data":[{"b64_json":"{{{base64}}}"}]}""";
+        var json = "{\"data\":[{\"b64_json\":\"" + base64 + "\"}]}";
         var svc = BuildService(MakeHandler(HttpStatusCode.OK, json), out _);
         var result = await svc.GenerateImageAsync("a prompt");
         Assert.Equal(imageBytes, result);
