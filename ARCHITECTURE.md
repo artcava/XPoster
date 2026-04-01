@@ -82,7 +82,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 Each generator implements `IGenerator` and encapsulates a specific **content production algorithm**:
 
-- **FeedGenerator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a GPT-4 summary, and requests a DALL-E 3 image. It is stateless and side-effect-free until it hands off the `Post`.
+- **FeedGenerator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a gpt-4.1-nano summary, and requests a gpt-image-1.5 image. It is stateless and side-effect-free until it hands off the `Post`.
 - **PowerLawGenerator**: constructs posts based on statistical/mathematical content (Bitcoin Power Law model). It consumes `CryptoService` for price data and `AiService` for narrative framing.
 - **NoGenerator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in the orchestrator.
 
@@ -90,7 +90,7 @@ Each generator implements `IGenerator` and encapsulates a specific **content pro
 
 Services are registered as singletons or transients in the DI container and are consumed by generators:
 
-- **AiService**: thin wrapper over the Azure OpenAI SDK; isolates all prompt engineering and model-specific parameters behind a stable interface (`IAiService`).
+- **AiService**: thin wrapper over the OpenAI API; isolates all prompt engineering and model-specific parameters behind a stable interface (`IAiService`).
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
 - **CryptoService**: utility layer for cryptocurrency data retrieval and token handling; used for security-sensitive operations and market data queries.
 
@@ -210,7 +210,7 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 
 **Context**: Content generation requires a large language model for summarisation and an image model for visuals. The system needs to comply with enterprise data-handling requirements (no data used for training).
 
-**Decision**: Use **Azure OpenAI Service** (GPT-4 for text, DALL-E 3 for images) accessed through the official Azure SDK, abstracted behind `IAiService`.
+**Decision**: Use **Azure OpenAI Service** (gpt-4.1-nano for text, gpt-image-1.5 for images) accessed through the official Azure SDK, abstracted behind `IAiService`.
 
 **Rationale**:
 - Azure OpenAI offers the same models as OpenAI.com but with **data residency and no training-use guarantees**, required for any content derived from proprietary or sensitive RSS feeds.
@@ -316,7 +316,7 @@ sequenceDiagram
     participant Fn as XFunction
     participant Factory as GeneratorFactory
     participant Gen as IGenerator<br/>(Feed / PowerLaw)
-    participant AI as AiService<br/>(Azure OpenAI)
+    participant AI as AiService<br/>(OpenAI)
     participant Feed as FeedService<br/>(RSS)
     participant Sender as ISender<br/>(X / LinkedIn / Instagram)
     participant Platform as Social Platform API

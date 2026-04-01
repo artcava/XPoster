@@ -8,7 +8,7 @@ namespace XPoster.Services;
 
 /// <summary>
 /// Implements <see cref="IAiService"/> by calling the OpenAI Chat Completions and Image Generations APIs.
-/// Uses <c>gpt-4o-mini</c> for text tasks and <c>gpt-image-1</c> for image generation.
+/// Uses <c>gpt-4.1-nano</c> for text tasks and <c>gpt-image-1.5</c> for image generation.
 /// </summary>
 public class AiService : IAiService
 {
@@ -89,11 +89,11 @@ public class AiService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt)
     {
-        _logger.LogInformation($"Generating image with gpt-image-1, prompt: {prompt}");
+        _logger.LogInformation($"Generating image with gpt-image-1.5, prompt: {prompt}");
 
         var body = new
         {
-            model = "gpt-image-1",
+            model = "gpt-image-1.5",
             prompt,
             n = 1,
             size = "1024x1024"
@@ -127,7 +127,7 @@ public class AiService : IAiService
         var underCharacters = messageMaxLenght - 50;
         return new
         {
-            model = "gpt-4o-mini",
+            model = "gpt-4.1-nano",
             messages = new[]
             {
                 new { role = "system", content = $"You are an assistant that summarizes text concisely. It's very important that you keep summaries under {underCharacters} characters." },
@@ -148,7 +148,7 @@ public class AiService : IAiService
     {
         return new
         {
-            model = "gpt-4o-mini",
+            model = "gpt-4.1-nano",
             messages = new[]
             {
                 new { role = "system", content = "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images." },
