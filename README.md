@@ -514,16 +514,14 @@ public class QuoteGenerator : BaseGenerator
 
 ```
 tests/
-├── XPoster.Tests/
-│   ├── Generators/
-│   │   ├── FeedGeneratorTests.cs
-│   │   └── PowerLawGeneratorTests.cs
-│   ├── Services/
-│   │   ├── AiServiceTests.cs
-│   │   └── FeedServiceTests.cs
-│   └── SenderPlugins/
-│       ├── XSenderTests.cs
-│       └── InSenderTests.cs
+├── Abstraction/             # tests for src/Abstraction/
+├── Implementation/          # tests for src/Implementation/ (FeedGenerator, PowerLawGenerator, GeneratorFactory…)
+├── Models/                  # tests for src/Models/
+├── Services/                # tests for src/Services/ (AiService, FeedService, CryptoService…)
+├── SenderPlugins/           # tests for src/SenderPlugins/ (XSender, InSender, IgSender…)
+├── XFunctionTests.cs        # integration-level tests for XFunction
+├── XFunctionMissingBranchTests.cs
+└── XPoster.Tests.csproj
 ```
 
 ### Running Tests
