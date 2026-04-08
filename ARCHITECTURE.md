@@ -201,28 +201,32 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 
 ---
 
-### ADR-004 — OpenAI Integration via Azure OpenAI Service
+### ADR-004 — OpenAI Integration via Direct API
 
 | Field | Detail |
 |---|---|
-| **Date** | 2025-Q1 |
-| **Status** | Accepted (migration to Azure AI Foundry planned, Phase 2) |
+| **Date** | 2026-Q1 |
+| **Status** | Accepted |
 
-**Context**: Content generation requires a large language model for summarisation and an image model for visuals. The system needs to comply with enterprise data-handling requirements (no data used for training).
+**Context**: Content generation requires a large language model for summarisation and an image model for visuals.
 
+<<<<<<< develop
 **Decision**: Use **Azure OpenAI Service** (gpt-4.1-nano for text, gpt-image-1.5 for images) accessed through the official Azure SDK, abstracted behind `IAiService`.
+=======
+**Decision**: Use **OpenAI direct API** (`api.openai.com`) accessed via `HttpClient` + `OPENAI_API_KEY`, abstracted behind `IAiService`.
+>>>>>>> master
 
 **Rationale**:
-- Azure OpenAI offers the same models as OpenAI.com but with **data residency and no training-use guarantees**, required for any content derived from proprietary or sensitive RSS feeds.
-- Managed Identity integration removes the need to store API keys in application settings.
-- `IAiService` abstraction means the underlying provider (OpenAI, Anthropic, local model) can be swapped without touching generators.
+- **Models**: `gpt-4.1-nano` for summarisation/prompting, `gpt-image-1.5` for image generation.
+- Migrated from Azure OpenAI (DALL-E 3) in v1.2.0 due to `response_format` parameter incompatibility.
+- `IAiService` abstraction means the underlying provider (Azure OpenAI, Anthropic, local model) can be swapped without touching generators.
+- Azure OpenAI migration is a future option.
 
 **Alternatives considered**:
-- **OpenAI.com direct API**: Rejected for production — data privacy policy is less explicit; suitable only for development/prototyping.
+- **Azure OpenAI Service**: Rejected in v1.2.0 — `response_format` parameter incompatibility with DALL-E 3.
 - **Hugging Face / open-source models**: Rejected — self-hosting adds infrastructure burden; quality gap for summarisation tasks at current scale.
-- **Azure AI Foundry** (formerly Cognitive Services): Planned migration target in Phase 2 for unified model management and cost control.
 
-**Consequences**: Azure OpenAI quotas and model versions must be managed in the Azure portal. Token usage should be monitored via Application Insights (see KQL queries in README).
+**Consequences**: OpenAI API quotas and rate limits must be managed. Token usage should be monitored via Application Insights (see KQL queries in README).
 
 ---
 
