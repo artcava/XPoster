@@ -8,9 +8,9 @@ Thank you for your interest in contributing to XPoster! This document provides g
 2. **Open an issue** for bugs or feature requests
 3. **Wait for maintainer approval** before starting work
 4. **Fork the repository** once approved
-5. **Create a branch** following naming conventions
+5. **Create a branch** from `develop`, following naming conventions
 6. **Make your changes** with tests
-7. **Submit a Pull Request** for review
+7. **Submit a Pull Request** targeting `develop` for review
 
 ## 👋 Good First Issues
 
@@ -41,12 +41,16 @@ These are self-contained tasks with clear acceptance criteria and limited scope 
 1. Use the **Documentation** template (`.github/ISSUE_TEMPLATE/documentation.md`)
 2. Reference the file/section that needs updating
 3. Suggest the corrected or missing content
+4. Wait for maintainer to add the `approved` label before starting work
 
 ### Issue Lifecycle
 
 needs-triage → approved → in-progress → needs-review → closed
 
 ## 🌿 Branch Naming Convention
+
+> **Always branch off from `develop`. Never branch directly off `master`.**
+> This applies to all contribution types, including documentation-only changes.
 
 All branches must follow this pattern:
 
@@ -63,6 +67,8 @@ All branches must follow this pattern:
 
 - [ ] Linked to an **approved** issue
 - [ ] Branch name follows conventions
+- [ ] Branch was created from `develop` (not `master`)
+- [ ] PR targets `develop` (not `master`)
 - [ ] All tests pass (`dotnet test`)
 - [ ] Code follows project style
 - [ ] Documentation updated
@@ -157,8 +163,10 @@ cd XPoster
 git remote add upstream https://github.com/artcava/XPoster.git
 ```
 
-**Create feature branch**
+**Create feature branch from `develop`**
 ```bash
+git checkout develop
+git pull upstream develop
 git checkout -b feature/your-feature-name
 ```
 

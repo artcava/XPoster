@@ -38,8 +38,8 @@
 ## Features
 
 ### 🤖 Content Generation
-- **AI-Powered Summarization**: Intelligent RSS feed summaries using GPT-4
-- **Image Generation**: Automatic contextual image creation with DALL-E 3
+- **AI-Powered Summarization**: Intelligent RSS feed summaries using gpt-4.1-nano
+- **Image Generation**: Automatic contextual image creation with gpt-image-1.5
 - **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
 - **Multi-Strategy**: Support for different content generation algorithms
 
@@ -131,7 +131,7 @@ Dynamically selects the appropriate generator based on current time.
 - **NoGenerator**: Placeholder for time slots without publishing
 
 #### 4. **Services Layer**
-- **AiService**: Interface with Azure OpenAI (GPT-4, DALL-E 3)
+- **AiService**: Interface with OpenAI (gpt-4.1-nano, gpt-image-1.5)
 - **FeedService**: RSS parser with caching and intelligent filtering
 - **CryptoService**: Crypto-currencies utilities
 
@@ -150,8 +150,8 @@ Dynamically selects the appropriate generator based on current time.
 - **C# 12** - Programming language
 
 ### AI & ML
-- **Azure OpenAI** - GPT-4 for summarization
-- **DALL-E 3** - Image generation
+- **OpenAI** - gpt-4.1-nano for summarization
+- **gpt-image-1.5** - Image generation
 
 ### Social Media APIs
 - **LinqToTwitter 6.15.0** - Twitter/X integration
@@ -176,7 +176,7 @@ Dynamically selects the appropriate generator based on current time.
 - **Azure Functions Core Tools** ([Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local))
 - **Visual Studio 2022** or **Visual Studio Code**
 - **Azure Account** (with active subscription)
-- **Azure OpenAI Service** (with GPT-4 and DALL-E 3 deployments)
+- **OpenAI API** (with gpt-4.1-nano and gpt-image-1.5 enabled)
 
 ### Clone the Repository
 
@@ -246,7 +246,13 @@ Create a `local.settings.json` file in the `src/` directory:
     "IG_ACCESS_TOKEN": "your_instagram_token",
     "IG_ACCOUNT_ID": "your_instagram_account_id",
     
+<<<<<<< develop
+    "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
+    "AZURE_OPENAI_KEY": "your_openai_key",
+    "AZURE_OPENAI_DEPLOYMENT_NAME": "gpt-4.1-nano"
+=======
     "OPENAI_API_KEY": "your_openai_api_key"
+>>>>>>> master
   }
 }
 ```
@@ -783,7 +789,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 ### ✅ Phase 1: Foundation (Complete)
 - [x] Azure Function setup
 - [x] Multi-platform sender architecture
-- [x] AI integration (GPT-4, DALL-E)
+- [x] AI integration (gpt-4.1-nano, gpt-image-1.5)
 - [x] Twitter/X publishing
 - [x] LinkedIn publishing
 - [x] RSS feed parsing
@@ -909,7 +915,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ## Acknowledgments
 
 - [Azure Functions](https://azure.microsoft.com/services/functions/) - Serverless platform
-- [OpenAI](https://openai.com/) - AI models (GPT-4, DALL-E)
+- [OpenAI](https://openai.com/) - AI models (gpt-4.1-nano, gpt-image-1.5)
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
