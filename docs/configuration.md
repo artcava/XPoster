@@ -1,85 +1,69 @@
 # Configuration Reference
 
-All configuration is passed via environment variables (locally in `src/local.settings.json`, in production via Azure App Settings or Key Vault references).
+All configuration is passed via environment variables (locally in `src/local.settings.json`, in production via Azure App Settings).
 
 ## Scheduler
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `CronSchedule` | string | `0 5 * * * *` | 6-field cron expression controlling execution frequency |
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `CronSchedule` | string | ✅ Yes | `0 0 6,8,14,16 * * *` | 6-field cron expression controlling execution frequency |
 
 ## Twitter / X
 
-| Variable | Type | Default | Description |
+| Variable | Type | Required | Description |
 |---|---|---|---|
-| `X_API_KEY` | string | — | Twitter App API Key |
-| `X_API_SECRET` | string | — | Twitter App API Secret |
-| `X_ACCESS_TOKEN` | string | — | User Access Token |
-| `X_ACCESS_TOKEN_SECRET` | string | — | User Access Token Secret |
+| `X_API_KEY` | string | ✅ Yes | Twitter App API Key |
+| `X_API_SECRET` | string | ✅ Yes | Twitter App API Secret |
+| `X_ACCESS_TOKEN` | string | ✅ Yes | User Access Token |
+| `X_ACCESS_TOKEN_SECRET` | string | ✅ Yes | User Access Token Secret |
 
 > Obtain from [developer.twitter.com](https://developer.twitter.com) → Your App → Keys and Tokens.
 
 ## LinkedIn
 
-| Variable | Type | Default | Description |
+| Variable | Type | Required | Description |
 |---|---|---|---|
-| `LINKEDIN_ACCESS_TOKEN` | string | — | OAuth 2.0 Bearer Token — stored in Key Vault (`LinkedInAccessToken`) |
-| `LINKEDIN_CLIENT_ID` | string | — | LinkedIn App Client ID — stored in Key Vault (`LinkedInClientId`) |
-| `LINKEDIN_CLIENT_SECRET` | string | — | LinkedIn App Client Secret — stored in Key Vault (`LinkedInClientSecret`) |
-| `LINKEDIN_ORGANIZATION_ID` | string | — | Numeric ID of the LinkedIn organization page |
-| `KEYVAULT_URI` | string | — | URI of the Azure Key Vault, e.g. `https://xposter-kv.vault.azure.net/` |
-
-> Generate tokens at [LinkedIn Developer Portal](https://www.linkedin.com/developers/).
-
-### Azure Key Vault References
-
-In production, `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_CLIENT_ID`, and `LINKEDIN_CLIENT_SECRET` **must not** be set as plain-text App Settings. Instead, configure them as **Azure Key Vault References** directly in the Function App's Application Settings:
-
-```
-LINKEDIN_ACCESS_TOKEN  = @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInAccessToken)
-LINKEDIN_CLIENT_ID     = @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInClientId)
-LINKEDIN_CLIENT_SECRET = @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInClientSecret)
-KEYVAULT_URI           = https://xposter-kv.vault.azure.net/
-```
-
-**Why unversioned references?** Omitting `SecretVersion` means the Function App always resolves the latest active version automatically after each token refresh, without requiring an app restart.
-
-**Prerequisites:**
-1. The Function App must have a **System-assigned Managed Identity** enabled (Azure Portal → Function App → Identity).
-2. Grant the identity the **Key Vault Secrets User** role on `xposter-kv` (Azure Portal → Key Vault → Access control (IAM)).
-3. Create the three secrets in the Key Vault with the exact names above.
-
-**Verification:** After saving the App Settings, the Azure Portal shows a green ✅ icon next to each Key Vault Reference. A yellow ⚠️ indicates a permission or secret-name mismatch.
-
-> **Local development:** supply raw token values directly in `src/local.settings.json` (git-ignored). Key Vault References are not resolved by the local Azure Functions host.
+| `IN_ACCESS_TOKEN` | string | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from LinkedIn Developer Portal → OAuth credentials. Expires every 60 days (manual rotation required). |
+| `IN_OWNER` | string | ✅ Yes | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Find it via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. |
 
 ## Instagram
 
-| Variable | Type | Default | Description |
+| Variable | Type | Required | Description |
 |---|---|---|---|
-| `INSTAGRAM_ACCESS_TOKEN` | string | — | Long-lived Graph API access token |
-| `INSTAGRAM_BUSINESS_ACCOUNT_ID` | string | — | Instagram Business Account ID |
+| `IG_ACCESS_TOKEN` | string | ✅ Yes | Long-lived Instagram Graph API access token. |
+| `IG_ACCOUNT_ID` | string | ✅ Yes | Numeric Instagram Business Account ID used in Graph API calls. |
 
-> Obtain via [Meta for Developers](https://developers.facebook.com/) → Instagram Graph API.
+> ⚠️ Instagram is not yet active in production. See issue #XX (Instagram production readiness) for the full enablement checklist.
 
-## Azure OpenAI
+## AI (OpenAI)
 
-| Variable | Type | Default | Description |
+| Variable | Type | Required | Description |
 |---|---|---|---|
-| `AZURE_OPENAI_ENDPOINT` | string | — | `https://<resource>.openai.azure.com/` |
-| `AZURE_OPENAI_KEY` | string | — | API key (or omit if using Managed Identity) |
-| `AZURE_OPENAI_DEPLOYMENT_NAME` | string | `gpt-4` | Name of the GPT-4 deployment in Azure OpenAI Studio |
+| `OPENAI_API_KEY` | string | ✅ Yes | OpenAI platform API key. Used by `AiService` for both text summarisation (`gpt-4.1-nano`) and image generation (`gpt-image-1.5`). |
 
 ## Azure Functions Runtime
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `AzureWebJobsStorage` | string | `UseDevelopmentStorage=true` | Storage connection string (Azurite locally, Storage Account in prod) |
-| `FUNCTIONS_WORKER_RUNTIME` | string | `dotnet-isolated` | Must be `dotnet-isolated` for .NET 8 isolated worker |
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `AzureWebJobsStorage` | string | ✅ Yes | `UseDevelopmentStorage=true` | Storage connection string (Azurite locally, Storage Account in prod) |
+| `FUNCTIONS_WORKER_RUNTIME` | string | ✅ Yes | `dotnet-isolated` | Must be `dotnet-isolated` for .NET 8 isolated worker |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING` | string | ❌ No | — | Connection string for Application Insights monitoring |
 
 ## Security Notes
 
 - Never commit `local.settings.json` — it is in `.gitignore`.
 - Use `src/local.settings.json.example` as the starting template.
-- In production, **always** use **Azure Key Vault References** for secrets (LinkedIn credentials, API keys).
 - For CI/CD, store secrets in **GitHub Actions Secrets**, never in workflow YAML.
+
+---
+
+## Future / Planned
+
+The following keys are reserved for a future migration back to Azure OpenAI. They are not read by any code in the current version.
+
+- `AZURE_OPENAI_KEY`
+- `AZURE_OPENAI_ENDPOINT`
+- `AZURE_OPENAI_DEPLOYMENT_NAME`
+- `LINKEDIN_CLIENT_ID`
+- `LINKEDIN_CLIENT_SECRET`
+- `KEYVAULT_URI`

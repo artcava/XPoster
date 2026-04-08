@@ -1,68 +1,23 @@
 {
   "IsEncrypted": false,
   "Values": {
-    // ─── Azure Functions runtime ──────────────────────────────────────────────
-    // Use "UseDevelopmentStorage=true" with Azurite for local dev,
-    // or provide a real Azure Storage connection string for remote environments.
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "CronSchedule": "0 0 6,8,14,16 * * *",
 
-    // ─── Cron schedule ────────────────────────────────────────────────────────
-    // 6-field Azure cron: {second} {minute} {hour} {day} {month} {dayOfWeek}
-    // Default fires every hour at :05 — adjust per environment.
-    // Examples:
-    //   "0 5 * * * *"   → every hour at :05
-    //   "*/30 * * * * *" → every 30 seconds (dev/testing only)
-    "CronSchedule": "0 5 * * * *",
-
-    // ─── Application Insights ─────────────────────────────────────────────────
-    // Obtain from Azure Portal → Application Insights resource → Overview blade.
-    // Copy the full "Connection String" (begins with "InstrumentationKey=").
-    // Setting this key locally enables Live Metrics and log streaming during
-    // `func start`. Leave empty to disable local telemetry.
-    "APPLICATIONINSIGHTS_CONNECTION_STRING": "",
-
-    // ─── Twitter / X API ──────────────────────────────────────────────────────
-    // Obtain from https://developer.twitter.com → Projects & Apps → your app → Keys and Tokens
-    // Requires "Read and Write" permissions on the app.
     "X_API_KEY": "",
     "X_API_SECRET": "",
     "X_ACCESS_TOKEN": "",
     "X_ACCESS_TOKEN_SECRET": "",
 
-    // ─── LinkedIn API ─────────────────────────────────────────────────────────
-    // In PRODUCTION: use Azure Key Vault References (see docs/configuration.md).
-    // The three secrets below must be stored in Azure Key Vault (xposter-kv)
-    // under the secret names shown.
-    //
-    // PRODUCTION App Settings (set in Azure Portal / IaC — do NOT put values here):
-    //   LINKEDIN_ACCESS_TOKEN  → @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInAccessToken)
-    //   LINKEDIN_CLIENT_ID     → @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInClientId)
-    //   LINKEDIN_CLIENT_SECRET → @Microsoft.KeyVault(VaultName=xposter-kv;SecretName=LinkedInClientSecret)
-    //   KEYVAULT_URI           → https://xposter-kv.vault.azure.net/
-    //
-    // LOCAL DEVELOPMENT: supply raw values below (file is git-ignored).
-    "KEYVAULT_URI": "https://xposter-kv.vault.azure.net/",
-    "LINKEDIN_ACCESS_TOKEN": "",
-    "LINKEDIN_CLIENT_ID": "",
-    "LINKEDIN_CLIENT_SECRET": "",
-    "LINKEDIN_ORGANIZATION_ID": "",
+    "IN_ACCESS_TOKEN": "",
+    "IN_OWNER": "",
 
-    // ─── Instagram Graph API ──────────────────────────────────────────────────
-    // Feature currently in development — see Roadmap in README.
-    // Obtain from https://developers.facebook.com → your app → Instagram Graph API
-    // INSTAGRAM_ACCESS_TOKEN: long-lived User or System User token with instagram_basic,
-    //   instagram_content_publish, pages_read_engagement scopes.
-    // INSTAGRAM_BUSINESS_ACCOUNT_ID: Instagram Business Account ID linked to a Facebook Page.
-    "INSTAGRAM_ACCESS_TOKEN": "",
-    "INSTAGRAM_BUSINESS_ACCOUNT_ID": "",
+    "IG_ACCESS_TOKEN": "",
+    "IG_ACCOUNT_ID": "",
 
-    // ─── Azure OpenAI ─────────────────────────────────────────────────────────
-    // Obtain from https://portal.azure.com → your Azure OpenAI resource → Keys and Endpoint
-    // AZURE_OPENAI_DEPLOYMENT_NAME: the deployment name you created (not the model name).
-    //   GPT-4 is used for summarization; ensure DALL-E 3 is also deployed in the same resource.
-    "AZURE_OPENAI_ENDPOINT": "https://<your-resource-name>.openai.azure.com/",
-    "AZURE_OPENAI_KEY": "",
-    "AZURE_OPENAI_DEPLOYMENT_NAME": "gpt-4"
+    "OPENAI_API_KEY": "",
+
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
