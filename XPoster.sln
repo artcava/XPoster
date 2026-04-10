@@ -41,18 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{B4C5
 		infra\modules\storage.bicep = infra\modules\storage.bicep
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{C5D6E7F8-A9B0-1234-CD56-EF7890AB1234}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D6E7F8A9-B0C1-2345-DE67-FA8901BC2345}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\branch-cleanup.yml = .github\workflows\branch-cleanup.yml
-		.github\workflows\branch-naming.yml = .github\workflows\branch-naming.yml
-		.github\workflows\branch-protection.yml = .github\workflows\branch-protection.yml
-		.github\workflows\ci.yml = .github\workflows\ci.yml
-		.github\workflows\issue-management.yml = .github\workflows\issue-management.yml
-		.github\workflows\linkedin-token-reminder.yml = .github\workflows\linkedin-token-reminder.yml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,8 +63,6 @@ Global
 		{51F62806-2C94-4BC7-A69E-266C207AB893} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A3B4C5D6-E7F8-9012-AB34-CD56EF789012} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B4C5D6E7-F8A9-0123-BC45-DE67FA890123} = {A3B4C5D6-E7F8-9012-AB34-CD56EF789012}
-		{C5D6E7F8-A9B0-1234-CD56-EF7890AB1234} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{D6E7F8A9-B0C1-2345-DE67-FA8901BC2345} = {C5D6E7F8-A9B0-1234-CD56-EF7890AB1234}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CCF3EE4-D229-4EAE-9A97-C48A6E280027}
