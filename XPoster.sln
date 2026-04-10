@@ -26,6 +26,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{51F62806-2
 		docs\monitoring.md = docs\monitoring.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{A3B4C5D6-E7F8-9012-AB34-CD56EF789012}"
+	ProjectSection(SolutionItems) = preProject
+		infra\README.md = infra\README.md
+		infra\main.bicep = infra\main.bicep
+		infra\main.bicepparam = infra\main.bicepparam
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{B4C5D6E7-F8A9-0123-BC45-DE67FA890123}"
+	ProjectSection(SolutionItems) = preProject
+		infra\modules\function-app.bicep = infra\modules\function-app.bicep
+		infra\modules\key-vault.bicep = infra\modules\key-vault.bicep
+		infra\modules\monitoring.bicep = infra\modules\monitoring.bicep
+		infra\modules\storage.bicep = infra\modules\storage.bicep
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +61,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{51F62806-2C94-4BC7-A69E-266C207AB893} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A3B4C5D6-E7F8-9012-AB34-CD56EF789012} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B4C5D6E7-F8A9-0123-BC45-DE67FA890123} = {A3B4C5D6-E7F8-9012-AB34-CD56EF789012}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CCF3EE4-D229-4EAE-9A97-C48A6E280027}
