@@ -7,6 +7,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPoster", "src\XPoster.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPoster.Tests", "tests\XPoster.Tests.csproj", "{4CD93D7E-E307-4F1E-BE01-831C216E6F80}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		ARCHITECTURE.md = ARCHITECTURE.md
+		CHANGELOG.md = CHANGELOG.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{51F62806-2C94-4BC7-A69E-266C207AB893}"
+	ProjectSection(SolutionItems) = preProject
+		docs\analysis-linkedin-token-auto-refresh.md = docs\analysis-linkedin-token-auto-refresh.md
+		docs\configuration.md = docs\configuration.md
+		docs\deployment.md = docs\deployment.md
+		docs\extending-xposter.md = docs\extending-xposter.md
+		docs\getting-started.md = docs\getting-started.md
+		docs\index.md = docs\index.md
+		docs\monitoring.md = docs\monitoring.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +43,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{51F62806-2C94-4BC7-A69E-266C207AB893} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CCF3EE4-D229-4EAE-9A97-C48A6E280027}
