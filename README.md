@@ -6,7 +6,7 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-Powered-412991?logo=openai&logoColor=white)](https://openai.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deployment](https://img.shields.io/badge/Deployed-Azure-blue)](https://xposterfunction.azurewebsites.net/)
-[![Build and Deploy](https://github.com/artcava/XPoster/actions/workflows/master_xposterfunction.yml/badge.svg)](https://github.com/artcava/XPoster/actions/workflows/master_xposterfunction.yml)
+[![Build and Deploy](https://github.com/artcava/XPoster/actions/workflows/ci.yml/badge.svg)](https://github.com/artcava/XPoster/actions/workflows/ci.yml)
 
 > **AI-Powered Social Media Automation Platform**
 > 
@@ -45,8 +45,8 @@
 
 ### 🌐 Multi-Platform Publishing
 - **Twitter/X**: Automated posting with image support
-- **LinkedIn**: Posts to a personal LinkedIn profile via the UGC Posts API. Company page support is planned (see issue #XX).
-- **Instagram**: Publishing via Graph API (in development, see issue #XX for production readiness checklist)
+- **LinkedIn**: Posts on personal profiles and company pages
+- **Instagram**: Publishing via Graph API (in development)
 
 ### ⚙️ Automation & Scheduling
 - **Timer-Based Execution**: Configurable automatic execution
@@ -240,19 +240,15 @@ Create a `local.settings.json` file in the `src/` directory:
     "X_ACCESS_TOKEN": "your_twitter_access_token",
     "X_ACCESS_TOKEN_SECRET": "your_twitter_access_token_secret",
     
-    "IN_ACCESS_TOKEN": "your_linkedin_token",
-    "IN_OWNER": "your_linkedin_owner_id",
+    "LINKEDIN_ACCESS_TOKEN": "your_linkedin_token",
+    "LINKEDIN_ORGANIZATION_ID": "your_linkedin_org_id",
     
-    "IG_ACCESS_TOKEN": "your_instagram_token",
-    "IG_ACCOUNT_ID": "your_instagram_account_id",
+    "INSTAGRAM_ACCESS_TOKEN": "your_instagram_token",
+    "INSTAGRAM_BUSINESS_ACCOUNT_ID": "your_instagram_account_id",
     
-<<<<<<< develop
     "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
     "AZURE_OPENAI_KEY": "your_openai_key",
     "AZURE_OPENAI_DEPLOYMENT_NAME": "gpt-4.1-nano"
-=======
-    "OPENAI_API_KEY": "your_openai_api_key"
->>>>>>> master
   }
 }
 ```
@@ -518,14 +514,16 @@ public class QuoteGenerator : BaseGenerator
 
 ```
 tests/
-├── Abstraction/             # tests for src/Abstraction/
-├── Implementation/          # tests for src/Implementation/ (FeedGenerator, PowerLawGenerator, GeneratorFactory…)
-├── Models/                  # tests for src/Models/
-├── SenderPlugins/           # tests for src/SenderPlugins/ (XSender, InSender, IgSender…)
-├── Services/                # tests for src/Services/ (AiService, FeedService, CryptoService…)
-├── XFunctionMissingBranchTests.cs
-├── XFunctionTests.cs        # integration-level tests for XFunction
-└── XPoster.Tests.csproj
+├── XPoster.Tests/
+│   ├── Generators/
+│   │   ├── FeedGeneratorTests.cs
+│   │   └── PowerLawGeneratorTests.cs
+│   ├── Services/
+│   │   ├── AiServiceTests.cs
+│   │   └── FeedServiceTests.cs
+│   └── SenderPlugins/
+│       ├── XSenderTests.cs
+│       └── InSenderTests.cs
 ```
 
 ### Running Tests
