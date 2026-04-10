@@ -29,7 +29,7 @@ jobs:
               return;
             }
 
-            const validPrefixes = ['feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/'];
+            const validPrefixes = ['feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/', 'chore/'];
             const isValid = validPrefixes.some(prefix => branch.startsWith(prefix));
 
             if (!isValid) {
@@ -39,6 +39,7 @@ jobs:
                 `Examples:\n` +
                 `- feature/add-mastodon-support\n` +
                 `- fix/twitter-auth-error\n` +
+                `- chore/update-dependencies\n` +
                 `- docs/update-readme`
               );
             } else {
