@@ -38,9 +38,20 @@ All configuration is passed via environment variables (locally in `src/local.set
 
 ## AI (OpenAI)
 
-| Variable | Type | Required | Description |
-|---|---|---|---|
-| `OPENAI_API_KEY` | string | ✅ Yes | OpenAI platform API key. Used by `AiService` for both text summarisation (`gpt-4.1-nano`) and image generation (`gpt-image-1.5`). |
+Configuration is bound from the `OpenAI` section using double-underscore notation in Azure App Settings / `local.settings.json` (e.g. `OpenAI__ApiKey`).
+
+| Setting | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `OpenAI__ApiKey` | string | ✅ Yes | — | OpenAI platform API key. Used by `OpenAiService` for all API calls. |
+| `OpenAI__ChatEndpoint` | string | No | `https://api.openai.com/v1/chat/completions` | Chat Completions API URL. |
+| `OpenAI__ChatModel` | string | No | `gpt-4.1-nano` | Model used for text summarisation and image prompt generation. |
+| `OpenAI__SummaryTemperature` | double | No | `0.5` | Temperature for summary generation. |
+| `OpenAI__SummaryMaxTokensPerChar` | int | No | `5` | Divisor to convert a character budget to `max_tokens`. |
+| `OpenAI__SummarySafetyMarginChars` | int | No | `50` | Character margin subtracted from the budget in the system prompt. |
+| `OpenAI__ImageEndpoint` | string | No | `https://api.openai.com/v1/images/generations` | Image Generations API URL. |
+| `OpenAI__ImageModel` | string | No | `gpt-image-1.5` | Model used for image generation. |
+| `OpenAI__ImageSize` | string | No | `1024x1024` | Output image size. |
+| `OpenAI__ImageCount` | int | No | `1` | Number of images to generate per request. |
 
 ## Azure Functions Runtime
 
