@@ -38,6 +38,7 @@ builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
 builder.Services.AddTransient<IAiService, OpenAiService>();
 
 builder.Build().Run();
