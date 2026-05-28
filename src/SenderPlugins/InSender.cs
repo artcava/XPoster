@@ -8,7 +8,9 @@ namespace XPoster.SenderPlugins;
 /// <summary>
 /// Publishes posts to LinkedIn using the LinkedIn UGC Posts API (v2).
 /// Supports both text-only posts and posts with an image attachment via the LinkedIn asset upload flow.
-/// Credentials are read from the <c>IN_ACCESS_TOKEN</c> and <c>IN_OWNER</c> environment variables.
+/// Credentials are read from the <c>IN_ACCESS_TOKEN</c> environment variable.
+/// The author URN is resolved from <c>IN_ORG_ID</c> (organization) when set,
+/// otherwise from <c>IN_OWNER</c> (person). At least one must be set.
 /// </summary>
 public class InSender : ISender
 {
@@ -52,10 +54,7 @@ public class InSender : ISender
 
         try
         {
-            // CS8600/CS8604: inOwner from env var is nullable — guard before use
-            var inOwner = Environment.GetEnvironmentVariable("IN_OWNER")
-                ?? throw new InvalidOperationException("IN_OWNER environment variable is not set.");
-
+            var author = ResolveAuthorUrn();
             var postText = post.Content + Post.Firm;
             dynamic postPayload;
 
@@ -66,7 +65,7 @@ public class InSender : ISender
                     registerUploadRequest = new
                     {
                         recipes = new[] { "urn:li:digitalmediaRecipe:feedshare-image" },
-                        owner = $"urn:li:person:{inOwner}",
+                        owner = author,
                         serviceRelationships = new[]
                         {
                             new { relationshipType = "OWNER", identifier = "urn:li:userGeneratedContent" }
@@ -109,11 +108,11 @@ public class InSender : ISender
                     }
                 }
 
-                postPayload = generatePayLoad(asset, inOwner, postText);
+                postPayload = generatePayLoad(asset, author, postText);
             }
             else
             {
-                postPayload = generatePayLoad(null, inOwner, postText);
+                postPayload = generatePayLoad(null, author, postText);
             }
 
             var json = JsonSerializer.Serialize(postPayload);
@@ -133,13 +132,29 @@ public class InSender : ISender
     }
 
     /// <summary>
+    /// Resolves the LinkedIn author URN for the post.
+    /// Returns an organization URN when <c>IN_ORG_ID</c> is set; otherwise returns a person URN from <c>IN_OWNER</c>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when neither <c>IN_ORG_ID</c> nor <c>IN_OWNER</c> is set.</exception>
+    private static string ResolveAuthorUrn()
+    {
+        var orgId = Environment.GetEnvironmentVariable("IN_ORG_ID");
+        if (!string.IsNullOrWhiteSpace(orgId))
+            return $"urn:li:organization:{orgId}";
+
+        var personId = Environment.GetEnvironmentVariable("IN_OWNER")
+            ?? throw new InvalidOperationException("Either IN_OWNER or IN_ORG_ID must be set.");
+        return $"urn:li:person:{personId}";
+    }
+
+    /// <summary>
     /// Builds the LinkedIn UGC post payload, optionally embedding an image asset.
     /// </summary>
     /// <param name="asset">The LinkedIn asset URN of the uploaded image, or <c>null</c> for text-only posts.</param>
-    /// <param name="owner">The LinkedIn person URN of the post author (from <c>IN_OWNER</c>).</param>
+    /// <param name="authorUrn">The fully-qualified LinkedIn author URN (person or organization).</param>
     /// <param name="summary">The text body of the post.</param>
     /// <returns>An anonymous object serialisable as a valid LinkedIn UGC post request body.</returns>
-    private dynamic generatePayLoad(string? asset, string owner, string summary)
+    private dynamic generatePayLoad(string? asset, string authorUrn, string summary)
     {
         Dictionary<string, object> specificContent;
         if (string.IsNullOrEmpty(asset))
@@ -186,7 +201,7 @@ public class InSender : ISender
 
         return new
         {
-            author = $"urn:li:person:{owner}",
+            author = authorUrn,
             lifecycleState = "PUBLISHED",
             specificContent,
             visibility
