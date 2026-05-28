@@ -52,6 +52,12 @@ Configuration is bound from the `OpenAI` section using double-underscore notatio
 | `OpenAI__ImageModel` | string | No | `gpt-image-1.5` | Model used for image generation. |
 | `OpenAI__ImageSize` | string | No | `1024x1024` | Output image size. |
 | `OpenAI__ImageCount` | int | No | `1` | Number of images to generate per request. |
+| `OpenAI__SummarySystemPromptTemplate` | string | No | *(see default)* | System prompt for summarisation. Supports `{MaxChars}` placeholder. |
+| `OpenAI__SummaryUserPromptTemplate` | string | No | *(see default)* | User prompt for summarisation. Supports `{Text}` placeholder. |
+| `OpenAI__ImagePromptSystemTemplate` | string | No | *(see default)* | System prompt for image prompt generation. No placeholders. |
+| `OpenAI__ImagePromptUserTemplate` | string | No | *(see default)* | User prompt for image prompt generation. Supports `{Summary}` placeholder. |
+| `OpenAI__ImagePromptMaxTokens` | int | No | `60` | Max tokens for image prompt generation requests. |
+| `OpenAI__ImagePromptTemperature` | double | No | `0.7` | Temperature for image prompt generation requests. |
 
 ## Azure Functions Runtime
 

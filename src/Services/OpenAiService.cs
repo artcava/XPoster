@@ -118,13 +118,19 @@ public class OpenAiService : IAiService
     {
         var maxTokens = messageMaxLenght / _options.SummaryMaxTokensPerChar;
         var underCharacters = messageMaxLenght - _options.SummarySafetyMarginChars;
+
+        var systemContent = _options.SummarySystemPromptTemplate
+            .Replace("{MaxChars}", underCharacters.ToString(), StringComparison.Ordinal);
+        var userContent = _options.SummaryUserPromptTemplate
+            .Replace("{Text}", text, StringComparison.Ordinal);
+
         return new
         {
             model = _options.ChatModel,
             messages = new[]
             {
-                new { role = "system", content = $"You are an assistant that summarizes text concisely. It's very important that you keep summaries under {underCharacters} characters." },
-                new { role = "user", content = $"Summarize this text in a few sentences. text: {text}" }
+                new { role = "system", content = systemContent },
+                new { role = "user", content = userContent }
             },
             max_tokens = maxTokens,
             temperature = _options.SummaryTemperature
@@ -139,16 +145,19 @@ public class OpenAiService : IAiService
     /// <returns>An anonymous object serialisable as a valid OpenAI Chat Completions request body.</returns>
     private object GetPromptForImage(string summary)
     {
+        var userContent = _options.ImagePromptUserTemplate
+            .Replace("{Summary}", summary, StringComparison.Ordinal);
+
         return new
         {
             model = _options.ChatModel,
             messages = new[]
             {
-                new { role = "system", content = "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images." },
-                new { role = "user", content = $"Generate an image prompt based on this summary: {summary}" }
+                new { role = "system", content = _options.ImagePromptSystemTemplate },
+                new { role = "user", content = userContent }
             },
-            max_tokens = 60,
-            temperature = 0.7
+            max_tokens = _options.ImagePromptMaxTokens,
+            temperature = _options.ImagePromptTemperature
         };
     }
 }

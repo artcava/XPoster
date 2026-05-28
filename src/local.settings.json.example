@@ -23,10 +23,16 @@
     "OpenAI__SummaryTemperature": "0.5",
     "OpenAI__SummaryMaxTokensPerChar": "5",
     "OpenAI__SummarySafetyMarginChars": "50",
+    "OpenAI__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "OpenAI__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
     "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
     "OpenAI__ImageModel": "gpt-image-1.5",
     "OpenAI__ImageSize": "1024x1024",
     "OpenAI__ImageCount": "1",
+    "OpenAI__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "OpenAI__ImagePromptMaxTokens": "60",
+    "OpenAI__ImagePromptTemperature": "0.7",
 
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }

@@ -45,4 +45,43 @@ public sealed class OpenAiOptions
 
     /// <summary>Gets or sets the number of images to generate per request.</summary>
     public int ImageCount { get; set; } = 1;
+
+    // ── Prompt Templates ──────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Gets or sets the system prompt template for text summarisation.
+    /// Supports placeholder <c>{MaxChars}</c>, replaced at runtime with the effective character limit.
+    /// </summary>
+    public string SummarySystemPromptTemplate { get; set; } =
+        "You are an assistant that summarizes text concisely. " +
+        "It's very important that you keep summaries under {MaxChars} characters.";
+
+    /// <summary>
+    /// Gets or sets the user prompt template for text summarisation.
+    /// Supports placeholder <c>{Text}</c>, replaced at runtime with the input text.
+    /// </summary>
+    public string SummaryUserPromptTemplate { get; set; } =
+        "Summarize this text in a few sentences. text: {Text}";
+
+    /// <summary>
+    /// Gets or sets the system prompt template for image prompt generation.
+    /// No runtime placeholders — the full instruction is used as-is.
+    /// </summary>
+    public string ImagePromptSystemTemplate { get; set; } =
+        "You are an assistant that generates image prompts for an AI image generation model based on text summaries. " +
+        "Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), " +
+        "and avoids text, signs, or words in the image. Respect content policy for generating images.";
+
+    /// <summary>
+    /// Gets or sets the user prompt template for image prompt generation.
+    /// Supports placeholder <c>{Summary}</c>, replaced at runtime with the input summary.
+    /// </summary>
+    public string ImagePromptUserTemplate { get; set; } =
+        "Generate an image prompt based on this summary: {Summary}";
+
+    /// <summary>Gets or sets the max tokens for image prompt generation requests.</summary>
+    public int ImagePromptMaxTokens { get; set; } = 60;
+
+    /// <summary>Gets or sets the temperature for image prompt generation requests.</summary>
+    public double ImagePromptTemperature { get; set; } = 0.7;
 }
