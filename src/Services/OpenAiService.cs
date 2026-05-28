@@ -10,18 +10,18 @@ namespace XPoster.Services;
 /// Implements <see cref="IAiService"/> by calling the OpenAI Chat Completions and Image Generations APIs.
 /// Uses <c>gpt-4.1-nano</c> for text tasks and <c>gpt-image-1.5</c> for image generation.
 /// </summary>
-public class AiService : IAiService
+public class OpenAiService : IAiService
 {
     private readonly HttpClient _client;
-    private readonly ILogger<AiService> _logger;
+    private readonly ILogger<OpenAiService> _logger;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="AiService"/>, configuring the HTTP client
+    /// Initialises a new instance of <see cref="OpenAiService"/>, configuring the HTTP client
     /// with the OpenAI Bearer token read from the <c>OPENAI_API_KEY</c> environment variable.
     /// </summary>
     /// <param name="httpClientFactory">The factory used to create the underlying <see cref="HttpClient"/>.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
-    public AiService(IHttpClientFactory httpClientFactory, ILogger<AiService> logger)
+    public OpenAiService(IHttpClientFactory httpClientFactory, ILogger<OpenAiService> logger)
     {
         _logger = logger;
         _client = httpClientFactory.CreateClient();
