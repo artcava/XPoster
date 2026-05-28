@@ -1,7 +1,9 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
+using XPoster.Models;
 using XPoster.Services;
 
 namespace XPoster.Tests.Services;
@@ -12,14 +14,14 @@ namespace XPoster.Tests.Services;
 /// </summary>
 public class OpenAiServiceTests
 {
-    private static OpenAiService BuildService(HttpMessageHandler handler, out Mock<ILogger<OpenAiService>> loggerMock)
+    private static OpenAiService BuildService(HttpMessageHandler handler, out Mock<ILogger<OpenAiService>> loggerMock, OpenAiOptions? opts = null)
     {
         loggerMock = new Mock<ILogger<OpenAiService>>();
         var factory = new Mock<IHttpClientFactory>();
         var client = new HttpClient(handler);
         factory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
-        Environment.SetEnvironmentVariable("OPENAI_API_KEY", "fake-key");
-        return new OpenAiService(factory.Object, loggerMock.Object);
+        var options = Options.Create(opts ?? new OpenAiOptions { ApiKey = "fake-key" });
+        return new OpenAiService(factory.Object, options, loggerMock.Object);
     }
 
     private static HttpMessageHandler MakeHandler(HttpStatusCode code, string json)

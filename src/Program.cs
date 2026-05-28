@@ -1,7 +1,9 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
 using XPoster.Implementation;
+using XPoster.Models;
 using XPoster.SenderPlugins;
 using XPoster.Services;
 
@@ -35,6 +37,7 @@ builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
+builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
 builder.Services.AddTransient<IAiService, OpenAiService>();
 
 builder.Build().Run();
