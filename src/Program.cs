@@ -35,6 +35,6 @@ builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
-builder.Services.AddTransient<IAiService, AiService>();
+builder.Services.AddTransient<IAiService, OpenAiService>();
 
 builder.Build().Run();
