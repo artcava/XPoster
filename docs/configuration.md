@@ -24,7 +24,8 @@ All configuration is passed via environment variables (locally in `src/local.set
 | Variable | Type | Required | Description |
 |---|---|---|---|
 | `IN_ACCESS_TOKEN` | string | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from LinkedIn Developer Portal → OAuth credentials. Expires every 60 days (manual rotation required). |
-| `IN_OWNER` | string | ✅ Yes | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Find it via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. |
+| `IN_OWNER` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Find it via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. Ignored when `IN_ORG_ID` is set. |
+| `IN_ORG_ID` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. `98765432`). When set, takes precedence over `IN_OWNER`. Posts are published as `urn:li:organization:{IN_ORG_ID}`. |
 
 ## Instagram
 
