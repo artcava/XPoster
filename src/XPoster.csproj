@@ -13,16 +13,11 @@
     <FileVersion>0.1.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="host.json" />
-    <Content Include="local.settings.json" />
-  </ItemGroup>
-  <ItemGroup>
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	<PackageReference Include="Azure.Identity" Version="1.13.2" />
 	<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.2.0" />
 	<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Storage.Blobs" Version="6.8.0" />
 	<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.1" />
-	<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.6" />
 	<PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.0.0" />
     <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
     <PackageReference Include="linqtotwitter" Version="6.15.0" />
@@ -30,15 +25,16 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="host.json">
+    <Content Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="local.settings.json">
+    </Content>
+    <Content Update="local.settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+  <Using Include="Microsoft.Extensions.Logging" />
 	<Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
 	<InternalsVisibleTo Include="XPoster.Tests" />
   </ItemGroup>

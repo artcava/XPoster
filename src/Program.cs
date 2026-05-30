@@ -33,12 +33,17 @@ builder.Services.AddTransient<InSender>();
 builder.Services.AddTransient<IgSender>();
 
 builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
+
+// Register IAiServiceFactory and all IAiService implementations
+builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
+builder.Services.AddTransient<IAiService, OpenAiService>();
+// builder.Services.AddTransient<IAiService, PerplexityService>(); // Uncomment when implemented
+
 builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
 builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
-builder.Services.AddTransient<IAiService, OpenAiService>();
 
 builder.Build().Run();
