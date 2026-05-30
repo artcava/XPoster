@@ -234,4 +234,55 @@ public class FeedGeneratorTests
         // xUnit2013: use Assert.Single instead of Assert.Equal(1, ...)
         Assert.Single(System.Text.RegularExpressions.Regex.Matches(result.Content, "#Bitcoin"));
     }
+
+    [Fact]
+    public async Task GenerateAsync_Should_ReturnNull_When_AiServiceIsNull()
+    {
+        // ARRANGE
+        var generator = new FeedGenerator(
+            _mockSender.Object,
+            _mockLogger.Object,
+            _mockFeedService.Object,
+            null);
+
+        // ACT
+        var result = await generator.GenerateAsync();
+
+        // ASSERT
+        Assert.Null(result);
+        Assert.False(generator.SendIt);
+        _mockFeedService.Verify(s => s.GetFeedsAsync(
+            It.IsAny<string>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<IEnumerable<string>>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GenerateAsync_Should_ReturnNull_When_SenderIsNull()
+    {
+        // ARRANGE
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
+
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+            It.IsAny<string>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+
+        var generator = new FeedGenerator(
+            null!,
+            _mockLogger.Object,
+            _mockFeedService.Object,
+            _mockAiService.Object);
+
+        // ACT
+        var result = await generator.GenerateAsync();
+
+        // ASSERT
+        Assert.Null(result);
+        Assert.False(generator.SendIt);
+        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
 }

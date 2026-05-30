@@ -12,7 +12,7 @@ namespace XPoster.Implementation;
 public class FeedGenerator : BaseGenerator
 {
     private readonly IFeedService _feedService;
-    private readonly IAiService _aiService;
+    private readonly IAiService? _aiService;
     private bool _sendIt = true;
 
     /// <summary>Default RSS feed URLs polled for Bitcoin news.</summary>
@@ -33,7 +33,7 @@ public class FeedGenerator : BaseGenerator
     /// <summary>
     /// Initialises a new instance of <see cref="FeedGenerator"/>.
     /// </summary>
-    public FeedGenerator(ISender sender, ILogger<FeedGenerator> logger, IFeedService feedService, IAiService aiService)
+    public FeedGenerator(ISender sender, ILogger<FeedGenerator> logger, IFeedService feedService, IAiService? aiService)
         : base(sender, logger)
     {
         _feedService = feedService;
@@ -47,6 +47,13 @@ public class FeedGenerator : BaseGenerator
     /// </summary>
     public override async Task<Post?> GenerateAsync()
     {
+        if (_aiService == null)
+        {
+            _logger.LogError("No IAiService instance provided to FeedGenerator. Cannot generate content.");
+            SendIt = false;
+            return null;
+        }
+
         var summary = await GenerateMessage();
         if (string.IsNullOrWhiteSpace(summary))
         {
@@ -58,7 +65,7 @@ public class FeedGenerator : BaseGenerator
         var prompt4Image = await _aiService.GetImagePromptAsync(summary);
         if (string.IsNullOrWhiteSpace(prompt4Image))
         {
-            _logger.LogError("Unable to get image prompt from OpenAI");
+            _logger.LogError("Unable to get image prompt from AI service");
             prompt4Image = summary;
         }
 
@@ -105,9 +112,15 @@ public class FeedGenerator : BaseGenerator
             return string.Empty;
         }
 
-        // CS8602: _sender is guaranteed non-null here — FeedGenerator ctor takes ISender (non-nullable)
+        if (_sender == null)
+        {
+            _logger.LogError("No sender configured for FeedGenerator.");
+            SendIt = false;
+            return string.Empty;
+        }
+
         string feedContent = allFeeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
-        var summary = await _aiService.GetSummaryAsync(feedContent, _sender!.MessageMaxLenght);
+        var summary = await _aiService!.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
         if (string.IsNullOrWhiteSpace(summary))
         {
             _logger.LogError("Unable to get summary from OpenAI");
