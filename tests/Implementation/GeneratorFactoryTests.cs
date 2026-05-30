@@ -11,12 +11,20 @@ public class GeneratorFactoryTests
     private readonly Mock<IServiceProvider> _mockServiceProvider;
     private readonly Mock<ILogger<GeneratorFactory>> _mockLogger;
     private readonly Mock<ITimeProvider> _mockTimeProvider;
+    private readonly Mock<IAiServiceFactory> _mockAiServiceFactory;
+    private readonly Mock<IAiService> _mockAiService;
 
     public GeneratorFactoryTests()
     {
         _mockServiceProvider = new Mock<IServiceProvider>();
         _mockLogger = new Mock<ILogger<GeneratorFactory>>();
         _mockTimeProvider = new Mock<ITimeProvider>();
+        _mockAiServiceFactory = new Mock<IAiServiceFactory>();
+        _mockAiService = new Mock<IAiService>();
+
+        _mockAiServiceFactory
+            .Setup(x => x.GetByProvider(AiProvider.OpenAi))
+            .Returns(_mockAiService.Object);
     }
 
     [Theory]
@@ -34,7 +42,11 @@ public class GeneratorFactoryTests
 
         SetupMocksForGeneratorFactory();
 
-        var factory = new GeneratorFactory(_mockServiceProvider.Object, _mockLogger.Object, _mockTimeProvider.Object);
+        var factory = new GeneratorFactory(
+            _mockServiceProvider.Object,
+            _mockLogger.Object,
+            _mockTimeProvider.Object,
+            _mockAiServiceFactory.Object);
 
         // ACT
         var generator = factory.Generate();
@@ -67,7 +79,8 @@ public class GeneratorFactoryTests
         var factory = new GeneratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
-            _mockTimeProvider.Object);
+            _mockTimeProvider.Object,
+            _mockAiServiceFactory.Object);
 
         // ACT
         var generator = factory.Generate();
@@ -98,7 +111,11 @@ public class GeneratorFactoryTests
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(IAiService)))
             .Returns(mockAiService.Object);
 
-        var factory = new GeneratorFactory(_mockServiceProvider.Object, _mockLogger.Object, _mockTimeProvider.Object);
+        var factory = new GeneratorFactory(
+            _mockServiceProvider.Object,
+            _mockLogger.Object,
+            _mockTimeProvider.Object,
+            _mockAiServiceFactory.Object);
 
         // ACT - Simulando le 8:00
         var generator = factory.Generate();
@@ -122,13 +139,37 @@ public class GeneratorFactoryTests
         var factory = new GeneratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
-            _mockTimeProvider.Object);
+            _mockTimeProvider.Object,
+            _mockAiServiceFactory.Object);
 
         // ACT
         var generator = factory.Generate();
 
         // ASSERT
         Assert.IsType<NoGenerator>(generator);
+        _mockAiServiceFactory.Verify(x => x.GetByProvider(It.IsAny<AiProvider>()), Times.Never);
+    }
+
+    [Fact]
+    public void Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()
+    {
+        // ARRANGE
+        var testDate = new DateTime(2025, 11, 14, 6, 0, 0);
+        _mockTimeProvider.Setup(tp => tp.GetCurrentTime()).Returns(testDate);
+        SetupMocksForGeneratorFactory();
+
+        var factory = new GeneratorFactory(
+            _mockServiceProvider.Object,
+            _mockLogger.Object,
+            _mockTimeProvider.Object,
+            _mockAiServiceFactory.Object);
+
+        // ACT
+        var generator = factory.Generate();
+
+        // ASSERT
+        Assert.IsType<FeedGenerator>(generator);
+        _mockAiServiceFactory.Verify(x => x.GetByProvider(AiProvider.OpenAi), Times.Once);
     }
     private void SetupMocksForGeneratorFactory()
     {

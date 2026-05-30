@@ -163,7 +163,6 @@ Dynamically selects the appropriate generator based on current time.
 - **ILogger** - Structured logging
 
 ### Utilities
-- **System.ServiceModel.Syndication** - RSS parsing
 - **Microsoft.Extensions.Http** - HTTP client factory
 
 ---
@@ -287,7 +286,7 @@ builder.Services.AddSingleton<OpenAIClient>(sp =>
 
 ### Option 1: GitHub Actions (Automated CI/CD)
 
-The repository includes a GitHub Actions workflow (`.github/workflows/master_xposterfunction.yml`).
+The repository includes a GitHub Actions workflow (`.github/workflows/ci.yml`).
 
 **Setup**:
 1. Create a Function App in Azure Portal

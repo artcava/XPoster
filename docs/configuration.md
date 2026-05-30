@@ -24,7 +24,8 @@ All configuration is passed via environment variables (locally in `src/local.set
 | Variable | Type | Required | Description |
 |---|---|---|---|
 | `IN_ACCESS_TOKEN` | string | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from LinkedIn Developer Portal → OAuth credentials. Expires every 60 days (manual rotation required). |
-| `IN_OWNER` | string | ✅ Yes | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Find it via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. |
+| `IN_OWNER` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Find it via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. Ignored when `IN_ORG_ID` is set. |
+| `IN_ORG_ID` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. `98765432`). When set, takes precedence over `IN_OWNER`. Posts are published as `urn:li:organization:{IN_ORG_ID}`. |
 
 ## Instagram
 
@@ -37,9 +38,26 @@ All configuration is passed via environment variables (locally in `src/local.set
 
 ## AI (OpenAI)
 
-| Variable | Type | Required | Description |
-|---|---|---|---|
-| `OPENAI_API_KEY` | string | ✅ Yes | OpenAI platform API key. Used by `AiService` for both text summarisation (`gpt-4.1-nano`) and image generation (`gpt-image-1.5`). |
+Configuration is bound from the `OpenAI` section using double-underscore notation in Azure App Settings / `local.settings.json` (e.g. `OpenAI__ApiKey`).
+
+| Setting | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `OpenAI__ApiKey` | string | ✅ Yes | — | OpenAI platform API key. Used by `OpenAiService` for all API calls. |
+| `OpenAI__ChatEndpoint` | string | No | `https://api.openai.com/v1/chat/completions` | Chat Completions API URL. |
+| `OpenAI__ChatModel` | string | No | `gpt-4.1-nano` | Model used for text summarisation and image prompt generation. |
+| `OpenAI__SummaryTemperature` | double | No | `0.5` | Temperature for summary generation. |
+| `OpenAI__SummaryMaxTokensPerChar` | int | No | `5` | Divisor to convert a character budget to `max_tokens`. |
+| `OpenAI__SummarySafetyMarginChars` | int | No | `50` | Character margin subtracted from the budget in the system prompt. |
+| `OpenAI__ImageEndpoint` | string | No | `https://api.openai.com/v1/images/generations` | Image Generations API URL. |
+| `OpenAI__ImageModel` | string | No | `gpt-image-1.5` | Model used for image generation. |
+| `OpenAI__ImageSize` | string | No | `1024x1024` | Output image size. |
+| `OpenAI__ImageCount` | int | No | `1` | Number of images to generate per request. |
+| `OpenAI__SummarySystemPromptTemplate` | string | No | *(see default)* | System prompt for summarisation. Supports `{MaxChars}` placeholder. |
+| `OpenAI__SummaryUserPromptTemplate` | string | No | *(see default)* | User prompt for summarisation. Supports `{Text}` placeholder. |
+| `OpenAI__ImagePromptSystemTemplate` | string | No | *(see default)* | System prompt for image prompt generation. No placeholders. |
+| `OpenAI__ImagePromptUserTemplate` | string | No | *(see default)* | User prompt for image prompt generation. Supports `{Summary}` placeholder. |
+| `OpenAI__ImagePromptMaxTokens` | int | No | `60` | Max tokens for image prompt generation requests. |
+| `OpenAI__ImagePromptTemperature` | double | No | `0.7` | Temperature for image prompt generation requests. |
 
 ## Azure Functions Runtime
 

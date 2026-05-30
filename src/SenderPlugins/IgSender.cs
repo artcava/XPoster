@@ -126,10 +126,10 @@ namespace XPoster.SenderPlugins
         /// Always thrown — this method is a placeholder pending integration with a public storage service
         /// such as Azure Blob Storage.
         /// </exception>
-        private async Task<string> UploadImageToPublicUrl(byte[] image)
+        private Task<string> UploadImageToPublicUrl(byte[] image)
         {
             _logger.LogInformation("Caricamento immagine su URL pubblico (da implementare).");
-            throw new NotImplementedException("Caricamento immagine su URL pubblico non implementato.");
+            return Task.FromException<string>(new NotImplementedException("Caricamento immagine su URL pubblico non implementato."));
         }
     }
 }

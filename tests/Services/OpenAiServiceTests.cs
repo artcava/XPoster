@@ -1,25 +1,27 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
+using XPoster.Models;
 using XPoster.Services;
 
 namespace XPoster.Tests.Services;
 
 /// <summary>
-/// Unit tests for <see cref="AiService"/> using a mocked <see cref="HttpMessageHandler"/>.
+/// Unit tests for <see cref="OpenAiService"/> using a mocked <see cref="HttpMessageHandler"/>.
 /// No real HTTP calls are made.
 /// </summary>
-public class AiServiceTests
+public class OpenAiServiceTests
 {
-    private static AiService BuildService(HttpMessageHandler handler, out Mock<ILogger<AiService>> loggerMock)
+    private static OpenAiService BuildService(HttpMessageHandler handler, out Mock<ILogger<OpenAiService>> loggerMock, OpenAiOptions? opts = null)
     {
-        loggerMock = new Mock<ILogger<AiService>>();
+        loggerMock = new Mock<ILogger<OpenAiService>>();
         var factory = new Mock<IHttpClientFactory>();
         var client = new HttpClient(handler);
         factory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
-        Environment.SetEnvironmentVariable("OPENAI_API_KEY", "fake-key");
-        return new AiService(factory.Object, loggerMock.Object);
+        var options = Options.Create(opts ?? new OpenAiOptions { ApiKey = "fake-key" });
+        return new OpenAiService(factory.Object, options, loggerMock.Object);
     }
 
     private static HttpMessageHandler MakeHandler(HttpStatusCode code, string json)
