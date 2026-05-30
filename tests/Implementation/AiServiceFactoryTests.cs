@@ -52,7 +52,7 @@ public class AiServiceFactoryTests
         // ARRANGE
         _serviceProvider
             .Setup(sp => sp.GetService(typeof(XPoster.Services.OpenAiService)))
-            .Returns(null);
+            .Returns((object?)null);
 
         var factory = new AiServiceFactory(_serviceProvider.Object);
 
