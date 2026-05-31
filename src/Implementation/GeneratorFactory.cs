@@ -112,8 +112,8 @@ public class GeneratorFactory : IGeneratorFactory
         new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
         new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
         //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-        new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator), AiProvider.OpenAi),
-        new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator), AiProvider.OpenAi),
-        //new ScheduledGenerationProfile(18, MessageSender.IgPowerLow, typeof(PowerLawGenerator), AiProvider.OpenAi),
+        new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
+        new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
+        //new ScheduledGenerationProfile(18, MessageSender.IgPowerLow, typeof(PowerLawGenerator)),
     };
 }
