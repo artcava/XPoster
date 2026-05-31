@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using XPoster.Abstraction;
-using XPoster.Models;
-using XPoster.Services;
 
 namespace XPoster.Implementation;
 
@@ -13,11 +11,11 @@ namespace XPoster.Implementation;
 public class AiServiceFactory : IAiServiceFactory
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly Dictionary<AiProvider, Type> _providerMap = new()
-    {
-        { AiProvider.OpenAi, typeof(OpenAiService) },
-        // { AiProvider.Perplexity, typeof(PerplexityService) }, // Uncomment when implemented
-    };
+    private static readonly HashSet<AiProvider> _supportedProviders =
+    [
+        AiProvider.OpenAi,
+        // AiProvider.Perplexity, // Uncomment when implemented
+    ];
 
     /// <summary>
     /// Initialises a new instance of <see cref="AiServiceFactory"/>.
@@ -37,11 +35,13 @@ public class AiServiceFactory : IAiServiceFactory
     /// <exception cref="InvalidOperationException">Thrown when mapped service cannot be resolved from DI.</exception>
     public IAiService GetByProvider(AiProvider provider)
     {
-        if (!_providerMap.TryGetValue(provider, out var serviceType))
+        if (!_supportedProviders.Contains(provider))
             throw new ArgumentException($"No IAiService registered for provider: {provider}");
-        var service = _serviceProvider.GetService(serviceType) as IAiService;
-        if (service == null)
+
+        var service = _serviceProvider.GetKeyedService<IAiService>(provider);
+        if (service is null)
             throw new InvalidOperationException($"Could not resolve IAiService for provider: {provider}");
+
         return service;
     }
 }

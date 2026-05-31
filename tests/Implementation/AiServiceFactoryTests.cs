@@ -8,10 +8,12 @@ namespace XPoster.Tests.Implementation;
 public class AiServiceFactoryTests
 {
     private readonly Mock<IServiceProvider> _serviceProvider;
+    private readonly Mock<IKeyedServiceProvider> _keyedServiceProvider;
 
     public AiServiceFactoryTests()
     {
         _serviceProvider = new Mock<IServiceProvider>();
+        _keyedServiceProvider = _serviceProvider.As<IKeyedServiceProvider>();
     }
 
     [Fact]
@@ -19,8 +21,8 @@ public class AiServiceFactoryTests
     {
         // ARRANGE
         var aiService = new Mock<IAiService>();
-        _serviceProvider
-            .Setup(sp => sp.GetService(typeof(XPoster.Services.OpenAiService)))
+        _keyedServiceProvider
+            .Setup(sp => sp.GetKeyedService(typeof(IAiService), AiProvider.OpenAi))
             .Returns(aiService.Object);
 
         var factory = new AiServiceFactory(_serviceProvider.Object);
@@ -50,8 +52,8 @@ public class AiServiceFactoryTests
     public void GetByProvider_Should_ThrowInvalidOperationException_When_MappedServiceCannotBeResolved()
     {
         // ARRANGE
-        _serviceProvider
-            .Setup(sp => sp.GetService(typeof(XPoster.Services.OpenAiService)))
+        _keyedServiceProvider
+            .Setup(sp => sp.GetKeyedService(typeof(IAiService), AiProvider.OpenAi))
             .Returns((object?)null);
 
         var factory = new AiServiceFactory(_serviceProvider.Object);
