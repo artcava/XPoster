@@ -12,7 +12,7 @@ public enum MessageSender
     /// <summary>Posts a Bitcoin Power Law update to LinkedIn.</summary>
     InPowerLaw,
     /// <summary>Posts a Bitcoin Power Law update to Instagram.</summary>
-    IgPowerLow,
+    IgPowerLaw,
     /// <summary>Posts a news feed summary to X (Twitter).</summary>
     XSummaryFeed,
     /// <summary>Posts a news feed summary to LinkedIn.</summary>
