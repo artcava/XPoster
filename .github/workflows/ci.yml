@@ -208,6 +208,24 @@ jobs:
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet publish src/XPoster.csproj --configuration Release --output ./output --no-build
           popd
+
+      - name: Validate Functions package
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          $requiredPaths = @(
+            './output/host.json',
+            './output/worker.config.json',
+            './output/.azurefunctions'
+          )
+
+          $missing = $requiredPaths | Where-Object { -not (Test-Path $_) }
+          if ($missing.Count -gt 0) {
+            Write-Error "Publish output is missing required Azure Functions isolated artifacts: $($missing -join ', ')"
+          }
+
+          Get-ChildItem ./output -Force | Select-Object Name
+          popd
       
       - name: Login to Azure
         uses: azure/login@v3
