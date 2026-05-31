@@ -61,7 +61,7 @@ public class GeneratorFactory : IGeneratorFactory
             MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender)) as ISender,
             MessageSender.InPowerLaw => _serviceProvider.GetService(typeof(InSender)) as ISender,
             MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender)) as ISender,
-            MessageSender.IgPowerLow => _serviceProvider.GetService(typeof(IgSender)) as ISender,
+            MessageSender.IgPowerLaw => _serviceProvider.GetService(typeof(IgSender)) as ISender,
             _ => null
         };
 
@@ -114,6 +114,6 @@ public class GeneratorFactory : IGeneratorFactory
         //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
         new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
         new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
-        //new ScheduledGenerationProfile(18, MessageSender.IgPowerLow, typeof(PowerLawGenerator)),
+        //new ScheduledGenerationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawGenerator)),
     };
 }
