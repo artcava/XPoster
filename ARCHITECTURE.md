@@ -48,7 +48,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     ├────────────────┤
     │ • AI Service   │ ◄─── OpenAI Integration
     │ • Feed Service │ ◄─── RSS Parser
-    │ • Crypto Svc   │ ◄─── Security Utils
+    │ • Crypto Svc   │ ◄─── CryptoPrices HTTP client
     └────────┬───────┘
              │
              ▼
@@ -83,7 +83,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 Each generator implements `IGenerator` and encapsulates a specific **content production algorithm**:
 
 - **FeedGenerator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a gpt-4.1-nano summary, and requests a gpt-image-1.5 image. It is stateless and side-effect-free until it hands off the `Post`.
-- **PowerLawGenerator**: constructs posts based on statistical/mathematical content (Bitcoin Power Law model). It consumes `CryptoService` for price data and `AiService` for narrative framing.
+- **PowerLawGenerator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on `AiService`.
 - **NoGenerator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in the orchestrator.
 
 ### Services Layer — Shared Infrastructure
@@ -92,7 +92,7 @@ Services are registered as singletons or transients in the DI container and are 
 
 - **AiService**: thin wrapper over the OpenAI API; isolates all prompt engineering and model-specific parameters behind a stable interface (`IAiService`).
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
-- **CryptoService**: utility layer for cryptocurrency data retrieval and token handling; used for security-sensitive operations and market data queries.
+- **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in generators.
 
 ### Sender Plugins — Platform Abstraction
 
@@ -201,7 +201,7 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 
 ---
 
-### ADR-004 — OpenAI Integration via Direct API
+### ADR-004 — OpenAI Integration via Azure OpenAI SDK
 
 | Field | Detail |
 |---|---|
@@ -210,11 +210,7 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 
 **Context**: Content generation requires a large language model for summarisation and an image model for visuals.
 
-<<<<<<< develop
 **Decision**: Use **Azure OpenAI Service** (gpt-4.1-nano for text, gpt-image-1.5 for images) accessed through the official Azure SDK, abstracted behind `IAiService`.
-=======
-**Decision**: Use **OpenAI direct API** (`api.openai.com`) accessed via `HttpClient` + `OPENAI_API_KEY`, abstracted behind `IAiService`.
->>>>>>> master
 
 **Rationale**:
 - **Models**: `gpt-4.1-nano` for summarisation/prompting, `gpt-image-1.5` for image generation.
@@ -223,7 +219,7 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 - Azure OpenAI migration is a future option.
 
 **Alternatives considered**:
-- **Azure OpenAI Service**: Rejected in v1.2.0 — `response_format` parameter incompatibility with DALL-E 3.
+- **OpenAI direct API**: Used in v1.2.0 transition period; superseded by Azure OpenAI SDK on develop branch.
 - **Hugging Face / open-source models**: Rejected — self-hosting adds infrastructure burden; quality gap for summarisation tasks at current scale.
 
 **Consequences**: OpenAI API quotas and rate limits must be managed. Token usage should be monitored via Application Insights (see KQL queries in README).
@@ -322,6 +318,7 @@ sequenceDiagram
     participant Gen as IGenerator<br/>(Feed / PowerLaw)
     participant AI as AiService<br/>(OpenAI)
     participant Feed as FeedService<br/>(RSS)
+    participant Crypto as CryptoService<br/>(cryptoprices.cc)
     participant Sender as ISender<br/>(X / LinkedIn / Instagram)
     participant Platform as Social Platform API
 
@@ -337,10 +334,11 @@ sequenceDiagram
         Gen->>AI: GetSummaryAsync(content, maxLength)
         AI-->>Gen: summary text
         Gen->>AI: GenerateImageAsync(title)
-        AI-->>Gen: image URL
+        AI-->>Gen: image bytes
     else PowerLawGenerator
-        Gen->>AI: GetPowerLawNarrativeAsync(priceData)
-        AI-->>Gen: narrative text
+        Gen->>Crypto: GetPriceAsync(symbol)
+        Crypto-->>Gen: current BTC price (decimal)
+        Gen->>Gen: Compute fair value (10⁻¹⁷ × days^5.83)
     end
 
     Gen-->>Fn: Post { Content, ImageUrl }

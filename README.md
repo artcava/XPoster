@@ -95,7 +95,7 @@
     ├────────────────┤
     │ • AI Service   │ ◄─── OpenAI Integration
     │ • Feed Service │ ◄─── RSS Parser
-    │ • Crypto Svc   │ ◄─── Security Utils
+    │ • Crypto Svc   │ ◄─── CryptoPrices HTTP client
     └────────┬───────┘
              │
              ▼
@@ -118,22 +118,24 @@ Timer-triggered Azure Function that orchestrates the entire publishing workflow.
 #### 2. **GeneratorFactory** (Factory + Strategy Pattern)
 Dynamically selects the appropriate generator based on current time.
 
-| Time | Platform | Strategy |
-|------|----------|----------|
-| 06:00 | LinkedIn | Feed Summary |
-| 08:00 | Twitter/X | Feed Summary |
-| 14:00 | LinkedIn | Power Law |
-| 16:00 | Twitter/X | Power Law |
+| Time | Platform | Strategy | Status |
+|------|----------|----------|--------|
+| 06:00 | LinkedIn | Feed Summary | ✅ Active |
+| 08:00 | Twitter/X | Feed Summary | ✅ Active |
+| 10:00 | Instagram | Feed Summary | ⚠️ Disabled — pending Instagram production readiness |
+| 14:00 | LinkedIn | Power Law | ✅ Active |
+| 16:00 | Twitter/X | Power Law | ✅ Active |
+| 18:00 | Instagram | Power Law | ⚠️ Disabled — pending Instagram production readiness |
 
 #### 3. **Generators** (Content Strategy)
 - **FeedGenerator**: Analyzes crypto RSS feeds, generates AI summaries, creates images
-- **PowerLawGenerator**: Generates content based on statistical distribution
+- **PowerLawGenerator**: Generates posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`), comparing the fair-value estimate with the live BTC price
 - **NoGenerator**: Placeholder for time slots without publishing
 
 #### 4. **Services Layer**
 - **AiService**: Interface with OpenAI (gpt-4.1-nano, gpt-image-1.5)
 - **FeedService**: RSS parser with caching and intelligent filtering
-- **CryptoService**: Crypto-currencies utilities
+- **CryptoService**: Thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol
 
 #### 5. **Sender Plugins** (Platform Abstraction)
 - **XSender**: Twitter/X via LinqToTwitter
@@ -419,14 +421,14 @@ az functionapp config appsettings set
 Modify `GeneratorFactory.cs` to customize which generator to use at each hour:
 
 ```csharp
-private static readonly Dictionary<int, MessageSender> sendParameters = new()
+private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 {
-{ 6, MessageSender.InSummaryFeed }, // LinkedIn Feed
-{ 8, MessageSender.XSummaryFeed }, // Twitter Feed
-{ 10, MessageSender.IgSummaryFeed }, // Instagram Feed (enable when ready)
-{ 14, MessageSender.InPowerLaw }, // LinkedIn Power Law
-{ 16, MessageSender.XPowerLaw }, // Twitter Power Law
-{ 18, MessageSender.IgPowerLow }, // Instagram Power Law
+    new ScheduledGenerationProfile(6,  MessageSender.InSummaryFeed,  typeof(FeedGenerator),     AiProvider.OpenAi),
+    new ScheduledGenerationProfile(8,  MessageSender.XSummaryFeed,   typeof(FeedGenerator),     AiProvider.OpenAi),
+    //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedGenerator),     AiProvider.OpenAi), // Disabled — see #72
+    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw,     typeof(PowerLawGenerator)),
+    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw,      typeof(PowerLawGenerator)),
+    //new ScheduledGenerationProfile(18, MessageSender.IgPowerLaw,   typeof(PowerLawGenerator)),                    // Disabled — see #72
 };
 ```
 ---
