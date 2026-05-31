@@ -39,8 +39,8 @@ builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
 
 // Register IAiServiceFactory and all IAiService implementations
 builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
-builder.Services.AddTransient<IAiService, OpenAiService>();
-// builder.Services.AddTransient<IAiService, PerplexityService>(); // Uncomment when implemented
+builder.Services.AddKeyedTransient<IAiService, OpenAiService>(AiProvider.OpenAi);
+// builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity); // Uncomment when implemented
 
 builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
 
