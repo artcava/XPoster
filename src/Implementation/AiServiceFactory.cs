@@ -14,6 +14,7 @@ public class AiServiceFactory : IAiServiceFactory
     private static readonly HashSet<AiProvider> _supportedProviders =
     [
         AiProvider.OpenAi,
+        AiProvider.AzureFoundry,
         // AiProvider.Perplexity, // Uncomment when implemented
     ];
 

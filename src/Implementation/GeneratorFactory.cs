@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
@@ -15,6 +16,7 @@ public class GeneratorFactory : IGeneratorFactory
     private readonly ILogger<GeneratorFactory> _log;
     private readonly ITimeProvider _timeProvider;
     private readonly IAiServiceFactory _aiServiceFactory;
+    private readonly IConfiguration? _configuration;
 
     /// <summary>
     /// Initialises a new instance of <see cref="GeneratorFactory"/>.
@@ -23,16 +25,19 @@ public class GeneratorFactory : IGeneratorFactory
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="aiServiceFactory">Factory used to resolve the AI service by provider.</param>
+    /// <param name="configuration">Optional configuration used to override the AI provider via <c>AiProvider</c> setting.</param>
     public GeneratorFactory(
         IServiceProvider serviceProvider,
         ILogger<GeneratorFactory> log,
         ITimeProvider timeProvider,
-        IAiServiceFactory aiServiceFactory)
+        IAiServiceFactory aiServiceFactory,
+        IConfiguration? configuration = null)
     {
         _serviceProvider = serviceProvider;
         _log = log;
         _timeProvider = timeProvider;
         _aiServiceFactory = aiServiceFactory;
+        _configuration = configuration;
     }
 
     /// <summary>
@@ -68,7 +73,8 @@ public class GeneratorFactory : IGeneratorFactory
         IAiService? aiService = null;
         if (profile.AiProvider.HasValue)
         {
-            aiService = _aiServiceFactory.GetByProvider(profile.AiProvider.Value);
+            var effectiveProvider = ResolveAiProvider(profile.AiProvider.Value);
+            aiService = _aiServiceFactory.GetByProvider(effectiveProvider);
         }
 
         // Dynamically instantiate the generator with sender and aiService if required
@@ -102,6 +108,26 @@ public class GeneratorFactory : IGeneratorFactory
             }
         }
         return (BaseGenerator)Activator.CreateInstance(generatorType, args.ToArray())!;
+    }
+
+    private AiProvider ResolveAiProvider(AiProvider defaultProvider)
+    {
+        var configuredProvider = _configuration?["AiProvider"];
+        if (string.IsNullOrWhiteSpace(configuredProvider))
+        {
+            return defaultProvider;
+        }
+
+        if (Enum.TryParse<AiProvider>(configuredProvider, ignoreCase: true, out var parsedProvider))
+        {
+            return parsedProvider;
+        }
+
+        _log.LogWarning("Invalid AiProvider value '{AiProvider}' in configuration. Falling back to {DefaultProvider}.",
+            configuredProvider,
+            defaultProvider);
+
+        return defaultProvider;
     }
 
     /// <summary>
