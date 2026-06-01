@@ -12,6 +12,8 @@ public enum AiProvider
     OpenAi = 1,
 
     /// <summary>Perplexity provider.</summary>
-    Perplexity = 2
-    // Extend here for future providers (e.g., Foundry)
+    Perplexity = 2,
+
+    /// <summary>Azure AI Foundry provider.</summary>
+    AzureFoundry = 3
 }

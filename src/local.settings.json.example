@@ -4,6 +4,7 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "CronSchedule": "0 0 6,8,14,16 * * *",
+    "AiProvider": "OpenAi",
 
     "X_API_KEY": "",
     "X_API_SECRET": "",
@@ -33,6 +34,21 @@
     "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
     "OpenAI__ImagePromptMaxTokens": "60",
     "OpenAI__ImagePromptTemperature": "0.7",
+
+    "AzureFoundry__Endpoint": "",
+    "AzureFoundry__ApiKey": "",
+    "AzureFoundry__DeploymentName": "",
+    "AzureFoundry__ImageDeploymentName": "",
+    "AzureFoundry__ApiVersion": "2024-02-01",
+    "AzureFoundry__SummaryTemperature": "0.5",
+    "AzureFoundry__SummaryMaxTokensPerChar": "5",
+    "AzureFoundry__SummarySafetyMarginChars": "50",
+    "AzureFoundry__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "AzureFoundry__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "AzureFoundry__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "AzureFoundry__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "AzureFoundry__ImagePromptMaxTokens": "60",
+    "AzureFoundry__ImagePromptTemperature": "0.7",
 
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }

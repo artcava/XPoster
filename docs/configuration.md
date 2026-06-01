@@ -38,6 +38,12 @@ All configuration is passed via environment variables (locally in `src/local.set
 
 ## AI (OpenAI)
 
+Use `AiProvider` to select which provider `GeneratorFactory` should resolve for AI-enabled slots.
+
+| Setting | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `AiProvider` | string | No | `OpenAi` | Overrides schedule default for AI-enabled slots. Supported values: `OpenAi`, `AzureFoundry`. |
+
 Configuration is bound from the `OpenAI` section using double-underscore notation in Azure App Settings / `local.settings.json` (e.g. `OpenAI__ApiKey`).
 
 | Setting | Type | Required | Default | Description |
@@ -58,6 +64,27 @@ Configuration is bound from the `OpenAI` section using double-underscore notatio
 | `OpenAI__ImagePromptUserTemplate` | string | No | *(see default)* | User prompt for image prompt generation. Supports `{Summary}` placeholder. |
 | `OpenAI__ImagePromptMaxTokens` | int | No | `60` | Max tokens for image prompt generation requests. |
 | `OpenAI__ImagePromptTemperature` | double | No | `0.7` | Temperature for image prompt generation requests. |
+
+## AI (Azure Foundry)
+
+Configuration is bound from the `AzureFoundry` section using double-underscore notation in Azure App Settings / `local.settings.json` (e.g. `AzureFoundry__Endpoint`).
+
+| Setting | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `AzureFoundry__Endpoint` | string | ✅ Yes | — | Base endpoint for your Foundry/OpenAI-compatible resource. |
+| `AzureFoundry__ApiKey` | string | ✅ Yes | — | API key used as `api-key` header. |
+| `AzureFoundry__DeploymentName` | string | ✅ Yes | — | Chat deployment used for summary and image-prompt generation. |
+| `AzureFoundry__ImageDeploymentName` | string | No | — | Image deployment used by `GenerateImageAsync`. |
+| `AzureFoundry__ApiVersion` | string | No | `2024-02-01` | API version appended to requests. |
+| `AzureFoundry__SummaryTemperature` | double | No | `0.5` | Temperature for summary generation. |
+| `AzureFoundry__SummaryMaxTokensPerChar` | int | No | `5` | Divisor to convert character budget to `max_tokens`. |
+| `AzureFoundry__SummarySafetyMarginChars` | int | No | `50` | Character margin subtracted from budget. |
+| `AzureFoundry__SummarySystemPromptTemplate` | string | No | *(see default)* | System prompt for summarisation. Supports `{MaxChars}`. |
+| `AzureFoundry__SummaryUserPromptTemplate` | string | No | *(see default)* | User prompt for summarisation. Supports `{Text}`. |
+| `AzureFoundry__ImagePromptSystemTemplate` | string | No | *(see default)* | System prompt for image-prompt generation. |
+| `AzureFoundry__ImagePromptUserTemplate` | string | No | *(see default)* | User prompt for image-prompt generation. Supports `{Summary}`. |
+| `AzureFoundry__ImagePromptMaxTokens` | int | No | `60` | Max tokens for image-prompt generation. |
+| `AzureFoundry__ImagePromptTemperature` | double | No | `0.7` | Temperature for image-prompt generation. |
 
 ## Azure Functions Runtime
 
