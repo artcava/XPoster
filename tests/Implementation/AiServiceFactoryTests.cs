@@ -35,6 +35,24 @@ public class AiServiceFactoryTests
     }
 
     [Fact]
+    public void GetByProvider_Should_ReturnAzureFoundryService_When_ProviderIsMappedAndResolvable()
+    {
+        // ARRANGE
+        var aiService = new Mock<IAiService>();
+        _keyedServiceProvider
+            .Setup(sp => sp.GetKeyedService(typeof(IAiService), AiProvider.AzureFoundry))
+            .Returns(aiService.Object);
+
+        var factory = new AiServiceFactory(_serviceProvider.Object);
+
+        // ACT
+        var result = factory.GetByProvider(AiProvider.AzureFoundry);
+
+        // ASSERT
+        Assert.Same(aiService.Object, result);
+    }
+
+    [Fact]
     public void GetByProvider_Should_ThrowArgumentException_When_ProviderIsNotMapped()
     {
         // ARRANGE
