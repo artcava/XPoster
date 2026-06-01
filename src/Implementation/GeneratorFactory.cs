@@ -25,6 +25,7 @@ public class GeneratorFactory : IGeneratorFactory
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="aiServiceFactory">Factory used to resolve the AI service by provider.</param>
+    /// <param name="configuration">Optional configuration used to override the AI provider via <c>AiProvider</c> setting.</param>
     public GeneratorFactory(
         IServiceProvider serviceProvider,
         ILogger<GeneratorFactory> log,
