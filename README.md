@@ -795,21 +795,15 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 - [x] CI/CD pipeline
 
 ### 🚧 Phase 2: Stabilization (In Progress)
-- [ ] AI migration to Azure Foundry
-- [ ] Linkedin auto-update authorization token
-- [ ] Configuration externalization
+- [x] Configuration externalization
+- [ ] AI addition: Azure AI Foundry (alternative to OpenAI)
+- [ ] LinkedIn auto-update authorization token ⚠️
 - [ ] Enhanced error handling
 - [ ] Comprehensive testing (80%+ coverage)
 
-### 📅 Phase 3: Intelligence (Q1 2026)
-- [ ] Post-publication analytics
-- [ ] ML-based optimal timing
-- [ ] Sentiment analysis
-- [ ] A/B testing framework
-- [ ] Trending hashtag detection
-- [ ] Multi-language support
+> ⚠️ LinkedIn token refresh is scoped to organization accounts only (`IN_ORG_ID`). Personal member accounts require manual renewal every 60 days.
 
-### 🎨 Phase 4: Admin Dashboard (Q2 2026)
+### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
 - [ ] Real-time analytics
 - [ ] Manual post scheduling
@@ -817,7 +811,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 - [ ] Performance metrics
 - [ ] Mobile app (MAUI)
 
-### 🌍 Phase 5: Expansion (Q3 2026)
+### 🌍 Phase 4: Expansion (TBD)
 - [ ] Instagram publishing (complete setup)
 - [ ] Threads (Meta) integration
 - [ ] Mastodon support
