@@ -1,13 +1,8 @@
 // src/Services/DeepSeekAiService.cs
-using Microsoft.Extensions.AI;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using OpenAI;
-using System.ClientModel;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
 using XPoster.Models;
 
@@ -15,6 +10,8 @@ namespace XPoster.Services;
 
 /// <summary>
 /// Implementazione di IAiService usando DeepSeek API.
+/// Gestisce solo la generazione di testo (summary e image prompt).
+/// La generazione di immagini è delegata a <see cref="FalAiImageService"/> tramite <see cref="HybridAiService"/>.
 /// </summary>
 public class DeepSeekService : IAiService
 {
@@ -36,7 +33,7 @@ public class DeepSeekService : IAiService
         _logger = logger;
         _options = options.Value;
         _client = httpClientFactory.CreateClient();
-        _client.DefaultRequestHeaders.Add("api-key", _options.ApiKey);
+        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_options.ApiKey}");
     }
 
     /// <summary>
@@ -90,6 +87,11 @@ public class DeepSeekService : IAiService
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Image generation is not supported by DeepSeek.
+    /// In the hybrid setup this method is never called directly —
+    /// <see cref="HybridAiService"/> delegates image generation to <see cref="FalAiImageService"/>.
+    /// </remarks>
     public Task<byte[]> GenerateImageAsync(string prompt)
     {
         _logger.LogWarning(
@@ -98,40 +100,8 @@ public class DeepSeekService : IAiService
         return Task.FromResult(Array.Empty<byte>());
     }
 
-//     /// <summary>
-//     /// Metodo di utilità (non parte di IAiService) per ottimizzare prompt per immagini.
-//     /// </summary>
-//     public async Task<string> OptimizePromptForImageAsync(string summary, string? style = null)
-//     {
-//         var styleInstruction = string.IsNullOrEmpty(style) 
-//             ? "realistic and visually appealing" 
-//             : style;
-
-//         var prompt = $@"Sei un esperto nella creazione di prompt per modelli di generazione immagini AI.
-
-// Basandoti sul seguente RIASSUNTO, crea un prompt dettagliato in INGLESE per generare un'immagine.
-
-// RIASSUNTO: {summary}
-
-// STILE RICHIESTO: {styleInstruction}
-
-// REQUISITI DEL PROMPT:
-// - Usa la struttura: '[Soggetto] + [dettagli specifici] + [stile/atmosfera] + [qualità]'
-// - Includi dettagli su ambientazione, luci, colori, mood
-// - Aggiungi specifiche tecniche: '4K', 'highly detailed'
-// - Massimo 75 parole
-// - Solo in inglese (ottimale per modelli come FLUX, DALL-E, Stable Diffusion)
-
-// Fornisci SOLO il prompt, senza spiegazioni.";
-
-//         var response = await _chatClient.CompleteAsync(prompt);
-//         var optimizedPrompt = response.Message.Text?.Trim() ?? string.Empty;
-//         _logger.LogInformation("Image prompt optimized: {Prompt}", optimizedPrompt);
-//         return optimizedPrompt;
-//     }
-
     private string GetChatCompletionsEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.DeploymentName)}/chat/completions?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
+        $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
     private object BuildSummaryPayload(string text, int messageMaxLength)
     {
@@ -146,6 +116,7 @@ public class DeepSeekService : IAiService
 
         return new
         {
+            model = _options.DeploymentName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },
@@ -163,6 +134,7 @@ public class DeepSeekService : IAiService
 
         return new
         {
+            model = _options.DeploymentName,
             messages = new[]
             {
                 new { role = "system", content = _options.ImagePromptSystemTemplate },

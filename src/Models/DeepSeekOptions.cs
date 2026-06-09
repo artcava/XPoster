@@ -1,21 +1,18 @@
 namespace XPoster.Models;
 
 /// <summary>
-/// Strongly-typed configuration for the Azure AI Foundry provider, bound from the <c>AzureFoundry</c> section.
+/// Strongly-typed configuration for the DeepSeek provider, bound from the <c>DeepSeek</c> section.
 /// </summary>
 public sealed class DeepSeekOptions
 {
-    /// <summary>Gets or sets the Foundry endpoint base URL (for example, <c>https://resource-name.openai.azure.com</c>).</summary>
-    public string Endpoint { get; set; } = string.Empty;
+    /// <summary>Gets or sets the DeepSeek endpoint base URL (for example, <c>https://api.deepseek.com</c>).</summary>
+    public string Endpoint { get; set; } = "https://api.deepseek.com";
 
-    /// <summary>Gets or sets the API key used for Foundry authentication.</summary>
+    /// <summary>Gets or sets the API key used for DeepSeek authentication.</summary>
     public string ApiKey { get; set; } = string.Empty;
 
-    /// <summary>Gets or sets the chat/completions deployment name.</summary>
-    public string DeploymentName { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the image generation deployment name.</summary>
-    public string ImageDeploymentName { get; set; } = string.Empty;
+    /// <summary>Gets or sets the chat/completions model name (e.g. <c>deepseek-chat</c>).</summary>
+    public string DeploymentName { get; set; } = "deepseek-chat";
 
     /// <summary>Gets or sets the REST API version.</summary>
     public string ApiVersion { get; set; } = "2024-02-01";

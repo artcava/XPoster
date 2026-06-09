@@ -1,9 +1,6 @@
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using XPoster.Models;
@@ -11,7 +8,7 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Generates images using the fal.ai REST API with the FLUX.2 Turbo model.
+/// Generates images using the fal.ai REST API with the FLUX.1 Turbo model.
 /// </summary>
 public sealed class FalAiImageService
 {
@@ -39,7 +36,7 @@ public sealed class FalAiImageService
     }
 
     /// <summary>
-    /// Generates an image from the given prompt using FLUX.2 Turbo on fal.ai.
+    /// Generates an image from the given prompt using FLUX.1 Turbo on fal.ai.
     /// </summary>
     /// <param name="prompt">The text prompt describing the desired image.</param>
     /// <returns>A byte array containing the generated image data, or an empty array on failure.</returns>
@@ -55,6 +52,7 @@ public sealed class FalAiImageService
         {
             prompt,
             image_size = _options.ImageSize,
+            num_inference_steps = _options.NumInferenceSteps,
             num_images = 1,
             enable_safety_checker = true,
             output_format = "png"
