@@ -1,31 +1,37 @@
+// src/Services/DeepSeekAiService.cs
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using OpenAI;
+using System.ClientModel;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
 using XPoster.Models;
 
 namespace XPoster.Services;
 
 /// <summary>
-/// Implements <see cref="IAiService"/> by calling Azure AI Foundry OpenAI-compatible endpoints.
+/// Implementazione di IAiService usando DeepSeek API.
 /// </summary>
-public sealed class AzureFoundryService : IAiService
+public class DeepSeekService : IAiService
 {
     private readonly HttpClient _client;
-    private readonly ILogger<AzureFoundryService> _logger;
-    private readonly AzureFoundryOptions _options;
+    private readonly ILogger<DeepSeekService> _logger;
+    private readonly DeepSeekOptions _options;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="AzureFoundryService"/> with configuration and logger.
+    /// Initialises a new instance of <see cref="DeepSeekService"/> with configuration and logger.
     /// </summary>
     /// <param name="httpClientFactory"></param>
     /// <param name="options"></param>
     /// <param name="logger"></param>
-    public AzureFoundryService(
+    public DeepSeekService(
         IHttpClientFactory httpClientFactory,
-        IOptions<AzureFoundryOptions> options,
-        ILogger<AzureFoundryService> logger)
+        IOptions<DeepSeekOptions> options,
+        ILogger<DeepSeekService> logger)
     {
         _logger = logger;
         _options = options.Value;
@@ -33,7 +39,9 @@ public sealed class AzureFoundryService : IAiService
         _client.DefaultRequestHeaders.Add("api-key", _options.ApiKey);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Genera un riassunto del testo.
+    /// </summary>
     public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
     {
         int tries = 0;
@@ -44,13 +52,13 @@ public sealed class AzureFoundryService : IAiService
             var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength));
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
-                _logger.LogInformation("Azure Foundry returned 429 during summary generation.");
+                _logger.LogInformation("DeepSeek returned 429 during summary generation.");
                 return string.Empty;
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogInformation("Azure Foundry summary request failed with status code {StatusCode}", response.StatusCode);
+                _logger.LogInformation("DeepSeek summary request failed with status code {StatusCode}", response.StatusCode);
                 return string.Empty;
             }
 
@@ -67,13 +75,13 @@ public sealed class AzureFoundryService : IAiService
         var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text));
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
-            _logger.LogInformation("Azure Foundry returned 429 during image prompt generation.");
+            _logger.LogInformation("DeepSeek returned 429 during image prompt generation.");
             return string.Empty;
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogInformation("Azure Foundry image prompt request failed with status code {StatusCode}", response.StatusCode);
+            _logger.LogInformation("DeepSeek image prompt request failed with status code {StatusCode}", response.StatusCode);
             return string.Empty;
         }
 
@@ -96,14 +104,14 @@ public sealed class AzureFoundryService : IAiService
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Azure Foundry image generation failed with status code {StatusCode}", response.StatusCode);
+            _logger.LogError("DeepSeek image generation failed with status code {StatusCode}", response.StatusCode);
             return Array.Empty<byte>();
         }
 
         var result = await response.Content.ReadFromJsonAsync<JsonElement>();
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
-            _logger.LogError("Azure Foundry image generation response does not contain data entries.");
+            _logger.LogError("DeepSeek image generation response does not contain data entries.");
             return Array.Empty<byte>();
         }
 
@@ -130,6 +138,38 @@ public sealed class AzureFoundryService : IAiService
 
         return Array.Empty<byte>();
     }
+
+//     /// <summary>
+//     /// Metodo di utilità (non parte di IAiService) per ottimizzare prompt per immagini.
+//     /// </summary>
+//     public async Task<string> OptimizePromptForImageAsync(string summary, string? style = null)
+//     {
+//         var styleInstruction = string.IsNullOrEmpty(style) 
+//             ? "realistic and visually appealing" 
+//             : style;
+
+//         var prompt = $@"Sei un esperto nella creazione di prompt per modelli di generazione immagini AI.
+
+// Basandoti sul seguente RIASSUNTO, crea un prompt dettagliato in INGLESE per generare un'immagine.
+
+// RIASSUNTO: {summary}
+
+// STILE RICHIESTO: {styleInstruction}
+
+// REQUISITI DEL PROMPT:
+// - Usa la struttura: '[Soggetto] + [dettagli specifici] + [stile/atmosfera] + [qualità]'
+// - Includi dettagli su ambientazione, luci, colori, mood
+// - Aggiungi specifiche tecniche: '4K', 'highly detailed'
+// - Massimo 75 parole
+// - Solo in inglese (ottimale per modelli come FLUX, DALL-E, Stable Diffusion)
+
+// Fornisci SOLO il prompt, senza spiegazioni.";
+
+//         var response = await _chatClient.CompleteAsync(prompt);
+//         var optimizedPrompt = response.Message.Text?.Trim() ?? string.Empty;
+//         _logger.LogInformation("Image prompt optimized: {Prompt}", optimizedPrompt);
+//         return optimizedPrompt;
+//     }
 
     private string GetChatCompletionsEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.DeploymentName)}/chat/completions?api-version={Uri.EscapeDataString(_options.ApiVersion)}";

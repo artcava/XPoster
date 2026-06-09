@@ -50,6 +50,11 @@
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
 
+    "DeepSeek__ApiKey": "",
+    "DeepSeek__Model": "",
+
+    "FalAi_ApiKey": "",
+
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }

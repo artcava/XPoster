@@ -15,5 +15,8 @@ public enum AiProvider
     Perplexity = 2,
 
     /// <summary>Azure AI Foundry provider.</summary>
-    AzureFoundry = 3
+    AzureFoundry = 3,
+
+    /// <summary>DeepSeek provider.</summary>
+    DeepSeek = 4,
 }
