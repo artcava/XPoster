@@ -43,7 +43,7 @@ builder.Services.AddKeyedTransient<IAiService, OpenAiService>(AiProvider.OpenAi)
 builder.Services.AddKeyedTransient<IAiService, AzureFoundryService>(AiProvider.AzureFoundry);
 builder.Services.AddKeyedTransient<IAiService, HybridAiService>(AiProvider.DeepSeekWithFal);
 builder.Services.AddTransient<IAiService, DeepSeekService>(); // Register DeepSeekService for direct injection into HybridAiService
-builder.Services.AddTransient<IAiService, FalAiService>(); // Register FalAiService for direct injection into HybridAiService
+builder.Services.AddTransient<FalAiImageService>(); // Register FalAiImageService for direct injection into HybridAiService
 // builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity); // Uncomment when implemented
 
 builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
