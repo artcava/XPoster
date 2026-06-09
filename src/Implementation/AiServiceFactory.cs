@@ -15,7 +15,7 @@ public class AiServiceFactory : IAiServiceFactory
     [
         AiProvider.OpenAi,
         AiProvider.AzureFoundry,
-        AiProvider.DeepSeek,
+        AiProvider.DeepSeekWithFal,
         // AiProvider.Perplexity, // Uncomment when implemented
     ];
 
