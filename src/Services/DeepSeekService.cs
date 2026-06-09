@@ -90,53 +90,12 @@ public class DeepSeekService : IAiService
     }
 
     /// <inheritdoc/>
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public Task<byte[]> GenerateImageAsync(string prompt)
     {
-        var requestBody = new
-        {
-            prompt,
-            n = 1,
-            size = "1024x1024",
-            response_format = "b64_json"
-        };
+        _logger.LogWarning(
+            "GenerateImageAsync was called on DeepSeekService, but image generation is handled by fal.ai in the hybrid setup.");
 
-        var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogError("DeepSeek image generation failed with status code {StatusCode}", response.StatusCode);
-            return Array.Empty<byte>();
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
-        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
-        {
-            _logger.LogError("DeepSeek image generation response does not contain data entries.");
-            return Array.Empty<byte>();
-        }
-
-        var first = data[0];
-
-        if (first.TryGetProperty("b64_json", out var b64Property))
-        {
-            var base64 = b64Property.GetString();
-            return string.IsNullOrWhiteSpace(base64)
-                ? Array.Empty<byte>()
-                : Convert.FromBase64String(base64);
-        }
-
-        if (first.TryGetProperty("url", out var urlProperty))
-        {
-            var imageUrl = urlProperty.GetString();
-            if (string.IsNullOrWhiteSpace(imageUrl))
-            {
-                return Array.Empty<byte>();
-            }
-
-            return await _client.GetByteArrayAsync(imageUrl);
-        }
-
-        return Array.Empty<byte>();
+        return Task.FromResult(Array.Empty<byte>());
     }
 
 //     /// <summary>
