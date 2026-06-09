@@ -133,9 +133,6 @@ public class DeepSeekService : IAiService
     private string GetChatCompletionsEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.DeploymentName)}/chat/completions?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
 
-    private string GetImageGenerationEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.ImageDeploymentName)}/images/generations?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
-
     private object BuildSummaryPayload(string text, int messageMaxLength)
     {
         var tokenDivisor = Math.Max(1, _options.SummaryMaxTokensPerChar);
