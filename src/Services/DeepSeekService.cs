@@ -89,15 +89,17 @@ public class DeepSeekService : IAiService
     /// <inheritdoc/>
     /// <remarks>
     /// Image generation is not supported by DeepSeek.
-    /// In the hybrid setup this method is never called directly —
+    /// In the hybrid setup this method must never be called directly —
     /// <see cref="HybridAiService"/> delegates image generation to <see cref="FalAiImageService"/>.
     /// </remarks>
+    /// <exception cref="NotSupportedException">
+    /// Always thrown. Use <see cref="HybridAiService"/> to generate images with DeepSeek as the text provider.
+    /// </exception>
     public Task<byte[]> GenerateImageAsync(string prompt)
     {
-        _logger.LogWarning(
-            "GenerateImageAsync was called on DeepSeekService, but image generation is handled by fal.ai in the hybrid setup.");
-
-        return Task.FromResult(Array.Empty<byte>());
+        throw new NotSupportedException(
+            $"{nameof(DeepSeekService)} does not support image generation. " +
+            $"Use {nameof(HybridAiService)} to delegate image generation to fal.ai.");
     }
 
     private string GetChatCompletionsEndpoint() =>
