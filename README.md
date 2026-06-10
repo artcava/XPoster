@@ -3,7 +3,7 @@
 [![Azure Functions](https://img.shields.io/badge/Azure%20Functions-v4-0062AD?logo=azurefunctions&logoColor=white)](https://azure.microsoft.com/en-us/services/functions/)
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![C#](https://img.shields.io/badge/C%23-12.0-239120?logo=csharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![OpenAI](https://img.shields.io/badge/OpenAI-Powered-412991?logo=openai&logoColor=white)](https://openai.com/)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-412991?logo=openai&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-services/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deployment](https://img.shields.io/badge/Deployed-Azure-blue)](https://xposterfunction.azurewebsites.net/)
 [![Build and Deploy](https://github.com/artcava/XPoster/actions/workflows/ci.yml/badge.svg)](https://github.com/artcava/XPoster/actions/workflows/ci.yml)
@@ -38,10 +38,11 @@
 ## Features
 
 ### 🤖 Content Generation
-- **AI-Powered Summarization**: Intelligent RSS feed summaries using gpt-4.1-nano
-- **Image Generation**: Automatic contextual image creation with gpt-image-1.5
+- **AI-Powered Summarization**: Intelligent RSS feed summaries via a configurable AI model of your choice
+- **Image Generation**: Automatic contextual image creation using any supported image generation model
 - **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
 - **Multi-Strategy**: Support for different content generation algorithms
+- **Provider Agnostic**: The AI provider (e.g. OpenAI, Azure AI Foundry) and the specific model are selected by the operator through configuration — no code change required to swap models
 
 ### 🌐 Multi-Platform Publishing
 - **Twitter/X**: Automated posting with image support
@@ -93,7 +94,7 @@
     ┌────────────────┐
     │   Services     │
     ├────────────────┤
-    │ • AI Service   │ ◄─── OpenAI Integration
+    │ • AI Service   │ ◄─── Configurable AI Provider
     │ • Feed Service │ ◄─── RSS Parser
     │ • Crypto Svc   │ ◄─── CryptoPrices HTTP client
     └────────┬───────┘
@@ -133,7 +134,7 @@ Dynamically selects the appropriate generator based on current time.
 - **NoGenerator**: Placeholder for time slots without publishing
 
 #### 4. **Services Layer**
-- **AiService**: Interface with OpenAI (gpt-4.1-nano, gpt-image-1.5)
+- **AiService**: Abstraction layer over the configured AI provider; the underlying model and endpoint are specified via environment variables (`AZURE_OPENAI_DEPLOYMENT_NAME`, `AZURE_OPENAI_ENDPOINT`)
 - **FeedService**: RSS parser with caching and intelligent filtering
 - **CryptoService**: Thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol
 
@@ -152,8 +153,9 @@ Dynamically selects the appropriate generator based on current time.
 - **C# 12** - Programming language
 
 ### AI & ML
-- **OpenAI** - gpt-4.1-nano for summarization
-- **gpt-image-1.5** - Image generation
+- **AI Provider**: Configurable at deploy time via environment variables — defaults to Azure OpenAI, but any compatible provider can be used
+- **Text model**: Any chat-completion model supported by the configured provider (e.g. gpt-4.1-nano, gpt-4o-mini, or models from Azure AI Foundry)
+- **Image model**: Any image-generation model supported by the configured provider (e.g. gpt-image-1, dall-e-3)
 
 ### Social Media APIs
 - **LinqToTwitter 6.15.0** - Twitter/X integration
@@ -177,7 +179,7 @@ Dynamically selects the appropriate generator based on current time.
 - **Azure Functions Core Tools** ([Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local))
 - **Visual Studio 2022** or **Visual Studio Code**
 - **Azure Account** (with active subscription)
-- **OpenAI API** (with gpt-4.1-nano and gpt-image-1.5 enabled)
+- **AI Provider API access**: An endpoint and key for any chat-completion and image-generation capable model (Azure OpenAI is the default; Azure AI Foundry or other OpenAI-compatible providers also work)
 
 ### Clone the Repository
 
@@ -249,10 +251,12 @@ Create a `local.settings.json` file in the `src/` directory:
     
     "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
     "AZURE_OPENAI_KEY": "your_openai_key",
-    "AZURE_OPENAI_DEPLOYMENT_NAME": "gpt-4.1-nano"
+    "AZURE_OPENAI_DEPLOYMENT_NAME": "your-deployment-name"
   }
 }
 ```
+
+> ℹ️ `AZURE_OPENAI_DEPLOYMENT_NAME` accepts any deployment name exposed by your provider — set it to the model you have provisioned (e.g. `gpt-4.1-nano`, `gpt-4o-mini`, or a custom Azure AI Foundry deployment).
 
 > 📖 Full configuration reference with types, defaults, and where to obtain each credential: [docs/configuration.md](docs/configuration.md).
 
@@ -270,7 +274,7 @@ For enhanced security, use Azure Managed Identity:
 
 1. Enable **System Assigned Managed Identity** on the Function App
 2. Assign appropriate roles on:
-   - Azure OpenAI Service
+   - Azure OpenAI Service (or your chosen AI provider)
    - Azure Key Vault (for secrets)
 3. Modify `Program.cs` to use `DefaultAzureCredential`
 
@@ -646,7 +650,7 @@ Add the following key to `local.settings.json` for local telemetry (optional but
 - **Execution Count**: Number of function executions
 - **Success Rate**: % of successful executions
 - **Average Duration**: Average execution time
-- **AI Token Usage**: OpenAI token consumption
+- **AI Token Usage**: Token consumption for the configured model
 
 ---
 
@@ -788,7 +792,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 ### ✅ Phase 1: Foundation (Complete)
 - [x] Azure Function setup
 - [x] Multi-platform sender architecture
-- [x] AI integration (gpt-4.1-nano, gpt-image-1.5)
+- [x] AI integration (configurable provider and model)
 - [x] Twitter/X publishing
 - [x] LinkedIn publishing
 - [x] RSS feed parsing
@@ -908,7 +912,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ## Acknowledgments
 
 - [Azure Functions](https://azure.microsoft.com/services/functions/) - Serverless platform
-- [OpenAI](https://openai.com/) - AI models (gpt-4.1-nano, gpt-image-1.5)
+- [OpenAI](https://openai.com/) - AI models
+- [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) - Alternative AI provider
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
