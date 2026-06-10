@@ -545,66 +545,16 @@ private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 
 ## Extensibility
 
-### Adding a New Platform
+XPoster is designed with explicit extension points that allow new capabilities to be added without modifying core logic. The table below lists what is extensible, and why each point was designed that way.
 
-**1. Create the Sender Plugin**
+| Extension point | How to extend | Rationale |
+|---|---|---|
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledGenerationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on generators or scheduling |
+| **Content Generators** (`BaseGenerator`) | Subclass `BaseGenerator`, override `GenerateAsync()`, register in `GeneratorFactory` | The Strategy pattern in `GeneratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All generators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
+| **Scheduling profiles** (`ScheduledGenerationProfile`) | Add or modify entries in `GeneratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
 
-```csharp
-// src/SenderPlugins/TikTokSender.cs
-public class TikTokSender : ISender
-{
-    public int MessageMaxLenght => 150;
-
-    public async Task<bool> SendAsync(Post post)
-    {
-        // Implement TikTok API logic
-        return true;
-    }
-}
-```
-
-**2. Register in DI Container**
-
-```csharp
-// src/Program.cs
-builder.Services.AddTransient<TikTokSender>();
-```
-
-**3. Add Enum**
-
-```csharp
-// src/Abstraction/Enums.cs
-public enum MessageSender
-{
-    // ...
-    TikTokSummaryFeed,
-}
-```
-
-**4. Configure Factory**
-
-```csharp
-// src/Implementation/GeneratorFactory.cs — slotProfiles list
-new ScheduledGenerationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-```
-
-> 📖 Full extension guide with services and design constraints: [docs/extending-xposter.md](docs/extending-xposter.md).
-
-### Adding a New Generator
-
-```csharp
-// src/Implementation/QuoteGenerator.cs
-public class QuoteGenerator : BaseGenerator
-{
-    public override async Task<Post>? GenerateAsync()
-    {
-        // Logic to generate motivational quotes
-        var quote = await _aiService.GetQuoteAsync();
-        return new Post { Content = quote };
-    }
-}
-```
-
+> 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
 ---
 
 ## Testing
