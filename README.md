@@ -200,26 +200,59 @@ FALAI_API_KEY          # fal.ai API key
 ## Technologies
 
 ### Core Framework
-- **.NET 8.0** - Main framework
-- **Azure Functions v4** - Serverless compute
-- **C# 12** - Programming language
+
+| Package | Version | Role |
+|---------|---------|------|
+| **.NET** | 8.0 | Target framework (isolated worker model) |
+| **Azure Functions** | v4 | Serverless compute host |
+| **C#** | 12 | Programming language |
+| `Microsoft.Azure.Functions.Worker` | 2.2.0 | Isolated worker SDK |
+| `Microsoft.Azure.Functions.Worker.Sdk` | 2.0.6 | Build-time analyzer |
+| `Microsoft.Azure.Functions.Worker.Extensions.Timer` | 4.3.1 | Timer trigger support |
+| `Microsoft.Azure.Functions.Worker.Extensions.Storage.Blobs` | 6.8.0 | Blob storage bindings |
 
 ### AI & ML
-- **AI Provider**: Configurable at deploy time via environment variables — defaults to Azure OpenAI, but any compatible provider can be used
-- **Text model**: Any chat-completion model supported by the configured provider (e.g. gpt-4.1-nano, gpt-4o-mini, or models from Azure AI Foundry)
-- **Image model**: Any image-generation model supported by the configured provider (e.g. gpt-image-1, dall-e-3)
+
+The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledGenerationProfile`.
+
+| Package | Version | Role |
+|---------|---------|------|
+| `Microsoft.Extensions.AI` | 10.6.0 | Provider-agnostic AI abstraction (chat + embeddings) |
+| `Microsoft.Extensions.AI.OpenAI` | 10.6.0 | OpenAI/Azure OpenAI bridge for `Microsoft.Extensions.AI` |
+| `Azure.AI.OpenAI` | 2.1.0 | Azure OpenAI REST client (used by `OpenAiService` and `AzureFoundryService`) |
+| `Azure.Identity` | 1.13.2 | Managed Identity / `DefaultAzureCredential` support |
+
+**Supported AI providers at runtime:**
+
+| `AiProvider` enum value | Concrete service | Text backend | Image backend |
+|-------------------------|-----------------|--------------|---------------|
+| `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
+| `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
+| `DeepSeekWithFal` | `HybridAiService` | DeepSeek API | fal.ai — FLUX.2 Turbo |
 
 ### Social Media APIs
-- **LinqToTwitter 6.15.0** - Twitter/X integration
-- **LinkedIn REST API v2** - LinkedIn publishing
-- **Instagram Graph API** - Instagram (in development)
 
-### Monitoring & Logging
-- **Application Insights** - Telemetry and monitoring
-- **ILogger** - Structured logging
+| Library / API | Version | Platform |
+|---------------|---------|----------|
+| `LinqToTwitter` | 6.15.0 | Twitter/X — OAuth 1.0a wrapper |
+| LinkedIn REST API | v2 | LinkedIn — direct HTTP calls via `IHttpClientFactory` |
+| Instagram Graph API | v21+ | Instagram — direct HTTP calls (in development) |
+
+### Monitoring & Observability
+
+| Package | Version | Role |
+|---------|---------|------|
+| `Microsoft.Azure.Functions.Worker.ApplicationInsights` | 2.0.0 | Auto-wires Application Insights for the isolated worker |
+| `Microsoft.ApplicationInsights.WorkerService` | 2.23.0 | Telemetry pipeline for background services |
+| `ILogger<T>` | (built-in) | Structured logging via `Microsoft.Extensions.Logging` |
 
 ### Utilities
-- **Microsoft.Extensions.Http** - HTTP client factory
+
+| Package | Version | Role |
+|---------|---------|------|
+| `Microsoft.Extensions.Http` | 9.0.10 | `IHttpClientFactory` — typed/named HTTP clients |
+| `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
+| `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
 
 ---
 
@@ -963,6 +996,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 - [Azure Functions](https://azure.microsoft.com/services/functions/) - Serverless platform
 - [OpenAI](https://openai.com/) - AI models
 - [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) - Alternative AI provider
+- [DeepSeek](https://www.deepseek.com/) - Cost-effective text generation
+- [fal.ai](https://fal.ai/) - FLUX.2 Turbo image generation
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
