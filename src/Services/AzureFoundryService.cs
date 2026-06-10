@@ -55,7 +55,13 @@ public sealed class AzureFoundryService : IAiService
             }
 
             var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-            text = result?.choices[0].message.content.Trim() ?? string.Empty;
+            if (result is null || result.choices is null || result.choices.Length == 0)
+            {
+                _logger.LogWarning("Azure Foundry returned a response with no choices during summary generation.");
+                return string.Empty;
+            }
+
+            text = result.choices[0].message.content.Trim();
         }
 
         return text;
@@ -78,7 +84,13 @@ public sealed class AzureFoundryService : IAiService
         }
 
         var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-        return result?.choices[0].message.content.Trim() ?? string.Empty;
+        if (result is null || result.choices is null || result.choices.Length == 0)
+        {
+            _logger.LogWarning("Azure Foundry returned a response with no choices during image prompt generation.");
+            return string.Empty;
+        }
+
+        return result.choices[0].message.content.Trim();
     }
 
     /// <inheritdoc/>
