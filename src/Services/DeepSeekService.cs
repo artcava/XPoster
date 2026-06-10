@@ -39,14 +39,14 @@ public class DeepSeekService : IAiService
     /// <summary>
     /// Genera un riassunto del testo.
     /// </summary>
-    public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
+    public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
     {
         int tries = 0;
 
         while (text.Length > messageMaxLength && tries <= 2)
         {
             tries++;
-            var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength));
+            var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength), cancellationToken);
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
                 _logger.LogInformation("DeepSeek returned 429 during summary generation.");
@@ -59,7 +59,7 @@ public class DeepSeekService : IAiService
                 return string.Empty;
             }
 
-            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
+            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
             text = result?.choices[0].message.content.Trim() ?? string.Empty;
         }
 
@@ -67,9 +67,9 @@ public class DeepSeekService : IAiService
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetImagePromptAsync(string text)
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
-        var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text));
+        var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text), cancellationToken);
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
             _logger.LogInformation("DeepSeek returned 429 during image prompt generation.");
@@ -82,7 +82,7 @@ public class DeepSeekService : IAiService
             return string.Empty;
         }
 
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
+        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
         return result?.choices[0].message.content.Trim() ?? string.Empty;
     }
 
@@ -95,7 +95,7 @@ public class DeepSeekService : IAiService
     /// <exception cref="NotSupportedException">
     /// Always thrown. Use <see cref="HybridAiService"/> to generate images with DeepSeek as the text provider.
     /// </exception>
-    public Task<byte[]> GenerateImageAsync(string prompt)
+    public Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         throw new NotSupportedException(
             $"{nameof(DeepSeekService)} does not support image generation. " +

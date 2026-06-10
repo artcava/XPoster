@@ -39,8 +39,9 @@ public sealed class FalAiImageService
     /// Generates an image from the given prompt using FLUX.1 Turbo on fal.ai.
     /// </summary>
     /// <param name="prompt">The text prompt describing the desired image.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A byte array containing the generated image data, or an empty array on failure.</returns>
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(prompt))
         {
@@ -63,7 +64,7 @@ public sealed class FalAiImageService
         HttpResponseMessage response;
         try
         {
-            response = await _client.PostAsJsonAsync(endpoint, requestBody);
+            response = await _client.PostAsJsonAsync(endpoint, requestBody, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
@@ -88,7 +89,7 @@ public sealed class FalAiImageService
         JsonElement result;
         try
         {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>();
+            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
         }
         catch (JsonException ex)
         {
@@ -122,7 +123,7 @@ public sealed class FalAiImageService
 
         try
         {
-            return await _client.GetByteArrayAsync(imageUrl);
+            return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
         }
         catch (HttpRequestException ex)
         {

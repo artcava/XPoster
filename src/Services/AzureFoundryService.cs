@@ -34,14 +34,14 @@ public sealed class AzureFoundryService : IAiService
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
+    public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
     {
         int tries = 0;
 
         while (text.Length > messageMaxLength && tries <= 2)
         {
             tries++;
-            var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength));
+            var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength), cancellationToken);
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
                 _logger.LogInformation("Azure Foundry returned 429 during summary generation.");
@@ -54,7 +54,7 @@ public sealed class AzureFoundryService : IAiService
                 return string.Empty;
             }
 
-            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
+            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
             text = result?.choices[0].message.content.Trim() ?? string.Empty;
         }
 
@@ -62,9 +62,9 @@ public sealed class AzureFoundryService : IAiService
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetImagePromptAsync(string text)
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
-        var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text));
+        var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text), cancellationToken);
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
             _logger.LogInformation("Azure Foundry returned 429 during image prompt generation.");
@@ -77,12 +77,12 @@ public sealed class AzureFoundryService : IAiService
             return string.Empty;
         }
 
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
+        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
         return result?.choices[0].message.content.Trim() ?? string.Empty;
     }
 
     /// <inheritdoc/>
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         var requestBody = new
         {
@@ -92,7 +92,7 @@ public sealed class AzureFoundryService : IAiService
             response_format = "b64_json"
         };
 
-        var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody);
+        var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -100,7 +100,7 @@ public sealed class AzureFoundryService : IAiService
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
             _logger.LogError("Azure Foundry image generation response does not contain data entries.");
@@ -125,7 +125,7 @@ public sealed class AzureFoundryService : IAiService
                 return Array.Empty<byte>();
             }
 
-            return await _client.GetByteArrayAsync(imageUrl);
+            return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
         }
 
         return Array.Empty<byte>();
