@@ -77,6 +77,22 @@ public class OpenAiServiceTests
         Assert.Equal(string.Empty, result);
     }
 
+    [Fact]
+    public async Task GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "{\"choices\":[]}"), out _);
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_WhenChoicesIsNull_ReturnsEmpty()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "{\"choices\":null}"), out _);
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        Assert.Equal(string.Empty, result);
+    }
+
     // ── GetImagePromptAsync ──────────────────────────────────────────────────
 
     [Fact]
@@ -99,6 +115,22 @@ public class OpenAiServiceTests
     public async Task GetImagePromptAsync_WhenApiReturnsError_ReturnsEmpty()
     {
         var svc = BuildService(MakeHandler(HttpStatusCode.BadRequest, "{}"), out _);
+        var result = await svc.GetImagePromptAsync("some summary");
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "{\"choices\":[]}"), out _);
+        var result = await svc.GetImagePromptAsync("some summary");
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmpty()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "{\"choices\":null}"), out _);
         var result = await svc.GetImagePromptAsync("some summary");
         Assert.Equal(string.Empty, result);
     }
