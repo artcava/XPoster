@@ -23,6 +23,203 @@ For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block w
 
 ---
 
+## Full `local.settings.json` Example
+
+The file below mirrors [`src/local.settings.json.example`](../src/local.settings.json.example) exactly, with inline comments explaining every key.
+
+```jsonc
+{
+  "IsEncrypted": false,
+  "Values": {
+
+    // ── Azure Functions Runtime ──────────────────────────────────────────
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    // Use Azurite (local emulator) or a real Storage Account connection string.
+    // Production example: "DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net"
+
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    // Required by the .NET 8 isolated worker model. Do not change.
+
+    // ── Scheduler ────────────────────────────────────────────────────────
+    "CronSchedule": "0 0 6,8,14,16 * * *",
+    // 6-field NCRONTAB expression: {second} {minute} {hour} {day} {month} {dayOfWeek}
+    // Default fires at 06:00, 08:00, 14:00, 16:00 every day.
+    // Use "*/30 * * * * *" for rapid testing (every 30 seconds, dev/test only).
+
+    // ── AI Provider Selector ─────────────────────────────────────────────
+    "AiProvider": "OpenAi",
+    // Selects the IAiService implementation injected into AI-enabled generators.
+    // Supported values: OpenAi | AzureFoundry | DeepSeekWithFal
+    // Only the configuration block that matches this value is required at runtime.
+
+    // ── Twitter / X ──────────────────────────────────────────────────────
+    "X_API_KEY": "",
+    // Twitter App Consumer Key. Obtain from developer.twitter.com > Your App > Keys and Tokens.
+    // The app must have Read and Write permissions.
+
+    "X_API_SECRET": "",
+    // Twitter App Consumer Secret (same location as above).
+
+    "X_ACCESS_TOKEN": "",
+    // User Access Token (OAuth 1.0a). Generated per-user from the developer portal.
+
+    "X_ACCESS_TOKEN_SECRET": "",
+    // User Access Token Secret (OAuth 1.0a).
+
+    // ── LinkedIn ─────────────────────────────────────────────────────────
+    "IN_ACCESS_TOKEN": "",
+    // LinkedIn OAuth 2.0 access token. Obtain from developer.linkedin.com > OAuth credentials.
+    // IMPORTANT: expires every 60 days — manual rotation is currently required.
+    // See Roadmap for the automated refresh milestone.
+
+    "IN_OWNER": "",
+    // Numeric LinkedIn person ID of the account that will author posts (e.g. "123456789").
+    // Resolve via: GET https://api.linkedin.com/v2/userinfo
+    // Posts are published as urn:li:person:{IN_OWNER}. Ignored when IN_ORG_ID is set.
+
+    "IN_ORG_ID": "",
+    // Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. "98765432").
+    // When set, takes precedence over IN_OWNER. Posts are published as urn:li:organization:{IN_ORG_ID}.
+    // Provide exactly ONE of IN_OWNER or IN_ORG_ID.
+
+    // ── Instagram (currently disabled — see issue #72) ────────────────────
+    "IG_ACCESS_TOKEN": "",
+    // Long-lived Instagram Graph API access token.
+    // These keys are read by IgSender but the slot is disabled in GeneratorFactory.
+
+    "IG_ACCOUNT_ID": "",
+    // Numeric Instagram Business Account ID used in Graph API calls.
+
+    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════
+    "OpenAI__ApiKey": "",
+    // Required. OpenAI platform API key. Obtain from platform.openai.com > API Keys.
+
+    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
+    // Chat Completions API URL. Override to point at an Azure OpenAI or other
+    // OpenAI-compatible endpoint (e.g. https://<resource>.openai.azure.com/...).
+
+    "OpenAI__ChatModel": "gpt-4.1-nano",
+    // Model used for text summarisation and image prompt generation.
+
+    "OpenAI__SummaryTemperature": "0.5",
+    // Temperature for summary generation (0.0–2.0). Lower = more deterministic.
+
+    "OpenAI__SummaryMaxTokensPerChar": "5",
+    // Divisor to convert a character budget to max_tokens (budget ÷ value).
+
+    "OpenAI__SummarySafetyMarginChars": "50",
+    // Character margin subtracted from the platform character limit before
+    // the {MaxChars} placeholder is passed to the prompt.
+
+    "OpenAI__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    // System prompt for summarisation. Supports {MaxChars} placeholder.
+
+    "OpenAI__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    // User prompt for summarisation. Supports {Text} placeholder.
+
+    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
+    // Image Generations API URL.
+
+    "OpenAI__ImageModel": "gpt-image-1.5",
+    // Model used for image generation (e.g. "gpt-image-1.5", "dall-e-3").
+
+    "OpenAI__ImageSize": "1024x1024",
+    // Output image dimensions. Supported values depend on the model
+    // (e.g. "1024x1024", "1792x1024", "1024x1792").
+
+    "OpenAI__ImageCount": "1",
+    // Number of images to generate per request.
+
+    "OpenAI__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    // System prompt for image-prompt generation. No placeholders.
+
+    "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    // User prompt for image-prompt generation. Supports {Summary} placeholder.
+
+    "OpenAI__ImagePromptMaxTokens": "60",
+    // Max tokens for image-prompt generation requests.
+
+    "OpenAI__ImagePromptTemperature": "0.7",
+    // Temperature for image-prompt generation (0.0–2.0). Higher = more creative prompts.
+
+    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════
+    "AzureFoundry__Endpoint": "",
+    // Azure OpenAI resource endpoint, e.g. https://<resource>.openai.azure.com/
+
+    "AzureFoundry__ApiKey": "",
+    // Azure OpenAI resource key (or leave empty to use Managed Identity).
+
+    "AzureFoundry__DeploymentName": "",
+    // Chat deployment name as configured in Azure AI Foundry (e.g. "gpt-4o-mini").
+
+    "AzureFoundry__ImageDeploymentName": "",
+    // Image generation deployment name (e.g. "dall-e-3").
+
+    "AzureFoundry__ApiVersion": "2024-02-01",
+    // Azure OpenAI REST API version.
+
+    "AzureFoundry__SummaryTemperature": "0.5",
+    "AzureFoundry__SummaryMaxTokensPerChar": "5",
+    "AzureFoundry__SummarySafetyMarginChars": "50",
+    "AzureFoundry__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "AzureFoundry__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "AzureFoundry__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "AzureFoundry__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "AzureFoundry__ImagePromptMaxTokens": "60",
+    "AzureFoundry__ImagePromptTemperature": "0.7",
+    // Same semantics as OpenAI__ equivalents; see above for descriptions.
+
+    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ═════════
+    "DeepSeek__Endpoint": "https://api.deepseek.com",
+    // DeepSeek API base URL. Keep the default unless using a custom proxy.
+
+    "DeepSeek__ApiKey": "",
+    // DeepSeek API key. Obtain from platform.deepseek.com > API Keys.
+
+    "DeepSeek__DeploymentName": "deepseek-chat",
+    // DeepSeek model name (e.g. "deepseek-chat", "deepseek-reasoner").
+
+    "DeepSeek__SummaryTemperature": "0.5",
+    "DeepSeek__SummaryMaxTokensPerChar": "5",
+    "DeepSeek__SummarySafetyMarginChars": "50",
+    "DeepSeek__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "DeepSeek__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "DeepSeek__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "DeepSeek__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "DeepSeek__ImagePromptMaxTokens": "60",
+    "DeepSeek__ImagePromptTemperature": "0.7",
+
+    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ══════════
+    "FalAi__ApiKey": "",
+    // fal.ai API key. Obtain from fal.ai/dashboard > API Keys.
+
+    "FalAi__ModelId": "fal-ai/flux/schnell",
+    // fal.ai model identifier.
+    // "fal-ai/flux/schnell" is optimised for speed (default).
+    // Use "fal-ai/flux-pro" for higher-quality output at increased cost.
+
+    "FalAi__ImageSize": "landscape_4_3",
+    // Named size preset accepted by the fal.ai API.
+    // Supported: landscape_4_3 | square | portrait_4_3 | landscape_16_9
+
+    "FalAi__NumInferenceSteps": "4",
+    // Number of diffusion inference steps. Lower = faster and cheaper; higher = better quality.
+    // Range: 1–50 (FLUX Schnell is tuned for 1–4 steps).
+
+    // ── Observability ─────────────────────────────────────────────────────
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
+    // Application Insights connection string.
+    // When present, the isolated worker SDK automatically registers the telemetry pipeline.
+    // Format: "InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
+    // Leave empty to disable telemetry locally.
+  }
+}
+```
+
+> **Note on `jsonc`:** `local.settings.json` does **not** support inline comments at runtime. The `jsonc`-annotated block above is for documentation only. The actual [`src/local.settings.json.example`](../src/local.settings.json.example) file uses plain JSON with empty-string placeholders.
+
+---
+
 ## Azure Functions Runtime
 
 | Variable | Type | Required | Default | Description |
@@ -146,30 +343,25 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AzureFoundry__Endpoint` | string | ✅ Yes | — | Base endpoint for your Azure AI Foundry resource (e.g. `https://my-hub.openai.azure.com/`). |
-| `AzureFoundry__ApiKey` | string | ✅ Yes | — | API key sent as the `api-key` header. |
-| `AzureFoundry__DeploymentName` | string | ✅ Yes | — | Chat deployment name used for summary and image-prompt generation. |
-| `AzureFoundry__ImageDeploymentName` | string | No | — | Image deployment name used by `GenerateImageAsync`. Leave empty if the same deployment handles both. |
-| `AzureFoundry__ApiVersion` | string | No | `2024-02-01` | Azure OpenAI REST API version appended to all requests. |
+| `AzureFoundry__Endpoint` | string | ✅ Yes | — | Azure OpenAI resource endpoint (e.g. `https://<resource>.openai.azure.com/`). |
+| `AzureFoundry__ApiKey` | string | ✅ Yes* | — | Azure OpenAI resource key. *Omit when using Managed Identity. |
+| `AzureFoundry__DeploymentName` | string | ✅ Yes | — | Chat deployment name as configured in Azure AI Foundry. |
+| `AzureFoundry__ImageDeploymentName` | string | ✅ Yes | — | Image generation deployment name. |
+| `AzureFoundry__ApiVersion` | string | No | `2024-02-01` | Azure OpenAI REST API version. |
 
-### Summarisation Tuning
+### Tuning (same semantics as OpenAI)
 
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| `AzureFoundry__SummaryTemperature` | double | `0.5` | Temperature for summary generation. |
-| `AzureFoundry__SummaryMaxTokensPerChar` | int | `5` | Divisor to convert character budget to `max_tokens`. |
-| `AzureFoundry__SummarySafetyMarginChars` | int | `50` | Character margin subtracted from budget. |
-| `AzureFoundry__SummarySystemPromptTemplate` | string | *(see example)* | System prompt for summarisation. Supports `{MaxChars}`. |
-| `AzureFoundry__SummaryUserPromptTemplate` | string | *(see example)* | User prompt for summarisation. Supports `{Text}`. |
-
-### Image Prompt Tuning
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| `AzureFoundry__ImagePromptSystemTemplate` | string | *(see example)* | System prompt for image-prompt generation. |
-| `AzureFoundry__ImagePromptUserTemplate` | string | *(see example)* | User prompt for image-prompt generation. Supports `{Summary}`. |
-| `AzureFoundry__ImagePromptMaxTokens` | int | `60` | Max tokens for image-prompt generation. |
-| `AzureFoundry__ImagePromptTemperature` | double | `0.7` | Temperature for image-prompt generation. |
+| Setting | Type | Default |
+|---|---|---|
+| `AzureFoundry__SummaryTemperature` | double | `0.5` |
+| `AzureFoundry__SummaryMaxTokensPerChar` | int | `5` |
+| `AzureFoundry__SummarySafetyMarginChars` | int | `50` |
+| `AzureFoundry__SummarySystemPromptTemplate` | string | *(see example)* |
+| `AzureFoundry__SummaryUserPromptTemplate` | string | *(see example)* |
+| `AzureFoundry__ImagePromptSystemTemplate` | string | *(see example)* |
+| `AzureFoundry__ImagePromptUserTemplate` | string | *(see example)* |
+| `AzureFoundry__ImagePromptMaxTokens` | int | `60` |
+| `AzureFoundry__ImagePromptTemperature` | double | `0.7` |
 
 ---
 
@@ -181,24 +373,19 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `DeepSeek__Endpoint` | string | No | `https://api.deepseek.com` | DeepSeek REST API base URL. |
-| `DeepSeek__ApiKey` | string | ✅ Yes | — | DeepSeek platform API key. Obtain from [platform.deepseek.com](https://platform.deepseek.com). |
-| `DeepSeek__DeploymentName` | string | No | `deepseek-chat` | Model identifier (e.g. `deepseek-chat`, `deepseek-reasoner`). |
+| `DeepSeek__Endpoint` | string | No | `https://api.deepseek.com` | DeepSeek API base URL. |
+| `DeepSeek__ApiKey` | string | ✅ Yes | — | DeepSeek API key. Obtain from [platform.deepseek.com](https://platform.deepseek.com). |
+| `DeepSeek__DeploymentName` | string | No | `deepseek-chat` | DeepSeek model name (e.g. `deepseek-chat`, `deepseek-reasoner`). |
 
-### Summarisation Tuning
+### Tuning
 
 | Setting | Type | Default | Description |
 |---|---|---|---|
 | `DeepSeek__SummaryTemperature` | double | `0.5` | Temperature for summary generation. |
-| `DeepSeek__SummaryMaxTokensPerChar` | int | `5` | Divisor to convert character budget to `max_tokens`. |
-| `DeepSeek__SummarySafetyMarginChars` | int | `50` | Character margin subtracted from budget. |
+| `DeepSeek__SummaryMaxTokensPerChar` | int | `5` | Divisor: character budget ÷ value = max_tokens. |
+| `DeepSeek__SummarySafetyMarginChars` | int | `50` | Safety margin characters. |
 | `DeepSeek__SummarySystemPromptTemplate` | string | *(see example)* | System prompt for summarisation. Supports `{MaxChars}`. |
 | `DeepSeek__SummaryUserPromptTemplate` | string | *(see example)* | User prompt for summarisation. Supports `{Text}`. |
-
-### Image Prompt Tuning
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
 | `DeepSeek__ImagePromptSystemTemplate` | string | *(see example)* | System prompt for image-prompt generation. |
 | `DeepSeek__ImagePromptUserTemplate` | string | *(see example)* | User prompt for image-prompt generation. Supports `{Summary}`. |
 | `DeepSeek__ImagePromptMaxTokens` | int | `60` | Max tokens for image-prompt generation. |
