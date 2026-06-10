@@ -59,12 +59,12 @@ Add two arms to the existing switch expression inside `Generate()`:
 ISender? sender = profile.SenderType switch
 {
     // existing arms ...
-    MessageSender.XPowerLaw    => _serviceProvider.GetService(typeof(XSender))    as ISender,
-    MessageSender.XSummaryFeed => _serviceProvider.GetService(typeof(XSender))    as ISender,
-    MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender))  as ISender,
-    MessageSender.InPowerLaw   => _serviceProvider.GetService(typeof(InSender))   as ISender,
-    MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender))  as ISender,
-    MessageSender.IgPowerLaw   => _serviceProvider.GetService(typeof(IgSender))   as ISender,
+    MessageSender.XPowerLaw     => _serviceProvider.GetService(typeof(XSender))    as ISender,
+    MessageSender.XSummaryFeed  => _serviceProvider.GetService(typeof(XSender))    as ISender,
+    MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender))   as ISender,
+    MessageSender.InPowerLaw    => _serviceProvider.GetService(typeof(InSender))   as ISender,
+    MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender))   as ISender,
+    MessageSender.IgPowerLaw    => _serviceProvider.GetService(typeof(IgSender))   as ISender,
     // new arms
     MessageSender.TikTokSummaryFeed => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
     MessageSender.TikTokPowerLaw    => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
@@ -128,19 +128,21 @@ No other change to `GeneratorFactory` is required.
 
 ## Adding a New AI Provider
 
-The AI layer is abstracted behind `IAiService`. Adding a new provider — whether a hosted API or a self-hosted model — requires only the three steps below. No generator or scheduling logic needs to change.
+The AI layer is abstracted behind `IAiService`. `AiServiceFactory` resolves implementations using the .NET **keyed services** mechanism: each `IAiService` is registered against its `AiProvider` enum value as the key, and `AiServiceFactory.GetByProvider()` calls `GetKeyedService<IAiService>(provider)` to retrieve it. There is no switch inside the factory — adding a new provider requires only registering the implementation under the correct key and declaring that key as supported.
 
 ### Step 1 — Add the Enum Value
+
+Append a new value to `AiProvider`. Assign an explicit integer to avoid accidental renumbering of existing values:
 
 ```csharp
 // src/Abstraction/AiProvider.cs
 public enum AiProvider
 {
-    OpenAi          = 0,
-    Perplexity      = 1,
-    AzureFoundry    = 2,
-    DeepSeekWithFal = 3,
-    Anthropic       = 4,  // new
+    None         = 0,
+    OpenAi       = 1,
+    Perplexity   = 2,
+    AzureFoundry = 3,
+    Anthropic    = 4,  // new
 }
 ```
 
@@ -150,37 +152,42 @@ public enum AiProvider
 // src/Services/AnthropicAiService.cs
 public class AnthropicAiService : IAiService
 {
-    // Implement GetCompletionAsync, GenerateImageAsync, and any other
-    // members defined by IAiService. Model names and SDK details are
-    // internal to this class.
+    // Model names, SDK dependencies, and API keys are internal to this class.
     public async Task<string> GetCompletionAsync(string prompt, int maxTokens)
     {
-        // Call Anthropic API
+        // Call Anthropic Messages API
     }
 
     public async Task<byte[]> GenerateImageAsync(string prompt)
     {
-        // Call Anthropic or a delegated image provider
+        // Anthropic does not offer a native image model;
+        // delegate to a compatible image provider or throw NotSupportedException.
     }
 }
 ```
 
-### Step 3 — Register and Wire in AiServiceFactory
+### Step 3 — Register as a Keyed Service and Declare as Supported
 
-Register the implementation in `Program.cs` and add the resolution case in `AiServiceFactory`:
+`AiServiceFactory` resolves providers via `GetKeyedService<IAiService>(provider)`, so the implementation must be registered as a **keyed transient** against its `AiProvider` enum value — not as a plain `AddTransient`. A plain registration would be invisible to the factory.
 
 ```csharp
 // src/Program.cs
-builder.Services.AddTransient<AnthropicAiService>();
+builder.Services.AddKeyedTransient<IAiService, AnthropicAiService>(AiProvider.Anthropic);
 ```
+
+Then add the new value to the `_supportedProviders` set in `AiServiceFactory`. This guard is what `GetByProvider` checks before attempting resolution; without it the factory throws `ArgumentException` even if the service is correctly registered:
 
 ```csharp
 // src/Implementation/AiServiceFactory.cs
-case AiProvider.Anthropic:
-    return _serviceProvider.GetRequiredService<AnthropicAiService>();
+private static readonly HashSet<AiProvider> _supportedProviders =
+[
+    AiProvider.OpenAi,
+    AiProvider.AzureFoundry,
+    AiProvider.Anthropic,  // new
+];
 ```
 
-The new provider is immediately available for assignment in any `ScheduledGenerationProfile` and via the global `AiProvider` configuration key.
+No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledGenerationProfile` and via the global `AiProvider` configuration key.
 
 ---
 
