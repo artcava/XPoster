@@ -324,65 +324,27 @@ Then open `src/local.settings.json` and replace every empty string `""` with the
 
 ## Configuration
 
-### 1. Local Development
+All configuration is driven by environment variables — there is no application-level config file to edit directly.
 
-Create a `local.settings.json` file in the `src/` directory:
+**For local development**, copy the template and fill in your credentials:
 
-```json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "CronSchedule": "0 5 * * * *",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    
-    "X_API_KEY": "your_twitter_api_key",
-    "X_API_SECRET": "your_twitter_api_secret",
-    "X_ACCESS_TOKEN": "your_twitter_access_token",
-    "X_ACCESS_TOKEN_SECRET": "your_twitter_access_token_secret",
-    
-    "LINKEDIN_ACCESS_TOKEN": "your_linkedin_token",
-    "LINKEDIN_ORGANIZATION_ID": "your_linkedin_org_id",
-    
-    "INSTAGRAM_ACCESS_TOKEN": "your_instagram_token",
-    "INSTAGRAM_BUSINESS_ACCOUNT_ID": "your_instagram_account_id",
-    
-    "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
-    "AZURE_OPENAI_KEY": "your_openai_key",
-    "AZURE_OPENAI_DEPLOYMENT_NAME": "your-deployment-name"
-  }
-}
+```bash
+cp src/local.settings.json.example src/local.settings.json
 ```
 
-> ℹ️ `AZURE_OPENAI_DEPLOYMENT_NAME` accepts any deployment name exposed by your provider — set it to the model you have provisioned (e.g. `gpt-4.1-nano`, `gpt-4o-mini`, or a custom Azure AI Foundry deployment).
+The example file documents every key inline. The variables are grouped into four areas:
 
-> 📖 Full configuration reference with types, defaults, and where to obtain each credential: [docs/configuration.md](docs/configuration.md).
+| Group | Keys |
+|---|---|
+| **Scheduling** | `CronSchedule`, `AzureWebJobsStorage`, `FUNCTIONS_WORKER_RUNTIME` |
+| **Twitter/X** | `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET` |
+| **LinkedIn** | `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_ORGANIZATION_ID` |
+| **Instagram** | `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` |
+| **AI Provider** | Varies by provider — see [Getting Started → Supported AI Providers](#supported-ai-providers) |
 
-### 2. Azure Configuration
+**For Azure**, add the same variables as Application Settings (**Azure Portal → Function App → Configuration**). For production environments, [Azure Managed Identity](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview) is recommended over API keys.
 
-#### App Settings (Azure Portal)
-
-Navigate to **Azure Portal** → **Function App** → **Configuration** → **Application Settings**
-
-Add the same variables from `local.settings.json`.
-
-#### Managed Identity (Recommended)
-
-For enhanced security, use Azure Managed Identity:
-
-1. Enable **System Assigned Managed Identity** on the Function App
-2. Assign appropriate roles on:
-   - Azure OpenAI Service (or your chosen AI provider)
-   - Azure Key Vault (for secrets)
-3. Modify `Program.cs` to use `DefaultAzureCredential`
-
-```csharp
-builder.Services.AddSingleton<OpenAIClient>(sp =>
-{
-    var endpoint = new Uri(Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT"));
-    return new OpenAIClient(endpoint, new DefaultAzureCredential());
-});
-```
+> 📖 Full reference with types, defaults, allowed values, and instructions on where to obtain each credential: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
