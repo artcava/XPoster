@@ -42,8 +42,8 @@ builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
 builder.Services.AddKeyedTransient<IAiService, OpenAiService>(AiProvider.OpenAi);
 builder.Services.AddKeyedTransient<IAiService, AzureFoundryService>(AiProvider.AzureFoundry);
 builder.Services.AddKeyedTransient<IAiService, HybridAiService>(AiProvider.DeepSeekWithFal);
-builder.Services.AddTransient<IAiService, DeepSeekService>(); // Register DeepSeekService for direct injection into HybridAiService
-builder.Services.AddTransient<FalAiImageService>(); // Register FalAiImageService for direct injection into HybridAiService
+builder.Services.AddTransient<DeepSeekService>(); // Concrete type for direct injection into HybridAiService
+builder.Services.AddTransient<FalAiImageService>(); // Concrete type for direct injection into HybridAiService
 // builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity); // Uncomment when implemented
 
 builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
@@ -55,5 +55,7 @@ builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi
 builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
 builder.Services.Configure<AzureFoundryOptions>(builder.Configuration.GetSection("AzureFoundry"));
 builder.Services.AddSingleton<IValidateOptions<AzureFoundryOptions>, AzureFoundryOptionsValidator>();
+builder.Services.Configure<DeepSeekOptions>(builder.Configuration.GetSection("DeepSeek"));
+builder.Services.AddSingleton<IValidateOptions<DeepSeekOptions>, DeepSeekOptionsValidator>();
 
 builder.Build().Run();
