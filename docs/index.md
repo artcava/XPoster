@@ -16,6 +16,6 @@ Welcome to the XPoster documentation hub. Use the links below to navigate to eac
 ## Quick Links
 
 - [README](../README.md) — Project overview
-- [ARCHITECTURE.md](../ARCHITECTURE.md) — Architectural decisions and design patterns
+- [Architecture](architecture.md) — Architectural decisions and design patterns
 - [CONTRIBUTING.md](../CONTRIBUTING.md) — Contribution guidelines
 - [tests/README.md](../tests/README.md) — Testing strategy

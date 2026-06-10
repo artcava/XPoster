@@ -41,26 +41,21 @@ public enum MessageSender
 }
 ```
 
-### Step 4 — Wire in GeneratorFactory
+### Step 4 — Add a ScheduledGenerationProfile entry
+
+Add the new sender to the `slotProfiles` list in `GeneratorFactory.cs`, specifying the hour, sender type, generator type, and (optionally) the AI provider for that slot:
 
 ```csharp
-// src/Implementation/GeneratorFactory.cs
-case MessageSender.TikTokSummaryFeed:
-    return GetInstance<FeedGenerator>(
-        _serviceProvider.GetService(typeof(TikTokSender)) as ISender
-    );
+// src/Implementation/GeneratorFactory.cs — slotProfiles list
+new ScheduledGenerationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
 ```
 
-### Step 5 — Add to Scheduling Dictionary
+Also add a matching `case` in the `GeneratorFactory.Generate()` switch so the factory can resolve `TikTokSender` from the DI container:
 
 ```csharp
-private static readonly Dictionary<int, MessageSender> sendParameters = new()
-{
-    { 6,  MessageSender.InSummaryFeed },
-    { 8,  MessageSender.XSummaryFeed },
-    { 10, MessageSender.TikTokSummaryFeed }, // new
-    ...
-};
+case MessageSender.TikTokSummaryFeed:
+    sender = _serviceProvider.GetRequiredService<TikTokSender>();
+    break;
 ```
 
 ---
@@ -84,7 +79,13 @@ public class QuoteGenerator : BaseGenerator
 }
 ```
 
-Then register and wire in `GeneratorFactory` as shown above.
+Then reference the new generator type in a `ScheduledGenerationProfile` entry:
+
+```csharp
+new ScheduledGenerationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteGenerator), AiProvider.Perplexity),
+```
+
+`CreateGeneratorInstance` in `GeneratorFactory` will resolve constructor parameters automatically via reflection.
 
 ---
 
@@ -122,4 +123,4 @@ builder.Services.AddTransient<INewsService, NewsService>();
 - Keep senders **stateless** — do not cache auth tokens in instance fields; use the DI-injected config.
 - Generators must be **idempotent** where possible — avoid side effects beyond calling `ISender.SendAsync`.
 - All external HTTP calls should go through `IHttpClientFactory` to respect connection pooling.
-- See [ARCHITECTURE.md](../ARCHITECTURE.md) for full ADRs and design pattern rationale.
+- See [docs/architecture.md](architecture.md) for full ADRs and design pattern rationale.

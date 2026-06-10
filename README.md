@@ -31,7 +31,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-> 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [ARCHITECTURE.md](ARCHITECTURE.md).
+> 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [docs/architecture.md](docs/architecture.md).
 
 ---
 
@@ -65,7 +65,7 @@
 
 ## Architecture
 
-> 📐 For the full architectural rationale, ADRs, design patterns, and Mermaid data-flow diagram, see **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+> 📐 For the full architectural rationale, ADRs, design patterns, and Mermaid data-flow diagram, see **[docs/architecture.md](docs/architecture.md)**.
 
 ### High-Level Overview
 
@@ -487,11 +487,8 @@ public enum MessageSender
 **4. Configure Factory**
 
 ```csharp
-// src/Implementation/GeneratorFactory.cs
-case MessageSender.TikTokSummaryFeed:
-    return GetInstance<FeedGenerator>(
-        _serviceProvider.GetService(typeof(TikTokSender)) as ISender
-    );
+// src/Implementation/GeneratorFactory.cs — slotProfiles list
+new ScheduledGenerationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
 ```
 
 > 📖 Full extension guide with services and design constraints: [docs/extending-xposter.md](docs/extending-xposter.md).
