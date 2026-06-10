@@ -94,7 +94,7 @@
     ┌────────────────┐
     │   Services     │
     ├────────────────┤
-    │ • AI Service   │ ◄─── Configurable AI Provider
+    │ • HybridAiSvc  │ ◄─── Composite AI Provider
     │ • Feed Service │ ◄─── RSS Parser
     │ • Crypto Svc   │ ◄─── CryptoPrices HTTP client
     └────────┬───────┘
@@ -134,9 +134,61 @@ Dynamically selects the appropriate generator based on current time.
 - **NoGenerator**: Placeholder for time slots without publishing
 
 #### 4. **Services Layer**
-- **AiService**: Abstraction layer over the configured AI provider; the underlying model and endpoint are specified via environment variables (`AZURE_OPENAI_DEPLOYMENT_NAME`, `AZURE_OPENAI_ENDPOINT`)
+
+##### General Services
 - **FeedService**: RSS parser with caching and intelligent filtering
 - **CryptoService**: Thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol
+
+##### AI Provider Services
+
+All AI provider services implement the `IAiService` interface, which defines three operations: `GetSummaryAsync`, `GetImagePromptAsync`, and `GenerateImageAsync`. The concrete implementation injected at runtime is determined by the `AiProvider` value on the active `ScheduledGenerationProfile`.
+
+| Service | Text model | Image model | Notes |
+|---------|------------|-------------|-------|
+| **OpenAiService** | Any OpenAI-compatible chat-completion model (e.g. `gpt-4.1-nano`, `gpt-4o-mini`) | Any OpenAI-compatible image-generation model (e.g. `gpt-image-1`, `dall-e-3`) | Default provider; endpoint and deployment name are read from `AZURE_OPENAI_ENDPOINT` / `AZURE_OPENAI_DEPLOYMENT_NAME` |
+| **AzureFoundryService** | Azure AI Foundry chat-completion deployment | Azure AI Foundry image-generation deployment | Drop-in alternative to `OpenAiService` for teams already on the Azure AI Foundry hub |
+| **DeepSeekService** | DeepSeek chat-completion API | — (text only) | Cost-effective option for high-volume text generation; used by `HybridAiService` for summaries and image prompts |
+| **FalAiImageService** | — (image only) | FLUX.2 Turbo via [fal.ai](https://fal.ai) | Specialized image-generation service; used by `HybridAiService` to produce images |
+| **HybridAiService** | Delegates to `DeepSeekService` | Delegates to `FalAiImageService` | Composite service — see deep-dive below |
+
+###### HybridAiService — Deep Dive
+
+`HybridAiService` is a **composite implementation** of `IAiService` that combines two specialized providers under a single interface, routing each operation to the backend best suited for it:
+
+```
+                  ┌─────────────────────────┐
+                  │     HybridAiService     │
+                  │    (implements IAiService)│
+                  └────────────┬────────────┘
+                               │
+           ┌───────────────────┴───────────────────┐
+           │                                       │
+           ▼                                       ▼
+  ┌─────────────────┐                   ┌──────────────────────┐
+  │  DeepSeekService│                   │  FalAiImageService   │
+  │  (text/summary) │                   │  (FLUX.2 Turbo image)│
+  └─────────────────┘                   └──────────────────────┘
+  GetSummaryAsync()                     GenerateImageAsync()
+  GetImagePromptAsync()
+```
+
+**Routing logic:**
+
+| `IAiService` method | Delegated to | Rationale |
+|---|---|---|
+| `GetSummaryAsync` | `DeepSeekService` | DeepSeek offers a strong cost/quality ratio for text summarization tasks |
+| `GetImagePromptAsync` | `DeepSeekService` | Prompt crafting is a text task — consistent use of the same text model avoids style drift |
+| `GenerateImageAsync` | `FalAiImageService` | FLUX.2 Turbo on fal.ai delivers high-quality images faster and cheaper than OpenAI image models for this workload |
+
+**Why use HybridAiService?**  
+Mixing providers at the service level lets the system optimise each step of the content pipeline independently — low-cost, high-throughput text generation with DeepSeek, and fast, high-quality image generation with FLUX.2 — without exposing that complexity to the generators, which only see the `IAiService` contract.
+
+**Configuration keys required:**
+```
+DEEPSEEK_API_KEY       # DeepSeek API key
+DEEPSEEK_MODEL         # e.g. deepseek-chat
+FALAI_API_KEY          # fal.ai API key
+```
 
 #### 5. **Sender Plugins** (Platform Abstraction)
 - **XSender**: Twitter/X via LinqToTwitter
