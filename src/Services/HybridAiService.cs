@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using XPoster.Abstraction;
@@ -32,23 +33,23 @@ public sealed class HybridAiService : IAiService
     }
 
     /// <inheritdoc />
-    public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
+    public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Generating summary with DeepSeek.");
-        return await _deepSeekService.GetSummaryAsync(text, messageMaxLength);
+        return await _deepSeekService.GetSummaryAsync(text, messageMaxLength, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<string> GetImagePromptAsync(string text)
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Generating image prompt with DeepSeek.");
-        return await _deepSeekService.GetImagePromptAsync(text);
+        return await _deepSeekService.GetImagePromptAsync(text, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Generating image with fal.ai.");
-        return await _falAiImageService.GenerateImageAsync(prompt);
+        return await _falAiImageService.GenerateImageAsync(prompt, cancellationToken);
     }
 }
