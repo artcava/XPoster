@@ -14,9 +14,6 @@ public sealed class DeepSeekOptions
     /// <summary>Gets or sets the chat/completions model name (e.g. <c>deepseek-chat</c>).</summary>
     public string DeploymentName { get; set; } = "deepseek-chat";
 
-    /// <summary>Gets or sets the REST API version.</summary>
-    public string ApiVersion { get; set; } = "2024-02-01";
-
     /// <summary>Gets or sets the temperature used for summary generation.</summary>
     public double SummaryTemperature { get; set; } = 0.5;
 

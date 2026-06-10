@@ -53,7 +53,6 @@
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
     "DeepSeek__DeploymentName": "deepseek-chat",
-    "DeepSeek__ApiVersion": "2024-02-01",
     "DeepSeek__SummaryTemperature": "0.5",
     "DeepSeek__SummaryMaxTokensPerChar": "5",
     "DeepSeek__SummarySafetyMarginChars": "50",
