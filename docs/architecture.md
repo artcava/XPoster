@@ -246,121 +246,25 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 
 ## 5. Extension Points
 
-### Adding a New Platform Sender
+XPoster exposes three well-defined extension points. Each maps to a distinct abstraction in the codebase and can be implemented independently without modifying existing components. Full step-by-step instructions and code examples are in [extending-xposter.md](extending-xposter.md).
 
-Follow these steps; no existing file requires modification beyond steps 2–4:
+### Platform Senders
 
-**Step 1 — Implement `ISender`**
+A sender encapsulates everything needed to publish a `Post` to a specific social platform: authentication, payload serialisation, and error handling. The `ISender` interface is intentionally minimal — it receives a fully-formed post and returns a boolean outcome — so platform-specific complexity is completely isolated from the rest of the pipeline.
 
-```csharp
-// src/SenderPlugins/ThreadsSender.cs
-public class ThreadsSender : ISender
-{
-    public int MessageMaxLength => 500;
+Adding a new platform has no impact on existing senders, generators, or the factory. The only touch points are a new implementing class, a DI registration, a new `MessageSender` enum value, and one entry in the scheduling profile list. This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
 
-    public async Task<bool> SendAsync(Post post)
-    {
-        // Threads API implementation
-        return true;
-    }
-}
-```
+### Content Generators
 
-**Step 2 — Register in DI**
+A generator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting `Post` takes. Each generator extends `BaseGenerator` and is selected at runtime based on the current time slot, so different algorithms can run at different hours without any conditional logic in the orchestrator.
 
-```csharp
-// src/Program.cs
-builder.Services.AddTransient<ThreadsSender>();
-```
+Because generators receive their dependencies (sender, AI service, data services) via constructor injection, a new generator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically, so no change to `GeneratorFactory` is required beyond adding a scheduling profile entry.
 
-**Step 3 — Add Enum Value**
+### AI Providers
 
-```csharp
-// src/Abstraction/Enums.cs
-public enum MessageSender
-{
-    // ...
-    ThreadsSummaryFeed,
-    ThreadsPowerLaw,
-}
-```
+The AI layer is abstracted behind `IAiService`, which decouples content generation logic from any specific model or vendor. The `AiProvider` enum identifies which implementation to resolve at runtime; the concrete model names, API keys, and SDK details are entirely internal to each implementation.
 
-**Step 4 — Add a ScheduledGenerationProfile entry**
-
-```csharp
-// src/Implementation/GeneratorFactory.cs — slotProfiles list
-new ScheduledGenerationProfile(20, MessageSender.ThreadsSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-```
-
-The factory will resolve `ThreadsSender` automatically from the `MessageSender` enum value via the existing `switch` in `GeneratorFactory.Generate()`. Add the matching `case` there if the sender is not yet covered.
-
-**Validation**: Write a unit test for the new sender using a mock `Post`.
-
----
-
-### Adding a New Generator
-
-**Step 1 — Extend `BaseGenerator`**
-
-```csharp
-// src/Implementation/TrendingTopicGenerator.cs
-public class TrendingTopicGenerator : BaseGenerator
-{
-    public TrendingTopicGenerator(ISender sender, ILogger<TrendingTopicGenerator> logger, IAiService aiService)
-        : base(sender, logger) { _aiService = aiService; }
-
-    public override async Task<Post>? GenerateAsync()
-    {
-        var topic = await _aiService.GetCompletionAsync("Generate a trending tech topic post.", 280);
-        return new Post { Content = topic };
-    }
-}
-```
-
-**Step 2 — Add a profile entry** referencing the new generator type:
-
-```csharp
-new ScheduledGenerationProfile(10, MessageSender.XSummaryFeed, typeof(TrendingTopicGenerator), AiProvider.Perplexity),
-```
-
-`CreateGeneratorInstance` in `GeneratorFactory` will resolve constructor parameters automatically.
-
-**Invariant**: `GenerateAsync()` must return `null` (not throw) when no content can be produced, so the orchestrator can skip posting gracefully.
-
----
-
-### Adding a New AI Provider
-
-**Step 1 — Add the enum value**
-
-```csharp
-// src/Abstraction/AiProvider.cs
-public enum AiProvider
-{
-    // ...
-    Anthropic = 5,
-}
-```
-
-**Step 2 — Implement `IAiService`**
-
-```csharp
-// src/Services/AnthropicAiService.cs
-public class AnthropicAiService : IAiService
-{
-    // Implement GetCompletionAsync, GenerateImageAsync, etc.
-}
-```
-
-**Step 3 — Register and wire in `AiServiceFactory`**
-
-```csharp
-// src/Implementation/AiServiceFactory.cs
-case AiProvider.Anthropic:
-    return _serviceProvider.GetRequiredService<AnthropicAiService>();
-```
-
-No changes to `GeneratorFactory`, generators, or the scheduling profile list are required.
+This design enables per-slot provider assignment (different providers can be active at different hours) and a global configuration override for A/B testing without code changes. Adding a new provider — whether a hosted API or a self-hosted model — requires only a new `IAiService` implementation, a DI registration, and an enum value. No generator or scheduling logic needs to change.
 
 ---
 
