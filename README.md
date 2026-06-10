@@ -261,10 +261,23 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 ### Prerequisites
 
 - **.NET 8.0 SDK** ([Download](https://dotnet.microsoft.com/download/dotnet/8.0))
+- **Visual Studio Code** ([Download](https://code.visualstudio.com/download))
 - **Azure Functions Core Tools** ([Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local))
-- **Visual Studio 2022** or **Visual Studio Code**
 - **Azure Account** (with active subscription)
-- **AI Provider API access**: An endpoint and key for any chat-completion and image-generation capable model (Azure OpenAI is the default; Azure AI Foundry or other OpenAI-compatible providers also work)
+- **AI Provider API access**: An endpoint and API key for at least one of the supported AI providers listed below
+
+#### Supported AI Providers
+
+| Provider | Website | Capabilities | Setup Guide |
+|----------|---------|--------------|-------------|
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/setup-azure-foundry.md](docs/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/setup-openai.md](docs/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/setup-deepseek.md](docs/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/setup-falai.md](docs/setup-falai.md) |
+
+> ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See the [Architecture](#architecture) section for details.
+>
+> ⚠️ Setup guides marked as `docs/setup-*.md` are either available or in progress. See the [Roadmap](#roadmap) for the current documentation status.
 
 ### Clone the Repository
 
@@ -417,13 +430,12 @@ cd src
 func azure functionapp publish xposterfunction
 ```
 
-### Option 3: Visual Studio
+### Option 3: Visual Studio Code
 
-1. Right-click on the `XPoster` project
-2. Select **Publish**
-3. Choose **Azure** → **Azure Function App (Windows)**
-4. Select or create a Function App
-5. Click **Publish**
+1. Install the [Azure Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
+2. Open the command palette (`Ctrl+Shift+P`) and select **Azure Functions: Deploy to Function App**
+3. Select or create a Function App
+4. Confirm the deployment
 
 > 📖 Step-by-step guide with post-deployment checklist: [docs/deployment.md](docs/deployment.md).
 
