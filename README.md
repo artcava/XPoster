@@ -350,56 +350,22 @@ The example file documents every key inline. The variables are grouped into four
 
 ## Deployment
 
-### Option 1: GitHub Actions (Automated CI/CD)
+Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/master_xposterfunction.yml`.
 
-The repository includes a GitHub Actions workflow (`.github/workflows/ci.yml`).
+| Option | Best for |
+|---|---|
+| **1. GitHub Actions** | Production — automated CI/CD on every push to `master` |
+| **2. Azure CLI** | Scripted / IaC provisioning, staging environments |
+| **3. Visual Studio** | One-off deploys during early development |
 
-**Setup**:
-1. Create a Function App in Azure Portal
-2. Download the **Publish Profile** from the Function App
-3. Add the content as a **Secret** in GitHub:
-   - Name: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
-4. Every push to `master` triggers automatic deployment
+### Quick Start: GitHub Actions
 
-### Option 2: Azure CLI
+1. Create a **Function App** in Azure Portal (Runtime: `.NET 8 Isolated`, Plan: Consumption)
+2. Download the **Publish Profile** (Function App → Overview → *Get publish profile*)
+3. Add it as a GitHub secret named `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+4. Push to `master` — the workflow triggers automatically
 
-```bash
-# Login
-az login
-
-# Create Resource Group
-az group create --name XPosterRG --location westeurope
-
-# Create Storage Account
-az storage account create \
-  --name xposterstorage \
-  --resource-group XPosterRG \
-  --location westeurope \
-  --sku Standard_LRS
-
-# Create Function App
-az functionapp create \
-  --name xposterfunction \
-  --resource-group XPosterRG \
-  --consumption-plan-location westeurope \
-  --runtime dotnet-isolated \
-  --runtime-version 8 \
-  --functions-version 4 \
-  --storage-account xposterstorage
-
-# Deploy
-cd src
-func azure functionapp publish xposterfunction
-```
-
-### Option 3: Visual Studio Code
-
-1. Install the [Azure Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
-2. Open the command palette (`Ctrl+Shift+P`) and select **Azure Functions: Deploy to Function App**
-3. Select or create a Function App
-4. Confirm the deployment
-
-> 📖 Step-by-step guide with post-deployment checklist: [docs/deployment.md](docs/deployment.md).
+> 📖 Full setup steps for all three options, post-deployment checklist, and Managed Identity configuration: **[docs/deployment.md](docs/deployment.md)**.
 
 ---
 
