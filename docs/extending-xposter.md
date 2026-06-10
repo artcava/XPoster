@@ -50,15 +50,29 @@ public enum MessageSender
 
 ### Step 4 — Wire in GeneratorFactory
 
-Add a matching `case` in the `GeneratorFactory.Generate()` switch so the factory can resolve `TikTokSender` from the DI container:
+`GeneratorFactory.Generate()` resolves the concrete sender through a **switch expression** that maps each `MessageSender` enum value to a specific class retrieved from the DI container. The result is cast to `ISender` because `GetService` returns `object?`; the factory then passes the interface reference to `CreateGeneratorInstance`, keeping generators fully decoupled from sender implementations.
+
+Add two arms to the existing switch expression inside `Generate()`:
 
 ```csharp
-// src/Implementation/GeneratorFactory.cs
-case MessageSender.TikTokSummaryFeed:
-case MessageSender.TikTokPowerLaw:
-    sender = _serviceProvider.GetRequiredService<TikTokSender>();
-    break;
+// src/Implementation/GeneratorFactory.cs — sender switch expression
+ISender? sender = profile.SenderType switch
+{
+    // existing arms ...
+    MessageSender.XPowerLaw    => _serviceProvider.GetService(typeof(XSender))    as ISender,
+    MessageSender.XSummaryFeed => _serviceProvider.GetService(typeof(XSender))    as ISender,
+    MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender))  as ISender,
+    MessageSender.InPowerLaw   => _serviceProvider.GetService(typeof(InSender))   as ISender,
+    MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender))  as ISender,
+    MessageSender.IgPowerLaw   => _serviceProvider.GetService(typeof(IgSender))   as ISender,
+    // new arms
+    MessageSender.TikTokSummaryFeed => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
+    MessageSender.TikTokPowerLaw    => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
+    _ => null
+};
 ```
+
+> Both `TikTokSummaryFeed` and `TikTokPowerLaw` resolve to the same `TikTokSender` class. The two enum values express *what is being posted* (content strategy + platform), not *how* — `TikTokSender` owns the how. This mirrors the existing pattern for `XSender` and `InSender`.
 
 ### Step 5 — Add a ScheduledGenerationProfile entry
 
@@ -122,11 +136,11 @@ The AI layer is abstracted behind `IAiService`. Adding a new provider — whethe
 // src/Abstraction/AiProvider.cs
 public enum AiProvider
 {
-    OpenAi        = 0,
-    Perplexity    = 1,
-    AzureFoundry  = 2,
+    OpenAi          = 0,
+    Perplexity      = 1,
+    AzureFoundry    = 2,
     DeepSeekWithFal = 3,
-    Anthropic     = 4,  // new
+    Anthropic       = 4,  // new
 }
 ```
 
