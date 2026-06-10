@@ -84,6 +84,26 @@ public class AzureFoundryServiceTests
     }
 
     [Fact]
+    public async Task GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":[]}").Object, out _);
+
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":null}").Object, out _);
+
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
     public async Task GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("prompt result")).Object, out _);
@@ -91,6 +111,26 @@ public class AzureFoundryServiceTests
         var result = await svc.GetImagePromptAsync("summary");
 
         Assert.Equal("prompt result", result);
+    }
+
+    [Fact]
+    public async Task GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":[]}").Object, out _);
+
+        var result = await svc.GetImagePromptAsync("summary");
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":null}").Object, out _);
+
+        var result = await svc.GetImagePromptAsync("summary");
+
+        Assert.Equal(string.Empty, result);
     }
 
     [Fact]

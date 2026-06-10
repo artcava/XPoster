@@ -108,6 +108,26 @@ public class DeepSeekServiceTests
         Assert.Equal(string.Empty, result);
     }
 
+    [Fact]
+    public async Task GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":[]}").Object, out _);
+
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":null}").Object, out _);
+
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        Assert.Equal(string.Empty, result);
+    }
+
     // ── GetImagePromptAsync ──────────────────────────────────────────────────
 
     [Fact]
@@ -136,6 +156,26 @@ public class DeepSeekServiceTests
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.BadGateway, "{}").Object, out _);
 
         var result = await svc.GetImagePromptAsync("summary");
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":[]}").Object, out _);
+
+        var result = await svc.GetImagePromptAsync("summary text");
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":null}").Object, out _);
+
+        var result = await svc.GetImagePromptAsync("summary text");
 
         Assert.Equal(string.Empty, result);
     }
