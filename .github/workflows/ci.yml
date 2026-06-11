@@ -32,12 +32,12 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Full history for versioning
       
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
@@ -52,7 +52,7 @@ jobs:
             /p:TreatWarningsAsErrors=false
       
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-artifacts
           path: |
@@ -70,10 +70,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
@@ -123,7 +123,7 @@ jobs:
       
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: ./coverage/report
@@ -139,10 +139,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
@@ -181,10 +181,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
@@ -228,13 +228,19 @@ jobs:
           popd
       
       - name: Login to Azure
-        uses: azure/login@v3
+        # NOTE: azure/login is pinned to v2 (latest: v2.3.0).
+        # A Node.js 24-compatible version has not been released yet.
+        # Track: https://github.com/Azure/login/releases
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_04545C92864042ED99D5EBF6456192FB }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F13F54A171EE481AAE09734F721803BB }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_87ED0225F8DF4E9DA6B45A7951B44B42 }}
       
       - name: Deploy Azure Functions
+        # NOTE: Azure/functions-action is pinned to v1 (latest: v1.5.3).
+        # A Node.js 24-compatible version has not been released yet.
+        # Track: https://github.com/Azure/functions-action/releases
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -255,12 +261,12 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
@@ -311,7 +317,7 @@ jobs:
           cat release_notes.md
       
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: Release ${{ steps.version.outputs.tag }}
