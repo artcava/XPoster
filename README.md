@@ -129,7 +129,7 @@ Dynamically selects the appropriate generator based on current time.
 | 18:00 | Instagram | Power Law | ⚠️ Disabled — pending Instagram production readiness |
 
 #### 3. **Generators** (Content Strategy)
-- **FeedGenerator**: Analyzes crypto RSS feeds, generates AI summaries, creates images
+- **FeedGenerator**: Analyzes RSS feeds, generates AI summaries, creates images
 - **PowerLawGenerator**: Generates posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`), comparing the fair-value estimate with the live BTC price
 - **NoGenerator**: Placeholder for time slots without publishing
 
@@ -452,12 +452,10 @@ Modify `GeneratorFactory.cs` to customize which generator to use at each hour:
 ```csharp
 private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 {
-    new ScheduledGenerationProfile(6,  MessageSender.InSummaryFeed,  typeof(FeedGenerator),     AiProvider.OpenAi),
-    new ScheduledGenerationProfile(8,  MessageSender.XSummaryFeed,   typeof(FeedGenerator),     AiProvider.OpenAi),
-    //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedGenerator),     AiProvider.OpenAi), // Disabled — see #72
-    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw,     typeof(PowerLawGenerator)),
-    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw,      typeof(PowerLawGenerator)),
-    //new ScheduledGenerationProfile(18, MessageSender.IgPowerLaw,   typeof(PowerLawGenerator)),                    // Disabled — see #72
+    new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
+    new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
+    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
+    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
 };
 ```
 ---
