@@ -489,17 +489,48 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 ```
 tests/
-├── XPoster.Tests/
-│   ├── Generators/
-│   │   ├── FeedGeneratorTests.cs
-│   │   └── PowerLawGeneratorTests.cs
-│   ├── Services/
-│   │   ├── AiServiceTests.cs
-│   │   └── FeedServiceTests.cs
-│   └── SenderPlugins/
-│       ├── XSenderTests.cs
-│       └── InSenderTests.cs
+├── XPoster.Tests.csproj
+├── XFunctionTests.cs
+├── XFunctionMissingBranchTests.cs
+├── Abstraction/
+│   └── BaseGeneratorTests.cs
+├── Implementation/
+│   ├── AiServiceFactoryTests.cs
+│   ├── FeedGeneratorTests.cs
+│   ├── GeneratorFactoryTests.cs
+│   ├── NoGeneratorTests.cs
+│   └── PowerLawGeneratorTests.cs
+├── Models/
+│   ├── AzureFoundryOptionsValidatorTests.cs
+│   ├── ModelsTests.cs
+│   ├── OpenAiOptionsValidatorTests.cs
+│   ├── PostMissingBranchTests.cs
+│   └── RSSFeedMissingBranchTests.cs
+├── SenderPlugins/
+│   ├── IgSenderTests.cs
+│   ├── InSenderMissingBranchTests.cs
+│   ├── InSenderSendAsyncTests.cs
+│   ├── InSenderTests.cs
+│   ├── XSenderMissingBranchTests.cs
+│   ├── XSenderSendAsyncTests.cs
+│   └── XSenderTests.cs
+└── Services/
+    ├── AzureFoundryServiceTests.cs
+    ├── CryptoServiceTests.cs
+    ├── FeedServiceTests.cs
+    ├── OpenAiServiceTests.cs
+    └── TimeProviderTests.cs
 ```
+
+
+| Folder | What is covered |
+|---|---|
+| *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
+| `Abstraction/` | `BaseGenerator` abstract class contracts |
+| `Implementation/` | `FeedGenerator`, `PowerLawGenerator`, `NoGenerator`, `GeneratorFactory`, and `AiServiceFactory` resolution logic |
+| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, OpenAI and Azure Foundry options validators |
+| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch); `IgSender` (in-development coverage) |
+| `Services/` | `OpenAiService`, `AzureFoundryService`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
 
 ### Running Tests
 
