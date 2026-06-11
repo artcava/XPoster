@@ -30,6 +30,7 @@
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
+- [Author](#author)
 
 > 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [docs/architecture.md](docs/architecture.md).
 
@@ -551,78 +552,6 @@ Key monitoring capabilities at a glance:
 
 ---
 
-## Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-### How to Contribute
-
-1. **Fork** the project
-2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
-
-### Guidelines
-
-- Follow C# (.NET) coding conventions
-- Add unit tests for new features
-- Update documentation
-- Keep commits atomic and descriptive
-- Respect existing design patterns
-
-### Coding Standards
-
-```csharp
-// ✅ Good
-public async Task<Post> GenerateAsync()
-{
-    var summary = await _aiService.GetSummaryAsync(content, maxLength);
-    if (string.IsNullOrWhiteSpace(summary))
-    {
-        _logger.LogWarning("Empty summary generated");
-        return null;
-    }
-    return new Post { Content = summary };
-}
-
-// ❌ Avoid
-public async Task<Post> GenerateAsync() {
-    var summary = await _aiService.GetSummaryAsync(content, maxLength);
-    if (summary == null || summary == "") return null;
-    return new Post { Content = summary };
-}
-```
-
----
-
-## License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2025 Marco Cavallo
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-```
-
-
----
-
 ## Author
 
 **Marco Cavallo**
@@ -651,6 +580,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 - **Issues**: [GitHub Issues](https://github.com/artcava/XPoster/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/artcava/XPoster/discussions)
+- **Linkedin**: [XPoster Page](https://www.linkedin.com/showcase/xposter)
 - **Email**: cavallo.marco@gmail.com
 
 ---
