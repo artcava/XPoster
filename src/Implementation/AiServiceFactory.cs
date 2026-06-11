@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using XPoster.Abstraction;
 
@@ -15,6 +13,7 @@ public class AiServiceFactory : IAiServiceFactory
     [
         AiProvider.OpenAi,
         AiProvider.AzureFoundry,
+        AiProvider.DeepSeekWithFal,
         // AiProvider.Perplexity, // Uncomment when implemented
     ];
 

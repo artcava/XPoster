@@ -50,6 +50,24 @@
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
 
+    "DeepSeek__Endpoint": "https://api.deepseek.com",
+    "DeepSeek__ApiKey": "",
+    "DeepSeek__DeploymentName": "deepseek-chat",
+    "DeepSeek__SummaryTemperature": "0.5",
+    "DeepSeek__SummaryMaxTokensPerChar": "5",
+    "DeepSeek__SummarySafetyMarginChars": "50",
+    "DeepSeek__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "DeepSeek__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "DeepSeek__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "DeepSeek__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "DeepSeek__ImagePromptMaxTokens": "60",
+    "DeepSeek__ImagePromptTemperature": "0.7",
+
+    "FalAi__ApiKey": "",
+    "FalAi__ModelId": "fal-ai/flux/schnell",
+    "FalAi__ImageSize": "landscape_4_3",
+    "FalAi__NumInferenceSteps": "4",
+
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }

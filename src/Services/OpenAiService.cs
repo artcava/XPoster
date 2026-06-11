@@ -33,14 +33,14 @@ public class OpenAiService : IAiService
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetSummaryAsync(string text, int messageMaxLength)
+    public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
     {
         int tries = 0;
 
         while (text != null && text.Length > messageMaxLength && tries <= 2)
         {
             tries++;
-            var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetSummary(text, messageMaxLength));
+            var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetSummary(text, messageMaxLength), cancellationToken);
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
                 _logger.LogInformation("Too many requests. Please try again later.");
@@ -53,17 +53,23 @@ public class OpenAiService : IAiService
                 return string.Empty;
             }
 
-            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
-            text = result?.choices[0].message.content.Trim() ?? string.Empty;
+            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
+            if (result is null || result.choices is null || result.choices.Length == 0)
+            {
+                _logger.LogWarning("OpenAI returned a response with no choices during summary generation.");
+                return string.Empty;
+            }
+
+            text = result.choices[0].message.content.Trim();
         }
         // CS8603: text cannot be null here — while loop guard ensures non-null or early return
         return text ?? string.Empty;
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetImagePromptAsync(string text)
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
-        var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetPromptForImage(text));
+        var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetPromptForImage(text), cancellationToken);
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
             _logger.LogInformation("Too many requests. Please try again later.");
@@ -76,12 +82,18 @@ public class OpenAiService : IAiService
             return string.Empty;
         }
 
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>();
-        return result?.choices[0].message.content.Trim() ?? string.Empty;
+        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
+        if (result is null || result.choices is null || result.choices.Length == 0)
+        {
+            _logger.LogWarning("OpenAI returned a response with no choices during image prompt generation.");
+            return string.Empty;
+        }
+
+        return result.choices[0].message.content.Trim();
     }
 
     /// <inheritdoc/>
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation($"Generating image with {_options.ImageModel}, prompt: {prompt}");
 
@@ -93,7 +105,7 @@ public class OpenAiService : IAiService
             size = _options.ImageSize
         };
 
-        var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body);
+        var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -101,7 +113,7 @@ public class OpenAiService : IAiService
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
         var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
         // base64 cannot be null if API responded with 200 and valid JSON structure
         return Convert.FromBase64String(base64!);

@@ -33,12 +33,12 @@ public class FeedGeneratorTests
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeSummary);
-        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary))
+        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakePrompt);
         // CS8620: GenerateImageAsync returns Task<byte[]> — aligned to non-nullable byte[]
-        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt))
+        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
 
         var generator = new FeedGenerator(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockAiService.Object);
@@ -52,9 +52,9 @@ public class FeedGeneratorTests
         Assert.Equal(fakeImage, message.Image);
 
         _mockFeedService.Verify(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(2));
-        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Once);
-        _mockAiService.Verify(s => s.GetImagePromptAsync(fakeSummary), Times.Once);
-        _mockAiService.Verify(s => s.GenerateImageAsync(fakePrompt), Times.Once);
+        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mockAiService.Verify(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()), Times.Once);
+        _mockAiService.Verify(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class FeedGeneratorTests
         // ASSERT
         Assert.Null(result);
         Assert.False(generator.SendIt);
-        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class FeedGeneratorTests
             It.IsAny<DateTimeOffset>(),
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(string.Empty);
 
         var generator = new FeedGenerator(
@@ -114,7 +114,7 @@ public class FeedGeneratorTests
         // ASSERT
         Assert.Null(result);
         Assert.False(generator.SendIt);
-        _mockAiService.Verify(s => s.GenerateImageAsync(It.IsAny<string>()), Times.Never);
+        _mockAiService.Verify(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -132,12 +132,12 @@ public class FeedGeneratorTests
             It.IsAny<DateTimeOffset>(),
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeSummary);
-        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary))
+        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakePrompt);
         // CS8600: null cast to byte[]? is intentional — simulates image generation failure
-        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt))
+        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ReturnsAsync((byte[]?)null!);
 
         var generator = new FeedGenerator(
@@ -171,11 +171,11 @@ public class FeedGeneratorTests
             It.IsAny<DateTimeOffset>(),
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeSummary);
-        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary))
+        _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakePrompt);
-        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt))
+        _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Image generation failed"));
 
         var generator = new FeedGenerator(
@@ -210,11 +210,11 @@ public class FeedGeneratorTests
             It.IsAny<DateTimeOffset>(),
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeSummary);
-        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>()))
+        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakePrompt);
-        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>()))
+        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
 
         var generator = new FeedGenerator(
@@ -283,6 +283,6 @@ public class FeedGeneratorTests
         // ASSERT
         Assert.Null(result);
         Assert.False(generator.SendIt);
-        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
