@@ -65,9 +65,14 @@
 
 ## Architecture
 
-> 📐 For the full architectural rationale, ADRs, design patterns, and Mermaid data-flow diagram, see **[docs/architecture.md](docs/architecture.md)**.
+XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
-### High-Level Overview
+- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and only orchestrates the pipeline
+- **`GeneratorFactory`** — maps the current UTC hour to a `ScheduledGenerationProfile`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
+- **Generators** (`FeedGenerator`, `PowerLawGenerator`, `NoGenerator`) — each encapsulates a self-contained content-production algorithm; generators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
+
+The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching generator code.
 
 ```
 ┌────────────────────────────┐
@@ -78,7 +83,7 @@
             ▼
 ┌────────────────────────────┐
 │   Generator Factory        │ ◄─── Strategy Pattern
-│   (Time-based Selector)    │
+│   (ScheduledGenerationProfile list) │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
@@ -91,13 +96,13 @@
       └──────┬───────┘
              │
              ▼
-    ┌────────────────┐
-    │   Services     │
-    ├────────────────┤
-    │ • HybridAiSvc  │ ◄─── Composite AI Provider
-    │ • Feed Service │ ◄─── RSS Parser
-    │ • Crypto Svc   │ ◄─── CryptoPrices HTTP client
-    └────────┬───────┘
+    ┌────────────────────┐
+    │   Services         │
+    ├────────────────────┤
+    │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
+    │ • Feed Service     │ ◄─── RSS Parser
+    │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
+    └────────┬───────────┘
              │
              ▼
     ┌────────────────┐
@@ -109,91 +114,7 @@
     └────────────────┘
 ```
 
-### Core Components
-
-#### 1. **XFunction** (Entry Point)
-Timer-triggered Azure Function that orchestrates the entire publishing workflow.
-
-**Cron Expression**: Configurable via environment variable (default: `0 5 * * * *`)
-
-#### 2. **GeneratorFactory** (Factory + Strategy Pattern)
-Dynamically selects the appropriate generator based on current time.
-
-| Time | Platform | Strategy | Status |
-|------|----------|----------|--------|
-| 06:00 | LinkedIn | Feed Summary | ✅ Active |
-| 08:00 | Twitter/X | Feed Summary | ✅ Active |
-| 10:00 | Instagram | Feed Summary | ⚠️ Disabled — pending Instagram production readiness |
-| 14:00 | LinkedIn | Power Law | ✅ Active |
-| 16:00 | Twitter/X | Power Law | ✅ Active |
-| 18:00 | Instagram | Power Law | ⚠️ Disabled — pending Instagram production readiness |
-
-#### 3. **Generators** (Content Strategy)
-- **FeedGenerator**: Analyzes RSS feeds, generates AI summaries, creates images
-- **PowerLawGenerator**: Generates posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`), comparing the fair-value estimate with the live BTC price
-- **NoGenerator**: Placeholder for time slots without publishing
-
-#### 4. **Services Layer**
-
-##### General Services
-- **FeedService**: RSS parser with caching and intelligent filtering
-- **CryptoService**: Thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol
-
-##### AI Provider Services
-
-All AI provider services implement the `IAiService` interface, which defines three operations: `GetSummaryAsync`, `GetImagePromptAsync`, and `GenerateImageAsync`. The concrete implementation injected at runtime is determined by the `AiProvider` value on the active `ScheduledGenerationProfile`.
-
-| Service | Text model | Image model | Notes |
-|---------|------------|-------------|-------|
-| **OpenAiService** | Any OpenAI-compatible chat-completion model (e.g. `gpt-4.1-nano`, `gpt-4o-mini`) | Any OpenAI-compatible image-generation model (e.g. `gpt-image-1`, `dall-e-3`) | Default provider; endpoint and deployment name are read from `AZURE_OPENAI_ENDPOINT` / `AZURE_OPENAI_DEPLOYMENT_NAME` |
-| **AzureFoundryService** | Azure AI Foundry chat-completion deployment | Azure AI Foundry image-generation deployment | Drop-in alternative to `OpenAiService` for teams already on the Azure AI Foundry hub |
-| **DeepSeekService** | DeepSeek chat-completion API | — (text only) | Cost-effective option for high-volume text generation; used by `HybridAiService` for summaries and image prompts |
-| **FalAiImageService** | — (image only) | FLUX.2 Turbo via [fal.ai](https://fal.ai) | Specialized image-generation service; used by `HybridAiService` to produce images |
-| **HybridAiService** | Delegates to `DeepSeekService` | Delegates to `FalAiImageService` | Composite service — see deep-dive below |
-
-###### HybridAiService — Deep Dive
-
-`HybridAiService` is a **composite implementation** of `IAiService` that combines two specialized providers under a single interface, routing each operation to the backend best suited for it:
-
-```
-                  ┌─────────────────────────┐
-                  │     HybridAiService     │
-                  │    (implements IAiService)│
-                  └────────────┬────────────┘
-                               │
-           ┌───────────────────┴───────────────────┐
-           │                                       │
-           ▼                                       ▼
-  ┌─────────────────┐                   ┌──────────────────────┐
-  │  DeepSeekService│                   │  FalAiImageService   │
-  │  (text/summary) │                   │  (FLUX.2 Turbo image)│
-  └─────────────────┘                   └──────────────────────┘
-  GetSummaryAsync()                     GenerateImageAsync()
-  GetImagePromptAsync()
-```
-
-**Routing logic:**
-
-| `IAiService` method | Delegated to | Rationale |
-|---|---|---|
-| `GetSummaryAsync` | `DeepSeekService` | DeepSeek offers a strong cost/quality ratio for text summarization tasks |
-| `GetImagePromptAsync` | `DeepSeekService` | Prompt crafting is a text task — consistent use of the same text model avoids style drift |
-| `GenerateImageAsync` | `FalAiImageService` | FLUX.2 Turbo on fal.ai delivers high-quality images faster and cheaper than OpenAI image models for this workload |
-
-**Why use HybridAiService?**  
-Mixing providers at the service level lets the system optimise each step of the content pipeline independently — low-cost, high-throughput text generation with DeepSeek, and fast, high-quality image generation with FLUX.2 — without exposing that complexity to the generators, which only see the `IAiService` contract.
-
-**Configuration keys required:**
-```
-DEEPSEEK_API_KEY       # DeepSeek API key
-DEEPSEEK_MODEL         # e.g. deepseek-chat
-FALAI_API_KEY          # fal.ai API key
-```
-
-#### 5. **Sender Plugins** (Platform Abstraction)
-- **XSender**: Twitter/X via LinqToTwitter
-- **InSender**: LinkedIn via HTTP API
-- **IgSender**: Instagram via Graph API (in development)
+> 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin, Abstract Factory), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
 
 ---
 
@@ -275,7 +196,7 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/setup-deepseek.md](docs/setup-deepseek.md) |
 | **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/setup-falai.md](docs/setup-falai.md) |
 
-> ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See the [Architecture](#architecture) section for details.
+> ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
 > ⚠️ Setup guides marked as `docs/setup-*.md` are either available or in progress. See the [Roadmap](#roadmap) for the current documentation status.
 
