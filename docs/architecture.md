@@ -1,0 +1,420 @@
+# Architecture
+
+This document explains the architectural decisions, component responsibilities, and extension contracts of **XPoster** — an AI-powered social media automation platform built on Azure Functions.
+
+> See also: [README.md](../README.md) for setup, configuration, and deployment instructions.
+
+---
+
+## Table of Contents
+
+1. [System Overview](#1-system-overview)
+2. [Component Responsibilities](#2-component-responsibilities)
+3. [Design Patterns Used](#3-design-patterns-used)
+4. [Architecture Decision Records (ADRs)](#4-architecture-decision-records-adrs)
+5. [Extension Points](#5-extension-points)
+6. [Data Flow Diagram](#6-data-flow-diagram)
+
+---
+
+## 1. System Overview
+
+XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects a content strategy based on the current time, generates a social media post (optionally using AI), and publishes it to one or more platforms via pluggable sender components.
+
+```
+┌────────────────────────────┐
+│   Azure Timer Trigger      │
+│   (configurable schedule)  │
+└───────────┬────────────────┘
+            │
+            ▼
+┌────────────────────────────┐
+│   Generator Factory        │ ◄─── Strategy Pattern
+│   (ScheduledGenerationProfile list) │
+└───────────┬────────────────┘
+            │
+    ┌───────┴────────┬──────────────┐
+    ▼                ▼              ▼
+┌──────────┐   ┌──────────┐   ┌──────────┐
+│   Feed   │   │ PowerLaw │   │    No    │
+│Generator │   │Generator │   │Generator │
+└─────┬────┘   └─────┬────┘   └──────────┘
+      │              │
+      └──────┬───────┘
+             │
+             ▼
+    ┌────────────────────┐
+    │   Services         │
+    ├────────────────────┤
+    │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
+    │ • Feed Service     │ ◄─── RSS Parser
+    │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
+    └────────┬───────────┘
+             │
+             ▼
+    ┌────────────────┐
+    │ Sender Plugins │
+    ├────────────────┤
+    │ • XSender      │ ◄─── Twitter/X API
+    │ • InSender     │ ◄─── LinkedIn API
+    │ • IgSender     │ ◄─── Instagram API
+    └────────────────┘
+```
+
+**System boundaries:**
+- **Inbound**: Azure Timer Trigger (no external HTTP surface in production)
+- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram Graph API, RSS feeds
+- **Observability**: Azure Application Insights
+
+---
+
+## 2. Component Responsibilities
+
+### XFunction — Entry Point
+
+`XFunction` is the Azure Functions timer-triggered entry point. Its sole responsibility is to **orchestrate the pipeline**: resolve the correct generator via the factory, call `GenerateAsync()`, and forward the resulting `Post` to the target sender. It owns no business logic and depends exclusively on injected abstractions, keeping the trigger layer thin and testable.
+
+### GeneratorFactory — Strategy Selector
+
+`GeneratorFactory` maps the current hour of day to a `ScheduledGenerationProfile` drawn from a statically declared `List<ScheduledGenerationProfile>`. Each profile carries four fields:
+
+| Field | Type | Purpose |
+|---|---|---|
+| `Hour` | `int` | Hour of day (0–23) when this slot is active |
+| `SenderType` | `MessageSender` | Identifies which `ISender` implementation to resolve |
+| `GeneratorType` | `Type` | The concrete `BaseGenerator` subclass to instantiate |
+| `AiProvider?` | `AiProvider?` | Optional AI provider for slots that require AI services |
+
+At runtime, the factory resolves the matching profile, independently resolves the **sender** (via the DI container) and the **AI service** (via `IAiServiceFactory.GetByProvider()`), then dynamically constructs the generator using reflection (`CreateGeneratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes. This component is the **single point of variation** for scheduling: changing what gets posted at any hour means editing one entry in the profile list.
+
+The factory enforces the invariant that every unscheduled hour resolves to `NoGenerator`, so the orchestrator never receives a null generator.
+
+### Generators — Content Strategies
+
+Each generator extends `BaseGenerator` and encapsulates a specific **content production algorithm**:
+
+- **FeedGenerator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a text summary, and requests a generated image. The specific model used is determined by the resolved `IAiService` implementation. It is stateless and side-effect-free until it hands off the `Post`.
+- **PowerLawGenerator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on `AiService`.
+- **NoGenerator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in the orchestrator.
+
+### Services Layer — Shared Infrastructure
+
+Services are registered as singletons or transients in the DI container and are consumed by generators:
+
+- **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledGenerationProfile` and can be overridden globally via the `AiProvider` configuration key.
+- **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
+- **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in generators.
+
+### Sender Plugins — Platform Abstraction
+
+Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)` and `int MessageMaxLength`. Senders are **exclusively responsible for platform-specific serialisation and API communication**; they receive a fully-formed `Post` and return a success/failure signal. This contract guarantees that generators never reference platform SDKs directly.
+
+---
+
+## 3. Design Patterns Used
+
+### Strategy Pattern — Content Generators
+
+**What**: `IGenerator` defines the algorithm interface; `FeedGenerator`, `PowerLawGenerator`, and `NoGenerator` are concrete strategies. `XFunction` programs to the interface, not the implementation.
+
+**Why**: Content generation algorithms change independently of the publishing pipeline. New generation strategies (e.g. a `QuoteGenerator` or `TrendingTopicGenerator`) can be introduced without touching the orchestrator or any other generator. The alternative — a large `switch` block inside `XFunction` — would violate the Open/Closed Principle and make unit testing expensive.
+
+**Trade-off**: The pattern adds one interface and one class per strategy. For the expected number of strategies (< 10), this overhead is negligible compared to the isolation gained.
+
+### Factory Pattern — Time-based Generator Selection
+
+**What**: `GeneratorFactory` centralises the construction and selection of `(IGenerator, ISender, IAiService)` triples. It reads the current UTC hour, looks up the matching `ScheduledGenerationProfile`, and dynamically instantiates the generator via `CreateGeneratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
+
+**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, MessageSender>` to a typed `ScheduledGenerationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
+
+**Trade-off**: The current implementation uses a compile-time list, so schedule changes require a code deployment. A future improvement would be externalising the schedule to Azure App Configuration, but this adds operational complexity not yet warranted.
+
+### Plugin Pattern — Sender Architecture
+
+**What**: Platform senders implement a common `ISender` interface and are registered in the DI container as concrete types. `GeneratorFactory` resolves the appropriate sender from the DI container by matching the `MessageSender` enum value in the profile.
+
+**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new enum value, and a profile entry. This directly supports the Roadmap's expansion goals (Threads, Mastodon, BlueSky, etc.).
+
+**Extensibility contract**: Any sender must:
+1. Implement `ISender`
+2. Honour `MessageMaxLength` so generators can truncate content correctly
+3. Return `false` (not throw) on non-fatal platform errors, allowing the orchestrator to continue
+
+### Abstract Factory Pattern — AI Provider Resolution
+
+**What**: `IAiServiceFactory` acts as an abstract factory that maps an `AiProvider` enum value to the concrete `IAiService` implementation registered for that provider. `GeneratorFactory` delegates all AI service resolution to it.
+
+**Why**: Decoupling provider selection from generator construction means a new AI provider requires only a new `IAiService` implementation, a DI registration, and an `AiProvider` enum value — the factory and all generators remain untouched. It also enables per-slot provider assignment (e.g. use `Perplexity` at 08:00 and `AzureFoundry` at 14:00) and a global override via configuration.
+
+**Trade-off**: Introduces one additional indirection layer between `GeneratorFactory` and the AI service. Acceptable given the number of supported providers (currently 4: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`).
+
+---
+
+## 4. Architecture Decision Records (ADRs)
+
+### ADR-001 — Azure Functions as Compute
+
+| Field | Detail |
+|---|---|
+| **Date** | 2025-Q1 |
+| **Status** | Accepted |
+
+**Context**: XPoster needs to execute a publishing workflow several times per day. The workload is bursty (seconds of CPU, then idle for hours) and has no persistent in-process state requirements.
+
+**Decision**: Use **Azure Functions v4 (Consumption Plan)** with a Timer Trigger.
+
+**Rationale**:
+- Zero infrastructure management; scaling and availability are platform-managed.
+- Cost model aligns with usage: the function executes ~8–10 times/day, well within the free tier.
+- Native integration with Azure Application Insights, Key Vault, and Managed Identity.
+- `.NET 8 isolated worker` model provides full control over the host process (custom middleware, DI, etc.).
+
+**Alternatives considered**:
+- **Containerised service (AKS/ACI)**: Rejected — always-on cost is unjustified for a periodic workload; adds Kubernetes or container orchestration overhead.
+- **Azure Logic Apps**: Rejected — insufficient support for custom C# logic and AI SDK integration; low debuggability.
+- **Azure Container Apps (scheduled jobs)**: Viable future option if cold-start latency becomes a constraint, but premature at current scale.
+
+**Consequences**: Cold starts are possible on the Consumption Plan. Acceptable because the timer trigger fires on a fixed schedule and a delay of 1–2 seconds is not user-facing.
+
+---
+
+### ADR-002 — Strategy Pattern for Content Generators
+
+| Field | Detail |
+|---|---|
+| **Date** | 2025-Q1 |
+| **Status** | Accepted |
+
+**Context**: The system must support multiple, independently evolving content-generation algorithms (RSS summary, Power Law model, future strategies). The orchestrator must remain stable as new algorithms are added.
+
+**Decision**: Model each content algorithm as a class extending `BaseGenerator`, selected at runtime by `GeneratorFactory` using a `List<ScheduledGenerationProfile>`.
+
+**Rationale**: See [Design Patterns — Strategy Pattern](#strategy-pattern--content-generators) above. Key driver: every new generator must be testable in isolation, without standing up Azure infrastructure.
+
+**Alternatives considered**:
+- **Inline conditionals in `XFunction`**: Rejected — violates SRP and OCP; every new strategy modifies the orchestrator.
+- **Azure Durable Functions fan-out**: Rejected — adds orchestration complexity not needed for sequential, single-platform execution.
+
+**Consequences**: Each generator owns its own dependencies (AI service, feed service, etc.), which are injected via `CreateGeneratorInstance`. Generator tests are pure unit tests with mocks.
+
+---
+
+### ADR-003 — Plugin Pattern for Senders
+
+| Field | Detail |
+|---|---|
+| **Date** | 2025-Q1 |
+| **Status** | Accepted |
+
+**Context**: The system targets multiple social platforms with different APIs, rate limits, authentication schemes, and content formats. New platforms must be addable without modifying existing code.
+
+**Decision**: Define `ISender` as the platform abstraction contract; implement one class per platform; register each in the DI container.
+
+**Rationale**: The Roadmap explicitly targets 5+ additional platforms (Threads, Mastodon, BlueSky, YouTube Shorts, TikTok). A plugin model ensures this expansion is low-risk and reviewable in isolation.
+
+**Alternatives considered**:
+- **Single `SenderService` with platform enum**: Rejected — grows unboundedly and mixes platform-specific logic in one class.
+- **External webhook/queue per platform**: Viable architectural direction for a distributed system, but over-engineered for the current single-process, low-volume deployment.
+
+**Consequences**: Each sender is independently deployable in tests. The `MessageMaxLength` contract must be respected; violations cause silent truncation bugs at the platform layer.
+
+---
+
+### ADR-004 — Provider-Agnostic AI Integration
+
+| Field | Detail |
+|---|---|
+| **Date** | 2026-Q1 |
+| **Status** | Accepted |
+
+**Context**: Content generation requires a large language model for summarisation and an image model for visuals. The initial implementation was coupled to a specific OpenAI model pair; as the number of supported providers and models grew, hardcoding became a maintenance liability.
+
+**Decision**: Introduce `IAiServiceFactory` as an abstract factory that resolves `IAiService` implementations by `AiProvider` enum value (`OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`). The active provider per time slot is declared in `ScheduledGenerationProfile.AiProvider` and can be overridden globally via the `AiProvider` configuration key. Concrete model names are an internal concern of each `IAiService` implementation.
+
+**Rationale**:
+- `IAiService` abstraction means the underlying provider and model can be swapped without touching generators or the factory scheduling logic.
+- Per-slot provider assignment (e.g. different providers at different hours) is expressed declaratively in the profile list.
+- Global override via config enables A/B testing between providers without code deployments.
+
+**Alternatives considered**:
+- **Single hardcoded `AiService` (OpenAI only)**: Used in v1.x; rejected as the provider landscape expanded.
+- **Hugging Face / open-source models**: Remains a valid future option via a new `IAiService` implementation; the current architecture supports it without changes.
+
+**Consequences**: Each `IAiService` implementation manages its own SDK dependencies and model configuration. Adding a new provider requires a new class, a DI registration, and an `AiProvider` enum value — no changes to `GeneratorFactory` or any generator.
+
+---
+
+### ADR-005 — Capability-based extension points for Senders, Generators and AI Providers
+
+| Field | Detail |
+|---|---|
+| **Date** | 2026-Q2 |
+| **Status** | Proposed |
+
+**Context**: XPoster has three independent extension axes — Platform Senders, Content Generators, and AI Providers — but the current design couples them in two ways that limit independent extensibility.
+
+- Problem 1 — `MessageSender` enum couples Sender identity to Generator identity
+    `MessageSender` today encodes not just *which platform to send to* but implicitly *which generator produced the content*. If a new Generator is introduced (e.g. a `VideoFeedGenerator`), a new enum value must be added for every existing Sender (e.g. `XVideo`, `InVideo`, `IgVideo`). The cartesian product grows with O(generators × senders) instead of O(generators) + O(senders).
+
+- Problem 2 — `HybridAiService` couples AI capability dispatch to a fixed provider list
+    `HybridAiService` currently decides at runtime whether to call OpenAI (text + image) or DeepSeek/Foundry (text only) via internal branching. Adding a new provider or a new modality (text-to-video, text-to-audio) requires modifying `HybridAiService` itself, violating the Open/Closed Principle. Furthermore, users cannot independently choose a text provider and an image provider; the coupling is implicit.
+
+**Decision**:
+
+1. Separate Generator identity from Sender identity.
+    Introduce a `SenderPlatform` enum (or string key) that identifies only the target platform (`X`, `LinkedIn`, `Instagram`). Each `IGenerator` declares which platforms it targets via a `IReadOnlyList<SenderPlatform> SupportedPlatforms` property. `GeneratorFactory` matches Generators to platforms, not to a combined Generator+Sender key.
+
+    Before:
+    ```csharp
+    public enum MessageSender { XFeed, InFeed, IgFeed, XPowerLaw, InPowerLaw, ... }
+    ```
+
+    After:
+    ```csharp
+    public enum SenderPlatform { X, LinkedIn, Instagram }
+
+    public interface IGenerator
+    {
+        IReadOnlyList<SenderPlatform> SupportedPlatforms { get; }
+        Task<Post> GenerateAsync(RSSFeed feed);
+    }
+    ```
+
+2. Introduce capability-based AI provider contracts.
+    Replace `HybridAiService` with a set of capability interfaces resolved from DI. Consumers declare which capability they need; the DI container resolves the configured implementation.
+
+    ```csharp
+    public interface ITextToTextProvider
+    {
+        Task<string> CompleteAsync(string prompt, CancellationToken ct = default);
+    }
+
+    public interface ITextToImageProvider
+    {
+        Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default);
+    }
+
+    // Future-proof, no code change required in existing code when added:
+    public interface ITextToVideoProvider { ... }
+    public interface ITextToAudioProvider { ... }
+    ```
+
+    Concrete services (`OpenAiService`, `DeepSeekService`, `AzureFoundryService`, `FalAiImageService`) implement only the interfaces matching their actual capabilities. Configuration drives which implementation is registered for each capability:
+
+    ```csharp
+    // Program.cs — example
+    builder.Services.AddScoped<ITextToTextProvider, DeepSeekService>();
+    builder.Services.AddScoped<ITextToImageProvider, FalAiImageService>();
+    ```
+
+**Rationale**: The two problems share a root cause: the current model uses a single opaque identifier (`MessageSender`, `HybridAiService`) to encode multiple orthogonal concepts simultaneously. This is a classic violation of the Single Responsibility Principle at the type-system level — correcting it at the abstraction layer, rather than patching individual classes, is the only approach that scales linearly with future extension.
+
+For Problem 1, the `SenderPlatform` split restores the invariant that was implicit in ADR-003 (Plugin Pattern for Senders): a sender knows only how to publish to a platform, not what content strategy produced the post. Keeping these two concerns separate means the scheduling profile becomes a first-class composition of independent axes — `(Generator, SenderPlatform)` — rather than a flat enum that conflates them.
+
+For Problem 2, the capability-interface model aligns with the direction already taken in ADR-004: that concrete model names and vendor details are internal concerns of each AI implementation. Capability interfaces (`ITextToTextProvider`, `ITextToImageProvider`) carry that principle one step further — a provider now also declares *what it can do*, not just *who it is*. This makes capability gaps explicit at compile time (a `DeepSeekService` that does not implement `ITextToImageProvider` simply cannot be registered for image generation) and eliminates the runtime branching in `HybridAiService` that currently silently degrades to a no-op when the wrong provider is asked for an unsupported modality.
+
+Together the two changes reduce the coupling surface to the minimum required: Generators know which platforms they target; AI providers declare their capabilities; the DI container wires them. No component needs to know about the others' internals.
+
+**Alternatives considered**
+| Alternative | Reason rejected |
+|---|---|
+| Keep `HybridAiService` and add new providers via switch | Violates OCP; grows unboundedly with each new provider |
+| Use a Strategy dictionary keyed by provider name string | Loses compile-time safety; discovery is implicit |
+| Semantic Kernel / Microsoft.Extensions.AI abstraction layer | Introduces a large dependency for a relatively small problem; can be reconsidered in later stages |
+
+**Consequences**:
+- Positive
+    - Adding a new Generator does not require touching the `MessageSender`/`SenderPlatform` enum.
+    - Adding a new AI Provider requires only implementing the relevant capability interface(s) and registering it in `Program.cs`.
+    - Users can freely mix providers per capability (e.g. DeepSeek for text, Fal.ai for image) via configuration alone.
+    - Future modalities (text-to-video, text-to-audio) are a new interface + one registration line — zero changes to existing code.
+    - `HybridAiService` is eliminated, removing an internal branch that is currently a maintenance burden.
+
+- Negative / Trade-offs
+    - Requires a breaking refactor of `GeneratorFactory`, `AiServiceFactory`, and `HybridAiService`.
+    - `Program.cs` DI registration becomes more verbose; a helper extension method (`AddXPosterAiProviders`) is recommended to keep it readable.
+    - Existing tests for `GeneratorFactory` and `AiServiceFactory` must be rewritten.
+
+---
+
+## 5. Extension Points
+
+XPoster exposes three well-defined extension points. Each maps to a distinct abstraction in the codebase and can be implemented independently without modifying existing components. Full step-by-step instructions and code examples are in [extending-xposter.md](extending-xposter.md).
+
+### Platform Senders
+
+A sender encapsulates everything needed to publish a `Post` to a specific social platform: authentication, payload serialisation, and error handling. The `ISender` interface is intentionally minimal — it receives a fully-formed post and returns a boolean outcome — so platform-specific complexity is completely isolated from the rest of the pipeline.
+
+Adding a new platform has no impact on existing senders, generators, or the factory. The only touch points are a new implementing class, a DI registration, a new `MessageSender` enum value, and one entry in the scheduling profile list. This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
+
+### Content Generators
+
+A generator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting `Post` takes. Each generator extends `BaseGenerator` and is selected at runtime based on the current time slot, so different algorithms can run at different hours without any conditional logic in the orchestrator.
+
+Because generators receive their dependencies (sender, AI service, data services) via constructor injection, a new generator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically, so no change to `GeneratorFactory` is required beyond adding a scheduling profile entry.
+
+### AI Providers
+
+The AI layer is abstracted behind `IAiService`, which decouples content generation logic from any specific model or vendor. The `AiProvider` enum identifies which implementation to resolve at runtime; the concrete model names, API keys, and SDK details are entirely internal to each implementation.
+
+This design enables per-slot provider assignment (different providers can be active at different hours) and a global configuration override for A/B testing without code changes. Adding a new provider — whether a hosted API or a self-hosted model — requires only a new `IAiService` implementation, a DI registration, and an enum value. No generator or scheduling logic needs to change.
+
+---
+
+## 6. Data Flow Diagram
+
+The following sequence diagram covers the end-to-end execution from Timer Trigger to post publication.
+
+```mermaid
+sequenceDiagram
+    participant Timer as Azure Timer Trigger
+    participant Fn as XFunction
+    participant Factory as GeneratorFactory
+    participant AiFactory as AiServiceFactory
+    participant Gen as BaseGenerator<br/>(Feed / PowerLaw)
+    participant AI as IAiService<br/>(resolved by AiProvider)
+    participant Feed as FeedService<br/>(RSS)
+    participant Crypto as CryptoService<br/>(cryptoprices.cc)
+    participant Sender as ISender<br/>(X / LinkedIn / Instagram)
+    participant Platform as Social Platform API
+
+    Timer->>Fn: Trigger (cron schedule)
+    Fn->>Factory: Generate()
+    Factory->>Factory: Match currentHour → ScheduledGenerationProfile
+    Factory->>Factory: Resolve ISender from DI (by SenderType)
+    Factory->>AiFactory: GetByProvider(profile.AiProvider)
+    AiFactory-->>Factory: IAiService (concrete implementation)
+    Factory->>Factory: CreateGeneratorInstance(type, sender, aiService)
+    Factory-->>Fn: BaseGenerator instance
+
+    Fn->>Gen: GenerateAsync()
+
+    alt FeedGenerator
+        Gen->>Feed: GetLatestItemAsync()
+        Feed-->>Gen: FeedItem (title, url, content)
+        Gen->>AI: GetCompletionAsync(content, maxLength)
+        AI-->>Gen: summary text
+        Gen->>AI: GenerateImageAsync(title)
+        AI-->>Gen: image bytes
+    else PowerLawGenerator
+        Gen->>Crypto: GetPriceAsync(symbol)
+        Crypto-->>Gen: current BTC price (decimal)
+        Gen->>Gen: Compute fair value (10⁻¹⁷ × days^5.83)
+    end
+
+    Gen-->>Fn: Post { Content, ImageUrl }
+
+    alt Post is null (NoGenerator or empty result)
+        Fn->>Fn: Log skip, exit
+    else Post is valid
+        Fn->>Sender: SendAsync(post)
+        Sender->>Platform: HTTP API call
+        Platform-->>Sender: 200 OK / error
+        Sender-->>Fn: true / false
+        Fn->>Fn: Log result to App Insights
+    end
+```
+
+---
+
+*Document maintained by [@artcava](https://github.com/artcava) — open an issue to propose changes.*

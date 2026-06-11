@@ -1,7 +1,5 @@
-// src/Services/DeepSeekAiService.cs
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
 using XPoster.Models;
@@ -36,9 +34,7 @@ public class DeepSeekService : IAiService
         _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_options.ApiKey}");
     }
 
-    /// <summary>
-    /// Genera un riassunto del testo.
-    /// </summary>
+    /// <inheritdoc/>
     public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
     {
         int tries = 0;

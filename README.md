@@ -3,7 +3,7 @@
 [![Azure Functions](https://img.shields.io/badge/Azure%20Functions-v4-0062AD?logo=azurefunctions&logoColor=white)](https://azure.microsoft.com/en-us/services/functions/)
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![C#](https://img.shields.io/badge/C%23-12.0-239120?logo=csharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![OpenAI](https://img.shields.io/badge/OpenAI-Powered-412991?logo=openai&logoColor=white)](https://openai.com/)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-412991?logo=openai&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-services/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deployment](https://img.shields.io/badge/Deployed-Azure-blue)](https://xposterfunction.azurewebsites.net/)
 [![Build and Deploy](https://github.com/artcava/XPoster/actions/workflows/ci.yml/badge.svg)](https://github.com/artcava/XPoster/actions/workflows/ci.yml)
@@ -30,18 +30,20 @@
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
+- [Author](#author)
 
-> 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [ARCHITECTURE.md](ARCHITECTURE.md).
+> 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [docs/architecture.md](docs/architecture.md).
 
 ---
 
 ## Features
 
 ### 🤖 Content Generation
-- **AI-Powered Summarization**: Intelligent RSS feed summaries using gpt-4.1-nano
-- **Image Generation**: Automatic contextual image creation with gpt-image-1.5
+- **AI-Powered Summarization**: Intelligent RSS feed summaries via a configurable AI model of your choice
+- **Image Generation**: Automatic contextual image creation using any supported image generation model
 - **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
 - **Multi-Strategy**: Support for different content generation algorithms
+- **Provider Agnostic**: The AI provider (e.g. OpenAI, Azure AI Foundry) and the specific model are selected by the operator through configuration — no code change required to swap models
 
 ### 🌐 Multi-Platform Publishing
 - **Twitter/X**: Automated posting with image support
@@ -64,9 +66,14 @@
 
 ## Architecture
 
-> 📐 For the full architectural rationale, ADRs, design patterns, and Mermaid data-flow diagram, see **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
-### High-Level Overview
+- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and only orchestrates the pipeline
+- **`GeneratorFactory`** — maps the current UTC hour to a `ScheduledGenerationProfile`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
+- **Generators** (`FeedGenerator`, `PowerLawGenerator`, `NoGenerator`) — each encapsulates a self-contained content-production algorithm; generators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
+
+The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching generator code.
 
 ```
 ┌────────────────────────────┐
@@ -77,7 +84,7 @@
             ▼
 ┌────────────────────────────┐
 │   Generator Factory        │ ◄─── Strategy Pattern
-│   (Time-based Selector)    │
+│   (ScheduledGenerationProfile list) │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
@@ -90,13 +97,13 @@
       └──────┬───────┘
              │
              ▼
-    ┌────────────────┐
-    │   Services     │
-    ├────────────────┤
-    │ • AI Service   │ ◄─── OpenAI Integration
-    │ • Feed Service │ ◄─── RSS Parser
-    │ • Crypto Svc   │ ◄─── CryptoPrices HTTP client
-    └────────┬───────┘
+    ┌────────────────────┐
+    │   Services         │
+    ├────────────────────┤
+    │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
+    │ • Feed Service     │ ◄─── RSS Parser
+    │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
+    └────────┬───────────┘
              │
              ▼
     ┌────────────────┐
@@ -108,64 +115,66 @@
     └────────────────┘
 ```
 
-### Core Components
-
-#### 1. **XFunction** (Entry Point)
-Timer-triggered Azure Function that orchestrates the entire publishing workflow.
-
-**Cron Expression**: Configurable via environment variable (default: `0 5 * * * *`)
-
-#### 2. **GeneratorFactory** (Factory + Strategy Pattern)
-Dynamically selects the appropriate generator based on current time.
-
-| Time | Platform | Strategy | Status |
-|------|----------|----------|--------|
-| 06:00 | LinkedIn | Feed Summary | ✅ Active |
-| 08:00 | Twitter/X | Feed Summary | ✅ Active |
-| 10:00 | Instagram | Feed Summary | ⚠️ Disabled — pending Instagram production readiness |
-| 14:00 | LinkedIn | Power Law | ✅ Active |
-| 16:00 | Twitter/X | Power Law | ✅ Active |
-| 18:00 | Instagram | Power Law | ⚠️ Disabled — pending Instagram production readiness |
-
-#### 3. **Generators** (Content Strategy)
-- **FeedGenerator**: Analyzes crypto RSS feeds, generates AI summaries, creates images
-- **PowerLawGenerator**: Generates posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`), comparing the fair-value estimate with the live BTC price
-- **NoGenerator**: Placeholder for time slots without publishing
-
-#### 4. **Services Layer**
-- **AiService**: Interface with OpenAI (gpt-4.1-nano, gpt-image-1.5)
-- **FeedService**: RSS parser with caching and intelligent filtering
-- **CryptoService**: Thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol
-
-#### 5. **Sender Plugins** (Platform Abstraction)
-- **XSender**: Twitter/X via LinqToTwitter
-- **InSender**: LinkedIn via HTTP API
-- **IgSender**: Instagram via Graph API (in development)
+> 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin, Abstract Factory), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
 
 ---
 
 ## Technologies
 
 ### Core Framework
-- **.NET 8.0** - Main framework
-- **Azure Functions v4** - Serverless compute
-- **C# 12** - Programming language
+
+| Package | Version | Role |
+|---------|---------|------|
+| **.NET** | 8.0 | Target framework (isolated worker model) |
+| **Azure Functions** | v4 | Serverless compute host |
+| **C#** | 12 | Programming language |
+| `Microsoft.Azure.Functions.Worker` | 2.2.0 | Isolated worker SDK |
+| `Microsoft.Azure.Functions.Worker.Sdk` | 2.0.6 | Build-time analyzer |
+| `Microsoft.Azure.Functions.Worker.Extensions.Timer` | 4.3.1 | Timer trigger support |
+| `Microsoft.Azure.Functions.Worker.Extensions.Storage.Blobs` | 6.8.0 | Blob storage bindings |
 
 ### AI & ML
-- **OpenAI** - gpt-4.1-nano for summarization
-- **gpt-image-1.5** - Image generation
+
+The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledGenerationProfile`.
+
+| Package | Version | Role |
+|---------|---------|------|
+| `Microsoft.Extensions.AI` | 10.6.0 | Provider-agnostic AI abstraction (chat + embeddings) |
+| `Microsoft.Extensions.AI.OpenAI` | 10.6.0 | OpenAI/Azure OpenAI bridge for `Microsoft.Extensions.AI` |
+| `Azure.AI.OpenAI` | 2.1.0 | Azure OpenAI REST client (used by `OpenAiService` and `AzureFoundryService`) |
+| `Azure.Identity` | 1.13.2 | Managed Identity / `DefaultAzureCredential` support |
+
+**Supported AI providers at runtime:**
+
+| `AiProvider` enum value | Concrete service | Text backend | Image backend |
+|-------------------------|-----------------|--------------|---------------|
+| `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
+| `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
+| `DeepSeekWithFal` | `HybridAiService` | DeepSeek API | fal.ai — FLUX.2 Turbo |
 
 ### Social Media APIs
-- **LinqToTwitter 6.15.0** - Twitter/X integration
-- **LinkedIn REST API v2** - LinkedIn publishing
-- **Instagram Graph API** - Instagram (in development)
 
-### Monitoring & Logging
-- **Application Insights** - Telemetry and monitoring
-- **ILogger** - Structured logging
+| Library / API | Version | Platform |
+|---------------|---------|----------|
+| `LinqToTwitter` | 6.15.0 | Twitter/X — OAuth 1.0a wrapper |
+| LinkedIn REST API | v2 | LinkedIn — direct HTTP calls via `IHttpClientFactory` |
+| Instagram Graph API | v21+ | Instagram — direct HTTP calls (in development) |
+
+### Monitoring & Observability
+
+| Package | Version | Role |
+|---------|---------|------|
+| `Microsoft.Azure.Functions.Worker.ApplicationInsights` | 2.0.0 | Auto-wires Application Insights for the isolated worker |
+| `Microsoft.ApplicationInsights.WorkerService` | 2.23.0 | Telemetry pipeline for background services |
+| `ILogger<T>` | (built-in) | Structured logging via `Microsoft.Extensions.Logging` |
 
 ### Utilities
-- **Microsoft.Extensions.Http** - HTTP client factory
+
+| Package | Version | Role |
+|---------|---------|------|
+| `Microsoft.Extensions.Http` | 9.0.10 | `IHttpClientFactory` — typed/named HTTP clients |
+| `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
+| `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
 
 ---
 
@@ -174,10 +183,23 @@ Dynamically selects the appropriate generator based on current time.
 ### Prerequisites
 
 - **.NET 8.0 SDK** ([Download](https://dotnet.microsoft.com/download/dotnet/8.0))
+- **Visual Studio Code** ([Download](https://code.visualstudio.com/download))
 - **Azure Functions Core Tools** ([Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local))
-- **Visual Studio 2022** or **Visual Studio Code**
 - **Azure Account** (with active subscription)
-- **OpenAI API** (with gpt-4.1-nano and gpt-image-1.5 enabled)
+- **AI Provider API access**: An endpoint and API key for at least one of the supported AI providers listed below
+
+#### Supported AI Providers
+
+| Provider | Website | Capabilities | Setup Guide |
+|----------|---------|--------------|-------------|
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/setup-azure-foundry.md](docs/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/setup-openai.md](docs/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/setup-deepseek.md](docs/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/setup-falai.md](docs/setup-falai.md) |
+
+> ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
+>
+> ⚠️ Setup guides marked as `docs/setup-*.md` are either available or in progress. See the [Roadmap](#roadmap) for the current documentation status.
 
 ### Clone the Repository
 
@@ -224,119 +246,48 @@ Then open `src/local.settings.json` and replace every empty string `""` with the
 
 ## Configuration
 
-### 1. Local Development
+All configuration is driven by environment variables — there is no application-level config file to edit directly.
 
-Create a `local.settings.json` file in the `src/` directory:
+**For local development**, copy the template and fill in your credentials:
 
-```json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "CronSchedule": "0 5 * * * *",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    
-    "X_API_KEY": "your_twitter_api_key",
-    "X_API_SECRET": "your_twitter_api_secret",
-    "X_ACCESS_TOKEN": "your_twitter_access_token",
-    "X_ACCESS_TOKEN_SECRET": "your_twitter_access_token_secret",
-    
-    "LINKEDIN_ACCESS_TOKEN": "your_linkedin_token",
-    "LINKEDIN_ORGANIZATION_ID": "your_linkedin_org_id",
-    
-    "INSTAGRAM_ACCESS_TOKEN": "your_instagram_token",
-    "INSTAGRAM_BUSINESS_ACCOUNT_ID": "your_instagram_account_id",
-    
-    "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
-    "AZURE_OPENAI_KEY": "your_openai_key",
-    "AZURE_OPENAI_DEPLOYMENT_NAME": "gpt-4.1-nano"
-  }
-}
+```bash
+cp src/local.settings.json.example src/local.settings.json
 ```
 
-> 📖 Full configuration reference with types, defaults, and where to obtain each credential: [docs/configuration.md](docs/configuration.md).
+The example file documents every key inline. The variables are grouped into four areas:
 
-### 2. Azure Configuration
+| Group | Keys |
+|---|---|
+| **Scheduling** | `CronSchedule`, `AzureWebJobsStorage`, `FUNCTIONS_WORKER_RUNTIME` |
+| **Twitter/X** | `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET` |
+| **LinkedIn** | `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_ORGANIZATION_ID` |
+| **Instagram** | `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` |
+| **AI Provider** | Varies by provider — see [Getting Started → Supported AI Providers](#supported-ai-providers) |
 
-#### App Settings (Azure Portal)
+**For Azure**, add the same variables as Application Settings (**Azure Portal → Function App → Configuration**). For production environments, [Azure Managed Identity](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview) is recommended over API keys.
 
-Navigate to **Azure Portal** → **Function App** → **Configuration** → **Application Settings**
-
-Add the same variables from `local.settings.json`.
-
-#### Managed Identity (Recommended)
-
-For enhanced security, use Azure Managed Identity:
-
-1. Enable **System Assigned Managed Identity** on the Function App
-2. Assign appropriate roles on:
-   - Azure OpenAI Service
-   - Azure Key Vault (for secrets)
-3. Modify `Program.cs` to use `DefaultAzureCredential`
-
-```csharp
-builder.Services.AddSingleton<OpenAIClient>(sp =>
-{
-    var endpoint = new Uri(Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT"));
-    return new OpenAIClient(endpoint, new DefaultAzureCredential());
-});
-```
+> 📖 Full reference with types, defaults, allowed values, and instructions on where to obtain each credential: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
 ## Deployment
 
-### Option 1: GitHub Actions (Automated CI/CD)
+Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/master_xposterfunction.yml`.
 
-The repository includes a GitHub Actions workflow (`.github/workflows/ci.yml`).
+| Option | Best for |
+|---|---|
+| **1. GitHub Actions** | Production — automated CI/CD on every push to `master` |
+| **2. Azure CLI** | Scripted / IaC provisioning, staging environments |
+| **3. Visual Studio** | One-off deploys during early development |
 
-**Setup**:
-1. Create a Function App in Azure Portal
-2. Download the **Publish Profile** from the Function App
-3. Add the content as a **Secret** in GitHub:
-   - Name: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
-4. Every push to `master` triggers automatic deployment
+### Quick Start: GitHub Actions
 
-### Option 2: Azure CLI
+1. Create a **Function App** in Azure Portal (Runtime: `.NET 8 Isolated`, Plan: Consumption)
+2. Download the **Publish Profile** (Function App → Overview → *Get publish profile*)
+3. Add it as a GitHub secret named `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+4. Push to `master` — the workflow triggers automatically
 
-```bash
-# Login
-az login
-
-# Create Resource Group
-az group create --name XPosterRG --location westeurope
-
-# Create Storage Account
-az storage account create \
-  --name xposterstorage \
-  --resource-group XPosterRG \
-  --location westeurope \
-  --sku Standard_LRS
-
-# Create Function App
-az functionapp create \
-  --name xposterfunction \
-  --resource-group XPosterRG \
-  --consumption-plan-location westeurope \
-  --runtime dotnet-isolated \
-  --runtime-version 8 \
-  --functions-version 4 \
-  --storage-account xposterstorage
-
-# Deploy
-cd src
-func azure functionapp publish xposterfunction
-```
-
-### Option 3: Visual Studio
-
-1. Right-click on the `XPoster` project
-2. Select **Publish**
-3. Choose **Azure** → **Azure Function App (Windows)**
-4. Select or create a Function App
-5. Click **Publish**
-
-> 📖 Step-by-step guide with post-deployment checklist: [docs/deployment.md](docs/deployment.md).
+> 📖 Full setup steps for all three options, post-deployment checklist, and Managed Identity configuration: **[docs/deployment.md](docs/deployment.md)**.
 
 ---
 
@@ -423,12 +374,10 @@ Modify `GeneratorFactory.cs` to customize which generator to use at each hour:
 ```csharp
 private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 {
-    new ScheduledGenerationProfile(6,  MessageSender.InSummaryFeed,  typeof(FeedGenerator),     AiProvider.OpenAi),
-    new ScheduledGenerationProfile(8,  MessageSender.XSummaryFeed,   typeof(FeedGenerator),     AiProvider.OpenAi),
-    //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedGenerator),     AiProvider.OpenAi), // Disabled — see #72
-    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw,     typeof(PowerLawGenerator)),
-    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw,      typeof(PowerLawGenerator)),
-    //new ScheduledGenerationProfile(18, MessageSender.IgPowerLaw,   typeof(PowerLawGenerator)),                    // Disabled — see #72
+    new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
+    new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
+    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
+    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
 };
 ```
 ---
@@ -444,69 +393,16 @@ private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 
 ## Extensibility
 
-### Adding a New Platform
+XPoster is designed with explicit extension points that allow new capabilities to be added without modifying core logic. The table below lists what is extensible, and why each point was designed that way.
 
-**1. Create the Sender Plugin**
+| Extension point | How to extend | Rationale |
+|---|---|---|
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledGenerationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on generators or scheduling |
+| **Content Generators** (`BaseGenerator`) | Subclass `BaseGenerator`, override `GenerateAsync()`, register in `GeneratorFactory` | The Strategy pattern in `GeneratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All generators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
+| **Scheduling profiles** (`ScheduledGenerationProfile`) | Add or modify entries in `GeneratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
 
-```csharp
-// src/SenderPlugins/TikTokSender.cs
-public class TikTokSender : ISender
-{
-    public int MessageMaxLenght => 150;
-
-    public async Task<bool> SendAsync(Post post)
-    {
-        // Implement TikTok API logic
-        return true;
-    }
-}
-```
-
-**2. Register in DI Container**
-
-```csharp
-// src/Program.cs
-builder.Services.AddTransient<TikTokSender>();
-```
-
-**3. Add Enum**
-
-```csharp
-// src/Abstraction/Enums.cs
-public enum MessageSender
-{
-    // ...
-    TikTokSummaryFeed,
-}
-```
-
-**4. Configure Factory**
-
-```csharp
-// src/Implementation/GeneratorFactory.cs
-case MessageSender.TikTokSummaryFeed:
-    return GetInstance<FeedGenerator>(
-        _serviceProvider.GetService(typeof(TikTokSender)) as ISender
-    );
-```
-
-> 📖 Full extension guide with services and design constraints: [docs/extending-xposter.md](docs/extending-xposter.md).
-
-### Adding a New Generator
-
-```csharp
-// src/Implementation/QuoteGenerator.cs
-public class QuoteGenerator : BaseGenerator
-{
-    public override async Task<Post>? GenerateAsync()
-    {
-        // Logic to generate motivational quotes
-        var quote = await _aiService.GetQuoteAsync();
-        return new Post { Content = quote };
-    }
-}
-```
-
+> 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
 ---
 
 ## Testing
@@ -515,17 +411,47 @@ public class QuoteGenerator : BaseGenerator
 
 ```
 tests/
-├── XPoster.Tests/
-│   ├── Generators/
-│   │   ├── FeedGeneratorTests.cs
-│   │   └── PowerLawGeneratorTests.cs
-│   ├── Services/
-│   │   ├── AiServiceTests.cs
-│   │   └── FeedServiceTests.cs
-│   └── SenderPlugins/
-│       ├── XSenderTests.cs
-│       └── InSenderTests.cs
+├── XPoster.Tests.csproj
+├── XFunctionTests.cs
+├── XFunctionMissingBranchTests.cs
+├── Abstraction/
+│   └── BaseGeneratorTests.cs
+├── Implementation/
+│   ├── AiServiceFactoryTests.cs
+│   ├── FeedGeneratorTests.cs
+│   ├── GeneratorFactoryTests.cs
+│   ├── NoGeneratorTests.cs
+│   └── PowerLawGeneratorTests.cs
+├── Models/
+│   ├── AzureFoundryOptionsValidatorTests.cs
+│   ├── ModelsTests.cs
+│   ├── OpenAiOptionsValidatorTests.cs
+│   ├── PostMissingBranchTests.cs
+│   └── RSSFeedMissingBranchTests.cs
+├── SenderPlugins/
+│   ├── IgSenderTests.cs
+│   ├── InSenderMissingBranchTests.cs
+│   ├── InSenderSendAsyncTests.cs
+│   ├── InSenderTests.cs
+│   ├── XSenderMissingBranchTests.cs
+│   ├── XSenderSendAsyncTests.cs
+│   └── XSenderTests.cs
+└── Services/
+    ├── AzureFoundryServiceTests.cs
+    ├── CryptoServiceTests.cs
+    ├── FeedServiceTests.cs
+    ├── OpenAiServiceTests.cs
+    └── TimeProviderTests.cs
 ```
+
+| Folder | What is covered |
+|---|---|
+| *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
+| `Abstraction/` | `BaseGenerator` abstract class contracts |
+| `Implementation/` | `FeedGenerator`, `PowerLawGenerator`, `NoGenerator`, `GeneratorFactory`, and `AiServiceFactory` resolution logic |
+| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, OpenAI and Azure Foundry options validators |
+| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch); `IgSender` (in-development coverage) |
+| `Services/` | `OpenAiService`, `AzureFoundryService`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
 
 ### Running Tests
 
@@ -574,212 +500,17 @@ public async Task FeedGenerator_ShouldGenerateSummary()
 
 ## Monitoring
 
-### Application Insights Setup
+XPoster uses **Azure Application Insights** for full-stack observability: telemetry collection, structured logging via `ILogger<T>`, dependency tracking, and alerting.
 
-#### 1. Create the Application Insights Resource
+Application Insights is activated automatically when the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable is present — no additional SDK code is required beyond the two registration calls already in `Program.cs`.
 
-1. In the **Azure Portal**, search for **Application Insights** and click **Create**
-2. Fill in the details:
-   - **Name**: e.g. `xposter-appinsights`
-   - **Resource Group**: same as your Function App (`XPosterRG`)
-   - **Region**: same region as the Function App
-   - **Resource Mode**: Workspace-based (recommended)
-3. Click **Review + Create**, then **Create**
-4. Once created, navigate to the resource and copy the **Connection String** (shown on the Overview blade)
+Key monitoring capabilities at a glance:
+- **Execution tracking**: every `XPosterFunction` invocation appears as a `request` in Application Insights
+- **Dependency tracing**: outbound HTTP calls to AI providers, social media APIs, and `cryptoprices.cc` are captured as `dependencies`
+- **Structured logging**: all `ILogger<T>` calls flow to the `traces` table with full custom dimensions
+- **Alerting**: recommended rules cover consecutive errors, high latency, token budget, and function downtime
 
-#### 2. Link Application Insights to the Function App
-
-Add the connection string as an **Application Setting** in the Function App:
-
-**Via Azure Portal**:
-1. Go to **Function App** → **Configuration** → **Application Settings**
-2. Click **+ New application setting**
-3. Name: `APPLICATIONINSIGHTS_CONNECTION_STRING`
-4. Value: paste the full connection string copied above
-5. Click **Save** and confirm the restart
-
-**Via Azure CLI**:
-```bash
-az functionapp config appsettings set \
-  --name xposterfunction \
-  --resource-group XPosterRG \
-  --settings "APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
-```
-
-#### 3. SDK Wiring in Program.cs
-
-The `Microsoft.Azure.Functions.Worker.ApplicationInsights` package is used. It is automatically registered when the connection string is present in the environment. No explicit SDK code is required in `Program.cs` for Azure Functions v4 isolated worker beyond the standard host builder:
-
-```csharp
-// Program.cs — Application Insights is enabled automatically
-// when APPLICATIONINSIGHTS_CONNECTION_STRING is set.
-var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
-    .ConfigureServices(services =>
-    {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
-        // ... other registrations
-    })
-    .Build();
-```
-
-#### 4. Connection String Configuration
-
-Add the following key to `local.settings.json` for local telemetry (optional but recommended for debugging):
-
-```json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
-  }
-}
-```
-
-> ⚠️ The key is already included in [`src/local.settings.json.example`](src/local.settings.json.example). See [#29](https://github.com/artcava/XPoster/issues/29) for the full settings template.
-
----
-
-### Key Metrics
-
-- **Execution Count**: Number of function executions
-- **Success Rate**: % of successful executions
-- **Average Duration**: Average execution time
-- **AI Token Usage**: OpenAI token consumption
-
----
-
-### KQL Queries
-
-All queries below are verified against the Azure Functions v4 isolated worker table schema (`requests`, `traces`, `dependencies`).
-
-```kql
-// Executions last 24h
-requests
-| where timestamp > ago(24h)
-| where name == "XPosterFunction"
-| summarize count() by bin(timestamp, 1h)
-| render timechart
-
-// Error rate (severity >= 3 = Warning+)
-traces
-| where timestamp > ago(7d)
-| where severityLevel >= 3
-| summarize errorCount = count() by bin(timestamp, 1d)
-| render barchart
-
-// AI Cost Tracking
-dependencies
-| where timestamp > ago(30d)
-| where target contains "openai"
-| extend tokenUsage = toint(customDimensions.tokenCount)
-| summarize totalTokens = sum(tokenUsage), totalCost = sum(tokenUsage) * 0.00006
-```
-
-> 💡 **Tip**: To pin any query result to an Azure Dashboard, run it in the **Logs** blade, click the **Pin to dashboard** icon (📌) in the top-right corner of the results panel, choose your dashboard, and click **Pin**.
-
----
-
-### Live Metrics (Local Development)
-
-Application Insights **Live Metrics** streams telemetry in near real-time with sub-second latency — useful to verify the function is behaving correctly during local development.
-
-1. Start the function locally:
-   ```bash
-   cd src
-   func start
-   ```
-2. In the Azure Portal, open your **Application Insights** resource
-3. Click **Live Metrics** in the left-hand menu
-4. Trigger a function execution (timer fires automatically, or use an HTTP trigger)
-5. Observe incoming requests, dependency calls, exceptions, and custom traces in real time
-
-> ℹ️ Live Metrics works even in local development as long as `APPLICATIONINSIGHTS_CONNECTION_STRING` is set in `local.settings.json`.
-
----
-
-### Alerting Configuration
-
-#### Step-by-Step: Create an Alert via Azure Portal
-
-The following example creates an alert for **more than 3 consecutive errors within 1 hour**:
-
-1. In the Azure Portal, navigate to your **Application Insights** resource
-2. Select **Alerts** → **+ Create** → **Alert rule**
-3. **Scope**: confirm it points to the Application Insights resource
-4. **Condition**:
-   - Click **+ Add condition**
-   - Signal type: **Custom log search**
-   - Enter the following KQL query:
-     ```kql
-     traces
-     | where severityLevel >= 3
-     | where timestamp > ago(1h)
-     | summarize errorCount = count()
-     ```
-   - Alert logic: **Greater than** threshold **3**
-   - Evaluation frequency: `5 minutes`
-   - Lookback period: `1 hour`
-5. **Actions**:
-   - Click **+ Add action group** → **Create action group**
-   - Add a notification: type **Email/SMS/Push/Voice**, fill in your email
-   - Optionally add a **Webhook** action (e.g. to a Slack/Teams incoming webhook URL)
-6. **Details**:
-   - Severity: **2 – Warning**
-   - Alert rule name: `XPoster - Consecutive Errors`
-7. Click **Review + Create**
-
-#### Recommended Alert Rules
-
-| Alert | KQL signal | Threshold | Severity |
-|-------|-----------|-----------|----------|
-| Consecutive errors | `traces \| where severityLevel >= 3` | > 3 in 1h | Sev 2 – Warning |
-| Token budget exceeded | `dependencies \| where target contains "openai" \| extend t = toint(customDimensions.tokenCount) \| summarize sum(t)` | > monthly budget | Sev 2 – Warning |
-| High latency | `requests \| where name == "XPosterFunction" \| summarize avg(duration)` | > 60 000 ms | Sev 3 – Informational |
-| Function downtime | Built-in **Availability** test on the Function App URL | < 100% | Sev 1 – Error |
-
-#### IaC: Bicep Snippet for Alert Provisioning
-
-Use the following Bicep snippet to provision the consecutive-errors alert rule as Infrastructure-as-Code:
-
-```bicep
-resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-15' = {
-  name: 'XPoster-ConsecutiveErrors'
-  location: resourceGroup().location
-  properties: {
-    description: 'Fires when more than 3 errors are logged within 1 hour'
-    severity: 2
-    enabled: true
-    scopes: [
-      appInsights.id
-    ]
-    evaluationFrequency: 'PT5M'
-    windowSize: 'PT1H'
-    criteria: {
-      allOf: [
-        {
-          query: 'traces | where severityLevel >= 3 | summarize errorCount = count()'
-          timeAggregation: 'Count'
-          operator: 'GreaterThan'
-          threshold: 3
-          failingPeriods: {
-            numberOfEvaluationPeriods: 1
-            minFailingPeriodsToAlert: 1
-          }
-        }
-      ]
-    }
-    actions: {
-      actionGroups: [
-        actionGroup.id
-      ]
-    }
-  }
-}
-```
-
-> 📖 Full KQL queries, alert thresholds, and live debugging instructions: [docs/monitoring.md](docs/monitoring.md).
+> 📖 Full setup (resource creation, connection string, `Program.cs` wiring, KQL queries, alert rules, Bicep IaC, and live debugging): **[docs/monitoring.md](docs/monitoring.md)**.
 
 ---
 
@@ -788,7 +519,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 ### ✅ Phase 1: Foundation (Complete)
 - [x] Azure Function setup
 - [x] Multi-platform sender architecture
-- [x] AI integration (gpt-4.1-nano, gpt-image-1.5)
+- [x] AI integration (configurable provider and model)
 - [x] Twitter/X publishing
 - [x] LinkedIn publishing
 - [x] RSS feed parsing
@@ -796,12 +527,10 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 
 ### 🚧 Phase 2: Stabilization (In Progress)
 - [x] Configuration externalization
-- [ ] AI addition: Azure AI Foundry (alternative to OpenAI)
-- [ ] LinkedIn auto-update authorization token ⚠️
-- [ ] Enhanced error handling
-- [ ] Comprehensive testing (80%+ coverage)
-
-> ⚠️ LinkedIn token refresh is scoped to organization accounts only (`IN_ORG_ID`). Personal member accounts require manual renewal every 60 days.
+- [x] AI provider expansion
+- [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
+- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005--capability-based-extension-points-for-senders-generators-and-ai-providers)
+- [ ] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
@@ -811,85 +540,13 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 - [ ] Performance metrics
 - [ ] Mobile app (MAUI)
 
-### 🌍 Phase 4: Expansion (TBD)
-- [ ] Instagram publishing (complete setup)
-- [ ] Threads (Meta) integration
-- [ ] Mastodon support
-- [ ] BlueSky protocol
-- [ ] YouTube Shorts
-- [ ] Podcast automation
-
----
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-### How to Contribute
-
-1. **Fork** the project
-2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
-
-### Guidelines
-
-- Follow C# (.NET) coding conventions
-- Add unit tests for new features
-- Update documentation
-- Keep commits atomic and descriptive
-- Respect existing design patterns
-
-### Coding Standards
-
-```csharp
-// ✅ Good
-public async Task<Post> GenerateAsync()
-{
-    var summary = await _aiService.GetSummaryAsync(content, maxLength);
-    if (string.IsNullOrWhiteSpace(summary))
-    {
-        _logger.LogWarning("Empty summary generated");
-        return null;
-    }
-    return new Post { Content = summary };
-}
-
-// ❌ Avoid
-public async Task<Post> GenerateAsync() {
-    var summary = await _aiService.GetSummaryAsync(content, maxLength);
-    if (summary == null || summary == "") return null;
-    return new Post { Content = summary };
-}
-```
-
----
-
-## License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2025 Marco Cavallo
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-```
-
+### 🧠 Phase 4: Intelligence & Engagement (TBD)
+- [ ] **Post performance metrics collection** (impressions, reach, engagement rate per platform)
+- [ ] **Adaptive scheduling** (recalibrate posting time slots based on collected engagement data)
+- [ ] **A/B content testing** (generate prompt variants and track which strategy performs best)
+- [ ] **Semantic post tagging** (structured labelling of published content to feed the analytics layer)
+- [ ] **AI-driven comment and reaction handling** (autonomous agent trained on human interaction patterns)
+- [ ] **AI performance analysis** (periodic review of metrics to propose improvements to content style and pipeline strategy)
 
 ---
 
@@ -908,7 +565,10 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ## Acknowledgments
 
 - [Azure Functions](https://azure.microsoft.com/services/functions/) - Serverless platform
-- [OpenAI](https://openai.com/) - AI models (gpt-4.1-nano, gpt-image-1.5)
+- [OpenAI](https://openai.com/) - AI models
+- [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) - Alternative AI provider
+- [DeepSeek](https://www.deepseek.com/) - Cost-effective text generation
+- [fal.ai](https://fal.ai/) - FLUX.2 Turbo image generation
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
@@ -918,6 +578,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 - **Issues**: [GitHub Issues](https://github.com/artcava/XPoster/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/artcava/XPoster/discussions)
+- **Linkedin**: [XPoster Page](https://www.linkedin.com/showcase/xposter)
 - **Email**: cavallo.marco@gmail.com
 
 ---
