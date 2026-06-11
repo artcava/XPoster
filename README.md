@@ -529,7 +529,7 @@ Key monitoring capabilities at a glance:
 - [x] Configuration externalization
 - [x] AI provider expansion
 - [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005)
+- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005--capability-based-extension-points-for-senders-generators-and-ai-providers)
 - [ ] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
@@ -540,13 +540,13 @@ Key monitoring capabilities at a glance:
 - [ ] Performance metrics
 - [ ] Mobile app (MAUI)
 
-### 🌍 Phase 4: Expansion (TBD)
-- [ ] Instagram publishing (complete setup)
-- [ ] Threads (Meta) integration
-- [ ] Mastodon support
-- [ ] BlueSky protocol
-- [ ] YouTube Shorts
-- [ ] Podcast automation
+### 🧠 Phase 4: Intelligence & Engagement (TBD)
+- [ ] **Post performance metrics collection** (impressions, reach, engagement rate per platform)
+- [ ] **Adaptive scheduling** (recalibrate posting time slots based on collected engagement data)
+- [ ] **A/B content testing** (generate prompt variants and track which strategy performs best)
+- [ ] **Semantic post tagging** (structured labelling of published content to feed the analytics layer)
+- [ ] **AI-driven comment and reaction handling** (autonomous agent trained on human interaction patterns)
+- [ ] **AI performance analysis** (periodic review of metrics to propose improvements to content style and pipeline strategy)
 
 ---
 

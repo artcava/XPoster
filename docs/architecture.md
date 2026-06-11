@@ -307,6 +307,14 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
     builder.Services.AddScoped<ITextToImageProvider, FalAiImageService>();
     ```
 
+**Rationale**: The two problems share a root cause: the current model uses a single opaque identifier (`MessageSender`, `HybridAiService`) to encode multiple orthogonal concepts simultaneously. This is a classic violation of the Single Responsibility Principle at the type-system level — correcting it at the abstraction layer, rather than patching individual classes, is the only approach that scales linearly with future extension.
+
+For Problem 1, the `SenderPlatform` split restores the invariant that was implicit in ADR-003 (Plugin Pattern for Senders): a sender knows only how to publish to a platform, not what content strategy produced the post. Keeping these two concerns separate means the scheduling profile becomes a first-class composition of independent axes — `(Generator, SenderPlatform)` — rather than a flat enum that conflates them.
+
+For Problem 2, the capability-interface model aligns with the direction already taken in ADR-004: that concrete model names and vendor details are internal concerns of each AI implementation. Capability interfaces (`ITextToTextProvider`, `ITextToImageProvider`) carry that principle one step further — a provider now also declares *what it can do*, not just *who it is*. This makes capability gaps explicit at compile time (a `DeepSeekService` that does not implement `ITextToImageProvider` simply cannot be registered for image generation) and eliminates the runtime branching in `HybridAiService` that currently silently degrades to a no-op when the wrong provider is asked for an unsupported modality.
+
+Together the two changes reduce the coupling surface to the minimum required: Generators know which platforms they target; AI providers declare their capabilities; the DI container wires them. No component needs to know about the others' internals.
+
 **Alternatives considered**
 | Alternative | Reason rejected |
 |---|---|
