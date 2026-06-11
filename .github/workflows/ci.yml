@@ -228,10 +228,7 @@ jobs:
           popd
       
       - name: Login to Azure
-        # NOTE: azure/login is pinned to v2 (latest: v2.3.0).
-        # A Node.js 24-compatible version has not been released yet.
-        # Track: https://github.com/Azure/login/releases
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_04545C92864042ED99D5EBF6456192FB }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F13F54A171EE481AAE09734F721803BB }}
