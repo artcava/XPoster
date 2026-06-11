@@ -527,12 +527,10 @@ Key monitoring capabilities at a glance:
 
 ### 🚧 Phase 2: Stabilization (In Progress)
 - [x] Configuration externalization
-- [ ] AI addition: Azure AI Foundry (alternative to OpenAI)
-- [ ] LinkedIn auto-update authorization token ⚠️
-- [ ] Enhanced error handling
-- [ ] Comprehensive testing (80%+ coverage)
-
-> ⚠️ LinkedIn token refresh is scoped to organization accounts only (`IN_ORG_ID`). Personal member accounts require manual renewal every 60 days.
+- [x] AI provider expansion
+- [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
+- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005)
+- [ ] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
