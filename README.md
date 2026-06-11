@@ -28,8 +28,6 @@
 - [Testing](#testing)
 - [Monitoring](#monitoring)
 - [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
 - [Author](#author)
 
 > 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [docs/architecture.md](docs/architecture.md).
