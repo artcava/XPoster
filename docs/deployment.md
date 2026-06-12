@@ -5,7 +5,7 @@ Three deployment methods are supported; **Option 1 (GitHub Actions)** is recomme
 
 ## Option 1: GitHub Actions (Recommended)
 
-The repository ships with `.github/workflows/master_xposterfunction.yml` that builds and deploys on every push to `master`.
+The repository ships with `.github/workflows/ci.yml` that builds, tests, and deploys on every push to `master`.
 
 ### Setup Steps
 
@@ -14,20 +14,26 @@ The repository ships with `.github/workflows/master_xposterfunction.yml` that bu
    - OS: Windows
    - Hosting plan: Consumption (Serverless)
 
-2. **Download the Publish Profile**:
-   - Azure Portal → Function App → Overview → **Get publish profile**
+2. **Register an App Registration** in Azure Active Directory and configure a **Federated Credential** for GitHub Actions:
+   - Azure Portal → Azure Active Directory → App registrations → New registration
+   - Under **Certificates & secrets → Federated credentials**, add a credential with:
+     - Issuer: `https://token.actions.githubusercontent.com`
+     - Subject: `repo:artcava/XPoster:ref:refs/heads/master`
 
-3. **Add the secret to GitHub**:
-   - GitHub repo → Settings → Secrets and variables → Actions
-   - Name: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
-   - Value: paste the publish profile XML content
+3. **Grant the App Registration access** to the Function App:
+   - Function App → Access control (IAM) → Add role assignment → **Contributor** → select the App Registration
 
-4. Push to `master` — the workflow triggers automatically.
+4. **Add the following secrets** to your GitHub repository (Settings → Secrets and variables → Actions):
+   - `AZUREAPPSERVICE_CLIENTID` — App Registration (client) ID
+   - `AZUREAPPSERVICE_TENANTID` — Azure tenant ID
+   - `AZUREAPPSERVICE_SUBSCRIPTIONID` — Azure subscription ID
+
+5. Push to `master` — the workflow triggers automatically.
 
 ### Monitoring the Workflow
 
 ```
-GitHub → Actions → master_xposterfunction → Latest run
+GitHub → Actions → ci → Latest run
 ```
 
 If the workflow fails, check the logs for `dotnet publish` or deployment errors.
@@ -78,12 +84,15 @@ func azure functionapp publish xposterfunction
 
 ---
 
-## Option 3: Visual Studio Publish
+## Option 3: Visual Studio Code
 
-1. Right-click the `XPoster` project → **Publish**
-2. Target: **Azure** → **Azure Function App (Windows)**
-3. Select or create a Function App
-4. Click **Publish**
+1. Install the **Azure Functions** extension for Visual Studio Code
+2. Sign in to Azure via the **Azure** side panel (`Shift+Alt+A`)
+3. In the Azure panel, expand your subscription and locate the **Function App**
+4. Right-click the Function App → **Deploy to Function App...**
+5. Select the repository root when prompted for the folder to deploy
+
+> ⚠️ Ensure `dotnet publish` completes successfully before deploying. VS Code deploys the current workspace — make sure all App Settings are configured in Azure Portal before the first run.
 
 ---
 

@@ -276,13 +276,16 @@ Three deployment methods are supported. **GitHub Actions (Option 1) is recommend
 |---|---|
 | **1. GitHub Actions** | Production — automated CI/CD on every push to `master` |
 | **2. Azure CLI** | Scripted / IaC provisioning, staging environments |
-| **3. Visual Studio** | One-off deploys during early development |
+| **3. Visual Studio Code** | One-off deploys during early development |
 
 ### Quick Start: GitHub Actions
 
 1. Create a **Function App** in Azure Portal (Runtime: `.NET 8 Isolated`, Plan: Consumption)
-2. Download the **Publish Profile** (Function App → Overview → *Get publish profile*)
-3. Add it as a GitHub secret named `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+2. In Azure Portal, register an **App Registration** and configure federated credentials for GitHub Actions
+3. Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
+   - `AZUREAPPSERVICE_CLIENTID` — App Registration client ID
+   - `AZUREAPPSERVICE_TENANTID` — Azure tenant ID
+   - `AZUREAPPSERVICE_SUBSCRIPTIONID` — Azure subscription ID
 4. Push to `master` — the workflow triggers automatically
 
 > 📖 Full setup steps for all three options, post-deployment checklist, and Managed Identity configuration: **[docs/deployment.md](docs/deployment.md)**.
