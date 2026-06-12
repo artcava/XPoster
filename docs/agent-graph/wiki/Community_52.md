@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IGeneratorFactory.cs** (4 connections)
-- **IGeneratorFactory.cs** (4 connections)
-- **IGeneratorFactory** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService** (2 connections)
 - **XPoster.Abstraction** (2 connections)
-- **Generate()** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 

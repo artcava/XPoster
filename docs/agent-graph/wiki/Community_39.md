@@ -1,23 +1,23 @@
 # Community 39
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **GeneratorFactoryTests.cs** (9 connections)
-- **Generate_Should_CreateNoGenerator_AtUnscheduledHours()** (2 connections)
-- **Generate_Should_ReturnCorrectGeneratorType_BasedOnHour()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **Generate_Should_CreateFeedGeneratorWithInSender_At6AM()** (2 connections)
-- **Generate_Should_CreateFeedGeneratorWithXSender_At8AM()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **GetCurrentTime_ReturnsLocalTime()** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

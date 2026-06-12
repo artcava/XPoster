@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiServiceFactory.cs** (4 connections)
-- **IAiServiceFactory.cs** (4 connections)
-- **GetByProvider()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **IAiServiceFactory** (2 connections)
+- **PowerLawGenerator.cs** (4 connections)
+- **PowerLawGenerator.cs** (4 connections)
+- **PowerLawGenerator()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Implementation** (2 connections)
 
 ## Relationships
 

@@ -1,22 +1,22 @@
 # Community 46
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **GeneratorFactory.cs** (10 connections)
+- **if()** (2 connections)
+- **GeneratorFactory()** (2 connections)
+- **CreateGeneratorInstance()** (2 connections)
+- **ScheduledGenerationProfile()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 35]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

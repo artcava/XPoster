@@ -1,22 +1,22 @@
 # Community 48
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **GeneratorFactory.cs** (10 connections)
-- **CreateGeneratorInstance()** (2 connections)
-- **ScheduledGenerationProfile()** (2 connections)
-- **if()** (2 connections)
-- **GeneratorFactory()** (2 connections)
+- **IGenerator.cs** (4 connections)
+- **IGenerator.cs** (4 connections)
+- **IGenerator** (2 connections)
+- **PostAsync()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 
-- [[Community 38]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

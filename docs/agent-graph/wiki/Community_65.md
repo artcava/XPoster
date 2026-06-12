@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FeedGenerator.cs** (8 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **FeedGenerator()** (2 connections)
+- **GeneratorFactoryTests.cs** (9 connections)
+- **GeneratorFactoryTests()** (2 connections)
+- **SetupMocksForGeneratorFactory()** (2 connections)
+- **Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
 
 ## Relationships
 
-- [[Community 50]] (4 shared connections)
+- [[Community 36]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

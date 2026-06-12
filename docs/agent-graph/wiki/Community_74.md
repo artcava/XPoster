@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
 - **if()** (2 connections)
-- **XSender()** (2 connections)
 
 ## Relationships
 

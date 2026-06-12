@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **SendAsync()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **Run()** (2 connections)
 - **catch()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **XPoster** (2 connections)
 
 ## Relationships
 
