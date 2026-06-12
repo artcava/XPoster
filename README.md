@@ -190,14 +190,14 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 
 | Provider | Website | Capabilities | Setup Guide |
 |----------|---------|--------------|-------------|
-| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/setup-azure-foundry.md](docs/setup-azure-foundry.md) |
-| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/setup-openai.md](docs/setup-openai.md) |
-| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/setup-deepseek.md](docs/setup-deepseek.md) |
-| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/setup-falai.md](docs/setup-falai.md) |
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/integrations/setup-azure-foundry.md](docs/integrations/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
 
 > ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
-> ⚠️ Setup guides marked as `docs/setup-*.md` are either available or in progress. See the [Roadmap](#roadmap) for the current documentation status.
+> ⚠️ Setup guides are located under `docs/integrations/`. See the [Roadmap](#roadmap) for the current documentation status.
 
 ### Clone the Repository
 
@@ -270,19 +270,22 @@ The example file documents every key inline. The variables are grouped into four
 
 ## Deployment
 
-Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/master_xposterfunction.yml`.
+Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/ci.yml`.
 
 | Option | Best for |
 |---|---|
 | **1. GitHub Actions** | Production — automated CI/CD on every push to `master` |
 | **2. Azure CLI** | Scripted / IaC provisioning, staging environments |
-| **3. Visual Studio** | One-off deploys during early development |
+| **3. Visual Studio Code** | One-off deploys during early development |
 
 ### Quick Start: GitHub Actions
 
 1. Create a **Function App** in Azure Portal (Runtime: `.NET 8 Isolated`, Plan: Consumption)
-2. Download the **Publish Profile** (Function App → Overview → *Get publish profile*)
-3. Add it as a GitHub secret named `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+2. In Azure Portal, register an **App Registration** and configure federated credentials for GitHub Actions
+3. Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
+   - `AZUREAPPSERVICE_CLIENTID` — App Registration client ID
+   - `AZUREAPPSERVICE_TENANTID` — Azure tenant ID
+   - `AZUREAPPSERVICE_SUBSCRIPTIONID` — Azure subscription ID
 4. Push to `master` — the workflow triggers automatically
 
 > 📖 Full setup steps for all three options, post-deployment checklist, and Managed Identity configuration: **[docs/deployment.md](docs/deployment.md)**.
@@ -385,7 +388,7 @@ private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 ✅ **Testing**: Use frequent schedules in development (`*/5 * * * * *` = every 5 secs)
 ✅ **Production**: More conservative schedules to avoid rate limiting
 ✅ **Multi-environment**: Different schedules for Dev/Staging/Prod
-✅ **Monitoring**: Check logs to confirm correct execution
+✅ **Monitoring**: Check logs to confirm execution
 
 ---
 
@@ -527,7 +530,7 @@ Key monitoring capabilities at a glance:
 - [x] Configuration externalization
 - [x] AI provider expansion
 - [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005--capability-based-extension-points-for-senders-generators-and-ai-providers)
+- [ ] Extension-point refactoring [see ADR-005](docs/analysis/ADR-005-capability-based-extension-points.md)
 - [ ] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
