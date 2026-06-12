@@ -2,12 +2,11 @@
 
 > God node · 20 connections
 
-**Community:** [[Community 0]]
+**Community:** [[Community 1]]
 
 ## Connections by Relation
 
 ### contains
-- [[OpenAiServiceTests.cs]]
 - [[XPoster.Tests.Services]]
 - [[OpenAiServiceTests]]
 - [[BuildService()]]

@@ -1,25 +1,25 @@
 # Community 29
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **OpenAIResponse.cs** (7 connections)
-- **OpenAIResponse.cs** (7 connections)
-- **ImageData** (2 connections)
-- **Choice** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **OpenAIResponse** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Message** (2 connections)
+- **OpenAiService.cs** (10 connections)
+- **GetPromptForImage()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **while()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetSummary()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 69]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

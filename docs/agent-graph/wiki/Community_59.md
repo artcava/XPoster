@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **BaseGenerator.cs** (5 connections)
+- **BaseGenerator()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (3 shared connections)
+- [[Community 87]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,26 +1,26 @@
 # Community 13
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **MakeService()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
-- **CryptoService()** (2 connections)
-- **CryptoServiceTests** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **NotSupportedException()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 61]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

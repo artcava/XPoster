@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **InSender.cs** (10 connections)
+- **InSender()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (2 shared connections)
+- [[Community 28]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

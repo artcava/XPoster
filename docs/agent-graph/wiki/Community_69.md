@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction()** (2 connections)
+- **OpenAiService.cs** (10 connections)
+- **OpenAiService()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 60]] (3 shared connections)
+- [[Community 29]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

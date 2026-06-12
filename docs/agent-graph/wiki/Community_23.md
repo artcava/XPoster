@@ -1,25 +1,25 @@
 # Community 23
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
-- **Exception()** (2 connections)
-- **catch()** (2 connections)
-- **SendAsync()** (2 connections)
-- **using()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 67]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

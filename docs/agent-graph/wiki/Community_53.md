@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **GetCryptoValue()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XPoster** (2 connections)
+- **Run()** (2 connections)
 - **catch()** (2 connections)
 
 ## Relationships

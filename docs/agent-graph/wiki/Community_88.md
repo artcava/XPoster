@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (12 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 9]] (10 shared connections)
+- [[Community 77]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
