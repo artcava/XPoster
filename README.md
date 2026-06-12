@@ -527,7 +527,7 @@ Key monitoring capabilities at a glance:
 - [x] Configuration externalization
 - [x] AI provider expansion
 - [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005--capability-based-extension-points-for-senders-generators-and-ai-providers)
+- [ ] Extension-point refactoring [see ADR-005](docs/analysis/ADR-005-capability-based-extension-points.md)
 - [ ] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
