@@ -190,14 +190,14 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 
 | Provider | Website | Capabilities | Setup Guide |
 |----------|---------|--------------|-------------|
-| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/setup-azure-foundry.md](docs/setup-azure-foundry.md) |
-| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/setup-openai.md](docs/setup-openai.md) |
-| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/setup-deepseek.md](docs/setup-deepseek.md) |
-| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/setup-falai.md](docs/setup-falai.md) |
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/integrations/setup-azure-foundry.md](docs/integrations/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
 
 > ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
-> ⚠️ Setup guides marked as `docs/setup-*.md` are either available or in progress. See the [Roadmap](#roadmap) for the current documentation status.
+> ⚠️ Setup guides are located under `docs/integrations/`. See the [Roadmap](#roadmap) for the current documentation status.
 
 ### Clone the Repository
 
@@ -385,7 +385,7 @@ private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 ✅ **Testing**: Use frequent schedules in development (`*/5 * * * * *` = every 5 secs)
 ✅ **Production**: More conservative schedules to avoid rate limiting
 ✅ **Multi-environment**: Different schedules for Dev/Staging/Prod
-✅ **Monitoring**: Check logs to confirm correct execution
+✅ **Monitoring**: Check logs to confirm execution
 
 ---
 
