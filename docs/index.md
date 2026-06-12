@@ -16,6 +16,12 @@ Welcome to the XPoster documentation hub. Use the links below to navigate to eac
 | [Extending XPoster](extending-xposter.md) | Adding new senders and generators |
 | [Monitoring & Alerting](monitoring.md) | Application Insights setup and KQL queries |
 
+## Integrations
+
+| Document | Description |
+|---|---|
+| [Graphify CI](integrations/graphify-ci.md) | Automated code-graph generation in the CI pipeline (backend .NET + frontend) |
+
 ## Quick Links
 
 - [README](../README.md) — Project overview
