@@ -44,7 +44,12 @@ jobs:
           dotnet-version: '10.0.x'  # graphify-dotnet targets net10.0 and requires the .NET 10 SDK
 
       - name: Install graphify-dotnet
-        run: dotnet tool install --global graphify-dotnet
+        # Run install from /tmp to avoid global.json in the repo root, which pins
+        # the SDK to 8.0.x and prevents dotnet from using the .NET 10 SDK installed above.
+        run: |
+          mkdir -p /tmp/dotnet-tool-install
+          cd /tmp/dotnet-tool-install
+          dotnet tool install --global graphify-dotnet
 
       - name: Regenerate agent graph (code + docs + infra)
         run: |
