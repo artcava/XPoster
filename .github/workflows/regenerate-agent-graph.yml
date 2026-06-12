@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write  # Required by peter-evans/create-pull-request to open the auto-PR
 
 # Cancel any in-progress run for the same ref to avoid redundant graph rebuilds.
 concurrency:
@@ -108,19 +109,22 @@ jobs:
           NOTICE_EOF
 
       # =========================
-      # COMMIT (only if graph changed)
-      # [skip ci] prevents ci.yml from triggering on this commit.
+      # AUTO-PR (respects branch protection on develop)
+      # peter-evans/create-pull-request commits any workspace changes onto a
+      # dedicated branch and opens a PR targeting develop.
+      # If no files changed, the action is a no-op and no PR is created.
+      # [skip ci] in the commit message prevents ci.yml from running on the
+      # auto-PR branch itself (docs-only change, no code to validate).
       # =========================
-      - name: Commit updated graph
-        run: |
-          git add docs/agent-graph
-          if git diff --cached --quiet -- docs/agent-graph; then
-            echo "No graph changes detected. Skipping commit."
-            exit 0
-          fi
+      - name: Open auto-PR for updated graph
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/regenerate-agent-graph
+          commit-message: "docs(graph): regenerate agent graph [skip ci]"
+          title: "docs(graph): regenerate agent graph"
+          body: |
+            Automated update of `docs/agent-graph` triggered by the `Regenerate Agent Graph` workflow.
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git commit -m "docs(graph): regenerate agent graph [skip ci]"
-          git push
+            > This PR was opened automatically by the CI bot. Merge once the status checks pass.
+          labels: automated
+          delete-branch: true
