@@ -1,25 +1,25 @@
 # Community 23
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory.cs** (7 connections)
-- **if()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **GetByProvider()** (2 connections)
-- **ArgumentException()** (2 connections)
-- **AiServiceFactory()** (2 connections)
+- **InSender.cs** (10 connections)
+- **Exception()** (2 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
+- **using()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 67]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

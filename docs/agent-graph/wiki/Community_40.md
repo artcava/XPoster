@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PowerLawGenerator.cs** (4 connections)
-- **PowerLawGenerator.cs** (4 connections)
-- **PowerLawGenerator()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **XPoster.Abstraction** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **ICryptoService** (2 connections)
 
 ## Relationships
 

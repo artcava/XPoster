@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider.cs** (4 connections)
-- **GetCurrentTime()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **TimeProvider** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService** (2 connections)
+- **GetFeedsAsync()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,20 @@
 # Community 73
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **FalAiOptions.cs** (2 connections)
+- **FalAiOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 53]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

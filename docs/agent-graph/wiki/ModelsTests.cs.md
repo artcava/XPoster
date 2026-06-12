@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### contains
+- [[ModelsTests.cs]]
 - [[XPoster.Tests.Models]]
 - [[ModelsTests]]
 - [[Post_CanBeCreated_WithRequiredContent()]]

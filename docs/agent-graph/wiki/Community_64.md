@@ -1,21 +1,21 @@
 # Community 64
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **RSSFeed** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **if()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 14]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

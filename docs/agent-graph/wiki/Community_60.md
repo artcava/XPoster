@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **XFunction.cs** (6 connections)
 - **catch()** (2 connections)
+- **Run()** (2 connections)
+- **XPoster** (2 connections)
 
 ## Relationships
 
-- [[Community 80]] (3 shared connections)
+- [[Community 69]] (3 shared connections)
 
 ## Audit Trail
 

@@ -1,22 +1,22 @@
 # Community 46
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **IgSender.cs** (7 connections)
+- **UploadImageToPublicUrl()** (2 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 68]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
