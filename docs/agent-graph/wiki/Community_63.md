@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **NoGenerator.cs** (3 connections)
-- **NoGenerator.cs** (3 connections)
-- **NoGenerator()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **Post** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

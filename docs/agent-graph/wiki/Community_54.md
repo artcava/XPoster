@@ -1,21 +1,21 @@
 # Community 54
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **catch()** (2 connections)
-- **XPoster** (2 connections)
-- **Run()** (2 connections)
+- **ScheduledGenerationProfile.cs** (3 connections)
+- **ScheduledGenerationProfile.cs** (3 connections)
+- **XPoster.Abstraction** (2 connections)
+- **ScheduledGenerationProfile()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

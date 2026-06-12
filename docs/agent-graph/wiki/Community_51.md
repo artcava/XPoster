@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IGeneratorFactory.cs** (4 connections)
-- **IGeneratorFactory.cs** (4 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
 - **XPoster.Abstraction** (2 connections)
-- **Generate()** (2 connections)
-- **IGeneratorFactory** (2 connections)
+- **ISender** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 

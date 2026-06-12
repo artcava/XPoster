@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiServiceFactory.cs** (4 connections)
-- **IAiServiceFactory.cs** (4 connections)
-- **GetByProvider()** (2 connections)
+- **IGeneratorFactory.cs** (4 connections)
+- **IGeneratorFactory.cs** (4 connections)
+- **Generate()** (2 connections)
 - **XPoster.Abstraction** (2 connections)
-- **IAiServiceFactory** (2 connections)
+- **IGeneratorFactory** (2 connections)
 
 ## Relationships
 

@@ -1,22 +1,22 @@
 # Community 52
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ISender** (2 connections)
+- **FeedService.cs** (7 connections)
+- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+- **Exception()** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 66]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
