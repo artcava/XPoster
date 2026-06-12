@@ -1,21 +1,21 @@
 # Community 54
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ScheduledGenerationProfile.cs** (3 connections)
-- **ScheduledGenerationProfile.cs** (3 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ScheduledGenerationProfile()** (2 connections)
+- **GeneratorFactoryTests.cs** (9 connections)
+- **GeneratorFactoryTests()** (2 connections)
+- **Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **SetupMocksForGeneratorFactory()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 39]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

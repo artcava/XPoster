@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FeedGenerator.cs** (8 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **FeedGenerator()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (4 shared connections)
+- [[Community 68]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

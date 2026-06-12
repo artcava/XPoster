@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **if()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 14]] (8 shared connections)
+- [[Community 66]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

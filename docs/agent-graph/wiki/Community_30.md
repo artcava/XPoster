@@ -7,10 +7,10 @@
 - **XFunctionMissingBranchTests.cs** (6 connections)
 - **XFunctionMissingBranchTests.cs** (6 connections)
 - **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
 - **Run_Should_LogError_When_GenerateAsync_ReturnsNull()** (2 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
 - **XPoster.Tests** (2 connections)
+- **XFunctionMissingBranchTests()** (2 connections)
 
 ## Relationships
 

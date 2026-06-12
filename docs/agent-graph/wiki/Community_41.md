@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IGeneratorFactory.cs** (4 connections)
-- **IGeneratorFactory.cs** (4 connections)
-- **Generate()** (2 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
 - **XPoster.Abstraction** (2 connections)
-- **IGeneratorFactory** (2 connections)
+- **ITimeProvider** (2 connections)
 
 ## Relationships
 

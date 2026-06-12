@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **GeneratorFactory.cs** (10 connections)
-- **GeneratorFactory()** (2 connections)
-- **CreateGeneratorInstance()** (2 connections)
-- **ScheduledGenerationProfile()** (2 connections)
-- **if()** (2 connections)
+- **FeedGenerator.cs** (8 connections)
+- **catch()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
+- **GenerateMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (5 shared connections)
+- [[Community 65]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
