@@ -1,0 +1,24 @@
+# Community 60
+
+> 4 nodes · cohesion 0.50
+
+## Key Concepts
+
+- **CryptoService.cs** (6 connections)
+- **GetCryptoValue()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+
+## Relationships
+
+- [[Community 80]] (3 shared connections)
+
+## Audit Trail
+
+- EXTRACTED: 12 (100%)
+- INFERRED: 0 (0%)
+- AMBIGUOUS: 0 (0%)
+
+---
+
+*Part of the graphify knowledge wiki. See [[index]] to navigate.*
