@@ -379,4 +379,3 @@ Nodes (2): AzureFoundryService.cs, if()
 
 ## Suggested Questions
 _Not enough signal to generate questions. The graph has no ambiguous edges, no bridge nodes, and all communities are well-connected._
-
