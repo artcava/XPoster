@@ -270,7 +270,7 @@ The example file documents every key inline. The variables are grouped into four
 
 ## Deployment
 
-Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/master_xposterfunction.yml`.
+Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/ci.yml`.
 
 | Option | Best for |
 |---|---|
