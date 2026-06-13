@@ -7,7 +7,7 @@ namespace XPoster.Tests;
 
 /// <summary>
 /// Additional XFunction.Run tests covering branches not exercised by XFunctionTests:
-/// null post from GenerateAsync, PostAsync returning false, and exception re-throw.
+/// null post from OrchestrateAsync, PostAsync returning false, and exception re-throw.
 /// </summary>
 public class XFunctionMissingBranchTests
 {
@@ -27,7 +27,7 @@ public class XFunctionMissingBranchTests
     [Fact]
     public async Task Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()
     {
-        // post == null branch: LogError("Failed to generate message...") then return
+        // post == null branch: LogError("Failed to orchestrate message...") then return
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
         _mockOrchestrator.Setup(g => g.OrchestrateAsync()).ReturnsAsync((Post?)null);
@@ -41,7 +41,7 @@ public class XFunctionMissingBranchTests
             l => l.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Failed to generate")),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Failed to orchestrate")),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
