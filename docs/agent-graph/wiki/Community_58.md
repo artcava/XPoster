@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ScheduledGenerationProfile.cs** (3 connections)
-- **ScheduledGenerationProfile.cs** (3 connections)
-- **ScheduledGenerationProfile()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **Post** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

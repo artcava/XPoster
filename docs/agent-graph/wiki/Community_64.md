@@ -1,21 +1,21 @@
 # Community 64
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **RSSFeed** (2 connections)
+- **OrchestratorFactoryTests.cs** (9 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 39]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

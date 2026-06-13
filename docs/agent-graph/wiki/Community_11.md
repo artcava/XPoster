@@ -6,8 +6,8 @@
 
 - **InSenderTests.cs** (9 connections)
 - **InSenderTests.cs** (9 connections)
-- **catch()** (2 connections)
 - **Constructor_InitializesCorrectly()** (2 connections)
+- **catch()** (2 connections)
 - **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
 - **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
 - **InSender_ImplementsISender()** (2 connections)

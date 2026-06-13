@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **GeneratorFactory.cs** (10 connections)
-- **XPoster.Implementation** (2 connections)
-- **foreach()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **Generate()** (2 connections)
-- **return()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
+- **BuildFalService()** (2 connections)
+- **HybridAiService()** (2 connections)
 
 ## Relationships
 
-- [[Community 50]] (5 shared connections)
+- [[Community 9]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

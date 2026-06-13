@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **BaseGeneratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **BaseGeneratorTests()** (2 connections)
-- **TestGenerator()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **OrchestratorFactory.cs** (10 connections)
+- **XPoster.Implementation** (2 connections)
+- **foreach()** (2 connections)
+- **ResolveAiProvider()** (2 connections)
+- **Resolve()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 30]] (6 shared connections)
+- [[Community 45]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

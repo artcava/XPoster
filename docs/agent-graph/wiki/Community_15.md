@@ -1,26 +1,26 @@
 # Community 15
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (8 connections)
-- **InSenderSendAsyncTests.cs** (8 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidTextOnlyPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **IgSenderTests.cs** (12 connections)
+- **Constructor_WithMissingAccountId_ThrowsInvalidOperationException()** (2 connections)
+- **Constructor_WithValidEnvVars_Succeeds()** (2 connections)
+- **Constructor_WithMissingAccessToken_ThrowsInvalidOperationException()** (2 connections)
+- **SendAsync_WithImage_CatchesNotImplementedException_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithMissingOwner_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **InSenderSendAsyncTests()** (2 connections)
+- **SendAsync_WithOversizedCaption_StillExecutes()** (2 connections)
+- **SendAsync_WithEmptyImageArray_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 53]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

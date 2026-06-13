@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **AiProvider.cs** (2 connections)
-- **AiProvider.cs** (2 connections)
+- **Enums.cs** (2 connections)
+- **Enums.cs** (2 connections)
 - **XPoster.Abstraction** (2 connections)
 
 ## Relationships

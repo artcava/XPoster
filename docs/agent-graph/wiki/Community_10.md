@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **NoGeneratorTests.cs** (9 connections)
-- **NoGeneratorTests.cs** (9 connections)
-- **Name_IsNoGenerator()** (2 connections)
-- **GenerateAsync_ReturnsNull()** (2 connections)
-- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **NoGeneratorTests()** (2 connections)
-- **ProduceImage_IsAlwaysFalse()** (2 connections)
+- **XSenderTests.cs** (9 connections)
+- **XSenderTests.cs** (9 connections)
+- **XSenderTests()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **catch()** (2 connections)
+- **Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()** (2 connections)
 
 ## Relationships
 

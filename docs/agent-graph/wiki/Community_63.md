@@ -1,21 +1,21 @@
 # Community 63
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **GeneratorFactoryTests.cs** (9 connections)
-- **GeneratorFactoryTests()** (2 connections)
-- **SetupMocksForGeneratorFactory()** (2 connections)
-- **Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator()** (2 connections)
+- **XPoster.Implementation** (2 connections)
 
 ## Relationships
 
-- [[Community 35]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

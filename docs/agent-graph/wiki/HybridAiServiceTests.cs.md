@@ -2,26 +2,25 @@
 
 > God node · 16 connections
 
-**Community:** [[Community 8]]
+**Community:** [[Community 34]]
 
 ## Connections by Relation
 
 ### contains
-- [[HybridAiServiceTests.cs]]
-- [[XPoster.Tests.Services]]
+- [[BuildHybrid()]]
+- [[ChatCompletionJson()]]
+- [[Constructor_NullDeepSeekService_ThrowsArgumentNullException()]]
+- [[DeepSeekService()]]
+- [[FalAiImageService()]]
+- [[GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()]]
+- [[GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()]]
 - [[HybridAiServiceTests]]
 - [[MakeHandlerMock()]]
+- [[XPoster.Tests.Services]]
 - [[BuildDeepSeekService()]]
-- [[DeepSeekService()]]
 - [[BuildFalService()]]
-- [[FalAiImageService()]]
-- [[BuildHybrid()]]
 - [[HybridAiService()]]
-- [[ChatCompletionJson()]]
-- [[GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()]]
-- [[GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()]]
 - [[GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()]]
-- [[Constructor_NullDeepSeekService_ThrowsArgumentNullException()]]
 - [[Constructor_NullFalAiService_ThrowsArgumentNullException()]]
 
 ---

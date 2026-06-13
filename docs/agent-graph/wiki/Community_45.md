@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **FeedGenerator.cs** (8 connections)
-- **catch()** (2 connections)
-- **ReplaceEveryFirstOccurenceOf()** (2 connections)
-- **GenerateMessage()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **OrchestratorFactory.cs** (10 connections)
+- **if()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 60]] (4 shared connections)
+- [[Community 37]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

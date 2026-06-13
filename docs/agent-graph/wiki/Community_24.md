@@ -1,25 +1,25 @@
 # Community 24
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory.cs** (7 connections)
-- **GetByProvider()** (2 connections)
-- **ArgumentException()** (2 connections)
-- **AiServiceFactory()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **OpenAiService.cs** (10 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummary()** (2 connections)
+- **GetPromptForImage()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 82]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **ValidOptions()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **PostMissingBranchTests** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
 
 ## Relationships
 

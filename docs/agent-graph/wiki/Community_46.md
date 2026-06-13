@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **PowerLawGenerator.cs** (4 connections)
-- **PowerLawGenerator.cs** (4 connections)
-- **PowerLawGenerator()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator()** (2 connections)
 - **if()** (2 connections)
 - **XPoster.Implementation** (2 connections)
 

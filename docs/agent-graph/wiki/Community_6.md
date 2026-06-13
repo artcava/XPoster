@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FeedGeneratorTests.cs** (11 connections)
-- **FeedGeneratorTests.cs** (11 connections)
-- **GenerateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
-- **GenerateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **FeedOrchestratorTests.cs** (11 connections)
+- **FeedOrchestratorTests.cs** (11 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
 - **XPoster.Tests.Implementation** (2 connections)
-- **FeedGeneratorTests()** (2 connections)
-- **GenerateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
-- **GenerateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
-- **GenerateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
 
 ## Relationships
 
