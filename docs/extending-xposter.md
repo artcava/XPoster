@@ -113,7 +113,7 @@ public class QuoteOrchestrator : BaseOrchestrator
 
 > **Invariant**: `OrchestrateAsync()` must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 
-### Step 2 — Add a ScheduledGenerationProfile entry
+### Step 2 — Add a ScheduledOrchestrationProfile entry
 
 Reference the new orchestrator type in the `slotProfiles` list. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 

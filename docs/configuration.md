@@ -48,7 +48,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
     // ── AI Provider Selector ─────────────────────────────────────────────
     "AiProvider": "OpenAi",
-    // Selects the IAiService implementation injected into AI-enabled generators.
+    // Selects the IAiService implementation injected into AI-enabled orchestrators.
     // Supported values: OpenAi | AzureFoundry | DeepSeekWithFal
     // Only the configuration block that matches this value is required at runtime.
 
@@ -85,7 +85,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // ── Instagram (currently disabled — see issue #72) ────────────────────
     "IG_ACCESS_TOKEN": "",
     // Long-lived Instagram Graph API access token.
-    // These keys are read by IgSender but the slot is disabled in GeneratorFactory.
+    // These keys are read by IgSender but the slot is disabled in OrchestratorFactory.
 
     "IG_ACCOUNT_ID": "",
     // Numeric Instagram Business Account ID used in Graph API calls.
@@ -250,7 +250,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation injected into AI-enabled generators. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`. |
+| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation injected into AI-enabled orchestrators. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`. |
 
 | `AiProvider` value | Resolved service | Text backend | Image backend |
 |---|---|---|---|
@@ -289,7 +289,7 @@ Obtain all four values from [developer.twitter.com](https://developer.twitter.co
 
 ## Instagram
 
-> ⚠️ Instagram publishing is **not yet active in production**. These variables are read by `IgSender` but the slot is disabled in `GeneratorFactory`. See issue [#72](https://github.com/artcava/XPoster/issues/72) for the full enablement checklist.
+> ⚠️ Instagram publishing is **not yet active in production**. These variables are read by `IgSender` but the slot is disabled in `OrchestratorFactory`. See issue [#72](https://github.com/artcava/XPoster/issues/72) for the full enablement checklist.
 
 | Variable | Type | Required | Description |
 |---|---|---|---|

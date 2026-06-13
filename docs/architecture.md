@@ -101,7 +101,7 @@ Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **conte
 
 Services are registered as singletons or transients in the DI container and are consumed by orchestrators:
 
-- **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledGenerationProfile` and can be overridden globally via the `AiProvider` configuration key.
+- **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledOrchestrationProfile` and can be overridden globally via the `AiProvider` configuration key.
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
 

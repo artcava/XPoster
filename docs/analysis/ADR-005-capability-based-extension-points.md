@@ -1,4 +1,4 @@
-# ADR-005 — Capability-based Extension Points for Senders, Generators and AI Providers
+# ADR-005 — Capability-based Extension Points for Senders, Orchestrators and AI Providers
 
 | Field | Detail |
 |---|---|
@@ -11,11 +11,11 @@
 
 ## Context
 
-XPoster has three independent extension axes — Platform Senders, Content Generators, and AI Providers — but the current design couples them in two ways that limit independent extensibility.
+XPoster has three independent extension axes — Platform Senders, Content Orchestrators, and AI Providers — but the current design couples them in two ways that limit independent extensibility.
 
-**Problem 1 — `MessageSender` enum couples Sender identity to Generator identity**
+**Problem 1 — `MessageSender` enum couples Sender identity to Orchestrator identity**
 
-`MessageSender` today encodes not just *which platform to send to* but implicitly *which generator produced the content*. If a new Generator is introduced (e.g. a `VideoFeedGenerator`), a new enum value must be added for every existing Sender (e.g. `XVideo`, `InVideo`, `IgVideo`). The cartesian product grows with O(generators × senders) instead of O(generators) + O(senders).
+`MessageSender` today encodes not just *which platform to send to* but implicitly *which orchestrator produced the content*. If a new Orchestrator is introduced (e.g. a `VideoFeedOrchestrator`), a new enum value must be added for every existing Sender (e.g. `XVideo`, `InVideo`, `IgVideo`). The cartesian product grows with O(orchestrators × senders) instead of O(orchestrators) + O(senders).
 
 **Problem 2 — `HybridAiService` couples AI capability dispatch to a fixed provider list**
 
@@ -23,9 +23,9 @@ XPoster has three independent extension axes — Platform Senders, Content Gener
 
 ## Decision
 
-### 1. Separate Generator identity from Sender identity
+### 1. Separate Orchestrator identity from Sender identity
 
-Introduce a `SenderPlatform` enum (or string key) that identifies only the target platform (`X`, `LinkedIn`, `Instagram`). Each `IGenerator` declares which platforms it targets via a `IReadOnlyList<SenderPlatform> SupportedPlatforms` property. `GeneratorFactory` matches Generators to platforms, not to a combined Generator+Sender key.
+Introduce a `SenderPlatform` enum (or string key) that identifies only the target platform (`X`, `LinkedIn`, `Instagram`). Each `IOrchestrator` declares which platforms it targets via a `IReadOnlyList<SenderPlatform> SupportedPlatforms` property. `OrchestratorFactory` matches Orchestrators to platforms, not to a combined Orchestrator+Sender key.
 
 **Before:**
 ```csharp
@@ -36,10 +36,10 @@ public enum MessageSender { XFeed, InFeed, IgFeed, XPowerLaw, InPowerLaw, ... }
 ```csharp
 public enum SenderPlatform { X, LinkedIn, Instagram }
 
-public interface IGenerator
+public interface IOrchestrator
 {
     IReadOnlyList<SenderPlatform> SupportedPlatforms { get; }
-    Task<Post> GenerateAsync(RSSFeed feed);
+    Task<Post> OrchestrateAsync(RSSFeed feed);
 }
 ```
 
@@ -90,13 +90,13 @@ For Problem 2, the capability-interface model aligns with the direction already 
 ## Consequences
 
 **Positive:**
-- Adding a new Generator does not require touching the `MessageSender`/`SenderPlatform` enum.
+- Adding a new Orchestrator does not require touching the `MessageSender`/`SenderPlatform` enum.
 - Adding a new AI Provider requires only implementing the relevant capability interface(s) and registering it in `Program.cs`.
 - Users can freely mix providers per capability (e.g. DeepSeek for text, Fal.ai for image) via configuration alone.
 - Future modalities (text-to-video, text-to-audio) are a new interface + one registration line — zero changes to existing code.
 - `HybridAiService` is eliminated, removing an internal branch that is currently a maintenance burden.
 
 **Negative / Trade-offs:**
-- Requires a breaking refactor of `GeneratorFactory`, `AiServiceFactory`, and `HybridAiService`.
+- Requires a breaking refactor of `OrchestratorFactory`, `AiServiceFactory`, and `HybridAiService`.
 - `Program.cs` DI registration becomes more verbose; a helper extension method (`AddXPosterAiProviders`) is recommended to keep it readable.
-- Existing tests for `GeneratorFactory` and `AiServiceFactory` must be rewritten.
+- Existing tests for `OrchestratorFactory` and `AiServiceFactory` must be rewritten.

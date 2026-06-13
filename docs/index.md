@@ -10,7 +10,7 @@ Welcome to the XPoster documentation hub. Use the links below to navigate to eac
 | [Architecture](architecture.md) | Architectural decisions and design patterns |
 | [Configuration Reference](configuration.md) | All environment variables with type, default, and description |
 | [Deployment Guide](deployment.md) | Step-by-step Azure deployment |
-| [Extending XPoster](extending-xposter.md) | Adding new senders and generators |
+| [Extending XPoster](extending-xposter.md) | Adding new senders and orchestrators |
 | [Monitoring & Alerting](monitoring.md) | Application Insights setup and KQL queries |
 
 ## Architecture Decision Records
