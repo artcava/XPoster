@@ -8,8 +8,12 @@ name: Persist Agent Graph
 #     so the commit produced by this workflow does not re-trigger it.
 #   - The commit message includes [skip ci] to suppress ci.yml on that push.
 #
-# No PAT required: a direct push from a workflow triggered by `push` (not `pull_request`)
-# is not subject to the GITHUB_TOKEN restriction that blocks CI on bot-opened PRs.
+# Authentication:
+#   BOT_PAT is required because github-actions[bot] is a system account and
+#   cannot be added to the bypass list of branch protection rules or Rulesets.
+#   GITHUB_TOKEN is rejected with 403 on protected branches.
+#   BOT_PAT must be a fine-grained PAT with Contents: Read & Write scope
+#   on this repository, stored as a repository secret named BOT_PAT.
 on:
   push:
     branches:
@@ -18,7 +22,7 @@ on:
       - 'docs/agent-graph/**'  # Ignore own commits to prevent infinite loop
 
 permissions:
-  contents: write  # Required to commit and push the regenerated graph
+  contents: read  # Actual write auth is delegated to BOT_PAT at checkout
 
 # Only one run at a time. If multiple PRs are merged in quick succession,
 # cancel the in-progress run and let the latest push win.
@@ -34,12 +38,16 @@ jobs:
     steps:
       # =========================
       # CHECKOUT
+      # Using BOT_PAT here causes all subsequent git operations (including
+      # git push) to authenticate as the token owner, bypassing the branch
+      # protection rule on develop.
       # =========================
       - name: Checkout develop
         uses: actions/checkout@v4
         with:
           ref: develop
           fetch-depth: 0  # Full history gives graphify richer relationship context
+          token: ${{ secrets.BOT_PAT }}
 
       # =========================
       # .NET + GRAPHIFY-DOTNET
@@ -114,6 +122,7 @@ jobs:
       # COMMIT AND PUSH
       # Commits only if the graph actually changed.
       # [skip ci] prevents ci.yml from running on this docs-only push.
+      # git push uses the BOT_PAT credential set at checkout.
       # =========================
       - name: Commit updated graph to develop
         run: |
