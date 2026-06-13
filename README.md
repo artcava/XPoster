@@ -40,7 +40,7 @@
 - **AI-Powered Summarization**: Intelligent RSS feed summaries via a configurable AI model of your choice
 - **Image Generation**: Automatic contextual image creation using any supported image generation model
 - **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
-- **Multi-Strategy**: Support for different content generation algorithms
+- **Multi-Strategy**: Support for different content orchestration algorithms
 - **Provider Agnostic**: The AI provider (e.g. OpenAI, Azure AI Foundry) and the specific model are selected by the operator through configuration — no code change required to swap models
 
 ### 🌐 Multi-Platform Publishing
@@ -66,12 +66,12 @@
 
 XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
-- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and only orchestrates the pipeline
-- **`GeneratorFactory`** — maps the current UTC hour to a `ScheduledGenerationProfile`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
-- **Generators** (`FeedGenerator`, `PowerLawGenerator`, `NoGenerator`) — each encapsulates a self-contained content-production algorithm; generators depend exclusively on injected abstractions and are unaware of target platforms
+- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
+- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
+- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
 - **Sender Plugins** (`XSender`, `InSender`, `IgSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
 
-The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching generator code.
+The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching orchestrator code.
 
 ```
 ┌────────────────────────────┐
@@ -81,18 +81,18 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
             │
             ▼
 ┌────────────────────────────┐
-│   Generator Factory        │ ◄─── Strategy Pattern
-│   (ScheduledGenerationProfile list) │
+│   OrchestratorFactory      │ ◄─── Strategy Pattern
+│   (ScheduledOrchestrationProfile list) │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
     ▼                ▼              ▼
-┌──────────┐   ┌──────────┐   ┌──────────┐
-│   Feed   │   │ PowerLaw │   │    No    │
-│Generator │   │Generator │   │Generator │
-└─────┬────┘   └─────┬────┘   └──────────┘
-      │              │
-      └──────┬───────┘
+┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+│     Feed     │   │  PowerLaw    │   │      No      │
+│ Orchestrator │   │ Orchestrator │   │ Orchestrator │
+└─────┬────────┘   └─────┬────────┘   └──────────────┘
+      │                  │
+      └──────┬───────────┘
              │
              ▼
     ┌────────────────────┐
@@ -135,7 +135,7 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
 
 ### AI & ML
 
-The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledGenerationProfile`.
+The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledOrchestrationProfile`.
 
 | Package | Version | Role |
 |---------|---------|------|
@@ -340,7 +340,6 @@ The execution frequency is configurable via the `CronSchedule` environment varia
 
 **Configuration**:
 
-
 ```json
 //local.settings.json
 {
@@ -370,19 +369,20 @@ az functionapp config appsettings set
 | **Daily** | `0 0 9 * * *` | Every day at 9:00 |
 | **Quick Test** | `*/30 * * * * *` | Every 30 seconds (dev only) |
 
-### Time-based Strategy (GeneratorFactory)
+### Time-based Strategy (OrchestratorFactory)
 
-Modify `GeneratorFactory.cs` to customize which generator to use at each hour:
+Modify `OrchestratorFactory.cs` to customize which orchestrator to use at each hour:
 
 ```csharp
-private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
+private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
 {
-    new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-    new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
-    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
+    new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
+    new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
 };
 ```
+
 ---
 
 ### Best Practices
@@ -400,12 +400,13 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledGenerationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on generators or scheduling |
-| **Content Generators** (`BaseGenerator`) | Subclass `BaseGenerator`, override `GenerateAsync()`, register in `GeneratorFactory` | The Strategy pattern in `GeneratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
-| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All generators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
-| **Scheduling profiles** (`ScheduledGenerationProfile`) | Add or modify entries in `GeneratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
+| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()`, register in `OrchestratorFactory` | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All orchestrators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
+| **Scheduling profiles** (`ScheduledOrchestrationProfile`) | Add or modify entries in `OrchestratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
 
 > 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
+
 ---
 
 ## Testing
@@ -418,13 +419,13 @@ tests/
 ├── XFunctionTests.cs
 ├── XFunctionMissingBranchTests.cs
 ├── Abstraction/
-│   └── BaseGeneratorTests.cs
+│   └── BaseOrchestratorTests.cs
 ├── Implementation/
 │   ├── AiServiceFactoryTests.cs
-│   ├── FeedGeneratorTests.cs
-│   ├── GeneratorFactoryTests.cs
-│   ├── NoGeneratorTests.cs
-│   └── PowerLawGeneratorTests.cs
+│   ├── FeedOrchestratorTests.cs
+│   ├── OrchestratorFactoryTests.cs
+│   ├── NoOrchestratorTests.cs
+│   └── PowerLawOrchestratorTests.cs
 ├── Models/
 │   ├── AzureFoundryOptionsValidatorTests.cs
 │   ├── ModelsTests.cs
@@ -450,8 +451,8 @@ tests/
 | Folder | What is covered |
 |---|---|
 | *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Abstraction/` | `BaseGenerator` abstract class contracts |
-| `Implementation/` | `FeedGenerator`, `PowerLawGenerator`, `NoGenerator`, `GeneratorFactory`, and `AiServiceFactory` resolution logic |
+| `Abstraction/` | `BaseOrchestrator` abstract class contracts |
+| `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `OrchestratorFactory`, and `AiServiceFactory` resolution logic |
 | `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, OpenAI and Azure Foundry options validators |
 | `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch); `IgSender` (in-development coverage) |
 | `Services/` | `OpenAiService`, `AzureFoundryService`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
@@ -463,7 +464,7 @@ tests/
 dotnet test
 
 # Specific tests
-dotnet test --filter "FullyQualifiedName~FeedGenerator"
+dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
 
 # With coverage
 dotnet test --collect:"XPlat Code Coverage"
@@ -475,15 +476,15 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ```csharp
 [Fact]
-public async Task FeedGenerator_ShouldGenerateSummary()
+public async Task FeedOrchestrator_ShouldGenerateSummary()
 {
     // Arrange
     var mockAiService = new Mock<IAiService>();
     mockAiService
         .Setup(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
         .ReturnsAsync("Test summary");
-    
-    var generator = new FeedGenerator(
+
+    var orchestrator = new FeedOrchestrator(
         mockSender.Object,
         mockLogger.Object,
         mockFeedService.Object,
@@ -491,7 +492,7 @@ public async Task FeedGenerator_ShouldGenerateSummary()
     );
 
     // Act
-    var result = await generator.GenerateAsync();
+    var result = await orchestrator.OrchestrateAsync();
 
     // Assert
     Assert.NotNull(result);

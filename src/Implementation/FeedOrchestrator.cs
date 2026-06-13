@@ -6,10 +6,10 @@ using XPoster.Models;
 namespace XPoster.Implementation;
 
 /// <summary>
-/// Generates a social-media post by aggregating Bitcoin-related RSS news from the last 24 hours,
+/// Orchestrates a social-media post by aggregating Bitcoin-related RSS news from the last 24 hours,
 /// summarising the content via AI, and optionally attaching an AI-generated image.
 /// </summary>
-public class FeedGenerator : BaseGenerator
+public class FeedOrchestrator : BaseOrchestrator
 {
     private readonly IFeedService _feedService;
     private readonly IAiService? _aiService;
@@ -22,18 +22,18 @@ public class FeedGenerator : BaseGenerator
     private Dictionary<string, string> _replacements = new Dictionary<string, string> { { "bitcoin", "#Bitcoin" }, { "btc", "#BTC" }, { "blockchain", "#Blockchain" }, { "fed", "#FED" } };
 
     /// <inheritdoc/>
-    public override string Name => typeof(FeedGenerator).Name;
+    public override string Name => typeof(FeedOrchestrator).Name;
 
     /// <inheritdoc/>
     public override bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
 
-    /// <summary>Always <c>true</c>; this generator always attempts to attach an AI-generated image.</summary>
+    /// <summary>Always <c>true</c>; this orchestrator always attempts to attach an AI-generated image.</summary>
     public override bool ProduceImage { get => true; set => throw new NotImplementedException(); }
 
     /// <summary>
-    /// Initialises a new instance of <see cref="FeedGenerator"/>.
+    /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>
-    public FeedGenerator(ISender sender, ILogger<FeedGenerator> logger, IFeedService feedService, IAiService? aiService)
+    public FeedOrchestrator(ISender sender, ILogger<FeedOrchestrator> logger, IFeedService feedService, IAiService? aiService)
         : base(sender, logger)
     {
         _feedService = feedService;
@@ -45,11 +45,11 @@ public class FeedGenerator : BaseGenerator
     /// and returns a <see cref="Post"/> ready for publishing.
     /// Posting is disabled and <c>null</c> is returned if no relevant news is found or summarisation fails.
     /// </summary>
-    public override async Task<Post?> GenerateAsync()
+    public override async Task<Post?> OrchestrateAsync()
     {
         if (_aiService == null)
         {
-            _logger.LogError("No IAiService instance provided to FeedGenerator. Cannot generate content.");
+            _logger.LogError("No IAiService instance provided to FeedOrchestrator. Cannot orchestrate content.");
             SendIt = false;
             return null;
         }
@@ -114,7 +114,7 @@ public class FeedGenerator : BaseGenerator
 
         if (_sender == null)
         {
-            _logger.LogError("No sender configured for FeedGenerator.");
+            _logger.LogError("No sender configured for FeedOrchestrator.");
             SendIt = false;
             return string.Empty;
         }

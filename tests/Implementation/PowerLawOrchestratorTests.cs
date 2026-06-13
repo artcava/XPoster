@@ -5,17 +5,17 @@ using XPoster.Implementation;
 
 namespace XPoster.Tests.Implementation;
 
-public class PowerLawGeneratorTests
+public class PowerLawOrchestratorTests
 {
     private readonly Mock<ISender> _mockSender;
-    private readonly Mock<ILogger<PowerLawGenerator>> _mockLogger;
+    private readonly Mock<ILogger<PowerLawOrchestrator>> _mockLogger;
     private readonly Mock<ICryptoService> _mockCryptoService;
     private readonly Mock<ITimeProvider> _mockTimeProvider;
 
-    public PowerLawGeneratorTests()
+    public PowerLawOrchestratorTests()
     {
         _mockSender = new Mock<ISender>();
-        _mockLogger = new Mock<ILogger<PowerLawGenerator>>();
+        _mockLogger = new Mock<ILogger<PowerLawOrchestrator>>();
         _mockCryptoService = new Mock<ICryptoService>();
         _mockTimeProvider = new Mock<ITimeProvider>();
     }
@@ -30,10 +30,10 @@ public class PowerLawGeneratorTests
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(fakeBtcPrice);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate); // Fornisci una data fissa
 
-        var generator = new PowerLawGenerator(_mockSender.Object, _mockLogger.Object, _mockCryptoService.Object, _mockTimeProvider.Object);
+        var orchestrator = new PowerLawOrchestrator(_mockSender.Object, _mockLogger.Object, _mockCryptoService.Object, _mockTimeProvider.Object);
 
         // ACT
-        var message = await generator.GenerateAsync();
+        var message = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.NotNull(message);
@@ -55,10 +55,10 @@ public class PowerLawGeneratorTests
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(fakeBtcPrice);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate); // Fornisci una data fissa
 
-        var generator = new PowerLawGenerator(_mockSender.Object, _mockLogger.Object, _mockCryptoService.Object, _mockTimeProvider.Object);
+        var orchestrator = new PowerLawOrchestrator(_mockSender.Object, _mockLogger.Object, _mockCryptoService.Object, _mockTimeProvider.Object);
 
         // ACT
-        var message = await generator.GenerateAsync();
+        var message = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         // Ora possiamo calcolare il valore atteso e verificarlo!
@@ -75,16 +75,16 @@ public class PowerLawGeneratorTests
         var invalidDate = new DateTime(2008, 12, 31);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(invalidDate);
 
-        var generator = new PowerLawGenerator(
+        var orchestrator = new PowerLawOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockCryptoService.Object,
             _mockTimeProvider.Object);
 
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         Assert.Null(result);
-        Assert.False(generator.SendIt);
+        Assert.False(orchestrator.SendIt);
     }
 
     [Fact]
@@ -95,13 +95,13 @@ public class PowerLawGeneratorTests
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(0m);
 
-        var generator = new PowerLawGenerator(
+        var orchestrator = new PowerLawOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockCryptoService.Object,
             _mockTimeProvider.Object);
 
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // Dovrebbe comunque restituire un messaggio anche senza valore reale
         Assert.NotNull(result);
@@ -117,13 +117,13 @@ public class PowerLawGeneratorTests
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(cryptoValue);
 
-        var generator = new PowerLawGenerator(
+        var orchestrator = new PowerLawOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockCryptoService.Object,
             _mockTimeProvider.Object);
 
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotNull(result);
         // Verifica che il messaggio non contenga la percentuale quando il valore è invalido

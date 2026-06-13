@@ -1,6 +1,6 @@
 # Extending XPoster
 
-XPoster is designed around three extension points: **Senders** (platform plugins), **Generators** (content strategies), and **AI Providers** (model integrations). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
+XPoster is designed around three extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), and **AI Providers** (model integrations). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
 
 > For the architectural rationale behind each extension point, see [architecture.md §5](architecture.md#5-extension-points).
 
@@ -27,7 +27,7 @@ public class TikTokSender : ISender
 }
 ```
 
-> `MessageMaxLength` must reflect the platform's actual character limit. Generators use this value to truncate content before calling `SendAsync`.
+> `MessageMaxLength` must reflect the platform's actual character limit. Orchestrators use this value to truncate content before calling `SendAsync`.
 
 ### Step 2 — Register in DI
 
@@ -48,14 +48,14 @@ public enum MessageSender
 }
 ```
 
-### Step 4 — Wire in GeneratorFactory
+### Step 4 — Wire in OrchestratorFactory
 
-`GeneratorFactory.Generate()` resolves the concrete sender through a **switch expression** that maps each `MessageSender` enum value to a specific class retrieved from the DI container. The result is cast to `ISender` because `GetService` returns `object?`; the factory then passes the interface reference to `CreateGeneratorInstance`, keeping generators fully decoupled from sender implementations.
+`OrchestratorFactory.Resolve()` resolves the concrete sender through a **switch expression** that maps each `MessageSender` enum value to a specific class retrieved from the DI container. The result is cast to `ISender` because `GetService` returns `object?`; the factory then passes the interface reference to `CreateOrchestratorInstance`, keeping orchestrators fully decoupled from sender implementations.
 
-Add two arms to the existing switch expression inside `Generate()`:
+Add two arms to the existing switch expression inside `Resolve()`:
 
 ```csharp
-// src/Implementation/GeneratorFactory.cs — sender switch expression
+// src/Implementation/OrchestratorFactory.cs — sender switch expression
 ISender? sender = profile.SenderType switch
 {
     // existing arms ...
@@ -74,36 +74,36 @@ ISender? sender = profile.SenderType switch
 
 > Both `TikTokSummaryFeed` and `TikTokPowerLaw` resolve to the same `TikTokSender` class. The two enum values express *what is being posted* (content strategy + platform), not *how* — `TikTokSender` owns the how. This mirrors the existing pattern for `XSender` and `InSender`.
 
-### Step 5 — Add a ScheduledGenerationProfile entry
+### Step 5 — Add a ScheduledOrchestrationProfile entry
 
-Add the new sender to the `slotProfiles` list in `GeneratorFactory.cs`, specifying the hour, sender type, generator type, and (optionally) the AI provider for that slot:
+Add the new sender to the `slotProfiles` list in `OrchestratorFactory.cs`, specifying the hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
-// src/Implementation/GeneratorFactory.cs — slotProfiles list
-new ScheduledGenerationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
+// src/Implementation/OrchestratorFactory.cs — slotProfiles list
+new ScheduledOrchestrationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
 ```
 
 **Validation**: Write a unit test for the new sender using a mock `Post` to verify serialisation and error-return behaviour before integration.
 
 ---
 
-## Adding a New Generator (Content Strategy)
+## Adding a New Orchestrator (Content Strategy)
 
-A generator inherits from `BaseGenerator` and overrides `GenerateAsync()` to produce a `Post`. It receives its dependencies — sender, AI service, and any data services — via constructor injection; `GeneratorFactory` resolves them automatically through reflection.
+An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It receives its dependencies — sender, AI service, and any data services — via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
 
-### Step 1 — Extend BaseGenerator
+### Step 1 — Extend BaseOrchestrator
 
 ```csharp
-// src/Implementation/QuoteGenerator.cs
-public class QuoteGenerator : BaseGenerator
+// src/Implementation/QuoteOrchestrator.cs
+public class QuoteOrchestrator : BaseOrchestrator
 {
-    public QuoteGenerator(ISender sender, ILogger<QuoteGenerator> logger, IAiService aiService)
+    public QuoteOrchestrator(ISender sender, ILogger<QuoteOrchestrator> logger, IAiService aiService)
         : base(sender, logger, aiService) { }
 
-    public override async Task<Post>? GenerateAsync()
+    public override async Task<Post>? OrchestrateAsync()
     {
         // Return null (do not throw) when no content can be produced.
-        // The orchestrator will skip posting gracefully.
+        // XFunction will skip posting gracefully.
         var quote = await _aiService.GetCompletionAsync("Generate a motivational tech quote.", 100);
         if (string.IsNullOrWhiteSpace(quote)) return null;
         return new Post { Content = quote };
@@ -111,18 +111,18 @@ public class QuoteGenerator : BaseGenerator
 }
 ```
 
-> **Invariant**: `GenerateAsync()` must return `null` — not throw — when content cannot be produced. The orchestrator uses a `null` return as the signal to skip the current posting slot.
+> **Invariant**: `OrchestrateAsync()` must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 
-### Step 2 — Add a ScheduledGenerationProfile entry
+### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new generator type in the `slotProfiles` list. `CreateGeneratorInstance` in `GeneratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type in the `slotProfiles` list. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
-// src/Implementation/GeneratorFactory.cs — slotProfiles list
-new ScheduledGenerationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteGenerator), AiProvider.Perplexity),
+// src/Implementation/OrchestratorFactory.cs — slotProfiles list
+new ScheduledOrchestrationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
 ```
 
-No other change to `GeneratorFactory` is required.
+No other change to `OrchestratorFactory` is required.
 
 ---
 
@@ -187,13 +187,13 @@ private static readonly HashSet<AiProvider> _supportedProviders =
 ];
 ```
 
-No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledGenerationProfile` and via the global `AiProvider` configuration key.
+No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledOrchestrationProfile` and via the global `AiProvider` configuration key.
 
 ---
 
 ## Adding a New Service (Data Source)
 
-For new external data integrations (e.g., a news API, a stock ticker, a weather feed), define an interface in `src/Abstraction/Interfaces/` and implement it in `src/Implementation/Services/`. Inject the new service into the generator that needs it — `CreateGeneratorInstance` will resolve it automatically.
+For new external data integrations (e.g., a news API, a stock ticker, a weather feed), define an interface in `src/Abstraction/Interfaces/` and implement it in `src/Implementation/Services/`. Inject the new service into the orchestrator that needs it — `CreateOrchestratorInstance` will resolve it automatically.
 
 ```csharp
 // src/Abstraction/Interfaces/INewsService.cs
@@ -225,9 +225,9 @@ builder.Services.AddTransient<INewsService, NewsService>();
 All extensions must respect the following invariants to integrate correctly with the pipeline:
 
 - **Senders must be stateless.** Do not cache authentication tokens in instance fields; use the DI-injected configuration or a token-provider service. The DI container manages lifetime.
-- **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to the orchestrator and prevents App Insights from recording a clean skip.
-- **`MessageMaxLength` must be accurate.** Generators rely on this value to truncate content before calling `SendAsync`. An incorrect value causes silent data loss at the platform layer.
-- **`GenerateAsync` must return `null`, not throw, when no content can be produced.** The orchestrator treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
-- **Generators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside a generator — that responsibility belongs to the orchestrator.
+- **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
+- **`MessageMaxLength` must be accurate.** Orchestrators rely on this value to truncate content before calling `SendAsync`. An incorrect value causes silent data loss at the platform layer.
+- **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+- **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, retry policies, and timeout configuration are applied consistently.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

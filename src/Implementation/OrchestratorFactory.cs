@@ -6,28 +6,28 @@ using XPoster.SenderPlugins;
 namespace XPoster.Implementation;
 
 /// <summary>
-/// Resolves and instantiates the correct <see cref="BaseGenerator"/> for the current hour of the day
+/// Resolves and instantiates the correct <see cref="BaseOrchestrator"/> for the current hour of the day
 /// by consulting the static <see cref="slotProfiles"/> schedule, including AI provider orchestration.
 /// </summary>
-public class GeneratorFactory : IGeneratorFactory
+public class OrchestratorFactory : IOrchestratorFactory
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<GeneratorFactory> _log;
+    private readonly ILogger<OrchestratorFactory> _log;
     private readonly ITimeProvider _timeProvider;
     private readonly IAiServiceFactory _aiServiceFactory;
     private readonly IConfiguration? _configuration;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="GeneratorFactory"/>.
+    /// Initialises a new instance of <see cref="OrchestratorFactory"/>.
     /// </summary>
     /// <param name="serviceProvider">DI service provider used to resolve senders and dependencies.</param>
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="aiServiceFactory">Factory used to resolve the AI service by provider.</param>
     /// <param name="configuration">Optional configuration used to override the AI provider via <c>AiProvider</c> setting.</param>
-    public GeneratorFactory(
+    public OrchestratorFactory(
         IServiceProvider serviceProvider,
-        ILogger<GeneratorFactory> log,
+        ILogger<OrchestratorFactory> log,
         ITimeProvider timeProvider,
         IAiServiceFactory aiServiceFactory,
         IConfiguration? configuration = null)
@@ -40,23 +40,23 @@ public class GeneratorFactory : IGeneratorFactory
     }
 
     /// <summary>
-    /// Creates and returns the <see cref="BaseGenerator"/> mapped to the current hour, including AI provider orchestration.
-    /// Falls back to <see cref="NoGenerator"/> when no entry exists for the current hour.
+    /// Creates and returns the <see cref="BaseOrchestrator"/> mapped to the current hour, including AI provider orchestration.
+    /// Falls back to <see cref="NoOrchestrator"/> when no entry exists for the current hour.
     /// </summary>
-    /// <returns>A fully initialised <see cref="BaseGenerator"/> instance.</returns>
-    public BaseGenerator Generate()
+    /// <returns>A fully initialised <see cref="BaseOrchestrator"/> instance.</returns>
+    public BaseOrchestrator Resolve()
     {
         var currentHour = _timeProvider.GetCurrentTime().Hour;
         var profile = slotProfiles.FirstOrDefault(p => p.Hour == currentHour);
 
         if (profile == null)
         {
-            _log.LogInformation("No slot profile for hour {Hour}, using NoGenerator", currentHour);
-            return CreateGeneratorInstance(typeof(NoGenerator), null, null);
+            _log.LogInformation("No slot profile for hour {Hour}, using NoOrchestrator", currentHour);
+            return CreateOrchestratorInstance(typeof(NoOrchestrator), null, null);
         }
 
-        _log.LogInformation("Creating generator {GeneratorType} for sender {SenderType} at hour {Hour} with AI provider {AiProvider}",
-            profile.GeneratorType.Name, profile.SenderType, profile.Hour, profile.AiProvider);
+        _log.LogInformation("Creating orchestrator {OrchestratorType} for sender {SenderType} at hour {Hour} with AI provider {AiProvider}",
+            profile.OrchestratorType.Name, profile.SenderType, profile.Hour, profile.AiProvider);
 
         ISender? sender = profile.SenderType switch
         {
@@ -76,17 +76,15 @@ public class GeneratorFactory : IGeneratorFactory
             aiService = _aiServiceFactory.GetByProvider(effectiveProvider);
         }
 
-        // Dynamically instantiate the generator with sender and aiService if required
-        return CreateGeneratorInstance(profile.GeneratorType, sender, aiService);
+        return CreateOrchestratorInstance(profile.OrchestratorType, sender, aiService);
     }
 
-    private BaseGenerator CreateGeneratorInstance(Type generatorType, ISender? sender, IAiService? aiService)
+    private BaseOrchestrator CreateOrchestratorInstance(Type orchestratorType, ISender? sender, IAiService? aiService)
     {
-        var loggerType = typeof(ILogger<>).MakeGenericType(generatorType);
+        var loggerType = typeof(ILogger<>).MakeGenericType(orchestratorType);
         var logger = _serviceProvider.GetRequiredService(loggerType);
 
-        // Try to match constructor: (ISender, IAiService, ILogger<T>) or fallback
-        var ctor = generatorType.GetConstructors()
+        var ctor = orchestratorType.GetConstructors()
             .OrderByDescending(c => c.GetParameters().Length)
             .FirstOrDefault();
         var parameters = ctor?.GetParameters();
@@ -106,7 +104,7 @@ public class GeneratorFactory : IGeneratorFactory
                     args.Add(_serviceProvider.GetService(param.ParameterType));
             }
         }
-        return (BaseGenerator)Activator.CreateInstance(generatorType, args.ToArray())!;
+        return (BaseOrchestrator)Activator.CreateInstance(orchestratorType, args.ToArray())!;
     }
 
     private AiProvider ResolveAiProvider(AiProvider defaultProvider)
@@ -130,15 +128,15 @@ public class GeneratorFactory : IGeneratorFactory
     }
 
     /// <summary>
-    /// Example slot profile mapping. Extend as needed.
+    /// Slot profile schedule. Each entry maps an hour of the day to an orchestrator type and sender.
     /// </summary>
-    private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
+    private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
     {
-        new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-        new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-        //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-        new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
-        new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
-        //new ScheduledGenerationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawGenerator)),
+        new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        //new ScheduledOrchestrationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
+        new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
+        //new ScheduledOrchestrationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawOrchestrator)),
     };
 }

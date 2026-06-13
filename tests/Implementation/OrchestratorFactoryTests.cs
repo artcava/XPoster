@@ -6,18 +6,18 @@ using XPoster.SenderPlugins;
 
 namespace XPoster.Tests.Implementation;
 
-public class GeneratorFactoryTests
+public class OrchestratorFactoryTests
 {
     private readonly Mock<IServiceProvider> _mockServiceProvider;
-    private readonly Mock<ILogger<GeneratorFactory>> _mockLogger;
+    private readonly Mock<ILogger<OrchestratorFactory>> _mockLogger;
     private readonly Mock<ITimeProvider> _mockTimeProvider;
     private readonly Mock<IAiServiceFactory> _mockAiServiceFactory;
     private readonly Mock<IAiService> _mockAiService;
 
-    public GeneratorFactoryTests()
+    public OrchestratorFactoryTests()
     {
         _mockServiceProvider = new Mock<IServiceProvider>();
-        _mockLogger = new Mock<ILogger<GeneratorFactory>>();
+        _mockLogger = new Mock<ILogger<OrchestratorFactory>>();
         _mockTimeProvider = new Mock<ITimeProvider>();
         _mockAiServiceFactory = new Mock<IAiServiceFactory>();
         _mockAiService = new Mock<IAiService>();
@@ -28,152 +28,152 @@ public class GeneratorFactoryTests
     }
 
     [Theory]
-    [InlineData(6, typeof(FeedGenerator))] // InSummaryFeed
-    [InlineData(8, typeof(FeedGenerator))] // XSummaryFeed
-    [InlineData(14, typeof(PowerLawGenerator))] // InPowerLaw
-    [InlineData(16, typeof(PowerLawGenerator))] // XPowerLaw
-    [InlineData(0, typeof(NoGenerator))] // NoSend
-    [InlineData(12, typeof(NoGenerator))] // NoSend
-    public void Generate_Should_ReturnCorrectGeneratorType_BasedOnHour(int hour, Type expectedType)
+    [InlineData(6, typeof(FeedOrchestrator))] // InSummaryFeed
+    [InlineData(8, typeof(FeedOrchestrator))] // XSummaryFeed
+    [InlineData(14, typeof(PowerLawOrchestrator))] // InPowerLaw
+    [InlineData(16, typeof(PowerLawOrchestrator))] // XPowerLaw
+    [InlineData(0, typeof(NoOrchestrator))] // NoSend
+    [InlineData(12, typeof(NoOrchestrator))] // NoSend
+    public void Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour(int hour, Type expectedType)
     {
         // ARRANGE
         var testDate = new DateTime(2025, 11, 14, hour, 0, 0);
         _mockTimeProvider.Setup(tp => tp.GetCurrentTime()).Returns(testDate);
 
-        SetupMocksForGeneratorFactory();
+        SetupMocksForOrchestratorFactory();
 
-        var factory = new GeneratorFactory(
+        var factory = new OrchestratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
             _mockTimeProvider.Object,
             _mockAiServiceFactory.Object);
 
         // ACT
-        var generator = factory.Generate();
+        var orchestrator = factory.Resolve();
 
         // ASSERT
-        Assert.IsType(expectedType, generator);
+        Assert.IsType(expectedType, orchestrator);
     }
 
     [Fact]
-    public void Generate_Should_CreateFeedGeneratorWithInSender_At6AM()
+    public void Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()
     {
         // ARRANGE
         var testDate = new DateTime(2025, 11, 14, 6, 0, 0); // 6 AM
         _mockTimeProvider.Setup(tp => tp.GetCurrentTime()).Returns(testDate);
 
         var mockInSender = new Mock<ISender>();
-        var mockLoggerFeed = new Mock<ILogger<FeedGenerator>>();
+        var mockLoggerFeed = new Mock<ILogger<FeedOrchestrator>>();
         var mockFeedService = new Mock<IFeedService>();
         var mockAiService = new Mock<IAiService>();
 
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(InSender)))
             .Returns(mockInSender.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedGenerator>)))
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedOrchestrator>)))
         .Returns(mockLoggerFeed.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(IFeedService)))
             .Returns(mockFeedService.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(IAiService)))
             .Returns(mockAiService.Object);
 
-        var factory = new GeneratorFactory(
+        var factory = new OrchestratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
             _mockTimeProvider.Object,
             _mockAiServiceFactory.Object);
 
         // ACT
-        var generator = factory.Generate();
+        var orchestrator = factory.Resolve();
 
         // ASSERT
-        Assert.IsType<FeedGenerator>(generator);
+        Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
     }
 
     [Fact]
-    public void Generate_Should_CreateFeedGeneratorWithXSender_At8AM()
+    public void Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()
     {
         // ARRANGE
         var testDate = new DateTime(2025, 11, 14, 8, 0, 0); // 8 AM
         _mockTimeProvider.Setup(tp => tp.GetCurrentTime()).Returns(testDate);
 
         var mockInSender = new Mock<ISender>();
-        var mockLoggerFeed = new Mock<ILogger<FeedGenerator>>();
+        var mockLoggerFeed = new Mock<ILogger<FeedOrchestrator>>();
         var mockFeedService = new Mock<IFeedService>();
         var mockAiService = new Mock<IAiService>();
 
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(XSender)))
             .Returns(mockInSender.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedGenerator>)))
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedOrchestrator>)))
             .Returns(mockLoggerFeed.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(IFeedService)))
             .Returns(mockFeedService.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(IAiService)))
             .Returns(mockAiService.Object);
 
-        var factory = new GeneratorFactory(
+        var factory = new OrchestratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
             _mockTimeProvider.Object,
             _mockAiServiceFactory.Object);
 
         // ACT - Simulando le 8:00
-        var generator = factory.Generate();
+        var orchestrator = factory.Resolve();
 
         // ASSERT
-        Assert.IsType<FeedGenerator>(generator);
+        Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
     }
     [Fact]
-    public void Generate_Should_CreateNoGenerator_AtUnscheduledHours()
+    public void Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()
     {
         // ARRANGE
         var testDate = new DateTime(2025, 11, 14, 3, 0, 0); // 3 AM - not scheduled
         _mockTimeProvider.Setup(tp => tp.GetCurrentTime()).Returns(testDate);
 
-        var mockLoggerNo = new Mock<ILogger<NoGenerator>>();
+        var mockLoggerNo = new Mock<ILogger<NoOrchestrator>>();
 
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<NoGenerator>)))
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<NoOrchestrator>)))
             .Returns(mockLoggerNo.Object);
 
-        var factory = new GeneratorFactory(
+        var factory = new OrchestratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
             _mockTimeProvider.Object,
             _mockAiServiceFactory.Object);
 
         // ACT
-        var generator = factory.Generate();
+        var orchestrator = factory.Resolve();
 
         // ASSERT
-        Assert.IsType<NoGenerator>(generator);
+        Assert.IsType<NoOrchestrator>(orchestrator);
         _mockAiServiceFactory.Verify(x => x.GetByProvider(It.IsAny<AiProvider>()), Times.Never);
     }
 
     [Fact]
-    public void Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()
+    public void Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()
     {
         // ARRANGE
         var testDate = new DateTime(2025, 11, 14, 6, 0, 0);
         _mockTimeProvider.Setup(tp => tp.GetCurrentTime()).Returns(testDate);
-        SetupMocksForGeneratorFactory();
+        SetupMocksForOrchestratorFactory();
 
-        var factory = new GeneratorFactory(
+        var factory = new OrchestratorFactory(
             _mockServiceProvider.Object,
             _mockLogger.Object,
             _mockTimeProvider.Object,
             _mockAiServiceFactory.Object);
 
         // ACT
-        var generator = factory.Generate();
+        var orchestrator = factory.Resolve();
 
         // ASSERT
-        Assert.IsType<FeedGenerator>(generator);
+        Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockAiServiceFactory.Verify(x => x.GetByProvider(AiProvider.OpenAi), Times.Once);
     }
-    private void SetupMocksForGeneratorFactory()
+    private void SetupMocksForOrchestratorFactory()
     {
-        // Setup base per tutti i tipi di generator
+        // Setup base per tutti i tipi di orchestrator
         var mockXSender = new Mock<ISender>();
         var mockInSender = new Mock<ISender>();
         var mockIgSender = new Mock<ISender>();
@@ -183,9 +183,9 @@ public class GeneratorFactoryTests
         var mockFeedService = new Mock<IFeedService>();
         var mockAiService = new Mock<IAiService>();
 
-        var mockLoggerPowerLaw = new Mock<ILogger<PowerLawGenerator>>();
-        var mockLoggerFeed = new Mock<ILogger<FeedGenerator>>();
-        var mockLoggerNo = new Mock<ILogger<NoGenerator>>();
+        var mockLoggerPowerLaw = new Mock<ILogger<PowerLawOrchestrator>>();
+        var mockLoggerFeed = new Mock<ILogger<FeedOrchestrator>>();
+        var mockLoggerNo = new Mock<ILogger<NoOrchestrator>>();
 
         // Senders
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(XSender)))
@@ -196,11 +196,11 @@ public class GeneratorFactoryTests
             .Returns(mockIgSender.Object);
 
         // Loggers (GetRequiredService)
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<PowerLawGenerator>)))
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<PowerLawOrchestrator>)))
             .Returns(mockLoggerPowerLaw.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedGenerator>)))
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedOrchestrator>)))
             .Returns(mockLoggerFeed.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<NoGenerator>)))
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<NoOrchestrator>)))
             .Returns(mockLoggerNo.Object);
 
         // Services (per ActivatorUtilities)

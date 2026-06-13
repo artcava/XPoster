@@ -84,7 +84,7 @@ The recommended workflow for AI-assisted development on XPoster:
    codebase — components, dependencies, and relationships — without reading
    every source file.
 2. **Reference specific nodes** from `wiki.md` when asking the agent to work on
-   a specific component (e.g. `ISender`, `GeneratorFactory`, `AiServiceFactory`).
+   a specific component (e.g. `ISender`, `OrchestratorFactory`, `AiServiceFactory`).
 3. **Use `graph.json`** for programmatic workflows — for example, a script that
    finds all classes implementing `ISender` before scaffolding a new sender plugin.
 
@@ -95,7 +95,7 @@ Context: see docs/agent-graph/backend/report.md
 
 Task: add a new ISender implementation for Bluesky.
 Follow the same pattern as XSender and InSender.
-Register it in Program.cs and add a ScheduledGenerationProfile entry.
+Register it in Program.cs and add a ScheduledOrchestrationProfile entry.
 ```
 
 ---
