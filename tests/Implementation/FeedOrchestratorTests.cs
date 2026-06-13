@@ -6,23 +6,23 @@ using XPoster.Models;
 
 namespace XPoster.Tests.Implementation;
 
-public class FeedGeneratorTests
+public class FeedOrchestratorTests
 {
     private readonly Mock<ISender> _mockSender;
-    private readonly Mock<ILogger<FeedGenerator>> _mockLogger;
+    private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
     private readonly Mock<IFeedService> _mockFeedService;
     private readonly Mock<IAiService> _mockAiService;
 
-    public FeedGeneratorTests()
+    public FeedOrchestratorTests()
     {
         _mockSender = new Mock<ISender>();
-        _mockLogger = new Mock<ILogger<FeedGenerator>>();
+        _mockLogger = new Mock<ILogger<FeedOrchestrator>>();
         _mockFeedService = new Mock<IFeedService>();
         _mockAiService = new Mock<IAiService>();
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()
+    public async Task OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Notizia su Bitcoin", Link = "https://bitcoin.org/" } };
@@ -41,10 +41,10 @@ public class FeedGeneratorTests
         _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
 
-        var generator = new FeedGenerator(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockAiService.Object);
+        var orchestrator = new FeedOrchestrator(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockAiService.Object);
 
         // ACT
-        var message = await generator.GenerateAsync();
+        var message = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.NotNull(message);
@@ -58,7 +58,7 @@ public class FeedGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnNull_When_NoFeedsFound()
+    public async Task OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()
     {
         // ARRANGE
         var emptyFeeds = new List<RSSFeed>();
@@ -71,23 +71,23 @@ public class FeedGeneratorTests
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(emptyFeeds);
 
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockFeedService.Object,
             _mockAiService.Object);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.Null(result);
-        Assert.False(generator.SendIt);
+        Assert.False(orchestrator.SendIt);
         _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnNull_When_SummaryGenerationFails()
+    public async Task OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
@@ -102,23 +102,23 @@ public class FeedGeneratorTests
         _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(string.Empty);
 
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockFeedService.Object,
             _mockAiService.Object);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.Null(result);
-        Assert.False(generator.SendIt);
+        Assert.False(orchestrator.SendIt);
         _mockAiService.Verify(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()
+    public async Task OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
@@ -140,24 +140,24 @@ public class FeedGeneratorTests
         _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ReturnsAsync((byte[]?)null!);
 
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockFeedService.Object,
             _mockAiService.Object);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.NotNull(result);
         Assert.Equal(fakeSummary, result.Content);
         Assert.Null(result.Image);
-        Assert.True(generator.SendIt);
+        Assert.True(orchestrator.SendIt);
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()
+    public async Task OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
@@ -178,24 +178,24 @@ public class FeedGeneratorTests
         _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Image generation failed"));
 
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockFeedService.Object,
             _mockAiService.Object);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.NotNull(result);
         Assert.Equal(fakeSummary, result.Content);
         Assert.Null(result.Image);
-        Assert.True(generator.SendIt);
+        Assert.True(orchestrator.SendIt);
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ApplyHashtagsCorrectly()
+    public async Task OrchestrateAsync_Should_ApplyHashtagsCorrectly()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "News about bitcoin and BTC and fed policy", Link = "https://bitcoin.org/" } };
@@ -217,14 +217,14 @@ public class FeedGeneratorTests
         _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
 
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockFeedService.Object,
             _mockAiService.Object);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.NotNull(result);
@@ -236,21 +236,21 @@ public class FeedGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnNull_When_AiServiceIsNull()
+    public async Task OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()
     {
         // ARRANGE
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             _mockSender.Object,
             _mockLogger.Object,
             _mockFeedService.Object,
             null);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.Null(result);
-        Assert.False(generator.SendIt);
+        Assert.False(orchestrator.SendIt);
         _mockFeedService.Verify(s => s.GetFeedsAsync(
             It.IsAny<string>(),
             It.IsAny<DateTimeOffset>(),
@@ -259,7 +259,7 @@ public class FeedGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateAsync_Should_ReturnNull_When_SenderIsNull()
+    public async Task OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()
     {
         // ARRANGE
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
@@ -271,18 +271,18 @@ public class FeedGeneratorTests
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
 
-        var generator = new FeedGenerator(
+        var orchestrator = new FeedOrchestrator(
             null!,
             _mockLogger.Object,
             _mockFeedService.Object,
             _mockAiService.Object);
 
         // ACT
-        var result = await generator.GenerateAsync();
+        var result = await orchestrator.OrchestrateAsync();
 
         // ASSERT
         Assert.Null(result);
-        Assert.False(generator.SendIt);
+        Assert.False(orchestrator.SendIt);
         _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
