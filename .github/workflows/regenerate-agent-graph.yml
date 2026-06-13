@@ -92,7 +92,7 @@ jobs:
           They are not C# code but are structured and parseable.
 
           ### Generated nodes — `docs/agent-graph/`
-          This folder itself. Auto-generated on every merge to `develop`.
+          This folder itself. Auto-generated on every PR against `develop` (pre-merge preview).
           Do not use these nodes as source-of-truth for code or docs content.
 
           ## Metadata
