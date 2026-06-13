@@ -1,25 +1,25 @@
 # Community 25
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **PostMissingBranchTests** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **InSender.cs** (10 connections)
+- **catch()** (2 connections)
+- **Exception()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
+- **generatePayLoad()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 73]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -6,10 +6,10 @@
 
 - **XFunctionTests.cs** (5 connections)
 - **XFunctionTests.cs** (5 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
 - **XPoster.Tests** (2 connections)
 - **XFunctionTests()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
 
 ## Relationships
 

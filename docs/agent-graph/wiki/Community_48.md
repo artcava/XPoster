@@ -1,22 +1,22 @@
 # Community 48
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IGenerator.cs** (4 connections)
-- **IGenerator.cs** (4 connections)
-- **IGenerator** (2 connections)
-- **PostAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **FeedGenerator.cs** (8 connections)
+- **GenerateMessage()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 55]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

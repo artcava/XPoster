@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **if()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **GeneratorFactoryTests.cs** (9 connections)
+- **SetupMocksForGeneratorFactory()** (2 connections)
+- **GeneratorFactoryTests()** (2 connections)
+- **Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
 
 ## Relationships
 
-- [[Community 20]] (8 shared connections)
+- [[Community 38]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

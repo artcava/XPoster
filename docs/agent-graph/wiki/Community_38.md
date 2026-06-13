@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **BaseGeneratorTests.cs** (12 connections)
-- **BaseGeneratorTests()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **TestGenerator()** (2 connections)
+- **GeneratorFactoryTests.cs** (9 connections)
+- **Generate_Should_ReturnCorrectGeneratorType_BasedOnHour()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Generate_Should_CreateFeedGeneratorWithInSender_At6AM()** (2 connections)
+- **Generate_Should_CreateNoGenerator_AtUnscheduledHours()** (2 connections)
+- **Generate_Should_CreateFeedGeneratorWithXSender_At8AM()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (6 shared connections)
+- [[Community 58]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

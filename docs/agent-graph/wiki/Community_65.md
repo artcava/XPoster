@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **GeneratorFactoryTests.cs** (9 connections)
-- **GeneratorFactoryTests()** (2 connections)
-- **SetupMocksForGeneratorFactory()** (2 connections)
-- **Generate_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **BaseGenerator.cs** (5 connections)
+- **XPoster.Abstraction** (2 connections)
+- **BaseGenerator()** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (5 shared connections)
+- [[Community 88]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PowerLawGenerator.cs** (4 connections)
-- **PowerLawGenerator.cs** (4 connections)
-- **PowerLawGenerator()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
+- **ISender** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 

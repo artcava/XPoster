@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (2 shared connections)
+- [[Community 68]] (2 shared connections)
 
 ## Audit Trail
 

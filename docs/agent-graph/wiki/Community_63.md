@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (12 connections)
-- **IgSenderTests()** (2 connections)
-- **SetValidEnvVars()** (2 connections)
-- **ClearEnvVars()** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+- **GetCryptoValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (8 shared connections)
+- [[Community 80]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

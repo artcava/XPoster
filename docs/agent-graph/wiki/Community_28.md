@@ -9,9 +9,9 @@
 - **GetByProvider()** (2 connections)
 - **ArgumentException()** (2 connections)
 - **AiServiceFactory()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Implementation** (2 connections)
 - **InvalidOperationException()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

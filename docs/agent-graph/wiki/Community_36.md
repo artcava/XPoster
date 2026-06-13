@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **GeneratorFactoryTests.cs** (9 connections)
-- **Generate_Should_CreateNoGenerator_AtUnscheduledHours()** (2 connections)
-- **Generate_Should_ReturnCorrectGeneratorType_BasedOnHour()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **Generate_Should_CreateFeedGeneratorWithInSender_At6AM()** (2 connections)
-- **Generate_Should_CreateFeedGeneratorWithXSender_At8AM()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
+- **HybridAiService()** (2 connections)
+- **BuildFalService()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
 
 ## Relationships
 
-- [[Community 65]] (4 shared connections)
+- [[Community 9]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
