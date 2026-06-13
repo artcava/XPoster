@@ -30,7 +30,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ScheduledGenerationProfile list) │
+│   (ScheduledOrchestrationProfile list) │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
@@ -76,7 +76,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 ### OrchestratorFactory — Strategy Selector
 
-`OrchestratorFactory` maps the current hour of day to a `ScheduledGenerationProfile` drawn from a statically declared `List<ScheduledGenerationProfile>`. Each profile carries four fields:
+`OrchestratorFactory` maps the current hour of day to a `ScheduledOrchestrationProfile` drawn from a statically declared `List<ScheduledOrchestrationProfile>`. Each profile carries four fields:
 
 | Field | Type | Purpose |
 |---|---|---|
@@ -123,9 +123,9 @@ Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)
 
 ### Factory Pattern — Time-based Orchestrator Selection
 
-**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, IAiService)` triples. Its `Resolve()` method reads the current UTC hour, looks up the matching `ScheduledGenerationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
+**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, IAiService)` triples. Its `Resolve()` method reads the current UTC hour, looks up the matching `ScheduledOrchestrationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
 
-**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, MessageSender>` to a typed `ScheduledGenerationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
+**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, MessageSender>` to a typed `ScheduledOrchestrationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
 
 **Trade-off**: The current implementation uses a compile-time list, so schedule changes require a code deployment. A future improvement would be externalising the schedule to Azure App Configuration, but this adds operational complexity not yet warranted.
 
@@ -207,7 +207,7 @@ sequenceDiagram
 
     Timer->>Fn: Trigger (cron schedule)
     Fn->>Factory: Resolve()
-    Factory->>Factory: Match currentHour → ScheduledGenerationProfile
+    Factory->>Factory: Match currentHour → ScheduledOrchestrationProfile
     Factory->>Factory: Resolve ISender from DI (by SenderType)
     Factory->>AiFactory: GetByProvider(profile.AiProvider)
     AiFactory-->>Factory: IAiService (concrete implementation)

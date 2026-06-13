@@ -67,7 +67,7 @@
 XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
 - **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
-- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledGenerationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
+- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
 - **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
 - **Sender Plugins** (`XSender`, `InSender`, `IgSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
 
@@ -82,7 +82,7 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ScheduledGenerationProfile list) │
+│   (ScheduledOrchestrationProfile list) │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
@@ -135,7 +135,7 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
 
 ### AI & ML
 
-The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledGenerationProfile`.
+The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledOrchestrationProfile`.
 
 | Package | Version | Role |
 |---------|---------|------|
@@ -374,12 +374,12 @@ az functionapp config appsettings set
 Modify `OrchestratorFactory.cs` to customize which orchestrator to use at each hour:
 
 ```csharp
-private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
+private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
 {
-    new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-    new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
-    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
+    new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
+    new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
 };
 ```
 
@@ -400,10 +400,10 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledGenerationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
 | **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()`, register in `OrchestratorFactory` | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
 | **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All orchestrators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
-| **Scheduling profiles** (`ScheduledGenerationProfile`) | Add or modify entries in `OrchestratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
+| **Scheduling profiles** (`ScheduledOrchestrationProfile`) | Add or modify entries in `OrchestratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
 
 > 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
 

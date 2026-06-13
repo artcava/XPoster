@@ -74,13 +74,13 @@ ISender? sender = profile.SenderType switch
 
 > Both `TikTokSummaryFeed` and `TikTokPowerLaw` resolve to the same `TikTokSender` class. The two enum values express *what is being posted* (content strategy + platform), not *how* — `TikTokSender` owns the how. This mirrors the existing pattern for `XSender` and `InSender`.
 
-### Step 5 — Add a ScheduledGenerationProfile entry
+### Step 5 — Add a ScheduledOrchestrationProfile entry
 
 Add the new sender to the `slotProfiles` list in `OrchestratorFactory.cs`, specifying the hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
 // src/Implementation/OrchestratorFactory.cs — slotProfiles list
-new ScheduledGenerationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+new ScheduledOrchestrationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
 ```
 
 **Validation**: Write a unit test for the new sender using a mock `Post` to verify serialisation and error-return behaviour before integration.
@@ -119,7 +119,7 @@ Reference the new orchestrator type in the `slotProfiles` list. `CreateOrchestra
 
 ```csharp
 // src/Implementation/OrchestratorFactory.cs — slotProfiles list
-new ScheduledGenerationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
+new ScheduledOrchestrationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
 ```
 
 No other change to `OrchestratorFactory` is required.
@@ -187,7 +187,7 @@ private static readonly HashSet<AiProvider> _supportedProviders =
 ];
 ```
 
-No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledGenerationProfile` and via the global `AiProvider` configuration key.
+No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledOrchestrationProfile` and via the global `AiProvider` configuration key.
 
 ---
 
