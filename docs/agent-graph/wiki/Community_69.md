@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (10 connections)
-- **OpenAiService()** (2 connections)
+- **IgSender.cs** (7 connections)
+- **IgSender()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (7 shared connections)
+- [[Community 45]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

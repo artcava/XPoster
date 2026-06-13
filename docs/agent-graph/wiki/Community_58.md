@@ -1,21 +1,21 @@
 # Community 58
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ScheduledGenerationProfile.cs** (3 connections)
-- **ScheduledGenerationProfile.cs** (3 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ScheduledGenerationProfile()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **if()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 20]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

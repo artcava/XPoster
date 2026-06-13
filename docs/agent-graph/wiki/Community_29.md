@@ -1,25 +1,25 @@
 # Community 29
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **OpenAiService.cs** (10 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **while()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetSummary()** (2 connections)
+- **AiServiceFactoryTests.cs** (7 connections)
+- **AiServiceFactoryTests.cs** (7 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **AiServiceFactoryTests()** (2 connections)
+- **GetByProvider_Should_ReturnService_When_ProviderIsMappedAndResolvable()** (2 connections)
+- **GetByProvider_Should_ReturnAzureFoundryService_When_ProviderIsMappedAndResolvable()** (2 connections)
+- **GetByProvider_Should_ThrowInvalidOperationException_When_MappedServiceCannotBeResolved()** (2 connections)
+- **GetByProvider_Should_ThrowArgumentException_When_ProviderIsNotMapped()** (2 connections)
 
 ## Relationships
 
-- [[Community 69]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
