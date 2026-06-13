@@ -44,7 +44,7 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// Falls back to <see cref="NoOrchestrator"/> when no entry exists for the current hour.
     /// </summary>
     /// <returns>A fully initialised <see cref="BaseOrchestrator"/> instance.</returns>
-    public BaseOrchestrator Orchestrate()
+    public BaseOrchestrator Resolve()
     {
         var currentHour = _timeProvider.GetCurrentTime().Hour;
         var profile = slotProfiles.FirstOrDefault(p => p.Hour == currentHour);

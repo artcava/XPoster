@@ -36,7 +36,7 @@ public class XFunction
 
         try
         {
-            var orchestrator = _orchestratorFactory.Orchestrate();
+            var orchestrator = _orchestratorFactory.Resolve();
 
             if (!orchestrator.SendIt) { _log.LogInformation("Orchestrator {0} is disabled", orchestrator.Name); return; }
 
