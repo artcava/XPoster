@@ -130,13 +130,13 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// <summary>
     /// Slot profile schedule. Each entry maps an hour of the day to an orchestrator type and sender.
     /// </summary>
-    private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
+    private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
     {
-        new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        //new ScheduledGenerationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
-        new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
-        //new ScheduledGenerationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawOrchestrator)),
+        new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        //new ScheduledOrchestrationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
+        new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
+        //new ScheduledOrchestrationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawOrchestrator)),
     };
 }
