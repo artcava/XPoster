@@ -45,7 +45,7 @@ builder.Services.AddTransient<DeepSeekService>(); // Concrete type for direct in
 builder.Services.AddTransient<FalAiImageService>(); // Concrete type for direct injection into HybridAiService
 // builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity); // Uncomment when implemented
 
-builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
+builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();

@@ -11,10 +11,10 @@ public sealed class ScheduledGenerationProfile
     /// <summary>Sender strategy used for this slot.</summary>
     public MessageSender SenderType { get; init; }
 
-    /// <summary>Generator type to instantiate for this slot.</summary>
-    public Type GeneratorType { get; init; }
+    /// <summary>Orchestrator type to instantiate for this slot.</summary>
+    public Type OrchestratorType { get; init; }
 
-    /// <summary>Optional AI provider used by this slot when the generator requires it.</summary>
+    /// <summary>Optional AI provider used by this slot when the orchestrator requires it.</summary>
     public AiProvider? AiProvider { get; init; }
 
     /// <summary>
@@ -22,13 +22,13 @@ public sealed class ScheduledGenerationProfile
     /// </summary>
     /// <param name="hour">Hour of day (0-23) when this slot is active.</param>
     /// <param name="senderType">Sender strategy used for this slot.</param>
-    /// <param name="generatorType">Generator type to instantiate for this slot.</param>
-    /// <param name="aiProvider">Optional AI provider for generators that require AI services.</param>
-    public ScheduledGenerationProfile(int hour, MessageSender senderType, Type generatorType, AiProvider? aiProvider = null)
+    /// <param name="orchestratorType">Orchestrator type to instantiate for this slot.</param>
+    /// <param name="aiProvider">Optional AI provider for orchestrators that require AI services.</param>
+    public ScheduledGenerationProfile(int hour, MessageSender senderType, Type orchestratorType, AiProvider? aiProvider = null)
     {
         Hour = hour;
         SenderType = senderType;
-        GeneratorType = generatorType;
+        OrchestratorType = orchestratorType;
         AiProvider = aiProvider;
     }
 }
