@@ -7,9 +7,9 @@
 - **TimeProviderTests.cs** (5 connections)
 - **TimeProviderTests.cs** (5 connections)
 - **GetCurrentTime_ReturnsLocalTime()** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
 - **TimeProviderTests** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
 
 ## Relationships
 

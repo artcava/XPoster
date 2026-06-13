@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **if()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **DeepSeekService()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **FalAiImageService()** (2 connections)
 
 ## Relationships
 
-- [[Community 18]] (8 shared connections)
+- [[Community 82]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

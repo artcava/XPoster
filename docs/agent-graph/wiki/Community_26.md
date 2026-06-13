@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **OpenAIResponse.cs** (7 connections)
-- **OpenAIResponse.cs** (7 connections)
-- **OpenAIImageResponse** (2 connections)
-- **XPoster.Models** (2 connections)
-- **OpenAIResponse** (2 connections)
-- **Choice** (2 connections)
-- **Message** (2 connections)
-- **ImageData** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
 
 ## Relationships
 

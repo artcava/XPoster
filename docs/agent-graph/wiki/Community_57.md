@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (12 connections)
-- **ClearEnvVars()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **SetValidEnvVars()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 14]] (8 shared connections)
+- [[Community 18]] (8 shared connections)
 
 ## Audit Trail
 

@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **GeneratorFactory.cs** (10 connections)
-- **return()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **foreach()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **Generate()** (2 connections)
+- **GeneratorFactoryTests.cs** (9 connections)
+- **Generate_Should_ReturnCorrectGeneratorType_BasedOnHour()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Generate_Should_CreateFeedGeneratorWithInSender_At6AM()** (2 connections)
+- **Generate_Should_CreateNoGenerator_AtUnscheduledHours()** (2 connections)
+- **Generate_Should_CreateFeedGeneratorWithXSender_At8AM()** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (5 shared connections)
+- [[Community 63]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

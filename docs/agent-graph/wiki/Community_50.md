@@ -1,22 +1,22 @@
 # Community 50
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **IFeedService** (2 connections)
-- **GetFeedsAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **GeneratorFactory.cs** (10 connections)
+- **GeneratorFactory()** (2 connections)
+- **CreateGeneratorInstance()** (2 connections)
+- **ScheduledGenerationProfile()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 34]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 53
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **NoGenerator.cs** (3 connections)
-- **NoGenerator.cs** (3 connections)
-- **NoGenerator()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **IgSenderTests.cs** (12 connections)
+- **IgSenderTests()** (2 connections)
+- **ClearEnvVars()** (2 connections)
+- **SetValidEnvVars()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 17]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IGeneratorFactory.cs** (4 connections)
-- **IGeneratorFactory.cs** (4 connections)
-- **IGeneratorFactory** (2 connections)
-- **Generate()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **PowerLawGenerator.cs** (4 connections)
+- **PowerLawGenerator.cs** (4 connections)
+- **PowerLawGenerator()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Implementation** (2 connections)
 
 ## Relationships
 

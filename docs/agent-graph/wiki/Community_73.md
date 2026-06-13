@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 25]] (7 shared connections)
+- [[Community 56]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

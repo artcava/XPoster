@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **Program.cs** (2 connections)
-- **if()** (2 connections)
-- **Program.cs** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 

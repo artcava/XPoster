@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
-- **catch()** (2 connections)
-- **Exception()** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **using()** (2 connections)
-- **generatePayLoad()** (2 connections)
+- **OpenAiService.cs** (10 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **GetPromptForImage()** (2 connections)
+- **GetSummary()** (2 connections)
 
 ## Relationships
 
-- [[Community 73]] (3 shared connections)
+- [[Community 81]] (3 shared connections)
 
 ## Audit Trail
 

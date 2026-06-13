@@ -5,15 +5,15 @@
 ## Key Concepts
 
 - **BaseGeneratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
 - **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **BaseGeneratorTests()** (2 connections)
 - **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **BaseGeneratorTests()** (2 connections)
 - **TestGenerator()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (6 shared connections)
+- [[Community 30]] (6 shared connections)
 
 ## Audit Trail
 
