@@ -115,6 +115,8 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin, Abstract Factory), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
 
+> 🤖 For AI-assisted development, an auto-generated code graph is available at [`docs/agent-graph/`](docs/agent-graph/). See [docs/agent-graph.md](docs/agent-graph.md) for usage.
+
 ---
 
 ## Technologies

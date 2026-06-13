@@ -37,7 +37,7 @@ Welcome to the XPoster documentation hub. Use the links below to navigate to eac
 | [OpenAI Setup](integrations/setup-openai.md) | API key, model selection, and configuration for the OpenAI provider |
 | [DeepSeek Setup](integrations/setup-deepseek.md) | API key and configuration for the DeepSeek text provider (used in HybridAiService) |
 | [fal.ai Setup](integrations/setup-falai.md) | API key and configuration for the fal.ai image provider (used in HybridAiService) |
-| [Graphify CI](integrations/graphify-ci.md) | Automated code-graph generation in the CI pipeline (backend .NET + frontend) |
+| [Agent Graph](agent-graph.md) | Auto-generated code-graph for AI-assisted development: what it is, output formats, CI pipeline, and usage guide |
 
 ## Quick Links
 
