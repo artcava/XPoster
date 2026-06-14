@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.Protected;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 using XPoster.Tests.Helpers;
@@ -45,11 +46,9 @@ public class InSenderResilienceTests
             (HttpStatusCode.OK, successBody));
 
         var sender = BuildSender(factory);
-        // Without real Polly pipeline the handler returns responses in sequence per call;
-        // InSender makes one attempt only — first call hits 429 → exception → false.
-        // This test documents that retry is delegated to Polly; the sender itself does not retry.
         var result = await sender.SendAsync(ValidPost());
-        // First call returns 429 → treated as non-success → exception thrown → caught → false.
+        // First call returns 429 -> treated as non-success -> exception thrown -> caught -> false.
+        // Retry is delegated to Polly; the sender itself does not retry.
         Assert.False(result);
     }
 
@@ -85,16 +84,15 @@ public class InSenderResilienceTests
     [Fact]
     public async Task SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()
     {
-        // Arrange: factory returns a client whose handler always throws
-        var mock = new Mock<HttpMessageHandler>();
-        mock.Protected()
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new HttpRequestException("Connection refused"));
 
-        var client = new HttpClient(mock.Object);
+        var client = new HttpClient(handlerMock.Object);
         var factoryMock = new Mock<IHttpClientFactory>();
         factoryMock.Setup(f => f.CreateClient("LinkedIn")).Returns(client);
 

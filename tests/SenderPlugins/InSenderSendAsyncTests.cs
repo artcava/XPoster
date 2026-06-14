@@ -14,14 +14,17 @@ namespace XPoster.Tests.SenderPlugins;
 public class InSenderSendAsyncTests
 {
     private readonly Mock<ILogger<InSender>> _mockLogger;
+    private readonly Mock<IHttpClientFactory> _mockFactory;
     private readonly InSender _sender;
 
     public InSenderSendAsyncTests()
     {
         _mockLogger = new Mock<ILogger<InSender>>();
+        _mockFactory = new Mock<IHttpClientFactory>();
+        _mockFactory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient());
         Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
         Environment.SetEnvironmentVariable("IN_OWNER", "fake_owner");
-        _sender = new InSender(_mockLogger.Object);
+        _sender = new InSender(_mockFactory.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -50,7 +53,6 @@ public class InSenderSendAsyncTests
     [Fact]
     public async Task SendAsync_WithValidTextOnlyPost_CatchesNetworkException_ReturnsFalse()
     {
-        // IN_OWNER is set — will reach generatePayLoad(null, ...) then fail on HTTP -> catch -> false
         var post = new Post { Content = "Valid LinkedIn post" };
         var result = await _sender.SendAsync(post);
         Assert.False(result);
@@ -62,7 +64,6 @@ public class InSenderSendAsyncTests
         Environment.SetEnvironmentVariable("IN_OWNER", null);
         var post = new Post { Content = "Valid post" };
         var result = await _sender.SendAsync(post);
-        // InvalidOperationException is caught internally -> returns false
         Assert.False(result);
     }
 }

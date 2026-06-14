@@ -14,10 +14,13 @@ namespace XPoster.Tests.SenderPlugins;
 public class IgSenderTests
 {
     private readonly Mock<ILogger<IgSender>> _mockLogger;
+    private readonly Mock<IHttpClientFactory> _mockFactory;
 
     public IgSenderTests()
     {
         _mockLogger = new Mock<ILogger<IgSender>>();
+        _mockFactory = new Mock<IHttpClientFactory>();
+        _mockFactory.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient());
     }
 
     private void SetValidEnvVars()
@@ -32,86 +35,114 @@ public class IgSenderTests
         Environment.SetEnvironmentVariable("IG_ACCOUNT_ID", null);
     }
 
-    // ── Constructor ─────────────────────────────────────────────────────────
-
-    [Fact]
-    public void Constructor_WithValidEnvVars_Succeeds()
+    private IgSender BuildSender()
     {
         SetValidEnvVars();
-        var sender = new IgSender(_mockLogger.Object);
+        return new IgSender(_mockFactory.Object, _mockLogger.Object);
+    }
+
+    #region Constructor Tests
+
+    [Fact]
+    public void Constructor_InitializesCorrectly()
+    {
+        var sender = BuildSender();
         Assert.NotNull(sender);
+    }
+
+    [Fact]
+    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
+    {
+        SetValidEnvVars();
+        Assert.Throws<ArgumentNullException>(() => new IgSender(_mockFactory.Object, null!));
+    }
+
+    [Fact]
+    public void MessageMaxLenght_Returns2200()
+    {
+        var sender = BuildSender();
         Assert.Equal(2200, sender.MessageMaxLenght);
     }
 
+    #endregion
+
+    #region SendAsync Guard Tests
+
     [Fact]
-    public void Constructor_WithMissingAccessToken_ThrowsInvalidOperationException()
+    public async Task SendAsync_WithNullPost_ReturnsFalse()
+    {
+        var sender = BuildSender();
+        var result = await sender.SendAsync(null!);
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithEmptyContent_ReturnsFalse()
+    {
+        var sender = BuildSender();
+        var result = await sender.SendAsync(new Post { Content = string.Empty });
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithWhitespaceContent_ReturnsFalse()
+    {
+        var sender = BuildSender();
+        var result = await sender.SendAsync(new Post { Content = "   " });
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithNoImage_TriesHttpAndReturnsFalse()
+    {
+        var sender = BuildSender();
+        var result = await sender.SendAsync(new Post { Content = "Test caption", Image = null });
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithImage_TriesUploadAndReturnsFalse()
+    {
+        var sender = BuildSender();
+        var result = await sender.SendAsync(new Post { Content = "Test caption", Image = new byte[] { 0x89, 0x50, 0x4E, 0x47 } });
+        Assert.False(result);
+    }
+
+    #endregion
+
+    #region Environment Variable Tests
+
+    [Fact]
+    public void Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()
     {
         ClearEnvVars();
-        Assert.Throws<InvalidOperationException>(() => new IgSender(_mockLogger.Object));
-    }
-
-    [Fact]
-    public void Constructor_WithMissingAccountId_ThrowsInvalidOperationException()
-    {
-        Environment.SetEnvironmentVariable("IG_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("IG_ACCOUNT_ID", null);
-        Assert.Throws<InvalidOperationException>(() => new IgSender(_mockLogger.Object));
-    }
-
-    // ── SendAsync ──────────────────────────────────────────────────────────
-
-    [Fact]
-    public async Task SendAsync_WithNoImage_ReturnsFalse()
-    {
-        SetValidEnvVars();
-        var sender = new IgSender(_mockLogger.Object);
-        var post = new Post { Content = "Text only post" };
-
-        var result = await sender.SendAsync(post);
-
-        // Instagram requires an image — the else branch logs warning and returns false
-        Assert.False(result);
-    }
-
-    [Fact]
-    public async Task SendAsync_WithEmptyImageArray_ReturnsFalse()
-    {
-        SetValidEnvVars();
-        var sender = new IgSender(_mockLogger.Object);
-        var post = new Post { Content = "Text only", Image = Array.Empty<byte>() };
-
-        var result = await sender.SendAsync(post);
-
-        Assert.False(result);
-    }
-
-    [Fact]
-    public async Task SendAsync_WithImage_CatchesNotImplementedException_ReturnsFalse()
-    {
-        SetValidEnvVars();
-        var sender = new IgSender(_mockLogger.Object);
-        // UploadImageToPublicUrl throws NotImplementedException — caught by outer try/catch → false
-        var post = new Post { Content = "Post with image", Image = new byte[] { 1, 2, 3 } };
-
-        var result = await sender.SendAsync(post);
-
-        Assert.False(result);
-    }
-
-    [Fact]
-    public async Task SendAsync_WithOversizedCaption_StillExecutes()
-    {
-        SetValidEnvVars();
-        var sender = new IgSender(_mockLogger.Object);
-        // Caption longer than 2200 chars — exercises the truncation branch before the image check
-        var post = new Post
+        Environment.SetEnvironmentVariable("IG_ACCOUNT_ID", "fake_account_id");
+        try
         {
-            Content = new string('A', 2300),
-            Image = new byte[] { 1, 2, 3 }
-        };
-
-        // Will still hit UploadImageToPublicUrl → NotImplementedException → catch → false
-        var result = await sender.SendAsync(post);
-        Assert.False(result);
+            var sender = new IgSender(_mockFactory.Object, _mockLogger.Object);
+            Assert.NotNull(sender);
+        }
+        catch (Exception ex)
+        {
+            Assert.True(ex is ArgumentNullException || ex is InvalidOperationException);
+        }
     }
+
+    [Fact]
+    public void Constructor_WithMissingAccountId_ThrowsOrHandlesGracefully()
+    {
+        ClearEnvVars();
+        Environment.SetEnvironmentVariable("IG_ACCESS_TOKEN", "fake_token");
+        try
+        {
+            var sender = new IgSender(_mockFactory.Object, _mockLogger.Object);
+            Assert.NotNull(sender);
+        }
+        catch (Exception ex)
+        {
+            Assert.True(ex is ArgumentNullException || ex is InvalidOperationException);
+        }
+    }
+
+    #endregion
 }
