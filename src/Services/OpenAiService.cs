@@ -97,6 +97,13 @@ public class OpenAiService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        // Guard against empty prompts — consistent with FalAiImageService (reference implementation).
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
+            return Array.Empty<byte>();
+        }
+
         _logger.LogInformation("Generating image with model {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
         var body = new
