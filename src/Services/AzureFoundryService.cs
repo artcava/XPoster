@@ -96,6 +96,12 @@ public sealed class AzureFoundryService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
+            return Array.Empty<byte>();
+        }
+
         var requestBody = new
         {
             prompt,
@@ -106,13 +112,31 @@ public sealed class AzureFoundryService : IAiService
 
         var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
 
+        // Intercept 429 before the generic success check — consistent with GetSummaryAsync
+        // and GetImagePromptAsync in this class, and with FalAiImageService (reference implementation).
+        if (response.StatusCode == HttpStatusCode.TooManyRequests)
+        {
+            _logger.LogWarning("Azure Foundry returned 429 during image generation.");
+            return Array.Empty<byte>();
+        }
+
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogError("Azure Foundry image generation failed with status code {StatusCode}", response.StatusCode);
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        JsonElement result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError(ex, "Azure Foundry image generation response contained invalid JSON.");
+            return Array.Empty<byte>();
+        }
+
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
             _logger.LogError("Azure Foundry image generation response does not contain data entries.");
@@ -124,9 +148,21 @@ public sealed class AzureFoundryService : IAiService
         if (first.TryGetProperty("b64_json", out var b64Property))
         {
             var base64 = b64Property.GetString();
-            return string.IsNullOrWhiteSpace(base64)
-                ? Array.Empty<byte>()
-                : Convert.FromBase64String(base64);
+            if (string.IsNullOrWhiteSpace(base64))
+            {
+                _logger.LogError("Azure Foundry image generation response contained a null or empty b64_json value.");
+                return Array.Empty<byte>();
+            }
+
+            try
+            {
+                return Convert.FromBase64String(base64);
+            }
+            catch (FormatException ex)
+            {
+                _logger.LogError(ex, "Azure Foundry image generation response contained an invalid base64 string.");
+                return Array.Empty<byte>();
+            }
         }
 
         if (first.TryGetProperty("url", out var urlProperty))
@@ -134,12 +170,35 @@ public sealed class AzureFoundryService : IAiService
             var imageUrl = urlProperty.GetString();
             if (string.IsNullOrWhiteSpace(imageUrl))
             {
+                _logger.LogError("Azure Foundry image generation response contained an empty fallback URL.");
                 return Array.Empty<byte>();
             }
 
-            return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
+            // Validate the fallback URL against the configured endpoint origin to prevent
+            // SSRF-style downloads from arbitrary hosts returned by the API response.
+            // If validation fails we still log and proceed rather than blocking — this is a
+            // defence-in-depth warning that enables audit in Application Insights.
+            var configuredOrigin = new Uri(_options.Endpoint.TrimEnd('/')).GetLeftPart(UriPartial.Authority);
+            if (!imageUrl.StartsWith(configuredOrigin, StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning(
+                    "Azure Foundry image fallback URL {ImageUrl} does not originate from the configured endpoint {ConfiguredOrigin}. Proceeding with download.",
+                    imageUrl,
+                    configuredOrigin);
+            }
+
+            try
+            {
+                return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Azure Foundry failed to download image from fallback URL: {Url}", imageUrl);
+                return Array.Empty<byte>();
+            }
         }
 
+        _logger.LogError("Azure Foundry image generation response data entry is missing both b64_json and url.");
         return Array.Empty<byte>();
     }
 
