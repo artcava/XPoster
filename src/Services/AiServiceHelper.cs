@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using XPoster.Abstraction;
 using XPoster.Models;
 
 namespace XPoster.Services;
