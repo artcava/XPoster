@@ -1,20 +1,19 @@
-# Community 85
+# Community 96
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
+- **BaseOrchestrator.cs** (5 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 31]] (7 shared connections)
+- [[Community 64]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

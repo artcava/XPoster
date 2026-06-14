@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory** (2 connections)
 - **XPoster.Abstraction** (2 connections)
-- **GetFeedsAsync()** (2 connections)
-- **IFeedService** (2 connections)
+- **GetByProvider()** (2 connections)
 
 ## Relationships
 

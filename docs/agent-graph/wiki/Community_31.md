@@ -1,25 +1,25 @@
 # Community 31
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AiServiceFactoryTests.cs** (7 connections)
-- **AiServiceFactoryTests.cs** (7 connections)
-- **GetByProvider_Should_ReturnAzureFoundryService_When_ProviderIsMappedAndResolvable()** (2 connections)
-- **AiServiceFactoryTests()** (2 connections)
-- **GetByProvider_Should_ThrowInvalidOperationException_When_MappedServiceCannotBeResolved()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **GetByProvider_Should_ReturnService_When_ProviderIsMappedAndResolvable()** (2 connections)
-- **GetByProvider_Should_ThrowArgumentException_When_ProviderIsNotMapped()** (2 connections)
+- **InSender.cs** (10 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **using()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **Exception()** (2 connections)
+- **catch()** (2 connections)
+- **generatePayLoad()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 85]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,17 +1,18 @@
 # Community 26
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory()** (2 connections)
-- **if()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **ArgumentException()** (2 connections)
-- **GetByProvider()** (2 connections)
+- **XSenderSendAsyncTests.cs** (8 connections)
+- **XSenderSendAsyncTests.cs** (8 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **XSenderSendAsyncTests()** (2 connections)
+- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 52
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (10 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Implementation** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
 - **if()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **CreateOrchestratorInstance()** (2 connections)
 
 ## Relationships
 
-- [[Community 39]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

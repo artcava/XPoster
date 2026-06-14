@@ -6,14 +6,14 @@
 
 - **OrchestratorFactoryTests.cs** (9 connections)
 - **XPoster.Tests.Implementation** (2 connections)
-- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
-- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
 - **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
 - **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
+- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (4 shared connections)
+- [[Community 74]] (4 shared connections)
 
 ## Audit Trail
 

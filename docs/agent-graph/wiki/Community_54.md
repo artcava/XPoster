@@ -5,14 +5,14 @@
 ## Key Concepts
 
 - **FeedOrchestrator.cs** (8 connections)
-- **GenerateMessage()** (2 connections)
-- **catch()** (2 connections)
-- **ReplaceEveryFirstOccurenceOf()** (2 connections)
 - **XPoster.Implementation** (2 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
+- **catch()** (2 connections)
+- **GenerateMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 60]] (4 shared connections)
+- [[Community 68]] (4 shared connections)
 
 ## Audit Trail
 

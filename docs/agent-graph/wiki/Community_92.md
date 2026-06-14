@@ -1,19 +1,20 @@
 # Community 92
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
-- **if()** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **AiProvider.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 69]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 55
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ITimeProvider** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **OrchestratorFactory.cs** (10 connections)
+- **if()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 47]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

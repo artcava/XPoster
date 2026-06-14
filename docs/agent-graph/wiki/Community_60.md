@@ -1,17 +1,18 @@
 # Community 60
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **FeedOrchestrator()** (2 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **XPoster.Abstraction** (2 connections)
+- **IOrchestratorFactory** (2 connections)
+- **Resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

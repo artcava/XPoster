@@ -1,23 +1,24 @@
 # Community 37
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **IgSenderTests.cs** (18 connections)
+- **ClearEnvVars()** (2 connections)
+- **catch()** (2 connections)
+- **Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()** (2 connections)
+- **SetValidEnvVars()** (2 connections)
+- **SendAsync_WithNoImage_TriesHttpAndReturnsFalse()** (2 connections)
+- **IgSenderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 13]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

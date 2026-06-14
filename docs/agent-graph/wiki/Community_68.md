@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (12 connections)
-- **ClearEnvVars()** (2 connections)
-- **SetValidEnvVars()** (2 connections)
-- **IgSenderTests()** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (8 shared connections)
+- [[Community 54]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

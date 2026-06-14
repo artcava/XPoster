@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **SendAsync()** (2 connections)
+- **FeedService.cs** (7 connections)
 - **catch()** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **XPoster.Services** (2 connections)
+- **Exception()** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (3 shared connections)
+- [[Community 76]] (3 shared connections)
 
 ## Audit Trail
 

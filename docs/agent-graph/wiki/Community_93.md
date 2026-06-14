@@ -1,20 +1,19 @@
-# Community 85
+# Community 93
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 31]] (7 shared connections)
+- [[Community 80]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -6,12 +6,12 @@
 
 - **XSender.cs** (6 connections)
 - **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
 - **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (3 shared connections)
+- [[Community 75]] (3 shared connections)
 
 ## Audit Trail
 

@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_DefaultOptions_Succeeds()** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
+- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
 
 ## Relationships
 

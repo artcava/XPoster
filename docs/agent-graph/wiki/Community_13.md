@@ -1,28 +1,29 @@
 # Community 13
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **GenerateImageAsync()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **while()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **IgSenderTests.cs** (18 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_WithMissingAccountId_ThrowsOrHandlesGracefully()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WithImage_TriesUploadAndReturnsFalse()** (2 connections)
+- **SendAsync_WithWhitespaceContent_ReturnsFalse()** (2 connections)
+- **IgSender()** (2 connections)
+- **MessageMaxLenght_Returns2200()** (2 connections)
 
 ## Relationships
 
-- [[Community 59]] (4 shared connections)
+- [[Community 37]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 40 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

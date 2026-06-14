@@ -1,26 +1,26 @@
 # Community 23
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (12 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyImageArray_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImage_CatchesNotImplementedException_ReturnsFalse()** (2 connections)
-- **Constructor_WithMissingAccessToken_ThrowsInvalidOperationException()** (2 connections)
-- **Constructor_WithValidEnvVars_Succeeds()** (2 connections)
-- **Constructor_WithMissingAccountId_ThrowsInvalidOperationException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithOversizedCaption_StillExecutes()** (2 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 68]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

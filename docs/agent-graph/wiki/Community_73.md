@@ -1,20 +1,21 @@
 # Community 73
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
+- **OpenAiService.cs** (12 connections)
+- **var()** (2 connections)
+- **OpenAiService()** (2 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (7 shared connections)
+- [[Community 22]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

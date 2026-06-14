@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **Run()** (2 connections)
-- **XPoster** (2 connections)
-- **catch()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (3 shared connections)
+- [[Community 77]] (3 shared connections)
 
 ## Audit Trail
 

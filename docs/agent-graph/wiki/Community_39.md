@@ -1,23 +1,24 @@
 # Community 39
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (10 connections)
-- **return()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **foreach()** (2 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **HybridAiService.cs** (6 connections)
+- **HybridAiService.cs** (6 connections)
+- **GenerateImageAsync()** (2 connections)
+- **HybridAiService()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 52]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
