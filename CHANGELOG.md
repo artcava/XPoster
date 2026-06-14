@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`Microsoft.Extensions.Http.Resilience` package** added to `XPoster.csproj` ([#133](https://github.com/artcava/XPoster/issues/133)): brings the Polly v8 standard resilience pipeline via the .NET 8 `AddStandardResilienceHandler` extension, without a direct `Polly` package reference.
+- **Named `HttpClient` registrations in `Program.cs`** ([#133](https://github.com/artcava/XPoster/issues/133)): six named clients registered — `OpenAI`, `AzureFoundry`, `DeepSeek`, `FalAi`, `LinkedIn`, `Instagram` — each with `AddStandardResilienceHandler` configured for 3 retries (exponential back-off + jitter), 30-second per-attempt timeout, and 30-second circuit-breaker break duration (`FalAi` uses 60-second timeout to accommodate image generation latency).
+- **`ResilienceTestHelpers`** (`tests/Helpers/ResilienceTestHelpers.cs`) ([#133](https://github.com/artcava/XPoster/issues/133)): shared factory for `HttpMessageHandler` mocks that return a configurable sequence of `(HttpStatusCode, body)` pairs, with fresh `HttpResponseMessage` instances on each call to support multi-attempt retry scenarios.
+
+### Changed
+- **`InSender` refactored to accept `IHttpClientFactory`** ([#133](https://github.com/artcava/XPoster/issues/133)): removed `static readonly HttpClient httpClient = new()`; constructor now accepts `IHttpClientFactory` and calls `CreateClient("LinkedIn")`, ensuring the Polly pipeline is applied to all outbound LinkedIn API calls. Authorization header set on the resolved client instance. Log call sites updated to structured logging.
+- **`IgSender` refactored to accept `IHttpClientFactory`** ([#133](https://github.com/artcava/XPoster/issues/133)): replaced `new HttpClient()` in constructor with `httpClientFactory.CreateClient("Instagram")`; constructor signature updated to `(IHttpClientFactory, ILogger<IgSender>)`. Log call sites updated to structured logging.
+- **`Program.cs` `AddHttpClient()` call replaced** ([#133](https://github.com/artcava/XPoster/issues/133)): the previous unnamed `builder.Services.AddHttpClient()` call is superseded by the six named client registrations above.
+
+### Tests
+- **`InSenderResilienceTests`** ([#133](https://github.com/artcava/XPoster/issues/133)): R1 — 429×2 then 200 sequence documents retry delegation to Polly; R2 — 503 returns `false` and logs error; R3 — `HttpRequestException` (post-retry exhaustion) returns `false`; R4 — 200 on first attempt returns `true` (happy path with factory-injected client).
+- **`IgSenderResilienceTests`** ([#133](https://github.com/artcava/XPoster/issues/133)): R1 — no-image post returns `false` without any HTTP call; R2 — image post with unimplemented upload returns `false` and logs error; R3 — `HttpRequestException` returns `false`.
+- **`InSenderTests` and `InSenderSendAsyncTests` constructor signatures updated** ([#133](https://github.com/artcava/XPoster/issues/133)): updated to pass an `IHttpClientFactory` mock matching the new `InSender(IHttpClientFactory, ILogger<InSender>)` constructor.
+
 ### Changed
 - **`AzureFoundryService.GenerateImageAsync` hardened** to match `FalAiImageService` as the reference implementation ([#139](https://github.com/artcava/XPoster/issues/139)):
   - Added 429 intercept before the success check, consistent with `GetSummaryAsync` and `GetImagePromptAsync` in the same class.
@@ -31,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`OpenAiService.GenerateImageAsync` — null `b64_json` dereference** ([#158](https://github.com/artcava/XPoster/issues/158)): `b64Property.GetString()` null check added before `Convert.FromBase64String`; returns empty array instead of throwing `ArgumentNullException`.
 - **`OpenAiService.GenerateImageAsync` — unhandled malformed JSON** ([#158](https://github.com/artcava/XPoster/issues/158)): `ReadFromJsonAsync<JsonElement>` now wrapped in `try/catch (JsonException)`; returns empty array on parse failure.
 
-### Added
+### Added (continued)
 - Dynamic GitHub Actions build status badge in README ([#35](https://github.com/artcava/XPoster/issues/35))
 - This CHANGELOG.md file ([#36](https://github.com/artcava/XPoster/issues/36))
 - **Agent graph generation**: new `regenerate-agent-graph.yml` workflow runs as a PR check on every PR targeting `develop`; generates a `graphify-dotnet` knowledge graph (wiki, report, JSON) and uploads it as a downloadable Actions artifact for pre-merge review ([#141](https://github.com/artcava/XPoster/issues/141))

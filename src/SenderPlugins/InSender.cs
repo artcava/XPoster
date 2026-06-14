@@ -14,22 +14,27 @@ namespace XPoster.SenderPlugins;
 /// </summary>
 public class InSender : ISender
 {
-    private static readonly HttpClient httpClient = new();
+    private readonly HttpClient _httpClient;
     private readonly ILogger<InSender> _logger;
 
     /// <summary>Gets the maximum number of characters allowed in a LinkedIn post caption.</summary>
     public int MessageMaxLenght => 800;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="InSender"/>, setting the Bearer token
-    /// for all outgoing LinkedIn API requests.
+    /// Initialises a new instance of <see cref="InSender"/> using an <see cref="IHttpClientFactory"/>-provided
+    /// client registered as "LinkedIn", which carries the Polly resilience pipeline.
     /// </summary>
+    /// <param name="httpClientFactory">The factory used to create the named "LinkedIn" client.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <c>null</c>.</exception>
-    public InSender(ILogger<InSender> logger)
+    public InSender(IHttpClientFactory httpClientFactory, ILogger<InSender> logger)
     {
-        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));
-        _logger = logger ?? throw new ArgumentNullException("logger");
+        ArgumentNullException.ThrowIfNull(httpClientFactory);
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _httpClient = httpClientFactory.CreateClient("LinkedIn");
+        _httpClient.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue(
+                "Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));
     }
 
     /// <summary>
@@ -75,11 +80,12 @@ public class InSender : ISender
 
                 var initJson = JsonSerializer.Serialize(initPayload);
                 var initContent = new StringContent(initJson, Encoding.UTF8, "application/json");
-                var initResponse = await httpClient.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", initContent);
+                var initResponse = await _httpClient.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", initContent);
 
                 if (!initResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"Failed to initialize image upload: {await initResponse.Content.ReadAsStringAsync()}");
+                    _logger.LogError("Failed to initialize image upload: {Response}",
+                        await initResponse.Content.ReadAsStringAsync());
                     return false;
                 }
 
@@ -99,11 +105,12 @@ public class InSender : ISender
                 {
                     var imageContent = new StreamContent(memoryStream);
                     imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
-                    var uploadResponse = await httpClient.PostAsync(uploadUrl, imageContent);
+                    var uploadResponse = await _httpClient.PostAsync(uploadUrl, imageContent);
 
                     if (!uploadResponse.IsSuccessStatusCode)
                     {
-                        _logger.LogError($"Failed to upload image: {await uploadResponse.Content.ReadAsStringAsync()}");
+                        _logger.LogError("Failed to upload image: {Response}",
+                            await uploadResponse.Content.ReadAsStringAsync());
                         return false;
                     }
                 }
@@ -117,11 +124,11 @@ public class InSender : ISender
 
             var json = JsonSerializer.Serialize(postPayload);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync("https://api.linkedin.com/v2/ugcPosts", content);
+            var response = await _httpClient.PostAsync("https://api.linkedin.com/v2/ugcPosts", content);
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"Failed to post to LinkedIn: {await response.Content.ReadAsStringAsync()}");
 
-            _logger.LogInformation($"Post published: {await response.Content.ReadAsStringAsync()}.");
+            _logger.LogInformation("Post published: {Response}.", await response.Content.ReadAsStringAsync());
             return true;
         }
         catch (Exception ex)

@@ -18,17 +18,19 @@ namespace XPoster.SenderPlugins
         private readonly string _instagramAccountId;
 
         /// <summary>
-        /// Initialises a new instance of <see cref="IgSender"/>, reading Instagram credentials
-        /// from environment variables.
+        /// Initialises a new instance of <see cref="IgSender"/> using an <see cref="IHttpClientFactory"/>-provided
+        /// client registered as "Instagram", which carries the Polly resilience pipeline.
         /// </summary>
+        /// <param name="httpClientFactory">The factory used to create the named "Instagram" client.</param>
         /// <param name="logger">The logger for diagnostic output.</param>
         /// <exception cref="InvalidOperationException">
         /// Thrown when <c>IG_ACCESS_TOKEN</c> or <c>IG_ACCOUNT_ID</c> are not set.
         /// </exception>
-        public IgSender(ILogger<IgSender> logger)
+        public IgSender(IHttpClientFactory httpClientFactory, ILogger<IgSender> logger)
         {
-            _httpClient = new HttpClient();
-            _logger = logger;
+            ArgumentNullException.ThrowIfNull(httpClientFactory);
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _httpClient = httpClientFactory.CreateClient("Instagram");
 
             // CS8601: GetEnvironmentVariable returns string? — throw early if missing (fail-fast)
             _accessToken = Environment.GetEnvironmentVariable("IG_ACCESS_TOKEN")
@@ -53,7 +55,7 @@ namespace XPoster.SenderPlugins
                 string caption = $"{post.Content}{Post.Firm}";
                 if (caption.Length > MessageMaxLenght)
                 {
-                    _logger.LogWarning($"Il messaggio supera il limite di {MessageMaxLenght} caratteri. Verrà troncato.");
+                    _logger.LogWarning("Il messaggio supera il limite di {MaxLength} caratteri. Verrà troncato.", MessageMaxLenght);
                     caption = caption.Substring(0, MessageMaxLenght);
                 }
 
@@ -73,11 +75,13 @@ namespace XPoster.SenderPlugins
                         access_token = _accessToken
                     };
                     var mediaContent = new StringContent(JsonSerializer.Serialize(mediaPayload), Encoding.UTF8, "application/json");
-                    var mediaResponse = await _httpClient.PostAsync($"https://graph.instagram.com/v20.0/{_instagramAccountId}/media", mediaContent);
+                    var mediaResponse = await _httpClient.PostAsync(
+                        $"https://graph.instagram.com/v20.0/{_instagramAccountId}/media", mediaContent);
 
                     if (!mediaResponse.IsSuccessStatusCode)
                     {
-                        _logger.LogError($"Errore nella creazione del media: {await mediaResponse.Content.ReadAsStringAsync()}");
+                        _logger.LogError("Errore nella creazione del media: {Response}",
+                            await mediaResponse.Content.ReadAsStringAsync());
                         return false;
                     }
 
@@ -92,11 +96,13 @@ namespace XPoster.SenderPlugins
                         access_token = _accessToken
                     };
                     var publishContent = new StringContent(JsonSerializer.Serialize(publishPayload), Encoding.UTF8, "application/json");
-                    var publishResponse = await _httpClient.PostAsync($"https://graph.instagram.com/v20.0/{_instagramAccountId}/media_publish", publishContent);
+                    var publishResponse = await _httpClient.PostAsync(
+                        $"https://graph.instagram.com/v20.0/{_instagramAccountId}/media_publish", publishContent);
 
                     if (!publishResponse.IsSuccessStatusCode)
                     {
-                        _logger.LogError($"Errore nella pubblicazione: {await publishResponse.Content.ReadAsStringAsync()}");
+                        _logger.LogError("Errore nella pubblicazione: {Response}",
+                            await publishResponse.Content.ReadAsStringAsync());
                         return false;
                     }
 

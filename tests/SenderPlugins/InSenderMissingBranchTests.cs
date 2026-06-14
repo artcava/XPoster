@@ -13,24 +13,28 @@ namespace XPoster.Tests.SenderPlugins;
 public class InSenderMissingBranchTests
 {
     private readonly Mock<ILogger<InSender>> _logger = new();
+    private readonly Mock<IHttpClientFactory> _factory = new();
+
+    public InSenderMissingBranchTests()
+    {
+        _factory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient());
+    }
 
     private InSender BuildSender(string owner = "fake_owner")
     {
         Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
         Environment.SetEnvironmentVariable("IN_OWNER", owner);
-        return new InSender(_logger.Object);
+        return new InSender(_factory.Object, _logger.Object);
     }
 
     [Fact]
     public async Task SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()
     {
-        // Exercises the image-upload path in SendAsync up to the HTTP call,
-        // which fails (no real server) and is caught -> returns false
         var sender = BuildSender();
         var post = new Post
         {
             Content = "Post with image",
-            Image = new byte[] { 0xFF, 0xD8, 0xFF } // fake JPEG header
+            Image = new byte[] { 0xFF, 0xD8, 0xFF }
         };
 
         var result = await sender.SendAsync(post);
@@ -65,32 +69,25 @@ public class InSenderMissingBranchTests
     [Fact]
     public async Task SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()
     {
-        // Arrange: set IN_ORG_ID — IN_OWNER is also present but should be ignored
         Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
         Environment.SetEnvironmentVariable("IN_OWNER", "fake_owner");
         Environment.SetEnvironmentVariable("IN_ORG_ID", "98765432");
-        var sender = new InSender(_logger.Object);
+        var sender = new InSender(_factory.Object, _logger.Object);
 
-        // Act: SendAsync will call ResolveAuthorUrn() → organization URN → HTTP call fails → false
         var result = await sender.SendAsync(new Post { Content = "org post" });
 
-        // Assert: execution reached the HTTP call (not an env-var exception)
         Assert.False(result);
-
-        // Cleanup
         Environment.SetEnvironmentVariable("IN_ORG_ID", null);
     }
 
     [Fact]
     public async Task SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()
     {
-        // Arrange: IN_ORG_ID is absent, IN_OWNER is present → person URN
         Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
         Environment.SetEnvironmentVariable("IN_OWNER", "123456789");
         Environment.SetEnvironmentVariable("IN_ORG_ID", null);
-        var sender = new InSender(_logger.Object);
+        var sender = new InSender(_factory.Object, _logger.Object);
 
-        // Act: reaches HTTP call → false (no real server)
         var result = await sender.SendAsync(new Post { Content = "person post" });
 
         Assert.False(result);
@@ -99,17 +96,14 @@ public class InSenderMissingBranchTests
     [Fact]
     public async Task SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()
     {
-        // Arrange: neither IN_ORG_ID nor IN_OWNER is set → InvalidOperationException caught → false
         Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
         Environment.SetEnvironmentVariable("IN_OWNER", null);
         Environment.SetEnvironmentVariable("IN_ORG_ID", null);
-        var sender = new InSender(_logger.Object);
+        var sender = new InSender(_factory.Object, _logger.Object);
 
         var result = await sender.SendAsync(new Post { Content = "no author" });
 
         Assert.False(result);
-
-        // Restore
         Environment.SetEnvironmentVariable("IN_OWNER", "fake_owner");
     }
 
