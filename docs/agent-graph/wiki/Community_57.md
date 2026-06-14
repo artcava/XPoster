@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **OpenAiService.cs** (11 connections)
+- **if()** (2 connections)
+- **OpenAiService()** (2 connections)
 - **catch()** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (3 shared connections)
+- [[Community 24]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

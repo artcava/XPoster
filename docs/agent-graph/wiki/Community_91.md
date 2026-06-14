@@ -1,20 +1,19 @@
-# Community 76
+# Community 91
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
-- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (3 shared connections)
+- [[Community 77]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

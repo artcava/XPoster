@@ -1,23 +1,23 @@
 # Community 36
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (5 connections)
-- **XFunctionTests.cs** (5 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
+- **BuildFalService()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **HybridAiService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 10]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

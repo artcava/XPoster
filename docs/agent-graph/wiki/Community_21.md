@@ -1,26 +1,26 @@
 # Community 21
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **NotSupportedException()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 64]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

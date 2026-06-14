@@ -1,19 +1,20 @@
 # Community 35
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **TestOrchestrator()** (2 connections)
+- **IAiService.cs** (6 connections)
+- **IAiService.cs** (6 connections)
+- **IAiService** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 30]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

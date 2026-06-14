@@ -1,17 +1,18 @@
 # Community 22
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
-- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
-- **AzureFoundryOptionsValidatorTests** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests** (2 connections)
+- **CryptoService()** (2 connections)
+- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
+- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
+- **MakeService()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 52
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **IFeedService** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **OrchestratorFactory.cs** (10 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **if()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 38]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

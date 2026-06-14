@@ -1,16 +1,17 @@
 # Community 69
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **InSender.cs** (10 connections)
-- **InSender()** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **FeedOrchestrator()** (2 connections)
 - **if()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 26]] (7 shared connections)
+- [[Community 50]] (4 shared connections)
 
 ## Audit Trail
 

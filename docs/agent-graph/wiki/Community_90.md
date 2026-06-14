@@ -1,20 +1,19 @@
-# Community 76
+# Community 90
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **BaseOrchestrator.cs** (5 connections)
 - **if()** (2 connections)
-- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (3 shared connections)
+- [[Community 65]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

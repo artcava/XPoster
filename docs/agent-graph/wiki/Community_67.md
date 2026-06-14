@@ -1,20 +1,21 @@
 # Community 67
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DeepSeekOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XPoster** (2 connections)
+- **Run()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 75]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

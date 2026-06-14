@@ -1,23 +1,29 @@
 # Community 3
 
-> 14 nodes · cohesion 0.27
+> 20 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **ModelsTests.cs** (13 connections)
-- **ModelsTests.cs** (13 connections)
-- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
-- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
-- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
-- **Post_CanHold_ImageBytes()** (2 connections)
-- **Message_CanBeCreated_WithContent()** (2 connections)
-- **ModelsTests** (2 connections)
-- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
-- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **ImageData_CanBeCreated_WithUrl()** (2 connections)
-- **Choice_CanBeCreated_WithMessage()** (2 connections)
-- **OpenAIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **FalAiImageServiceTests.cs** (19 connections)
+- **FalAiImageServiceTests.cs** (19 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **FalImageJson()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **BuildService()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 74 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

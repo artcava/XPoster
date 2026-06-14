@@ -1,6 +1,6 @@
 # OpenAiServiceTests.cs
 
-> God node · 20 connections
+> God node · 29 connections
 
 **Community:** [[Community 0]]
 
@@ -13,6 +13,7 @@
 - [[BuildService()]]
 - [[OpenAiService()]]
 - [[MakeHandler()]]
+- [[MakeHandlerMock()]]
 - [[ChatCompletionJson()]]
 - [[GetSummaryAsync_WhenTextAlreadyShort_ReturnsTextUnchanged()]]
 - [[GetSummaryAsync_WhenApiReturns200_ReturnsTrimmedContent()]]
@@ -20,13 +21,12 @@
 - [[GetSummaryAsync_WhenApiReturnsError_ReturnsEmpty()]]
 - [[GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
 - [[GetSummaryAsync_WhenChoicesIsNull_ReturnsEmpty()]]
+- [[GetSummaryAsync_WhenSummaryAlwaysTooLong_StopsAfterThreeAttempts()]]
 - [[GetImagePromptAsync_WhenApiReturns200_ReturnsTrimmedContent()]]
 - [[GetImagePromptAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()]]
+- [[GetImagePromptAsync_WhenApiReturnsTooManyRequests_LogsInformation()]]
 - [[GetImagePromptAsync_WhenApiReturnsError_ReturnsEmpty()]]
 - [[GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
-- [[GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmpty()]]
-- [[GenerateImageAsync_WhenApiReturns200_ReturnsDecodedBytes()]]
-- [[GenerateImageAsync_WhenApiReturnsError_ReturnsEmptyArray()]]
 
 ---
 

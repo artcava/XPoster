@@ -1,27 +1,28 @@
 # Community 11
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **InSenderTests.cs** (9 connections)
-- **InSenderTests.cs** (9 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **catch()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **InSenderTests()** (2 connections)
-- **Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **AzureFoundryService.cs** (13 connections)
+- **XPoster.Services** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **while()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 84]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

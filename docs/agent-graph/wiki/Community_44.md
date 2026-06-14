@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **SendAsync()** (2 connections)
-- **ISender** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Implementation** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

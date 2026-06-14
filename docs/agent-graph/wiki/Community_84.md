@@ -1,19 +1,20 @@
 # Community 84
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
+- **AzureFoundryService.cs** (13 connections)
+- **catch()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 62]] (3 shared connections)
+- [[Community 11]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
