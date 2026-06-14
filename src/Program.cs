@@ -50,11 +50,12 @@ builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
-builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi"));
 builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
 builder.Services.Configure<AzureFoundryOptions>(builder.Configuration.GetSection("AzureFoundry"));
 builder.Services.AddSingleton<IValidateOptions<AzureFoundryOptions>, AzureFoundryOptionsValidator>();
 builder.Services.Configure<DeepSeekOptions>(builder.Configuration.GetSection("DeepSeek"));
 builder.Services.AddSingleton<IValidateOptions<DeepSeekOptions>, DeepSeekOptionsValidator>();
+builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi"));
+builder.Services.AddSingleton<IValidateOptions<FalAiOptions>, FalAiOptionsValidator>();
 
 builder.Build().Run();
