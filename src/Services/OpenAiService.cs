@@ -109,16 +109,57 @@ public class OpenAiService : IAiService
 
         var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
 
+        if (response.StatusCode == HttpStatusCode.TooManyRequests)
+        {
+            _logger.LogWarning("OpenAI returned 429 during image generation.");
+            return Array.Empty<byte>();
+        }
+
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogError("OpenAI image generation failed with status code {StatusCode}", response.StatusCode);
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
-        // base64 cannot be null if API responded with 200 and valid JSON structure
-        return Convert.FromBase64String(base64!);
+        JsonElement result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError(ex, "OpenAI image generation response contained invalid JSON.");
+            return Array.Empty<byte>();
+        }
+
+        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
+        {
+            _logger.LogError("OpenAI image generation response does not contain data entries.");
+            return Array.Empty<byte>();
+        }
+
+        if (!data[0].TryGetProperty("b64_json", out var b64Property))
+        {
+            _logger.LogError("OpenAI image generation response data entry is missing b64_json.");
+            return Array.Empty<byte>();
+        }
+
+        var base64 = b64Property.GetString();
+        if (string.IsNullOrWhiteSpace(base64))
+        {
+            _logger.LogError("OpenAI image generation response contained a null or empty b64_json value.");
+            return Array.Empty<byte>();
+        }
+
+        try
+        {
+            return Convert.FromBase64String(base64);
+        }
+        catch (FormatException ex)
+        {
+            _logger.LogError(ex, "OpenAI image generation response contained an invalid base64 string.");
+            return Array.Empty<byte>();
+        }
     }
 
     /// <summary>
