@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **`AzureFoundryService.GenerateImageAsync` hardened** to match `FalAiImageService` as the reference implementation ([#139](https://github.com/artcava/XPoster/issues/139)):
+  - Added 429 intercept before the success check, consistent with `GetSummaryAsync` and `GetImagePromptAsync` in the same class.
+  - Wrapped `ReadFromJsonAsync<JsonElement>` in `try/catch (JsonException)` to handle malformed API responses without throwing.
+  - Added `null`-check and `try/catch (FormatException)` around `Convert.FromBase64String` for the `b64_json` path.
+  - Added origin validation for the `url` fallback: emits `LogWarning` with the full URL when the download origin does not match `_options.Endpoint`, enabling audit in Application Insights; download proceeds as defence-in-depth.
+  - Wrapped `GetByteArrayAsync` in `try/catch (HttpRequestException)` on the `url` fallback path.
+  - Added explicit `LogError` when the response data entry contains neither `b64_json` nor `url`.
+- **`OpenAiService.GenerateImageAsync` hardened** ([#139](https://github.com/artcava/XPoster/issues/139)):
+  - Added `string.IsNullOrWhiteSpace(prompt)` guard at method entry, consistent with `FalAiImageService`.
+- **Prompt guard added to `AzureFoundryService.GenerateImageAsync`** ([#139](https://github.com/artcava/XPoster/issues/139)): rejects empty or whitespace-only prompts with `LogWarning` before any HTTP call, matching the pattern already in `FalAiImageService` and the newly updated `OpenAiService`.
+
 ### Added
 - Dynamic GitHub Actions build status badge in README ([#35](https://github.com/artcava/XPoster/issues/35))
 - This CHANGELOG.md file ([#36](https://github.com/artcava/XPoster/issues/36))
@@ -19,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/` folder reorganisation: analysis sub-folder reordered ([#143](https://github.com/artcava/XPoster/pull/143))
 - `docs/agent-graph.md`: new unified guide explaining what the agent graph is, node types, output formats, CI workflow, and how to use it with AI coding assistants; merges and supersedes `docs/integrations/graphify-ci.md`
 
-### Changed
+### Changed (continued)
 - `regenerate-agent-graph.yml` trigger changed from `pull_request[closed]` (post-merge) to `pull_request[opened, synchronize, reopened]` (pre-merge PR check); removed `peter-evans/create-pull-request` step that was the root cause of the CI loop ([#149](https://github.com/artcava/XPoster/issues/149))
 - `persist-agent-graph.yml` checkout step updated to use `BOT_PAT` token; `permissions.contents` downgraded to `read` (actual write delegated to the token) ([#149](https://github.com/artcava/XPoster/issues/149))
 - `docs/index.md`: replaced `graphify-ci.md` row with `agent-graph.md` in the Integrations section
@@ -29,6 +41,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CI loop on `develop`**: merging the auto-generated `chore/regenerate-agent-graph` PR was re-triggering the same workflow indefinitely; resolved by splitting generation (PR check) and persistence (push trigger) into two separate workflows with explicit loop-prevention guards ([#149](https://github.com/artcava/XPoster/issues/149))
 - `graphify-dotnet` install failure: tool requires .NET 10 SDK; `setup-dotnet` now pinned to `10.0.x`; install moved to `/tmp` to bypass `global.json` which pins the SDK to 8.0.x ([#144](https://github.com/artcava/XPoster/pull/144), [#145](https://github.com/artcava/XPoster/pull/145), [#146](https://github.com/artcava/XPoster/pull/146))
 - `regenerate-agent-graph.yml` NOTICE.md: corrected Generated nodes description from "every merge to develop" to "every PR against develop (pre-merge preview)" to accurately reflect the workflow trigger
+
+### Tests
+- **`OpenAiServiceTests`**: added G7 (`WhenPromptIsEmpty`) and G8 (`WhenPromptIsWhitespace`) — verify that `GenerateImageAsync` returns an empty array and makes zero HTTP calls when the prompt is blank ([#139](https://github.com/artcava/XPoster/issues/139))
+- **`AzureFoundryServiceTests`**: added G2–G8 for `GenerateImageAsync` — malformed JSON (G2), empty `data` array (G3), `b64_json: null` (G4), `url` fallback download (G5), cross-origin `url` fallback emits `LogWarning` (G6), empty prompt (G7), whitespace-only prompt (G8) ([#139](https://github.com/artcava/XPoster/issues/139))
 
 ---
 
