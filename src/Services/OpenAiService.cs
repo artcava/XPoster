@@ -37,19 +37,21 @@ public class OpenAiService : IAiService
     {
         int tries = 0;
 
-        while (text != null && text.Length > messageMaxLength && tries <= 2)
+        // text is a non-nullable string — the `text != null` guard was redundant and has been removed.
+        // AzureFoundryService canonical pattern: guard only on Length and retry count.
+        while (text.Length > messageMaxLength && tries <= 2)
         {
             tries++;
             var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetSummary(text, messageMaxLength), cancellationToken);
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
-                _logger.LogInformation("Too many requests. Please try again later.");
+                _logger.LogInformation("OpenAI returned 429 during summary generation.");
                 return string.Empty;
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogInformation($"Error: {response.StatusCode}");
+                _logger.LogInformation("OpenAI summary request failed with status code {StatusCode}", response.StatusCode);
                 return string.Empty;
             }
 
@@ -62,8 +64,8 @@ public class OpenAiService : IAiService
 
             text = result.choices[0].message.content.Trim();
         }
-        // CS8603: text cannot be null here — while loop guard ensures non-null or early return
-        return text ?? string.Empty;
+
+        return text;
     }
 
     /// <inheritdoc/>
@@ -72,13 +74,13 @@ public class OpenAiService : IAiService
         var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetPromptForImage(text), cancellationToken);
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
-            _logger.LogInformation("Too many requests. Please try again later.");
+            _logger.LogInformation("OpenAI returned 429 during image prompt generation.");
             return string.Empty;
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogInformation($"Error: {response.StatusCode}");
+            _logger.LogInformation("OpenAI image prompt request failed with status code {StatusCode}", response.StatusCode);
             return string.Empty;
         }
 
@@ -95,7 +97,14 @@ public class OpenAiService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"Generating image with {_options.ImageModel}, prompt: {prompt}");
+        // Guard against empty prompts — consistent with FalAiImageService (reference implementation).
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
+            return Array.Empty<byte>();
+        }
+
+        _logger.LogInformation("Generating image with model {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
         var body = new
         {
@@ -107,16 +116,57 @@ public class OpenAiService : IAiService
 
         var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
+        if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
-            _logger.LogError($"Image generation failed: {response.StatusCode}");
+            _logger.LogWarning("OpenAI returned 429 during image generation.");
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
-        // base64 cannot be null if API responded with 200 and valid JSON structure
-        return Convert.FromBase64String(base64!);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogError("OpenAI image generation failed with status code {StatusCode}", response.StatusCode);
+            return Array.Empty<byte>();
+        }
+
+        JsonElement result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError(ex, "OpenAI image generation response contained invalid JSON.");
+            return Array.Empty<byte>();
+        }
+
+        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
+        {
+            _logger.LogError("OpenAI image generation response does not contain data entries.");
+            return Array.Empty<byte>();
+        }
+
+        if (!data[0].TryGetProperty("b64_json", out var b64Property))
+        {
+            _logger.LogError("OpenAI image generation response data entry is missing b64_json.");
+            return Array.Empty<byte>();
+        }
+
+        var base64 = b64Property.GetString();
+        if (string.IsNullOrWhiteSpace(base64))
+        {
+            _logger.LogError("OpenAI image generation response contained a null or empty b64_json value.");
+            return Array.Empty<byte>();
+        }
+
+        try
+        {
+            return Convert.FromBase64String(base64);
+        }
+        catch (FormatException ex)
+        {
+            _logger.LogError(ex, "OpenAI image generation response contained an invalid base64 string.");
+            return Array.Empty<byte>();
+        }
     }
 
     /// <summary>

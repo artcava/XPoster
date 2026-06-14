@@ -110,6 +110,11 @@ public class DeepSeekService : IAiService
             $"Use {nameof(HybridAiService)} to delegate image generation to fal.ai.");
     }
 
+    // No Uri.EscapeDataString call is needed here: the suffix "/chat/completions" is a
+    // static string constant with no dynamic path segments. The base Endpoint value is
+    // validated by DeepSeekOptionsValidator to be non-empty; its trailing slash is trimmed
+    // before concatenation. If dynamic path segments are added in the future, each segment
+    // must be wrapped with Uri.EscapeDataString, consistent with AzureFoundryService.
     private string GetChatCompletionsEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
