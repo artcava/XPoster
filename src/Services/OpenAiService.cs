@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
@@ -21,9 +20,6 @@ public class OpenAiService : IAiService
     /// Initialises a new instance of <see cref="OpenAiService"/>, configuring the HTTP client
     /// with the OpenAI Bearer token from <see cref="OpenAiOptions.ApiKey"/>.
     /// </summary>
-    /// <param name="httpClientFactory">The factory used to create the underlying <see cref="HttpClient"/>.</param>
-    /// <param name="options">The OpenAI provider options.</param>
-    /// <param name="logger">The logger for diagnostic output.</param>
     public OpenAiService(IHttpClientFactory httpClientFactory, IOptions<OpenAiOptions> options, ILogger<OpenAiService> logger)
     {
         _logger = logger;
@@ -37,74 +33,36 @@ public class OpenAiService : IAiService
     {
         int tries = 0;
 
-        // text is a non-nullable string — the `text != null` guard was redundant and has been removed.
-        // AzureFoundryService canonical pattern: guard only on Length and retry count.
-        while (text.Length > messageMaxLength && tries <= 2)
+        while (text != null && text.Length > messageMaxLength && tries <= 2)
         {
             tries++;
             var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetSummary(text, messageMaxLength), cancellationToken);
-            if (response.StatusCode == HttpStatusCode.TooManyRequests)
-            {
-                _logger.LogInformation("OpenAI returned 429 during summary generation.");
-                return string.Empty;
-            }
+            var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
+                response, "OpenAI", "summary generation", _logger, cancellationToken);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogInformation("OpenAI summary request failed with status code {StatusCode}", response.StatusCode);
+            if (!success)
                 return string.Empty;
-            }
 
-            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-            if (result is null || result.choices is null || result.choices.Length == 0)
-            {
-                _logger.LogWarning("OpenAI returned a response with no choices during summary generation.");
-                return string.Empty;
-            }
-
-            text = result.choices[0].message.content.Trim();
+            text = content;
         }
 
-        return text;
+        return text ?? string.Empty;
     }
 
     /// <inheritdoc/>
     public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
         var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetPromptForImage(text), cancellationToken);
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            _logger.LogInformation("OpenAI returned 429 during image prompt generation.");
-            return string.Empty;
-        }
+        var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
+            response, "OpenAI", "image prompt generation", _logger, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogInformation("OpenAI image prompt request failed with status code {StatusCode}", response.StatusCode);
-            return string.Empty;
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-        if (result is null || result.choices is null || result.choices.Length == 0)
-        {
-            _logger.LogWarning("OpenAI returned a response with no choices during image prompt generation.");
-            return string.Empty;
-        }
-
-        return result.choices[0].message.content.Trim();
+        return success ? content : string.Empty;
     }
 
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
-        // Guard against empty prompts — consistent with FalAiImageService (reference implementation).
-        if (string.IsNullOrWhiteSpace(prompt))
-        {
-            _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
-            return Array.Empty<byte>();
-        }
-
-        _logger.LogInformation("Generating image with model {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
+        _logger.LogInformation("Generating image with {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
         var body = new
         {
@@ -116,70 +74,21 @@ public class OpenAiService : IAiService
 
         var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            _logger.LogWarning("OpenAI returned 429 during image generation.");
-            return Array.Empty<byte>();
-        }
-
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("OpenAI image generation failed with status code {StatusCode}", response.StatusCode);
+            _logger.LogError("Image generation failed with status code {StatusCode}", response.StatusCode);
             return Array.Empty<byte>();
         }
 
-        JsonElement result;
-        try
-        {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        }
-        catch (JsonException ex)
-        {
-            _logger.LogError(ex, "OpenAI image generation response contained invalid JSON.");
-            return Array.Empty<byte>();
-        }
-
-        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
-        {
-            _logger.LogError("OpenAI image generation response does not contain data entries.");
-            return Array.Empty<byte>();
-        }
-
-        if (!data[0].TryGetProperty("b64_json", out var b64Property))
-        {
-            _logger.LogError("OpenAI image generation response data entry is missing b64_json.");
-            return Array.Empty<byte>();
-        }
-
-        var base64 = b64Property.GetString();
-        if (string.IsNullOrWhiteSpace(base64))
-        {
-            _logger.LogError("OpenAI image generation response contained a null or empty b64_json value.");
-            return Array.Empty<byte>();
-        }
-
-        try
-        {
-            return Convert.FromBase64String(base64);
-        }
-        catch (FormatException ex)
-        {
-            _logger.LogError(ex, "OpenAI image generation response contained an invalid base64 string.");
-            return Array.Empty<byte>();
-        }
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
+        return Convert.FromBase64String(base64!);
     }
 
-    /// <summary>
-    /// Builds the request payload for the Chat Completions API to summarise <paramref name="text"/>
-    /// within the given character budget.
-    /// </summary>
-    /// <param name="text">The text to summarise.</param>
-    /// <param name="messageMaxLenght">The character limit that the summary must respect.</param>
-    /// <returns>An anonymous object serialisable as a valid OpenAI Chat Completions request body.</returns>
-    private object GetSummary(string text, int messageMaxLenght)
+    private object GetSummary(string text, int messageMaxLength)
     {
-        var maxTokens = messageMaxLenght / _options.SummaryMaxTokensPerChar;
-        var underCharacters = messageMaxLenght - _options.SummarySafetyMarginChars;
+        var maxTokens = messageMaxLength / _options.SummaryMaxTokensPerChar;
+        var underCharacters = messageMaxLength - _options.SummarySafetyMarginChars;
 
         var systemContent = _options.SummarySystemPromptTemplate
             .Replace("{MaxChars}", underCharacters.ToString(), StringComparison.Ordinal);
@@ -199,12 +108,6 @@ public class OpenAiService : IAiService
         };
     }
 
-    /// <summary>
-    /// Builds the request payload for the Chat Completions API to derive an image generation prompt
-    /// from a news <paramref name="summary"/>.
-    /// </summary>
-    /// <param name="summary">The text summary to base the image prompt on.</param>
-    /// <returns>An anonymous object serialisable as a valid OpenAI Chat Completions request body.</returns>
     private object GetPromptForImage(string summary)
     {
         var userContent = _options.ImagePromptUserTemplate

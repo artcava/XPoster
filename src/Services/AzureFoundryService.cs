@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
@@ -19,9 +18,6 @@ public sealed class AzureFoundryService : IAiService
     /// <summary>
     /// Initialises a new instance of <see cref="AzureFoundryService"/> with configuration and logger.
     /// </summary>
-    /// <param name="httpClientFactory"></param>
-    /// <param name="options"></param>
-    /// <param name="logger"></param>
     public AzureFoundryService(
         IHttpClientFactory httpClientFactory,
         IOptions<AzureFoundryOptions> options,
@@ -42,26 +38,13 @@ public sealed class AzureFoundryService : IAiService
         {
             tries++;
             var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength), cancellationToken);
-            if (response.StatusCode == HttpStatusCode.TooManyRequests)
-            {
-                _logger.LogInformation("Azure Foundry returned 429 during summary generation.");
-                return string.Empty;
-            }
+            var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
+                response, "Azure Foundry", "summary generation", _logger, cancellationToken);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogInformation("Azure Foundry summary request failed with status code {StatusCode}", response.StatusCode);
+            if (!success)
                 return string.Empty;
-            }
 
-            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-            if (result is null || result.choices is null || result.choices.Length == 0)
-            {
-                _logger.LogWarning("Azure Foundry returned a response with no choices during summary generation.");
-                return string.Empty;
-            }
-
-            text = result.choices[0].message.content.Trim();
+            text = content;
         }
 
         return text;
@@ -71,37 +54,15 @@ public sealed class AzureFoundryService : IAiService
     public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
         var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text), cancellationToken);
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            _logger.LogInformation("Azure Foundry returned 429 during image prompt generation.");
-            return string.Empty;
-        }
+        var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
+            response, "Azure Foundry", "image prompt generation", _logger, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogInformation("Azure Foundry image prompt request failed with status code {StatusCode}", response.StatusCode);
-            return string.Empty;
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-        if (result is null || result.choices is null || result.choices.Length == 0)
-        {
-            _logger.LogWarning("Azure Foundry returned a response with no choices during image prompt generation.");
-            return string.Empty;
-        }
-
-        return result.choices[0].message.content.Trim();
+        return success ? content : string.Empty;
     }
 
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(prompt))
-        {
-            _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
-            return Array.Empty<byte>();
-        }
-
         var requestBody = new
         {
             prompt,
@@ -112,31 +73,13 @@ public sealed class AzureFoundryService : IAiService
 
         var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
 
-        // Intercept 429 before the generic success check — consistent with GetSummaryAsync
-        // and GetImagePromptAsync in this class, and with FalAiImageService (reference implementation).
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            _logger.LogWarning("Azure Foundry returned 429 during image generation.");
-            return Array.Empty<byte>();
-        }
-
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogError("Azure Foundry image generation failed with status code {StatusCode}", response.StatusCode);
             return Array.Empty<byte>();
         }
 
-        JsonElement result;
-        try
-        {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        }
-        catch (JsonException ex)
-        {
-            _logger.LogError(ex, "Azure Foundry image generation response contained invalid JSON.");
-            return Array.Empty<byte>();
-        }
-
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
             _logger.LogError("Azure Foundry image generation response does not contain data entries.");
@@ -148,57 +91,20 @@ public sealed class AzureFoundryService : IAiService
         if (first.TryGetProperty("b64_json", out var b64Property))
         {
             var base64 = b64Property.GetString();
-            if (string.IsNullOrWhiteSpace(base64))
-            {
-                _logger.LogError("Azure Foundry image generation response contained a null or empty b64_json value.");
-                return Array.Empty<byte>();
-            }
-
-            try
-            {
-                return Convert.FromBase64String(base64);
-            }
-            catch (FormatException ex)
-            {
-                _logger.LogError(ex, "Azure Foundry image generation response contained an invalid base64 string.");
-                return Array.Empty<byte>();
-            }
+            return string.IsNullOrWhiteSpace(base64)
+                ? Array.Empty<byte>()
+                : Convert.FromBase64String(base64);
         }
 
         if (first.TryGetProperty("url", out var urlProperty))
         {
             var imageUrl = urlProperty.GetString();
             if (string.IsNullOrWhiteSpace(imageUrl))
-            {
-                _logger.LogError("Azure Foundry image generation response contained an empty fallback URL.");
                 return Array.Empty<byte>();
-            }
 
-            // Validate the fallback URL against the configured endpoint origin to prevent
-            // SSRF-style downloads from arbitrary hosts returned by the API response.
-            // If validation fails we still log and proceed rather than blocking — this is a
-            // defence-in-depth warning that enables audit in Application Insights.
-            var configuredOrigin = new Uri(_options.Endpoint.TrimEnd('/')).GetLeftPart(UriPartial.Authority);
-            if (!imageUrl.StartsWith(configuredOrigin, StringComparison.OrdinalIgnoreCase))
-            {
-                _logger.LogWarning(
-                    "Azure Foundry image fallback URL {ImageUrl} does not originate from the configured endpoint {ConfiguredOrigin}. Proceeding with download.",
-                    imageUrl,
-                    configuredOrigin);
-            }
-
-            try
-            {
-                return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "Azure Foundry failed to download image from fallback URL: {Url}", imageUrl);
-                return Array.Empty<byte>();
-            }
+            return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
         }
 
-        _logger.LogError("Azure Foundry image generation response data entry is missing both b64_json and url.");
         return Array.Empty<byte>();
     }
 

@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
@@ -7,9 +6,9 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Implementazione di IAiService usando DeepSeek API.
-/// Gestisce solo la generazione di testo (summary e image prompt).
-/// La generazione di immagini è delegata a <see cref="FalAiImageService"/> tramite <see cref="HybridAiService"/>.
+/// Implements <see cref="IAiService"/> using the DeepSeek API.
+/// Handles only text generation (summary and image prompt).
+/// Image generation is delegated to <see cref="FalAiImageService"/> via <see cref="HybridAiService"/>.
 /// </summary>
 public class DeepSeekService : IAiService
 {
@@ -20,9 +19,6 @@ public class DeepSeekService : IAiService
     /// <summary>
     /// Initialises a new instance of <see cref="DeepSeekService"/> with configuration and logger.
     /// </summary>
-    /// <param name="httpClientFactory"></param>
-    /// <param name="options"></param>
-    /// <param name="logger"></param>
     public DeepSeekService(
         IHttpClientFactory httpClientFactory,
         IOptions<DeepSeekOptions> options,
@@ -43,26 +39,13 @@ public class DeepSeekService : IAiService
         {
             tries++;
             var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength), cancellationToken);
-            if (response.StatusCode == HttpStatusCode.TooManyRequests)
-            {
-                _logger.LogInformation("DeepSeek returned 429 during summary generation.");
-                return string.Empty;
-            }
+            var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
+                response, "DeepSeek", "summary generation", _logger, cancellationToken);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogInformation("DeepSeek summary request failed with status code {StatusCode}", response.StatusCode);
+            if (!success)
                 return string.Empty;
-            }
 
-            var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-            if (result is null || result.choices is null || result.choices.Length == 0)
-            {
-                _logger.LogWarning("DeepSeek returned a response with no choices during summary generation.");
-                return string.Empty;
-            }
-
-            text = result.choices[0].message.content.Trim();
+            text = content;
         }
 
         return text;
@@ -72,26 +55,10 @@ public class DeepSeekService : IAiService
     public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
     {
         var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text), cancellationToken);
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            _logger.LogInformation("DeepSeek returned 429 during image prompt generation.");
-            return string.Empty;
-        }
+        var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
+            response, "DeepSeek", "image prompt generation", _logger, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogInformation("DeepSeek image prompt request failed with status code {StatusCode}", response.StatusCode);
-            return string.Empty;
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
-        if (result is null || result.choices is null || result.choices.Length == 0)
-        {
-            _logger.LogWarning("DeepSeek returned a response with no choices during image prompt generation.");
-            return string.Empty;
-        }
-
-        return result.choices[0].message.content.Trim();
+        return success ? content : string.Empty;
     }
 
     /// <inheritdoc/>
@@ -110,11 +77,6 @@ public class DeepSeekService : IAiService
             $"Use {nameof(HybridAiService)} to delegate image generation to fal.ai.");
     }
 
-    // No Uri.EscapeDataString call is needed here: the suffix "/chat/completions" is a
-    // static string constant with no dynamic path segments. The base Endpoint value is
-    // validated by DeepSeekOptionsValidator to be non-empty; its trailing slash is trimmed
-    // before concatenation. If dynamic path segments are added in the future, each segment
-    // must be wrapped with Uri.EscapeDataString, consistent with AzureFoundryService.
     private string GetChatCompletionsEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
