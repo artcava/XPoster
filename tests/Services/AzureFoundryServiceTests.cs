@@ -47,6 +47,8 @@ public class AzureFoundryServiceTests
     private static string ChatCompletionJson(string content) =>
         "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
+    // ── GetSummaryAsync ──────────────────────────────────────────────────────
+
     [Fact]
     public async Task GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()
     {
@@ -103,6 +105,8 @@ public class AzureFoundryServiceTests
         Assert.Equal(string.Empty, result);
     }
 
+    // ── GetImagePromptAsync ───────────────────────────────────────────────
+
     [Fact]
     public async Task GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()
     {
@@ -133,6 +137,8 @@ public class AzureFoundryServiceTests
         Assert.Equal(string.Empty, result);
     }
 
+    // ── GenerateImageAsync ──────────────────────────────────────────────────
+
     [Fact]
     public async Task GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()
     {
@@ -150,6 +156,17 @@ public class AzureFoundryServiceTests
     public async Task GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.BadRequest, "{}").Object, out _);
+
+        var result = await svc.GenerateImageAsync("image prompt");
+
+        Assert.Empty(result);
+    }
+
+    /// <summary>G1 — 429 on image generation must return empty, not fall through to success path.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out _);
 
         var result = await svc.GenerateImageAsync("image prompt");
 
