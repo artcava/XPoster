@@ -1,22 +1,23 @@
 # Community 43
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **IOrchestratorFactory** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **OrchestratorFactoryTests.cs** (9 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
+- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 71]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

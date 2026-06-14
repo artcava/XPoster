@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (12 connections)
-- **SetValidEnvVars()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **ClearEnvVars()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **OpenAiService()** (2 connections)
 
 ## Relationships
 
-- [[Community 15]] (8 shared connections)
+- [[Community 22]] (8 shared connections)
 
 ## Audit Trail
 

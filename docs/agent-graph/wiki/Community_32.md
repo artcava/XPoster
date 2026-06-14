@@ -1,16 +1,17 @@
 # Community 32
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **HybridAiService.cs** (6 connections)
-- **HybridAiService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **HybridAiService()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

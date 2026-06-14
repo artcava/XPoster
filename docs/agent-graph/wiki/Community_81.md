@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **catch()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 56]] (3 shared connections)
+- [[Community 62]] (3 shared connections)
 
 ## Audit Trail
 

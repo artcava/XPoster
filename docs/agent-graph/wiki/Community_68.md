@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **IgSenderTests.cs** (12 connections)
+- **ClearEnvVars()** (2 connections)
+- **SetValidEnvVars()** (2 connections)
+- **IgSenderTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (3 shared connections)
+- [[Community 23]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

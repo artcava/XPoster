@@ -1,21 +1,22 @@
 # Community 56
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **FalAiImageService()** (2 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **GetByProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **AiServiceFactoryTests.cs** (7 connections)
-- **AiServiceFactoryTests.cs** (7 connections)
-- **GetByProvider_Should_ThrowArgumentException_When_ProviderIsNotMapped()** (2 connections)
-- **GetByProvider_Should_ThrowInvalidOperationException_When_MappedServiceCannotBeResolved()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **GetByProvider_Should_ReturnAzureFoundryService_When_ProviderIsMappedAndResolvable()** (2 connections)
-- **AiServiceFactoryTests()** (2 connections)
-- **GetByProvider_Should_ReturnService_When_ProviderIsMappedAndResolvable()** (2 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAIResponse** (2 connections)
+- **Message** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **Choice** (2 connections)
+- **ImageData** (2 connections)
 
 ## Relationships
 

@@ -1,28 +1,29 @@
 # Community 10
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **HybridAiServiceTests** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
-- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildHybrid()** (2 connections)
-- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
+- **FeedOrchestratorTests.cs** (11 connections)
+- **FeedOrchestratorTests.cs** (11 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

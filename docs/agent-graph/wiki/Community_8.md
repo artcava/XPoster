@@ -1,21 +1,22 @@
 # Community 8
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XSenderMissingBranchTests.cs** (11 connections)
-- **XSenderMissingBranchTests.cs** (11 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **MessageMaxLenght_Returns250()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **XSender()** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **XSenderMissingBranchTests** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
+- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

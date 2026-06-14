@@ -1,17 +1,18 @@
 # Community 25
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory.cs** (7 connections)
-- **ArgumentException()** (2 connections)
-- **AiServiceFactory()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **GetByProvider()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **if()** (2 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

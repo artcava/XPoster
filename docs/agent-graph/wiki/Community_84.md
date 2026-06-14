@@ -1,20 +1,20 @@
 # Community 84
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (13 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 11]] (10 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

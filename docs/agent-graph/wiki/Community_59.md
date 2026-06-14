@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (9 connections)
-- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 39]] (5 shared connections)
+- [[Community 13]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -6,8 +6,8 @@
 
 - **ISender.cs** (4 connections)
 - **ISender.cs** (4 connections)
-- **SendAsync()** (2 connections)
 - **ISender** (2 connections)
+- **SendAsync()** (2 connections)
 - **XPoster.Abstraction** (2 connections)
 
 ## Relationships

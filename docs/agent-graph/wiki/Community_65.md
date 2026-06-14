@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
-- **BaseOrchestrator()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **PostAsync()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 90]] (2 shared connections)
+- [[Community 78]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
