@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using XPoster.Abstraction;
 using XPoster.Models;
 
@@ -32,7 +33,7 @@ internal static class AiServiceHelper
     {
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
-            logger.LogInformation("{Provider} returned 429 during {Operation}.", providerName, operationName);
+            logger.LogInformation("{Provider} returned 429 (TooManyRequests) during {Operation}.", providerName, operationName);
             return (false, string.Empty);
         }
 
@@ -43,7 +44,17 @@ internal static class AiServiceHelper
             return (false, string.Empty);
         }
 
-        var result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
+        OpenAIResponse? result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<OpenAIResponse>(cancellationToken);
+        }
+        catch (JsonException)
+        {
+            logger.LogWarning("{Provider} returned malformed JSON during {Operation}.", providerName, operationName);
+            return (false, string.Empty);
+        }
+
         if (result is null || result.choices is null || result.choices.Length == 0)
         {
             logger.LogWarning("{Provider} returned a response with no choices during {Operation}.",

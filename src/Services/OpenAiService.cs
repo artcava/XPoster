@@ -62,6 +62,9 @@ public class OpenAiService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(prompt))
+            return Array.Empty<byte>();
+
         _logger.LogInformation("Generating image with {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
         var body = new
@@ -80,9 +83,34 @@ public class OpenAiService : IAiService
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        var base64 = result.GetProperty("data")[0].GetProperty("b64_json").GetString();
-        return Convert.FromBase64String(base64!);
+        JsonElement result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        }
+        catch (JsonException)
+        {
+            _logger.LogError("OpenAI image generation returned malformed JSON.");
+            return Array.Empty<byte>();
+        }
+
+        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
+        {
+            _logger.LogError("OpenAI image generation response does not contain data entries.");
+            return Array.Empty<byte>();
+        }
+
+        var first = data[0];
+
+        if (first.TryGetProperty("b64_json", out var b64Property))
+        {
+            var base64 = b64Property.GetString();
+            return string.IsNullOrWhiteSpace(base64)
+                ? Array.Empty<byte>()
+                : Convert.FromBase64String(base64);
+        }
+
+        return Array.Empty<byte>();
     }
 
     private object GetSummary(string text, int messageMaxLength)

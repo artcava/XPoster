@@ -63,6 +63,9 @@ public sealed class AzureFoundryService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(prompt))
+            return Array.Empty<byte>();
+
         var requestBody = new
         {
             prompt,
@@ -79,7 +82,17 @@ public sealed class AzureFoundryService : IAiService
             return Array.Empty<byte>();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        JsonElement result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+        }
+        catch (JsonException)
+        {
+            _logger.LogError("Azure Foundry image generation returned malformed JSON.");
+            return Array.Empty<byte>();
+        }
+
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
             _logger.LogError("Azure Foundry image generation response does not contain data entries.");
@@ -101,6 +114,16 @@ public sealed class AzureFoundryService : IAiService
             var imageUrl = urlProperty.GetString();
             if (string.IsNullOrWhiteSpace(imageUrl))
                 return Array.Empty<byte>();
+
+            // Warn when the fallback URL origin differs from the configured endpoint.
+            var configuredOrigin = new Uri(_options.Endpoint.TrimEnd('/')).GetLeftPart(UriPartial.Authority);
+            var imageOrigin = new Uri(imageUrl).GetLeftPart(UriPartial.Authority);
+            if (!string.Equals(configuredOrigin, imageOrigin, StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning(
+                    "Azure Foundry image generation returned a fallback URL from a different origin: {ImageUrl}. Expected origin: {ConfiguredOrigin}.",
+                    imageUrl, configuredOrigin);
+            }
 
             return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
         }
