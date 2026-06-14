@@ -252,4 +252,38 @@ public class OpenAiServiceTests
         var result = await svc.GenerateImageAsync("a prompt");
         Assert.Empty(result);
     }
+
+    /// <summary>G7 — Empty prompt must return empty array immediately, without making any HTTP call.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyArrayWithoutCallingApi()
+    {
+        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
+        var svc = BuildService(handler.Object, out _);
+
+        var result = await svc.GenerateImageAsync(string.Empty);
+
+        Assert.Empty(result);
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Never(),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>());
+    }
+
+    /// <summary>G8 — Whitespace-only prompt must also be rejected before any HTTP call.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyArrayWithoutCallingApi()
+    {
+        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
+        var svc = BuildService(handler.Object, out _);
+
+        var result = await svc.GenerateImageAsync("   ");
+
+        Assert.Empty(result);
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Never(),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>());
+    }
 }
