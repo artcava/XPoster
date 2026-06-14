@@ -37,19 +37,21 @@ public class OpenAiService : IAiService
     {
         int tries = 0;
 
-        while (text != null && text.Length > messageMaxLength && tries <= 2)
+        // text is a non-nullable string — the `text != null` guard was redundant and has been removed.
+        // AzureFoundryService canonical pattern: guard only on Length and retry count.
+        while (text.Length > messageMaxLength && tries <= 2)
         {
             tries++;
             var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetSummary(text, messageMaxLength), cancellationToken);
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
-                _logger.LogInformation("Too many requests. Please try again later.");
+                _logger.LogInformation("OpenAI returned 429 during summary generation.");
                 return string.Empty;
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogInformation($"Error: {response.StatusCode}");
+                _logger.LogInformation("OpenAI summary request failed with status code {StatusCode}", response.StatusCode);
                 return string.Empty;
             }
 
@@ -62,8 +64,8 @@ public class OpenAiService : IAiService
 
             text = result.choices[0].message.content.Trim();
         }
-        // CS8603: text cannot be null here — while loop guard ensures non-null or early return
-        return text ?? string.Empty;
+
+        return text;
     }
 
     /// <inheritdoc/>
@@ -72,13 +74,13 @@ public class OpenAiService : IAiService
         var response = await _client.PostAsJsonAsync(_options.ChatEndpoint, GetPromptForImage(text), cancellationToken);
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
-            _logger.LogInformation("Too many requests. Please try again later.");
+            _logger.LogInformation("OpenAI returned 429 during image prompt generation.");
             return string.Empty;
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogInformation($"Error: {response.StatusCode}");
+            _logger.LogInformation("OpenAI image prompt request failed with status code {StatusCode}", response.StatusCode);
             return string.Empty;
         }
 
@@ -95,7 +97,7 @@ public class OpenAiService : IAiService
     /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"Generating image with {_options.ImageModel}, prompt: {prompt}");
+        _logger.LogInformation("Generating image with model {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
         var body = new
         {
@@ -109,7 +111,7 @@ public class OpenAiService : IAiService
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError($"Image generation failed: {response.StatusCode}");
+            _logger.LogError("OpenAI image generation failed with status code {StatusCode}", response.StatusCode);
             return Array.Empty<byte>();
         }
 
