@@ -39,6 +39,21 @@ public class OpenAiServiceTests
         return mock.Object;
     }
 
+    private static Mock<HttpMessageHandler> MakeHandlerMock(HttpStatusCode code, string json)
+    {
+        var mock = new Mock<HttpMessageHandler>();
+        mock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage(code)
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+            });
+        return mock;
+    }
+
     private static string ChatCompletionJson(string content) =>
         "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
@@ -93,6 +108,27 @@ public class OpenAiServiceTests
         Assert.Equal(string.Empty, result);
     }
 
+    /// <summary>G5 — The retry loop must stop after at most 3 HTTP calls (tries 0,1,2; guard: tries &lt;= 2).</summary>
+    [Fact]
+    public async Task GetSummaryAsync_WhenSummaryAlwaysTooLong_StopsAfterThreeAttempts()
+    {
+        // Response always returns text longer than the limit so the loop never exits via length.
+        // After tries==2 the loop condition fails and the last API response text is returned.
+        var longResponse = new string('b', 200);
+        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson(longResponse));
+        var svc = BuildService(handler.Object, out _);
+
+        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        // Exactly 3 HTTP calls: tries=1, tries=2, tries=3 (while condition: tries <= 2 checked after increment)
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(3),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>());
+        Assert.Equal(longResponse, result);
+    }
+
     // ── GetImagePromptAsync ──────────────────────────────────────────────────
 
     [Fact]
@@ -109,6 +145,23 @@ public class OpenAiServiceTests
         var svc = BuildService(MakeHandler(HttpStatusCode.TooManyRequests, "{}"), out _);
         var result = await svc.GetImagePromptAsync("some summary");
         Assert.Equal(string.Empty, result);
+    }
+
+    /// <summary>G6 — 429 must emit a log entry, not only return empty.</summary>
+    [Fact]
+    public async Task GetImagePromptAsync_WhenApiReturnsTooManyRequests_LogsInformation()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.TooManyRequests, "{}"), out var loggerMock);
+        await svc.GetImagePromptAsync("some summary");
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("429") || v.ToString()!.Contains("TooManyRequests")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
     }
 
     [Fact]
@@ -152,6 +205,42 @@ public class OpenAiServiceTests
     public async Task GenerateImageAsync_WhenApiReturnsError_ReturnsEmptyArray()
     {
         var svc = BuildService(MakeHandler(HttpStatusCode.BadRequest, "{}"), out _);
+        var result = await svc.GenerateImageAsync("a prompt");
+        Assert.Empty(result);
+    }
+
+    /// <summary>G1 — 429 on image generation must return empty, not throw.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyArray()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.TooManyRequests, "{}"), out _);
+        var result = await svc.GenerateImageAsync("a prompt");
+        Assert.Empty(result);
+    }
+
+    /// <summary>G2 — Malformed JSON on 200 must not throw; must return empty array.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyArray()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "NOT_JSON"), out _);
+        var result = await svc.GenerateImageAsync("a prompt");
+        Assert.Empty(result);
+    }
+
+    /// <summary>G3 — Empty data array on 200 must return empty array, not throw IndexOutOfRangeException.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyArray()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "{\"data\":[]}"), out _);
+        var result = await svc.GenerateImageAsync("a prompt");
+        Assert.Empty(result);
+    }
+
+    /// <summary>G4 — b64_json null in response must return empty array, not throw FormatException.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyArray()
+    {
+        var svc = BuildService(MakeHandler(HttpStatusCode.OK, "{\"data\":[{\"b64_json\":null}]}"), out _);
         var result = await svc.GenerateImageAsync("a prompt");
         Assert.Empty(result);
     }
