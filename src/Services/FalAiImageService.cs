@@ -58,7 +58,16 @@ public sealed class FalAiImageService
             output_format = "png"
         };
 
-        var endpoint = $"{FalApiBaseUrl}/{_options.ModelId}";
+        // ModelId may contain path separators (e.g. "fal-ai/flux/schnell").
+        // Each segment is encoded individually so that slashes are preserved as
+        // path delimiters while any reserved or unsafe characters within a segment
+        // are percent-encoded. This is consistent with the AzureFoundryService
+        // pattern that calls Uri.EscapeDataString on DeploymentName.
+        var encodedModelPath = string.Join(
+            "/",
+            _options.ModelId.Split('/').Select(Uri.EscapeDataString));
+
+        var endpoint = $"{FalApiBaseUrl}/{encodedModelPath}";
 
         HttpResponseMessage response;
         try
