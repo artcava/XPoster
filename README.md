@@ -447,6 +447,12 @@ tests/
 │   ├── OrchestratorFactoryTests.cs
 │   ├── NoOrchestratorTests.cs
 │   └── PowerLawOrchestratorTests.cs
+├── Integration/
+│   ├── PollyIntegrationTestBase.cs
+│   ├── LinkedInResiliencePipelineTests.cs
+│   ├── InstagramResiliencePipelineTests.cs
+│   ├── AiClientsResiliencePipelineTests.cs
+│   └── CaptureLoggerProvider.cs
 ├── Models/
 │   ├── AzureFoundryOptionsValidatorTests.cs
 │   ├── DeepSeekOptionsTests.cs
@@ -466,19 +472,17 @@ tests/
 │   ├── XSenderMissingBranchTests.cs
 │   ├── XSenderSendAsyncTests.cs
 │   └── XSenderTests.cs
-├── Services/
-│   ├── AiServiceHelperTests.cs
-│   ├── AzureFoundryServiceTests.cs
-│   ├── CryptoServiceTests.cs
-│   ├── DeepSeekServiceTests.cs
-│   ├── FalAiImageServiceTests.cs
-│   ├── FeedServiceTests.cs
-│   ├── HybridAiServiceTests.cs
-│   ├── OpenAiServiceTests.cs
-│   └── TimeProviderTests.cs
-└── XPoster.Tests/
-    └── Services/
-        └── KeyVaultServiceTests.cs
+└── Services/
+    ├── AiServiceHelperTests.cs
+    ├── AzureFoundryServiceTests.cs
+    ├── CryptoServiceTests.cs
+    ├── DeepSeekServiceTests.cs
+    ├── FalAiImageServiceTests.cs
+    ├── FeedServiceTests.cs
+    ├── HybridAiServiceTests.cs
+    ├── KeyVaultServiceTests.cs
+    ├── OpenAiServiceTests.cs
+    └── TimeProviderTests.cs
 ```
 
 | Folder | What is covered |
@@ -487,10 +491,10 @@ tests/
 | `Abstraction/` | `BaseOrchestrator` abstract class contracts |
 | `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
 | `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `OrchestratorFactory`, and `AiServiceFactory` resolution logic |
+| `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
 | `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
 | `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience) |
-| `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
-| `XPoster.Tests/Services/` | `KeyVaultService` unit tests |
+| `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
 
 ### Running Tests
 
@@ -501,8 +505,8 @@ dotnet test
 # Specific tests
 dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
 
-# With coverage
-dotnet test --collect:"XPlat Code Coverage"
+# With coverage (exclusions defined in coverlet.runsettings at repo root)
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 ```
 
 > 📖 Full testing strategy, mocking patterns, and coverage goals: [tests/README.md](tests/README.md).
