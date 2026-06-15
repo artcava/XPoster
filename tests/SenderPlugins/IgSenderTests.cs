@@ -10,7 +10,7 @@ namespace XPoster.Tests.SenderPlugins;
 /// Tests for IgSender.
 /// Only branches that execute before or without real HTTP calls are covered:
 /// constructor guards, MessageMaxLenght, null/empty content guards, no-image branch,
-/// and the image path (which throws NotImplementedException caught internally).
+/// and the image path (which throws on the Instagram API — caught internally).
 /// </summary>
 public class IgSenderTests
 {
@@ -102,6 +102,53 @@ public class IgSenderTests
             Image = new byte[] { 0x89, 0x50, 0x4E, 0x47 }
         });
         Assert.False(result);
+    }
+
+    #endregion
+
+    #region Credential resolution Tests (GAP-4)
+
+    /// <summary>
+    /// GAP-4: verifies that IgAccessToken is read from KV by its canonical name
+    /// when a post with an image is submitted (the only path that reaches KV in IgSender).
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WithImage_ReadsIgAccessTokenFromKv()
+    {
+        await BuildSender().SendAsync(new Post
+        {
+            Content = "caption",
+            Image = new byte[] { 1, 2, 3 }
+        });
+
+        _mockKv.Verify(s => s.GetSecretAsync("IgAccessToken"), Times.AtLeastOnce);
+    }
+
+    /// <summary>
+    /// GAP-4: verifies that IgAccountId is read from KV by its canonical name.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WithImage_ReadsIgAccountIdFromKv()
+    {
+        await BuildSender().SendAsync(new Post
+        {
+            Content = "caption",
+            Image = new byte[] { 1, 2, 3 }
+        });
+
+        _mockKv.Verify(s => s.GetSecretAsync("IgAccountId"), Times.AtLeastOnce);
+    }
+
+    /// <summary>
+    /// GAP-4 (inverse): when no image is present, IgSender returns false early
+    /// and must NOT query Key Vault at all.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WithoutImage_DoesNotQueryKv()
+    {
+        await BuildSender().SendAsync(new Post { Content = "text only" });
+
+        _mockKv.Verify(s => s.GetSecretAsync(It.IsAny<string>()), Times.Never);
     }
 
     #endregion

@@ -72,6 +72,34 @@ public class KeyVaultServiceTests
     }
 
     // -----------------------------------------------------------------------
+    // GAP-3: KeyVaultService — missing KEYVAULT_URI configuration
+    // -----------------------------------------------------------------------
+
+    /// <summary>
+    /// GAP-3: When KEYVAULT_URI is absent from configuration, constructing
+    /// KeyVaultService must throw <see cref="InvalidOperationException"/>.
+    /// This prevents silent misconfiguration at startup.
+    /// </summary>
+    [Fact]
+    public void KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()
+    {
+        // Arrange: ensure the env var is absent for this test
+        var original = Environment.GetEnvironmentVariable("KEYVAULT_URI");
+        Environment.SetEnvironmentVariable("KEYVAULT_URI", null);
+
+        try
+        {
+            Assert.Throws<InvalidOperationException>(
+                () => new XPoster.Services.KeyVaultService());
+        }
+        finally
+        {
+            // Restore original value so other tests are not affected
+            Environment.SetEnvironmentVariable("KEYVAULT_URI", original);
+        }
+    }
+
+    // -----------------------------------------------------------------------
     // InSender — verifies correct Key Vault secret names are requested
     // -----------------------------------------------------------------------
 
@@ -124,9 +152,9 @@ public class KeyVaultServiceTests
 
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
-        kv.Verify(s => s.GetSecretAsync("XApiKey"), Times.Once);
-        kv.Verify(s => s.GetSecretAsync("XApiSecret"), Times.Once);
-        kv.Verify(s => s.GetSecretAsync("XAccessToken"), Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XApiKey"),            Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XApiSecret"),         Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XAccessToken"),       Times.Once);
         kv.Verify(s => s.GetSecretAsync("XAccessTokenSecret"), Times.Once);
     }
 
@@ -150,7 +178,7 @@ public class KeyVaultServiceTests
         await sender.SendAsync(post);
 
         kv.Verify(s => s.GetSecretAsync("IgAccessToken"), Times.AtLeastOnce);
-        kv.Verify(s => s.GetSecretAsync("IgAccountId"), Times.AtLeastOnce);
+        kv.Verify(s => s.GetSecretAsync("IgAccountId"),   Times.AtLeastOnce);
     }
 
     [Fact]

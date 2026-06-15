@@ -83,5 +83,26 @@ public class XSenderTests
         Assert.Throws<ArgumentNullException>(() => new XSender(null!, _mockLogger.Object));
     }
 
+    /// <summary>
+    /// GAP-2: verifies that Key Vault is queried on EVERY SendAsync invocation,
+    /// not cached from construction time — core behaviour of issue #113.
+    /// TwitterContext will throw (no real credentials), but KV reads happen before that.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_CalledTwice_QueriesKvOnEachCall()
+    {
+        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
+        var post = new Post { Content = "Hello world" };
+
+        await sender.SendAsync(post);
+        await sender.SendAsync(post);
+
+        // Each call must read all four credentials from KV (Times.Exactly(2) per secret)
+        _mockKv.Verify(s => s.GetSecretAsync("XApiKey"),           Times.Exactly(2));
+        _mockKv.Verify(s => s.GetSecretAsync("XApiSecret"),        Times.Exactly(2));
+        _mockKv.Verify(s => s.GetSecretAsync("XAccessToken"),      Times.Exactly(2));
+        _mockKv.Verify(s => s.GetSecretAsync("XAccessTokenSecret"),Times.Exactly(2));
+    }
+
     #endregion
 }

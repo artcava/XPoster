@@ -31,6 +31,15 @@ public class InSenderTests
         return kv;
     }
 
+    private static Mock<IKeyVaultService> BuildKeyVaultMockWithOrg()
+    {
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("test_token_12345");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync("123456789");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOrgId")).ReturnsAsync("urn:li:organization:9876");
+        return kv;
+    }
+
     #region Constructor and Properties Tests
 
     [Fact]
@@ -85,6 +94,40 @@ public class InSenderTests
     public void Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => new InSender(_mockFactory.Object, null!, _mockLogger.Object));
+    }
+
+    /// <summary>
+    /// GAP-2: verifies that Key Vault is queried on EVERY SendAsync invocation.
+    /// HttpClient will fail (no real LinkedIn API), but KV reads happen before the first HTTP call.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall()
+    {
+        var sender = new InSender(_mockFactory.Object, _mockKv.Object, _mockLogger.Object);
+        var post = new Post { Content = "A LinkedIn post" };
+
+        await sender.SendAsync(post);
+        await sender.SendAsync(post);
+
+        _mockKv.Verify(s => s.GetSecretAsync("LinkedInAccessToken"), Times.Exactly(2));
+    }
+
+    /// <summary>
+    /// GAP-2 (variant): when LinkedInOrgId IS present in KV, ResolveAuthorUrnAsync
+    /// should use the org URN as author instead of falling back to LinkedInOwnerCode.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdSecret()
+    {
+        var kvWithOrg = BuildKeyVaultMockWithOrg();
+        var sender = new InSender(_mockFactory.Object, kvWithOrg.Object, _mockLogger.Object);
+        var post = new Post { Content = "A LinkedIn post" };
+
+        await sender.SendAsync(post);
+
+        kvWithOrg.Verify(s => s.GetSecretAsync("LinkedInOrgId"), Times.AtLeastOnce);
+        // LinkedInOwnerCode is still read as a fallback initialisation; org URN takes precedence in the author field
+        kvWithOrg.Verify(s => s.GetSecretAsync("LinkedInOwnerCode"), Times.AtLeastOnce);
     }
 
     #endregion
