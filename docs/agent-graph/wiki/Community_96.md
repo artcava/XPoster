@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (4 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships

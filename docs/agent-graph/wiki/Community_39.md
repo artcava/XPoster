@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **HybridAiService.cs** (6 connections)
-- **HybridAiService.cs** (6 connections)
-- **HybridAiService()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **XPoster.Tests** (2 connections)
 
 ## Relationships
 

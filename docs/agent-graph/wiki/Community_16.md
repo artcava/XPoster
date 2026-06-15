@@ -4,25 +4,25 @@
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
-- **HybridAiServiceTests** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
-- **BuildHybrid()** (2 connections)
-- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **FalAiImageService()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **catch()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (6 shared connections)
+- [[Community 66]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

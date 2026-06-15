@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **SendAsync()** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **TimeProvider** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 

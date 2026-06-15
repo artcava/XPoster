@@ -1,25 +1,25 @@
 # Community 29
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **SendAsync()** (2 connections)
-- **ResolveAuthorUrnAsync()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **Exception()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **using()** (2 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **Message** (2 connections)
+- **Choice** (2 connections)
+- **ImageData** (2 connections)
+- **OpenAIResponse** (2 connections)
 
 ## Relationships
 
-- [[Community 64]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

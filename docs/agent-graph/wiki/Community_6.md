@@ -6,10 +6,6 @@
 
 - **KeyVaultServiceTests.cs** (15 connections)
 - **KeyVaultServiceTests.cs** (15 connections)
-- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
-- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
-- **HttpFactory()** (2 connections)
-- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
 - **KeyVaultServiceTests** (2 connections)
 - **InSender_SendAsync_RequestsLinkedInOwnerCode()** (2 connections)
 - **InSenderKv()** (2 connections)
@@ -17,9 +13,13 @@
 - **GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
 - **XSender_SendAsync_RequestsAllFourXCredentials()** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
+- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
+- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
+- **HttpFactory()** (2 connections)
+- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
 - **StubHttpMessageHandler()** (2 connections)
 - **GetSecretAsync_ReturnsExpectedValue()** (2 connections)
+- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
 
 ## Relationships
 

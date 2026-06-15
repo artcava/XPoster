@@ -1,20 +1,20 @@
 # Community 84
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **Program.cs** (2 connections)
-- **Program.cs** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **CryptoService()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 69]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

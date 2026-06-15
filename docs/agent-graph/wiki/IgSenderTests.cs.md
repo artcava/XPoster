@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### contains
+- [[IgSenderTests.cs]]
 - [[XPoster.Tests.SenderPlugins]]
 - [[IgSenderTests()]]
 - [[BuildSender()]]

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **RSSFeed** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **XPoster.Implementation** (2 connections)
+- **NoOrchestrator()** (2 connections)
 
 ## Relationships
 

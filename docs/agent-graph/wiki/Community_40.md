@@ -1,23 +1,23 @@
 # Community 40
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsLocalTime()** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **BuildDeepSeekService()** (2 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **BuildFalService()** (2 connections)
+- **HybridAiService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 15]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **Validate()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 95]] (2 shared connections)
+- [[Community 97]] (2 shared connections)
 
 ## Audit Trail
 
