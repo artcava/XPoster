@@ -2,9 +2,9 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
+using XPoster.Extensions;
 using XPoster.Implementation;
 using XPoster.Models;
 using XPoster.SenderPlugins;
@@ -18,7 +18,6 @@ builder.Services
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
-    // CS8600: FirstOrDefault can return null — annotated as nullable
     LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
         == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
     if (defaultRule is not null)
@@ -27,62 +26,7 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
     }
 });
 
-// Named HttpClients with standard Polly resilience pipeline:
-// retry (3 attempts, exponential back-off + jitter), circuit-breaker, and per-attempt timeout.
-// Secrets never appear here — all sender credentials are read from Azure Key Vault at runtime.
-builder.Services.AddHttpClient("OpenAI")
-    .AddStandardResilienceHandler(options =>
-    {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-    });
-
-builder.Services.AddHttpClient("AzureFoundry")
-    .AddStandardResilienceHandler(options =>
-    {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-    });
-
-builder.Services.AddHttpClient("DeepSeek")
-    .AddStandardResilienceHandler(options =>
-    {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-    });
-
-builder.Services.AddHttpClient("FalAi")
-    .AddStandardResilienceHandler(options =>
-    {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(60); // image gen may be slower
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-    });
-
-builder.Services.AddHttpClient("LinkedIn")
-    .AddStandardResilienceHandler(options =>
-    {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-    });
-
-builder.Services.AddHttpClient("Instagram")
-    .AddStandardResilienceHandler(options =>
-    {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-    });
+builder.Services.AddHttpClients();
 
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();

@@ -29,28 +29,28 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Full history for versioning
-      
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
-      
+
       - name: Build solution
         run: |
           dotnet build ${{ env.SOLUTION_PATH }} \
             --configuration ${{ env.BUILD_CONFIGURATION }} \
             --no-restore \
             /p:TreatWarningsAsErrors=false
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
         with:
@@ -61,34 +61,37 @@ jobs:
           retention-days: 1
 
   # ============================================
-  # TEST JOB - Run unit tests with coverage
+  # UNIT TEST JOB - Fast feedback, no I/O waits
+  # Excludes integration tests (Category=Integration).
   # ============================================
-  test:
-    name: Test
+  test-unit:
+    name: Unit Tests
     needs: build
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 10
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
-      
+
       - name: Run unit tests with coverage
         run: |
           dotnet test ${{ env.SOLUTION_PATH }} \
             --configuration ${{ env.BUILD_CONFIGURATION }} \
             --no-restore \
             --verbosity normal \
+            --filter "Category!=Integration" \
             --collect:"XPlat Code Coverage" \
             --results-directory ./coverage
-      
+
       - name: Generate coverage report
         if: always()
         run: |
@@ -101,11 +104,11 @@ jobs:
               mkdir -p ./coverage/report
               echo "No coverage data available" > ./coverage/report/Summary.txt
             }
-      
+
       - name: Display coverage summary
         if: always()
         run: cat ./coverage/report/Summary.txt || echo "No coverage report generated"
-      
+
       - name: Check coverage threshold
         if: always()
         run: |
@@ -120,7 +123,7 @@ jobs:
           else
             echo "✅ Coverage ${COVERAGE}% meets threshold ${{ env.COVERAGE_THRESHOLD }}%"
           fi
-      
+
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v6
@@ -130,25 +133,56 @@ jobs:
           retention-days: 7
 
   # ============================================
+  # INTEGRATION TEST JOB - Polly resilience pipeline
+  # Runs only tests tagged Category=Integration.
+  # Longer timeout to accommodate retry delays.
+  # ============================================
+  test-integration:
+    name: Integration Tests
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Run integration tests
+        run: |
+          dotnet test ${{ env.SOLUTION_PATH }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-restore \
+            --verbosity normal \
+            --filter "Category=Integration"
+
+  # ============================================
   # QUALITY JOB - Code formatting and analyzers
   # ============================================
   quality:
     name: Quality
     needs: build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
-      
+
       - name: Verify code formatting
         run: |
           echo "Checking code formatting..."
@@ -158,7 +192,7 @@ jobs:
               echo "⚠️ Warning: Code formatting issues found."
               echo "Continuing with build..."
             }
-      
+
       - name: Run code analyzers
         run: |
           dotnet build ${{ env.SOLUTION_PATH }} \
@@ -172,36 +206,36 @@ jobs:
   # ============================================
   deploy:
     name: Deploy
-    needs: [build, test, quality]
+    needs: [build, test-unit, test-integration, quality]
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: windows-latest
     permissions:
       id-token: write
       contents: read
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-      
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Restore dependencies
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet restore
           popd
-      
+
       - name: Build Solution
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet build --configuration Release --no-restore
           popd
-      
+
       - name: Publish Application
         shell: pwsh
         run: |
@@ -226,14 +260,14 @@ jobs:
 
           Get-ChildItem ./output -Force | Select-Object Name
           popd
-      
+
       - name: Login to Azure
         uses: azure/login@v3
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_04545C92864042ED99D5EBF6456192FB }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F13F54A171EE481AAE09734F721803BB }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_87ED0225F8DF4E9DA6B45A7951B44B42 }}
-      
+
       - name: Deploy Azure Functions
         uses: Azure/functions-action@v1.5.6
         id: fa
@@ -247,23 +281,23 @@ jobs:
   # ============================================
   release:
     name: Release
-    needs: [build, test, quality]
+    needs: [build, test-unit, test-integration, quality]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Extract version from tag
         id: version
         run: |
@@ -272,17 +306,17 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "Release version: ${VERSION}"
-      
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
-      
+
       - name: Build release artifacts
         run: |
           dotnet build ${{ env.SOLUTION_PATH }} \
             --configuration ${{ env.BUILD_CONFIGURATION }} \
             --no-restore \
             /p:Version=${{ steps.version.outputs.version }}
-      
+
       - name: Publish release binaries
         run: |
           dotnet publish src/XPoster.csproj \
@@ -290,13 +324,13 @@ jobs:
             --no-build \
             --output ./publish \
             /p:Version=${{ steps.version.outputs.version }}
-      
+
       - name: Create release archive
         run: |
           cd ./publish
           zip -r ../XPoster-${{ steps.version.outputs.version }}.zip .
           cd ..
-      
+
       - name: Generate release notes
         id: release_notes
         run: |
@@ -309,7 +343,7 @@ jobs:
           fi
           echo -e "$NOTES" > release_notes.md
           cat release_notes.md
-      
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
