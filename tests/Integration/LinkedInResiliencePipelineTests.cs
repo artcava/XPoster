@@ -6,6 +6,7 @@ using Xunit;
 
 namespace XPoster.Tests.Integration;
 
+[Trait("Category", "Integration")]
 public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
 {
     [Fact]
@@ -43,11 +44,6 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
             (HttpStatusCode.InternalServerError, "{}"),
             (HttpStatusCode.InternalServerError, "{}"));
 
-        // maxRetryAttempts: 1 satisfies Polly validation (>= 1).
-        // retryEnabled: false disables ShouldHandle on the retry policy so each
-        // PostAsync produces exactly 1 request to the handler, making failure
-        // counting deterministic for the circuit breaker.
-        // minimumThroughput: 2 lets the breaker open after just 2 failures.
         var provider = BuildProviderWithHandler(
             "LinkedIn",
             handler,
