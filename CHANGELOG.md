@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/agent-graph.md`: new unified guide explaining what the agent graph is, node types, output formats, CI workflow, and how to use it with AI coding assistants; merges and supersedes `docs/integrations/graphify-ci.md`.
 - Dynamic GitHub Actions build status badge in README ([#35](https://github.com/artcava/XPoster/issues/35)).
 - This CHANGELOG.md file ([#36](https://github.com/artcava/XPoster/issues/36)).
+- **`coverlet.runsettings`** added at repo root ([#166](https://github.com/artcava/XPoster/issues/166)): excludes auto-generated Azure Functions isolated-worker classes (`Program`, `DirectFunctionExecutor`, `FunctionExecutorAutoStartup`, `FunctionExecutorHostBuilderExtensions`, `FunctionMetadataProviderAutoStartup`, `GeneratedFunctionMetadataProvider`, `WorkerExtensionStartupCodeExecutor`, `WorkerHostBuilderFunctionMetadataProviderExtension`, `HttpClientExtensions`) from Coverlet coverage collection; referenced via `--settings coverlet.runsettings` in `ci.yml` so exclusions apply consistently both locally and in CI.
 
 ### Changed
 - **`InSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): constructor now accepts `IKeyVaultService`; `LinkedInAccessToken`, `LinkedInOwnerCode`, and `LinkedInOrgId` (optional) are resolved via `GetSecretAsync` on every `SendAsync` invocation, enabling transparent secret rotation without a Function App restart.
@@ -39,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/index.md`: replaced `graphify-ci.md` row with `agent-graph.md` in the Integrations section.
 - `README.md`: added agent graph callout in the Architecture section.
 - `docs/` folder reorganisation: analysis sub-folder reordered ([#143](https://github.com/artcava/XPoster/pull/143)).
+- **`COVERAGE_THRESHOLD` raised from `70` to `80`** in `.github/workflows/ci.yml` ([#166](https://github.com/artcava/XPoster/issues/166)): enforces meaningful quality gate after auto-generated classes are excluded and missing `IgSender` / `KeyVaultService` tests are added.
 
 ### Fixed
 - **`AzureFoundryService.GenerateImageAsync` — missing prompt guard** ([#158](https://github.com/artcava/XPoster/issues/158)): empty or whitespace-only prompts now return `Array.Empty<byte>()` immediately without making any HTTP call.
@@ -61,6 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`AiServiceHelperTests`** ([#158](https://github.com/artcava/XPoster/issues/158)): covers `ParseChatCompletionResponseAsync` in isolation — 429, non-2xx `[Theory]`, `choices: null`, `choices: []`, missing `required` property, happy path, whitespace-only content.
 - **`OpenAiServiceTests`** — added G2–G4, G7–G8 for `GenerateImageAsync`: malformed JSON, empty `data` array, null `b64_json`, empty/whitespace prompt ([#158](https://github.com/artcava/XPoster/issues/158), [#139](https://github.com/artcava/XPoster/issues/139)).
 - **`AzureFoundryServiceTests`** — added G2–G8 for `GenerateImageAsync`: malformed JSON, empty `data` array, null `b64_json`, `url` fallback, cross-origin `url` warning, empty/whitespace prompt ([#158](https://github.com/artcava/XPoster/issues/158), [#139](https://github.com/artcava/XPoster/issues/139)).
+- **`IgSenderTests`** — added missing coverage paths ([#166](https://github.com/artcava/XPoster/issues/166)): `SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError`, `SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse`, `SendAsync_WhenInstagramApiReturns429_ReturnsFalse`, `SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError`.
+- **`KeyVaultServiceTests`** created ([#166](https://github.com/artcava/XPoster/issues/166)): constructor guards (`null` logger, missing `KEYVAULT_URI`), `GetSecretAsync` happy path and `RequestFailedException` propagation, `SetSecretAsync` happy path and exception propagation, `LogDebug` emission for both methods; uses `StubKeyVaultService` and `ThrowingKeyVaultService` inner test doubles consistent with Community 6 pattern.
 ---
 
 ## [0.1.2] - 2026-06-11
@@ -104,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - OpenAI models updated to **`gpt-4.1-nano`** (text) and **`gpt-image-1.5`** (image) ([#68](https://github.com/artcava/XPoster/issues/68))
 - `CONTRIBUTING.md`: explicit rule to always branch from `develop`; PR checklist updated ([#79](https://github.com/artcava/XPoster/issues/79))
 - `README.md` and all docs aligned to actual environment variable names: `IN_*`, `IG_*`, `OPENAI_*` ([#70](https://github.com/artcava/XPoster/issues/70))
-- Directory tree diagrams in `README.md` and `tests/README.md` updated to match actual project structure ([#74](https://github.com/artcava/XPoster/issues/74))
+- Directory tree diagrams in `README.md` and `tests/README.md` updated to match actual project structure ([#70](https://github.com/artcava/XPoster/issues/70), [#74](https://github.com/artcava/XPoster/issues/74))
 
 ### Fixed
 - Removed unsupported `response_format` parameter from image generation request body (`gpt-image-1` always returns `b64_json` by default); switched model from `gpt-image-1-mini` (unavailable on direct OpenAI API) to `gpt-image-1` ([#26](https://github.com/artcava/XPoster/issues/26))

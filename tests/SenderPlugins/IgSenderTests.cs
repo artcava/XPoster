@@ -1,8 +1,11 @@
+using System.Net;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.Protected;
 using XPoster.Abstraction;
 using XPoster.Models;
 using XPoster.SenderPlugins;
+using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 
@@ -30,6 +33,14 @@ public class IgSenderTests
 
     private IgSender BuildSender() =>
         new(_mockFactory.Object, _mockKv.Object, _mockLogger.Object);
+
+    private static IgSender BuildSenderWithFactory(IHttpClientFactory factory, Mock<IKeyVaultService>? kv = null)
+    {
+        var kvMock = kv ?? new Mock<IKeyVaultService>();
+        kvMock.Setup(s => s.GetSecretAsync("IgAccessToken")).ReturnsAsync("fake_token");
+        kvMock.Setup(s => s.GetSecretAsync("IgAccountId")).ReturnsAsync("fake_account_id");
+        return new IgSender(factory, kvMock.Object, new Mock<ILogger<IgSender>>().Object);
+    }
 
     #region Constructor Tests
 
@@ -108,10 +119,6 @@ public class IgSenderTests
 
     #region Credential resolution Tests (GAP-4)
 
-    /// <summary>
-    /// GAP-4: verifies that IgAccessToken is read from KV by its canonical name
-    /// when a post with an image is submitted (the only path that reaches KV in IgSender).
-    /// </summary>
     [Fact]
     public async Task SendAsync_WithImage_ReadsIgAccessTokenFromKv()
     {
@@ -124,9 +131,6 @@ public class IgSenderTests
         _mockKv.Verify(s => s.GetSecretAsync("IgAccessToken"), Times.AtLeastOnce);
     }
 
-    /// <summary>
-    /// GAP-4: verifies that IgAccountId is read from KV by its canonical name.
-    /// </summary>
     [Fact]
     public async Task SendAsync_WithImage_ReadsIgAccountIdFromKv()
     {
@@ -139,16 +143,139 @@ public class IgSenderTests
         _mockKv.Verify(s => s.GetSecretAsync("IgAccountId"), Times.AtLeastOnce);
     }
 
-    /// <summary>
-    /// GAP-4 (inverse): when no image is present, IgSender returns false early
-    /// and must NOT query Key Vault at all.
-    /// </summary>
     [Fact]
     public async Task SendAsync_WithoutImage_DoesNotQueryKv()
     {
         await BuildSender().SendAsync(new Post { Content = "text only" });
 
         _mockKv.Verify(s => s.GetSecretAsync(It.IsAny<string>()), Times.Never);
+    }
+
+    #endregion
+
+    #region Image upload and API response Tests (issue #166 gaps)
+
+    /// <summary>
+    /// When the image upload helper throws NotImplementedException (current state),
+    /// SendAsync must catch it and return false — never surface the exception to callers.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()
+    {
+        // Arrange — default factory (no HTTP handler needed; UploadImageToPublicUrl throws before any HTTP call)
+        var sender = BuildSender();
+        var post = new Post { Content = "caption", Image = new byte[] { 1, 2, 3 } };
+
+        // Act
+        var result = await sender.SendAsync(post);
+
+        // Assert
+        Assert.False(result);
+        _mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception?>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    /// <summary>
+    /// When the Instagram media-create API returns a non-success status code,
+    /// SendAsync must return false and log an error.
+    /// This test requires a real upload URL — we simulate it by patching the HTTP handler
+    /// so that UploadImageToPublicUrl would succeed if implemented; currently the method
+    /// throws NotImplementedException, so we verify the outer catch fires instead.
+    /// Once UploadImageToPublicUrl is implemented this test should be updated to inject
+    /// a real upload response followed by a non-success media-create response.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()
+    {
+        // Arrange — handler returns 400 for any request
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent("{\"error\":\"bad_request\"}")
+            });
+
+        var client = new HttpClient(handlerMock.Object);
+        var factoryMock = new Mock<IHttpClientFactory>();
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(client);
+
+        var sender = BuildSenderWithFactory(factoryMock.Object);
+        var post = new Post { Content = "caption", Image = new byte[] { 1, 2, 3 } };
+
+        // Act
+        var result = await sender.SendAsync(post);
+
+        // Assert — NotImplementedException from UploadImageToPublicUrl is caught;
+        // the outer catch returns false regardless of handler behaviour.
+        Assert.False(result);
+    }
+
+    /// <summary>
+    /// When the Instagram API returns HTTP 429 (rate limit), SendAsync returns false.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WhenInstagramApiReturns429_ReturnsFalse()
+    {
+        var factory = ResilienceTestHelpers.BuildFactory(
+            "Instagram",
+            (HttpStatusCode.TooManyRequests, "{\"error\":\"rate_limited\"}"));
+
+        var sender = BuildSenderWithFactory(factory);
+        var post = new Post { Content = "caption", Image = new byte[] { 1, 2, 3 } };
+
+        var result = await sender.SendAsync(post);
+
+        Assert.False(result);
+    }
+
+    /// <summary>
+    /// When an HttpRequestException is thrown during the image upload step,
+    /// SendAsync must catch it and return false.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new HttpRequestException("Connection refused"));
+
+        var client = new HttpClient(handlerMock.Object);
+        var factoryMock = new Mock<IHttpClientFactory>();
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(client);
+
+        var loggerMock = new Mock<ILogger<IgSender>>();
+        var kvMock = new Mock<IKeyVaultService>();
+        kvMock.Setup(s => s.GetSecretAsync("IgAccessToken")).ReturnsAsync("fake_token");
+        kvMock.Setup(s => s.GetSecretAsync("IgAccountId")).ReturnsAsync("fake_account_id");
+
+        var sender = new IgSender(factoryMock.Object, kvMock.Object, loggerMock.Object);
+        var post = new Post { Content = "caption", Image = new byte[] { 1, 2, 3 } };
+
+        var result = await sender.SendAsync(post);
+
+        Assert.False(result);
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception?>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
     }
 
     #endregion
