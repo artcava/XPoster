@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **`coverlet.runsettings`** added at repo root ([#166](https://github.com/artcava/XPoster/issues/166)): excludes auto-generated Azure Functions isolated-worker classes (`Program`, `DirectFunctionExecutor`, `FunctionExecutorAutoStartup`, `FunctionExecutorHostBuilderExtensions`, `FunctionMetadataProviderAutoStartup`, `GeneratedFunctionMetadataProvider`, `WorkerExtensionStartupCodeExecutor`, `WorkerHostBuilderFunctionMetadataProviderExtension`, `HttpClientExtensions`) from Coverlet coverage collection; referenced via `--settings coverlet.runsettings` in `ci.yml` so exclusions apply consistently both locally and in CI.
 - **`Azure.Security.KeyVault.Secrets` v4.7.0** added to `XPoster.csproj` ([#113](https://github.com/artcava/XPoster/issues/113)): provides the `SecretClient` used to read secrets from Azure Key Vault at runtime.
 - **`IKeyVaultService` abstraction** (`src/Abstraction/IKeyVaultService.cs`) ([#113](https://github.com/artcava/XPoster/issues/113)): interface exposing `GetSecretAsync(string name)` for runtime secret retrieval; includes a `SetSecretAsync` stub reserved for secret-rotation write-back (see #114).
 - **`KeyVaultService` implementation** (`src/Services/KeyVaultService.cs`) ([#113](https://github.com/artcava/XPoster/issues/113)): concrete implementation backed by `DefaultAzureCredential` and the `KEYVAULT_URI` app setting; registered as `Singleton` in `Program.cs` so `SecretClient` is reused across invocations.
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This CHANGELOG.md file ([#36](https://github.com/artcava/XPoster/issues/36)).
 
 ### Changed
+- **`COVERAGE_THRESHOLD` raised from `70` to `80`** in `.github/workflows/ci.yml` ([#166](https://github.com/artcava/XPoster/issues/166)): enforces meaningful quality gate after auto-generated classes are excluded and missing `IgSender` / `KeyVaultService` tests are added.
 - **`InSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): constructor now accepts `IKeyVaultService`; `LinkedInAccessToken`, `LinkedInOwnerCode`, and `LinkedInOrgId` (optional) are resolved via `GetSecretAsync` on every `SendAsync` invocation, enabling transparent secret rotation without a Function App restart.
 - **`XSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): the four X/Twitter OAuth tokens (`XApiKey`, `XApiSecret`, `XAccessToken`, `XAccessTokenSecret`) are now read from Key Vault per-call; `TwitterContext` is constructed and disposed inside each `SendAsync` with fresh credentials.
 - **`IgSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): `IgAccessToken` and `IgAccountId` are resolved via `GetSecretAsync` on every `SendAsync` invocation.
@@ -52,6 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `graphify-dotnet` install failure: tool requires .NET 10 SDK; `setup-dotnet` now pinned to `10.0.x`; install moved to `/tmp` to bypass `global.json` ([#144](https://github.com/artcava/XPoster/pull/144), [#145](https://github.com/artcava/XPoster/pull/145), [#146](https://github.com/artcava/XPoster/pull/146)).
 
 ### Tests
+- **`IgSenderTests`** — added missing coverage paths ([#166](https://github.com/artcava/XPoster/issues/166)): `SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError`, `SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse`, `SendAsync_WhenInstagramApiReturns429_ReturnsFalse`, `SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError`.
+- **`KeyVaultServiceTests`** created ([#166](https://github.com/artcava/XPoster/issues/166)): constructor guards (`null` logger, missing `KEYVAULT_URI`), `GetSecretAsync` happy path and `RequestFailedException` propagation, `SetSecretAsync` happy path and exception propagation, `LogDebug` emission for both methods; uses `StubKeyVaultService` and `ThrowingKeyVaultService` inner test doubles consistent with Community 6 pattern.
 - **Polly resilience pipeline integration tests** ([#161](https://github.com/artcava/XPoster/issues/161)): new `tests/Integration/` folder with `PollyIntegrationTestBase`, `LinkedInResiliencePipelineTests`, `InstagramResiliencePipelineTests`, `AiClientsResiliencePipelineTests`, and `CaptureLoggerProvider`; these tests build a real `IServiceProvider` with `AddStandardResilienceHandler` (mirroring `Program.cs`) and replace only the innermost `HttpMessageHandler` with a test double — ensuring Polly's retry, circuit-breaker, and attempt-timeout policies are exercised end-to-end without any outbound network calls; `OnRetry` log emission verified via `CaptureLoggerProvider`.
 - **`KeyVaultServiceTests`** ([#113](https://github.com/artcava/XPoster/issues/113)): verifies canonical secret name constants, transparent rotation scenario, and that no KV call is made when `SendAsync` receives a no-image post.
 - **`InSenderTests`** updated ([#113](https://github.com/artcava/XPoster/issues/113)): `SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall` verifies KV is called on every invocation; `SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode` verifies `LinkedInOrgId` is used as author URN and `LinkedInOwnerCode` is `Times.Never` when org secret resolves successfully.
@@ -104,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - OpenAI models updated to **`gpt-4.1-nano`** (text) and **`gpt-image-1.5`** (image) ([#68](https://github.com/artcava/XPoster/issues/68))
 - `CONTRIBUTING.md`: explicit rule to always branch from `develop`; PR checklist updated ([#79](https://github.com/artcava/XPoster/issues/79))
 - `README.md` and all docs aligned to actual environment variable names: `IN_*`, `IG_*`, `OPENAI_*` ([#70](https://github.com/artcava/XPoster/issues/70))
-- Directory tree diagrams in `README.md` and `tests/README.md` updated to match actual project structure ([#74](https://github.com/artcava/XPoster/issues/74))
+- Directory tree diagrams in `README.md` and `tests/README.md` updated to match actual project structure ([#70](https://github.com/artcava/XPoster/issues/70), [#74](https://github.com/artcava/XPoster/issues/74))
 
 ### Fixed
 - Removed unsupported `response_format` parameter from image generation request body (`gpt-image-1` always returns `b64_json` by default); switched model from `gpt-image-1-mini` (unavailable on direct OpenAI API) to `gpt-image-1` ([#26](https://github.com/artcava/XPoster/issues/26))

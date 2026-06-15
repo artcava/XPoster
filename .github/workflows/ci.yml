@@ -20,7 +20,7 @@ env:
   SOLUTION_PATH: './XPoster.sln'
   BUILD_CONFIGURATION: 'Release'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
-  COVERAGE_THRESHOLD: 70
+  COVERAGE_THRESHOLD: 80
 
 jobs:
   # ============================================
@@ -63,6 +63,8 @@ jobs:
   # ============================================
   # UNIT TEST JOB - Fast feedback, no I/O waits
   # Excludes integration tests (Category=Integration).
+  # coverlet.runsettings excludes auto-generated Azure Functions
+  # runtime classes from coverage collection.
   # ============================================
   test-unit:
     name: Unit Tests
@@ -89,6 +91,7 @@ jobs:
             --no-restore \
             --verbosity normal \
             --filter "Category!=Integration" \
+            --settings coverlet.runsettings \
             --collect:"XPlat Code Coverage" \
             --results-directory ./coverage
 
