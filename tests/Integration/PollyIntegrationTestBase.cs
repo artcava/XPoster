@@ -33,15 +33,18 @@ public abstract class PollyIntegrationTestBase
         var services = new ServiceCollection();
         services.AddLogging();
 
-        services.AddHttpClient(clientName)
-            .AddStandardResilienceHandler(options =>
-            {
-                options.Retry.MaxRetryAttempts = maxRetryAttempts;
-                options.Retry.Delay = TimeSpan.FromSeconds(retryDelaySeconds);
-                options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(attemptTimeoutSeconds);
-                options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(breakDurationSeconds);
-            })
-            .ConfigurePrimaryHttpMessageHandler(() => innerHandler);
+        // AddStandardResilienceHandler returns IHttpStandardResiliencePipelineBuilder,
+        // not IHttpClientBuilder — ConfigurePrimaryHttpMessageHandler must be called
+        // on the IHttpClientBuilder returned by AddHttpClient, not chained after.
+        var builder = services.AddHttpClient(clientName);
+        builder.AddStandardResilienceHandler(options =>
+        {
+            options.Retry.MaxRetryAttempts = maxRetryAttempts;
+            options.Retry.Delay = TimeSpan.FromSeconds(retryDelaySeconds);
+            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(attemptTimeoutSeconds);
+            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(breakDurationSeconds);
+        });
+        builder.ConfigurePrimaryHttpMessageHandler(() => innerHandler);
 
         return services.BuildServiceProvider();
     }

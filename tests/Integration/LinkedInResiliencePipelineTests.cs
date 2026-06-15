@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace XPoster.Tests.Integration;
@@ -118,22 +119,26 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
     {
         // Arrange: capture log entries emitted by Polly's OnRetry callback
         var logMessages = new List<string>();
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
+        // AddProvider is an extension method from Microsoft.Extensions.Logging —
+        // the using directive for that namespace is required.
         services.AddLogging(b => b.AddProvider(new CaptureLoggerProvider(logMessages)));
 
         var handler = BuildSequenceHandler(
             (HttpStatusCode.TooManyRequests, "{}"),
             (HttpStatusCode.OK, "{\"id\":\"ok\"}"));
 
-        services.AddHttpClient("LinkedIn")
-            .AddStandardResilienceHandler(options =>
-            {
-                options.Retry.MaxRetryAttempts = 3;
-                options.Retry.Delay = TimeSpan.FromSeconds(2);
-                options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-                options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-            })
-            .ConfigurePrimaryHttpMessageHandler(() => handler);
+        // AddStandardResilienceHandler and ConfigurePrimaryHttpMessageHandler must
+        // be called on separate variables — see PollyIntegrationTestBase for rationale.
+        var httpClientBuilder = services.AddHttpClient("LinkedIn");
+        httpClientBuilder.AddStandardResilienceHandler(options =>
+        {
+            options.Retry.MaxRetryAttempts = 3;
+            options.Retry.Delay = TimeSpan.FromSeconds(2);
+            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
+            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        });
+        httpClientBuilder.ConfigurePrimaryHttpMessageHandler(() => handler);
 
         var provider = services.BuildServiceProvider();
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient("LinkedIn");
