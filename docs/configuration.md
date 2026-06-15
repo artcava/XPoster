@@ -1,8 +1,10 @@
 # Configuration Reference
 
-All configuration is passed via environment variables — locally in `src/local.settings.json`, in production via Azure App Settings (or Key Vault references).
+All configuration is passed via environment variables — locally in `src/local.settings.json`, in production via Azure App Settings.
 
 The file [`src/local.settings.json.example`](../src/local.settings.json.example) is the canonical starting template: copy it to `src/local.settings.json`, fill in the empty strings, and the function is ready to run locally.
+
+> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **no longer configured via environment variables**. They are resolved at runtime by `KeyVaultService` directly from Azure Key Vault. See the [Key Vault](#key-vault) section below.
 
 ---
 
@@ -11,8 +13,7 @@ The file [`src/local.settings.json.example`](../src/local.settings.json.example)
 For a minimal local setup with the default provider (`OpenAi`) you need at minimum:
 
 - [ ] `AzureWebJobsStorage` — Azurite or a real Storage Account connection string
-- [ ] `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET`
-- [ ] `IN_ACCESS_TOKEN` + one of `IN_OWNER` / `IN_ORG_ID`
+- [ ] `KEYVAULT_URI` — URI of the Azure Key Vault instance holding all sender credentials
 - [ ] `OpenAI__ApiKey`
 - [ ] (Optional) `APPLICATIONINSIGHTS_CONNECTION_STRING` for local telemetry
 
@@ -20,6 +21,8 @@ For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block w
 
 - [ ] `DeepSeek__ApiKey`
 - [ ] `FalAi__ApiKey`
+
+> 💡 For local development, run `az login` before starting the function. `KeyVaultService` uses `DefaultAzureCredential`, which picks up your Azure CLI session automatically.
 
 ---
 
@@ -35,7 +38,6 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // ── Azure Functions Runtime ──────────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     // Use Azurite (local emulator) or a real Storage Account connection string.
-    // Production example: "DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net"
 
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     // Required by the .NET 8 isolated worker model. Do not change.
@@ -50,45 +52,23 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AiProvider": "OpenAi",
     // Selects the IAiService implementation injected into AI-enabled orchestrators.
     // Supported values: OpenAi | AzureFoundry | DeepSeekWithFal
-    // Only the configuration block that matches this value is required at runtime.
 
-    // ── Twitter / X ──────────────────────────────────────────────────────
-    "X_API_KEY": "",
-    // Twitter App Consumer Key. Obtain from developer.twitter.com > Your App > Keys and Tokens.
-    // The app must have Read and Write permissions.
-
-    "X_API_SECRET": "",
-    // Twitter App Consumer Secret (same location as above).
-
-    "X_ACCESS_TOKEN": "",
-    // User Access Token (OAuth 1.0a). Generated per-user from the developer portal.
-
-    "X_ACCESS_TOKEN_SECRET": "",
-    // User Access Token Secret (OAuth 1.0a).
-
-    // ── LinkedIn ─────────────────────────────────────────────────────────
-    "IN_ACCESS_TOKEN": "",
-    // LinkedIn OAuth 2.0 access token. Obtain from developer.linkedin.com > OAuth credentials.
-    // IMPORTANT: expires every 60 days — manual rotation is currently required.
-    // See Roadmap for the automated refresh milestone.
-
-    "IN_OWNER": "",
-    // Numeric LinkedIn person ID of the account that will author posts (e.g. "123456789").
-    // Resolve via: GET https://api.linkedin.com/v2/userinfo
-    // Posts are published as urn:li:person:{IN_OWNER}. Ignored when IN_ORG_ID is set.
-
-    "IN_ORG_ID": "",
-    // Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. "98765432").
-    // When set, takes precedence over IN_OWNER. Posts are published as urn:li:organization:{IN_ORG_ID}.
-    // Provide exactly ONE of IN_OWNER or IN_ORG_ID.
-
-    // ── Instagram (currently disabled — see issue #72) ────────────────────
-    "IG_ACCESS_TOKEN": "",
-    // Long-lived Instagram Graph API access token.
-    // These keys are read by IgSender but the slot is disabled in OrchestratorFactory.
-
-    "IG_ACCOUNT_ID": "",
-    // Numeric Instagram Business Account ID used in Graph API calls.
+    // ── Key Vault ────────────────────────────────────────────────────────
+    "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
+    // URI of the Azure Key Vault instance holding all sender OAuth credentials.
+    // Local dev: run `az login` — DefaultAzureCredential picks up your CLI session.
+    // Azure deployment: Managed Identity handles authentication automatically.
+    //
+    // Required secrets in Key Vault (exact casing enforced):
+    //   XApiKey               — X (Twitter) API key
+    //   XApiSecret            — X (Twitter) API secret
+    //   XAccessToken          — X (Twitter) access token
+    //   XAccessTokenSecret    — X (Twitter) access token secret
+    //   LinkedInAccessToken   — LinkedIn OAuth 2.0 Bearer token
+    //   LinkedInOwnerCode     — LinkedIn person/owner ID
+    //   LinkedInOrgId         — LinkedIn organization ID (optional; org posts)
+    //   IgAccessToken         — Instagram Graph API access token
+    //   IgAccountId           — Instagram account ID
 
     // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════
     "OpenAI__ApiKey": "",
@@ -96,68 +76,29 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
     // Chat Completions API URL. Override to point at an Azure OpenAI or other
-    // OpenAI-compatible endpoint (e.g. https://<resource>.openai.azure.com/...).
+    // OpenAI-compatible endpoint.
 
     "OpenAI__ChatModel": "gpt-4.1-nano",
-    // Model used for text summarisation and image prompt generation.
-
     "OpenAI__SummaryTemperature": "0.5",
-    // Temperature for summary generation (0.0–2.0). Lower = more deterministic.
-
     "OpenAI__SummaryMaxTokensPerChar": "5",
-    // Divisor to convert a character budget to max_tokens (budget ÷ value).
-
     "OpenAI__SummarySafetyMarginChars": "50",
-    // Character margin subtracted from the platform character limit before
-    // the {MaxChars} placeholder is passed to the prompt.
-
     "OpenAI__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    // System prompt for summarisation. Supports {MaxChars} placeholder.
-
     "OpenAI__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    // User prompt for summarisation. Supports {Text} placeholder.
-
     "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
-    // Image Generations API URL.
-
     "OpenAI__ImageModel": "gpt-image-1.5",
-    // Model used for image generation (e.g. "gpt-image-1.5", "dall-e-3").
-
     "OpenAI__ImageSize": "1024x1024",
-    // Output image dimensions. Supported values depend on the model
-    // (e.g. "1024x1024", "1792x1024", "1024x1792").
-
     "OpenAI__ImageCount": "1",
-    // Number of images to generate per request.
-
     "OpenAI__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    // System prompt for image-prompt generation. No placeholders.
-
     "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    // User prompt for image-prompt generation. Supports {Summary} placeholder.
-
     "OpenAI__ImagePromptMaxTokens": "60",
-    // Max tokens for image-prompt generation requests.
-
     "OpenAI__ImagePromptTemperature": "0.7",
-    // Temperature for image-prompt generation (0.0–2.0). Higher = more creative prompts.
 
     // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════
     "AzureFoundry__Endpoint": "",
-    // Azure OpenAI resource endpoint, e.g. https://<resource>.openai.azure.com/
-
     "AzureFoundry__ApiKey": "",
-    // Azure OpenAI resource key (or leave empty to use Managed Identity).
-
     "AzureFoundry__DeploymentName": "",
-    // Chat deployment name as configured in Azure AI Foundry (e.g. "gpt-4o-mini").
-
     "AzureFoundry__ImageDeploymentName": "",
-    // Image generation deployment name (e.g. "dall-e-3").
-
     "AzureFoundry__ApiVersion": "2024-02-01",
-    // Azure OpenAI REST API version.
-
     "AzureFoundry__SummaryTemperature": "0.5",
     "AzureFoundry__SummaryMaxTokensPerChar": "5",
     "AzureFoundry__SummarySafetyMarginChars": "50",
@@ -167,18 +108,11 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
-    // Same semantics as OpenAI__ equivalents; see above for descriptions.
 
     // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ═════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
-    // DeepSeek API base URL. Keep the default unless using a custom proxy.
-
     "DeepSeek__ApiKey": "",
-    // DeepSeek API key. Obtain from platform.deepseek.com > API Keys.
-
     "DeepSeek__DeploymentName": "deepseek-chat",
-    // DeepSeek model name (e.g. "deepseek-chat", "deepseek-reasoner").
-
     "DeepSeek__SummaryTemperature": "0.5",
     "DeepSeek__SummaryMaxTokensPerChar": "5",
     "DeepSeek__SummarySafetyMarginChars": "50",
@@ -191,27 +125,14 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
     // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ══════════
     "FalAi__ApiKey": "",
-    // fal.ai API key. Obtain from fal.ai/dashboard > API Keys.
-
     "FalAi__ModelId": "fal-ai/flux/schnell",
-    // fal.ai model identifier.
-    // "fal-ai/flux/schnell" is optimised for speed (default).
-    // Use "fal-ai/flux-pro" for higher-quality output at increased cost.
-
     "FalAi__ImageSize": "landscape_4_3",
-    // Named size preset accepted by the fal.ai API.
-    // Supported: landscape_4_3 | square | portrait_4_3 | landscape_16_9
-
     "FalAi__NumInferenceSteps": "4",
-    // Number of diffusion inference steps. Lower = faster and cheaper; higher = better quality.
-    // Range: 1–50 (FLUX Schnell is tuned for 1–4 steps).
 
     // ── Observability ─────────────────────────────────────────────────────
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
     // Application Insights connection string.
     // When present, the isolated worker SDK automatically registers the telemetry pipeline.
-    // Format: "InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
-    // Leave empty to disable telemetry locally.
   }
 }
 ```
@@ -262,39 +183,56 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 ---
 
-## Twitter / X
+## Key Vault
 
-Obtain all four values from [developer.twitter.com](https://developer.twitter.com) → **Your App** → **Keys and Tokens**. The app must have **Read and Write** permissions.
-
-| Variable | Type | Required | Description |
-|---|---|---|---|
-| `X_API_KEY` | string | ✅ Yes | Twitter App API Key (Consumer Key). |
-| `X_API_SECRET` | string | ✅ Yes | Twitter App API Secret (Consumer Secret). |
-| `X_ACCESS_TOKEN` | string | ✅ Yes | User Access Token (OAuth 1.0a). |
-| `X_ACCESS_TOKEN_SECRET` | string | ✅ Yes | User Access Token Secret (OAuth 1.0a). |
-
----
-
-## LinkedIn
+All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are resolved at runtime by `KeyVaultService` (`IKeyVaultService`) directly from Azure Key Vault. They are **not** stored in environment variables or App Settings.
 
 | Variable | Type | Required | Description |
 |---|---|---|---|
-| `IN_ACCESS_TOKEN` | string | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from [LinkedIn Developer Portal](https://developer.linkedin.com) → OAuth credentials. **Expires every 60 days** — manual rotation is currently required. |
-| `IN_OWNER` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Resolve via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. Ignored when `IN_ORG_ID` is set. |
-| `IN_ORG_ID` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. `98765432`). When set, takes precedence over `IN_OWNER`. Posts are published as `urn:li:organization:{IN_ORG_ID}`. |
+| `KEYVAULT_URI` | string | ✅ Yes | Full URI of the Azure Key Vault instance, e.g. `https://<vault-name>.vault.azure.net/`. |
 
-> ⚠️ LinkedIn token refresh is currently limited to organization accounts (`IN_ORG_ID`). Personal member accounts require manual renewal every 60 days. See the [Roadmap](../README.md#roadmap) for the automated refresh milestone.
+### Authentication
 
----
+`KeyVaultService` uses `DefaultAzureCredential` from `Azure.Identity`, which resolves credentials in the following order:
 
-## Instagram
+| Environment | Credential used |
+|---|---|
+| Local development | Azure CLI session (`az login`) |
+| Azure (production) | Function App Managed Identity (no secrets required) |
 
-> ⚠️ Instagram publishing is **not yet active in production**. These variables are read by `IgSender` but the slot is disabled in `OrchestratorFactory`. See issue [#72](https://github.com/artcava/XPoster/issues/72) for the full enablement checklist.
+For local development, ensure the identity used with `az login` has the **Key Vault Secrets User** role on the vault.
 
-| Variable | Type | Required | Description |
-|---|---|---|---|
-| `IG_ACCESS_TOKEN` | string | ✅ Yes (when enabled) | Long-lived Instagram Graph API access token. |
-| `IG_ACCOUNT_ID` | string | ✅ Yes (when enabled) | Numeric Instagram Business Account ID used in Graph API calls. |
+### Required Secrets in Key Vault
+
+Secret names are case-sensitive. The following secrets must be present in the vault:
+
+#### Twitter / X
+
+| Secret name | Description |
+|---|---|
+| `XApiKey` | Twitter App API Key (Consumer Key). Obtain from [developer.twitter.com](https://developer.twitter.com) → Your App → Keys and Tokens. The app must have **Read and Write** permissions. |
+| `XApiSecret` | Twitter App API Secret (Consumer Secret). |
+| `XAccessToken` | User Access Token (OAuth 1.0a). |
+| `XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
+
+#### LinkedIn
+
+| Secret name | Required | Description |
+|---|---|---|
+| `LinkedInAccessToken` | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from [LinkedIn Developer Portal](https://developer.linkedin.com) → OAuth credentials. **Expires every 60 days** — manual rotation is currently required. |
+| `LinkedInOwnerCode` | ⚠️ One of `LinkedInOwnerCode` / `LinkedInOrgId` | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Resolve via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{id}`. Ignored when `LinkedInOrgId` is set. |
+| `LinkedInOrgId` | ⚠️ One of `LinkedInOwnerCode` / `LinkedInOrgId` | Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. `98765432`). When set, takes precedence over `LinkedInOwnerCode`. Posts are published as `urn:li:organization:{id}`. |
+
+> ⚠️ LinkedIn token refresh is currently limited to organization accounts. Personal member accounts require manual renewal every 60 days. See the [Roadmap](../README.md#roadmap) for the automated refresh milestone.
+
+#### Instagram
+
+> ⚠️ Instagram publishing is **not yet active in production**. These secrets are read by `IgSender` but the slot is disabled in `OrchestratorFactory`. See issue [#72](https://github.com/artcava/XPoster/issues/72) for the full enablement checklist.
+
+| Secret name | Description |
+|---|---|
+| `IgAccessToken` | Long-lived Instagram Graph API access token. |
+| `IgAccountId` | Numeric Instagram Business Account ID used in Graph API calls. |
 
 ---
 
@@ -420,16 +358,6 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 
 - Never commit `local.settings.json` — it is listed in `.gitignore`.
 - Use [`src/local.settings.json.example`](../src/local.settings.json.example) as the starting template; it contains no real secrets.
+- Sender credentials live exclusively in Azure Key Vault and are never stored as environment variables or App Settings, in any environment.
 - For CI/CD, store secrets as **GitHub Actions Secrets**; never embed them in workflow YAML files.
-- In production, consider using **Azure Key Vault references** in App Settings to avoid storing secrets as plain-text values in the portal.
-
----
-
-## Future / Planned
-
-The following keys are reserved for future features and are not read by any code in the current version.
-
-| Key | Notes |
-|---|---|
-| `LINKEDIN_CLIENT_ID` / `LINKEDIN_CLIENT_SECRET` | Required for automated LinkedIn token refresh (OAuth 2.0 PKCE flow — planned). |
-| `KEYVAULT_URI` | Azure Key Vault integration for secrets management (planned). |
+- In production, the Function App Managed Identity must be granted the **Key Vault Secrets User** role on the vault — no manual credential management is required.
