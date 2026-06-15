@@ -29,7 +29,7 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 
 // Named HttpClients with standard Polly resilience pipeline:
 // retry (3 attempts, exponential back-off + jitter), circuit-breaker, and per-attempt timeout.
-// Secrets never appear here — they are read from env vars inside each sender/service.
+// Secrets never appear here — all sender credentials are read from Azure Key Vault at runtime.
 builder.Services.AddHttpClient("OpenAI")
     .AddStandardResilienceHandler(options =>
     {
@@ -86,6 +86,10 @@ builder.Services.AddHttpClient("Instagram")
 
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();
+
+// Key Vault service — Singleton; credentials are read per-call via DefaultAzureCredential.
+// Works via az login locally and via Managed Identity in Azure.
+builder.Services.AddSingleton<IKeyVaultService, KeyVaultService>();
 
 builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
