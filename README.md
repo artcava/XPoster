@@ -73,6 +73,8 @@ XPoster is a **serverless, event-driven pipeline** built on four structural pill
 
 The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching orchestrator code.
 
+Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKeyVaultService`), which wraps `Azure.Security.KeyVault.Secrets` and is consumed by sender plugins at runtime to retrieve OAuth credentials from Azure Key Vault.
+
 ```
 ┌────────────────────────────┐
 │   Azure Timer Trigger      │
@@ -99,8 +101,10 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
     │   Services         │
     ├────────────────────┤
     │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
+    │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
     │ • Feed Service     │ ◄─── RSS Parser
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
+    │ • KeyVaultService  │ ◄─── Azure Key Vault secret resolution
     └────────┬───────────┘
              │
              ▼
@@ -150,7 +154,9 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 |-------------------------|-----------------|--------------|---------------|
 | `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
 | `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
-| `DeepSeekWithFal` | `HybridAiService` | DeepSeek API | fal.ai — FLUX.2 Turbo |
+| `DeepSeekWithFal` | `HybridAiService` | `DeepSeekService` → DeepSeek API | `FalAiImageService` → fal.ai FLUX.2 Turbo |
+
+> ℹ️ `DeepSeekService` and `FalAiImageService` are independent services, each with their own registration and test coverage. `HybridAiService` composes the two, delegating text requests to `DeepSeekService` and image requests to `FalAiImageService`. This composition is transparent to orchestrators, which always program to `IAiService`.
 
 ### Social Media APIs
 
@@ -168,13 +174,16 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | `Microsoft.ApplicationInsights.WorkerService` | 2.23.0 | Telemetry pipeline for background services |
 | `ILogger<T>` | (built-in) | Structured logging via `Microsoft.Extensions.Logging` |
 
-### Utilities
+### Utilities & Security
 
 | Package | Version | Role |
 |---------|---------|------|
-| `Microsoft.Extensions.Http` | 9.0.10 | `IHttpClientFactory` — typed/named HTTP clients |
+| `Microsoft.Extensions.Http.Resilience` | 9.1.0 | Retry / resilience pipelines for outbound HTTP clients (`IHttpClientFactory`) |
 | `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
+| `Azure.Security.KeyVault.Secrets` | 4.7.0 | Azure Key Vault secret retrieval (used by `KeyVaultService`) |
 | `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
+
+> ℹ️ `Microsoft.Extensions.Http` is resolved transitively and is not pinned explicitly in the project file to avoid NU1603 version conflicts.
 
 ---
 
@@ -199,7 +208,7 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 
 > ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
-> ⚠️ Setup guides are located under `docs/integrations/`. See the [Roadmap](#roadmap) for the current documentation status.
+> ⚠️ The setup guides above are present and cover account creation, API key configuration, and troubleshooting. Some validation tasks (model names, key naming, SDK version checks) are tracked in issues [#130](https://github.com/artcava/XPoster/issues/130), [#131](https://github.com/artcava/XPoster/issues/131), and [#132](https://github.com/artcava/XPoster/issues/132) and will be completed before the next stable release.
 
 ### Clone the Repository
 
@@ -263,8 +272,9 @@ The example file documents every key inline. The variables are grouped into four
 | **LinkedIn** | `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_ORGANIZATION_ID` |
 | **Instagram** | `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` |
 | **AI Provider** | Varies by provider — see [Getting Started → Supported AI Providers](#supported-ai-providers) |
+| **Azure Key Vault** | `KEY_VAULT_URI` — URI of the Azure Key Vault instance used by `KeyVaultService` to resolve platform OAuth secrets at runtime |
 
-**For Azure**, add the same variables as Application Settings (**Azure Portal → Function App → Configuration**). For production environments, [Azure Managed Identity](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview) is recommended over API keys.
+**For Azure**, add the same variables as Application Settings (**Azure Portal → Function App → Configuration**). For production environments, [Azure Managed Identity](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview) is recommended over API keys — `KeyVaultService` uses `DefaultAzureCredential` and will transparently pick up the Function App's Managed Identity when available.
 
 > 📖 Full reference with types, defaults, allowed values, and instructions on where to obtain each credential: **[docs/configuration.md](docs/configuration.md)**.
 
@@ -279,6 +289,15 @@ Three deployment methods are supported. **GitHub Actions (Option 1) is recommend
 | **1. GitHub Actions** | Production — automated CI/CD on every push to `master` |
 | **2. Azure CLI** | Scripted / IaC provisioning, staging environments |
 | **3. Visual Studio Code** | One-off deploys during early development |
+
+### Branching Strategy
+
+| Branch | Purpose |
+|---|---|
+| `develop` | Active development branch — all feature and fix work targets here |
+| `master` | Production branch — holds the deployable state currently running on Azure; the CI/CD workflow deploys on every push to `master` |
+
+Work is developed on `develop` (or short-lived feature branches off it) and promoted to `master` when ready for release. The GitHub Actions workflow is scoped to `master` and does not trigger on `develop` pushes.
 
 ### Quick Start: GitHub Actions
 
@@ -420,6 +439,8 @@ tests/
 ├── XFunctionMissingBranchTests.cs
 ├── Abstraction/
 │   └── BaseOrchestratorTests.cs
+├── Helpers/
+│   └── ResilienceTestHelpers.cs
 ├── Implementation/
 │   ├── AiServiceFactoryTests.cs
 │   ├── FeedOrchestratorTests.cs
@@ -428,34 +449,48 @@ tests/
 │   └── PowerLawOrchestratorTests.cs
 ├── Models/
 │   ├── AzureFoundryOptionsValidatorTests.cs
+│   ├── DeepSeekOptionsTests.cs
+│   ├── DeepSeekOptionsValidatorTests.cs
+│   ├── FalAiOptionsValidatorTests.cs
 │   ├── ModelsTests.cs
 │   ├── OpenAiOptionsValidatorTests.cs
 │   ├── PostMissingBranchTests.cs
 │   └── RSSFeedMissingBranchTests.cs
 ├── SenderPlugins/
+│   ├── IgSenderResilienceTests.cs
 │   ├── IgSenderTests.cs
 │   ├── InSenderMissingBranchTests.cs
+│   ├── InSenderResilienceTests.cs
 │   ├── InSenderSendAsyncTests.cs
 │   ├── InSenderTests.cs
 │   ├── XSenderMissingBranchTests.cs
 │   ├── XSenderSendAsyncTests.cs
 │   └── XSenderTests.cs
-└── Services/
-    ├── AzureFoundryServiceTests.cs
-    ├── CryptoServiceTests.cs
-    ├── FeedServiceTests.cs
-    ├── OpenAiServiceTests.cs
-    └── TimeProviderTests.cs
+├── Services/
+│   ├── AiServiceHelperTests.cs
+│   ├── AzureFoundryServiceTests.cs
+│   ├── CryptoServiceTests.cs
+│   ├── DeepSeekServiceTests.cs
+│   ├── FalAiImageServiceTests.cs
+│   ├── FeedServiceTests.cs
+│   ├── HybridAiServiceTests.cs
+│   ├── OpenAiServiceTests.cs
+│   └── TimeProviderTests.cs
+└── XPoster.Tests/
+    └── Services/
+        └── KeyVaultServiceTests.cs
 ```
 
 | Folder | What is covered |
 |---|---|
 | *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
 | `Abstraction/` | `BaseOrchestrator` abstract class contracts |
+| `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
 | `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `OrchestratorFactory`, and `AiServiceFactory` resolution logic |
-| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, OpenAI and Azure Foundry options validators |
-| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch); `IgSender` (in-development coverage) |
-| `Services/` | `OpenAiService`, `AzureFoundryService`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
+| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
+| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience) |
+| `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
+| `XPoster.Tests/Services/` | `KeyVaultService` unit tests |
 
 ### Running Tests
 
@@ -533,7 +568,7 @@ Key monitoring capabilities at a glance:
 - [x] Configuration externalization
 - [x] AI provider expansion
 - [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [ ] Extension-point refactoring [see ADR-005](docs/analysis/ADR-005-capability-based-extension-points.md)
+- [ ] Extension-point refactoring — ADR-005 status: **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134)
 - [ ] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
