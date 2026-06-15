@@ -1,21 +1,22 @@
 # Community 67
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **XPoster.Implementation** (2 connections)
-- **NoOrchestrator()** (2 connections)
+- **IgSender.cs** (7 connections)
+- **UploadImageToPublicUrl()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 86]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

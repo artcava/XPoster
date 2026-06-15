@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (5 connections)
-- **XFunctionTests.cs** (5 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **XPoster.Models** (2 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 

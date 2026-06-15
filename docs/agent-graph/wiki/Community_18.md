@@ -7,14 +7,14 @@
 - **XSenderMissingBranchTests.cs** (10 connections)
 - **XSenderMissingBranchTests.cs** (10 connections)
 - **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
 - **BuildSender()** (2 connections)
 - **MessageMaxLenght_Returns250()** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
 - **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
 - **XSenderMissingBranchTests()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
 - **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,19 @@
-# Community 87
+# Community 106
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
-- **XSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 69]] (3 shared connections)
+- [[Community 93]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

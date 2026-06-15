@@ -1,18 +1,19 @@
 # Community 51
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (10 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **if()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
+- **GetSecretAsync()** (2 connections)
+- **KeyVaultService()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **SetSecretAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 48]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

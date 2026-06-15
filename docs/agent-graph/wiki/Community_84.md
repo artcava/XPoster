@@ -1,16 +1,17 @@
 # Community 84
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **CryptoService()** (2 connections)
-- **if()** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator()** (2 connections)
+- **XPoster.Implementation** (2 connections)
 
 ## Relationships
 
-- [[Community 69]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

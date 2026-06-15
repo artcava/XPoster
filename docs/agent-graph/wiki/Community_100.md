@@ -1,12 +1,12 @@
-# Community 94
+# Community 100
 
 > 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **AzureFoundryOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **AiProvider.cs** (2 connections)
 
 ## Relationships
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **var()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **FalAiImageService()** (2 connections)
 
 ## Relationships
 
-- [[Community 87]] (3 shared connections)
+- [[Community 96]] (3 shared connections)
 
 ## Audit Trail
 

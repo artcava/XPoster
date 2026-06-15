@@ -5,15 +5,15 @@
 ## Key Concepts
 
 - **OrchestratorFactoryTests.cs** (9 connections)
-- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
-- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
-- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
 - **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
 - **XPoster.Tests.Implementation** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
+- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (4 shared connections)
+- [[Community 83]] (4 shared connections)
 
 ## Audit Trail
 

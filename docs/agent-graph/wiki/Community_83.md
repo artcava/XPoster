@@ -1,20 +1,21 @@
 # Community 83
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **if()** (2 connections)
-- **FeedService()** (2 connections)
+- **OrchestratorFactoryTests.cs** (9 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (4 shared connections)
+- [[Community 47]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

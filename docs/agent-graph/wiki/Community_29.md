@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **OpenAIResponse.cs** (7 connections)
-- **OpenAIResponse.cs** (7 connections)
-- **XPoster.Models** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **Message** (2 connections)
-- **Choice** (2 connections)
-- **ImageData** (2 connections)
-- **OpenAIResponse** (2 connections)
+- **AiServiceFactory.cs** (7 connections)
+- **AiServiceFactory.cs** (7 connections)
+- **InvalidOperationException()** (2 connections)
+- **if()** (2 connections)
+- **ArgumentException()** (2 connections)
+- **AiServiceFactory()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **GetByProvider()** (2 connections)
 
 ## Relationships
 

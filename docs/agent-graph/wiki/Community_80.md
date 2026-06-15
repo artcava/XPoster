@@ -1,20 +1,21 @@
 # Community 80
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FalAiOptions.cs** (2 connections)
-- **FalAiOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **var()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 19]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

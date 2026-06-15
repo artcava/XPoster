@@ -1,16 +1,16 @@
-# Community 87
+# Community 101
 
 > 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **XFunction.cs** (6 connections)
 - **if()** (2 connections)
-- **XSender()** (2 connections)
+- **XFunction()** (2 connections)
 
 ## Relationships
 
-- [[Community 69]] (3 shared connections)
+- [[Community 77]] (3 shared connections)
 
 ## Audit Trail
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **Run()** (2 connections)
-- **XPoster** (2 connections)
-- **catch()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **if()** (2 connections)
+- **OpenAiService()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (3 shared connections)
+- [[Community 25]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

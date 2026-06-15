@@ -1,21 +1,22 @@
 # Community 64
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
+- **GenerateMessage()** (2 connections)
+- **XPoster.Implementation** (2 connections)
 - **catch()** (2 connections)
-- **if()** (2 connections)
-- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 30]] (7 shared connections)
+- [[Community 79]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
