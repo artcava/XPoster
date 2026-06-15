@@ -49,7 +49,7 @@ public sealed class InstagramResiliencePipelineTests : PollyIntegrationTestBase
         var provider = BuildProviderWithHandler(
             "Instagram",
             handler,
-            maxRetryAttempts: 3,
+            maxRetryAttempts:     3,
             breakDurationSeconds: 3600);
         var factory = provider.GetRequiredService<IHttpClientFactory>();
         var client = factory.CreateClient("Instagram");

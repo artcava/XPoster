@@ -15,8 +15,25 @@ namespace XPoster.Tests.Integration;
 /// This ensures the full DelegatingHandler chain — including Polly — is exercised
 /// without any real outbound network calls.
 /// </summary>
+/// <remarks>
+/// Polly enforces two proportionality constraints at pipeline-build time:
+/// 1. CircuitBreaker.SamplingDuration >= AttemptTimeout * 2
+///    (so at least two attempts fit inside the sampling window).
+/// 2. TotalRequestTimeout > AttemptTimeout
+///    (the overall budget must exceed a single attempt).
+/// Default values here are chosen to satisfy both constraints while mirroring
+/// the production configuration in Program.cs.
+/// </remarks>
 public abstract class PollyIntegrationTestBase
 {
+    // Default production-like timeouts (seconds) — must obey Polly constraints.
+    // SamplingDuration is derived automatically as attemptTimeout * 2 + 10 inside BuildProviderWithHandler.
+    private const int DefaultAttemptTimeoutSeconds      = 30;
+    private const int DefaultTotalRequestTimeoutSeconds = 180; // > attemptTimeout * maxRetries
+    private const int DefaultBreakDurationSeconds       = 30;
+    private const int DefaultMaxRetryAttempts           = 3;
+    private const int DefaultRetryDelaySeconds          = 2;
+
     /// <summary>
     /// Builds an <see cref="IServiceProvider" /> with a named <see cref="System.Net.Http.HttpClient" />
     /// wired through the standard resilience pipeline and backed by <paramref name="innerHandler" />.
@@ -25,11 +42,16 @@ public abstract class PollyIntegrationTestBase
     protected static IServiceProvider BuildProviderWithHandler(
         string clientName,
         HttpMessageHandler innerHandler,
-        int maxRetryAttempts = 3,
-        int retryDelaySeconds = 2,
-        int attemptTimeoutSeconds = 30,
-        int breakDurationSeconds = 30)
+        int maxRetryAttempts           = DefaultMaxRetryAttempts,
+        int retryDelaySeconds          = DefaultRetryDelaySeconds,
+        int attemptTimeoutSeconds      = DefaultAttemptTimeoutSeconds,
+        int totalRequestTimeoutSeconds = DefaultTotalRequestTimeoutSeconds,
+        int breakDurationSeconds       = DefaultBreakDurationSeconds)
     {
+        // Polly constraint: SamplingDuration must be >= AttemptTimeout * 2.
+        // We add a 10-second margin to avoid edge-case equality failures.
+        var samplingDurationSeconds = attemptTimeoutSeconds * 2 + 10;
+
         var services = new ServiceCollection();
         services.AddLogging();
 
@@ -39,10 +61,14 @@ public abstract class PollyIntegrationTestBase
         var builder = services.AddHttpClient(clientName);
         builder.AddStandardResilienceHandler(options =>
         {
-            options.Retry.MaxRetryAttempts = maxRetryAttempts;
-            options.Retry.Delay = TimeSpan.FromSeconds(retryDelaySeconds);
-            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(attemptTimeoutSeconds);
-            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(breakDurationSeconds);
+            options.Retry.MaxRetryAttempts                   = maxRetryAttempts;
+            options.Retry.Delay                             = TimeSpan.FromSeconds(retryDelaySeconds);
+            options.AttemptTimeout.Timeout                  = TimeSpan.FromSeconds(attemptTimeoutSeconds);
+            // Polly constraint 1: TotalRequestTimeout > AttemptTimeout.
+            options.TotalRequestTimeout.Timeout             = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
+            options.CircuitBreaker.BreakDuration            = TimeSpan.FromSeconds(breakDurationSeconds);
+            // Polly constraint 2: SamplingDuration >= AttemptTimeout * 2.
+            options.CircuitBreaker.SamplingDuration         = TimeSpan.FromSeconds(samplingDurationSeconds);
         });
         builder.ConfigurePrimaryHttpMessageHandler(() => innerHandler);
 

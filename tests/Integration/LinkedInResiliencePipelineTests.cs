@@ -67,7 +67,7 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
         var provider = BuildProviderWithHandler(
             "LinkedIn",
             handler,
-            maxRetryAttempts: 3,
+            maxRetryAttempts:   3,
             breakDurationSeconds: 3600 /* long break so the breaker stays open during the test */);
         var factory = provider.GetRequiredService<IHttpClientFactory>();
         var client = factory.CreateClient("LinkedIn");
@@ -96,7 +96,7 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
     [Fact]
     public async Task Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()
     {
-        // Arrange: handler delays longer than the configured attempt timeout
+        // Arrange: handler delays longer than the configured attempt timeout.
         // Use a very short timeout (1 s) so the test completes quickly.
         var handler = BuildDelayedHandler(delayMs: 5_000);
         var provider = BuildProviderWithHandler(
@@ -105,7 +105,7 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
             attemptTimeoutSeconds: 1);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient("LinkedIn");
         client.BaseAddress = new Uri("https://api.linkedin.com");
-        client.Timeout = TimeSpan.FromSeconds(30); // outer timeout well above Polly's per-attempt timeout
+        client.Timeout = TimeSpan.FromSeconds(30);
 
         // Act & Assert: Polly's attempt timeout fires before the handler responds
         await Assert.ThrowsAnyAsync<Exception>(() =>
@@ -133,10 +133,14 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
         var httpClientBuilder = services.AddHttpClient("LinkedIn");
         httpClientBuilder.AddStandardResilienceHandler(options =>
         {
-            options.Retry.MaxRetryAttempts = 3;
-            options.Retry.Delay = TimeSpan.FromSeconds(2);
-            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+            options.Retry.MaxRetryAttempts          = 3;
+            options.Retry.Delay                    = TimeSpan.FromSeconds(2);
+            options.AttemptTimeout.Timeout          = TimeSpan.FromSeconds(30);
+            // Polly constraint 1: TotalRequestTimeout > AttemptTimeout.
+            options.TotalRequestTimeout.Timeout     = TimeSpan.FromSeconds(180);
+            options.CircuitBreaker.BreakDuration    = TimeSpan.FromSeconds(30);
+            // Polly constraint 2: SamplingDuration >= AttemptTimeout * 2.
+            options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(70);
         });
         httpClientBuilder.ConfigurePrimaryHttpMessageHandler(() => handler);
 

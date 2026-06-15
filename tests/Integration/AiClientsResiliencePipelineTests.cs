@@ -16,12 +16,15 @@ namespace XPoster.Tests.Integration;
 public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
 {
     [Theory]
-    [InlineData("OpenAI",       "https://api.openai.com",                "/v1/chat/completions")]
-    [InlineData("AzureFoundry", "https://xposter.openai.azure.com",      "/openai/deployments/gpt-4/chat/completions?api-version=2024-02-01")]
-    [InlineData("DeepSeek",     "https://api.deepseek.com",              "/v1/chat/completions")]
-    [InlineData("FalAi",        "https://fal.run",                       "/fal-ai/flux/dev")]
+    [InlineData("OpenAI",       "https://api.openai.com",                "/v1/chat/completions",                                          30, 180)]
+    [InlineData("AzureFoundry", "https://xposter.openai.azure.com",      "/openai/deployments/gpt-4/chat/completions?api-version=2024-02-01", 30, 180)]
+    [InlineData("DeepSeek",     "https://api.deepseek.com",              "/v1/chat/completions",                                          30, 180)]
+    // FalAi uses a 60-second attempt timeout to accommodate image generation latency;
+    // TotalRequestTimeout must exceed AttemptTimeout, so we use 300 s.
+    [InlineData("FalAi",        "https://fal.run",                       "/fal-ai/flux/dev",                                              60, 300)]
     public async Task Polly_AiClient_RetriesOn429_AndEventuallySucceeds(
-        string clientName, string baseUrl, string path)
+        string clientName, string baseUrl, string path,
+        int attemptTimeoutSeconds, int totalRequestTimeoutSeconds)
     {
         // Arrange: two 429s followed by a 200 with minimal JSON
         var responseBody = "{\"choices\":[{\"message\":{\"content\":\"ok\"}}]}";
@@ -30,8 +33,11 @@ public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
             (HttpStatusCode.TooManyRequests, "{}"),
             (HttpStatusCode.OK, responseBody));
 
-        var timeoutSeconds = clientName == "FalAi" ? 60 : 30;
-        var provider = BuildProviderWithHandler(clientName, handler, attemptTimeoutSeconds: timeoutSeconds);
+        var provider = BuildProviderWithHandler(
+            clientName,
+            handler,
+            attemptTimeoutSeconds:      attemptTimeoutSeconds,
+            totalRequestTimeoutSeconds: totalRequestTimeoutSeconds);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient(clientName);
         client.BaseAddress = new Uri(baseUrl);
 
@@ -45,22 +51,26 @@ public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
     }
 
     [Theory]
-    [InlineData("OpenAI",       "https://api.openai.com",           "/v1/chat/completions",       30)]
-    [InlineData("AzureFoundry", "https://xposter.openai.azure.com", "/openai/deployments/gpt-4",  30)]
-    [InlineData("DeepSeek",     "https://api.deepseek.com",         "/v1/chat/completions",       30)]
-    [InlineData("FalAi",        "https://fal.run",                  "/fal-ai/flux/dev",           60)]
+    [InlineData("OpenAI",       "https://api.openai.com",           "/v1/chat/completions",       30, 180)]
+    [InlineData("AzureFoundry", "https://xposter.openai.azure.com", "/openai/deployments/gpt-4",  30, 180)]
+    [InlineData("DeepSeek",     "https://api.deepseek.com",         "/v1/chat/completions",       30, 180)]
+    [InlineData("FalAi",        "https://fal.run",                  "/fal-ai/flux/dev",           60, 300)]
     public async Task Polly_AiClient_AttemptTimeout_CancelsSlowRequest(
-        string clientName, string baseUrl, string path, int configuredTimeoutSeconds)
+        string clientName, string baseUrl, string path,
+        int attemptTimeoutSeconds, int totalRequestTimeoutSeconds)
     {
-        // Arrange: handler always takes longer than the timeout
+        // Arrange: handler always takes longer than the 1-second test timeout.
+        // We override attemptTimeoutSeconds to 1 so the test completes quickly,
+        // but keep totalRequestTimeoutSeconds proportional (must be > 1).
         var handler = BuildDelayedHandler(delayMs: 5_000);
         var provider = BuildProviderWithHandler(
             clientName,
             handler,
-            attemptTimeoutSeconds: 1 /* use 1 s so the test does not actually wait */ );
+            attemptTimeoutSeconds:      1,
+            totalRequestTimeoutSeconds: totalRequestTimeoutSeconds);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient(clientName);
         client.BaseAddress = new Uri(baseUrl);
-        client.Timeout = TimeSpan.FromSeconds(configuredTimeoutSeconds + 30);
+        client.Timeout = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
 
         // Act & Assert
         await Assert.ThrowsAnyAsync<Exception>(() =>
