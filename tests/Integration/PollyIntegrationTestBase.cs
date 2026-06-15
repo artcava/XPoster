@@ -21,15 +21,16 @@ namespace XPoster.Tests.Integration;
 ///    (so at least two attempts fit inside the sampling window).
 /// 2. TotalRequestTimeout > AttemptTimeout
 ///    (the overall budget must exceed a single attempt).
-/// Default values here are chosen to satisfy both constraints while mirroring
-/// the production configuration in Program.cs.
+///
+/// Additionally, Polly's default ShouldHandle predicate treats HTTP responses as
+/// successful regardless of status code — only network-level exceptions count as
+/// failures by default. To make retry and circuit-breaker policies react to 4xx/5xx
+/// responses, ShouldHandle must be configured explicitly.
 /// </remarks>
 public abstract class PollyIntegrationTestBase
 {
-    // Default production-like timeouts (seconds) — must obey Polly constraints.
-    // SamplingDuration is derived automatically as attemptTimeout * 2 + 10 inside BuildProviderWithHandler.
     private const int DefaultAttemptTimeoutSeconds      = 30;
-    private const int DefaultTotalRequestTimeoutSeconds = 180; // > attemptTimeout * maxRetries
+    private const int DefaultTotalRequestTimeoutSeconds = 180;
     private const int DefaultBreakDurationSeconds       = 30;
     private const int DefaultMaxRetryAttempts           = 3;
     private const int DefaultRetryDelaySeconds          = 2;
@@ -49,26 +50,39 @@ public abstract class PollyIntegrationTestBase
         int breakDurationSeconds       = DefaultBreakDurationSeconds)
     {
         // Polly constraint: SamplingDuration must be >= AttemptTimeout * 2.
-        // We add a 10-second margin to avoid edge-case equality failures.
         var samplingDurationSeconds = attemptTimeoutSeconds * 2 + 10;
 
         var services = new ServiceCollection();
         services.AddLogging();
 
-        // AddStandardResilienceHandler returns IHttpStandardResiliencePipelineBuilder,
-        // not IHttpClientBuilder — ConfigurePrimaryHttpMessageHandler must be called
-        // on the IHttpClientBuilder returned by AddHttpClient, not chained after.
         var builder = services.AddHttpClient(clientName);
         builder.AddStandardResilienceHandler(options =>
         {
-            options.Retry.MaxRetryAttempts                   = maxRetryAttempts;
-            options.Retry.Delay                             = TimeSpan.FromSeconds(retryDelaySeconds);
-            options.AttemptTimeout.Timeout                  = TimeSpan.FromSeconds(attemptTimeoutSeconds);
-            // Polly constraint 1: TotalRequestTimeout > AttemptTimeout.
-            options.TotalRequestTimeout.Timeout             = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
-            options.CircuitBreaker.BreakDuration            = TimeSpan.FromSeconds(breakDurationSeconds);
-            // Polly constraint 2: SamplingDuration >= AttemptTimeout * 2.
-            options.CircuitBreaker.SamplingDuration         = TimeSpan.FromSeconds(samplingDurationSeconds);
+            // Retry and circuit breaker only fire for transient HTTP errors by default.
+            // Configure ShouldHandle explicitly so that 429 and 5xx status codes are
+            // treated as failures — matching the behaviour expected in production.
+            options.Retry.ShouldHandle = args => ValueTask.FromResult(
+                args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests
+                    or HttpStatusCode.InternalServerError
+                    or HttpStatusCode.BadGateway
+                    or HttpStatusCode.ServiceUnavailable
+                    or HttpStatusCode.GatewayTimeout
+                || args.Outcome.Exception is not null);
+
+            options.CircuitBreaker.ShouldHandle = args => ValueTask.FromResult(
+                args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests
+                    or HttpStatusCode.InternalServerError
+                    or HttpStatusCode.BadGateway
+                    or HttpStatusCode.ServiceUnavailable
+                    or HttpStatusCode.GatewayTimeout
+                || args.Outcome.Exception is not null);
+
+            options.Retry.MaxRetryAttempts               = maxRetryAttempts;
+            options.Retry.Delay                          = TimeSpan.FromSeconds(retryDelaySeconds);
+            options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(attemptTimeoutSeconds);
+            options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
+            options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(breakDurationSeconds);
+            options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(samplingDurationSeconds);
         });
         builder.ConfigurePrimaryHttpMessageHandler(() => innerHandler);
 
