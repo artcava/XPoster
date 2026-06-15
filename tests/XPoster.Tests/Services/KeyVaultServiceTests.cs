@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using XPoster.Abstraction;
 
@@ -64,7 +65,7 @@ public class KeyVaultServiceTests
         mock.Setup(s => s.GetSecretAsync("XAccessToken"))
             .ReturnsAsync(() => ++callCount == 1 ? "old-token" : "new-token");
 
-        var first = await mock.Object.GetSecretAsync("XAccessToken");
+        var first  = await mock.Object.GetSecretAsync("XAccessToken");
         var second = await mock.Object.GetSecretAsync("XAccessToken");
 
         Assert.Equal("old-token", first);
@@ -76,25 +77,23 @@ public class KeyVaultServiceTests
     // -----------------------------------------------------------------------
 
     /// <summary>
-    /// GAP-3: When KEYVAULT_URI is absent from configuration, constructing
-    /// KeyVaultService must throw <see cref="InvalidOperationException"/>.
-    /// This prevents silent misconfiguration at startup.
+    /// GAP-3: When KEYVAULT_URI is absent, constructing KeyVaultService must throw
+    /// <see cref="InvalidOperationException"/> to prevent silent misconfiguration.
     /// </summary>
     [Fact]
     public void KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()
     {
-        // Arrange: ensure the env var is absent for this test
         var original = Environment.GetEnvironmentVariable("KEYVAULT_URI");
         Environment.SetEnvironmentVariable("KEYVAULT_URI", null);
 
         try
         {
+            var logger = NullLogger<XPoster.Services.KeyVaultService>.Instance;
             Assert.Throws<InvalidOperationException>(
-                () => new XPoster.Services.KeyVaultService());
+                () => new XPoster.Services.KeyVaultService(logger));
         }
         finally
         {
-            // Restore original value so other tests are not affected
             Environment.SetEnvironmentVariable("KEYVAULT_URI", original);
         }
     }
@@ -110,7 +109,7 @@ public class KeyVaultServiceTests
         var sender = new XPoster.SenderPlugins.InSender(
             HttpFactory(System.Net.HttpStatusCode.OK, "{}"),
             kv.Object,
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.InSender>.Instance);
+            NullLogger<XPoster.SenderPlugins.InSender>.Instance);
 
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
@@ -124,7 +123,7 @@ public class KeyVaultServiceTests
         var sender = new XPoster.SenderPlugins.InSender(
             HttpFactory(System.Net.HttpStatusCode.OK, "{}"),
             kv.Object,
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.InSender>.Instance);
+            NullLogger<XPoster.SenderPlugins.InSender>.Instance);
 
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
@@ -148,7 +147,7 @@ public class KeyVaultServiceTests
 
         var sender = new XPoster.SenderPlugins.XSender(
             kv.Object,
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.XSender>.Instance);
+            NullLogger<XPoster.SenderPlugins.XSender>.Instance);
 
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
@@ -172,7 +171,7 @@ public class KeyVaultServiceTests
         var sender = new XPoster.SenderPlugins.IgSender(
             HttpFactory(System.Net.HttpStatusCode.OK, "{\"id\":\"media-1\"}"),
             kv.Object,
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.IgSender>.Instance);
+            NullLogger<XPoster.SenderPlugins.IgSender>.Instance);
 
         var post = new XPoster.Models.Post { Content = "caption", Image = new byte[] { 1, 2, 3 } };
         await sender.SendAsync(post);
@@ -188,7 +187,7 @@ public class KeyVaultServiceTests
         var sender = new XPoster.SenderPlugins.IgSender(
             HttpFactory(System.Net.HttpStatusCode.OK, "{}"),
             kv.Object,
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.IgSender>.Instance);
+            NullLogger<XPoster.SenderPlugins.IgSender>.Instance);
 
         var post = new XPoster.Models.Post { Content = "text only" };
         await sender.SendAsync(post);
