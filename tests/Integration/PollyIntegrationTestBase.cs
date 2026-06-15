@@ -26,6 +26,11 @@ namespace XPoster.Tests.Integration;
 /// successful regardless of status code — only network-level exceptions count as
 /// failures by default. To make retry and circuit-breaker policies react to 4xx/5xx
 /// responses, ShouldHandle must be configured explicitly.
+///
+/// CircuitBreaker.MinimumThroughput controls the minimum number of requests that
+/// must pass through the sampling window before the breaker can open. The default
+/// value (100) is appropriate for production but makes circuit-breaker tests
+/// impractical. Tests that exercise the breaker must pass minimumThroughput: 2.
 /// </remarks>
 public abstract class PollyIntegrationTestBase
 {
@@ -34,11 +39,13 @@ public abstract class PollyIntegrationTestBase
     private const int DefaultBreakDurationSeconds       = 30;
     private const int DefaultMaxRetryAttempts           = 3;
     private const int DefaultRetryDelaySeconds          = 2;
+    private const int DefaultMinimumThroughput          = 100; // Polly default — production value
 
     /// <summary>
     /// Builds an <see cref="IServiceProvider" /> with a named <see cref="System.Net.Http.HttpClient" />
     /// wired through the standard resilience pipeline and backed by <paramref name="innerHandler" />.
     /// Options mirror the values in <c>Program.cs</c>.
+    /// Pass <paramref name="minimumThroughput"/>: 2 when the test needs to open the circuit breaker.
     /// </summary>
     protected static IServiceProvider BuildProviderWithHandler(
         string clientName,
@@ -47,7 +54,8 @@ public abstract class PollyIntegrationTestBase
         int retryDelaySeconds          = DefaultRetryDelaySeconds,
         int attemptTimeoutSeconds      = DefaultAttemptTimeoutSeconds,
         int totalRequestTimeoutSeconds = DefaultTotalRequestTimeoutSeconds,
-        int breakDurationSeconds       = DefaultBreakDurationSeconds)
+        int breakDurationSeconds       = DefaultBreakDurationSeconds,
+        int minimumThroughput          = DefaultMinimumThroughput)
     {
         // Polly constraint: SamplingDuration must be >= AttemptTimeout * 2.
         var samplingDurationSeconds = attemptTimeoutSeconds * 2 + 10;
@@ -58,9 +66,6 @@ public abstract class PollyIntegrationTestBase
         var builder = services.AddHttpClient(clientName);
         builder.AddStandardResilienceHandler(options =>
         {
-            // Retry and circuit breaker only fire for transient HTTP errors by default.
-            // Configure ShouldHandle explicitly so that 429 and 5xx status codes are
-            // treated as failures — matching the behaviour expected in production.
             options.Retry.ShouldHandle = args => ValueTask.FromResult(
                 args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests
                     or HttpStatusCode.InternalServerError
@@ -83,6 +88,7 @@ public abstract class PollyIntegrationTestBase
             options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
             options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(breakDurationSeconds);
             options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(samplingDurationSeconds);
+            options.CircuitBreaker.MinimumThroughput     = minimumThroughput;
         });
         builder.ConfigurePrimaryHttpMessageHandler(() => innerHandler);
 

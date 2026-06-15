@@ -13,17 +13,6 @@ namespace XPoster.Tests.Integration;
 /// </summary>
 public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
 {
-    private System.Net.Http.HttpClient BuildClient(
-        HttpMessageHandler handler,
-        int attemptTimeoutSeconds = 30)
-    {
-        var provider = BuildProviderWithHandler(
-            "LinkedIn",
-            handler,
-            attemptTimeoutSeconds: attemptTimeoutSeconds);
-        return provider.GetRequiredService<IHttpClientFactory>().CreateClient("LinkedIn");
-    }
-
     [Fact]
     public async Task Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()
     {
@@ -32,7 +21,8 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
             (HttpStatusCode.TooManyRequests, "{}"),
             (HttpStatusCode.OK, "{\"id\":\"urn:li:ugcPost:1\"}"));
 
-        var client = BuildClient(handler);
+        var provider = BuildProviderWithHandler("LinkedIn", handler);
+        var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient("LinkedIn");
         client.BaseAddress = new Uri("https://api.linkedin.com");
 
         var response = await client.PostAsync(
@@ -58,22 +48,30 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
             (HttpStatusCode.InternalServerError, "{}"),
             (HttpStatusCode.InternalServerError, "{}"));
 
+        // minimumThroughput: 2 — allows the breaker to open after just 2 failures
+        // within the sampling window, making the test deterministic without requiring
+        // hundreds of requests (which is the production-appropriate default of 100).
         var provider = BuildProviderWithHandler(
             "LinkedIn",
             handler,
-            maxRetryAttempts:     3,
-            breakDurationSeconds: 3600);
+            maxRetryAttempts:   0,   // no retries: each PostAsync = exactly 1 request to handler
+            breakDurationSeconds: 3600,
+            minimumThroughput:  2);
         var factory = provider.GetRequiredService<IHttpClientFactory>();
         var client = factory.CreateClient("LinkedIn");
         client.BaseAddress = new Uri("https://api.linkedin.com");
-        var content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json");
 
         Exception? circuitBreakerException = null;
         for (var i = 0; i < 10; i++)
         {
             try
             {
-                await client.PostAsync("/v2/ugcPosts", content);
+                // Recreate StringContent on every iteration: HttpContent is single-use
+                // and gets disposed after the first send. Reusing the same instance
+                // causes the request to fail before reaching Polly.
+                await client.PostAsync(
+                    "/v2/ugcPosts",
+                    new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
             }
             catch (Exception ex)
             {
