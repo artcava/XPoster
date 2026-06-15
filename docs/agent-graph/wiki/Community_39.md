@@ -6,8 +6,8 @@
 
 - **HybridAiService.cs** (6 connections)
 - **HybridAiService.cs** (6 connections)
-- **GenerateImageAsync()** (2 connections)
 - **HybridAiService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 - **GetSummaryAsync()** (2 connections)
 - **GetImagePromptAsync()** (2 connections)
 - **XPoster.Services** (2 connections)

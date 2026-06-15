@@ -1,22 +1,23 @@
 # Community 9
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhitespaceApiKey_Fails()** (2 connections)
-- **Validate_WhitespaceModelId_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **FalAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingModelId_Fails()** (2 connections)
-- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
-- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
-- **Validate_MissingApiKey_Fails()** (2 connections)
+- **DeepSeekService.cs** (13 connections)
+- **DeepSeekService.cs** (13 connections)
+- **XPoster.Services** (2 connections)
+- **NotSupportedException()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **if()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

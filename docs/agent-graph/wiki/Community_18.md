@@ -1,19 +1,20 @@
 # Community 18
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **InSenderTests.cs** (9 connections)
-- **InSenderTests.cs** (9 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()** (2 connections)
-- **catch()** (2 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **ValidPost()** (2 connections)
+- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **InSender()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
+- **BuildSender()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **OpenAiService.cs** (12 connections)
-- **var()** (2 connections)
 - **OpenAiService()** (2 connections)
+- **var()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 22]] (8 shared connections)
+- [[Community 23]] (8 shared connections)
 
 ## Audit Trail
 

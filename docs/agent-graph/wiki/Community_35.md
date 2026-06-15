@@ -1,16 +1,17 @@
 # Community 35
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
-- **XPoster.Tests** (2 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
+- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
+- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
+- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **FeedServiceTests()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

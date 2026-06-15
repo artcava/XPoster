@@ -1,20 +1,19 @@
-# Community 84
+# Community 97
 
-> 3 nodes · cohesion 1.00
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **Program.cs** (2 connections)
-- **Program.cs** (2 connections)
+- **BaseOrchestrator.cs** (5 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 72]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

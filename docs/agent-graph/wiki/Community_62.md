@@ -1,21 +1,22 @@
 # Community 62
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
+- **FeedService.cs** (7 connections)
+- **XPoster.Services** (2 connections)
+- **GetFeedsAsync()** (2 connections)
+- **catch()** (2 connections)
+- **Exception()** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (3 shared connections)
+- [[Community 87]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (5 connections)
-- **AiServiceHelper.cs** (5 connections)
-- **if()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **catch()** (2 connections)
-- **return()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsLocalTime()** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 

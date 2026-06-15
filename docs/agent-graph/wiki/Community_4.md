@@ -1,27 +1,28 @@
 # Community 4
 
-> 18 nodes · cohesion 0.22
+> 19 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **AiServiceHelperTests.cs** (17 connections)
-- **AiServiceHelperTests.cs** (17 connections)
-- **ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenContentIsWhitespaceOnly_ReturnsTrueAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()** (2 connections)
-- **ChatJson()** (2 connections)
-- **AiServiceHelperTests** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **IgSenderTests.cs** (18 connections)
+- **IgSenderTests.cs** (18 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **IgSender()** (2 connections)
+- **SendAsync_WithWhitespaceContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithoutImage_DoesNotQueryKv()** (2 connections)
+- **SendAsync_WithImage_TriesUploadAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithImage_ReadsIgAccessTokenFromKv()** (2 connections)
+- **SendAsync_WithImage_ReadsIgAccountIdFromKv()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **BuildSender()** (2 connections)
+- **MessageMaxLenght_Returns2200()** (2 connections)
 - **new()** (2 connections)
-- **MakeResponse()** (2 connections)
-- **var()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
@@ -29,7 +30,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 70 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

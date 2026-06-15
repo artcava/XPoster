@@ -1,23 +1,23 @@
 # Community 43
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (9 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
-- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
-- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
-- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
+- **XPoster.Services** (2 connections)
+- **SetSecretAsync()** (2 connections)
+- **GetSecretAsync()** (2 connections)
+- **KeyVaultService()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

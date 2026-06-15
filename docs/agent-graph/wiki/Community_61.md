@@ -1,13 +1,14 @@
 # Community 61
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **IOrchestratorFactory.cs** (4 connections)
 - **XPoster.Abstraction** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **IOrchestratorFactory** (2 connections)
+- **Resolve()** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

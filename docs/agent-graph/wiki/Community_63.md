@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **if()** (2 connections)
-- **var()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **catch()** (2 connections)
+- **Run()** (2 connections)
+- **XPoster** (2 connections)
 
 ## Relationships
 
-- [[Community 15]] (10 shared connections)
+- [[Community 88]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

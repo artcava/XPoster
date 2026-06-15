@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **if()** (2 connections)
-- **CryptoService()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **params()** (2 connections)
+- **BuildFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (3 shared connections)
+- [[Community 66]] (3 shared connections)
 
 ## Audit Trail
 

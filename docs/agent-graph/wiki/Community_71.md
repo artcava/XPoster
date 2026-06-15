@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **FalAiImageService()** (2 connections)
+- **OrchestratorFactoryTests.cs** (9 connections)
+- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 82]] (3 shared connections)
+- [[Community 45]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

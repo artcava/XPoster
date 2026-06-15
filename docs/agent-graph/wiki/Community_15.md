@@ -5,20 +5,20 @@
 ## Key Concepts
 
 - **AzureFoundryService.cs** (14 connections)
-- **XPoster.Services** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
 - **GetSummaryAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **while()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **AzureFoundryService()** (2 connections)
 - **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
 
 ## Relationships
 
-- [[Community 63]] (4 shared connections)
+- [[Community 68]] (4 shared connections)
 
 ## Audit Trail
 

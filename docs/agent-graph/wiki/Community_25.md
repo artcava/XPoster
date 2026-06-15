@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (8 connections)
-- **InSenderSendAsyncTests.cs** (8 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithMissingOwner_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidTextOnlyPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **InSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **DeepSeekOptionsTests.cs** (8 connections)
+- **DeepSeekOptionsTests.cs** (8 connections)
+- **DeepSeekOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **DeepSeekOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **DeepSeekOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
 
 ## Relationships
 

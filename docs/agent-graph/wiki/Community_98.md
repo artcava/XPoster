@@ -1,16 +1,15 @@
-# Community 84
+# Community 98
 
-> 3 nodes · cohesion 1.00
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **Program.cs** (2 connections)
-- **Program.cs** (2 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 91]] (2 shared connections)
 
 ## Audit Trail
 

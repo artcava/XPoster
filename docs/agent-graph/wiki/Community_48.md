@@ -1,14 +1,15 @@
 # Community 48
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **GetFeedsAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **IFeedService** (2 connections)
+- **AiServiceHelper.cs** (5 connections)
+- **AiServiceHelper.cs** (5 connections)
+- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+- **return()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (4 connections)
-- **XPoster.Models** (2 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
 - **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
