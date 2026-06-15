@@ -114,10 +114,11 @@ public class InSenderTests
 
     /// <summary>
     /// GAP-2 (variant): when LinkedInOrgId IS present in KV, ResolveAuthorUrnAsync
-    /// should use the org URN as author instead of falling back to LinkedInOwnerCode.
+    /// uses it directly as author URN and does NOT fall back to LinkedInOwnerCode.
+    /// Verified against actual InSender behaviour observed at runtime.
     /// </summary>
     [Fact]
-    public async Task SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdSecret()
+    public async Task SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode()
     {
         var kvWithOrg = BuildKeyVaultMockWithOrg();
         var sender = new InSender(_mockFactory.Object, kvWithOrg.Object, _mockLogger.Object);
@@ -125,9 +126,11 @@ public class InSenderTests
 
         await sender.SendAsync(post);
 
+        // OrgId must be queried — it is the author URN when present
         kvWithOrg.Verify(s => s.GetSecretAsync("LinkedInOrgId"), Times.AtLeastOnce);
-        // LinkedInOwnerCode is still read as a fallback initialisation; org URN takes precedence in the author field
-        kvWithOrg.Verify(s => s.GetSecretAsync("LinkedInOwnerCode"), Times.AtLeastOnce);
+
+        // OwnerCode must NOT be queried when OrgId resolves successfully
+        kvWithOrg.Verify(s => s.GetSecretAsync("LinkedInOwnerCode"), Times.Never);
     }
 
     #endregion
