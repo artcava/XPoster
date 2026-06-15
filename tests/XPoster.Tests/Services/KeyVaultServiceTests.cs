@@ -10,6 +10,25 @@ namespace XPoster.Tests.Services;
 /// </summary>
 public class KeyVaultServiceTests
 {
+    private static Mock<IKeyVaultService> InSenderKv()
+    {
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("li-token");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOrgId"))
+            .ThrowsAsync(new Azure.RequestFailedException("not found"));
+        kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync("owner-123");
+        return kv;
+    }
+
+    private static IHttpClientFactory HttpFactory(System.Net.HttpStatusCode status, string body)
+    {
+        var handler = new StubHttpMessageHandler(status, body);
+        var client = new System.Net.Http.HttpClient(handler);
+        var mock = new Mock<IHttpClientFactory>();
+        mock.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
+        return mock.Object;
+    }
+
     // -----------------------------------------------------------------------
     // GetSecretAsync — basic contract
     // -----------------------------------------------------------------------
@@ -40,7 +59,6 @@ public class KeyVaultServiceTests
     [Fact]
     public async Task GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()
     {
-        // Simulate a credential rotation between two invocations
         var mock = new Mock<IKeyVaultService>();
         var callCount = 0;
         mock.Setup(s => s.GetSecretAsync("XAccessToken"))
@@ -60,30 +78,29 @@ public class KeyVaultServiceTests
     [Fact]
     public async Task InSender_SendAsync_RequestsLinkedInAccessToken()
     {
-        var mock = new Mock<IKeyVaultService>();
-        SetupInSenderSecrets(mock);
-
-        var httpFactory = TestHelpers.BuildHttpFactory(System.Net.HttpStatusCode.OK, "{}");
-        var sender = new XPoster.SenderPlugins.InSender(httpFactory, mock.Object, TestHelpers.NullLogger<XPoster.SenderPlugins.InSender>());
+        var kv = InSenderKv();
+        var sender = new XPoster.SenderPlugins.InSender(
+            HttpFactory(System.Net.HttpStatusCode.OK, "{}"),
+            kv.Object,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.InSender>.Instance);
 
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
-        mock.Verify(s => s.GetSecretAsync("LinkedInAccessToken"), Times.AtLeastOnce);
+        kv.Verify(s => s.GetSecretAsync("LinkedInAccessToken"), Times.AtLeastOnce);
     }
 
     [Fact]
     public async Task InSender_SendAsync_RequestsLinkedInOwnerCode()
     {
-        var mock = new Mock<IKeyVaultService>();
-        SetupInSenderSecrets(mock);
-
-        var httpFactory = TestHelpers.BuildHttpFactory(System.Net.HttpStatusCode.OK, "{}");
-        var sender = new XPoster.SenderPlugins.InSender(httpFactory, mock.Object, TestHelpers.NullLogger<XPoster.SenderPlugins.InSender>());
+        var kv = InSenderKv();
+        var sender = new XPoster.SenderPlugins.InSender(
+            HttpFactory(System.Net.HttpStatusCode.OK, "{}"),
+            kv.Object,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.InSender>.Instance);
 
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
-        // Either LinkedInOwnerCode or LinkedInOrgId must be queried
-        mock.Verify(
+        kv.Verify(
             s => s.GetSecretAsync(It.Is<string>(n => n == "LinkedInOwnerCode" || n == "LinkedInOrgId")),
             Times.AtLeastOnce);
     }
@@ -95,21 +112,22 @@ public class KeyVaultServiceTests
     [Fact]
     public async Task XSender_SendAsync_RequestsAllFourXCredentials()
     {
-        var mock = new Mock<IKeyVaultService>();
-        mock.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("key");
-        mock.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("secret");
-        mock.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("at");
-        mock.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("ats");
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("key");
+        kv.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("secret");
+        kv.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("at");
+        kv.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("ats");
 
-        var sender = new XPoster.SenderPlugins.XSender(mock.Object, TestHelpers.NullLogger<XPoster.SenderPlugins.XSender>());
+        var sender = new XPoster.SenderPlugins.XSender(
+            kv.Object,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.XSender>.Instance);
 
-        // Act — exception expected from LinqToTwitter stub; we only care about KV calls
         await sender.SendAsync(new XPoster.Models.Post { Content = "hello" });
 
-        mock.Verify(s => s.GetSecretAsync("XApiKey"), Times.Once);
-        mock.Verify(s => s.GetSecretAsync("XApiSecret"), Times.Once);
-        mock.Verify(s => s.GetSecretAsync("XAccessToken"), Times.Once);
-        mock.Verify(s => s.GetSecretAsync("XAccessTokenSecret"), Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XApiKey"), Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XApiSecret"), Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XAccessToken"), Times.Once);
+        kv.Verify(s => s.GetSecretAsync("XAccessTokenSecret"), Times.Once);
     }
 
     // -----------------------------------------------------------------------
@@ -119,60 +137,60 @@ public class KeyVaultServiceTests
     [Fact]
     public async Task IgSender_SendAsync_WithImage_RequestsBothIgSecrets()
     {
-        var mock = new Mock<IKeyVaultService>();
-        mock.Setup(s => s.GetSecretAsync("IgAccessToken")).ReturnsAsync("ig-token");
-        mock.Setup(s => s.GetSecretAsync("IgAccountId")).ReturnsAsync("123456");
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("IgAccessToken")).ReturnsAsync("ig-token");
+        kv.Setup(s => s.GetSecretAsync("IgAccountId")).ReturnsAsync("123456");
 
-        var httpFactory = TestHelpers.BuildHttpFactory(System.Net.HttpStatusCode.OK, "{\"id\":\"media-1\"}");
-        var sender = new XPoster.SenderPlugins.IgSender(httpFactory, mock.Object, TestHelpers.NullLogger<XPoster.SenderPlugins.IgSender>());
+        var sender = new XPoster.SenderPlugins.IgSender(
+            HttpFactory(System.Net.HttpStatusCode.OK, "{\"id\":\"media-1\"}"),
+            kv.Object,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.IgSender>.Instance);
 
         var post = new XPoster.Models.Post { Content = "caption", Image = new byte[] { 1, 2, 3 } };
         await sender.SendAsync(post);
 
-        mock.Verify(s => s.GetSecretAsync("IgAccessToken"), Times.AtLeastOnce);
-        mock.Verify(s => s.GetSecretAsync("IgAccountId"), Times.AtLeastOnce);
+        kv.Verify(s => s.GetSecretAsync("IgAccessToken"), Times.AtLeastOnce);
+        kv.Verify(s => s.GetSecretAsync("IgAccountId"), Times.AtLeastOnce);
     }
 
     [Fact]
     public async Task IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()
     {
-        var mock = new Mock<IKeyVaultService>();
-        var httpFactory = TestHelpers.BuildHttpFactory(System.Net.HttpStatusCode.OK, "{}");
-        var sender = new XPoster.SenderPlugins.IgSender(httpFactory, mock.Object, TestHelpers.NullLogger<XPoster.SenderPlugins.IgSender>());
+        var kv = new Mock<IKeyVaultService>();
+        var sender = new XPoster.SenderPlugins.IgSender(
+            HttpFactory(System.Net.HttpStatusCode.OK, "{}"),
+            kv.Object,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<XPoster.SenderPlugins.IgSender>.Instance);
 
         var post = new XPoster.Models.Post { Content = "text only" };
         await sender.SendAsync(post);
 
-        // No image => Key Vault never called
-        mock.Verify(s => s.GetSecretAsync(It.IsAny<string>()), Times.Never);
-    }
-
-    // -----------------------------------------------------------------------
-    // Helpers
-    // -----------------------------------------------------------------------
-
-    private static void SetupInSenderSecrets(Mock<IKeyVaultService> mock)
-    {
-        mock.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("li-token");
-        mock.Setup(s => s.GetSecretAsync("LinkedInOrgId")).ThrowsAsync(new Azure.RequestFailedException("not found"));
-        mock.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync("owner-123");
+        kv.Verify(s => s.GetSecretAsync(It.IsAny<string>()), Times.Never);
     }
 }
 
-/// <summary>Minimal test helpers shared across sender tests.</summary>
-internal static class TestHelpers
+/// <summary>
+/// Minimal inline HTTP handler stub, replacing the missing HttpMessageHandlerStub reference.
+/// </summary>
+internal sealed class StubHttpMessageHandler : System.Net.Http.HttpMessageHandler
 {
-    public static ILogger<T> NullLogger<T>() =>
-        Microsoft.Extensions.Logging.Abstractions.NullLogger<T>.Instance;
+    private readonly System.Net.HttpStatusCode _status;
+    private readonly string _body;
 
-    public static IHttpClientFactory BuildHttpFactory(
-        System.Net.HttpStatusCode statusCode,
-        string responseBody)
+    public StubHttpMessageHandler(System.Net.HttpStatusCode status, string body)
     {
-        var handler = new System.Net.Http.HttpMessageHandlerStub(statusCode, responseBody);
-        var client = new System.Net.Http.HttpClient(handler);
-        var mock = new Mock<IHttpClientFactory>();
-        mock.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
-        return mock.Object;
+        _status = status;
+        _body = body;
+    }
+
+    protected override Task<System.Net.Http.HttpResponseMessage> SendAsync(
+        System.Net.Http.HttpRequestMessage request,
+        System.Threading.CancellationToken cancellationToken)
+    {
+        var response = new System.Net.Http.HttpResponseMessage(_status)
+        {
+            Content = new System.Net.Http.StringContent(_body)
+        };
+        return Task.FromResult(response);
     }
 }

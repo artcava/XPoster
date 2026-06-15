@@ -11,14 +11,24 @@ public class InSenderTests
 {
     private readonly Mock<ILogger<InSender>> _mockLogger;
     private readonly Mock<IHttpClientFactory> _mockFactory;
+    private readonly Mock<IKeyVaultService> _mockKv;
 
     public InSenderTests()
     {
         _mockLogger = new Mock<ILogger<InSender>>();
         _mockFactory = new Mock<IHttpClientFactory>();
         _mockFactory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient());
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "test_token_12345");
-        Environment.SetEnvironmentVariable("IN_OWNER", "123456789");
+        _mockKv = BuildKeyVaultMock();
+    }
+
+    private static Mock<IKeyVaultService> BuildKeyVaultMock()
+    {
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("test_token_12345");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync("123456789");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOrgId"))
+            .ThrowsAsync(new Azure.RequestFailedException("not found"));
+        return kv;
     }
 
     #region Constructor and Properties Tests
@@ -26,7 +36,7 @@ public class InSenderTests
     [Fact]
     public void Constructor_InitializesCorrectly()
     {
-        var sender = new InSender(_mockFactory.Object, _mockLogger.Object);
+        var sender = new InSender(_mockFactory.Object, _mockKv.Object, _mockLogger.Object);
         Assert.NotNull(sender);
         Assert.Equal(800, sender.MessageMaxLenght);
     }
@@ -34,13 +44,13 @@ public class InSenderTests
     [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new InSender(_mockFactory.Object, null!));
+        Assert.Throws<ArgumentNullException>(() => new InSender(_mockFactory.Object, _mockKv.Object, null!));
     }
 
     [Fact]
     public void InSender_ImplementsISender()
     {
-        var sender = new InSender(_mockFactory.Object, _mockLogger.Object);
+        var sender = new InSender(_mockFactory.Object, _mockKv.Object, _mockLogger.Object);
         Assert.IsAssignableFrom<ISender>(sender);
     }
 
@@ -51,7 +61,7 @@ public class InSenderTests
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()
     {
-        var sender = new InSender(_mockFactory.Object, _mockLogger.Object);
+        var sender = new InSender(_mockFactory.Object, _mockKv.Object, _mockLogger.Object);
         Post? post = null;
 
         var result = await sender.SendAsync(post!);
@@ -69,21 +79,12 @@ public class InSenderTests
 
     #endregion
 
-    #region Environment Variable Tests
+    #region Credential resolution Tests
 
     [Fact]
-    public void Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()
+    public void Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()
     {
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", null);
-        try
-        {
-            var sender = new InSender(_mockFactory.Object, _mockLogger.Object);
-            Assert.NotNull(sender);
-        }
-        catch (Exception ex)
-        {
-            Assert.True(ex.Message.Contains("token", StringComparison.OrdinalIgnoreCase) || ex is ArgumentNullException || ex is InvalidOperationException);
-        }
+        Assert.Throws<ArgumentNullException>(() => new InSender(_mockFactory.Object, null!, _mockLogger.Object));
     }
 
     #endregion
