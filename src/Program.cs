@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,61 +28,113 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
     }
 });
 
+// Transient HTTP status codes that Polly should treat as failures for both
+// retry and circuit-breaker policies across all named HttpClients.
+// Without an explicit ShouldHandle, Polly considers all HttpResponseMessage
+// outcomes as successful — only network-level exceptions count by default.
+static bool IsTransientHttpFailure(HttpResponseMessage? response) =>
+    response?.StatusCode is
+        HttpStatusCode.TooManyRequests or
+        HttpStatusCode.InternalServerError or
+        HttpStatusCode.BadGateway or
+        HttpStatusCode.ServiceUnavailable or
+        HttpStatusCode.GatewayTimeout;
+
 // Named HttpClients with standard Polly resilience pipeline:
 // retry (3 attempts, exponential back-off + jitter), circuit-breaker, and per-attempt timeout.
 // Secrets never appear here — all sender credentials are read from Azure Key Vault at runtime.
+//
+// Polly proportionality constraints (enforced at pipeline-build time):
+//   1. CircuitBreaker.SamplingDuration >= AttemptTimeout * 2
+//   2. TotalRequestTimeout > AttemptTimeout
 builder.Services.AddHttpClient("OpenAI")
     .AddStandardResilienceHandler(options =>
     {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        options.Retry.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.CircuitBreaker.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.Retry.MaxRetryAttempts               = 3;
+        options.Retry.Delay                          = TimeSpan.FromSeconds(2);
+        options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(30);
+        options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(180);
+        options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(30);
+        options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(70);
     });
 
 builder.Services.AddHttpClient("AzureFoundry")
     .AddStandardResilienceHandler(options =>
     {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        options.Retry.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.CircuitBreaker.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.Retry.MaxRetryAttempts               = 3;
+        options.Retry.Delay                          = TimeSpan.FromSeconds(2);
+        options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(30);
+        options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(180);
+        options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(30);
+        options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(70);
     });
 
 builder.Services.AddHttpClient("DeepSeek")
     .AddStandardResilienceHandler(options =>
     {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        options.Retry.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.CircuitBreaker.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.Retry.MaxRetryAttempts               = 3;
+        options.Retry.Delay                          = TimeSpan.FromSeconds(2);
+        options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(30);
+        options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(180);
+        options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(30);
+        options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(70);
     });
 
 builder.Services.AddHttpClient("FalAi")
     .AddStandardResilienceHandler(options =>
     {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(60); // image gen may be slower
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        options.Retry.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.CircuitBreaker.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.Retry.MaxRetryAttempts               = 3;
+        options.Retry.Delay                          = TimeSpan.FromSeconds(2);
+        options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(60); // image gen may be slower
+        options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(300);
+        options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(30);
+        options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(130);
     });
 
 builder.Services.AddHttpClient("LinkedIn")
     .AddStandardResilienceHandler(options =>
     {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        options.Retry.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.CircuitBreaker.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.Retry.MaxRetryAttempts               = 3;
+        options.Retry.Delay                          = TimeSpan.FromSeconds(2);
+        options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(30);
+        options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(180);
+        options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(30);
+        options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(70);
     });
 
 builder.Services.AddHttpClient("Instagram")
     .AddStandardResilienceHandler(options =>
     {
-        options.Retry.MaxRetryAttempts = 3;
-        options.Retry.Delay = TimeSpan.FromSeconds(2);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
-        options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+        options.Retry.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.CircuitBreaker.ShouldHandle = args =>
+            ValueTask.FromResult(IsTransientHttpFailure(args.Outcome.Result) || args.Outcome.Exception is not null);
+        options.Retry.MaxRetryAttempts               = 3;
+        options.Retry.Delay                          = TimeSpan.FromSeconds(2);
+        options.AttemptTimeout.Timeout               = TimeSpan.FromSeconds(30);
+        options.TotalRequestTimeout.Timeout          = TimeSpan.FromSeconds(180);
+        options.CircuitBreaker.BreakDuration         = TimeSpan.FromSeconds(30);
+        options.CircuitBreaker.SamplingDuration      = TimeSpan.FromSeconds(70);
     });
 
 builder.Services.AddLogging();
