@@ -4,11 +4,6 @@ using Xunit;
 
 namespace XPoster.Tests.Integration;
 
-/// <summary>
-/// Integration tests verifying that the Polly standard resilience pipeline wired
-/// for the <c>Instagram</c> named <see cref="System.Net.Http.HttpClient" /> behaves
-/// correctly in a real <see cref="IServiceProvider" /> context.
-/// </summary>
 public sealed class InstagramResiliencePipelineTests : PollyIntegrationTestBase
 {
     [Fact]
@@ -46,17 +41,19 @@ public sealed class InstagramResiliencePipelineTests : PollyIntegrationTestBase
             (HttpStatusCode.InternalServerError, "{}"),
             (HttpStatusCode.InternalServerError, "{}"));
 
-        // minimumThroughput: 2 — allows the breaker to open after just 2 failures
-        // within the sampling window, making the test deterministic without requiring
-        // hundreds of requests (which is the production-appropriate default of 100).
+        // maxRetryAttempts: 1 satisfies Polly validation (>= 1).
+        // retryEnabled: false disables ShouldHandle on the retry policy so each
+        // PostAsync produces exactly 1 request to the handler, making failure
+        // counting deterministic for the circuit breaker.
+        // minimumThroughput: 2 lets the breaker open after just 2 failures.
         var provider = BuildProviderWithHandler(
             "Instagram",
             handler,
-            maxRetryAttempts:    0,   // no retries: each PostAsync = exactly 1 request to handler
+            maxRetryAttempts:    1,
+            retryEnabled:        false,
             breakDurationSeconds: 3600,
             minimumThroughput:   2);
-        var factory = provider.GetRequiredService<IHttpClientFactory>();
-        var client = factory.CreateClient("Instagram");
+        var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient("Instagram");
         client.BaseAddress = new Uri("https://graph.facebook.com");
 
         Exception? circuitBreakerException = null;
@@ -64,9 +61,6 @@ public sealed class InstagramResiliencePipelineTests : PollyIntegrationTestBase
         {
             try
             {
-                // Recreate StringContent on every iteration: HttpContent is single-use
-                // and gets disposed after the first send. Reusing the same instance
-                // causes the request to fail before reaching Polly.
                 await client.PostAsync(
                     "/v18.0/me/media",
                     new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
@@ -85,10 +79,7 @@ public sealed class InstagramResiliencePipelineTests : PollyIntegrationTestBase
     public async Task Polly_Instagram_AttemptTimeout_CancelsSlowRequest()
     {
         var handler = BuildDelayedHandler(delayMs: 5_000);
-        var provider = BuildProviderWithHandler(
-            "Instagram",
-            handler,
-            attemptTimeoutSeconds: 1);
+        var provider = BuildProviderWithHandler("Instagram", handler, attemptTimeoutSeconds: 1);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient("Instagram");
         client.BaseAddress = new Uri("https://graph.facebook.com");
         client.Timeout = TimeSpan.FromSeconds(30);
