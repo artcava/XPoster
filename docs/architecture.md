@@ -47,8 +47,10 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     │   Services         │
     ├────────────────────┤
     │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
+    │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
     │ • Feed Service     │ ◄─── RSS Parser
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
+    │ • KeyVaultService  │ ◄─── Azure Key Vault secret resolution
     └────────┬───────────┘
              │
              ▼
@@ -63,7 +65,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 **System boundaries:**
 - **Inbound**: Azure Timer Trigger (no external HTTP surface in production)
-- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram Graph API, RSS feeds
+- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram Graph API, RSS feeds, Azure Key Vault
 - **Observability**: Azure Application Insights
 
 ---
@@ -99,15 +101,26 @@ Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **conte
 
 ### Services Layer — Shared Infrastructure
 
-Services are registered as singletons or transients in the DI container and are consumed by orchestrators:
+Services are registered as singletons or transients in the DI container and are consumed by orchestrators and sender plugins:
 
 - **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledOrchestrationProfile` and can be overridden globally via the `AiProvider` configuration key.
+- **AiServiceHelper**: a shared utility class used internally by AI service implementations (`DeepSeekService`, `FalAiImageService`, and others). It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
+- **KeyVaultService** (`IKeyVaultService`): wraps `Azure.Security.KeyVault.Secrets` to retrieve OAuth tokens and API secrets from Azure Key Vault at runtime. Used by `XSender` and `InSender` to resolve platform credentials without storing secrets in application settings. Uses `DefaultAzureCredential`, so it transparently leverages the Function App's Managed Identity in production.
+
+**AI Provider Services** (consumed via `IAiService` abstraction):
+- **OpenAiService**: bridges `Microsoft.Extensions.AI` to the OpenAI / Azure OpenAI endpoint for both text and image generation.
+- **AzureFoundryService**: bridges `Microsoft.Extensions.AI` to an Azure AI Foundry deployment.
+- **DeepSeekService**: direct HTTP client to the DeepSeek API (`api.deepseek.com/v1`), OpenAI-compatible. Used standalone or as the text leg of `HybridAiService`.
+- **FalAiImageService**: HTTP client to the fal.ai API for FLUX.2 Turbo image generation. Used standalone or as the image leg of `HybridAiService`.
+- **HybridAiService**: composes `DeepSeekService` (text) and `FalAiImageService` (image) behind a single `IAiService` contract, enabling the `DeepSeekWithFal` provider option. It introduces no additional API surface and is the only consumer of both inner services.
 
 ### Sender Plugins — Platform Abstraction
 
 Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)` and `int MessageMaxLength`. Senders are **exclusively responsible for platform-specific serialisation and API communication**; they receive a fully-formed `Post` and return a success/failure signal. This contract guarantees that orchestrators never reference platform SDKs directly.
+
+Senders that require OAuth tokens not available in plain application settings (`XSender`, `InSender`) resolve them at runtime via `IKeyVaultService`.
 
 ---
 
@@ -160,7 +173,7 @@ Each ADR is maintained as a standalone document in [`docs/analysis/`](analysis/)
 | [ADR-002](analysis/ADR-002-strategy-pattern-generators.md) | Strategy Pattern for Content Orchestrators | Accepted |
 | [ADR-003](analysis/ADR-003-plugin-pattern-senders.md) | Plugin Pattern for Senders | Accepted |
 | [ADR-004](analysis/ADR-004-provider-agnostic-ai.md) | Provider-Agnostic AI Integration | Accepted |
-| [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | Proposed |
+| [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134) |
 
 ---
 
@@ -202,6 +215,7 @@ sequenceDiagram
     participant AI as IAiService<br/>(resolved by AiProvider)
     participant Feed as FeedService<br/>(RSS)
     participant Crypto as CryptoService<br/>(cryptoprices.cc)
+    participant KV as KeyVaultService<br/>(Azure Key Vault)
     participant Sender as ISender<br/>(X / LinkedIn / Instagram)
     participant Platform as Social Platform API
 
@@ -235,6 +249,8 @@ sequenceDiagram
         Fn->>Fn: Log skip, exit
     else Post is valid
         Fn->>Sender: SendAsync(post)
+        Sender->>KV: ResolveSecretAsync(key)
+        KV-->>Sender: OAuth token / API secret
         Sender->>Platform: HTTP API call
         Platform-->>Sender: 200 OK / error
         Sender-->>Fn: true / false
