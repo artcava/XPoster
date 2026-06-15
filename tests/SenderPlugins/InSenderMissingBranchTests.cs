@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
+using XPoster.Abstraction;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 
@@ -20,12 +21,27 @@ public class InSenderMissingBranchTests
         _factory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient());
     }
 
-    private InSender BuildSender(string owner = "fake_owner")
+    private Mock<IKeyVaultService> BuildKv(
+        string? ownerCode = "fake_owner",
+        string? orgId = null)
     {
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("IN_OWNER", owner);
-        return new InSender(_factory.Object, _logger.Object);
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("fake_token");
+        if (ownerCode != null)
+            kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync(ownerCode);
+        else
+            kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync(string.Empty);
+
+        if (orgId != null)
+            kv.Setup(s => s.GetSecretAsync("LinkedInOrgId")).ReturnsAsync(orgId);
+        else
+            kv.Setup(s => s.GetSecretAsync("LinkedInOrgId"))
+                .ThrowsAsync(new Azure.RequestFailedException("not found"));
+        return kv;
     }
+
+    private InSender BuildSender(string? ownerCode = "fake_owner", string? orgId = null)
+        => new(_factory.Object, BuildKv(ownerCode, orgId).Object, _logger.Object);
 
     [Fact]
     public async Task SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()
@@ -44,23 +60,20 @@ public class InSenderMissingBranchTests
     [Fact]
     public void MessageMaxLenght_Returns800()
     {
-        var sender = BuildSender();
-        Assert.Equal(800, sender.MessageMaxLenght);
+        Assert.Equal(800, BuildSender().MessageMaxLenght);
     }
 
     [Fact]
     public async Task SendAsync_NullPost_ReturnsFalse()
     {
-        var sender = BuildSender();
-        var result = await sender.SendAsync(null!);
+        var result = await BuildSender().SendAsync(null!);
         Assert.False(result);
     }
 
     [Fact]
     public async Task SendAsync_WhitespaceContent_ReturnsFalse()
     {
-        var sender = BuildSender();
-        var result = await sender.SendAsync(new Post { Content = "  " });
+        var result = await BuildSender().SendAsync(new Post { Content = "  " });
         Assert.False(result);
     }
 
@@ -69,42 +82,25 @@ public class InSenderMissingBranchTests
     [Fact]
     public async Task SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()
     {
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("IN_OWNER", "fake_owner");
-        Environment.SetEnvironmentVariable("IN_ORG_ID", "98765432");
-        var sender = new InSender(_factory.Object, _logger.Object);
-
+        var sender = BuildSender(ownerCode: "fake_owner", orgId: "98765432");
         var result = await sender.SendAsync(new Post { Content = "org post" });
-
         Assert.False(result);
-        Environment.SetEnvironmentVariable("IN_ORG_ID", null);
     }
 
     [Fact]
     public async Task SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()
     {
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("IN_OWNER", "123456789");
-        Environment.SetEnvironmentVariable("IN_ORG_ID", null);
-        var sender = new InSender(_factory.Object, _logger.Object);
-
+        var sender = BuildSender(ownerCode: "123456789", orgId: null);
         var result = await sender.SendAsync(new Post { Content = "person post" });
-
         Assert.False(result);
     }
 
     [Fact]
     public async Task SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()
     {
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("IN_OWNER", null);
-        Environment.SetEnvironmentVariable("IN_ORG_ID", null);
-        var sender = new InSender(_factory.Object, _logger.Object);
-
+        var sender = BuildSender(ownerCode: null, orgId: null);
         var result = await sender.SendAsync(new Post { Content = "no author" });
-
         Assert.False(result);
-        Environment.SetEnvironmentVariable("IN_OWNER", "fake_owner");
     }
 
     #endregion

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
+using XPoster.Abstraction;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 
@@ -7,9 +8,6 @@ namespace XPoster.Tests.SenderPlugins;
 
 /// <summary>
 /// Tests for InSender.SendAsync input-validation branches and generatePayLoad paths.
-/// HTTP calls to LinkedIn API are not exercised — only guards and the text-only
-/// payload branch (which falls through to a network call that returns false via catch)
-/// are tested here.
 /// </summary>
 public class InSenderSendAsyncTests
 {
@@ -22,9 +20,12 @@ public class InSenderSendAsyncTests
         _mockLogger = new Mock<ILogger<InSender>>();
         _mockFactory = new Mock<IHttpClientFactory>();
         _mockFactory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient());
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("IN_OWNER", "fake_owner");
-        _sender = new InSender(_mockFactory.Object, _mockLogger.Object);
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("fake_token");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync("fake_owner");
+        kv.Setup(s => s.GetSecretAsync("LinkedInOrgId"))
+            .ThrowsAsync(new Azure.RequestFailedException("not found"));
+        _sender = new InSender(_mockFactory.Object, kv.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -51,18 +52,9 @@ public class InSenderSendAsyncTests
     }
 
     [Fact]
-    public async Task SendAsync_WithValidTextOnlyPost_CatchesNetworkException_ReturnsFalse()
+    public async Task SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()
     {
-        var post = new Post { Content = "Valid LinkedIn post" };
-        var result = await _sender.SendAsync(post);
-        Assert.False(result);
-    }
-
-    [Fact]
-    public async Task SendAsync_WithMissingOwner_ReturnsFalse()
-    {
-        Environment.SetEnvironmentVariable("IN_OWNER", null);
-        var post = new Post { Content = "Valid post" };
+        var post = new Post { Content = "Valid content" };
         var result = await _sender.SendAsync(post);
         Assert.False(result);
     }

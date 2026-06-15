@@ -8,14 +8,14 @@ namespace XPoster.SenderPlugins;
 /// <summary>
 /// Publishes posts to LinkedIn using the LinkedIn UGC Posts API (v2).
 /// Supports both text-only posts and posts with an image attachment via the LinkedIn asset upload flow.
-/// Credentials are read from the <c>IN_ACCESS_TOKEN</c> environment variable.
-/// The author URN is resolved from <c>IN_ORG_ID</c> (organization) when set,
-/// otherwise from <c>IN_OWNER</c> (person). At least one must be set.
+/// Credentials are read from Azure Key Vault on every <see cref="SendAsync"/> call:
+/// <c>LinkedInAccessToken</c>, <c>LinkedInOwnerCode</c>, and optionally <c>LinkedInOrgId</c>.
 /// </summary>
 public class InSender : ISender
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<InSender> _logger;
+    private readonly IKeyVaultService _keyVaultService;
 
     /// <summary>Gets the maximum number of characters allowed in a LinkedIn post caption.</summary>
     public int MessageMaxLenght => 800;
@@ -25,21 +25,21 @@ public class InSender : ISender
     /// client registered as "LinkedIn", which carries the Polly resilience pipeline.
     /// </summary>
     /// <param name="httpClientFactory">The factory used to create the named "LinkedIn" client.</param>
+    /// <param name="keyVaultService">The Key Vault service used to retrieve credentials at runtime.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <c>null</c>.</exception>
-    public InSender(IHttpClientFactory httpClientFactory, ILogger<InSender> logger)
+    /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
+    public InSender(IHttpClientFactory httpClientFactory, IKeyVaultService keyVaultService, ILogger<InSender> logger)
     {
         ArgumentNullException.ThrowIfNull(httpClientFactory);
+        _keyVaultService = keyVaultService ?? throw new ArgumentNullException(nameof(keyVaultService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _httpClient = httpClientFactory.CreateClient("LinkedIn");
-        _httpClient.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue(
-                "Bearer", Environment.GetEnvironmentVariable("IN_ACCESS_TOKEN"));
     }
 
     /// <summary>
     /// Publishes <paramref name="post"/> to LinkedIn. When an image is present, it is registered
     /// and uploaded via the LinkedIn asset API before the UGC post is created.
+    /// Credentials are read fresh from Key Vault at the start of each call.
     /// </summary>
     /// <param name="post">The post to publish. Must not be <c>null</c> and must have non-empty content.</param>
     /// <returns><c>true</c> if the post was published successfully; otherwise <c>false</c>.</returns>
@@ -59,7 +59,11 @@ public class InSender : ISender
 
         try
         {
-            var author = ResolveAuthorUrn();
+            var accessToken = await _keyVaultService.GetSecretAsync("LinkedInAccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+            var author = await ResolveAuthorUrnAsync();
             var postText = post.Content + Post.Firm;
             dynamic postPayload;
 
@@ -95,7 +99,6 @@ public class InSender : ISender
                 var uploadMechanism = valueElement.GetProperty("uploadMechanism");
                 var mediaUploadRequest = uploadMechanism.GetProperty("com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest");
 
-                // CS8602/CS8600: GetString() can return null — guard with null-coalescing throw
                 string uploadUrl = mediaUploadRequest.GetProperty("uploadUrl").GetString()
                     ?? throw new InvalidOperationException("uploadUrl missing in LinkedIn response.");
                 string asset = valueElement.GetProperty("asset").GetString()
@@ -139,18 +142,29 @@ public class InSender : ISender
     }
 
     /// <summary>
-    /// Resolves the LinkedIn author URN for the post.
-    /// Returns an organization URN when <c>IN_ORG_ID</c> is set; otherwise returns a person URN from <c>IN_OWNER</c>.
+    /// Resolves the LinkedIn author URN for the post by reading credentials from Key Vault.
+    /// Returns an organization URN when <c>LinkedInOrgId</c> is present; otherwise a person URN from <c>LinkedInOwnerCode</c>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when neither <c>IN_ORG_ID</c> nor <c>IN_OWNER</c> is set.</exception>
-    private static string ResolveAuthorUrn()
+    /// <exception cref="InvalidOperationException">Thrown when neither secret resolves to a non-empty value.</exception>
+    private async Task<string> ResolveAuthorUrnAsync()
     {
-        var orgId = Environment.GetEnvironmentVariable("IN_ORG_ID");
+        string orgId;
+        try
+        {
+            orgId = await _keyVaultService.GetSecretAsync("LinkedInOrgId");
+        }
+        catch (Azure.RequestFailedException)
+        {
+            orgId = string.Empty;
+        }
+
         if (!string.IsNullOrWhiteSpace(orgId))
             return $"urn:li:organization:{orgId}";
 
-        var personId = Environment.GetEnvironmentVariable("IN_OWNER")
-            ?? throw new InvalidOperationException("Either IN_OWNER or IN_ORG_ID must be set.");
+        var personId = await _keyVaultService.GetSecretAsync("LinkedInOwnerCode");
+        if (string.IsNullOrWhiteSpace(personId))
+            throw new InvalidOperationException("Either LinkedInOwnerCode or LinkedInOrgId must be set in Key Vault.");
+
         return $"urn:li:person:{personId}";
     }
 

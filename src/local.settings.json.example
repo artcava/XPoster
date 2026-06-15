@@ -6,17 +6,23 @@
     "CronSchedule": "0 0 6,8,14,16 * * *",
     "AiProvider": "OpenAi",
 
-    "X_API_KEY": "",
-    "X_API_SECRET": "",
-    "X_ACCESS_TOKEN": "",
-    "X_ACCESS_TOKEN_SECRET": "",
-
-    "IN_ACCESS_TOKEN": "",
-    "IN_OWNER": "",
-    "IN_ORG_ID": "",
-
-    "IG_ACCESS_TOKEN": "",
-    "IG_ACCOUNT_ID": "",
+    // -----------------------------------------------------------------------
+    // Key Vault — all sender credentials are now read from Azure Key Vault.
+    // Local development: run `az login` and set KEYVAULT_URI to the vault URI.
+    // Azure deployment: Managed Identity handles authentication automatically.
+    //
+    // Required secrets in Key Vault (exact casing enforced):
+    //   LinkedInAccessToken   — LinkedIn Bearer token
+    //   LinkedInOwnerCode     — LinkedIn person/owner ID
+    //   LinkedInOrgId         — LinkedIn organization ID (optional; org posts)
+    //   XApiKey               — X (Twitter) API key
+    //   XApiSecret            — X (Twitter) API secret
+    //   XAccessToken          — X (Twitter) access token
+    //   XAccessTokenSecret    — X (Twitter) access token secret
+    //   IgAccessToken         — Instagram Graph API access token
+    //   IgAccountId           — Instagram account ID
+    // -----------------------------------------------------------------------
+    "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",

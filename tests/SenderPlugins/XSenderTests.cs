@@ -9,12 +9,22 @@ namespace XPoster.Tests.SenderPlugins;
 public class XSenderTests
 {
     private readonly Mock<ILogger<XSender>> _mockLogger;
+    private readonly Mock<IKeyVaultService> _mockKv;
 
     public XSenderTests()
     {
         _mockLogger = new Mock<ILogger<XSender>>();
-        Environment.SetEnvironmentVariable("X_ACCESS_TOKEN", "test_token_12345");
-        Environment.SetEnvironmentVariable("X_ACCESS_TOKEN_SECRET", "123456789");
+        _mockKv = BuildKeyVaultMock();
+    }
+
+    private static Mock<IKeyVaultService> BuildKeyVaultMock()
+    {
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("fake_key");
+        kv.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("fake_secret");
+        kv.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("fake_token");
+        kv.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("fake_token_secret");
+        return kv;
     }
 
     #region Constructor and Properties Tests
@@ -22,7 +32,7 @@ public class XSenderTests
     [Fact]
     public void Constructor_InitializesCorrectly()
     {
-        var sender = new XSender(_mockLogger.Object);
+        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
         Assert.NotNull(sender);
         Assert.Equal(250, sender.MessageMaxLenght);
     }
@@ -30,14 +40,13 @@ public class XSenderTests
     [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
-        // CS8625: passing null intentionally to test null-guard — suppress with null!
-        Assert.Throws<ArgumentNullException>(() => new XSender(null!));
+        Assert.Throws<ArgumentNullException>(() => new XSender(_mockKv.Object, null!));
     }
 
     [Fact]
     public void XSender_ImplementsISender()
     {
-        var sender = new XSender(_mockLogger.Object);
+        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
         Assert.IsAssignableFrom<ISender>(sender);
     }
 
@@ -48,16 +57,11 @@ public class XSenderTests
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()
     {
-        // Arrange
-        var sender = new XSender(_mockLogger.Object);
-        // CS8600: null intentional — testing null guard in SendAsync
+        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
         Post? post = null;
 
-        // Act
-        // CS8604: passing null! intentionally to test null-guard behaviour
         var result = await sender.SendAsync(post!);
 
-        // Assert
         Assert.False(result);
         _mockLogger.Verify(
             x => x.Log(
@@ -65,28 +69,39 @@ public class XSenderTests
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("null")),
                 It.IsAny<Exception?>(),
-                // CS8620: formatter param is Func<..., Exception?, string> — aligned
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ), Times.Once);
     }
 
     #endregion
 
-    #region Environment Variable Tests
+    #region Credential resolution Tests
 
     [Fact]
-    public void Constructor_WithMissingAccessToken_ThrowsOrHandlesGracefully()
+    public void Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()
     {
-        Environment.SetEnvironmentVariable("IN_ACCESS_TOKEN", null);
-        try
-        {
-            var sender = new XSender(_mockLogger.Object);
-            Assert.NotNull(sender);
-        }
-        catch (Exception ex)
-        {
-            Assert.True(ex.Message.Contains("token", StringComparison.OrdinalIgnoreCase) || ex is ArgumentNullException || ex is InvalidOperationException);
-        }
+        Assert.Throws<ArgumentNullException>(() => new XSender(null!, _mockLogger.Object));
+    }
+
+    /// <summary>
+    /// GAP-2: verifies that Key Vault is queried on EVERY SendAsync invocation,
+    /// not cached from construction time — core behaviour of issue #113.
+    /// TwitterContext will throw (no real credentials), but KV reads happen before that.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_CalledTwice_QueriesKvOnEachCall()
+    {
+        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
+        var post = new Post { Content = "Hello world" };
+
+        await sender.SendAsync(post);
+        await sender.SendAsync(post);
+
+        // Each call must read all four credentials from KV (Times.Exactly(2) per secret)
+        _mockKv.Verify(s => s.GetSecretAsync("XApiKey"),           Times.Exactly(2));
+        _mockKv.Verify(s => s.GetSecretAsync("XApiSecret"),        Times.Exactly(2));
+        _mockKv.Verify(s => s.GetSecretAsync("XAccessToken"),      Times.Exactly(2));
+        _mockKv.Verify(s => s.GetSecretAsync("XAccessTokenSecret"),Times.Exactly(2));
     }
 
     #endregion
