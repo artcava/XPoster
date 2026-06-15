@@ -6,14 +6,14 @@
 
 - **NoOrchestratorTests.cs** (9 connections)
 - **NoOrchestratorTests.cs** (9 connections)
+- **OrchestrateAsync_ReturnsNull()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
 - **SendIt_IsAlwaysFalse()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
 - **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
+- **ProduceImage_IsAlwaysFalse()** (2 connections)
 - **Name_IsNoOrchestrator()** (2 connections)
 - **NoOrchestratorTests()** (2 connections)
-- **OrchestrateAsync_ReturnsNull()** (2 connections)
-- **ProduceImage_IsAlwaysFalse()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
 
 ## Relationships
 

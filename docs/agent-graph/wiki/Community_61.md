@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider** (2 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **GetByProvider()** (2 connections)
+- **IAiServiceFactory** (2 connections)
 - **XPoster.Abstraction** (2 connections)
-- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 

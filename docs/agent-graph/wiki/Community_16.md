@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSenderTests.cs** (10 connections)
-- **XSenderTests.cs** (10 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
-- **XSender_ImplementsISender()** (2 connections)
-- **XSenderTests()** (2 connections)
-- **BuildKeyVaultMock()** (2 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **BuildSender()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
+- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **ValidPost()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
+- **InSender()** (2 connections)
 
 ## Relationships
 

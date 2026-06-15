@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsLocalTime()** (2 connections)
+- **IKeyVaultService.cs** (5 connections)
+- **IKeyVaultService.cs** (5 connections)
+- **IKeyVaultService** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **SetSecretAsync()** (2 connections)
+- **GetSecretAsync()** (2 connections)
 
 ## Relationships
 

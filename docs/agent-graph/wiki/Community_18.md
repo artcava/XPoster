@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **MessageMaxLenght_Returns250()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **XSenderMissingBranchTests()** (2 connections)
+- **XSenderTests.cs** (10 connections)
+- **XSenderTests.cs** (10 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **BuildKeyVaultMock()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
 
 ## Relationships
 

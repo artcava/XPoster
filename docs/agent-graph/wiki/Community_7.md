@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (13 connections)
-- **DeepSeekService.cs** (13 connections)
-- **GenerateImageAsync()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **if()** (2 connections)
-- **NotSupportedException()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **var()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
+- **OpenAIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **ModelsTests** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
 
 ## Relationships
 

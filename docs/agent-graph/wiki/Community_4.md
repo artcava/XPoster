@@ -1,28 +1,29 @@
 # Community 4
 
-> 19 nodes · cohesion 0.20
+> 20 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (18 connections)
-- **IgSenderTests.cs** (18 connections)
-- **MessageMaxLenght_Returns2200()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **IgSender()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithWhitespaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **SendAsync_WithoutImage_DoesNotQueryKv()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImage_ReadsIgAccountIdFromKv()** (2 connections)
-- **new()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImage_ReadsIgAccessTokenFromKv()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WithImage_TriesUploadAndReturnsFalse()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **FalAiImageServiceTests.cs** (19 connections)
+- **FalAiImageServiceTests.cs** (19 connections)
+- **MakeHandlerMock()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **FalImageJson()** (2 connections)
+- **BuildService()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
 
 ## Relationships
 
@@ -30,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 70 (100%)
+- EXTRACTED: 74 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,26 +1,26 @@
 # Community 25
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **while()** (2 connections)
-- **GetSummary()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **catch()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

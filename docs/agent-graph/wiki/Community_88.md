@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **if()** (2 connections)
-- **CryptoService()** (2 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 76]] (3 shared connections)
+- [[Community 104]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

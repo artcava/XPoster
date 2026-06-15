@@ -1,8 +1,8 @@
 # IgSenderTests.cs
 
-> God node · 18 connections
+> God node · 23 connections
 
-**Community:** [[Community 4]]
+**Community:** [[Community 2]]
 
 ## Connections by Relation
 
@@ -12,9 +12,10 @@
 - [[IgSenderTests()]]
 - [[BuildSender()]]
 - [[new()]]
+- [[BuildSenderWithFactory()]]
+- [[IgSender()]]
 - [[Constructor_InitializesCorrectly()]]
 - [[Constructor_WithNullLogger_ThrowsArgumentNullException()]]
-- [[IgSender()]]
 - [[Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()]]
 - [[MessageMaxLenght_Returns2200()]]
 - [[SendAsync_WithNullPost_ReturnsFalse()]]
@@ -25,6 +26,7 @@
 - [[SendAsync_WithImage_ReadsIgAccessTokenFromKv()]]
 - [[SendAsync_WithImage_ReadsIgAccountIdFromKv()]]
 - [[SendAsync_WithoutImage_DoesNotQueryKv()]]
+- [[SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()]]
 
 ---
 

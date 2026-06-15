@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **XPoster.Extensions** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
+- **AiServiceHelper.cs** (5 connections)
+- **AiServiceHelper.cs** (5 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
+- **return()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 

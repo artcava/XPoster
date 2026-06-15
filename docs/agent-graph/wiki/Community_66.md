@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 

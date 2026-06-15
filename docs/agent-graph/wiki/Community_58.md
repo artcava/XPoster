@@ -6,8 +6,8 @@
 
 - **IOrchestrator.cs** (4 connections)
 - **IOrchestrator.cs** (4 connections)
-- **PostAsync()** (2 connections)
 - **XPoster.Abstraction** (2 connections)
+- **PostAsync()** (2 connections)
 - **IOrchestrator** (2 connections)
 
 ## Relationships
