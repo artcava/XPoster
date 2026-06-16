@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 using XPoster.Services;
 
 namespace XPoster.Tests.Services;
@@ -11,7 +13,8 @@ namespace XPoster.Tests.Services;
 /// </summary>
 public class LocalOverrideTimeProviderTests
 {
-    private static LocalOverrideTimeProvider BuildProvider(string? forceHour)
+    private static LocalOverrideTimeProvider BuildProvider(string? forceHour,
+        ILogger<LocalOverrideTimeProvider>? logger = null)
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(forceHour is null
@@ -19,7 +22,7 @@ public class LocalOverrideTimeProviderTests
                 : new[] { new KeyValuePair<string, string?>("ForceHour", forceHour) })
             .Build();
 
-        var log = NullLogger<LocalOverrideTimeProvider>.Instance;
+        var log = logger ?? NullLogger<LocalOverrideTimeProvider>.Instance;
         return new LocalOverrideTimeProvider(config, log);
     }
 
@@ -73,6 +76,25 @@ public class LocalOverrideTimeProviderTests
     }
 
     [Fact]
+    public void GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()
+    {
+        // Arrange
+        // Boundary distinct from null and non-numeric:
+        // TryParse("", ...) returns false → fallback to DateTime.UtcNow.Hour.
+        var provider = BuildProvider("");
+        var before = DateTime.UtcNow;
+
+        // Act — must not throw
+        var result = provider.GetCurrentTime();
+
+        var after = DateTime.UtcNow;
+
+        // Assert
+        Assert.InRange(result.Hour, before.Hour, after.Hour);
+        Assert.Equal(DateTimeKind.Utc, result.Kind);
+    }
+
+    [Fact]
     public void GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()
     {
         // Arrange
@@ -107,5 +129,31 @@ public class LocalOverrideTimeProviderTests
 
         // Assert
         Assert.Equal(expectedHour, result.Hour);
+    }
+
+    [Theory]
+    [InlineData("8")]        // valid hour — forced path
+    [InlineData(null)]       // absent — fallback path
+    [InlineData("")]         // empty — fallback path
+    [InlineData("not-a-number")] // non-numeric — fallback path
+    public void Constructor_AlwaysEmitsDevOverrideWarning(string? forceHour)
+    {
+        // Arrange
+        var loggerMock = new Mock<ILogger<LocalOverrideTimeProvider>>();
+
+        // Act
+        BuildProvider(forceHour, loggerMock.Object);
+
+        // Assert — warning must be emitted exactly once regardless of ForceHour value
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains("[DEV OVERRIDE]") &&
+                    v.ToString()!.Contains("LocalOverrideTimeProvider active")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
     }
 }
