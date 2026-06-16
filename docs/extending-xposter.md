@@ -59,13 +59,6 @@ Add two arms to the existing switch expression inside `Resolve()`:
 ISender? sender = profile.SenderType switch
 {
     // existing arms ...
-    MessageSender.XPowerLaw     => _serviceProvider.GetService(typeof(XSender))    as ISender,
-    MessageSender.XSummaryFeed  => _serviceProvider.GetService(typeof(XSender))    as ISender,
-    MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender))   as ISender,
-    MessageSender.InPowerLaw    => _serviceProvider.GetService(typeof(InSender))   as ISender,
-    MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender))   as ISender,
-    MessageSender.IgPowerLaw    => _serviceProvider.GetService(typeof(IgSender))   as ISender,
-    // new arms
     MessageSender.TikTokSummaryFeed => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
     MessageSender.TikTokPowerLaw    => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
     _ => null
