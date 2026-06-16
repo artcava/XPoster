@@ -304,7 +304,8 @@ The snippet below is the minimum configuration required to run a full dry-run pi
 - `ForceHour: "9"` routes every execution to the `DryRunSender` slot, regardless of wall-clock time.
 - `CronSchedule: "*/30 * * * * *"` triggers every 30 seconds so you can observe results quickly. Switch to a less aggressive schedule once verified.
 - No Twitter/X, LinkedIn, or Instagram secrets are needed in Key Vault — only `XApiKey` must exist for the connectivity probe.
-- Remove or leave empty `ForceHour` before committing or deploying to any non-local environment.
+
+> ℹ️ `local.settings.json` is listed in `.gitignore` and is never committed to the repository. `ForceHour` therefore carries no commit risk — it only needs to be removed before copying values into `local.settings.json.example` or Azure App Settings.
 
 ### Step-by-step dry-run setup
 
@@ -347,11 +348,9 @@ The snippet below is the minimum configuration required to run a full dry-run pi
    [DryRunSender] Dry run complete — no post published.
    ```
 
-7. **Cleanup** — remove `ForceHour` from `local.settings.json` before any commit.
-   ```bash
-   # Verify ForceHour is not set before committing
-   grep -i ForceHour src/local.settings.json && echo "WARNING: remove ForceHour before commit!"
-   ```
+7. **Cleanup** — `local.settings.json` is gitignored and never committed, so `ForceHour` poses no repository risk. When you are done testing, remove `ForceHour` (or set it to an empty string) to restore normal slot resolution. Ensure `ForceHour` is **not** copied into:
+   - `src/local.settings.json.example` (the committed template)
+   - Azure App Settings of any non-local environment
 
 ### Switching AI provider for dry-run
 
@@ -493,3 +492,4 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 - For CI/CD, store secrets as **GitHub Actions Secrets**; never embed them in workflow YAML files.
 - In production, the Function App Managed Identity must be granted the **Key Vault Secrets User** role on the vault — no manual credential management is required.
 - `ForceHour` must never be set in production App Settings. Its presence in a production environment would cause every execution to resolve to the wrong orchestration slot.
+- `ForceHour` must not appear in `src/local.settings.json.example` — the committed template must never carry development-only overrides.
