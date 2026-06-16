@@ -38,6 +38,7 @@ builder.Services.AddSingleton<IKeyVaultService, KeyVaultService>();
 builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
 builder.Services.AddTransient<IgSender>();
+builder.Services.AddTransient<DryRunSender>();
 
 // ITimeProvider registration:
 //   Development + ForceHour set  → LocalOverrideTimeProvider (pins clock to the configured UTC hour)
