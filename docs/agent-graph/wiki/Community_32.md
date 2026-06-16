@@ -1,25 +1,25 @@
 # Community 32
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLogger()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **InSender.cs** (11 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
+- **ResolveAuthorUrnAsync()** (2 connections)
+- **SendAsync()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **Exception()** (2 connections)
+- **generatePayLoad()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 74]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

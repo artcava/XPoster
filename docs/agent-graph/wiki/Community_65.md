@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (10 connections)
-- **if()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
+- **IgSender.cs** (7 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **UploadImageToPublicUrl()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (5 shared connections)
+- [[Community 92]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

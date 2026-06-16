@@ -1,25 +1,27 @@
 # Community 6
 
-> 16 nodes · cohesion 0.24
+> 18 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **KeyVaultServiceTests.cs** (15 connections)
-- **KeyVaultServiceTests.cs** (15 connections)
-- **GetSecretAsync_ReturnsExpectedValue()** (2 connections)
-- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
-- **HttpFactory()** (2 connections)
-- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
+- **AiServiceHelperTests.cs** (17 connections)
+- **AiServiceHelperTests.cs** (17 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **XSender_SendAsync_RequestsAllFourXCredentials()** (2 connections)
-- **KeyVaultServiceTests** (2 connections)
-- **InSenderKv()** (2 connections)
-- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInOwnerCode()** (2 connections)
-- **GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()** (2 connections)
-- **KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()** (2 connections)
+- **new()** (2 connections)
+- **AiServiceHelperTests** (2 connections)
+- **MakeResponse()** (2 connections)
+- **ChatJson()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenContentIsWhitespaceOnly_ReturnsTrueAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()** (2 connections)
+- **var()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
 
 ## Relationships
 
@@ -27,7 +29,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 58 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

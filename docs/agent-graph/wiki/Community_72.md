@@ -1,21 +1,22 @@
 # Community 72
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **Run()** (2 connections)
-- **XPoster** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
 - **catch()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
+- **GenerateMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 100]] (3 shared connections)
+- [[Community 77]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

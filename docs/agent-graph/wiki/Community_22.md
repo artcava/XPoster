@@ -1,26 +1,28 @@
 # Community 22
 
-> 9 nodes · cohesion 0.42
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **BuildHybrid()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
+- **HybridAiServiceTests** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 57]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

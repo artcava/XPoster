@@ -1,21 +1,22 @@
 # Community 14
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FeedOrchestratorTests.cs** (11 connections)
-- **FeedOrchestratorTests.cs** (11 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
-- **FeedOrchestratorTests()** (2 connections)
-- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
-- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **Validate_DefaultOptions_Succeeds()** (2 connections)
+- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

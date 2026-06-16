@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **MessageMaxLenght_Returns250()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderMissingBranchTests()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **OrchestratorFactoryTests.cs** (10 connections)
+- **OrchestratorFactoryTests.cs** (10 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
+- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithDryRunSender_At9AM()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
 
 ## Relationships
 

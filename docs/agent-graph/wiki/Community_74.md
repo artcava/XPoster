@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **var()** (2 connections)
-- **OpenAiService()** (2 connections)
+- **InSender.cs** (11 connections)
+- **InSender()** (2 connections)
 - **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (8 shared connections)
+- [[Community 32]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

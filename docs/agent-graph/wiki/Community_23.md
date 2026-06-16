@@ -1,26 +1,27 @@
 # Community 23
 
-> 9 nodes · cohesion 0.22
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **GetSummaryAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GetSummary()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
+- **ProduceImage_IsAlwaysFalse()** (2 connections)
+- **OrchestrateAsync_ReturnsNull()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
+- **NoOrchestratorTests()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

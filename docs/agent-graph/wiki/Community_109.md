@@ -1,20 +1,19 @@
-# Community 101
+# Community 109
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (3 shared connections)
+- [[Community 95]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

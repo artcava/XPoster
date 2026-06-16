@@ -1,16 +1,17 @@
 # Community 40
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **IAiService** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
+- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
+- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
+- **FeedServiceTests()** (2 connections)
+- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

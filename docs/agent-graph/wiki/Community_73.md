@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (9 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **StringContent()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 49]] (5 shared connections)
+- [[Community 51]] (5 shared connections)
 
 ## Audit Trail
 
