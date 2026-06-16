@@ -69,7 +69,7 @@ XPoster is a **serverless, event-driven pipeline** built on four structural pill
 - **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
 - **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
 - **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
 
 The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching orchestrator code.
 
@@ -108,13 +108,14 @@ Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKey
     └────────┬───────────┘
              │
              ▼
-    ┌────────────────┐
-    │ Sender Plugins │
-    ├────────────────┤
-    │ • XSender      │ ◄─── Twitter/X API
-    │ • InSender     │ ◄─── LinkedIn API
-    │ • IgSender     │ ◄─── Instagram API
-    └────────────────┘
+    ┌────────────────────┐
+    │ Sender Plugins     │
+    ├────────────────────┤
+    │ • XSender          │ ◄─── Twitter/X API
+    │ • InSender         │ ◄─── LinkedIn API
+    │ • IgSender         │ ◄─── Instagram API
+    │ • DryRunSender     │ ◄─── Local testing only (no outbound API calls)
+    └────────────────────┘
 ```
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin, Abstract Factory), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
@@ -397,10 +398,14 @@ private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
 {
     new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
     new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    // Hour 9 is reserved for local dry-run testing only — must never appear in a production schedule
+    new ScheduledOrchestrationProfile(9, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi),
     new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
     new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
 };
 ```
+
+> ⚠️ **`DryRunSend` (hour 9) is reserved for local development and testing only.** It uses `DryRunSender`, which logs post content and probes Key Vault connectivity without publishing to any social platform. This slot must never be included in a production `CronSchedule`. See [`src/local.settings.json.example`](src/local.settings.json.example) for the recommended local dry-run setup.
 
 ---
 
@@ -463,6 +468,7 @@ tests/
 │   ├── PostMissingBranchTests.cs
 │   └── RSSFeedMissingBranchTests.cs
 ├── SenderPlugins/
+│   ├── DryRunSenderTests.cs
 │   ├── IgSenderResilienceTests.cs
 │   ├── IgSenderTests.cs
 │   ├── InSenderMissingBranchTests.cs
@@ -493,7 +499,7 @@ tests/
 | `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `OrchestratorFactory`, and `AiServiceFactory` resolution logic |
 | `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
 | `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
-| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience) |
+| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
 | `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
 
 ### Running Tests
@@ -573,7 +579,8 @@ Key monitoring capabilities at a glance:
 - [x] AI provider expansion
 - [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
 - [ ] Extension-point refactoring — ADR-005 status: **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134)
-- [ ] Test coverage gate at 80%
+- [x] Test coverage gate at 80%
+- [x] DryRunSender for local end-to-end testing without publishing [Issue #174](https://github.com/artcava/XPoster/issues/174)
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
