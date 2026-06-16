@@ -258,26 +258,12 @@ Then open `src/local.settings.json` and replace every empty string `""` with the
 
 All configuration is driven by environment variables — there is no application-level config file to edit directly.
 
-**For local development**, copy the template and fill in your credentials:
+- **Locally**: copy [`src/local.settings.json.example`](src/local.settings.json.example) to `src/local.settings.json` and fill in your values.
+- **On Azure**: add the same variables as Application Settings (**Azure Portal → Function App → Configuration**).
 
-```bash
-cp src/local.settings.json.example src/local.settings.json
-```
+Platform OAuth credentials (Twitter/X, LinkedIn, Instagram) are **not** stored as environment variables. They are resolved at runtime by `KeyVaultService` directly from **Azure Key Vault**, using `DefaultAzureCredential` — which picks up your `az login` session locally and the Function App's Managed Identity in production.
 
-The example file documents every key inline. The variables are grouped into four areas:
-
-| Group | Keys |
-|---|---|
-| **Scheduling** | `CronSchedule`, `AzureWebJobsStorage`, `FUNCTIONS_WORKER_RUNTIME` |
-| **Twitter/X** | `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET` |
-| **LinkedIn** | `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_ORGANIZATION_ID` |
-| **Instagram** | `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` |
-| **AI Provider** | Varies by provider — see [Getting Started → Supported AI Providers](#supported-ai-providers) |
-| **Azure Key Vault** | `KEY_VAULT_URI` — URI of the Azure Key Vault instance used by `KeyVaultService` to resolve platform OAuth secrets at runtime |
-
-**For Azure**, add the same variables as Application Settings (**Azure Portal → Function App → Configuration**). For production environments, [Azure Managed Identity](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview) is recommended over API keys — `KeyVaultService` uses `DefaultAzureCredential` and will transparently pick up the Function App's Managed Identity when available.
-
-> 📖 Full reference with types, defaults, allowed values, and instructions on where to obtain each credential: **[docs/configuration.md](docs/configuration.md)**.
+> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
@@ -580,6 +566,7 @@ Key monitoring capabilities at a glance:
 - [x] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
 - [ ] Extension-point refactoring — ADR-005 status: **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134)
 - [x] Test coverage gate at 80%
+- [x] DryRunSender for local end-to-end testing without publishing [Issue #174](https://github.com/artcava/XPoster/issues/174)
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
