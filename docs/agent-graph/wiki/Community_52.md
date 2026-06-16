@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (5 connections)
-- **AiServiceHelper.cs** (5 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **return()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 

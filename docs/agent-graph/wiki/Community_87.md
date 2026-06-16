@@ -1,16 +1,17 @@
 # Community 87
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **if()** (2 connections)
-- **XSender()** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **Post** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (2 shared connections)
+- [[Community 75]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

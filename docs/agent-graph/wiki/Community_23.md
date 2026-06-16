@@ -1,26 +1,26 @@
 # Community 23
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **RSSFeedMissingBranchTests** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **GetSummaryAsync()** (2 connections)
+- **catch()** (2 connections)
+- **GetSummary()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetPromptForImage()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 74]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

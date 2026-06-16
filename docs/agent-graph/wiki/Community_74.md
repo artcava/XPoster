@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (9 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **var()** (2 connections)
+- **OpenAiService()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (5 shared connections)
+- [[Community 23]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

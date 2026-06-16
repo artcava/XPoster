@@ -1,20 +1,21 @@
 # Community 15
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderMissingBranchTests()** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **PostWithoutImage()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
 - **BuildSender()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **MessageMaxLenght_Returns250()** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **new()** (2 connections)
 
 ## Relationships
 
@@ -22,7 +23,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
+- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
+- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
+- **FeedServiceTests()** (2 connections)
+- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 

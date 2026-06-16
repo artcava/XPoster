@@ -1,21 +1,21 @@
 # Community 73
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **OrchestratorFactoryTests.cs** (9 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 49]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -6,10 +6,10 @@
 
 - **HttpClientExtensions.cs** (5 connections)
 - **HttpClientExtensions.cs** (5 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
 - **AddHttpClients()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
 - **IsTransientHttpFailure()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 

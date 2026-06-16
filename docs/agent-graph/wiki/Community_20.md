@@ -1,23 +1,24 @@
 # Community 20
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **NoOrchestratorTests()** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
-- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **OrchestrateAsync_ReturnsNull()** (2 connections)
-- **ProduceImage_IsAlwaysFalse()** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 79]] (4 shared connections)
 
 ## Audit Trail
 

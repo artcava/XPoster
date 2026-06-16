@@ -1,21 +1,22 @@
 # Community 13
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (11 connections)
-- **IgSenderResilienceTests.cs** (11 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSenderTests.cs** (12 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode()** (2 connections)
+- **SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall()** (2 connections)
+- **BuildKeyVaultMockWithOrg()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **BuildKeyVaultMock()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **PostWithImage()** (2 connections)
-- **BuildSender()** (2 connections)
-- **IgSender()** (2 connections)
-- **new()** (2 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **PostWithoutImage()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **GetCryptoValue()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (3 shared connections)
+- [[Community 103]] (3 shared connections)
 
 ## Audit Trail
 
