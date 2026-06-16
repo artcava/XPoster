@@ -89,15 +89,23 @@ public class LocalOverrideTimeProviderTests
     }
 
     [Fact]
-    public void GetCurrentTime_WhenForceHourIsOutOfRange_StillReturnsConfiguredValue()
+    public void GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()
     {
-        // Arrange — no clamping in the provider; OrchestratorFactory handles no-match gracefully
-        var provider = BuildProvider("99");
+        // Arrange
+        // DateTime.UtcNow.Date.AddHours(99) overflows naturally:
+        // 99 % 24 = 3  →  result.Hour == 3.
+        // The provider stores the raw value without clamping; DateTime handles
+        // the arithmetic. OrchestratorFactory will find no matching slot (no
+        // profile has Hour == 3 for a ForceHour of 99), which is the expected
+        // graceful miss behaviour.
+        const int forceHour = 99;
+        const int expectedHour = forceHour % 24; // 3
+        var provider = BuildProvider(forceHour.ToString());
 
         // Act
         var result = provider.GetCurrentTime();
 
-        // Assert — value is stored and returned as-is; slot miss is the factory's concern
-        Assert.Equal(99, result.Hour);
+        // Assert
+        Assert.Equal(expectedHour, result.Hour);
     }
 }
