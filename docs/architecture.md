@@ -54,13 +54,14 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     └────────┬───────────┘
              │
              ▼
-    ┌────────────────┐
-    │ Sender Plugins │
-    ├────────────────┤
-    │ • XSender      │ ◄─── Twitter/X API
-    │ • InSender     │ ◄─── LinkedIn API
-    │ • IgSender     │ ◄─── Instagram API
-    └────────────────┘
+    ┌────────────────────┐
+    │ Sender Plugins     │
+    ├────────────────────┤
+    │ • XSender          │ ◄─── Twitter/X API
+    │ • InSender         │ ◄─── LinkedIn API
+    │ • IgSender         │ ◄─── Instagram API
+    │ • DryRunSender     │ ◄─── Local testing only (no outbound API calls)
+    └────────────────────┘
 ```
 
 **System boundaries:**
@@ -96,8 +97,8 @@ The factory enforces the invariant that every unscheduled hour resolves to `NoOr
 Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**:
 
 - **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a text summary, and requests a generated image. The specific model used is determined by the resolved `IAiService` implementation. It is stateless and side-effect-free until it hands off the `Post`.
-- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on `AiService`.
-- **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.
+- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model’s fair-value estimate. It has no dependency on `AiService`.
+- **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent “no posting” without null-checks in `XFunction`.
 
 ### Services Layer — Shared Infrastructure
 
@@ -107,7 +108,7 @@ Services are registered as singletons or transients in the DI container and are 
 - **AiServiceHelper**: a shared utility class used internally by AI service implementations (`DeepSeekService`, `FalAiImageService`, and others). It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
-- **KeyVaultService** (`IKeyVaultService`): wraps `Azure.Security.KeyVault.Secrets` to retrieve OAuth tokens and API secrets from Azure Key Vault at runtime. Used by `XSender` and `InSender` to resolve platform credentials without storing secrets in application settings. Uses `DefaultAzureCredential`, so it transparently leverages the Function App's Managed Identity in production.
+- **KeyVaultService** (`IKeyVaultService`): wraps `Azure.Security.KeyVault.Secrets` to retrieve OAuth tokens and API secrets from Azure Key Vault at runtime. Used by `XSender`, `InSender`, and `DryRunSender` to resolve platform credentials without storing secrets in application settings. Uses `DefaultAzureCredential`, so it transparently leverages the Function App’s Managed Identity in production.
 
 **AI Provider Services** (consumed via `IAiService` abstraction):
 - **OpenAiService**: bridges `Microsoft.Extensions.AI` to the OpenAI / Azure OpenAI endpoint for both text and image generation.
@@ -121,6 +122,15 @@ Services are registered as singletons or transients in the DI container and are 
 Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post)` and `int MessageMaxLength`. Senders are **exclusively responsible for platform-specific serialisation and API communication**; they receive a fully-formed `Post` and return a success/failure signal. This contract guarantees that orchestrators never reference platform SDKs directly.
 
 Senders that require OAuth tokens not available in plain application settings (`XSender`, `InSender`) resolve them at runtime via `IKeyVaultService`.
+
+**Current sender implementations:**
+
+| Sender | `MessageSender` value | Target | Notes |
+|---|---|---|---|
+| `XSender` | `XSummaryFeed`, `XPowerLaw` | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; resolves tokens from Key Vault |
+| `InSender` | `InSummaryFeed`, `InPowerLaw` | LinkedIn API | Direct HTTP via `IHttpClientFactory`; resolves token from Key Vault |
+| `IgSender` | *(in development)* | Instagram Graph API | Direct HTTP via `IHttpClientFactory` |
+| `DryRunSender` | `DryRunSend` | **None** | **Local development and testing only.** Logs post content (character count, full text, image presence) and probes Key Vault connectivity (`XApiKey`), but makes **no outbound social API calls**. Always returns `true` on a well-formed post. `MessageMaxLength` is `int.MaxValue`. Must never be used in a production `CronSchedule`. |
 
 ---
 
@@ -146,12 +156,14 @@ Senders that require OAuth tokens not available in plain application settings (`
 
 **What**: Platform senders implement a common `ISender` interface and are registered in the DI container as concrete types. `OrchestratorFactory` resolves the appropriate sender from the DI container by matching the `MessageSender` enum value in the profile.
 
-**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new enum value, and a profile entry. This directly supports the Roadmap's expansion goals (Threads, Mastodon, BlueSky, etc.).
+**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new enum value, and a profile entry. This directly supports the Roadmap’s expansion goals (Threads, Mastodon, BlueSky, etc.).
 
 **Extensibility contract**: Any sender must:
 1. Implement `ISender`
 2. Honour `MessageMaxLength` so orchestrators can truncate content correctly
 3. Return `false` (not throw) on non-fatal platform errors, allowing `XFunction` to continue
+
+> ⚠️ **Special case — `DryRunSender`**: this sender satisfies the `ISender` contract but is explicitly excluded from production use. It serves as a reference implementation that demonstrates the minimal contract surface: null-guard on the incoming post, Key Vault connectivity probe (validates local `az login` / Managed Identity plumbing), structured logging of the post payload, and `return true` with no outbound call. New sender authors can use it as a scaffold to verify DI wiring and Key Vault access before implementing the real platform API.
 
 ### Abstract Factory Pattern — AI Provider Resolution
 
@@ -217,6 +229,7 @@ sequenceDiagram
     participant Crypto as CryptoService<br/>(cryptoprices.cc)
     participant KV as KeyVaultService<br/>(Azure Key Vault)
     participant Sender as ISender<br/>(X / LinkedIn / Instagram)
+    participant DryRun as DryRunSender<br/>(local testing only)
     participant Platform as Social Platform API
 
     Timer->>Fn: Trigger (cron schedule)
@@ -247,7 +260,14 @@ sequenceDiagram
 
     alt Post is null (NoOrchestrator or empty result)
         Fn->>Fn: Log skip, exit
-    else Post is valid
+    else Sender is DryRunSender (local testing only)
+        Fn->>DryRun: SendAsync(post)
+        DryRun->>KV: GetSecretAsync("XApiKey") [connectivity probe]
+        KV-->>DryRun: secret value (or exception)
+        DryRun->>DryRun: Log character count, content, image presence
+        DryRun-->>Fn: true (no outbound API call made)
+        Fn->>Fn: Log result to App Insights
+    else Post is valid (production sender)
         Fn->>Sender: SendAsync(post)
         Sender->>KV: ResolveSecretAsync(key)
         KV-->>Sender: OAuth token / API secret

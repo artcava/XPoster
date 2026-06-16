@@ -20,6 +20,26 @@
     "ForceHour": "",
 
     // -----------------------------------------------------------------------
+    // Dry-run testing (local integration testing without social platform publishing).
+    //
+    // To test the full pipeline — including Key Vault connectivity and AI provider
+    // output — without posting to X/Twitter, LinkedIn, or Instagram:
+    //
+    //   1. Set "ForceHour": "9"  (maps to the DryRunSend slot in OrchestratorFactory)
+    //   2. Set "AiProvider" to the provider under test: "OpenAi", "AzureFoundry", or "DeepSeekWithFal"
+    //   3. Ensure KEYVAULT_URI is set and `az login` has been run
+    //   4. Run the function — orchestration executes normally but no post is published
+    //
+    // The DryRunSender will:
+    //   - Probe Key Vault by reading the "XApiKey" secret (verifies connectivity)
+    //   - Log the post content (character count + full text) and image presence
+    //   - Return true without calling any social platform API
+    //
+    // WARNING: The dry-run slot (hour 9) must never be included in the production
+    // CronSchedule. It is exclusively for local development use.
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
     // Key Vault — all sender credentials are now read from Azure Key Vault.
     // Local development: run `az login` and set KEYVAULT_URI to the vault URI.
     // Azure deployment: Managed Identity handles authentication automatically.
