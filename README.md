@@ -566,7 +566,6 @@ Key monitoring capabilities at a glance:
 - [x] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
 - [ ] Extension-point refactoring — ADR-005 status: **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134)
 - [x] Test coverage gate at 80%
-- [x] DryRunSender for local end-to-end testing without publishing [Issue #174](https://github.com/artcava/XPoster/issues/174)
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
