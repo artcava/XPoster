@@ -29,7 +29,7 @@ jobs:
               return;
             }
 
-            const validPrefixes = ['feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/', 'chore/'];
+            const validPrefixes = ['feat/', 'feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/', 'chore/'];
             const isValid = validPrefixes.some(prefix => branch.startsWith(prefix));
 
             if (!isValid) {

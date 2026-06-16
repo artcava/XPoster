@@ -7,6 +7,19 @@
     "AiProvider": "OpenAi",
 
     // -----------------------------------------------------------------------
+    // Local development slot override.
+    // Set to a UTC hour (0-23) matching a slotProfiles entry to force that
+    // orchestrator slot without waiting for the real clock.
+    // Examples:
+    //   "ForceHour": "6"   → InSummaryFeed / FeedOrchestrator
+    //   "ForceHour": "8"   → XSummaryFeed  / FeedOrchestrator
+    //   "ForceHour": "14"  → InPowerLaw    / PowerLawOrchestrator
+    //   "ForceHour": "16"  → XPowerLaw     / PowerLawOrchestrator
+    // Remove or leave empty to use the real UTC clock (production behaviour).
+    // -----------------------------------------------------------------------
+    "ForceHour": "",
+
+    // -----------------------------------------------------------------------
     // Key Vault — all sender credentials are now read from Azure Key Vault.
     // Local development: run `az login` and set KEYVAULT_URI to the vault URI.
     // Azure deployment: Managed Identity handles authentication automatically.
