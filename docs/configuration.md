@@ -24,6 +24,19 @@ For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block w
 
 > 💡 For local development, run `az login` before starting the function. `KeyVaultService` uses `DefaultAzureCredential`, which picks up your Azure CLI session automatically.
 
+### 🧪 Quick-Start: DryRunSender (no social API credentials needed)
+
+If you only want to verify the end-to-end pipeline locally **without publishing to any social platform**, you can use `DryRunSender`. This is the recommended first step for new contributors or when onboarding a new environment.
+
+- [ ] `AzureWebJobsStorage` — `UseDevelopmentStorage=true` (Azurite)
+- [ ] `KEYVAULT_URI` — Key Vault URI (needed for the connectivity probe)
+- [ ] `OpenAI__ApiKey` — required if `AiProvider = OpenAi` (default)
+- [ ] `az login` executed in the terminal before `func start`
+- [ ] `ForceHour` set to `9` in `local.settings.json` (routes to the dry-run slot)
+- [ ] **No** Twitter/X, LinkedIn, or Instagram secrets required
+
+> See the [DryRunSender — Local Testing](#dryrunsender--local-testing) section below for the full `local.settings.json` snippet and step-by-step instructions.
+
 ---
 
 ## Full `local.settings.json` Example
@@ -35,25 +48,27 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
   "IsEncrypted": false,
   "Values": {
 
-    // ── Azure Functions Runtime ──────────────────────────────────────────
+    // ── Azure Functions Runtime ──────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     // Use Azurite (local emulator) or a real Storage Account connection string.
 
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     // Required by the .NET 8 isolated worker model. Do not change.
 
-    // ── Scheduler ────────────────────────────────────────────────────────
+    // ── Scheduler ────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
     // 6-field NCRONTAB expression: {second} {minute} {hour} {day} {month} {dayOfWeek}
     // Default fires at 06:00, 08:00, 14:00, 16:00 every day.
     // Use "*/30 * * * * *" for rapid testing (every 30 seconds, dev/test only).
+    // ⚠️ Hour 9 is reserved for DryRunSender (local testing only) — never include it
+    //    in a production CronSchedule.
 
-    // ── AI Provider Selector ─────────────────────────────────────────────
+    // ── AI Provider Selector ───────────────────────────────────
     "AiProvider": "OpenAi",
     // Selects the IAiService implementation injected into AI-enabled orchestrators.
     // Supported values: OpenAi | AzureFoundry | DeepSeekWithFal
 
-    // ── Key Vault ────────────────────────────────────────────────────────
+    // ── Key Vault ────────────────────────────────────────────
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
     // URI of the Azure Key Vault instance holding all sender OAuth credentials.
     // Local dev: run `az login` — DefaultAzureCredential picks up your CLI session.
@@ -69,6 +84,9 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     //   LinkedInOrgId         — LinkedIn organization ID (optional; org posts)
     //   IgAccessToken         — Instagram Graph API access token
     //   IgAccountId           — Instagram account ID
+    //
+    // DryRunSender only probes XApiKey to verify Key Vault connectivity.
+    // No other secrets are required when using the dry-run slot.
 
     // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════
     "OpenAI__ApiKey": "",
@@ -93,7 +111,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "OpenAI__ImagePromptMaxTokens": "60",
     "OpenAI__ImagePromptTemperature": "0.7",
 
-    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════
+    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ════════════════
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
@@ -109,7 +127,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
 
-    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ═════════
+    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ════════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
     "DeepSeek__DeploymentName": "deepseek-chat",
@@ -123,13 +141,13 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "DeepSeek__ImagePromptMaxTokens": "60",
     "DeepSeek__ImagePromptTemperature": "0.7",
 
-    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ══════════
+    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ═════════════
     "FalAi__ApiKey": "",
     "FalAi__ModelId": "fal-ai/flux/schnell",
     "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 
-    // ── Observability ─────────────────────────────────────────────────────
+    // ── Observability ────────────────────────────────────────────
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
     // Application Insights connection string.
     // When present, the isolated worker SDK automatically registers the telemetry pipeline.
@@ -155,6 +173,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `CronSchedule` | string | ✅ Yes | `0 0 6,8,14,16 * * *` | 6-field NCRONTAB expression (`{second} {minute} {hour} {day} {month} {dayOfWeek}`) controlling execution frequency. |
+| `ForceHour` | string | No | — | When set, overrides the current UTC hour used by `OrchestratorFactory.Resolve()`. Intended for local development only — set to `"9"` to force the dry-run slot regardless of wall-clock time. **Must not be set in production.** |
 
 **Common expressions:**
 
@@ -164,6 +183,8 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 | `0 0 * * * *` | Every hour on the hour |
 | `0 0 9,12,15,18 * * 1-5` | 09:00, 12:00, 15:00, 18:00 Mon–Fri |
 | `*/30 * * * * *` | Every 30 seconds (dev/test only) |
+
+> ⚠️ **Hour 9 is reserved for `DryRunSender` (local testing only).** It must never appear in a production `CronSchedule`. Use `ForceHour = "9"` locally instead of adding hour 9 to the cron expression.
 
 ---
 
@@ -206,11 +227,13 @@ For local development, ensure the identity used with `az login` has the **Key Va
 
 Secret names are case-sensitive. The following secrets must be present in the vault:
 
+> 🧪 **Using `DryRunSender`?** Only `XApiKey` is required in Key Vault — it is read as a connectivity probe to verify that your local `az login` session and Key Vault role assignment are working correctly. All other secrets listed below are **not** accessed during a dry run.
+
 #### Twitter / X
 
 | Secret name | Description |
 |---|---|
-| `XApiKey` | Twitter App API Key (Consumer Key). Obtain from [developer.twitter.com](https://developer.twitter.com) → Your App → Keys and Tokens. The app must have **Read and Write** permissions. |
+| `XApiKey` | Twitter App API Key (Consumer Key). Obtain from [developer.twitter.com](https://developer.twitter.com) → Your App → Keys and Tokens. The app must have **Read and Write** permissions. Also used as Key Vault connectivity probe by `DryRunSender`. |
 | `XApiSecret` | Twitter App API Secret (Consumer Secret). |
 | `XAccessToken` | User Access Token (OAuth 1.0a). |
 | `XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
@@ -233,6 +256,114 @@ Secret names are case-sensitive. The following secrets must be present in the va
 |---|---|
 | `IgAccessToken` | Long-lived Instagram Graph API access token. |
 | `IgAccountId` | Numeric Instagram Business Account ID used in Graph API calls. |
+
+---
+
+## DryRunSender — Local Testing
+
+`DryRunSender` is a no-op `ISender` implementation designed for local end-to-end pipeline verification. It runs the full orchestration pipeline — AI content generation, RSS feed fetch, image generation — but **never publishes to any social platform**. Instead, it logs the generated post payload and probes Key Vault connectivity.
+
+### What DryRunSender does
+
+| Step | Behaviour |
+|---|---|
+| Null guard | Returns `false` and logs `Warning` if the incoming `Post` is `null` |
+| Key Vault probe | Calls `GetSecretAsync("XApiKey")` to verify `az login` and Key Vault role assignment; returns `false` and logs `Error` on failure |
+| Content logging | Logs character count, full post text, and whether an image is present |
+| Return value | Returns `true` — no HTTP call to any social platform is made |
+| `MessageMaxLength` | `int.MaxValue` — no content truncation applied |
+
+> ⚠️ `DryRunSender` is assigned to slot **hour 9** in `OrchestratorFactory`. This slot must **never** appear in a production `CronSchedule`. Use `ForceHour` (see below) to activate it locally at any time of day.
+
+### Minimal `local.settings.json` for dry-run
+
+The snippet below is the minimum configuration required to run a full dry-run pipeline execution locally. Only `XApiKey` needs to exist in Key Vault.
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "CronSchedule": "*/30 * * * * *",
+    "ForceHour": "9",
+    "AiProvider": "OpenAi",
+    "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
+    "OpenAI__ApiKey": "<your-openai-key>",
+    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
+    "OpenAI__ChatModel": "gpt-4.1-nano",
+    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
+    "OpenAI__ImageModel": "gpt-image-1.5",
+    "OpenAI__ImageSize": "1024x1024",
+    "OpenAI__ImageCount": "1"
+  }
+}
+```
+
+**Key points:**
+- `ForceHour: "9"` routes every execution to the `DryRunSender` slot, regardless of wall-clock time.
+- `CronSchedule: "*/30 * * * * *"` triggers every 30 seconds so you can observe results quickly. Switch to a less aggressive schedule once verified.
+- No Twitter/X, LinkedIn, or Instagram secrets are needed in Key Vault — only `XApiKey` must exist for the connectivity probe.
+- Remove or leave empty `ForceHour` before committing or deploying to any non-local environment.
+
+### Step-by-step dry-run setup
+
+1. **Authenticate with Azure CLI**
+   ```bash
+   az login
+   ```
+   Ensure the logged-in identity has the **Key Vault Secrets User** role on your vault.
+
+2. **Add `XApiKey` to Key Vault** (if not already present)
+   ```bash
+   az keyvault secret set \
+     --vault-name <your-keyvault-name> \
+     --name XApiKey \
+     --value "probe-value"
+   ```
+   The value itself is not used for publishing — any non-empty string is sufficient.
+
+3. **Start Azurite** (Azure Storage emulator)
+   ```bash
+   azurite --silent --location .azurite --debug .azurite/debug.log
+   ```
+
+4. **Copy and configure `local.settings.json`**
+   ```bash
+   cp src/local.settings.json.example src/local.settings.json
+   ```
+   Then set `ForceHour` to `"9"` and fill in `KEYVAULT_URI` and `OpenAI__ApiKey`.
+
+5. **Start the function**
+   ```bash
+   cd src && func start
+   ```
+
+6. **Observe the logs.** A successful dry run produces output similar to:
+   ```
+   [DryRunSender] Key Vault connectivity probe: OK (secret 'XApiKey' resolved)
+   [DryRunSender] Post content (743 chars): "Breaking: Bitcoin Power Law model signals..."
+   [DryRunSender] Image attached: True
+   [DryRunSender] Dry run complete — no post published.
+   ```
+
+7. **Cleanup** — remove `ForceHour` from `local.settings.json` before any commit.
+   ```bash
+   # Verify ForceHour is not set before committing
+   grep -i ForceHour src/local.settings.json && echo "WARNING: remove ForceHour before commit!"
+   ```
+
+### Switching AI provider for dry-run
+
+To test with `DeepSeekWithFal` instead of OpenAI, change `AiProvider` and replace the OpenAI keys:
+
+```json
+"AiProvider": "DeepSeekWithFal",
+"DeepSeek__ApiKey": "<your-deepseek-key>",
+"FalAi__ApiKey": "<your-falai-key>"
+```
+
+All other dry-run settings (`ForceHour`, `KEYVAULT_URI`, etc.) remain the same.
 
 ---
 
@@ -361,3 +492,4 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 - Sender credentials live exclusively in Azure Key Vault and are never stored as environment variables or App Settings, in any environment.
 - For CI/CD, store secrets as **GitHub Actions Secrets**; never embed them in workflow YAML files.
 - In production, the Function App Managed Identity must be granted the **Key Vault Secrets User** role on the vault — no manual credential management is required.
+- `ForceHour` must never be set in production App Settings. Its presence in a production environment would cause every execution to resolve to the wrong orchestration slot.
