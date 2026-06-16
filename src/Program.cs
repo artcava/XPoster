@@ -39,7 +39,17 @@ builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
 builder.Services.AddTransient<IgSender>();
 
-builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
+// ITimeProvider registration:
+//   Development + ForceHour set  → LocalOverrideTimeProvider (pins clock to the configured UTC hour)
+//   All other environments        → TimeProvider (returns DateTime.UtcNow)
+// To restore production behaviour locally, remove or empty 'ForceHour' in local.settings.json.
+var isDevelopment = builder.Environment.IsDevelopment();
+var forceHour = builder.Configuration["ForceHour"];
+
+if (isDevelopment && !string.IsNullOrWhiteSpace(forceHour))
+    builder.Services.AddSingleton<ITimeProvider, LocalOverrideTimeProvider>();
+else
+    builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
 
 // Register IAiServiceFactory and all IAiService implementations
 builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
