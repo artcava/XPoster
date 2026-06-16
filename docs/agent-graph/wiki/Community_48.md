@@ -5,15 +5,15 @@
 ## Key Concepts
 
 - **OrchestratorFactory.cs** (10 connections)
-- **Resolve()** (2 connections)
 - **ResolveAiProvider()** (2 connections)
-- **XPoster.Implementation** (2 connections)
 - **return()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **Resolve()** (2 connections)
 - **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 65]] (5 shared connections)
+- [[Community 63]] (5 shared connections)
 
 ## Audit Trail
 

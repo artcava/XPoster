@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **BuildDeepSeekService()** (2 connections)
-- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
-- **HybridAiService()** (2 connections)
-- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
-- **BuildFalService()** (2 connections)
+- **OrchestratorFactoryTests.cs** (9 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
+- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
+- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
 
 ## Relationships
 
-- [[Community 17]] (10 shared connections)
+- [[Community 74]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **GetCryptoValue()** (2 connections)
-- **catch()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **GenerateImageAsync()** (2 connections)
+- **FalAiImageService()** (2 connections)
 - **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 99]] (3 shared connections)
+- [[Community 89]] (3 shared connections)
 
 ## Audit Trail
 

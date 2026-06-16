@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
+- **GetSecretAsync()** (2 connections)
+- **SetSecretAsync()** (2 connections)
+- **KeyVaultService()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 

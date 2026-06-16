@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (9 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
+- **XSender.cs** (6 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 51]] (5 shared connections)
+- [[Community 87]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

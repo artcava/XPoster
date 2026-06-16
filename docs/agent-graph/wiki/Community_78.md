@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
-- **BaseOrchestrator()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **PostAsync()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **OpenAiService()** (2 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 106]] (2 shared connections)
+- [[Community 25]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

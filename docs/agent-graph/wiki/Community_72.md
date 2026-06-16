@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
 - **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
+- **if()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- [[Community 93]] (3 shared connections)
+- [[Community 16]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
