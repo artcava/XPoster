@@ -268,3 +268,6 @@ __pycache__/
 # C# Dev Kit language service cache
 *.lscache
 
+# Microsoft Azurite Dev Spaces
+__blobstorage__/*
+__azurite_*
