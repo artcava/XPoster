@@ -1,4 +1,6 @@
 using System.Net;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -22,7 +24,7 @@ public class AzureFoundryServiceTests
             Endpoint = "https://myfoundry.openai.azure.com",
             ApiKey = "fake-key",
             DeploymentName = "gpt-4.1-nano",
-            ImageDeploymentName = "gpt-image-1"
+            ImageDeploymentName = "gpt-image-1.5"
         });
 
         return new AzureFoundryService(factory.Object, options, loggerMock.Object);
@@ -327,5 +329,66 @@ public class AzureFoundryServiceTests
             Times.Never(),
             ItExpr.IsAny<HttpRequestMessage>(),
             ItExpr.IsAny<CancellationToken>());
+    }
+
+    /// <summary>
+    /// E1 — GenerateImageAsync must POST to the Foundry /images/generations path,
+    /// not the classic Azure OpenAI /openai/deployments/{name}/images/generations path.
+    /// </summary>
+    [Fact]
+    public async Task GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()
+    {
+        var imageBytes = new byte[] { 1, 2, 3 };
+        var base64 = Convert.ToBase64String(imageBytes);
+        var json = "{\"data\":[{\"b64_json\":\"" + base64 + "\"}]}";
+        var handler = MakeHandlerMock(HttpStatusCode.OK, json);
+        var svc = BuildService(handler.Object, out _);
+
+        await svc.GenerateImageAsync("a polar bear");
+
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Once(),
+            ItExpr.Is<HttpRequestMessage>(r =>
+                r.Method == HttpMethod.Post &&
+                r.RequestUri!.AbsolutePath.EndsWith("/images/generations", StringComparison.Ordinal) &&
+                !r.RequestUri.AbsolutePath.Contains("/openai/deployments/", StringComparison.Ordinal)),
+            ItExpr.IsAny<CancellationToken>());
+    }
+
+    /// <summary>
+    /// E2 — The request body must include the `model` field set to ImageDeploymentName
+    /// so Azure AI Foundry routes the call to the correct deployment.
+    /// </summary>
+    [Fact]
+    public async Task GenerateImageAsync_RequestBodyContainsModelField()
+    {
+        var imageBytes = new byte[] { 5, 6, 7 };
+        var base64 = Convert.ToBase64String(imageBytes);
+        var json = "{\"data\":[{\"b64_json\":\"" + base64 + "\"}]}";
+
+        string? capturedBody = null;
+        var mock = new Mock<HttpMessageHandler>();
+        mock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Returns<HttpRequestMessage, CancellationToken>(async (req, _) =>
+            {
+                capturedBody = await req.Content!.ReadAsStringAsync();
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
+            });
+
+        var svc = BuildService(mock.Object, out _);
+        await svc.GenerateImageAsync("a polar bear");
+
+        Assert.NotNull(capturedBody);
+        using var doc = JsonDocument.Parse(capturedBody!);
+        Assert.True(doc.RootElement.TryGetProperty("model", out var modelProp));
+        Assert.Equal("gpt-image-1.5", modelProp.GetString());
     }
 }

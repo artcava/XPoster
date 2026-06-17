@@ -66,8 +66,11 @@ public sealed class AzureFoundryService : IAiService
         if (string.IsNullOrWhiteSpace(prompt))
             return Array.Empty<byte>();
 
+        // Azure AI Foundry /openai/v1 expects the deployment name as `model` in the
+        // request body. The endpoint does not embed it in the URL path.
         var requestBody = new
         {
+            model = _options.ImageDeploymentName,
             prompt,
             n = 1,
             size = "1024x1024",
@@ -134,8 +137,11 @@ public sealed class AzureFoundryService : IAiService
     private string GetChatCompletionsEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.DeploymentName)}/chat/completions?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
 
+    // Azure AI Foundry /openai/v1 exposes a unified image generation path.
+    // The deployment name is passed as `model` in the request body, so the URL
+    // does not include the deployment segment or an api-version query parameter.
     private string GetImageGenerationEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.ImageDeploymentName)}/images/generations?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
+        $"{_options.Endpoint.TrimEnd('/')}/images/generations";
 
     private object BuildSummaryPayload(string text, int messageMaxLength)
     {
