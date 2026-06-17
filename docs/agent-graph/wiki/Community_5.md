@@ -1,29 +1,27 @@
 # Community 5
 
-> 20 nodes · cohesion 0.19
+> 18 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (19 connections)
-- **FalAiImageServiceTests.cs** (19 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **BuildService()** (2 connections)
-- **FalImageJson()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
+- **AiServiceHelperTests.cs** (17 connections)
+- **AiServiceHelperTests.cs** (17 connections)
+- **ChatJson()** (2 connections)
+- **MakeResponse()** (2 connections)
+- **new()** (2 connections)
+- **AiServiceHelperTests** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenContentIsWhitespaceOnly_ReturnsTrueAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **FalAiImageServiceTests** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **var()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
 
 ## Relationships
 
@@ -31,7 +29,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 74 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

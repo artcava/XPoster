@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (2 shared connections)
+- [[Community 95]] (2 shared connections)
 
 ## Audit Trail
 

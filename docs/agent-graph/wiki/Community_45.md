@@ -1,24 +1,24 @@
 # Community 45
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **DryRunSender.cs** (6 connections)
+- **DryRunSender.cs** (6 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **DryRunSender()** (2 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (9 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

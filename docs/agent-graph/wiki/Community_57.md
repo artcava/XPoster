@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **AddHttpClients()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **XPoster.Extensions** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 

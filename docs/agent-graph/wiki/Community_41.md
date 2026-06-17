@@ -1,16 +1,17 @@
 # Community 41
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **DryRunSender.cs** (6 connections)
-- **DryRunSender.cs** (6 connections)
-- **DryRunSender()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

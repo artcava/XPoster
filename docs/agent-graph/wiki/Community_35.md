@@ -6,12 +6,12 @@
 
 - **CaptureLoggerProvider.cs** (7 connections)
 - **CaptureLoggerProvider.cs** (7 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Dispose()** (2 connections)
-- **IsEnabled()** (2 connections)
-- **CreateLogger()** (2 connections)
 - **CaptureLogger()** (2 connections)
+- **IsEnabled()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 - **CaptureLoggerProvider()** (2 connections)
+- **Dispose()** (2 connections)
+- **CreateLogger()** (2 connections)
 
 ## Relationships
 

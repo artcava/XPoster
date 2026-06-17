@@ -5,19 +5,19 @@
 ## Key Concepts
 
 - **OrchestratorFactoryTests.cs** (16 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
 - **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
 - **XPoster.Tests.Implementation** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
 - **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (7 shared connections)
+- [[Community 48]] (7 shared connections)
 
 ## Audit Trail
 

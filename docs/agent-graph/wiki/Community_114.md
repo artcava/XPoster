@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
-- **if()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 
-- [[Community 76]] (3 shared connections)
+- [[Community 103]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

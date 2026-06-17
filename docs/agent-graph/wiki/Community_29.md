@@ -1,26 +1,26 @@
 # Community 29
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **DeepSeekOptionsTests.cs** (8 connections)
+- **DeepSeekOptionsTests.cs** (8 connections)
+- **DeepSeekOptionsTests** (2 connections)
+- **DeepSeekOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **DeepSeekOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **DeepSeekOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

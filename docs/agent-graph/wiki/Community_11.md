@@ -1,22 +1,23 @@
 # Community 11
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests.cs** (12 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall()** (2 connections)
-- **SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **BuildKeyVaultMockWithOrg()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **BuildKeyVaultMock()** (2 connections)
+- **DeepSeekService.cs** (13 connections)
+- **DeepSeekService.cs** (13 connections)
+- **XPoster.Services** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **NotSupportedException()** (2 connections)
+- **if()** (2 connections)
+- **while()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

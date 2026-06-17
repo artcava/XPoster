@@ -1,31 +1,32 @@
 # Community 8
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (13 connections)
-- **DeepSeekService.cs** (13 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **AzureFoundryServiceTests.cs** (31 connections)
+- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 - **if()** (2 connections)
-- **NotSupportedException()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **while()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
+- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
+- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
+- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 6]] (16 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 59 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

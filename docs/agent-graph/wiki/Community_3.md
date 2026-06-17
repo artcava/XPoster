@@ -1,30 +1,29 @@
 # Community 3
 
-> 21 nodes · cohesion 0.19
+> 20 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **DeepSeekServiceTests.cs** (20 connections)
-- **DeepSeekServiceTests.cs** (20 connections)
-- **BuildService()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsContent()** (2 connections)
-- **GetSummaryAsync_WhenTextWithinLimit_DoesNotCallApi()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **DeepSeekServiceTests** (2 connections)
-- **GenerateImageAsync_ExceptionMessage_MentionsHybridAiService()** (2 connections)
-- **GenerateImageAsync_AlwaysThrows_NotSupportedException()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **FalAiImageServiceTests.cs** (19 connections)
+- **FalAiImageServiceTests.cs** (19 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **FalImageJson()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **BuildService()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
@@ -32,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (100%)
+- EXTRACTED: 74 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
