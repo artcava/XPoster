@@ -7,7 +7,7 @@ namespace XPoster.Implementation;
 
 /// <summary>
 /// Resolves and instantiates the correct <see cref="BaseOrchestrator"/> for the current hour of the day
-/// by consulting the static <see cref="slotProfiles"/> schedule, including AI provider orchestration.
+/// by consulting the <see cref="ISlotProfileProvider"/> schedule, including AI provider orchestration.
 /// </summary>
 public class OrchestratorFactory : IOrchestratorFactory
 {
@@ -15,6 +15,7 @@ public class OrchestratorFactory : IOrchestratorFactory
     private readonly ILogger<OrchestratorFactory> _log;
     private readonly ITimeProvider _timeProvider;
     private readonly IAiServiceFactory _aiServiceFactory;
+    private readonly ISlotProfileProvider _slotProfileProvider;
     private readonly IConfiguration? _configuration;
 
     /// <summary>
@@ -24,18 +25,21 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="aiServiceFactory">Factory used to resolve the AI service by provider.</param>
+    /// <param name="slotProfileProvider">Provider that supplies the scheduled orchestration profiles.</param>
     /// <param name="configuration">Optional configuration used to override the AI provider via <c>AiProvider</c> setting.</param>
     public OrchestratorFactory(
         IServiceProvider serviceProvider,
         ILogger<OrchestratorFactory> log,
         ITimeProvider timeProvider,
         IAiServiceFactory aiServiceFactory,
+        ISlotProfileProvider slotProfileProvider,
         IConfiguration? configuration = null)
     {
         _serviceProvider = serviceProvider;
         _log = log;
         _timeProvider = timeProvider;
         _aiServiceFactory = aiServiceFactory;
+        _slotProfileProvider = slotProfileProvider;
         _configuration = configuration;
     }
 
@@ -47,7 +51,7 @@ public class OrchestratorFactory : IOrchestratorFactory
     public BaseOrchestrator Resolve()
     {
         var currentHour = _timeProvider.GetCurrentTime().Hour;
-        var profile = slotProfiles.FirstOrDefault(p => p.Hour == currentHour);
+        var profile = _slotProfileProvider.GetProfiles().FirstOrDefault(p => p.Hour == currentHour);
 
         if (profile == null)
         {
@@ -60,13 +64,13 @@ public class OrchestratorFactory : IOrchestratorFactory
 
         ISender? sender = profile.SenderType switch
         {
-            MessageSender.XPowerLaw => _serviceProvider.GetService(typeof(XSender)) as ISender,
-            MessageSender.XSummaryFeed => _serviceProvider.GetService(typeof(XSender)) as ISender,
-            MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender)) as ISender,
-            MessageSender.InPowerLaw => _serviceProvider.GetService(typeof(InSender)) as ISender,
-            MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender)) as ISender,
-            MessageSender.IgPowerLaw => _serviceProvider.GetService(typeof(IgSender)) as ISender,
-            MessageSender.DryRunSend => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
+            MessageSender.XPowerLaw     => _serviceProvider.GetService(typeof(XSender))     as ISender,
+            MessageSender.XSummaryFeed  => _serviceProvider.GetService(typeof(XSender))     as ISender,
+            MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender))    as ISender,
+            MessageSender.InPowerLaw    => _serviceProvider.GetService(typeof(InSender))    as ISender,
+            MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender))    as ISender,
+            MessageSender.IgPowerLaw    => _serviceProvider.GetService(typeof(IgSender))    as ISender,
+            MessageSender.DryRunSend    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
             _ => null
         };
 
@@ -127,21 +131,4 @@ public class OrchestratorFactory : IOrchestratorFactory
 
         return defaultProvider;
     }
-
-    /// <summary>
-    /// Slot profile schedule. Each entry maps an hour of the day to an orchestrator type and sender.
-    /// </summary>
-    private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
-    {
-        new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        //new ScheduledOrchestrationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        // Dry-run slot: set ForceHour=9 and AiProvider=<desired> in local.settings.json to test
-        // end-to-end orchestration without publishing to any social platform.
-        // This slot must never appear in a production schedule without being commented out.
-        // new ScheduledOrchestrationProfile(9, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi),
-        new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
-        new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
-        //new ScheduledOrchestrationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawOrchestrator)),
-    };
 }
