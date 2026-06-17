@@ -61,6 +61,19 @@ builder.Services.AddTransient<DeepSeekService>(); // Concrete type for direct in
 builder.Services.AddTransient<FalAiImageService>(); // Concrete type for direct injection into HybridAiService
 // builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity); // Uncomment when implemented
 
+// ISlotProfileProvider registration:
+//   EnableDryRunSlot = true   → DryRunSlotProfileProvider (adds hour-9 DryRun entry on top of the default schedule)
+//   All other environments     → DefaultSlotProfileProvider (production schedule, no DryRun slot)
+// Set EnableDryRunSlot=true in local.settings.json to test end-to-end without publishing to any social platform.
+var enableDryRunRaw = builder.Configuration["EnableDryRunSlot"];
+var enableDryRun = bool.TryParse(enableDryRunRaw, out var parsed) && parsed;
+
+if (enableDryRun)
+    builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
+        new DryRunSlotProfileProvider(new DefaultSlotProfileProvider()));
+else
+    builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
+
 builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();

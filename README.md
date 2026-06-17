@@ -84,7 +84,7 @@ Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKey
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ScheduledOrchestrationProfile list) │
+│   (ISlotProfileProvider)   │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
@@ -347,27 +347,27 @@ The execution frequency is configurable via the `CronSchedule` environment varia
 **Configuration**:
 
 ```json
-//local.settings.json
+// local.settings.json
 {
   "Values": {
-    "CronSchedule": "0 5 * * * *"
+    "CronSchedule": "0 0 6,8,14,16 * * *"
   }
 }
 ```
 
 ```bash
-//Azure CLI
-az functionapp config appsettings set
---name xposterfunction
---resource-group XPosterRG
---settings "CronSchedule=0 5 * * * *"
+# Azure CLI
+az functionapp config appsettings set \
+  --name xposterfunction \
+  --resource-group XPosterRG \
+  --settings "CronSchedule=0 0 6,8,14,16 * * *"
 ```
 
 ### Cron Expression Examples
 
 | Schedule | Cron Expression | Description |
 |----------|-----------------|-------------|
-| **Default** | `0 5 */2 * * *` | Every 2 hours at :05 |
+| **Default** | `0 0 6,8,14,16 * * *` | Production slots: 6, 8, 14, 16 UTC |
 | **Hourly** | `0 0 * * * *` | Every hour on the hour |
 | **Every 4 hours** | `0 0 */4 * * *` | Every 4 hours |
 | **Business Hours** | `0 0 9,12,15,18 * * 1-5` | 9, 12, 15, 18 (Mon-Fri) |
@@ -375,23 +375,41 @@ az functionapp config appsettings set
 | **Daily** | `0 0 9 * * *` | Every day at 9:00 |
 | **Quick Test** | `*/30 * * * * *` | Every 30 seconds (dev only) |
 
-### Time-based Strategy (OrchestratorFactory)
+### Time-based Strategy (ISlotProfileProvider)
 
-Modify `OrchestratorFactory.cs` to customize which orchestrator to use at each hour:
+The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles:
 
-```csharp
-private static readonly List<ScheduledOrchestrationProfile> slotProfiles = new()
+| UTC Hour | Sender | Orchestrator | AI Provider |
+|----------|--------|--------------|-------------|
+| 6 | `InSummaryFeed` | `FeedOrchestrator` | OpenAi |
+| 8 | `XSummaryFeed` | `FeedOrchestrator` | OpenAi |
+| 14 | `InPowerLaw` | `PowerLawOrchestrator` | *(default)* |
+| 16 | `XPowerLaw` | `PowerLawOrchestrator` | *(default)* |
+
+`OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
+
+### Dry-Run Testing (Local)
+
+To run the full pipeline locally without publishing to any social platform, activate the `DryRunSlotProfileProvider` via two environment variables — **no code changes required**:
+
+```json
+// local.settings.json
 {
-    new ScheduledOrchestrationProfile(6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-    new ScheduledOrchestrationProfile(8, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
-    // Hour 9 is reserved for local dry-run testing only — must never appear in a production schedule
-    new ScheduledOrchestrationProfile(9, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi),
-    new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
-    new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
-};
+  "Values": {
+    "EnableDryRunSlot": "true",
+    "ForceHour": "9"
+  }
+}
 ```
 
-> ⚠️ **`DryRunSend` (hour 9) is reserved for local development and testing only.** It uses `DryRunSender`, which logs post content and probes Key Vault connectivity without publishing to any social platform. This slot must never be included in a production `CronSchedule`. See [`src/local.settings.json.example`](src/local.settings.json.example) for the recommended local dry-run setup.
+| Key | Value | Effect |
+|-----|-------|--------|
+| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRunSend` entry at hour 9 |
+| `ForceHour` | `9` | Overrides the UTC clock so `OrchestratorFactory` selects the dry-run slot at startup |
+
+`DryRunSender` will probe Key Vault connectivity (reads the `XApiKey` secret), log the generated post content (character count + full text and image presence), and return `true` — without calling any social platform API.
+
+> ⚠️ `EnableDryRunSlot` defaults to `false`. In production this key must be absent or explicitly set to `"false"`. Hour 9 is **never** part of the production schedule.
 
 ---
 
@@ -413,7 +431,7 @@ XPoster is designed with explicit extension points that allow new capabilities t
 | **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
 | **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()`, register in `OrchestratorFactory` | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
 | **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All orchestrators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
-| **Scheduling profiles** (`ScheduledOrchestrationProfile`) | Add or modify entries in `OrchestratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
+| **Scheduling profiles** (`ISlotProfileProvider`) | Implement `ISlotProfileProvider` (or subclass `DryRunSlotProfileProvider` as a decorator) and register it in `Program.cs` | The schedule is a swappable dependency injected into `OrchestratorFactory` — operators can alter or extend the slot list without touching factory or orchestrator code |
 
 > 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
 
@@ -437,7 +455,8 @@ tests/
 │   ├── FeedOrchestratorTests.cs
 │   ├── OrchestratorFactoryTests.cs
 │   ├── NoOrchestratorTests.cs
-│   └── PowerLawOrchestratorTests.cs
+│   ├── PowerLawOrchestratorTests.cs
+│   └── SlotProfileProviderTests.cs
 ├── Integration/
 │   ├── PollyIntegrationTestBase.cs
 │   ├── LinkedInResiliencePipelineTests.cs
@@ -482,7 +501,7 @@ tests/
 | *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
 | `Abstraction/` | `BaseOrchestrator` abstract class contracts |
 | `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `OrchestratorFactory`, and `AiServiceFactory` resolution logic |
+| `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `AiServiceFactory` resolution logic; `OrchestratorFactory` using synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` provider behaviour (`SlotProfileProviderTests.cs`) |
 | `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
 | `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
 | `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
