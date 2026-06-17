@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
+- **XSender.cs** (6 connections)
+- **if()** (2 connections)
+- **XSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 83]] (3 shared connections)
+- [[Community 88]] (3 shared connections)
 
 ## Audit Trail
 

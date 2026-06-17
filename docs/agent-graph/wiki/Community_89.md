@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XSender()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 78]] (3 shared connections)
+- [[Community 77]] (3 shared connections)
 
 ## Audit Trail
 

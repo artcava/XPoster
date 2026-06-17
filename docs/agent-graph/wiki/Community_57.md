@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **BuildDeepSeekService()** (2 connections)
-- **BuildFalService()** (2 connections)
-- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
-- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
-- **HybridAiService()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **TestOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 22]] (10 shared connections)
+- [[Community 45]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

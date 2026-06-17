@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IKeyVaultService.cs** (5 connections)
-- **IKeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
 - **SetSecretAsync()** (2 connections)
-- **IKeyVaultService** (2 connections)
+- **KeyVaultService()** (2 connections)
 - **GetSecretAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 

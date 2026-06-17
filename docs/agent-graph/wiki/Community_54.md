@@ -1,23 +1,23 @@
 # Community 54
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **BuildFalService()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
+- **HybridAiService()** (2 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 20]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

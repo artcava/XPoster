@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **KeyVaultService.cs** (5 connections)
-- **KeyVaultService.cs** (5 connections)
-- **GetSecretAsync()** (2 connections)
-- **KeyVaultService()** (2 connections)
-- **SetSecretAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 

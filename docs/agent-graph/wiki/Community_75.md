@@ -1,21 +1,21 @@
 # Community 75
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **var()** (2 connections)
-- **if()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **Post** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (10 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,28 +1,28 @@
 # Community 21
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **catch()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **XSenderMissingBranchTests.cs** (10 connections)
+- **XSenderMissingBranchTests.cs** (10 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
+- **BuildSender()** (2 connections)
+- **MessageMaxLenght_Returns250()** (2 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **XSenderMissingBranchTests()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

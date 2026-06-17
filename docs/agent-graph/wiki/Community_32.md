@@ -5,17 +5,17 @@
 ## Key Concepts
 
 - **InSender.cs** (11 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **using()** (2 connections)
-- **ResolveAuthorUrnAsync()** (2 connections)
 - **SendAsync()** (2 connections)
 - **InvalidOperationException()** (2 connections)
-- **Exception()** (2 connections)
+- **ResolveAuthorUrnAsync()** (2 connections)
 - **generatePayLoad()** (2 connections)
+- **Exception()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (4 shared connections)
+- [[Community 76]] (4 shared connections)
 
 ## Audit Trail
 

@@ -1,28 +1,28 @@
 # Community 22
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **BuildHybrid()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
-- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
-- **HybridAiServiceTests** (2 connections)
+- **OrchestratorFactoryTests.cs** (10 connections)
+- **OrchestratorFactoryTests.cs** (10 connections)
+- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithDryRunSender_At9AM()** (2 connections)
+- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

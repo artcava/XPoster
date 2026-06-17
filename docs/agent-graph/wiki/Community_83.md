@@ -1,21 +1,21 @@
 # Community 83
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
