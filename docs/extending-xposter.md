@@ -69,12 +69,18 @@ ISender? sender = profile.SenderType switch
 
 ### Step 5 — Add a ScheduledOrchestrationProfile entry
 
-Add the new sender to the `slotProfiles` list in `OrchestratorFactory.cs`, specifying the hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Implementation/DefaultSlotProfileProvider.cs`), which implements `ISlotProfileProvider`. Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
-// src/Implementation/OrchestratorFactory.cs — slotProfiles list
-new ScheduledOrchestrationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+// src/Implementation/DefaultSlotProfileProvider.cs
+public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
+[
+    // existing profiles ...
+    new ScheduledOrchestrationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+];
 ```
+
+> `OrchestratorFactory` no longer owns a static profile list — it receives `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time. Only `DefaultSlotProfileProvider` needs to change when adding a production slot.
 
 **Validation**: Write a unit test for the new sender using a mock `Post` to verify serialisation and error-return behaviour before integration.
 
@@ -108,14 +114,18 @@ public class QuoteOrchestrator : BaseOrchestrator
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new orchestrator type in the `slotProfiles` list. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
-// src/Implementation/OrchestratorFactory.cs — slotProfiles list
-new ScheduledOrchestrationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
+// src/Implementation/DefaultSlotProfileProvider.cs
+public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
+[
+    // existing profiles ...
+    new ScheduledOrchestrationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
+];
 ```
 
-No other change to `OrchestratorFactory` is required.
+No other change to `OrchestratorFactory` is required. The factory receives the updated profile list via `ISlotProfileProvider` at runtime without any code modification.
 
 ---
 
