@@ -1,28 +1,28 @@
 # Community 20
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **FalAiImageService()** (2 connections)
-- **BuildHybrid()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **HybridAiServiceTests** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
-- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **XSenderTests.cs** (10 connections)
+- **XSenderTests.cs** (10 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **BuildKeyVaultMock()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
 
 ## Relationships
 
-- [[Community 49]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

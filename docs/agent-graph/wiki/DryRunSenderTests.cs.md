@@ -2,30 +2,29 @@
 
 > God node · 19 connections
 
-**Community:** [[Community 4]]
+**Community:** [[Community 3]]
 
 ## Connections by Relation
 
 ### contains
-- [[DryRunSenderTests.cs]]
+- [[XPoster.Tests.SenderPlugins]]
+- [[DryRunSenderTests()]]
 - [[BuildSender()]]
+- [[ValidPost()]]
+- [[new()]]
 - [[Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()]]
 - [[Constructor_WithNullLogger_ThrowsArgumentNullException()]]
 - [[DryRunSender_ImplementsISender()]]
-- [[DryRunSenderTests()]]
 - [[MessageMaxLenght_ReturnsIntMaxValue()]]
-- [[new()]]
-- [[SendAsync_DoesNotCallAnyOutboundSocialApi()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()]]
-- [[SendAsync_WhenKeyVaultProbeThrows_LogsError()]]
-- [[SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()]]
-- [[SendAsync_WithImageBytes_LogsImagePresence()]]
-- [[SendAsync_WithNullPost_LogsWarning()]]
 - [[SendAsync_WithNullPost_ReturnsFalse()]]
-- [[ValidPost()]]
-- [[XPoster.Tests.SenderPlugins]]
+- [[SendAsync_WithNullPost_LogsWarning()]]
+- [[SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()]]
+- [[SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()]]
+- [[SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()]]
+- [[SendAsync_WithImageBytes_LogsImagePresence()]]
+- [[SendAsync_DoesNotCallAnyOutboundSocialApi()]]
+- [[SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()]]
+- [[SendAsync_WhenKeyVaultProbeThrows_LogsError()]]
 
 ---
 

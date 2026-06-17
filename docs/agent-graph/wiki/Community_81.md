@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **GenerateImageAsync()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **OpenAiService()** (2 connections)
 
 ## Relationships
 
-- [[Community 101]] (3 shared connections)
+- [[Community 28]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

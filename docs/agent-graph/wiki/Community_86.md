@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **Program.cs** (3 connections)
+- **Program.cs** (3 connections)
+- **if()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

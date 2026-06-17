@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IKeyVaultService.cs** (5 connections)
-- **IKeyVaultService.cs** (5 connections)
-- **SetSecretAsync()** (2 connections)
-- **IKeyVaultService** (2 connections)
-- **GetSecretAsync()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **XPoster.Implementation** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

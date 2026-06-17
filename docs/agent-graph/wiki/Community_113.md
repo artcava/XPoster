@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 95]] (2 shared connections)
+- [[Community 107]] (2 shared connections)
 
 ## Audit Trail
 

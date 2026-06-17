@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **FeedOrchestrator()** (2 connections)
-- **foreach()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (4 shared connections)
+- [[Community 49]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

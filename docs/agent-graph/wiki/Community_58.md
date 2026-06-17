@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **XPoster.Models** (2 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **Validate()** (2 connections)
+- **IKeyVaultService.cs** (5 connections)
+- **IKeyVaultService.cs** (5 connections)
+- **SetSecretAsync()** (2 connections)
+- **GetSecretAsync()** (2 connections)
+- **IKeyVaultService** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 

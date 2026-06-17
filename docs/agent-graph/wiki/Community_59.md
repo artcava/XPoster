@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (5 connections)
-- **AiServiceHelper.cs** (5 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **foreach()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 - **if()** (2 connections)
-- **return()** (2 connections)
 
 ## Relationships
 
