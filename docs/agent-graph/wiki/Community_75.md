@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService()** (2 connections)
-- **if()** (2 connections)
-- **var()** (2 connections)
+- **XSender.cs** (6 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 25]] (8 shared connections)
+- [[Community 95]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

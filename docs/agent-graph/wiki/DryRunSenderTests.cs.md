@@ -7,24 +7,25 @@
 ## Connections by Relation
 
 ### contains
-- [[XPoster.Tests.SenderPlugins]]
-- [[DryRunSenderTests()]]
+- [[DryRunSenderTests.cs]]
 - [[BuildSender()]]
-- [[ValidPost()]]
-- [[new()]]
 - [[Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()]]
 - [[Constructor_WithNullLogger_ThrowsArgumentNullException()]]
 - [[DryRunSender_ImplementsISender()]]
+- [[DryRunSenderTests()]]
 - [[MessageMaxLenght_ReturnsIntMaxValue()]]
-- [[SendAsync_WithNullPost_ReturnsFalse()]]
-- [[SendAsync_WithNullPost_LogsWarning()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()]]
-- [[SendAsync_WithImageBytes_LogsImagePresence()]]
+- [[new()]]
 - [[SendAsync_DoesNotCallAnyOutboundSocialApi()]]
-- [[SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()]]
+- [[SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()]]
+- [[SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()]]
+- [[SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()]]
 - [[SendAsync_WhenKeyVaultProbeThrows_LogsError()]]
+- [[SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()]]
+- [[SendAsync_WithImageBytes_LogsImagePresence()]]
+- [[SendAsync_WithNullPost_LogsWarning()]]
+- [[SendAsync_WithNullPost_ReturnsFalse()]]
+- [[ValidPost()]]
+- [[XPoster.Tests.SenderPlugins]]
 
 ---
 

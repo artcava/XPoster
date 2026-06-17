@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **MakeService()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **CryptoServiceTests** (2 connections)
-- **CryptoService()** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
 
 ## Relationships
 

@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
 - **catch()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **GenerateMessage()** (2 connections)
-- **ReplaceEveryFirstOccurenceOf()** (2 connections)
+- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
 
 ## Relationships
 
-- [[Community 90]] (4 shared connections)
+- [[Community 89]] (4 shared connections)
 
 ## Audit Trail
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **StringContent()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 - **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetCryptoValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (3 shared connections)
+- [[Community 52]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

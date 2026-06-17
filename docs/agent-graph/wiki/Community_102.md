@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **FalAiOptions.cs** (2 connections)
-- **FalAiOptions.cs** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **Enums.cs** (2 connections)
+- **Enums.cs** (2 connections)
 
 ## Relationships
 

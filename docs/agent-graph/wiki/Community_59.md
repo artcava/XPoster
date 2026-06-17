@@ -1,23 +1,23 @@
 # Community 59
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **return()** (2 connections)
-- **XPoster.Implementation** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **Resolve()** (2 connections)
-- **foreach()** (2 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
+- **SetSecretAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **KeyVaultService()** (2 connections)
+- **GetSecretAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

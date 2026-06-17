@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **Program.cs** (3 connections)
+- **Program.cs** (3 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

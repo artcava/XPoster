@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (8 connections)
-- **DeepSeekOptionsTests.cs** (8 connections)
-- **DeepSeekOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **DeepSeekOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **HttpResponseMessage()** (2 connections)
+- **params()** (2 connections)
+- **var()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
 
 ## Relationships
 

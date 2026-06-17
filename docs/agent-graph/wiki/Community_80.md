@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **var()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **OrchestratorFactory()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 19]] (10 shared connections)
+- [[Community 55]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

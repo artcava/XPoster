@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
-- **SendAsync()** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **GetCryptoValue()** (2 connections)
+- **ICryptoService** (2 connections)
 - **XPoster.Abstraction** (2 connections)
 
 ## Relationships
