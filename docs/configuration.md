@@ -32,7 +32,8 @@ If you only want to verify the end-to-end pipeline locally **without publishing 
 - [ ] `KEYVAULT_URI` — Key Vault URI (needed for the connectivity probe)
 - [ ] `OpenAI__ApiKey` — required if `AiProvider = OpenAi` (default)
 - [ ] `az login` executed in the terminal before `func start`
-- [ ] `ForceHour` set to `9` in `local.settings.json` (routes to the dry-run slot)
+- [ ] `EnableDryRunSlot` set to `true` in `local.settings.json` (registers the dry-run slot via `DryRunSlotProfileProvider`)
+- [ ] `ForceHour` set to `9` in `local.settings.json` (routes execution to the dry-run slot regardless of wall-clock time)
 - [ ] **No** Twitter/X, LinkedIn, or Instagram secrets required
 
 > See the [DryRunSender — Local Testing](#dryrunsender--local-testing) section below for the full `local.settings.json` snippet and step-by-step instructions.
@@ -48,7 +49,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
   "IsEncrypted": false,
   "Values": {
 
-    // ── Azure Functions Runtime ──────────────────────────────────────
+    // ── Azure Functions Runtime ─────────────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     // Use Azurite (local emulator) or a real Storage Account connection string.
 
@@ -60,10 +61,18 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // 6-field NCRONTAB expression: {second} {minute} {hour} {day} {month} {dayOfWeek}
     // Default fires at 06:00, 08:00, 14:00, 16:00 every day.
     // Use "*/30 * * * * *" for rapid testing (every 30 seconds, dev/test only).
-    // ⚠️ Hour 9 is reserved for DryRunSender (local testing only) — never include it
-    //    in a production CronSchedule.
 
-    // ── AI Provider Selector ───────────────────────────────────
+    "ForceHour": "",
+    // When set, overrides the current UTC hour used by OrchestratorFactory.Resolve().
+    // Use "9" locally together with EnableDryRunSlot = true to route to the dry-run slot.
+    // Must NOT be set in production App Settings.
+
+    "EnableDryRunSlot": "false",
+    // When true, registers DryRunSlotProfileProvider (decorator over DefaultSlotProfileProvider)
+    // which appends a dry-run slot at hour 9. Use together with ForceHour = "9" for local testing.
+    // Must NOT be set to true in production App Settings.
+
+    // ── AI Provider Selector ────────────────────────────────────────
     "AiProvider": "OpenAi",
     // Selects the IAiService implementation injected into AI-enabled orchestrators.
     // Supported values: OpenAi | AzureFoundry | DeepSeekWithFal
@@ -88,7 +97,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // DryRunSender only probes XApiKey to verify Key Vault connectivity.
     // No other secrets are required when using the dry-run slot.
 
-    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════
+    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════
     "OpenAI__ApiKey": "",
     // Required. OpenAI platform API key. Obtain from platform.openai.com > API Keys.
 
@@ -111,7 +120,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "OpenAI__ImagePromptMaxTokens": "60",
     "OpenAI__ImagePromptTemperature": "0.7",
 
-    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ════════════════
+    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════════════
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
@@ -127,7 +136,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
 
-    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ════════════
+    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ══════════════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
     "DeepSeek__DeploymentName": "deepseek-chat",
@@ -141,7 +150,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "DeepSeek__ImagePromptMaxTokens": "60",
     "DeepSeek__ImagePromptTemperature": "0.7",
 
-    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ═════════════
+    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ═════════════════
     "FalAi__ApiKey": "",
     "FalAi__ModelId": "fal-ai/flux/schnell",
     "FalAi__ImageSize": "landscape_4_3",
@@ -173,18 +182,19 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `CronSchedule` | string | ✅ Yes | `0 0 6,8,14,16 * * *` | 6-field NCRONTAB expression (`{second} {minute} {hour} {day} {month} {dayOfWeek}`) controlling execution frequency. |
-| `ForceHour` | string | No | — | When set, overrides the current UTC hour used by `OrchestratorFactory.Resolve()`. Intended for local development only — set to `"9"` to force the dry-run slot regardless of wall-clock time. **Must not be set in production.** |
+| `ForceHour` | string | No | — | When set, overrides the current UTC hour used by `OrchestratorFactory.Resolve()`. Intended for local development only — set to `"9"` together with `EnableDryRunSlot = true` to force the dry-run slot. **Must not be set in production.** |
+| `EnableDryRunSlot` | bool | No | `false` | When `true`, registers `DryRunSlotProfileProvider` as `ISlotProfileProvider`, which decorates `DefaultSlotProfileProvider` and appends a dry-run slot at hour 9. Use together with `ForceHour = "9"` for local pipeline testing. **Must not be `true` in production App Settings.** |
 
 **Common expressions:**
 
 | Expression | Fires at |
-|---|---|
+|---|-----------|
 | `0 0 6,8,14,16 * * *` | 06:00, 08:00, 14:00, 16:00 every day (default) |
 | `0 0 * * * *` | Every hour on the hour |
 | `0 0 9,12,15,18 * * 1-5` | 09:00, 12:00, 15:00, 18:00 Mon–Fri |
 | `*/30 * * * * *` | Every 30 seconds (dev/test only) |
 
-> ⚠️ **Hour 9 is reserved for `DryRunSender` (local testing only).** It must never appear in a production `CronSchedule`. Use `ForceHour = "9"` locally instead of adding hour 9 to the cron expression.
+> ⚠️ **`EnableDryRunSlot` and `ForceHour` are local-only settings.** Neither must appear in a production `CronSchedule` or Azure App Settings. The dry-run slot is added exclusively through `DryRunSlotProfileProvider`, which is only registered when `EnableDryRunSlot = true`.
 
 ---
 
@@ -263,6 +273,8 @@ Secret names are case-sensitive. The following secrets must be present in the va
 
 `DryRunSender` is a no-op `ISender` implementation designed for local end-to-end pipeline verification. It runs the full orchestration pipeline — AI content generation, RSS feed fetch, image generation — but **never publishes to any social platform**. Instead, it logs the generated post payload and probes Key Vault connectivity.
 
+The dry-run slot is **not hardcoded** in `OrchestratorFactory`. It is appended by `DryRunSlotProfileProvider`, a decorator over `DefaultSlotProfileProvider` that is registered in `Program.cs` only when `EnableDryRunSlot = true` in app settings.
+
 ### What DryRunSender does
 
 | Step | Behaviour |
@@ -273,7 +285,23 @@ Secret names are case-sensitive. The following secrets must be present in the va
 | Return value | Returns `true` — no HTTP call to any social platform is made |
 | `MessageMaxLength` | `int.MaxValue` — no content truncation applied |
 
-> ⚠️ `DryRunSender` is assigned to slot **hour 9** in `OrchestratorFactory`. This slot must **never** appear in a production `CronSchedule`. Use `ForceHour` (see below) to activate it locally at any time of day.
+### How the dry-run slot is activated
+
+The dry-run slot at hour 9 is registered exclusively via DI, not via a hardcoded schedule entry:
+
+```csharp
+// Program.cs (simplified)
+var enableDryRun = builder.Configuration.GetValue<bool>("EnableDryRunSlot", defaultValue: false);
+
+if (enableDryRun)
+    builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
+        new DryRunSlotProfileProvider(new DefaultSlotProfileProvider()));
+else
+    builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
+```
+
+- When `EnableDryRunSlot = false` (default, production), only the four canonical slots (06:00, 08:00, 14:00, 16:00) are active.
+- When `EnableDryRunSlot = true` (local only), the dry-run slot at hour 9 is appended. Use `ForceHour = "9"` to route any execution to it regardless of wall-clock time.
 
 ### Minimal `local.settings.json` for dry-run
 
@@ -286,6 +314,7 @@ The snippet below is the minimum configuration required to run a full dry-run pi
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "CronSchedule": "*/30 * * * * *",
+    "EnableDryRunSlot": "true",
     "ForceHour": "9",
     "AiProvider": "OpenAi",
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
@@ -301,11 +330,12 @@ The snippet below is the minimum configuration required to run a full dry-run pi
 ```
 
 **Key points:**
-- `ForceHour: "9"` routes every execution to the `DryRunSender` slot, regardless of wall-clock time.
+- `EnableDryRunSlot: "true"` registers `DryRunSlotProfileProvider`, which appends the dry-run slot at hour 9.
+- `ForceHour: "9"` routes every execution to that slot, regardless of wall-clock time.
 - `CronSchedule: "*/30 * * * * *"` triggers every 30 seconds so you can observe results quickly. Switch to a less aggressive schedule once verified.
 - No Twitter/X, LinkedIn, or Instagram secrets are needed in Key Vault — only `XApiKey` must exist for the connectivity probe.
 
-> ℹ️ `local.settings.json` is listed in `.gitignore` and is never committed to the repository. `ForceHour` therefore carries no commit risk — it only needs to be removed before copying values into `local.settings.json.example` or Azure App Settings.
+> ℹ️ `local.settings.json` is listed in `.gitignore` and is never committed to the repository. `EnableDryRunSlot` and `ForceHour` therefore carry no commit risk — they only need to be absent when copying values into `local.settings.json.example` or Azure App Settings.
 
 ### Step-by-step dry-run setup
 
@@ -333,7 +363,7 @@ The snippet below is the minimum configuration required to run a full dry-run pi
    ```bash
    cp src/local.settings.json.example src/local.settings.json
    ```
-   Then set `ForceHour` to `"9"` and fill in `KEYVAULT_URI` and `OpenAI__ApiKey`.
+   Then set `EnableDryRunSlot` to `"true"`, `ForceHour` to `"9"`, and fill in `KEYVAULT_URI` and `OpenAI__ApiKey`.
 
 5. **Start the function**
    ```bash
@@ -348,7 +378,7 @@ The snippet below is the minimum configuration required to run a full dry-run pi
    [DryRunSender] Dry run complete — no post published.
    ```
 
-7. **Cleanup** — `local.settings.json` is gitignored and never committed, so `ForceHour` poses no repository risk. When you are done testing, remove `ForceHour` (or set it to an empty string) to restore normal slot resolution. Ensure `ForceHour` is **not** copied into:
+7. **Cleanup** — `local.settings.json` is gitignored and never committed. When you are done testing, remove `EnableDryRunSlot` and `ForceHour` (or set them to empty strings) to restore normal slot resolution. Ensure neither key is copied into:
    - `src/local.settings.json.example` (the committed template)
    - Azure App Settings of any non-local environment
 
@@ -362,7 +392,7 @@ To test with `DeepSeekWithFal` instead of OpenAI, change `AiProvider` and replac
 "FalAi__ApiKey": "<your-falai-key>"
 ```
 
-All other dry-run settings (`ForceHour`, `KEYVAULT_URI`, etc.) remain the same.
+All other dry-run settings (`EnableDryRunSlot`, `ForceHour`, `KEYVAULT_URI`, etc.) remain the same.
 
 ---
 
@@ -491,5 +521,6 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 - Sender credentials live exclusively in Azure Key Vault and are never stored as environment variables or App Settings, in any environment.
 - For CI/CD, store secrets as **GitHub Actions Secrets**; never embed them in workflow YAML files.
 - In production, the Function App Managed Identity must be granted the **Key Vault Secrets User** role on the vault — no manual credential management is required.
+- `EnableDryRunSlot` must never be `true` in production App Settings. Its presence would cause `DryRunSlotProfileProvider` to be registered, adding an unintended slot to the production schedule.
 - `ForceHour` must never be set in production App Settings. Its presence in a production environment would cause every execution to resolve to the wrong orchestration slot.
-- `ForceHour` must not appear in `src/local.settings.json.example` — the committed template must never carry development-only overrides.
+- Neither `EnableDryRunSlot` nor `ForceHour` must appear in `src/local.settings.json.example` — the committed template must never carry development-only overrides.
