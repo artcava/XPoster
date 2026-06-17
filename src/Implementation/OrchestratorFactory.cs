@@ -114,20 +114,23 @@ public class OrchestratorFactory : IOrchestratorFactory
 
     private AiProvider ResolveAiProvider(AiProvider defaultProvider)
     {
+        // The profile's provider is always authoritative.
+        // IConfiguration is only a fallback when the profile does not specify one.
+        if (defaultProvider != AiProvider.None)
+            return defaultProvider;
+
         var configuredProvider = _configuration?["AiProvider"];
         if (string.IsNullOrWhiteSpace(configuredProvider))
         {
+            _log.LogWarning("No AiProvider specified in profile and no global fallback configured.");
             return defaultProvider;
         }
 
         if (Enum.TryParse<AiProvider>(configuredProvider, ignoreCase: true, out var parsedProvider))
-        {
             return parsedProvider;
-        }
 
-        _log.LogWarning("Invalid AiProvider value '{AiProvider}' in configuration. Falling back to {DefaultProvider}.",
-            configuredProvider,
-            defaultProvider);
+        _log.LogWarning("Invalid AiProvider value '{AiProvider}' in configuration. No fallback available.",
+            configuredProvider);
 
         return defaultProvider;
     }

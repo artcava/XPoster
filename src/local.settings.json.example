@@ -83,7 +83,6 @@
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
     "AzureFoundry__ImageDeploymentName": "",
-    "AzureFoundry__ApiVersion": "2024-02-01",
     "AzureFoundry__SummaryTemperature": "0.5",
     "AzureFoundry__SummaryMaxTokensPerChar": "5",
     "AzureFoundry__SummarySafetyMarginChars": "50",

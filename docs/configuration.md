@@ -125,7 +125,6 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
     "AzureFoundry__ImageDeploymentName": "",
-    "AzureFoundry__ApiVersion": "2024-02-01",
     "AzureFoundry__SummaryTemperature": "0.5",
     "AzureFoundry__SummaryMaxTokensPerChar": "5",
     "AzureFoundry__SummarySafetyMarginChars": "50",
@@ -441,11 +440,10 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AzureFoundry__Endpoint` | string | ✅ Yes | — | Azure OpenAI resource endpoint (e.g. `https://<resource>.openai.azure.com/`). |
-| `AzureFoundry__ApiKey` | string | ✅ Yes* | — | Azure OpenAI resource key. *Omit when using Managed Identity. |
+| `AzureFoundry__Endpoint` | string | ✅ Yes | — | Azure AI Foundry resource endpoint (e.g. `https://<resource>.services.ai.azure.com/openai/v1`). |
+| `AzureFoundry__ApiKey` | string | ✅ Yes* | — | Azure AI Foundry resource key. *Omit when using Managed Identity. |
 | `AzureFoundry__DeploymentName` | string | ✅ Yes | — | Chat deployment name as configured in Azure AI Foundry. |
 | `AzureFoundry__ImageDeploymentName` | string | ✅ Yes | — | Image generation deployment name. |
-| `AzureFoundry__ApiVersion` | string | No | `2024-02-01` | Azure OpenAI REST API version. |
 
 ### Tuning (same semantics as OpenAI)
 

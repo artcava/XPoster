@@ -66,19 +66,25 @@ public sealed class AzureFoundryService : IAiService
         if (string.IsNullOrWhiteSpace(prompt))
             return Array.Empty<byte>();
 
+        // Azure AI Foundry /openai/v1 expects the deployment name as `model` in the
+        // request body. The endpoint does not embed it in the URL path.
         var requestBody = new
         {
+            model = _options.ImageDeploymentName,
             prompt,
             n = 1,
-            size = "1024x1024",
-            response_format = "b64_json"
+            size = "1024x1024"
         };
 
         var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Azure Foundry image generation failed with status code {StatusCode}", response.StatusCode);
+            var errorBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(
+                "Azure Foundry image generation failed with status {StatusCode}. Response: {ErrorBody}",
+                response.StatusCode,
+                errorBody);
             return Array.Empty<byte>();
         }
 
@@ -131,11 +137,17 @@ public sealed class AzureFoundryService : IAiService
         return Array.Empty<byte>();
     }
 
+    // Azure AI Foundry /openai/v1 exposes a unified chat completions path.
+    // The deployment name is passed as `model` in the request body, so the URL
+    // does not include the deployment segment or an api-version query parameter.
     private string GetChatCompletionsEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.DeploymentName)}/chat/completions?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
+        $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
+    // Azure AI Foundry /openai/v1 exposes a unified image generation path.
+    // The deployment name is passed as `model` in the request body, so the URL
+    // does not include the deployment segment or an api-version query parameter.
     private string GetImageGenerationEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.ImageDeploymentName)}/images/generations?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
+        $"{_options.Endpoint.TrimEnd('/')}/images/generations";
 
     private object BuildSummaryPayload(string text, int messageMaxLength)
     {
@@ -150,6 +162,7 @@ public sealed class AzureFoundryService : IAiService
 
         return new
         {
+            model = _options.DeploymentName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },
@@ -167,6 +180,7 @@ public sealed class AzureFoundryService : IAiService
 
         return new
         {
+            model = _options.DeploymentName,
             messages = new[]
             {
                 new { role = "system", content = _options.ImagePromptSystemTemplate },

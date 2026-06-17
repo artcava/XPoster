@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    // Azurite local storage emulator — required for local Function development.
+    "Azurite.azurite",
+    // Azure Functions extension — provides func host integration and local debugging.
+    "ms-azuretools.vscode-azurefunctions",
+    // C# Dev Kit — language server, test runner, and solution explorer.
+    "ms-dotnettools.csdevkit"
+  ]
+}
