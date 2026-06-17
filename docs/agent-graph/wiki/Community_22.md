@@ -1,28 +1,27 @@
 # Community 22
 
-> 11 nodes · cohesion 0.35
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (10 connections)
-- **OrchestratorFactoryTests.cs** (10 connections)
-- **Generate_Should_CreateFeedOrchestratorWithInSender_At6AM()** (2 connections)
-- **Generate_Should_CreateFeedOrchestratorWithDryRunSender_At9AM()** (2 connections)
-- **Generate_Should_ReturnCorrectOrchestratorType_BasedOnHour()** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
 - **XPoster.Tests.Implementation** (2 connections)
-- **Resolve_Should_RequestOpenAiProvider_ForScheduledFeedSlot()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_CreateNoOrchestrator_AtUnscheduledHours()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **Generate_Should_CreateFeedOrchestratorWithXSender_At8AM()** (2 connections)
+- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 46]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (3 shared connections)
+- [[Community 95]] (3 shared connections)
 
 ## Audit Trail
 

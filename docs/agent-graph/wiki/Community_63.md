@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory** (2 connections)
-- **XPoster.Abstraction** (2 connections)
-- **Resolve()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Implementation** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

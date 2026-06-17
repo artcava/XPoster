@@ -1,20 +1,21 @@
 # Community 92
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XPoster.Abstraction** (2 connections)
-- **Enums.cs** (2 connections)
-- **Enums.cs** (2 connections)
+- **InSender.cs** (11 connections)
+- **InSender()** (2 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 35]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

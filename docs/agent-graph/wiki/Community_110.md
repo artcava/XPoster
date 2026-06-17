@@ -1,20 +1,19 @@
-# Community 107
+# Community 110
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
 - **DeepSeekOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 110]] (2 shared connections)
+- [[Community 107]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

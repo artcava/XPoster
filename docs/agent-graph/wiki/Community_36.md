@@ -9,9 +9,9 @@
 - **XPoster.Tests.Models** (2 connections)
 - **Post_EmptyContent_IsAllowed()** (2 connections)
 - **Post_DefaultImageIsNull()** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
 - **Post_CanSetAndGetAllProperties()** (2 connections)
 - **PostMissingBranchTests** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
 
 ## Relationships
 

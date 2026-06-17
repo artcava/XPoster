@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **AzureFoundryService.cs** (14 connections)
-- **BuildImagePromptPayload()** (2 connections)
 - **var()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 18]] (10 shared connections)
+- [[Community 19]] (10 shared connections)
 
 ## Audit Trail
 
