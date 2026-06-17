@@ -1,14 +1,12 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Attach to .NET Functions",
-      "type": "coreclr",
-      "request": "attach",
-      // preLaunchTask starts Azurite → builds src → starts func host in sequence.
-      // The debugger attaches once the host process is ready.
-      "preLaunchTask": "func: start",
-      "processId": "${command:pickProcess}"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to .NET Functions",
+            "type": "coreclr",
+            "request": "attach",
+            "preLaunchTask": "func: host start",
+            "processId": "${command:azureFunctions.pickProcess}"
+        }
+    ]
 }

@@ -73,15 +73,18 @@ public sealed class AzureFoundryService : IAiService
             model = _options.ImageDeploymentName,
             prompt,
             n = 1,
-            size = "1024x1024",
-            response_format = "b64_json"
+            size = "1024x1024"
         };
 
         var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Azure Foundry image generation failed with status code {StatusCode}", response.StatusCode);
+            var errorBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(
+                "Azure Foundry image generation failed with status {StatusCode}. Response: {ErrorBody}",
+                response.StatusCode,
+                errorBody);
             return Array.Empty<byte>();
         }
 
