@@ -13,15 +13,15 @@ This agent works on XPoster. Apply these rules before any generic .NET guidance.
 - It is a timer-triggered automation pipeline.
 - Business behavior is split across:
   - function orchestration
-  - generators
+  - orchestrators
   - services
   - sender plugins
 
 ## Required Architecture Fit
 
 - Keep XFunction thin and orchestration-focused.
-- Keep generator selection in GeneratorFactory.
-- Keep content production in generators.
+- Keep orchestrator selection in OrchestratorFactory.
+- Keep content production in orchestrators.
 - Keep platform publishing in sender plugins.
 - Keep infrastructure wiring in Program.cs.
 - Reuse current abstractions before introducing new ones.
@@ -78,8 +78,8 @@ This agent works on XPoster. Apply these rules before any generic .NET guidance.
 - Prefer focused Arrange / Act / Assert tests.
 - Prioritize tests for:
   - XFunction orchestration behavior
-  - GeneratorFactory schedule mapping
-  - generator success/failure paths
+  - OrchestratorFactory schedule mapping
+  - orchestrator success/failure paths
   - sender success/failure behavior
   - service edge cases around external API responses
 

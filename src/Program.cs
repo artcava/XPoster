@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using XPoster.Abstraction;
+using XPoster.Extensions;
 using XPoster.Implementation;
 using XPoster.Models;
 using XPoster.SenderPlugins;
@@ -17,7 +18,6 @@ builder.Services
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
-    // CS8600: FirstOrDefault can return null — annotated as nullable
     LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
         == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
     if (defaultRule is not null)
@@ -26,15 +26,31 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
     }
 });
 
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClients();
+
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();
+
+// Key Vault service — Singleton; credentials are read per-call via DefaultAzureCredential.
+// Works via az login locally and via Managed Identity in Azure.
+builder.Services.AddSingleton<IKeyVaultService, KeyVaultService>();
 
 builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
 builder.Services.AddTransient<IgSender>();
+builder.Services.AddTransient<DryRunSender>();
 
-builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
+// ITimeProvider registration:
+//   Development + ForceHour set  → LocalOverrideTimeProvider (pins clock to the configured UTC hour)
+//   All other environments        → TimeProvider (returns DateTime.UtcNow)
+// To restore production behaviour locally, remove or empty 'ForceHour' in local.settings.json.
+var isDevelopment = builder.Environment.IsDevelopment();
+var forceHour = builder.Configuration["ForceHour"];
+
+if (isDevelopment && !string.IsNullOrWhiteSpace(forceHour))
+    builder.Services.AddSingleton<ITimeProvider, LocalOverrideTimeProvider>();
+else
+    builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
 
 // Register IAiServiceFactory and all IAiService implementations
 builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
@@ -45,16 +61,30 @@ builder.Services.AddTransient<DeepSeekService>(); // Concrete type for direct in
 builder.Services.AddTransient<FalAiImageService>(); // Concrete type for direct injection into HybridAiService
 // builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity); // Uncomment when implemented
 
-builder.Services.AddTransient<IGeneratorFactory, GeneratorFactory>();
+// ISlotProfileProvider registration:
+//   EnableDryRunSlot = true   → DryRunSlotProfileProvider (adds hour-9 DryRun entry on top of the default schedule)
+//   All other environments     → DefaultSlotProfileProvider (production schedule, no DryRun slot)
+// Set EnableDryRunSlot=true in local.settings.json to test end-to-end without publishing to any social platform.
+var enableDryRunRaw = builder.Configuration["EnableDryRunSlot"];
+var enableDryRun = bool.TryParse(enableDryRunRaw, out var parsed) && parsed;
+
+if (enableDryRun)
+    builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
+        new DryRunSlotProfileProvider(new DefaultSlotProfileProvider()));
+else
+    builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
+
+builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
-builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi"));
 builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
 builder.Services.Configure<AzureFoundryOptions>(builder.Configuration.GetSection("AzureFoundry"));
 builder.Services.AddSingleton<IValidateOptions<AzureFoundryOptions>, AzureFoundryOptionsValidator>();
 builder.Services.Configure<DeepSeekOptions>(builder.Configuration.GetSection("DeepSeek"));
 builder.Services.AddSingleton<IValidateOptions<DeepSeekOptions>, DeepSeekOptionsValidator>();
+builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi"));
+builder.Services.AddSingleton<IValidateOptions<FalAiOptions>, FalAiOptionsValidator>();
 
 builder.Build().Run();

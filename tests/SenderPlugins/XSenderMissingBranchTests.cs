@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
+using XPoster.Abstraction;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 
@@ -13,15 +14,17 @@ namespace XPoster.Tests.SenderPlugins;
 public class XSenderMissingBranchTests
 {
     private readonly Mock<ILogger<XSender>> _logger = new();
+    private readonly Mock<IKeyVaultService> _kv = new();
 
-    private XSender BuildSender()
+    public XSenderMissingBranchTests()
     {
-        Environment.SetEnvironmentVariable("X_API_KEY", "key");
-        Environment.SetEnvironmentVariable("X_API_SECRET", "secret");
-        Environment.SetEnvironmentVariable("X_ACCESS_TOKEN", "token");
-        Environment.SetEnvironmentVariable("X_ACCESS_TOKEN_SECRET", "token_secret");
-        return new XSender(_logger.Object);
+        _kv.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("key");
+        _kv.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("secret");
+        _kv.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("token");
+        _kv.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("token_secret");
     }
+
+    private XSender BuildSender() => new(_kv.Object, _logger.Object);
 
     [Fact]
     public async Task SendAsync_NullPost_ReturnsFalse()
@@ -55,7 +58,6 @@ public class XSenderMissingBranchTests
     [Fact]
     public async Task SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()
     {
-        // Exercises the image branch up to UploadMediaAsync which throws -> catch -> false
         var result = await BuildSender().SendAsync(new Post
         {
             Content = "Hello with image",

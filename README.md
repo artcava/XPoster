@@ -28,8 +28,6 @@
 - [Testing](#testing)
 - [Monitoring](#monitoring)
 - [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
 - [Author](#author)
 
 > 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [docs/architecture.md](docs/architecture.md).
@@ -42,7 +40,7 @@
 - **AI-Powered Summarization**: Intelligent RSS feed summaries via a configurable AI model of your choice
 - **Image Generation**: Automatic contextual image creation using any supported image generation model
 - **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
-- **Multi-Strategy**: Support for different content generation algorithms
+- **Multi-Strategy**: Support for different content orchestration algorithms
 - **Provider Agnostic**: The AI provider (e.g. OpenAI, Azure AI Foundry) and the specific model are selected by the operator through configuration — no code change required to swap models
 
 ### 🌐 Multi-Platform Publishing
@@ -68,12 +66,14 @@
 
 XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
-- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and only orchestrates the pipeline
-- **`GeneratorFactory`** — maps the current UTC hour to a `ScheduledGenerationProfile`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
-- **Generators** (`FeedGenerator`, `PowerLawGenerator`, `NoGenerator`) — each encapsulates a self-contained content-production algorithm; generators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
+- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
+- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
+- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
 
-The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching generator code.
+The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching orchestrator code.
+
+Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKeyVaultService`), which wraps `Azure.Security.KeyVault.Secrets` and is consumed by sender plugins at runtime to retrieve OAuth credentials from Azure Key Vault.
 
 ```
 ┌────────────────────────────┐
@@ -83,39 +83,44 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
             │
             ▼
 ┌────────────────────────────┐
-│   Generator Factory        │ ◄─── Strategy Pattern
-│   (ScheduledGenerationProfile list) │
+│   OrchestratorFactory      │ ◄─── Strategy Pattern
+│   (ISlotProfileProvider)   │
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
     ▼                ▼              ▼
-┌──────────┐   ┌──────────┐   ┌──────────┐
-│   Feed   │   │ PowerLaw │   │    No    │
-│Generator │   │Generator │   │Generator │
-└─────┬────┘   └─────┬────┘   └──────────┘
-      │              │
-      └──────┬───────┘
+┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+│     Feed     │   │  PowerLaw    │   │      No      │
+│ Orchestrator │   │ Orchestrator │   │ Orchestrator │
+└─────┬────────┘   └─────┬────────┘   └──────────────┘
+      │                  │
+      └──────┬───────────┘
              │
              ▼
     ┌────────────────────┐
     │   Services         │
     ├────────────────────┤
     │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
+    │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
     │ • Feed Service     │ ◄─── RSS Parser
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
+    │ • KeyVaultService  │ ◄─── Azure Key Vault secret resolution
     └────────┬───────────┘
              │
              ▼
-    ┌────────────────┐
-    │ Sender Plugins │
-    ├────────────────┤
-    │ • XSender      │ ◄─── Twitter/X API
-    │ • InSender     │ ◄─── LinkedIn API
-    │ • IgSender     │ ◄─── Instagram API
-    └────────────────┘
+    ┌────────────────────┐
+    │ Sender Plugins     │
+    ├────────────────────┤
+    │ • XSender          │ ◄─── Twitter/X API
+    │ • InSender         │ ◄─── LinkedIn API
+    │ • IgSender         │ ◄─── Instagram API
+    │ • DryRunSender     │ ◄─── Local testing only (no outbound API calls)
+    └────────────────────┘
 ```
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin, Abstract Factory), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
+
+> 🤖 For AI-assisted development, an auto-generated code graph is available at [`docs/agent-graph/`](docs/agent-graph/). See [docs/agent-graph.md](docs/agent-graph.md) for usage.
 
 ---
 
@@ -135,7 +140,7 @@ The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiSer
 
 ### AI & ML
 
-The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledGenerationProfile`.
+The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledOrchestrationProfile`.
 
 | Package | Version | Role |
 |---------|---------|------|
@@ -150,7 +155,9 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 |-------------------------|-----------------|--------------|---------------|
 | `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
 | `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
-| `DeepSeekWithFal` | `HybridAiService` | DeepSeek API | fal.ai — FLUX.2 Turbo |
+| `DeepSeekWithFal` | `HybridAiService` | `DeepSeekService` → DeepSeek API | `FalAiImageService` → fal.ai FLUX.2 Turbo |
+
+> ℹ️ `DeepSeekService` and `FalAiImageService` are independent services, each with their own registration and test coverage. `HybridAiService` composes the two, delegating text requests to `DeepSeekService` and image requests to `FalAiImageService`. This composition is transparent to orchestrators, which always program to `IAiService`.
 
 ### Social Media APIs
 
@@ -168,13 +175,16 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | `Microsoft.ApplicationInsights.WorkerService` | 2.23.0 | Telemetry pipeline for background services |
 | `ILogger<T>` | (built-in) | Structured logging via `Microsoft.Extensions.Logging` |
 
-### Utilities
+### Utilities & Security
 
 | Package | Version | Role |
 |---------|---------|------|
-| `Microsoft.Extensions.Http` | 9.0.10 | `IHttpClientFactory` — typed/named HTTP clients |
+| `Microsoft.Extensions.Http.Resilience` | 9.1.0 | Retry / resilience pipelines for outbound HTTP clients (`IHttpClientFactory`) |
 | `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
+| `Azure.Security.KeyVault.Secrets` | 4.7.0 | Azure Key Vault secret retrieval (used by `KeyVaultService`) |
 | `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
+
+> ℹ️ `Microsoft.Extensions.Http` is resolved transitively and is not pinned explicitly in the project file to avoid NU1603 version conflicts.
 
 ---
 
@@ -192,14 +202,14 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 
 | Provider | Website | Capabilities | Setup Guide |
 |----------|---------|--------------|-------------|
-| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/setup-azure-foundry.md](docs/setup-azure-foundry.md) |
-| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/setup-openai.md](docs/setup-openai.md) |
-| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/setup-deepseek.md](docs/setup-deepseek.md) |
-| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/setup-falai.md](docs/setup-falai.md) |
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/integrations/setup-azure-foundry.md](docs/integrations/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
 
 > ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
-> ⚠️ Setup guides marked as `docs/setup-*.md` are either available or in progress. See the [Roadmap](#roadmap) for the current documentation status.
+> ⚠️ The setup guides above are present and cover account creation, API key configuration, and troubleshooting. Some validation tasks (model names, key naming, SDK version checks) are tracked in issues [#130](https://github.com/artcava/XPoster/issues/130), [#131](https://github.com/artcava/XPoster/issues/131), and [#132](https://github.com/artcava/XPoster/issues/132) and will be completed before the next stable release.
 
 ### Clone the Repository
 
@@ -248,43 +258,42 @@ Then open `src/local.settings.json` and replace every empty string `""` with the
 
 All configuration is driven by environment variables — there is no application-level config file to edit directly.
 
-**For local development**, copy the template and fill in your credentials:
+- **Locally**: copy [`src/local.settings.json.example`](src/local.settings.json.example) to `src/local.settings.json` and fill in your values.
+- **On Azure**: add the same variables as Application Settings (**Azure Portal → Function App → Configuration**).
 
-```bash
-cp src/local.settings.json.example src/local.settings.json
-```
+Platform OAuth credentials (Twitter/X, LinkedIn, Instagram) are **not** stored as environment variables. They are resolved at runtime by `KeyVaultService` directly from **Azure Key Vault**, using `DefaultAzureCredential` — which picks up your `az login` session locally and the Function App's Managed Identity in production.
 
-The example file documents every key inline. The variables are grouped into four areas:
-
-| Group | Keys |
-|---|---|
-| **Scheduling** | `CronSchedule`, `AzureWebJobsStorage`, `FUNCTIONS_WORKER_RUNTIME` |
-| **Twitter/X** | `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET` |
-| **LinkedIn** | `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_ORGANIZATION_ID` |
-| **Instagram** | `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` |
-| **AI Provider** | Varies by provider — see [Getting Started → Supported AI Providers](#supported-ai-providers) |
-
-**For Azure**, add the same variables as Application Settings (**Azure Portal → Function App → Configuration**). For production environments, [Azure Managed Identity](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview) is recommended over API keys.
-
-> 📖 Full reference with types, defaults, allowed values, and instructions on where to obtain each credential: **[docs/configuration.md](docs/configuration.md)**.
+> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
 ## Deployment
 
-Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/master_xposterfunction.yml`.
+Three deployment methods are supported. **GitHub Actions (Option 1) is recommended for production** — the repository ships with a ready-to-use workflow at `.github/workflows/ci.yml`.
 
 | Option | Best for |
 |---|---|
 | **1. GitHub Actions** | Production — automated CI/CD on every push to `master` |
 | **2. Azure CLI** | Scripted / IaC provisioning, staging environments |
-| **3. Visual Studio** | One-off deploys during early development |
+| **3. Visual Studio Code** | One-off deploys during early development |
+
+### Branching Strategy
+
+| Branch | Purpose |
+|---|---|
+| `develop` | Active development branch — all feature and fix work targets here |
+| `master` | Production branch — holds the deployable state currently running on Azure; the CI/CD workflow deploys on every push to `master` |
+
+Work is developed on `develop` (or short-lived feature branches off it) and promoted to `master` when ready for release. The GitHub Actions workflow is scoped to `master` and does not trigger on `develop` pushes.
 
 ### Quick Start: GitHub Actions
 
 1. Create a **Function App** in Azure Portal (Runtime: `.NET 8 Isolated`, Plan: Consumption)
-2. Download the **Publish Profile** (Function App → Overview → *Get publish profile*)
-3. Add it as a GitHub secret named `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+2. In Azure Portal, register an **App Registration** and configure federated credentials for GitHub Actions
+3. Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
+   - `AZUREAPPSERVICE_CLIENTID` — App Registration client ID
+   - `AZUREAPPSERVICE_TENANTID` — Azure tenant ID
+   - `AZUREAPPSERVICE_SUBSCRIPTIONID` — Azure subscription ID
 4. Push to `master` — the workflow triggers automatically
 
 > 📖 Full setup steps for all three options, post-deployment checklist, and Managed Identity configuration: **[docs/deployment.md](docs/deployment.md)**.
@@ -337,29 +346,28 @@ The execution frequency is configurable via the `CronSchedule` environment varia
 
 **Configuration**:
 
-
 ```json
-//local.settings.json
+// local.settings.json
 {
   "Values": {
-    "CronSchedule": "0 5 * * * *"
+    "CronSchedule": "0 0 6,8,14,16 * * *"
   }
 }
 ```
 
 ```bash
-//Azure CLI
-az functionapp config appsettings set
---name xposterfunction
---resource-group XPosterRG
---settings "CronSchedule=0 5 * * * *"
+# Azure CLI
+az functionapp config appsettings set \
+  --name xposterfunction \
+  --resource-group XPosterRG \
+  --settings "CronSchedule=0 0 6,8,14,16 * * *"
 ```
 
 ### Cron Expression Examples
 
 | Schedule | Cron Expression | Description |
 |----------|-----------------|-------------|
-| **Default** | `0 5 */2 * * *` | Every 2 hours at :05 |
+| **Default** | `0 0 6,8,14,16 * * *` | Production slots: 6, 8, 14, 16 UTC |
 | **Hourly** | `0 0 * * * *` | Every hour on the hour |
 | **Every 4 hours** | `0 0 */4 * * *` | Every 4 hours |
 | **Business Hours** | `0 0 9,12,15,18 * * 1-5` | 9, 12, 15, 18 (Mon-Fri) |
@@ -367,19 +375,42 @@ az functionapp config appsettings set
 | **Daily** | `0 0 9 * * *` | Every day at 9:00 |
 | **Quick Test** | `*/30 * * * * *` | Every 30 seconds (dev only) |
 
-### Time-based Strategy (GeneratorFactory)
+### Time-based Strategy (ISlotProfileProvider)
 
-Modify `GeneratorFactory.cs` to customize which generator to use at each hour:
+The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles:
 
-```csharp
-private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
+| UTC Hour | Sender | Orchestrator | AI Provider |
+|----------|--------|--------------|-------------|
+| 6 | `InSummaryFeed` | `FeedOrchestrator` | OpenAi |
+| 8 | `XSummaryFeed` | `FeedOrchestrator` | OpenAi |
+| 14 | `InPowerLaw` | `PowerLawOrchestrator` | *(default)* |
+| 16 | `XPowerLaw` | `PowerLawOrchestrator` | *(default)* |
+
+`OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
+
+### Dry-Run Testing (Local)
+
+To run the full pipeline locally without publishing to any social platform, activate the `DryRunSlotProfileProvider` via two environment variables — **no code changes required**:
+
+```json
+// local.settings.json
 {
-    new ScheduledGenerationProfile(6, MessageSender.InSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-    new ScheduledGenerationProfile(8, MessageSender.XSummaryFeed, typeof(FeedGenerator), AiProvider.OpenAi),
-    new ScheduledGenerationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawGenerator)),
-    new ScheduledGenerationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawGenerator)),
-};
+  "Values": {
+    "EnableDryRunSlot": "true",
+    "ForceHour": "9"
+  }
+}
 ```
+
+| Key | Value | Effect |
+|-----|-------|--------|
+| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRunSend` entry at hour 9 |
+| `ForceHour` | `9` | Overrides the UTC clock so `OrchestratorFactory` selects the dry-run slot at startup |
+
+`DryRunSender` will probe Key Vault connectivity (reads the `XApiKey` secret), log the generated post content (character count + full text and image presence), and return `true` — without calling any social platform API.
+
+> ⚠️ `EnableDryRunSlot` defaults to `false`. In production this key must be absent or explicitly set to `"false"`. Hour 9 is **never** part of the production schedule.
+
 ---
 
 ### Best Practices
@@ -387,7 +418,7 @@ private static readonly List<ScheduledGenerationProfile> slotProfiles = new()
 ✅ **Testing**: Use frequent schedules in development (`*/5 * * * * *` = every 5 secs)
 ✅ **Production**: More conservative schedules to avoid rate limiting
 ✅ **Multi-environment**: Different schedules for Dev/Staging/Prod
-✅ **Monitoring**: Check logs to confirm correct execution
+✅ **Monitoring**: Check logs to confirm execution
 
 ---
 
@@ -397,12 +428,13 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledGenerationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on generators or scheduling |
-| **Content Generators** (`BaseGenerator`) | Subclass `BaseGenerator`, override `GenerateAsync()`, register in `GeneratorFactory` | The Strategy pattern in `GeneratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
-| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All generators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
-| **Scheduling profiles** (`ScheduledGenerationProfile`) | Add or modify entries in `GeneratorFactory.slotProfiles` | Time slots are data, not code — operators can reconfigure the publishing schedule without touching business logic |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
+| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()`, register in `OrchestratorFactory` | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All orchestrators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
+| **Scheduling profiles** (`ISlotProfileProvider`) | Implement `ISlotProfileProvider` (or subclass `DryRunSlotProfileProvider` as a decorator) and register it in `Program.cs` | The schedule is a swappable dependency injected into `OrchestratorFactory` — operators can alter or extend the slot list without touching factory or orchestrator code |
 
 > 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
+
 ---
 
 ## Testing
@@ -415,31 +447,51 @@ tests/
 ├── XFunctionTests.cs
 ├── XFunctionMissingBranchTests.cs
 ├── Abstraction/
-│   └── BaseGeneratorTests.cs
+│   └── BaseOrchestratorTests.cs
+├── Helpers/
+│   └── ResilienceTestHelpers.cs
 ├── Implementation/
 │   ├── AiServiceFactoryTests.cs
-│   ├── FeedGeneratorTests.cs
-│   ├── GeneratorFactoryTests.cs
-│   ├── NoGeneratorTests.cs
-│   └── PowerLawGeneratorTests.cs
+│   ├── FeedOrchestratorTests.cs
+│   ├── OrchestratorFactoryTests.cs
+│   ├── NoOrchestratorTests.cs
+│   ├── PowerLawOrchestratorTests.cs
+│   └── SlotProfileProviderTests.cs
+├── Integration/
+│   ├── PollyIntegrationTestBase.cs
+│   ├── LinkedInResiliencePipelineTests.cs
+│   ├── InstagramResiliencePipelineTests.cs
+│   ├── AiClientsResiliencePipelineTests.cs
+│   └── CaptureLoggerProvider.cs
 ├── Models/
 │   ├── AzureFoundryOptionsValidatorTests.cs
+│   ├── DeepSeekOptionsTests.cs
+│   ├── DeepSeekOptionsValidatorTests.cs
+│   ├── FalAiOptionsValidatorTests.cs
 │   ├── ModelsTests.cs
 │   ├── OpenAiOptionsValidatorTests.cs
 │   ├── PostMissingBranchTests.cs
 │   └── RSSFeedMissingBranchTests.cs
 ├── SenderPlugins/
+│   ├── DryRunSenderTests.cs
+│   ├── IgSenderResilienceTests.cs
 │   ├── IgSenderTests.cs
 │   ├── InSenderMissingBranchTests.cs
+│   ├── InSenderResilienceTests.cs
 │   ├── InSenderSendAsyncTests.cs
 │   ├── InSenderTests.cs
 │   ├── XSenderMissingBranchTests.cs
 │   ├── XSenderSendAsyncTests.cs
 │   └── XSenderTests.cs
 └── Services/
+    ├── AiServiceHelperTests.cs
     ├── AzureFoundryServiceTests.cs
     ├── CryptoServiceTests.cs
+    ├── DeepSeekServiceTests.cs
+    ├── FalAiImageServiceTests.cs
     ├── FeedServiceTests.cs
+    ├── HybridAiServiceTests.cs
+    ├── KeyVaultServiceTests.cs
     ├── OpenAiServiceTests.cs
     └── TimeProviderTests.cs
 ```
@@ -447,11 +499,13 @@ tests/
 | Folder | What is covered |
 |---|---|
 | *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Abstraction/` | `BaseGenerator` abstract class contracts |
-| `Implementation/` | `FeedGenerator`, `PowerLawGenerator`, `NoGenerator`, `GeneratorFactory`, and `AiServiceFactory` resolution logic |
-| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, OpenAI and Azure Foundry options validators |
-| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch); `IgSender` (in-development coverage) |
-| `Services/` | `OpenAiService`, `AzureFoundryService`, `CryptoService`, `FeedService`, and `TimeProvider` unit tests |
+| `Abstraction/` | `BaseOrchestrator` abstract class contracts |
+| `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
+| `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `AiServiceFactory` resolution logic; `OrchestratorFactory` using synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` provider behaviour (`SlotProfileProviderTests.cs`) |
+| `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
+| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
+| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
+| `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
 
 ### Running Tests
 
@@ -460,10 +514,10 @@ tests/
 dotnet test
 
 # Specific tests
-dotnet test --filter "FullyQualifiedName~FeedGenerator"
+dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
 
-# With coverage
-dotnet test --collect:"XPlat Code Coverage"
+# With coverage (exclusions defined in coverlet.runsettings at repo root)
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 ```
 
 > 📖 Full testing strategy, mocking patterns, and coverage goals: [tests/README.md](tests/README.md).
@@ -472,15 +526,15 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ```csharp
 [Fact]
-public async Task FeedGenerator_ShouldGenerateSummary()
+public async Task FeedOrchestrator_ShouldGenerateSummary()
 {
     // Arrange
     var mockAiService = new Mock<IAiService>();
     mockAiService
         .Setup(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
         .ReturnsAsync("Test summary");
-    
-    var generator = new FeedGenerator(
+
+    var orchestrator = new FeedOrchestrator(
         mockSender.Object,
         mockLogger.Object,
         mockFeedService.Object,
@@ -488,7 +542,7 @@ public async Task FeedGenerator_ShouldGenerateSummary()
     );
 
     // Act
-    var result = await generator.GenerateAsync();
+    var result = await orchestrator.OrchestrateAsync();
 
     // Assert
     Assert.NotNull(result);
@@ -528,9 +582,9 @@ Key monitoring capabilities at a glance:
 ### 🚧 Phase 2: Stabilization (In Progress)
 - [x] Configuration externalization
 - [x] AI provider expansion
-- [ ] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [ ] Extension-point refactoring [see ADR-005](docs/architecture.md#adr-005--capability-based-extension-points-for-senders-generators-and-ai-providers)
-- [ ] Test coverage gate at 80%
+- [x] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
+- [ ] Extension-point refactoring — ADR-005 status: **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134)
+- [x] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI

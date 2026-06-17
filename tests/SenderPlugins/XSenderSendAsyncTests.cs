@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
+using XPoster.Abstraction;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 
@@ -18,11 +19,12 @@ public class XSenderSendAsyncTests
     public XSenderSendAsyncTests()
     {
         _mockLogger = new Mock<ILogger<XSender>>();
-        Environment.SetEnvironmentVariable("X_API_KEY", "fake_key");
-        Environment.SetEnvironmentVariable("X_API_SECRET", "fake_secret");
-        Environment.SetEnvironmentVariable("X_ACCESS_TOKEN", "fake_token");
-        Environment.SetEnvironmentVariable("X_ACCESS_TOKEN_SECRET", "fake_token_secret");
-        _sender = new XSender(_mockLogger.Object);
+        var kv = new Mock<IKeyVaultService>();
+        kv.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("fake_key");
+        kv.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("fake_secret");
+        kv.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("fake_token");
+        kv.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("fake_token_secret");
+        _sender = new XSender(kv.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -51,7 +53,6 @@ public class XSenderSendAsyncTests
     [Fact]
     public async Task SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()
     {
-        // Twitter API will throw because credentials are fake — the catch block returns false
         var post = new Post { Content = "Valid content" };
         var result = await _sender.SendAsync(post);
         Assert.False(result);

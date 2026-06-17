@@ -1,8 +1,10 @@
 # Configuration Reference
 
-All configuration is passed via environment variables — locally in `src/local.settings.json`, in production via Azure App Settings (or Key Vault references).
+All configuration is passed via environment variables — locally in `src/local.settings.json`, in production via Azure App Settings.
 
 The file [`src/local.settings.json.example`](../src/local.settings.json.example) is the canonical starting template: copy it to `src/local.settings.json`, fill in the empty strings, and the function is ready to run locally.
+
+> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **no longer configured via environment variables**. They are resolved at runtime by `KeyVaultService` directly from Azure Key Vault. See the [Key Vault](#key-vault) section below.
 
 ---
 
@@ -11,8 +13,7 @@ The file [`src/local.settings.json.example`](../src/local.settings.json.example)
 For a minimal local setup with the default provider (`OpenAi`) you need at minimum:
 
 - [ ] `AzureWebJobsStorage` — Azurite or a real Storage Account connection string
-- [ ] `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET`
-- [ ] `IN_ACCESS_TOKEN` + one of `IN_OWNER` / `IN_ORG_ID`
+- [ ] `KEYVAULT_URI` — URI of the Azure Key Vault instance holding all sender credentials
 - [ ] `OpenAI__ApiKey`
 - [ ] (Optional) `APPLICATIONINSIGHTS_CONNECTION_STRING` for local telemetry
 
@@ -20,6 +21,22 @@ For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block w
 
 - [ ] `DeepSeek__ApiKey`
 - [ ] `FalAi__ApiKey`
+
+> 💡 For local development, run `az login` before starting the function. `KeyVaultService` uses `DefaultAzureCredential`, which picks up your Azure CLI session automatically.
+
+### 🧪 Quick-Start: DryRunSender (no social API credentials needed)
+
+If you only want to verify the end-to-end pipeline locally **without publishing to any social platform**, you can use `DryRunSender`. This is the recommended first step for new contributors or when onboarding a new environment.
+
+- [ ] `AzureWebJobsStorage` — `UseDevelopmentStorage=true` (Azurite)
+- [ ] `KEYVAULT_URI` — Key Vault URI (needed for the connectivity probe)
+- [ ] `OpenAI__ApiKey` — required if `AiProvider = OpenAi` (default)
+- [ ] `az login` executed in the terminal before `func start`
+- [ ] `EnableDryRunSlot` set to `true` in `local.settings.json` (registers the dry-run slot via `DryRunSlotProfileProvider`)
+- [ ] `ForceHour` set to `9` in `local.settings.json` (routes execution to the dry-run slot regardless of wall-clock time)
+- [ ] **No** Twitter/X, LinkedIn, or Instagram secrets required
+
+> See the [DryRunSender — Local Testing](#dryrunsender--local-testing) section below for the full `local.settings.json` snippet and step-by-step instructions.
 
 ---
 
@@ -32,132 +49,83 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
   "IsEncrypted": false,
   "Values": {
 
-    // ── Azure Functions Runtime ──────────────────────────────────────────
+    // ── Azure Functions Runtime ─────────────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     // Use Azurite (local emulator) or a real Storage Account connection string.
-    // Production example: "DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net"
 
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     // Required by the .NET 8 isolated worker model. Do not change.
 
-    // ── Scheduler ────────────────────────────────────────────────────────
+    // ── Scheduler ────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
     // 6-field NCRONTAB expression: {second} {minute} {hour} {day} {month} {dayOfWeek}
     // Default fires at 06:00, 08:00, 14:00, 16:00 every day.
     // Use "*/30 * * * * *" for rapid testing (every 30 seconds, dev/test only).
 
-    // ── AI Provider Selector ─────────────────────────────────────────────
+    "ForceHour": "",
+    // When set, overrides the current UTC hour used by OrchestratorFactory.Resolve().
+    // Use "9" locally together with EnableDryRunSlot = true to route to the dry-run slot.
+    // Must NOT be set in production App Settings.
+
+    "EnableDryRunSlot": "false",
+    // When true, registers DryRunSlotProfileProvider (decorator over DefaultSlotProfileProvider)
+    // which appends a dry-run slot at hour 9. Use together with ForceHour = "9" for local testing.
+    // Must NOT be set to true in production App Settings.
+
+    // ── AI Provider Selector ────────────────────────────────────────
     "AiProvider": "OpenAi",
-    // Selects the IAiService implementation injected into AI-enabled generators.
+    // Selects the IAiService implementation injected into AI-enabled orchestrators.
     // Supported values: OpenAi | AzureFoundry | DeepSeekWithFal
-    // Only the configuration block that matches this value is required at runtime.
 
-    // ── Twitter / X ──────────────────────────────────────────────────────
-    "X_API_KEY": "",
-    // Twitter App Consumer Key. Obtain from developer.twitter.com > Your App > Keys and Tokens.
-    // The app must have Read and Write permissions.
+    // ── Key Vault ────────────────────────────────────────────
+    "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
+    // URI of the Azure Key Vault instance holding all sender OAuth credentials.
+    // Local dev: run `az login` — DefaultAzureCredential picks up your CLI session.
+    // Azure deployment: Managed Identity handles authentication automatically.
+    //
+    // Required secrets in Key Vault (exact casing enforced):
+    //   XApiKey               — X (Twitter) API key
+    //   XApiSecret            — X (Twitter) API secret
+    //   XAccessToken          — X (Twitter) access token
+    //   XAccessTokenSecret    — X (Twitter) access token secret
+    //   LinkedInAccessToken   — LinkedIn OAuth 2.0 Bearer token
+    //   LinkedInOwnerCode     — LinkedIn person/owner ID
+    //   LinkedInOrgId         — LinkedIn organization ID (optional; org posts)
+    //   IgAccessToken         — Instagram Graph API access token
+    //   IgAccountId           — Instagram account ID
+    //
+    // DryRunSender only probes XApiKey to verify Key Vault connectivity.
+    // No other secrets are required when using the dry-run slot.
 
-    "X_API_SECRET": "",
-    // Twitter App Consumer Secret (same location as above).
-
-    "X_ACCESS_TOKEN": "",
-    // User Access Token (OAuth 1.0a). Generated per-user from the developer portal.
-
-    "X_ACCESS_TOKEN_SECRET": "",
-    // User Access Token Secret (OAuth 1.0a).
-
-    // ── LinkedIn ─────────────────────────────────────────────────────────
-    "IN_ACCESS_TOKEN": "",
-    // LinkedIn OAuth 2.0 access token. Obtain from developer.linkedin.com > OAuth credentials.
-    // IMPORTANT: expires every 60 days — manual rotation is currently required.
-    // See Roadmap for the automated refresh milestone.
-
-    "IN_OWNER": "",
-    // Numeric LinkedIn person ID of the account that will author posts (e.g. "123456789").
-    // Resolve via: GET https://api.linkedin.com/v2/userinfo
-    // Posts are published as urn:li:person:{IN_OWNER}. Ignored when IN_ORG_ID is set.
-
-    "IN_ORG_ID": "",
-    // Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. "98765432").
-    // When set, takes precedence over IN_OWNER. Posts are published as urn:li:organization:{IN_ORG_ID}.
-    // Provide exactly ONE of IN_OWNER or IN_ORG_ID.
-
-    // ── Instagram (currently disabled — see issue #72) ────────────────────
-    "IG_ACCESS_TOKEN": "",
-    // Long-lived Instagram Graph API access token.
-    // These keys are read by IgSender but the slot is disabled in GeneratorFactory.
-
-    "IG_ACCOUNT_ID": "",
-    // Numeric Instagram Business Account ID used in Graph API calls.
-
-    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════
+    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════
     "OpenAI__ApiKey": "",
     // Required. OpenAI platform API key. Obtain from platform.openai.com > API Keys.
 
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
     // Chat Completions API URL. Override to point at an Azure OpenAI or other
-    // OpenAI-compatible endpoint (e.g. https://<resource>.openai.azure.com/...).
+    // OpenAI-compatible endpoint.
 
     "OpenAI__ChatModel": "gpt-4.1-nano",
-    // Model used for text summarisation and image prompt generation.
-
     "OpenAI__SummaryTemperature": "0.5",
-    // Temperature for summary generation (0.0–2.0). Lower = more deterministic.
-
     "OpenAI__SummaryMaxTokensPerChar": "5",
-    // Divisor to convert a character budget to max_tokens (budget ÷ value).
-
     "OpenAI__SummarySafetyMarginChars": "50",
-    // Character margin subtracted from the platform character limit before
-    // the {MaxChars} placeholder is passed to the prompt.
-
     "OpenAI__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    // System prompt for summarisation. Supports {MaxChars} placeholder.
-
     "OpenAI__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    // User prompt for summarisation. Supports {Text} placeholder.
-
     "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
-    // Image Generations API URL.
-
     "OpenAI__ImageModel": "gpt-image-1.5",
-    // Model used for image generation (e.g. "gpt-image-1.5", "dall-e-3").
-
     "OpenAI__ImageSize": "1024x1024",
-    // Output image dimensions. Supported values depend on the model
-    // (e.g. "1024x1024", "1792x1024", "1024x1792").
-
     "OpenAI__ImageCount": "1",
-    // Number of images to generate per request.
-
     "OpenAI__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    // System prompt for image-prompt generation. No placeholders.
-
     "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    // User prompt for image-prompt generation. Supports {Summary} placeholder.
-
     "OpenAI__ImagePromptMaxTokens": "60",
-    // Max tokens for image-prompt generation requests.
-
     "OpenAI__ImagePromptTemperature": "0.7",
-    // Temperature for image-prompt generation (0.0–2.0). Higher = more creative prompts.
 
-    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════
+    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════════════
     "AzureFoundry__Endpoint": "",
-    // Azure OpenAI resource endpoint, e.g. https://<resource>.openai.azure.com/
-
     "AzureFoundry__ApiKey": "",
-    // Azure OpenAI resource key (or leave empty to use Managed Identity).
-
     "AzureFoundry__DeploymentName": "",
-    // Chat deployment name as configured in Azure AI Foundry (e.g. "gpt-4o-mini").
-
     "AzureFoundry__ImageDeploymentName": "",
-    // Image generation deployment name (e.g. "dall-e-3").
-
     "AzureFoundry__ApiVersion": "2024-02-01",
-    // Azure OpenAI REST API version.
-
     "AzureFoundry__SummaryTemperature": "0.5",
     "AzureFoundry__SummaryMaxTokensPerChar": "5",
     "AzureFoundry__SummarySafetyMarginChars": "50",
@@ -167,18 +135,11 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
-    // Same semantics as OpenAI__ equivalents; see above for descriptions.
 
-    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ═════════
+    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ══════════════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
-    // DeepSeek API base URL. Keep the default unless using a custom proxy.
-
     "DeepSeek__ApiKey": "",
-    // DeepSeek API key. Obtain from platform.deepseek.com > API Keys.
-
     "DeepSeek__DeploymentName": "deepseek-chat",
-    // DeepSeek model name (e.g. "deepseek-chat", "deepseek-reasoner").
-
     "DeepSeek__SummaryTemperature": "0.5",
     "DeepSeek__SummaryMaxTokensPerChar": "5",
     "DeepSeek__SummarySafetyMarginChars": "50",
@@ -189,29 +150,16 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "DeepSeek__ImagePromptMaxTokens": "60",
     "DeepSeek__ImagePromptTemperature": "0.7",
 
-    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ══════════
+    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ═════════════════
     "FalAi__ApiKey": "",
-    // fal.ai API key. Obtain from fal.ai/dashboard > API Keys.
-
     "FalAi__ModelId": "fal-ai/flux/schnell",
-    // fal.ai model identifier.
-    // "fal-ai/flux/schnell" is optimised for speed (default).
-    // Use "fal-ai/flux-pro" for higher-quality output at increased cost.
-
     "FalAi__ImageSize": "landscape_4_3",
-    // Named size preset accepted by the fal.ai API.
-    // Supported: landscape_4_3 | square | portrait_4_3 | landscape_16_9
-
     "FalAi__NumInferenceSteps": "4",
-    // Number of diffusion inference steps. Lower = faster and cheaper; higher = better quality.
-    // Range: 1–50 (FLUX Schnell is tuned for 1–4 steps).
 
-    // ── Observability ─────────────────────────────────────────────────────
+    // ── Observability ────────────────────────────────────────────
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
     // Application Insights connection string.
     // When present, the isolated worker SDK automatically registers the telemetry pipeline.
-    // Format: "InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
-    // Leave empty to disable telemetry locally.
   }
 }
 ```
@@ -234,15 +182,19 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `CronSchedule` | string | ✅ Yes | `0 0 6,8,14,16 * * *` | 6-field NCRONTAB expression (`{second} {minute} {hour} {day} {month} {dayOfWeek}`) controlling execution frequency. |
+| `ForceHour` | string | No | — | When set, overrides the current UTC hour used by `OrchestratorFactory.Resolve()`. Intended for local development only — set to `"9"` together with `EnableDryRunSlot = true` to force the dry-run slot. **Must not be set in production.** |
+| `EnableDryRunSlot` | bool | No | `false` | When `true`, registers `DryRunSlotProfileProvider` as `ISlotProfileProvider`, which decorates `DefaultSlotProfileProvider` and appends a dry-run slot at hour 9. Use together with `ForceHour = "9"` for local pipeline testing. **Must not be `true` in production App Settings.** |
 
 **Common expressions:**
 
 | Expression | Fires at |
-|---|---|
+|---|-----------|
 | `0 0 6,8,14,16 * * *` | 06:00, 08:00, 14:00, 16:00 every day (default) |
 | `0 0 * * * *` | Every hour on the hour |
 | `0 0 9,12,15,18 * * 1-5` | 09:00, 12:00, 15:00, 18:00 Mon–Fri |
 | `*/30 * * * * *` | Every 30 seconds (dev/test only) |
+
+> ⚠️ **`EnableDryRunSlot` and `ForceHour` are local-only settings.** Neither must appear in a production `CronSchedule` or Azure App Settings. The dry-run slot is added exclusively through `DryRunSlotProfileProvider`, which is only registered when `EnableDryRunSlot = true`.
 
 ---
 
@@ -250,7 +202,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation injected into AI-enabled generators. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`. |
+| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation injected into AI-enabled orchestrators. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`. |
 
 | `AiProvider` value | Resolved service | Text backend | Image backend |
 |---|---|---|---|
@@ -262,39 +214,185 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 ---
 
-## Twitter / X
+## Key Vault
 
-Obtain all four values from [developer.twitter.com](https://developer.twitter.com) → **Your App** → **Keys and Tokens**. The app must have **Read and Write** permissions.
+All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are resolved at runtime by `KeyVaultService` (`IKeyVaultService`) directly from Azure Key Vault. They are **not** stored in environment variables or App Settings.
 
 | Variable | Type | Required | Description |
 |---|---|---|---|
-| `X_API_KEY` | string | ✅ Yes | Twitter App API Key (Consumer Key). |
-| `X_API_SECRET` | string | ✅ Yes | Twitter App API Secret (Consumer Secret). |
-| `X_ACCESS_TOKEN` | string | ✅ Yes | User Access Token (OAuth 1.0a). |
-| `X_ACCESS_TOKEN_SECRET` | string | ✅ Yes | User Access Token Secret (OAuth 1.0a). |
+| `KEYVAULT_URI` | string | ✅ Yes | Full URI of the Azure Key Vault instance, e.g. `https://<vault-name>.vault.azure.net/`. |
+
+### Authentication
+
+`KeyVaultService` uses `DefaultAzureCredential` from `Azure.Identity`, which resolves credentials in the following order:
+
+| Environment | Credential used |
+|---|---|
+| Local development | Azure CLI session (`az login`) |
+| Azure (production) | Function App Managed Identity (no secrets required) |
+
+For local development, ensure the identity used with `az login` has the **Key Vault Secrets User** role on the vault.
+
+### Required Secrets in Key Vault
+
+Secret names are case-sensitive. The following secrets must be present in the vault:
+
+> 🧪 **Using `DryRunSender`?** Only `XApiKey` is required in Key Vault — it is read as a connectivity probe to verify that your local `az login` session and Key Vault role assignment are working correctly. All other secrets listed below are **not** accessed during a dry run.
+
+#### Twitter / X
+
+| Secret name | Description |
+|---|---|
+| `XApiKey` | Twitter App API Key (Consumer Key). Obtain from [developer.twitter.com](https://developer.twitter.com) → Your App → Keys and Tokens. The app must have **Read and Write** permissions. Also used as Key Vault connectivity probe by `DryRunSender`. |
+| `XApiSecret` | Twitter App API Secret (Consumer Secret). |
+| `XAccessToken` | User Access Token (OAuth 1.0a). |
+| `XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
+
+#### LinkedIn
+
+| Secret name | Required | Description |
+|---|---|---|
+| `LinkedInAccessToken` | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from [LinkedIn Developer Portal](https://developer.linkedin.com) → OAuth credentials. **Expires every 60 days** — manual rotation is currently required. |
+| `LinkedInOwnerCode` | ⚠️ One of `LinkedInOwnerCode` / `LinkedInOrgId` | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Resolve via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{id}`. Ignored when `LinkedInOrgId` is set. |
+| `LinkedInOrgId` | ⚠️ One of `LinkedInOwnerCode` / `LinkedInOrgId` | Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. `98765432`). When set, takes precedence over `LinkedInOwnerCode`. Posts are published as `urn:li:organization:{id}`. |
+
+> ⚠️ LinkedIn token refresh is currently limited to organization accounts. Personal member accounts require manual renewal every 60 days. See the [Roadmap](../README.md#roadmap) for the automated refresh milestone.
+
+#### Instagram
+
+> ⚠️ Instagram publishing is **not yet active in production**. These secrets are read by `IgSender` but the slot is disabled in `OrchestratorFactory`. See issue [#72](https://github.com/artcava/XPoster/issues/72) for the full enablement checklist.
+
+| Secret name | Description |
+|---|---|
+| `IgAccessToken` | Long-lived Instagram Graph API access token. |
+| `IgAccountId` | Numeric Instagram Business Account ID used in Graph API calls. |
 
 ---
 
-## LinkedIn
+## DryRunSender — Local Testing
 
-| Variable | Type | Required | Description |
-|---|---|---|---|
-| `IN_ACCESS_TOKEN` | string | ✅ Yes | LinkedIn OAuth 2.0 access token. Obtain from [LinkedIn Developer Portal](https://developer.linkedin.com) → OAuth credentials. **Expires every 60 days** — manual rotation is currently required. |
-| `IN_OWNER` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn person ID of the account that will author posts (e.g. `123456789`). Resolve via `GET https://api.linkedin.com/v2/userinfo`. Posts are published as `urn:li:person:{IN_OWNER}`. Ignored when `IN_ORG_ID` is set. |
-| `IN_ORG_ID` | string | ⚠️ One of `IN_OWNER` / `IN_ORG_ID` | Numeric LinkedIn organization ID for publishing on behalf of a company page (e.g. `98765432`). When set, takes precedence over `IN_OWNER`. Posts are published as `urn:li:organization:{IN_ORG_ID}`. |
+`DryRunSender` is a no-op `ISender` implementation designed for local end-to-end pipeline verification. It runs the full orchestration pipeline — AI content generation, RSS feed fetch, image generation — but **never publishes to any social platform**. Instead, it logs the generated post payload and probes Key Vault connectivity.
 
-> ⚠️ LinkedIn token refresh is currently limited to organization accounts (`IN_ORG_ID`). Personal member accounts require manual renewal every 60 days. See the [Roadmap](../README.md#roadmap) for the automated refresh milestone.
+The dry-run slot is **not hardcoded** in `OrchestratorFactory`. It is appended by `DryRunSlotProfileProvider`, a decorator over `DefaultSlotProfileProvider` that is registered in `Program.cs` only when `EnableDryRunSlot = true` in app settings.
 
----
+### What DryRunSender does
 
-## Instagram
+| Step | Behaviour |
+|---|---|
+| Null guard | Returns `false` and logs `Warning` if the incoming `Post` is `null` |
+| Key Vault probe | Calls `GetSecretAsync("XApiKey")` to verify `az login` and Key Vault role assignment; returns `false` and logs `Error` on failure |
+| Content logging | Logs character count, full post text, and whether an image is present |
+| Return value | Returns `true` — no HTTP call to any social platform is made |
+| `MessageMaxLength` | `int.MaxValue` — no content truncation applied |
 
-> ⚠️ Instagram publishing is **not yet active in production**. These variables are read by `IgSender` but the slot is disabled in `GeneratorFactory`. See issue [#72](https://github.com/artcava/XPoster/issues/72) for the full enablement checklist.
+### How the dry-run slot is activated
 
-| Variable | Type | Required | Description |
-|---|---|---|---|
-| `IG_ACCESS_TOKEN` | string | ✅ Yes (when enabled) | Long-lived Instagram Graph API access token. |
-| `IG_ACCOUNT_ID` | string | ✅ Yes (when enabled) | Numeric Instagram Business Account ID used in Graph API calls. |
+The dry-run slot at hour 9 is registered exclusively via DI, not via a hardcoded schedule entry:
+
+```csharp
+// Program.cs (simplified)
+var enableDryRun = builder.Configuration.GetValue<bool>("EnableDryRunSlot", defaultValue: false);
+
+if (enableDryRun)
+    builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
+        new DryRunSlotProfileProvider(new DefaultSlotProfileProvider()));
+else
+    builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
+```
+
+- When `EnableDryRunSlot = false` (default, production), only the four canonical slots (06:00, 08:00, 14:00, 16:00) are active.
+- When `EnableDryRunSlot = true` (local only), the dry-run slot at hour 9 is appended. Use `ForceHour = "9"` to route any execution to it regardless of wall-clock time.
+
+### Minimal `local.settings.json` for dry-run
+
+The snippet below is the minimum configuration required to run a full dry-run pipeline execution locally. Only `XApiKey` needs to exist in Key Vault.
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "CronSchedule": "*/30 * * * * *",
+    "EnableDryRunSlot": "true",
+    "ForceHour": "9",
+    "AiProvider": "OpenAi",
+    "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
+    "OpenAI__ApiKey": "<your-openai-key>",
+    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
+    "OpenAI__ChatModel": "gpt-4.1-nano",
+    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
+    "OpenAI__ImageModel": "gpt-image-1.5",
+    "OpenAI__ImageSize": "1024x1024",
+    "OpenAI__ImageCount": "1"
+  }
+}
+```
+
+**Key points:**
+- `EnableDryRunSlot: "true"` registers `DryRunSlotProfileProvider`, which appends the dry-run slot at hour 9.
+- `ForceHour: "9"` routes every execution to that slot, regardless of wall-clock time.
+- `CronSchedule: "*/30 * * * * *"` triggers every 30 seconds so you can observe results quickly. Switch to a less aggressive schedule once verified.
+- No Twitter/X, LinkedIn, or Instagram secrets are needed in Key Vault — only `XApiKey` must exist for the connectivity probe.
+
+> ℹ️ `local.settings.json` is listed in `.gitignore` and is never committed to the repository. `EnableDryRunSlot` and `ForceHour` therefore carry no commit risk — they only need to be absent when copying values into `local.settings.json.example` or Azure App Settings.
+
+### Step-by-step dry-run setup
+
+1. **Authenticate with Azure CLI**
+   ```bash
+   az login
+   ```
+   Ensure the logged-in identity has the **Key Vault Secrets User** role on your vault.
+
+2. **Add `XApiKey` to Key Vault** (if not already present)
+   ```bash
+   az keyvault secret set \
+     --vault-name <your-keyvault-name> \
+     --name XApiKey \
+     --value "probe-value"
+   ```
+   The value itself is not used for publishing — any non-empty string is sufficient.
+
+3. **Start Azurite** (Azure Storage emulator)
+   ```bash
+   azurite --silent --location .azurite --debug .azurite/debug.log
+   ```
+
+4. **Copy and configure `local.settings.json`**
+   ```bash
+   cp src/local.settings.json.example src/local.settings.json
+   ```
+   Then set `EnableDryRunSlot` to `"true"`, `ForceHour` to `"9"`, and fill in `KEYVAULT_URI` and `OpenAI__ApiKey`.
+
+5. **Start the function**
+   ```bash
+   cd src && func start
+   ```
+
+6. **Observe the logs.** A successful dry run produces output similar to:
+   ```
+   [DryRunSender] Key Vault connectivity probe: OK (secret 'XApiKey' resolved)
+   [DryRunSender] Post content (743 chars): "Breaking: Bitcoin Power Law model signals..."
+   [DryRunSender] Image attached: True
+   [DryRunSender] Dry run complete — no post published.
+   ```
+
+7. **Cleanup** — `local.settings.json` is gitignored and never committed. When you are done testing, remove `EnableDryRunSlot` and `ForceHour` (or set them to empty strings) to restore normal slot resolution. Ensure neither key is copied into:
+   - `src/local.settings.json.example` (the committed template)
+   - Azure App Settings of any non-local environment
+
+### Switching AI provider for dry-run
+
+To test with `DeepSeekWithFal` instead of OpenAI, change `AiProvider` and replace the OpenAI keys:
+
+```json
+"AiProvider": "DeepSeekWithFal",
+"DeepSeek__ApiKey": "<your-deepseek-key>",
+"FalAi__ApiKey": "<your-falai-key>"
+```
+
+All other dry-run settings (`EnableDryRunSlot`, `ForceHour`, `KEYVAULT_URI`, etc.) remain the same.
 
 ---
 
@@ -420,16 +518,9 @@ Configuration bound from the `AzureFoundry` prefix using double-underscore notat
 
 - Never commit `local.settings.json` — it is listed in `.gitignore`.
 - Use [`src/local.settings.json.example`](../src/local.settings.json.example) as the starting template; it contains no real secrets.
+- Sender credentials live exclusively in Azure Key Vault and are never stored as environment variables or App Settings, in any environment.
 - For CI/CD, store secrets as **GitHub Actions Secrets**; never embed them in workflow YAML files.
-- In production, consider using **Azure Key Vault references** in App Settings to avoid storing secrets as plain-text values in the portal.
-
----
-
-## Future / Planned
-
-The following keys are reserved for future features and are not read by any code in the current version.
-
-| Key | Notes |
-|---|---|
-| `LINKEDIN_CLIENT_ID` / `LINKEDIN_CLIENT_SECRET` | Required for automated LinkedIn token refresh (OAuth 2.0 PKCE flow — planned). |
-| `KEYVAULT_URI` | Azure Key Vault integration for secrets management (planned). |
+- In production, the Function App Managed Identity must be granted the **Key Vault Secrets User** role on the vault — no manual credential management is required.
+- `EnableDryRunSlot` must never be `true` in production App Settings. Its presence would cause `DryRunSlotProfileProvider` to be registered, adding an unintended slot to the production schedule.
+- `ForceHour` must never be set in production App Settings. Its presence in a production environment would cause every execution to resolve to the wrong orchestration slot.
+- Neither `EnableDryRunSlot` nor `ForceHour` must appear in `src/local.settings.json.example` — the committed template must never carry development-only overrides.

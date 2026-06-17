@@ -6,17 +6,61 @@
     "CronSchedule": "0 0 6,8,14,16 * * *",
     "AiProvider": "OpenAi",
 
-    "X_API_KEY": "",
-    "X_API_SECRET": "",
-    "X_ACCESS_TOKEN": "",
-    "X_ACCESS_TOKEN_SECRET": "",
+    // -----------------------------------------------------------------------
+    // Local development slot override.
+    // Set to a UTC hour (0-23) matching an entry in DefaultSlotProfileProvider
+    // to force that orchestrator slot without waiting for the real clock.
+    // Examples:
+    //   "ForceHour": "6"   → InSummaryFeed / FeedOrchestrator
+    //   "ForceHour": "8"   → XSummaryFeed  / FeedOrchestrator
+    //   "ForceHour": "14"  → InPowerLaw    / PowerLawOrchestrator
+    //   "ForceHour": "16"  → XPowerLaw     / PowerLawOrchestrator
+    // Remove or leave empty to use the real UTC clock (production behaviour).
+    // -----------------------------------------------------------------------
+    "ForceHour": "",
 
-    "IN_ACCESS_TOKEN": "",
-    "IN_OWNER": "",
-    "IN_ORG_ID": "",
+    // -----------------------------------------------------------------------
+    // Dry-run testing (local integration testing without social platform publishing).
+    //
+    // To test the full pipeline — including Key Vault connectivity and AI provider
+    // output — without posting to X/Twitter, LinkedIn, or Instagram:
+    //
+    //   1. Set "EnableDryRunSlot": "true"  → registers DryRunSlotProfileProvider,
+    //      which appends a DryRunSend entry at hour 9 to the production schedule.
+    //   2. Set "ForceHour": "9"            → forces the clock to hour 9 so the
+    //      dry-run slot is selected at startup.
+    //   3. Set "AiProvider" to the provider under test: "OpenAi", "AzureFoundry",
+    //      or "DeepSeekWithFal".
+    //   4. Ensure KEYVAULT_URI is set and `az login` has been run.
+    //   5. Run the function — orchestration executes normally but no post is published.
+    //
+    // The DryRunSender will:
+    //   - Probe Key Vault by reading the "XApiKey" secret (verifies connectivity)
+    //   - Log the post content (character count + full text) and image presence
+    //   - Return true without calling any social platform API
+    //
+    // NOTE: EnableDryRunSlot defaults to false. In production this key must be
+    // absent or set to "false" — no code changes or comments required.
+    // -----------------------------------------------------------------------
+    "EnableDryRunSlot": "false",
 
-    "IG_ACCESS_TOKEN": "",
-    "IG_ACCOUNT_ID": "",
+    // -----------------------------------------------------------------------
+    // Key Vault — all sender credentials are now read from Azure Key Vault.
+    // Local development: run `az login` and set KEYVAULT_URI to the vault URI.
+    // Azure deployment: Managed Identity handles authentication automatically.
+    //
+    // Required secrets in Key Vault (exact casing enforced):
+    //   LinkedInAccessToken   — LinkedIn Bearer token
+    //   LinkedInOwnerCode     — LinkedIn person/owner ID
+    //   LinkedInOrgId         — LinkedIn organization ID (optional; org posts)
+    //   XApiKey               — X (Twitter) API key
+    //   XApiSecret            — X (Twitter) API secret
+    //   XAccessToken          — X (Twitter) access token
+    //   XAccessTokenSecret    — X (Twitter) access token secret
+    //   IgAccessToken         — Instagram Graph API access token
+    //   IgAccountId           — Instagram account ID
+    // -----------------------------------------------------------------------
+    "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",

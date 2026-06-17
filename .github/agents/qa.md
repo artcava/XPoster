@@ -15,7 +15,7 @@ XPoster is a .NET 8 Azure Functions v4 application using the isolated worker mod
 - Mocking library: Moq
 - Main validation targets:
   - function orchestration
-  - generator selection and scheduling
+  - orchestrator selection and scheduling
   - content generation behavior
   - sender plugin behavior
   - service behavior for external APIs
@@ -27,14 +27,14 @@ XPoster is a .NET 8 Azure Functions v4 application using the isolated worker mod
 - Verify failures are logged and surfaced as intended.
 - Verify disabled or no-op generator behavior is handled correctly.
 
-2. GeneratorFactory schedule mapping
-- Verify the correct generator/sender combination is selected for configured time slots.
+2. OrchestratorFactory schedule mapping
+- Verify the correct orchestrator/sender combination is selected for configured time slots.
 - Verify unmapped slots resolve safely.
 
-3. Generator behavior
-- Verify generation success and failure paths.
-- Verify null or invalid generation results are handled correctly.
-- Verify generator behavior stays independent from sender implementation details.
+3. Orchestrator behavior
+- Verify orchestrator success and failure paths.
+- Verify null or invalid orchestrator results are handled correctly.
+- Verify orchestrator behavior stays independent from sender implementation details.
 
 4. Sender plugin behavior
 - Verify platform-specific success/failure handling.

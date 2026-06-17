@@ -8,9 +8,9 @@ This guide walks you through cloning, configuring, and running XPoster locally f
 |---|---|---|
 | .NET SDK | 8.0+ | [Download](https://dotnet.microsoft.com/download/dotnet/8.0) |
 | Azure Functions Core Tools | v4 | [Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local) |
-| Visual Studio / VS Code | Latest | — |
+| Visual Studio Code | Latest | [Download](https://code.visualstudio.com/download) |
 | Azure Account | Active subscription | [Sign up](https://azure.microsoft.com/free/) |
-| Azure OpenAI Service | GPT-4 + DALL-E 3 deployments | [Docs](https://learn.microsoft.com/azure/cognitive-services/openai/) |
+| Azure OpenAI Service | Some model deployments | [Docs](https://learn.microsoft.com/azure/cognitive-services/openai/) |
 
 ## 1. Clone the Repository
 

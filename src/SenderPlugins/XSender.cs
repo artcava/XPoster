@@ -7,34 +7,25 @@ namespace XPoster.SenderPlugins;
 
 /// <summary>
 /// Publishes posts to X (Twitter) using the LinqToTwitter library with OAuth 1.0a single-user authentication.
-/// Credentials are read from environment variables at construction time.
+/// Credentials are read from Azure Key Vault on every <see cref="SendAsync"/> call:
+/// <c>XApiKey</c>, <c>XApiSecret</c>, <c>XAccessToken</c>, <c>XAccessTokenSecret</c>.
+/// A <see cref="TwitterContext"/> is rebuilt per invocation to reflect any mid-cycle credential rotation.
 /// </summary>
 public class XSender : ISender
 {
-    private readonly TwitterContext _twitterContext;
+    private readonly IKeyVaultService _keyVaultService;
     private readonly ILogger<XSender> _logger;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="XSender"/>, configuring OAuth credentials
-    /// from the <c>X_API_KEY</c>, <c>X_API_SECRET</c>, <c>X_ACCESS_TOKEN</c>,
-    /// and <c>X_ACCESS_TOKEN_SECRET</c> environment variables.
+    /// Initialises a new instance of <see cref="XSender"/>.
     /// </summary>
+    /// <param name="keyVaultService">The Key Vault service used to retrieve credentials at runtime.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <c>null</c>.</exception>
-    public XSender(ILogger<XSender> logger)
+    /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
+    public XSender(IKeyVaultService keyVaultService, ILogger<XSender> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException("logger");
-        var auth = new SingleUserAuthorizer
-        {
-            CredentialStore = new SingleUserInMemoryCredentialStore
-            {
-                ConsumerKey = Environment.GetEnvironmentVariable("X_API_KEY"),
-                ConsumerSecret = Environment.GetEnvironmentVariable("X_API_SECRET"),
-                AccessToken = Environment.GetEnvironmentVariable("X_ACCESS_TOKEN"),
-                AccessTokenSecret = Environment.GetEnvironmentVariable("X_ACCESS_TOKEN_SECRET")
-            }
-        };
-        _twitterContext = new TwitterContext(auth);
+        _keyVaultService = keyVaultService ?? throw new ArgumentNullException(nameof(keyVaultService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>Gets the maximum number of characters allowed per tweet (250, leaving room for the firm footer).</summary>
@@ -43,6 +34,7 @@ public class XSender : ISender
     /// <summary>
     /// Publishes <paramref name="post"/> as a tweet. If an image is attached, it is uploaded
     /// first and the tweet is created with the resulting media ID.
+    /// Credentials are read fresh from Key Vault at the start of each call.
     /// </summary>
     /// <param name="post">The post to publish. Must not be <c>null</c> and must have non-empty content.</param>
     /// <returns><c>true</c> if the tweet was published successfully; otherwise <c>false</c>.</returns>
@@ -62,16 +54,33 @@ public class XSender : ISender
 
         try
         {
+            var apiKey = await _keyVaultService.GetSecretAsync("XApiKey");
+            var apiSecret = await _keyVaultService.GetSecretAsync("XApiSecret");
+            var accessToken = await _keyVaultService.GetSecretAsync("XAccessToken");
+            var accessTokenSecret = await _keyVaultService.GetSecretAsync("XAccessTokenSecret");
+
+            var auth = new SingleUserAuthorizer
+            {
+                CredentialStore = new SingleUserInMemoryCredentialStore
+                {
+                    ConsumerKey = apiKey,
+                    ConsumerSecret = apiSecret,
+                    AccessToken = accessToken,
+                    AccessTokenSecret = accessTokenSecret
+                }
+            };
+            using var twitterContext = new TwitterContext(auth);
+
             var postText = post.Content + Post.Firm;
             var tweetId = string.Empty;
 
             if (post.Image != null && post.Image.Length > 0)
             {
-                var media = await _twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image");
+                var media = await twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image");
 
                 if (media == null) throw new Exception("Error uploading media");
 
-                var imageTweet = await _twitterContext.TweetMediaAsync(
+                var imageTweet = await twitterContext.TweetMediaAsync(
                     text: postText,
                     mediaIds: new List<string> { media.MediaID.ToString() }
                 );
@@ -81,7 +90,7 @@ public class XSender : ISender
             }
             else
             {
-                var tweet = await _twitterContext.TweetAsync(postText);
+                var tweet = await twitterContext.TweetAsync(postText);
 
                 if (tweet == null) throw new Exception("Error tweeting");
 

@@ -19,4 +19,6 @@ public enum MessageSender
     InSummaryFeed,
     /// <summary>Posts a news feed summary to Instagram.</summary>
     IgSummaryFeed,
+    /// <summary>Dry-run sender for local integration testing. Logs post output without publishing.</summary>
+    DryRunSend,
 }
