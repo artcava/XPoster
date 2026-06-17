@@ -5,7 +5,7 @@ namespace XPoster.Models;
 /// </summary>
 public sealed class AzureFoundryOptions
 {
-    /// <summary>Gets or sets the Foundry endpoint base URL (for example, <c>https://resource-name.openai.azure.com</c>).</summary>
+    /// <summary>Gets or sets the Foundry endpoint base URL (for example, <c>https://resource-name.services.ai.azure.com/openai/v1</c>).</summary>
     public string Endpoint { get; set; } = string.Empty;
 
     /// <summary>Gets or sets the API key used for Foundry authentication.</summary>
@@ -16,9 +16,6 @@ public sealed class AzureFoundryOptions
 
     /// <summary>Gets or sets the image generation deployment name.</summary>
     public string ImageDeploymentName { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the REST API version.</summary>
-    public string ApiVersion { get; set; } = "2024-02-01";
 
     /// <summary>Gets or sets the temperature used for summary generation.</summary>
     public double SummaryTemperature { get; set; } = 0.5;
