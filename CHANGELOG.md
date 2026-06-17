@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.1.3] - 2026-06-17
+
 ### Added
 - **`DryRunSender`** (`src/SenderPlugins/DryRunSender.cs`) ([#174](https://github.com/artcava/XPoster/issues/174)): no-op `ISender` implementation for local end-to-end testing; probes Key Vault connectivity via `GetSecretAsync("XApiKey")` and logs the full post content (character count, text, image presence) without making any outbound social API call; `MessageMaxLenght` returns `int.MaxValue`; activated at hour 9 only when `EnableDryRunSlot = true` via `DryRunSlotProfileProvider` — must never be enabled in production.
 - **`ISlotProfileProvider`** (`src/Abstraction/ISlotProfileProvider.cs`): interface exposing `GetProfiles()` returning `IReadOnlyList<ScheduledOrchestrationProfile>`; decouples schedule ownership from `OrchestratorFactory` and enables conditional DI composition of schedule profiles.
@@ -73,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`AiServiceHelperTests`** ([#158](https://github.com/artcava/XPoster/issues/158)): covers `ParseChatCompletionResponseAsync` in isolation — 429, non-2xx `[Theory]`, `choices: null`, `choices: []`, missing `required` property, happy path, whitespace-only content.
 - **`OpenAiServiceTests`** — added G2–G4, G7–G8 for `GenerateImageAsync`: malformed JSON, empty `data` array, null `b64_json`, empty/whitespace prompt ([#158](https://github.com/artcava/XPoster/issues/158), [#139](https://github.com/artcava/XPoster/issues/139)).
 - **`AzureFoundryServiceTests`** — added G2–G8 for `GenerateImageAsync`: malformed JSON, empty `data` array, null `b64_json`, `url` fallback, cross-origin `url` warning, empty/whitespace prompt ([#158](https://github.com/artcava/XPoster/issues/158), [#139](https://github.com/artcava/XPoster/issues/139)).
+
 ---
 
 ## [0.1.2] - 2026-06-11
@@ -158,7 +163,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/artcava/XPoster/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/artcava/XPoster/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/artcava/XPoster/releases/tag/v0.1.0
