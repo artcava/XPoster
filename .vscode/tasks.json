@@ -1,0 +1,95 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Starts the Azurite local storage emulator.
+      // Required before the Azure Functions host can start.
+      "label": "azurite: start",
+      "type": "shell",
+      "command": "azurite",
+      "args": [
+        "--silent",
+        "--location",
+        "${workspaceFolder}/.azurite",
+        "--debug",
+        "${workspaceFolder}/.azurite/debug.log"
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": [
+          {
+            "regexp": ".",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Azurite",
+          "endsPattern": "Azurite Blob service is successfully listening"
+        }
+      },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "group": "infrastructure"
+      }
+    },
+    {
+      // Builds the Azure Functions project in the src/ folder.
+      "label": "build: src",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src",
+        "--configuration",
+        "Debug",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "type": "process",
+      "group": "build",
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "group": "infrastructure"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      // Starts the Azure Functions host.
+      // Depends on Azurite being ready and the project being built.
+      "label": "func: start",
+      "type": "shell",
+      "command": "func",
+      "args": ["start", "--dotnet-isolated-debug"],
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": [
+          {
+            "regexp": ".",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Azure Functions Core Tools",
+          "endsPattern": "Host started"
+        }
+      },
+      "dependsOn": ["azurite: start", "build: src"],
+      "dependsOrder": "sequence",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infrastructure"
+      }
+    }
+  ]
+}
