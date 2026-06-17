@@ -139,7 +139,7 @@ public class OrchestratorFactory : IOrchestratorFactory
         // Dry-run slot: set ForceHour=9 and AiProvider=<desired> in local.settings.json to test
         // end-to-end orchestration without publishing to any social platform.
         // This slot must never appear in a production schedule without being commented out.
-        new ScheduledOrchestrationProfile(9, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi),
+        // new ScheduledOrchestrationProfile(9, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi),
         new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator)),
         new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw, typeof(PowerLawOrchestrator)),
         //new ScheduledOrchestrationProfile(18, MessageSender.IgPowerLaw, typeof(PowerLawOrchestrator)),
