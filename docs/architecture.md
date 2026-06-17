@@ -30,7 +30,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ScheduledOrchestrationProfile list) │
+│   (ISlotProfileProvider)   │ ◄─── Injected schedule profiles
 └───────────┬────────────────┘
             │
     ┌───────┴────────┬──────────────┐
@@ -79,7 +79,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 ### OrchestratorFactory — Strategy Selector
 
-`OrchestratorFactory` maps the current hour of day to a `ScheduledOrchestrationProfile` drawn from a statically declared `List<ScheduledOrchestrationProfile>`. Each profile carries four fields:
+`OrchestratorFactory` maps the current hour of day to a `ScheduledOrchestrationProfile` supplied by an injected `ISlotProfileProvider`. Each profile carries four fields:
 
 | Field | Type | Purpose |
 |---|---|---|
@@ -88,7 +88,9 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 | `OrchestratorType` | `Type` | The concrete `BaseOrchestrator` subclass to instantiate |
 | `AiProvider?` | `AiProvider?` | Optional AI provider for slots that require AI services |
 
-At runtime, the factory calls `Resolve()` to match the current hour to a profile, independently resolves the **sender** (via the DI container) and the **AI service** (via `IAiServiceFactory.GetByProvider()`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes. This component is the **single point of variation** for scheduling: changing what gets posted at any hour means editing one entry in the profile list.
+At runtime, the factory calls `Resolve()` to match the current hour to a profile returned by `ISlotProfileProvider.GetProfiles()`, independently resolves the **sender** (via the DI container) and the **AI service** (via `IAiServiceFactory.GetByProvider()`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes.
+
+The **schedule itself is a dependency**, not a compile-time constant. In production, `DefaultSlotProfileProvider` supplies the four canonical slots (06:00, 08:00, 14:00, 16:00). For local dry-run testing, `DryRunSlotProfileProvider` decorates `DefaultSlotProfileProvider` and appends the dry-run slot at hour 9; it is activated by setting `EnableDryRunSlot = true` in app settings and registered in `Program.cs` via conditional DI. This means adding or switching the dry-run slot requires no changes to `OrchestratorFactory`.
 
 The factory enforces the invariant that every unscheduled hour resolves to `NoOrchestrator`, so `XFunction` never receives a null orchestrator.
 
@@ -97,8 +99,8 @@ The factory enforces the invariant that every unscheduled hour resolves to `NoOr
 Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**:
 
 - **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a text summary, and requests a generated image. The specific model used is determined by the resolved `IAiService` implementation. It is stateless and side-effect-free until it hands off the `Post`.
-- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model’s fair-value estimate. It has no dependency on `AiService`.
-- **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent “no posting” without null-checks in `XFunction`.
+- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on `AiService`.
+- **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.
 
 ### Services Layer — Shared Infrastructure
 
@@ -108,7 +110,7 @@ Services are registered as singletons or transients in the DI container and are 
 - **AiServiceHelper**: a shared utility class used internally by AI service implementations (`DeepSeekService`, `FalAiImageService`, and others). It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
-- **KeyVaultService** (`IKeyVaultService`): wraps `Azure.Security.KeyVault.Secrets` to retrieve OAuth tokens and API secrets from Azure Key Vault at runtime. Used by `XSender`, `InSender`, and `DryRunSender` to resolve platform credentials without storing secrets in application settings. Uses `DefaultAzureCredential`, so it transparently leverages the Function App’s Managed Identity in production.
+- **KeyVaultService** (`IKeyVaultService`): wraps `Azure.Security.KeyVault.Secrets` to retrieve OAuth tokens and API secrets from Azure Key Vault at runtime. Used by `XSender`, `InSender`, and `DryRunSender` to resolve platform credentials without storing secrets in application settings. Uses `DefaultAzureCredential`, so it transparently leverages the Function App's Managed Identity in production.
 
 **AI Provider Services** (consumed via `IAiService` abstraction):
 - **OpenAiService**: bridges `Microsoft.Extensions.AI` to the OpenAI / Azure OpenAI endpoint for both text and image generation.
@@ -130,7 +132,7 @@ Senders that require OAuth tokens not available in plain application settings (`
 | `XSender` | `XSummaryFeed`, `XPowerLaw` | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; resolves tokens from Key Vault |
 | `InSender` | `InSummaryFeed`, `InPowerLaw` | LinkedIn API | Direct HTTP via `IHttpClientFactory`; resolves token from Key Vault |
 | `IgSender` | *(in development)* | Instagram Graph API | Direct HTTP via `IHttpClientFactory` |
-| `DryRunSender` | `DryRunSend` | **None** | **Local development and testing only.** Logs post content (character count, full text, image presence) and probes Key Vault connectivity (`XApiKey`), but makes **no outbound social API calls**. Always returns `true` on a well-formed post. `MessageMaxLength` is `int.MaxValue`. Must never be used in a production `CronSchedule`. |
+| `DryRunSender` | `DryRunSend` | **None** | **Local development and testing only.** Logs post content (character count, full text, image presence) and probes Key Vault connectivity (`XApiKey`), but makes **no outbound social API calls**. Always returns `true` on a well-formed post. `MessageMaxLength` is `int.MaxValue`. Activated via `EnableDryRunSlot = true` in app settings; must never be used in a production environment. |
 
 ---
 
@@ -146,17 +148,17 @@ Senders that require OAuth tokens not available in plain application settings (`
 
 ### Factory Pattern — Time-based Orchestrator Selection
 
-**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, IAiService)` triples. Its `Resolve()` method reads the current UTC hour, looks up the matching `ScheduledOrchestrationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
+**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, IAiService)` triples. Its `Resolve()` method reads the current UTC hour, calls `ISlotProfileProvider.GetProfiles()` to obtain the active schedule, looks up the matching `ScheduledOrchestrationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
 
-**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, MessageSender>` to a typed `ScheduledOrchestrationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
+**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, MessageSender>` to a typed `ScheduledOrchestrationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation using a mock `ISlotProfileProvider` with synthetic profiles, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
 
-**Trade-off**: The current implementation uses a compile-time list, so schedule changes require a code deployment. A future improvement would be externalising the schedule to Azure App Configuration, but this adds operational complexity not yet warranted.
+**Trade-off**: The schedule is now an injected dependency (`ISlotProfileProvider`), which means schedule changes — including adding or removing the dry-run slot — are controlled entirely via DI registration and app settings, with no changes required to `OrchestratorFactory` itself. Adding a fully externalised schedule (e.g. from Azure App Configuration) would only require a new `ISlotProfileProvider` implementation registered in `Program.cs`.
 
 ### Plugin Pattern — Sender Architecture
 
 **What**: Platform senders implement a common `ISender` interface and are registered in the DI container as concrete types. `OrchestratorFactory` resolves the appropriate sender from the DI container by matching the `MessageSender` enum value in the profile.
 
-**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new enum value, and a profile entry. This directly supports the Roadmap’s expansion goals (Threads, Mastodon, BlueSky, etc.).
+**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new enum value, and a profile entry. This directly supports the Roadmap's expansion goals (Threads, Mastodon, BlueSky, etc.).
 
 **Extensibility contract**: Any sender must:
 1. Implement `ISender`
@@ -197,13 +199,13 @@ XPoster exposes three well-defined extension points. Each maps to a distinct abs
 
 A sender encapsulates everything needed to publish a `Post` to a specific social platform: authentication, payload serialisation, and error handling. The `ISender` interface is intentionally minimal — it receives a fully-formed post and returns a boolean outcome — so platform-specific complexity is completely isolated from the rest of the pipeline.
 
-Adding a new platform has no impact on existing senders, orchestrators, or the factory. The only touch points are a new implementing class, a DI registration, a new `MessageSender` enum value, and one entry in the scheduling profile list. This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
+Adding a new platform has no impact on existing senders, orchestrators, or the factory. The only touch points are a new implementing class, a DI registration, a new `MessageSender` enum value, and one entry in the scheduling profile (either in `DefaultSlotProfileProvider` for production slots, or in a custom `ISlotProfileProvider` decorator for environment-specific slots). This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
 
 ### Content Orchestrators
 
 An orchestrator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting `Post` takes. Each orchestrator extends `BaseOrchestrator` and is selected at runtime based on the current time slot via `OrchestratorFactory.Resolve()`, so different algorithms can run at different hours without any conditional logic in `XFunction`.
 
-Because orchestrators receive their dependencies (sender, AI service, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically, so no change to `OrchestratorFactory` is required beyond adding a scheduling profile entry.
+Because orchestrators receive their dependencies (sender, AI service, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically; the only required change is adding a `ScheduledOrchestrationProfile` entry to the appropriate `ISlotProfileProvider` implementation — no changes to `OrchestratorFactory` itself.
 
 ### AI Providers
 
@@ -222,6 +224,7 @@ sequenceDiagram
     participant Timer as Azure Timer Trigger
     participant Fn as XFunction
     participant Factory as OrchestratorFactory
+    participant ProfileProvider as ISlotProfileProvider
     participant AiFactory as AiServiceFactory
     participant Orch as BaseOrchestrator<br/>(Feed / PowerLaw)
     participant AI as IAiService<br/>(resolved by AiProvider)
@@ -234,6 +237,8 @@ sequenceDiagram
 
     Timer->>Fn: Trigger (cron schedule)
     Fn->>Factory: Resolve()
+    Factory->>ProfileProvider: GetProfiles()
+    ProfileProvider-->>Factory: List<ScheduledOrchestrationProfile>
     Factory->>Factory: Match currentHour → ScheduledOrchestrationProfile
     Factory->>Factory: Resolve ISender from DI (by SenderType)
     Factory->>AiFactory: GetByProvider(profile.AiProvider)
@@ -252,32 +257,24 @@ sequenceDiagram
         AI-->>Orch: image bytes
     else PowerLawOrchestrator
         Orch->>Crypto: GetPriceAsync(symbol)
-        Crypto-->>Orch: current BTC price (decimal)
-        Orch->>Orch: Compute fair value (10⁻¹⁷ × days^5.83)
+        Crypto-->>Orch: current price
+        Orch->>Orch: Compute Power Law fair value
     end
 
-    Orch-->>Fn: Post { Content, ImageUrl }
+    Orch-->>Fn: Post
 
-    alt Post is null (NoOrchestrator or empty result)
-        Fn->>Fn: Log skip, exit
-    else Sender is DryRunSender (local testing only)
+    alt Production sender (X / LinkedIn / Instagram)
+        Fn->>Sender: SendAsync(post)
+        Sender->>KV: GetSecretAsync(credentialName)
+        KV-->>Sender: secret value
+        Sender->>Platform: Publish post (platform API)
+        Platform-->>Sender: success / error
+        Sender-->>Fn: bool result
+    else DryRunSender (local only, EnableDryRunSlot = true)
         Fn->>DryRun: SendAsync(post)
         DryRun->>KV: GetSecretAsync("XApiKey") [connectivity probe]
-        KV-->>DryRun: secret value (or exception)
-        DryRun->>DryRun: Log character count, content, image presence
-        DryRun-->>Fn: true (no outbound API call made)
-        Fn->>Fn: Log result to App Insights
-    else Post is valid (production sender)
-        Fn->>Sender: SendAsync(post)
-        Sender->>KV: ResolveSecretAsync(key)
-        KV-->>Sender: OAuth token / API secret
-        Sender->>Platform: HTTP API call
-        Platform-->>Sender: 200 OK / error
-        Sender-->>Fn: true / false
-        Fn->>Fn: Log result to App Insights
+        KV-->>DryRun: secret value
+        DryRun->>DryRun: Log post content (no outbound call)
+        DryRun-->>Fn: true
     end
 ```
-
----
-
-*Document maintained by [@artcava](https://github.com/artcava) — open an issue to propose changes.*
