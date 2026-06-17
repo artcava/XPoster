@@ -63,7 +63,10 @@ public class AzureFoundryServiceTests
         handler.Protected().Verify(
             "SendAsync",
             Times.Once(),
-            ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Post && r.RequestUri!.AbsolutePath.Contains("/chat/completions", StringComparison.Ordinal)),
+            ItExpr.Is<HttpRequestMessage>(r =>
+                r.Method == HttpMethod.Post &&
+                r.RequestUri!.AbsolutePath.EndsWith("/chat/completions", StringComparison.Ordinal) &&
+                !r.RequestUri.AbsolutePath.Contains("/openai/deployments/", StringComparison.Ordinal)),
             ItExpr.IsAny<CancellationToken>());
     }
 
@@ -210,14 +213,11 @@ public class AzureFoundryServiceTests
 
     /// <summary>
     /// G5 — When b64_json is absent but a url is present, the service downloads from the url
-    /// and returns the bytes. In this test the url points to a second endpoint served by the
-    /// same mock handler, which returns a fixed byte payload.
+    /// and returns the bytes.
     /// </summary>
     [Fact]
     public async Task GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()
     {
-        // The image download call is also intercepted by the same HttpClient/handler.
-        // We configure the handler to return the image bytes for any request.
         var imageBytes = new byte[] { 10, 20, 30 };
         var mock = new Mock<HttpMessageHandler>();
         mock.Protected()
@@ -227,8 +227,6 @@ public class AzureFoundryServiceTests
                 ItExpr.IsAny<CancellationToken>())
             .Returns<HttpRequestMessage, CancellationToken>((req, _) =>
             {
-                // First call is the POST to the image generation endpoint.
-                // Second call is the GET for the image URL.
                 if (req.Method == HttpMethod.Post)
                 {
                     var json = "{\"data\":[{\"url\":\"https://myfoundry.openai.azure.com/generated/img.png\"}]}";
@@ -252,8 +250,7 @@ public class AzureFoundryServiceTests
     }
 
     /// <summary>
-    /// G6 — A fallback url that does not originate from the configured endpoint must emit a
-    /// LogWarning. The download is still attempted (defence-in-depth, not a hard block).
+    /// G6 — A fallback url that does not originate from the configured endpoint must emit a LogWarning.
     /// </summary>
     [Fact]
     public async Task GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()
@@ -269,7 +266,6 @@ public class AzureFoundryServiceTests
             {
                 if (req.Method == HttpMethod.Post)
                 {
-                    // URL originates from a different host — should trigger LogWarning.
                     var json = "{\"data\":[{\"url\":\"https://cdn.unknown.example.com/img.png\"}]}";
                     return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
                     {
@@ -357,8 +353,7 @@ public class AzureFoundryServiceTests
     }
 
     /// <summary>
-    /// E2 — The request body must include the `model` field set to ImageDeploymentName
-    /// so Azure AI Foundry routes the call to the correct deployment.
+    /// E2 — The image request body must include the `model` field set to ImageDeploymentName.
     /// </summary>
     [Fact]
     public async Task GenerateImageAsync_RequestBodyContainsModelField()
@@ -390,5 +385,61 @@ public class AzureFoundryServiceTests
         using var doc = JsonDocument.Parse(capturedBody!);
         Assert.True(doc.RootElement.TryGetProperty("model", out var modelProp));
         Assert.Equal("gpt-image-1.5", modelProp.GetString());
+    }
+
+    /// <summary>
+    /// C1 — GetSummaryAsync must POST to the Foundry /chat/completions path,
+    /// not the classic Azure OpenAI /openai/deployments/{name}/chat/completions path.
+    /// </summary>
+    [Fact]
+    public async Task GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()
+    {
+        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("short"));
+        var svc = BuildService(handler.Object, out _);
+
+        await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Once(),
+            ItExpr.Is<HttpRequestMessage>(r =>
+                r.Method == HttpMethod.Post &&
+                r.RequestUri!.AbsolutePath.EndsWith("/chat/completions", StringComparison.Ordinal) &&
+                !r.RequestUri.AbsolutePath.Contains("/openai/deployments/", StringComparison.Ordinal)),
+            ItExpr.IsAny<CancellationToken>());
+    }
+
+    /// <summary>
+    /// C2 — The chat request body must include the `model` field set to DeploymentName.
+    /// </summary>
+    [Fact]
+    public async Task GetSummaryAsync_RequestBodyContainsModelField()
+    {
+        string? capturedBody = null;
+        var mock = new Mock<HttpMessageHandler>();
+        mock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Returns<HttpRequestMessage, CancellationToken>(async (req, _) =>
+            {
+                capturedBody = await req.Content!.ReadAsStringAsync();
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        ChatCompletionJson("short"),
+                        Encoding.UTF8,
+                        "application/json")
+                };
+            });
+
+        var svc = BuildService(mock.Object, out _);
+        await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        Assert.NotNull(capturedBody);
+        using var doc = JsonDocument.Parse(capturedBody!);
+        Assert.True(doc.RootElement.TryGetProperty("model", out var modelProp));
+        Assert.Equal("gpt-4.1-nano", modelProp.GetString());
     }
 }

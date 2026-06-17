@@ -134,8 +134,11 @@ public sealed class AzureFoundryService : IAiService
         return Array.Empty<byte>();
     }
 
+    // Azure AI Foundry /openai/v1 exposes a unified chat completions path.
+    // The deployment name is passed as `model` in the request body, so the URL
+    // does not include the deployment segment or an api-version query parameter.
     private string GetChatCompletionsEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/openai/deployments/{Uri.EscapeDataString(_options.DeploymentName)}/chat/completions?api-version={Uri.EscapeDataString(_options.ApiVersion)}";
+        $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
     // Azure AI Foundry /openai/v1 exposes a unified image generation path.
     // The deployment name is passed as `model` in the request body, so the URL
@@ -156,6 +159,7 @@ public sealed class AzureFoundryService : IAiService
 
         return new
         {
+            model = _options.DeploymentName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },
@@ -173,6 +177,7 @@ public sealed class AzureFoundryService : IAiService
 
         return new
         {
+            model = _options.DeploymentName,
             messages = new[]
             {
                 new { role = "system", content = _options.ImagePromptSystemTemplate },
