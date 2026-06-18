@@ -4,7 +4,7 @@ namespace XPoster.Services;
 
 /// <summary>
 /// Concrete implementation of <see cref="ITimeProvider"/> that delegates to the system clock.
-/// Returns UTC time so that slot matching in <see cref="XPoster.Orchestrator.OrchestratorFactory"/>
+/// Returns UTC time so that slot matching in <see cref="XPoster.Orchestrators.OrchestratorFactory"/>
 /// is deterministic regardless of host timezone or <c>WEBSITE_TIME_ZONE</c> configuration.
 /// </summary>
 public class TimeProvider : ITimeProvider

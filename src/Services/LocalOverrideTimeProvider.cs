@@ -41,7 +41,7 @@ public sealed class LocalOverrideTimeProvider : ITimeProvider
     /// <summary>
     /// Returns today's UTC date with the hour forced to <c>ForceHour</c>.
     /// Minutes, seconds and milliseconds are zeroed so the value aligns cleanly
-    /// with the top-of-hour slot matching in <see cref="XPoster.Implementation.OrchestratorFactory"/>.
+    /// with the top-of-hour slot matching in <see cref="XPoster.Orchestrators.OrchestratorFactory"/>.
     /// </summary>
     /// <returns>A <see cref="DateTime"/> with <see cref="DateTimeKind.Utc"/> and the configured forced hour.</returns>
     public DateTime GetCurrentTime() =>
