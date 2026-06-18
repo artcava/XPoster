@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
@@ -39,7 +38,13 @@ public sealed class FalAiImageService
     /// </summary>
     /// <param name="prompt">The text prompt describing the desired image.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
-    /// <returns>A byte array containing the generated image data, or an empty array on failure.</returns>
+    /// <returns>
+    /// A byte array containing the generated image data, or an empty array on failure.
+    /// HTTP-level guards (429 <c>LogWarning</c>, non-2xx <c>LogError</c>, JSON deserialisation
+    /// <c>LogError</c>) are handled by <see cref="AiServiceHelper.ParseImageResponseAsync"/>.
+    /// <see cref="System.Net.Http.HttpRequestException"/> on both POST and image download are caught
+    /// and logged as errors inside this service.
+    /// </returns>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(prompt))
@@ -80,30 +85,13 @@ public sealed class FalAiImageService
             return Array.Empty<byte>();
         }
 
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            _logger.LogWarning("fal.ai returned 429 Too Many Requests during image generation.");
-            return Array.Empty<byte>();
-        }
+        var (success, content) = await AiServiceHelper.ParseImageResponseAsync(
+            response, "fal.ai", _logger, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogError(
-                "fal.ai image generation failed. StatusCode: {StatusCode}",
-                response.StatusCode);
+        if (!success || content is null)
             return Array.Empty<byte>();
-        }
 
-        JsonElement result;
-        try
-        {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        }
-        catch (JsonException ex)
-        {
-            _logger.LogError(ex, "Failed to deserialize fal.ai response.");
-            return Array.Empty<byte>();
-        }
+        var result = content.Value;
 
         // Response schema: { "images": [{ "url": "...", ... }] }
         if (!result.TryGetProperty("images", out var images) || images.GetArrayLength() == 0)

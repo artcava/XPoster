@@ -61,10 +61,21 @@ public sealed class AzureFoundryService : IAiService
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Delegates HTTP-level guards (429, non-2xx, JSON deserialisation failure) to
+    /// <see cref="AiServiceHelper.ParseImageResponseAsync"/>.
+    /// <see cref="System.Net.Http.HttpRequestException"/> on the POST call is caught and logged as an error.
+    /// An empty or whitespace prompt emits <c>LogWarning</c> and returns immediately without making any HTTP call.
+    /// Schema-specific parsing (<c>data[0].b64_json</c>, <c>data[0].url</c> fallback, origin validation)
+    /// remains inside this service.
+    /// </remarks>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogWarning("Azure Foundry GenerateImageAsync called with an empty or whitespace prompt.");
             return Array.Empty<byte>();
+        }
 
         // Azure AI Foundry /openai/v1 expects the deployment name as `model` in the
         // request body. The endpoint does not embed it in the URL path.
@@ -76,28 +87,24 @@ public sealed class AzureFoundryService : IAiService
             size = "1024x1024"
         };
 
-        var response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorBody = await response.Content.ReadAsStringAsync();
-            _logger.LogError(
-                "Azure Foundry image generation failed with status {StatusCode}. Response: {ErrorBody}",
-                response.StatusCode,
-                errorBody);
-            return Array.Empty<byte>();
-        }
-
-        JsonElement result;
+        HttpResponseMessage response;
         try
         {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+            response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken);
         }
-        catch (JsonException)
+        catch (HttpRequestException ex)
         {
-            _logger.LogError("Azure Foundry image generation returned malformed JSON.");
+            _logger.LogError(ex, "Azure Foundry image generation HTTP request failed.");
             return Array.Empty<byte>();
         }
+
+        var (success, content) = await AiServiceHelper.ParseImageResponseAsync(
+            response, "Azure Foundry", _logger, cancellationToken);
+
+        if (!success || content is null)
+            return Array.Empty<byte>();
+
+        var result = content.Value;
 
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {

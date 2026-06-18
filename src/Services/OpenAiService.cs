@@ -60,10 +60,20 @@ public class OpenAiService : IAiService
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Delegates HTTP-level guards (429, non-2xx, JSON deserialisation failure) to
+    /// <see cref="AiServiceHelper.ParseImageResponseAsync"/>.
+    /// <see cref="System.Net.Http.HttpRequestException"/> on the POST call is caught and logged as an error.
+    /// An empty or whitespace prompt emits <c>LogWarning</c> and returns immediately without making any HTTP call.
+    /// Schema-specific parsing (<c>data[0].b64_json</c>) remains inside this service.
+    /// </remarks>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogWarning("OpenAI GenerateImageAsync called with an empty or whitespace prompt.");
             return Array.Empty<byte>();
+        }
 
         _logger.LogInformation("Generating image with {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
@@ -75,24 +85,24 @@ public class OpenAiService : IAiService
             size = _options.ImageSize
         };
 
-        var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogError("Image generation failed with status code {StatusCode}", response.StatusCode);
-            return Array.Empty<byte>();
-        }
-
-        JsonElement result;
+        HttpResponseMessage response;
         try
         {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+            response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
         }
-        catch (JsonException)
+        catch (HttpRequestException ex)
         {
-            _logger.LogError("OpenAI image generation returned malformed JSON.");
+            _logger.LogError(ex, "OpenAI image generation HTTP request failed.");
             return Array.Empty<byte>();
         }
+
+        var (success, content) = await AiServiceHelper.ParseImageResponseAsync(
+            response, "OpenAI", _logger, cancellationToken);
+
+        if (!success || content is null)
+            return Array.Empty<byte>();
+
+        var result = content.Value;
 
         if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
