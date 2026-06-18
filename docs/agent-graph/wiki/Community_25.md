@@ -1,19 +1,20 @@
 # Community 25
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **OrchestrateAsync_ReturnsNull()** (2 connections)
-- **NoOrchestratorTests()** (2 connections)
-- **ProduceImage_IsAlwaysFalse()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
 - **XPoster.Tests.Implementation** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **new()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

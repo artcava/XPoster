@@ -1,23 +1,24 @@
 # Community 56
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **XPoster.Extensions** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 88]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

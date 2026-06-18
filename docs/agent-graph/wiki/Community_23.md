@@ -4,25 +4,25 @@
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **DeepSeekService()** (2 connections)
-- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
-- **BuildHybrid()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
 - **FalAiImageService()** (2 connections)
-- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **HybridAiServiceTests** (2 connections)
-- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
 - **MakeHandlerMock()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
 
 ## Relationships
 
-- [[Community 63]] (6 shared connections)
+- [[Community 19]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

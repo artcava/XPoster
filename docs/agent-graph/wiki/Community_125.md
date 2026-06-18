@@ -1,20 +1,19 @@
-# Community 116
+# Community 125
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
-- **FeedService()** (2 connections)
 
 ## Relationships
 
-- [[Community 78]] (4 shared connections)
+- [[Community 118]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

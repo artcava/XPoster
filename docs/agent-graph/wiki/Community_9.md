@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (13 connections)
-- **DeepSeekService.cs** (13 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **NotSupportedException()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **FeedOrchestratorTests.cs** (13 connections)
+- **FeedOrchestratorTests.cs** (13 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **new()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
 
 ## Relationships
 

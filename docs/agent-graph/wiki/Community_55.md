@@ -1,19 +1,20 @@
 # Community 55
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **TestOrchestrator()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionMissingBranchTests()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
 
 ## Relationships
 
-- [[Community 49]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

@@ -1,23 +1,23 @@
 # Community 61
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IKeyVaultService.cs** (5 connections)
-- **IKeyVaultService.cs** (5 connections)
-- **XPoster.Abstraction** (2 connections)
-- **SetSecretAsync()** (2 connections)
-- **GetSecretAsync()** (2 connections)
-- **IKeyVaultService** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
+- **HybridAiService()** (2 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **BuildFalService()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 26]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,27 +1,28 @@
 # Community 26
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **BuildHybrid()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **HybridAiServiceTests** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (7 shared connections)
+- [[Community 61]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

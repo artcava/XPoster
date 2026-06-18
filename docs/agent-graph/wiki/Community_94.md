@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
+- **InSender.cs** (11 connections)
 - **catch()** (2 connections)
+- **if()** (2 connections)
+- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 102]] (3 shared connections)
+- [[Community 38]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 96
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **catch()** (2 connections)
+- **Program.cs** (3 connections)
+- **Program.cs** (3 connections)
+- **if()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

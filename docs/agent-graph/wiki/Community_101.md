@@ -1,20 +1,21 @@
 # Community 101
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **OrchestratorFactory()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 119]] (2 shared connections)
+- [[Community 62]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
