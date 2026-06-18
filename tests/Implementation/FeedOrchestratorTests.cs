@@ -11,15 +11,28 @@ public class FeedOrchestratorTests
     private readonly Mock<ISender> _mockSender;
     private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
     private readonly Mock<IFeedService> _mockFeedService;
+    private readonly Mock<IFeedUrlProvider> _mockFeedUrlProvider;
     private readonly Mock<IAiService> _mockAiService;
+
+    private static readonly List<string> DefaultUrls =
+    [
+        "https://cointelegraph.com/rss/tag/bitcoin",
+        "https://www.coindesk.com/arc/outboundfeeds/rss"
+    ];
 
     public FeedOrchestratorTests()
     {
         _mockSender = new Mock<ISender>();
         _mockLogger = new Mock<ILogger<FeedOrchestrator>>();
         _mockFeedService = new Mock<IFeedService>();
+        _mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
         _mockAiService = new Mock<IAiService>();
+
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(DefaultUrls);
     }
+
+    private FeedOrchestrator CreateOrchestrator(IAiService? aiService = null) =>
+        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockFeedUrlProvider.Object, aiService ?? _mockAiService.Object);
 
     [Fact]
     public async Task OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()
@@ -37,11 +50,10 @@ public class FeedOrchestratorTests
             .ReturnsAsync(fakeSummary);
         _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakePrompt);
-        // CS8620: GenerateImageAsync returns Task<byte[]> — aligned to non-nullable byte[]
         _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
 
-        var orchestrator = new FeedOrchestrator(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockAiService.Object);
+        var orchestrator = CreateOrchestrator();
 
         // ACT
         var message = await orchestrator.OrchestrateAsync();
@@ -51,6 +63,7 @@ public class FeedOrchestratorTests
         Assert.Equal(fakeSummary, message.Content);
         Assert.Equal(fakeImage, message.Image);
 
+        _mockFeedUrlProvider.Verify(p => p.GetFeedUrls(), Times.Once);
         _mockFeedService.Verify(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(2));
         _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Once);
         _mockAiService.Verify(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()), Times.Once);
@@ -71,11 +84,7 @@ public class FeedOrchestratorTests
             It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(emptyFeeds);
 
-        var orchestrator = new FeedOrchestrator(
-            _mockSender.Object,
-            _mockLogger.Object,
-            _mockFeedService.Object,
-            _mockAiService.Object);
+        var orchestrator = CreateOrchestrator();
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -102,11 +111,7 @@ public class FeedOrchestratorTests
         _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(string.Empty);
 
-        var orchestrator = new FeedOrchestrator(
-            _mockSender.Object,
-            _mockLogger.Object,
-            _mockFeedService.Object,
-            _mockAiService.Object);
+        var orchestrator = CreateOrchestrator();
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -136,15 +141,10 @@ public class FeedOrchestratorTests
             .ReturnsAsync(fakeSummary);
         _mockAiService.Setup(s => s.GetImagePromptAsync(fakeSummary, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakePrompt);
-        // CS8600: null cast to byte[]? is intentional — simulates image generation failure
         _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ReturnsAsync((byte[]?)null!);
 
-        var orchestrator = new FeedOrchestrator(
-            _mockSender.Object,
-            _mockLogger.Object,
-            _mockFeedService.Object,
-            _mockAiService.Object);
+        var orchestrator = CreateOrchestrator();
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -178,11 +178,7 @@ public class FeedOrchestratorTests
         _mockAiService.Setup(s => s.GenerateImageAsync(fakePrompt, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Image generation failed"));
 
-        var orchestrator = new FeedOrchestrator(
-            _mockSender.Object,
-            _mockLogger.Object,
-            _mockFeedService.Object,
-            _mockAiService.Object);
+        var orchestrator = CreateOrchestrator();
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -217,11 +213,7 @@ public class FeedOrchestratorTests
         _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
 
-        var orchestrator = new FeedOrchestrator(
-            _mockSender.Object,
-            _mockLogger.Object,
-            _mockFeedService.Object,
-            _mockAiService.Object);
+        var orchestrator = CreateOrchestrator();
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -231,7 +223,6 @@ public class FeedOrchestratorTests
         Assert.Contains("#Bitcoin", result.Content);
         Assert.Contains("#BTC", result.Content);
         Assert.Contains("#FED", result.Content);
-        // xUnit2013: use Assert.Single instead of Assert.Equal(1, ...)
         Assert.Single(System.Text.RegularExpressions.Regex.Matches(result.Content, "#Bitcoin"));
     }
 
@@ -239,11 +230,7 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()
     {
         // ARRANGE
-        var orchestrator = new FeedOrchestrator(
-            _mockSender.Object,
-            _mockLogger.Object,
-            _mockFeedService.Object,
-            null);
+        var orchestrator = CreateOrchestrator(aiService: null);
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -275,6 +262,7 @@ public class FeedOrchestratorTests
             null!,
             _mockLogger.Object,
             _mockFeedService.Object,
+            _mockFeedUrlProvider.Object,
             _mockAiService.Object);
 
         // ACT
