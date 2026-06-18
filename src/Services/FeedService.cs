@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.Services;

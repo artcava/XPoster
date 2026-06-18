@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Options;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.Implementation;

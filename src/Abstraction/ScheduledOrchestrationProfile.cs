@@ -1,3 +1,5 @@
+using XPoster.Contracts;
+
 namespace XPoster.Abstraction;
 
 /// <summary>

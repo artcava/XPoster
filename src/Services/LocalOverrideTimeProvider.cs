@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 
 namespace XPoster.Services;
 

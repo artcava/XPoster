@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.SenderPlugins;
