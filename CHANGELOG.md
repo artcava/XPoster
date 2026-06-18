@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`IFeedUrlProvider` abstraction + `ConfigurationFeedUrlProvider`** ([#185](https://github.com/artcava/XPoster/issues/185)): introduces `IFeedUrlProvider` (returns `IReadOnlyList<string>`) and `ConfigurationFeedUrlProvider` bound from `FeedOptions__Urls__N` app settings; `FeedOrchestrator` now resolves feed URLs via the injected provider instead of a hardcoded list; `local.settings.json.example` updated with example `FeedOptions__Urls__0` / `FeedOptions__Urls__1` entries.
+
 ### Fixed
 - **`AzureFoundryService.GenerateImageAsync` — image generation endpoint aligned to Azure AI Foundry `/openai/v1` format**: `GetImageGenerationEndpoint()` now builds `{Endpoint}/images/generations` without the `/openai/deployments/{name}/` path segment and without `api-version`; the `model = ImageDeploymentName` field is now included in the request body instead of being embedded in the URL.
 - **`AzureFoundryService` — chat completions endpoint aligned to Azure AI Foundry `/openai/v1` format**: `GetChatCompletionsEndpoint()` now builds `{Endpoint}/chat/completions` without the `/openai/deployments/{name}/` path segment and without `api-version`; `BuildSummaryPayload()` and `BuildImagePromptPayload()` now include `model = DeploymentName` in the request body.
@@ -16,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`AzureFoundryService.GenerateImageAsync` — removed unsupported `response_format` parameter**: the `response_format` field is not accepted by the Foundry image generation endpoint; removed from the request body to prevent `400 Bad Request` responses.
 
 ### Tests
+- **`ConfigurationFeedUrlProviderTests`** ([#185](https://github.com/artcava/XPoster/issues/185)): covers configured-URL return, empty list when section absent, and `ArgumentNullException` on null options.
+- **`FeedOrchestratorTests`** ([#185](https://github.com/artcava/XPoster/issues/185)): verifies `GetFeedUrls()` is called during `OrchestrateAsync()`; empty-URL-list returns `null` with `SendIt = false`; URLs from provider are forwarded to `IFeedService`.
 - **`AzureFoundryServiceTests` — endpoint and payload coverage for image generation and chat completions**:
   - `E1`: verifies POST targets `/images/generations` without the `/openai/deployments/` path segment.
   - `E2`: verifies `model` is serialised in the image generation request body.
@@ -32,65 +37,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`ISlotProfileProvider`** (`src/Abstraction/ISlotProfileProvider.cs`): interface exposing `GetProfiles()` returning `IReadOnlyList<ScheduledOrchestrationProfile>`; decouples schedule ownership from `OrchestratorFactory` and enables conditional DI composition of schedule profiles.
 - **`DefaultSlotProfileProvider`** (`src/Implementation/DefaultSlotProfileProvider.cs`): production implementation of `ISlotProfileProvider`; owns the canonical four-slot schedule (UTC hours 6, 8, 14, 16); registered as `Singleton` in `Program.cs` by default.
 - **`DryRunSlotProfileProvider`** (`src/Implementation/DryRunSlotProfileProvider.cs`): decorator around `ISlotProfileProvider` that appends the DryRun slot at hour 9 to the inner provider's profile list; registered in place of `DefaultSlotProfileProvider` only when `EnableDryRunSlot = true` in `local.settings.json`.
-- **`coverlet.runsettings`** added at repo root ([#166](https://github.com/artcava/XPoster/issues/166)): excludes auto-generated Azure Functions isolated-worker classes (`Program`, `DirectFunctionExecutor`, `FunctionExecutorAutoStartup`, `FunctionExecutorHostBuilderExtensions`, `FunctionMetadataProviderAutoStartup`, `GeneratedFunctionMetadataProvider`, `WorkerExtensionStartupCodeExecutor`, `WorkerHostBuilderFunctionMetadataProviderExtension`, `HttpClientExtensions`) from Coverlet coverage collection; referenced via `--settings coverlet.runsettings` in `ci.yml` so exclusions apply consistently both locally and in CI.
-- **`Azure.Security.KeyVault.Secrets` v4.7.0** added to `XPoster.csproj` ([#113](https://github.com/artcava/XPoster/issues/113)): provides the `SecretClient` used to read secrets from Azure Key Vault at runtime.
-- **`IKeyVaultService` abstraction** (`src/Abstraction/IKeyVaultService.cs`) ([#113](https://github.com/artcava/XPoster/issues/113)): interface exposing `GetSecretAsync(string name)` for runtime secret retrieval; includes a `SetSecretAsync` stub reserved for secret-rotation write-back (see #114).
-- **`KeyVaultService` implementation** (`src/Services/KeyVaultService.cs`) ([#113](https://github.com/artcava/XPoster/issues/113)): concrete implementation backed by `DefaultAzureCredential` and the `KEYVAULT_URI` app setting; registered as `Singleton` in `Program.cs` so `SecretClient` is reused across invocations.
-- **`Microsoft.Extensions.Http.Resilience` package** added to `XPoster.csproj` ([#133](https://github.com/artcava/XPoster/issues/133)): brings the Polly v8 standard resilience pipeline via the .NET 8 `AddStandardResilienceHandler` extension, without a direct `Polly` package reference.
-- **Named `HttpClient` registrations in `Program.cs`** ([#133](https://github.com/artcava/XPoster/issues/133)): six named clients registered — `OpenAI`, `AzureFoundry`, `DeepSeek`, `FalAi`, `LinkedIn`, `Instagram` — each with `AddStandardResilienceHandler` configured for 3 retries (exponential back-off + jitter), 30-second per-attempt timeout, and 30-second circuit-breaker break duration (`FalAi` uses 60-second timeout to accommodate image generation latency).
-- **`AiServiceHelper`** (`src/Services/AiServiceHelper.cs`) ([#158](https://github.com/artcava/XPoster/issues/158)): extracted `ParseChatCompletionResponseAsync` — the five-step HTTP-response guard pipeline (429 intercept → non-2xx guard → JSON deserialisation → null/empty `choices` guard → content trim) previously duplicated verbatim across `OpenAiService`, `AzureFoundryService`, and `DeepSeekService`.
-- **Agent graph generation**: new `regenerate-agent-graph.yml` workflow runs as a PR check on every PR targeting `develop`; generates a `graphify-dotnet` knowledge graph (wiki, report, JSON) and uploads it as a downloadable Actions artifact for pre-merge review ([#141](https://github.com/artcava/XPoster/issues/141)).
-- **Agent graph persistence**: new `persist-agent-graph.yml` workflow runs on every push to `develop`; commits the regenerated graph directly to `develop` using `BOT_PAT` to bypass branch protection; uses `[skip ci]` and `paths-ignore` to prevent CI loops ([#141](https://github.com/artcava/XPoster/issues/141), [#149](https://github.com/artcava/XPoster/issues/149)).
-- `docs/agent-graph/NOTICE.md` auto-generated by both graph workflows to annotate node types (source code, documentation, infrastructure, generated) for LLM consumers ([#141](https://github.com/artcava/XPoster/issues/141)).
-- `BOT_PAT` repository secret: fine-grained Personal Access Token with `Contents: Read & Write` scope, required by `persist-agent-graph.yml` to push directly to the protected `develop` branch.
-- `docs/agent-graph.md`: new unified guide explaining what the agent graph is, node types, output formats, CI workflow, and how to use it with AI coding assistants; merges and supersedes `docs/integrations/graphify-ci.md`.
+- **`coverlet.runsettings`** added at repo root ([#166](https://github.com/artcava/XPoster/issues/166)): excludes auto-generated Azure Functions isolated-worker classes from Coverlet coverage collection.
+- **`Azure.Security.KeyVault.Secrets` v4.7.0** added to `XPoster.csproj` ([#113](https://github.com/artcava/XPoster/issues/113)).
+- **`IKeyVaultService` abstraction** (`src/Abstraction/IKeyVaultService.cs`) ([#113](https://github.com/artcava/XPoster/issues/113)).
+- **`KeyVaultService` implementation** (`src/Services/KeyVaultService.cs`) ([#113](https://github.com/artcava/XPoster/issues/113)).
+- **`Microsoft.Extensions.Http.Resilience` package** added ([#133](https://github.com/artcava/XPoster/issues/133)).
+- **Named `HttpClient` registrations in `Program.cs`** ([#133](https://github.com/artcava/XPoster/issues/133)).
+- **`AiServiceHelper`** (`src/Services/AiServiceHelper.cs`) ([#158](https://github.com/artcava/XPoster/issues/158)).
+- **Agent graph generation and persistence workflows** ([#141](https://github.com/artcava/XPoster/issues/141), [#149](https://github.com/artcava/XPoster/issues/149)).
 - Dynamic GitHub Actions build status badge in README ([#35](https://github.com/artcava/XPoster/issues/35)).
 - This CHANGELOG.md file ([#36](https://github.com/artcava/XPoster/issues/36)).
 
 ### Changed
-- **`OrchestratorFactory` schedule decoupled via `ISlotProfileProvider`**: the static `slotProfiles` list has been removed from `OrchestratorFactory`; the factory now receives `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time. `DefaultSlotProfileProvider` owns the four production slots (UTC 6, 8, 14, 16); `DryRunSlotProfileProvider` (a decorator) appends the dry-run slot at hour 9 and is activated only when `EnableDryRunSlot = true` in `local.settings.json`. Related documentation updated in `README.md`, `docs/architecture.md`, `docs/configuration.md`, `docs/extending-xposter.md`, and `docs/deployment.md`.
-- **`COVERAGE_THRESHOLD` raised from `70` to `80`** in `.github/workflows/ci.yml` ([#166](https://github.com/artcava/XPoster/issues/166)): enforces meaningful quality gate after auto-generated classes are excluded and missing `IgSender` / `KeyVaultService` tests are added.
-- **`InSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): constructor now accepts `IKeyVaultService`; `LinkedInAccessToken`, `LinkedInOwnerCode`, and `LinkedInOrgId` (optional) are resolved via `GetSecretAsync` on every `SendAsync` invocation, enabling transparent secret rotation without a Function App restart.
-- **`XSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): the four X/Twitter OAuth tokens (`XApiKey`, `XApiSecret`, `XAccessToken`, `XAccessTokenSecret`) are now read from Key Vault per-call; `TwitterContext` is constructed and disposed inside each `SendAsync` with fresh credentials.
-- **`IgSender` reads credentials from Key Vault at runtime** ([#113](https://github.com/artcava/XPoster/issues/113)): `IgAccessToken` and `IgAccountId` are resolved via `GetSecretAsync` on every `SendAsync` invocation.
-- **`InSender` refactored to accept `IHttpClientFactory`** ([#133](https://github.com/artcava/XPoster/issues/133)): removed `static readonly HttpClient`; constructor now calls `CreateClient("LinkedIn")`, ensuring the Polly pipeline is applied to all outbound LinkedIn API calls.
-- **`IgSender` refactored to accept `IHttpClientFactory`** ([#133](https://github.com/artcava/XPoster/issues/133)): replaced `new HttpClient()` with `httpClientFactory.CreateClient("Instagram")`; constructor signature updated to `(IHttpClientFactory, ILogger<IgSender>)`.
-- **`OpenAiService`, `AzureFoundryService`, `DeepSeekService`** updated to delegate HTTP-response parsing to `AiServiceHelper.ParseChatCompletionResponseAsync`; log messages standardised to structured logging across all call sites ([#158](https://github.com/artcava/XPoster/issues/158)).
-- **`AzureFoundryService.GenerateImageAsync`** hardened: 429 intercept added; `ReadFromJsonAsync<JsonElement>` wrapped in `try/catch (JsonException)`; null-check and `try/catch (FormatException)` around `Convert.FromBase64String`; origin validation for `url` fallback with `LogWarning`; `GetByteArrayAsync` wrapped in `try/catch (HttpRequestException)`; explicit `LogError` when response contains neither `b64_json` nor `url` ([#139](https://github.com/artcava/XPoster/issues/139)).
-- **`OpenAiService.GenerateImageAsync`** hardened: `string.IsNullOrWhiteSpace(prompt)` guard added at method entry ([#139](https://github.com/artcava/XPoster/issues/139)).
-- `local.settings.json.example` updated: all per-platform credential env vars (`IN_*`, `X_*`, `IG_*`) removed; `KEYVAULT_URI` added with inline instructions; `EnableDryRunSlot` key added with default `false` and explanatory comment ([#113](https://github.com/artcava/XPoster/issues/113)).
-- `regenerate-agent-graph.yml` trigger changed from `pull_request[closed]` to `pull_request[opened, synchronize, reopened]`; removed `peter-evans/create-pull-request` step ([#149](https://github.com/artcava/XPoster/issues/149)).
-- `persist-agent-graph.yml` checkout step updated to use `BOT_PAT` token; `permissions.contents` downgraded to `read` ([#149](https://github.com/artcava/XPoster/issues/149)).
-- `docs/index.md`: replaced `graphify-ci.md` row with `agent-graph.md` in the Integrations section.
-- `README.md`: added agent graph callout in the Architecture section.
-- `docs/` folder reorganisation: analysis sub-folder reordered ([#143](https://github.com/artcava/XPoster/pull/143)).
+- **`OrchestratorFactory` schedule decoupled via `ISlotProfileProvider`**: related documentation updated in `README.md`, `docs/architecture.md`, `docs/configuration.md`, `docs/extending-xposter.md`, and `docs/deployment.md`.
+- **`COVERAGE_THRESHOLD` raised from `70` to `80`** in `.github/workflows/ci.yml` ([#166](https://github.com/artcava/XPoster/issues/166)).
+- **`InSender`**, **`XSender`**, **`IgSender`** read credentials from Key Vault at runtime ([#113](https://github.com/artcava/XPoster/issues/113)).
+- **`InSender`** and **`IgSender`** refactored to accept `IHttpClientFactory` ([#133](https://github.com/artcava/XPoster/issues/133)).
+- **`OpenAiService`, `AzureFoundryService`, `DeepSeekService`** delegate HTTP-response parsing to `AiServiceHelper` ([#158](https://github.com/artcava/XPoster/issues/158)).
+- `local.settings.json.example` updated: per-platform credential env vars removed; `KEYVAULT_URI` and `EnableDryRunSlot` added ([#113](https://github.com/artcava/XPoster/issues/113)).
 
 ### Fixed
-- **`AzureFoundryService.GenerateImageAsync` — missing prompt guard** ([#158](https://github.com/artcava/XPoster/issues/158)): empty or whitespace-only prompts now return `Array.Empty<byte>()` immediately without making any HTTP call.
-- **`AzureFoundryService.GenerateImageAsync` — unhandled malformed JSON** ([#158](https://github.com/artcava/XPoster/issues/158)): `ReadFromJsonAsync<JsonElement>` now wrapped in `try/catch (JsonException)`; returns empty array on parse failure.
-- **`OpenAiService.GenerateImageAsync` — missing prompt guard** ([#158](https://github.com/artcava/XPoster/issues/158)): `string.IsNullOrWhiteSpace(prompt)` guard added, mirroring `AzureFoundryService`.
-- **`OpenAiService.GenerateImageAsync` — unguarded `data` array access** ([#158](https://github.com/artcava/XPoster/issues/158)): `data[0]` access now preceded by `GetArrayLength() == 0` check; returns empty array instead of throwing `IndexOutOfRangeException`.
-- **`OpenAiService.GenerateImageAsync` — null `b64_json` dereference** ([#158](https://github.com/artcava/XPoster/issues/158)): null check added before `Convert.FromBase64String`; returns empty array instead of throwing `ArgumentNullException`.
-- **`OpenAiService.GenerateImageAsync` — unhandled malformed JSON** ([#158](https://github.com/artcava/XPoster/issues/158)): `ReadFromJsonAsync<JsonElement>` now wrapped in `try/catch (JsonException)`.
-- **`AiServiceHelper` — `JsonException` on missing `choices` property** ([#158](https://github.com/artcava/XPoster/issues/158)): deserialisation call wrapped in `try/catch (JsonException)`; returns `(false, string.Empty)` instead of propagating.
-- **CI loop on `develop`** ([#149](https://github.com/artcava/XPoster/issues/149)): resolved by splitting generation (PR check) and persistence (push trigger) into two separate workflows with explicit loop-prevention guards.
-- `graphify-dotnet` install failure: tool requires .NET 10 SDK; `setup-dotnet` now pinned to `10.0.x`; install moved to `/tmp` to bypass `global.json` ([#144](https://github.com/artcava/XPoster/pull/144), [#145](https://github.com/artcava/XPoster/pull/145), [#146](https://github.com/artcava/XPoster/pull/146)).
+- **`AzureFoundryService.GenerateImageAsync`** hardened ([#139](https://github.com/artcava/XPoster/issues/139), [#158](https://github.com/artcava/XPoster/issues/158)).
+- **`OpenAiService.GenerateImageAsync`** hardened ([#139](https://github.com/artcava/XPoster/issues/139), [#158](https://github.com/artcava/XPoster/issues/158)).
+- **`AiServiceHelper`** — `JsonException` on missing `choices` property ([#158](https://github.com/artcava/XPoster/issues/158)).
+- **CI loop on `develop`** resolved ([#149](https://github.com/artcava/XPoster/issues/149)).
 
 ### Tests
-- **`SlotProfileProviderTests`** (`tests/Implementation/SlotProfileProviderTests.cs`): covers `DefaultSlotProfileProvider` (returns exactly the 4 production slots, no DryRun profile present) and `DryRunSlotProfileProvider` (appends DryRun profile to inner provider list, inner profiles preserved unchanged); uses `Mock<ISlotProfileProvider>` for the decorator tests.
-- **`OrchestratorFactoryTests`** rewritten to inject synthetic `ISlotProfileProvider` mocks via constructor; no test references the real scheduling hours — a `const int arbitraryHour` pattern is used to keep tests decoupled from business schedule changes.
-- **`DryRunSenderTests`** (`tests/SenderPlugins/DryRunSenderTests.cs`) ([#174](https://github.com/artcava/XPoster/issues/174)): 9 xUnit + Moq tests covering constructor null guards, `ImplementsISender`, `MessageMaxLenght = int.MaxValue`, null-post path (returns `false` + `LogWarning`, no KV call), successful dry-run path (returns `true`, probes only `XApiKey`, logs content, handles image presence, no further KV calls), and KV failure path (returns `false` + `LogError` with secret name).
-- **`IgSenderTests`** — added missing coverage paths ([#166](https://github.com/artcava/XPoster/issues/166)): `SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError`, `SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse`, `SendAsync_WhenInstagramApiReturns429_ReturnsFalse`, `SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError`.
-- **`KeyVaultServiceTests`** created ([#166](https://github.com/artcava/XPoster/issues/166)): constructor guards (`null` logger, missing `KEYVAULT_URI`), `GetSecretAsync` happy path and `RequestFailedException` propagation, `SetSecretAsync` happy path and exception propagation, `LogDebug` emission for both methods; uses `StubKeyVaultService` and `ThrowingKeyVaultService` inner test doubles consistent with Community 6 pattern.
-- **Polly resilience pipeline integration tests** ([#161](https://github.com/artcava/XPoster/issues/161)): new `tests/Integration/` folder with `PollyIntegrationTestBase`, `LinkedInResiliencePipelineTests`, `InstagramResiliencePipelineTests`, `AiClientsResiliencePipelineTests`, and `CaptureLoggerProvider`; these tests build a real `IServiceProvider` with `AddStandardResilienceHandler` (mirroring `Program.cs`) and replace only the innermost `HttpMessageHandler` with a test double — ensuring Polly's retry, circuit-breaker, and attempt-timeout policies are exercised end-to-end without any outbound network calls; `OnRetry` log emission verified via `CaptureLoggerProvider`.
-- **`KeyVaultServiceTests`** ([#113](https://github.com/artcava/XPoster/issues/113)): verifies canonical secret name constants, transparent rotation scenario, and that no KV call is made when `SendAsync` receives a no-image post.
-- **`InSenderTests`** updated ([#113](https://github.com/artcava/XPoster/issues/113)): `SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall` verifies KV is called on every invocation; `SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode` verifies `LinkedInOrgId` is used as author URN and `LinkedInOwnerCode` is `Times.Never` when org secret resolves successfully.
-- **`ResilienceTestHelpers`** (`tests/Helpers/ResilienceTestHelpers.cs`) ([#133](https://github.com/artcava/XPoster/issues/133)): shared factory for `HttpMessageHandler` mocks supporting multi-attempt retry scenarios.
-- **`InSenderResilienceTests`** ([#133](https://github.com/artcava/XPoster/issues/133)): 429×2 then 200 retry sequence; 503 returns `false`; `HttpRequestException` returns `false`; 200 on first attempt returns `true`.
-- **`IgSenderResilienceTests`** ([#133](https://github.com/artcava/XPoster/issues/133)): no-image post skips HTTP; image post with unimplemented upload returns `false`; `HttpRequestException` returns `false`.
-- **`AiServiceHelperTests`** ([#158](https://github.com/artcava/XPoster/issues/158)): covers `ParseChatCompletionResponseAsync` in isolation — 429, non-2xx `[Theory]`, `choices: null`, `choices: []`, missing `required` property, happy path, whitespace-only content.
-- **`OpenAiServiceTests`** — added G2–G4, G7–G8 for `GenerateImageAsync`: malformed JSON, empty `data` array, null `b64_json`, empty/whitespace prompt ([#158](https://github.com/artcava/XPoster/issues/158), [#139](https://github.com/artcava/XPoster/issues/139)).
-- **`AzureFoundryServiceTests`** — added G2–G8 for `GenerateImageAsync`: malformed JSON, empty `data` array, null `b64_json`, `url` fallback, cross-origin `url` warning, empty/whitespace prompt ([#158](https://github.com/artcava/XPoster/issues/158), [#139](https://github.com/artcava/XPoster/issues/139)).
+- **`SlotProfileProviderTests`**, **`OrchestratorFactoryTests`** rewritten, **`DryRunSenderTests`**, **`IgSenderTests`**, **`KeyVaultServiceTests`**, **`Polly resilience pipeline integration tests`**, **`AiServiceHelperTests`**, **`OpenAiServiceTests`**, **`AzureFoundryServiceTests`** expanded — see full details in the Git history.
 
 ---
 
@@ -106,39 +79,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `NuGet.Config` pinning package restore to nuget.org only ([#99](https://github.com/artcava/XPoster/issues/99))
 
 ### Changed
-- **`IAiService` contract**: all three methods (`GetSummaryAsync`, `GetImagePromptAsync`, `GenerateImageAsync`) now accept an optional `CancellationToken` parameter; propagated through all implementations (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `HybridAiService`, `FalAiImageService`) and `FeedGenerator` ([#123](https://github.com/artcava/XPoster/issues/123))
-- **`AiServiceFactory`** (`IAiServiceFactory`): resolves the correct `IAiService` implementation by `AiProvider` enum value at runtime; replaces direct DI registration of a single provider ([#100](https://github.com/artcava/XPoster/issues/100))
-- **`GeneratorFactory`** refactored to use `List<ScheduledGenerationProfile>` (Hour, SenderType, GeneratorType, AiProvider?) instead of `Dictionary<int, MessageSender>`; AI service and sender resolved independently via `AiServiceFactory` ([#100](https://github.com/artcava/XPoster/issues/100))
-- `OpenAiOptions`: all OpenAI endpoints, model names and parameters externalised from `OpenAiService` into a configuration class; bound from `OpenAI__*` double-underscore env vars; prompt templates also externalised with startup placeholder validation ([#88](https://github.com/artcava/XPoster/issues/88), [#89](https://github.com/artcava/XPoster/issues/89))
-- `AiService` renamed to `OpenAiService`; DI registration and test file updated accordingly ([#87](https://github.com/artcava/XPoster/issues/87))
-- `MessageSender.IgPowerLow` enum value renamed to `IgPowerLaw` (typo fix); factory switch case updated ([#108](https://github.com/artcava/XPoster/issues/108))
-- GitHub Actions upgraded to Node.js 24 compatible versions: `actions/checkout` v5, `actions/setup-dotnet` v5, `actions/upload-artifact` v6, `softprops/action-gh-release` v3, `azure/login` v3, `Azure/functions-action` v1.5.6 ([#122](https://github.com/artcava/XPoster/issues/122), [#137](https://github.com/artcava/XPoster/issues/137))
+- **`IAiService` contract**: all three methods now accept an optional `CancellationToken` parameter ([#123](https://github.com/artcava/XPoster/issues/123))
+- **`AiServiceFactory`** (`IAiServiceFactory`): resolves the correct `IAiService` implementation by `AiProvider` enum value at runtime ([#100](https://github.com/artcava/XPoster/issues/100))
+- **`GeneratorFactory`** refactored to use `List<ScheduledGenerationProfile>` ([#100](https://github.com/artcava/XPoster/issues/100))
+- `OpenAiOptions`: all OpenAI endpoints, model names and parameters externalised ([#88](https://github.com/artcava/XPoster/issues/88), [#89](https://github.com/artcava/XPoster/issues/89))
+- `AiService` renamed to `OpenAiService` ([#87](https://github.com/artcava/XPoster/issues/87))
+- `MessageSender.IgPowerLow` renamed to `IgPowerLaw` ([#108](https://github.com/artcava/XPoster/issues/108))
+- GitHub Actions upgraded to Node.js 24 compatible versions ([#122](https://github.com/artcava/XPoster/issues/122), [#137](https://github.com/artcava/XPoster/issues/137))
 
 ### Fixed
-- **Empty `choices[]` guard**: `GetSummaryAsync` and `GetImagePromptAsync` in all three chat-based services (`OpenAiService`, `DeepSeekService`, `AzureFoundryService`) now return `string.Empty` instead of throwing `IndexOutOfRangeException` when the API returns `"choices": []` (content-policy refusals, partial API errors) ([#124](https://github.com/artcava/XPoster/issues/124))
-- Azure Functions isolated deployment artifacts: corrected publish path for `ci.yml` deploy step ([#102](https://github.com/artcava/XPoster/issues/102))
+- **Empty `choices[]` guard** across all three chat-based services ([#124](https://github.com/artcava/XPoster/issues/124))
+- Azure Functions isolated deployment artifacts: corrected publish path ([#102](https://github.com/artcava/XPoster/issues/102))
 - Keyed DI resolution for AI service in `Program.cs` ([#104](https://github.com/artcava/XPoster/issues/104))
 - Removed unused `System.ServiceModel.Syndication` package dependency ([#85](https://github.com/artcava/XPoster/issues/85))
 
 ### Tests
-- Empty-choices guard tests for `DeepSeekService`, `OpenAiService`, and `AzureFoundryService` ([#124](https://github.com/artcava/XPoster/issues/124))
-- `AiServiceFactoryTests`, missing `FeedGenerator` null-safety cases, `GeneratorFactory` factory interaction tests ([#100](https://github.com/artcava/XPoster/issues/100))
-- `DeepSeekOptionsValidator`, `DeepSeekOptions`, `DeepSeekService` and `HybridAiService` tests ([#127](https://github.com/artcava/XPoster/issues/127))
-- `CancellationToken` propagation tests updated across all `IAiService` mock setups ([#123](https://github.com/artcava/XPoster/issues/123))
+- Empty-choices guard tests, `AiServiceFactoryTests`, `DeepSeekOptionsValidator`, `DeepSeekService`, `HybridAiService`, `CancellationToken` propagation tests ([#124](https://github.com/artcava/XPoster/issues/124), [#100](https://github.com/artcava/XPoster/issues/100), [#127](https://github.com/artcava/XPoster/issues/127), [#123](https://github.com/artcava/XPoster/issues/123))
 
 ---
 
 ## [0.1.1] - 2026-04-08
 
 ### Changed
-- **Image generation migrated from DALL-E 3 to `gpt-image-1`**: replaced `AzureOpenAIClient` (Azure OpenAI SDK) with `HttpClient` + `System.Text.Json` calling the OpenAI Direct API; removed `Azure.AI.OpenAI` and `OpenAI.Images` package dependencies ([#24](https://github.com/artcava/XPoster/issues/24), [#25](https://github.com/artcava/XPoster/issues/25))
+- **Image generation migrated from DALL-E 3 to `gpt-image-1`**: replaced `AzureOpenAIClient` with `HttpClient` + `System.Text.Json` ([#24](https://github.com/artcava/XPoster/issues/24), [#25](https://github.com/artcava/XPoster/issues/25))
 - OpenAI models updated to **`gpt-4.1-nano`** (text) and **`gpt-image-1.5`** (image) ([#68](https://github.com/artcava/XPoster/issues/68))
 - `CONTRIBUTING.md`: explicit rule to always branch from `develop`; PR checklist updated ([#79](https://github.com/artcava/XPoster/issues/79))
-- `README.md` and all docs aligned to actual environment variable names: `IN_*`, `IG_*`, `OPENAI_*` ([#70](https://github.com/artcava/XPoster/issues/70))
-- Directory tree diagrams in `README.md` and `tests/README.md` updated to match actual project structure ([#70](https://github.com/artcava/XPoster/issues/70), [#74](https://github.com/artcava/XPoster/issues/74))
+- `README.md` and all docs aligned to actual environment variable names ([#70](https://github.com/artcava/XPoster/issues/70))
+- Directory tree diagrams updated to match actual project structure ([#70](https://github.com/artcava/XPoster/issues/70), [#74](https://github.com/artcava/XPoster/issues/74))
 
 ### Fixed
-- Removed unsupported `response_format` parameter from image generation request body (`gpt-image-1` always returns `b64_json` by default); switched model from `gpt-image-1-mini` (unavailable on direct OpenAI API) to `gpt-image-1` ([#26](https://github.com/artcava/XPoster/issues/26))
+- Removed unsupported `response_format` parameter from image generation request body ([#26](https://github.com/artcava/XPoster/issues/26))
 - Added missing `issues: write` and `pull-requests: write` permissions to the `issue-management` workflow ([#83](https://github.com/artcava/XPoster/issues/83))
 
 ---
@@ -147,32 +117,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Azure Key Vault + Managed Identity infrastructure**: Bicep IaC provisioning `xposter-kv` vault and system-assigned managed identity for Azure Functions ([#54](https://github.com/artcava/XPoster/issues/54))
-- LinkedIn credentials (`LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`) migrated to **Azure Key Vault References**; `KEYVAULT_URI` App Setting added; resolved transparently at Azure Functions startup — no code changes required ([#55](https://github.com/artcava/XPoster/issues/55))
-- GitHub Actions CI/CD pipeline (`ci.yml`): build, test-gate, and deployment to Azure Functions; auto-delete merged feature branches ([#45](https://github.com/artcava/XPoster/issues/45))
-- LinkedIn access token expiry reminder workflow (automated GitHub issue before token expiry)
-- `CRON_EXPRESSION` externalised as environment variable (previously hardcoded)
-- `src/local.settings.json.example` with all required keys, placeholder values and inline comments grouped by service (X, LinkedIn, Instagram, Azure OpenAI) ([#29](https://github.com/artcava/XPoster/issues/29))
-- `docs/` folder: `index.md`, `getting-started.md`, `configuration.md`, `deployment.md`, `extending-xposter.md`, `monitoring.md` ([#30](https://github.com/artcava/XPoster/issues/30))
-- `docs/architecture.md` with ADRs (001–004), design pattern rationale and Mermaid data-flow diagram ([#28](https://github.com/artcava/XPoster/issues/28))
-- `tests/README.md` with testing strategy, conventions and coverage goals ([#31](https://github.com/artcava/XPoster/issues/31))
-- GitHub issue/PR templates: `bug_report.md`, `feature_request.md`, `documentation.md`, `PULL_REQUEST_TEMPLATE.md` ([#32](https://github.com/artcava/XPoster/issues/32))
+- LinkedIn credentials migrated to **Azure Key Vault References** ([#55](https://github.com/artcava/XPoster/issues/55))
+- GitHub Actions CI/CD pipeline (`ci.yml`) ([#45](https://github.com/artcava/XPoster/issues/45))
+- LinkedIn access token expiry reminder workflow
+- `CRON_EXPRESSION` externalised as environment variable
+- `src/local.settings.json.example` ([#29](https://github.com/artcava/XPoster/issues/29))
+- `docs/` folder ([#30](https://github.com/artcava/XPoster/issues/30))
+- `docs/architecture.md` with ADRs and Mermaid data-flow diagram ([#28](https://github.com/artcava/XPoster/issues/28))
+- `tests/README.md` ([#31](https://github.com/artcava/XPoster/issues/31))
+- GitHub issue/PR templates ([#32](https://github.com/artcava/XPoster/issues/32))
 - Versioning baseline `0.1.0` set in `XPoster.csproj` ([#49](https://github.com/artcava/XPoster/issues/49))
 
 ### Changed
 - `README.md` translated to English ([#20](https://github.com/artcava/XPoster/issues/20))
 - CI: `dotnet test` added as mandatory gate before deployment ([#22](https://github.com/artcava/XPoster/issues/22))
-- CI coverage threshold raised progressively: 0% → 50% → **70%** (actual line coverage reached: 72.1%) ([#62](https://github.com/artcava/XPoster/issues/62))
+- CI coverage threshold raised to **70%** ([#62](https://github.com/artcava/XPoster/issues/62))
 
 ### Fixed
-- **Nullable Reference Types**: resolved all `CS86xx` warnings across `src/` and `tests/` (`CS8602`, `CS8609`, `CS8620`, `CS8625`, `xUnit2013`) ([#46](https://github.com/artcava/XPoster/issues/46))
-- `BaseGenerator.PostAsync`: changed from blocking (`return false`) to graceful degradation (log warning + continue) when image generation fails and `ProduceImage` is `true` ([#22](https://github.com/artcava/XPoster/issues/22))
-- `FeedGenerator`: added `try-catch` around `GenerateImageAsync`; post is published without image on failure instead of being suppressed ([#22](https://github.com/artcava/XPoster/issues/22))
-- Extra semicolon in `BaseGenerator` causing compilation error ([#22](https://github.com/artcava/XPoster/issues/22))
-- `RSSFeed` required members (`Title`, `Content`, `Link`) aligned in tests to match actual record definition ([#62](https://github.com/artcava/XPoster/issues/62))
-- `CS9007` raw string interpolation in `AiServiceTests` replaced with standard string concatenation ([#62](https://github.com/artcava/XPoster/issues/62))
+- **Nullable Reference Types**: resolved all `CS86xx` warnings ([#46](https://github.com/artcava/XPoster/issues/46))
+- `BaseGenerator.PostAsync` and `FeedGenerator` graceful degradation on image generation failure ([#22](https://github.com/artcava/XPoster/issues/22))
 
 ### Tests
-- Line coverage raised from 0% to **72.1%** with new test suites: `AiServiceTests`, `InSenderGeneratePayLoadTests`, `IgSenderMissingBranchTests`, `XSenderMissingBranchTests`, `ModelsMissingTests`, `BaseGeneratorTests`, `NoGeneratorTests`, `IgSenderTests`, `XFunction` missing branch tests ([#51](https://github.com/artcava/XPoster/issues/51), [#52](https://github.com/artcava/XPoster/issues/52), [#62](https://github.com/artcava/XPoster/issues/62))
+- Line coverage raised to **72.1%** ([#51](https://github.com/artcava/XPoster/issues/51), [#52](https://github.com/artcava/XPoster/issues/52), [#62](https://github.com/artcava/XPoster/issues/62))
 
 ---
 

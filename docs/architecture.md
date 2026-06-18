@@ -51,6 +51,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     │ • Feed Service     │ ◄─── RSS Parser
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
     │ • KeyVaultService  │ ◄─── Azure Key Vault secret resolution
+    │ • FeedUrlProvider  │ ◄─── Feed URL resolution (IFeedUrlProvider)
     └────────┬───────────┘
              │
              ▼
@@ -98,7 +99,7 @@ The factory enforces the invariant that every unscheduled hour resolves to `NoOr
 
 Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**:
 
-- **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a text summary, and requests a generated image. The specific model used is determined by the resolved `IAiService` implementation. It is stateless and side-effect-free until it hands off the `Post`.
+- **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a text summary, and requests a generated image. Feed URLs are resolved at runtime via `IFeedUrlProvider` (default: `ConfigurationFeedUrlProvider`, bound from `FeedOptions__Urls__N` app settings). If the provider returns an empty list, `OrchestrateAsync()` returns `null` immediately with no AI or sender invocation. The specific AI model used is determined by the resolved `IAiService` implementation. It is stateless and side-effect-free until it hands off the `Post`.
 - **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on `AiService`.
 - **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.
 
@@ -109,6 +110,7 @@ Services are registered as singletons or transients in the DI container and are 
 - **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledOrchestrationProfile` and can be overridden globally via the `AiProvider` configuration key.
 - **AiServiceHelper**: a shared utility class used internally by AI service implementations (`DeepSeekService`, `FalAiImageService`, and others). It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
 - **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
+- **ConfigurationFeedUrlProvider** (`IFeedUrlProvider`): resolves the list of RSS feed URLs consumed by `FeedOrchestrator` from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
 - **KeyVaultService** (`IKeyVaultService`): wraps `Azure.Security.KeyVault.Secrets` to retrieve OAuth tokens and API secrets from Azure Key Vault at runtime. Used by `XSender`, `InSender`, and `DryRunSender` to resolve platform credentials without storing secrets in application settings. Uses `DefaultAzureCredential`, so it transparently leverages the Function App's Managed Identity in production.
 
@@ -228,6 +230,7 @@ sequenceDiagram
     participant AiFactory as AiServiceFactory
     participant Orch as BaseOrchestrator<br/>(Feed / PowerLaw)
     participant AI as IAiService<br/>(resolved by AiProvider)
+    participant FeedUrl as IFeedUrlProvider
     participant Feed as FeedService<br/>(RSS)
     participant Crypto as CryptoService<br/>(cryptoprices.cc)
     participant KV as KeyVaultService<br/>(Azure Key Vault)
@@ -249,7 +252,9 @@ sequenceDiagram
     Fn->>Orch: OrchestrateAsync()
 
     alt FeedOrchestrator
-        Orch->>Feed: GetLatestItemAsync()
+        Orch->>FeedUrl: GetFeedUrls()
+        FeedUrl-->>Orch: IReadOnlyList<string>
+        Orch->>Feed: GetLatestItemAsync(url)
         Feed-->>Orch: FeedItem (title, url, content)
         Orch->>AI: GetCompletionAsync(content, maxLength)
         AI-->>Orch: summary text

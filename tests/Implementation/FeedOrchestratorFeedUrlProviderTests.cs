@@ -1,0 +1,183 @@
+using Microsoft.Extensions.Logging;
+using Moq;
+using XPoster.Abstraction;
+using XPoster.Implementation;
+using XPoster.Models;
+
+namespace XPoster.Tests.Implementation;
+
+/// <summary>
+/// Tests focused on <see cref="FeedOrchestrator"/> interactions with <see cref="IFeedUrlProvider"/>.
+/// Covers URL delegation, empty-URL guard, and per-URL FeedService call verification.
+/// </summary>
+public class FeedOrchestratorFeedUrlProviderTests
+{
+    private readonly Mock<ISender> _mockSender;
+    private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
+    private readonly Mock<IFeedService> _mockFeedService;
+    private readonly Mock<IFeedUrlProvider> _mockFeedUrlProvider;
+    private readonly Mock<IAiService> _mockAiService;
+
+    public FeedOrchestratorFeedUrlProviderTests()
+    {
+        _mockSender = new Mock<ISender>();
+        _mockLogger = new Mock<ILogger<FeedOrchestrator>>();
+        _mockFeedService = new Mock<IFeedService>();
+        _mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
+        _mockAiService = new Mock<IAiService>();
+
+        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+    }
+
+    private FeedOrchestrator CreateOrchestrator() =>
+        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockFeedUrlProvider.Object, _mockAiService.Object);
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_CallGetFeedUrls_Once()
+    {
+        // ARRANGE
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(["https://feed1.com/rss"]);
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
+        _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Summary");
+        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Prompt");
+        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        _mockFeedUrlProvider.Verify(p => p.GetFeedUrls(), Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()
+    {
+        // ARRANGE
+        var urls = new List<string>
+        {
+            "https://feed1.com/rss",
+            "https://feed2.com/rss",
+            "https://feed3.com/rss"
+        };
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(urls);
+
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
+        _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Summary");
+        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Prompt");
+        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        await orchestrator.OrchestrateAsync();
+
+        // ASSERT — GetFeedsAsync must be called exactly N times, once per URL
+        _mockFeedService.Verify(
+            s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            Times.Exactly(urls.Count));
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()
+    {
+        // ARRANGE
+        var url1 = "https://feed1.com/rss";
+        var url2 = "https://feed2.com/rss";
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([url1, url2]);
+
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
+        _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Summary");
+        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Prompt");
+        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        await orchestrator.OrchestrateAsync();
+
+        // ASSERT — each configured URL is passed to FeedService exactly once
+        _mockFeedService.Verify(
+            s => s.GetFeedsAsync(url1, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            Times.Once);
+        _mockFeedService.Verify(
+            s => s.GetFeedsAsync(url2, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_ReturnNull_And_DisableSendIt_When_ProviderReturnsEmptyList()
+    {
+        // ARRANGE
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([]);
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        var result = await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        Assert.Null(result);
+        Assert.False(orchestrator.SendIt);
+        _mockFeedService.Verify(
+            s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            Times.Never);
+        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()
+    {
+        // ARRANGE
+        var url1 = "https://feed1.com/rss";
+        var url2 = "https://feed2.com/rss";
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([url1, url2]);
+
+        var feedsFromUrl1 = new List<RSSFeed> { new() { Title = "Feed1 Item", Content = "Content1", Link = "https://l1.com" } };
+        var feedsFromUrl2 = new List<RSSFeed> { new() { Title = "Feed2 Item", Content = "Content2", Link = "https://l2.com" } };
+
+        _mockFeedService
+            .Setup(s => s.GetFeedsAsync(url1, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(feedsFromUrl1);
+        _mockFeedService
+            .Setup(s => s.GetFeedsAsync(url2, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(feedsFromUrl2);
+
+        string? capturedFeedContent = null;
+        _mockAiService
+            .Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .Callback<string, int, CancellationToken>((content, _, _) => capturedFeedContent = content)
+            .ReturnsAsync("AggregatedSummary");
+        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("Prompt");
+        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        var result = await orchestrator.OrchestrateAsync();
+
+        // ASSERT — AI receives aggregated content from both URLs
+        Assert.NotNull(result);
+        Assert.NotNull(capturedFeedContent);
+        Assert.Contains("Content1", capturedFeedContent);
+        Assert.Contains("Content2", capturedFeedContent);
+    }
+}
