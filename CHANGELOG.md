@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`AzureFoundryService.GenerateImageAsync` — image generation endpoint aligned to Azure AI Foundry `/openai/v1` format**: `GetImageGenerationEndpoint()` now builds `{Endpoint}/images/generations` without the `/openai/deployments/{name}/` path segment and without `api-version`; the `model = ImageDeploymentName` field is now included in the request body instead of being embedded in the URL.
+- **`AzureFoundryService` — chat completions endpoint aligned to Azure AI Foundry `/openai/v1` format**: `GetChatCompletionsEndpoint()` now builds `{Endpoint}/chat/completions` without the `/openai/deployments/{name}/` path segment and without `api-version`; `BuildSummaryPayload()` and `BuildImagePromptPayload()` now include `model = DeploymentName` in the request body.
+- **`AzureFoundryOptions` — removed `ApiVersion` property**: `ApiVersion` was not used by Foundry `/openai/v1` endpoints and was causing `400 Bad Request` errors; removed from `AzureFoundryOptions`, `local.settings.json.example`, and related documentation.
+- **`AzureFoundryService.GenerateImageAsync` — removed unsupported `response_format` parameter**: the `response_format` field is not accepted by the Foundry image generation endpoint; removed from the request body to prevent `400 Bad Request` responses.
+
+### Tests
+- **`AzureFoundryServiceTests` — endpoint and payload coverage for image generation and chat completions**:
+  - `E1`: verifies POST targets `/images/generations` without the `/openai/deployments/` path segment.
+  - `E2`: verifies `model` is serialised in the image generation request body.
+  - `C1`: verifies POST targets `/chat/completions` without the `/openai/deployments/` path segment.
+  - `C2`: verifies `model` is present in the chat completions request body.
+- **`AzureFoundryOptionsTests`** — added `DoesNotExpose_ApiVersionProperty` regression test to ensure `ApiVersion` is not reintroduced in the options model; follows the `DeepSeekOptions` test pattern.
+
 ---
 
 ## [0.1.3] - 2026-06-17
