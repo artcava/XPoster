@@ -57,43 +57,9 @@ internal static class AiServiceHelper
     }
 
     /// <summary>
-    /// Legacy overload: parses HTTP guards and JSON only, returning the raw <see cref="JsonElement"/>.
-    /// </summary>
-    internal static async Task<(bool Success, JsonElement? Content)> ParseImageResponseAsync(
-        HttpResponseMessage response,
-        string providerName,
-        ILogger logger,
-        CancellationToken cancellationToken)
-    {
-        if (response.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            logger.LogWarning("{Provider} returned 429 (TooManyRequests) during image generation.", providerName);
-            return (false, null);
-        }
-
-        if (!response.IsSuccessStatusCode)
-        {
-            logger.LogError("{Provider} image generation failed with status code {StatusCode}.",
-                providerName, response.StatusCode);
-            return (false, null);
-        }
-
-        JsonElement result;
-        try
-        {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-        }
-        catch (JsonException)
-        {
-            logger.LogError("{Provider} image generation returned malformed JSON.", providerName);
-            return (false, null);
-        }
-
-        return (true, result);
-    }
-
-    /// <summary>
     /// Parses an image generation HTTP response end-to-end.
+    /// Handles HTTP guard pipeline, JSON deserialization, and provider-specific
+    /// byte extraction (base64 or URL download).
     /// </summary>
     internal static async Task<byte[]> ParseImageResponseAsync(
         HttpResponseMessage response,
