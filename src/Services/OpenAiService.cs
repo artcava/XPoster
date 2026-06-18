@@ -60,10 +60,19 @@ public class OpenAiService : IAiService
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Delegates the full pipeline (HTTP guards, JSON deserialisation, b64_json extraction)
+    /// to <see cref="AiServiceHelper.ParseImageResponseAsync(HttpResponseMessage,AiProvider,HttpClient,ILogger,string?,CancellationToken)"/>.
+    /// <see cref="System.Net.Http.HttpRequestException"/> on the POST call is caught and logged as an error.
+    /// An empty or whitespace prompt emits <c>LogWarning</c> and returns immediately without making any HTTP call.
+    /// </remarks>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogWarning("OpenAI GenerateImageAsync called with an empty or whitespace prompt.");
             return Array.Empty<byte>();
+        }
 
         _logger.LogInformation("Generating image with {ImageModel}, prompt: {Prompt}", _options.ImageModel, prompt);
 
@@ -75,42 +84,19 @@ public class OpenAiService : IAiService
             size = _options.ImageSize
         };
 
-        var response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogError("Image generation failed with status code {StatusCode}", response.StatusCode);
-            return Array.Empty<byte>();
-        }
-
-        JsonElement result;
+        HttpResponseMessage response;
         try
         {
-            result = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+            response = await _client.PostAsJsonAsync(_options.ImageEndpoint, body, cancellationToken);
         }
-        catch (JsonException)
+        catch (HttpRequestException ex)
         {
-            _logger.LogError("OpenAI image generation returned malformed JSON.");
+            _logger.LogError(ex, "OpenAI image generation HTTP request failed.");
             return Array.Empty<byte>();
         }
 
-        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
-        {
-            _logger.LogError("OpenAI image generation response does not contain data entries.");
-            return Array.Empty<byte>();
-        }
-
-        var first = data[0];
-
-        if (first.TryGetProperty("b64_json", out var b64Property))
-        {
-            var base64 = b64Property.GetString();
-            return string.IsNullOrWhiteSpace(base64)
-                ? Array.Empty<byte>()
-                : Convert.FromBase64String(base64);
-        }
-
-        return Array.Empty<byte>();
+        return await AiServiceHelper.ParseImageResponseAsync(
+            response, AiProvider.OpenAi, _client, _logger, allowedOrigin: null, cancellationToken);
     }
 
     private object GetSummary(string text, int messageMaxLength)
