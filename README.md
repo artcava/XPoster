@@ -439,73 +439,18 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 ## Testing
 
-### Test Structure
+The test suite uses **xUnit + Moq** with a unit-first approach. Tests are organized to mirror the `src/` folder structure and target ≥ 80% line coverage on every CI run.
 
 ```
 tests/
-├── XPoster.Tests.csproj
-├── XFunctionTests.cs
-├── XFunctionMissingBranchTests.cs
-├── Contracts/
-│   └── AiProviderExtensionsTests.cs
-├── Helpers/
-│   └── ResilienceTestHelpers.cs
-├── Orchestrators/
-│   ├── AiServiceFactoryTests.cs
-│   ├── FeedOrchestratorTests.cs
-│   ├── OrchestratorFactoryTests.cs
-│   ├── NoOrchestratorTests.cs
-│   ├── PowerLawOrchestratorTests.cs
-│   └── SlotProfileProviderTests.cs
-├── Integration/
-│   ├── PollyIntegrationTestBase.cs
-│   ├── LinkedInResiliencePipelineTests.cs
-│   ├── InstagramResiliencePipelineTests.cs
-│   ├── AiClientsResiliencePipelineTests.cs
-│   └── CaptureLoggerProvider.cs
-├── Models/
-│   ├── AzureFoundryOptionsValidatorTests.cs
-│   ├── DeepSeekOptionsTests.cs
-│   ├── DeepSeekOptionsValidatorTests.cs
-│   ├── FalAiOptionsValidatorTests.cs
-│   ├── ModelsTests.cs
-│   ├── OpenAiOptionsValidatorTests.cs
-│   ├── PostMissingBranchTests.cs
-│   └── RSSFeedMissingBranchTests.cs
-├── SenderPlugins/
-│   ├── DryRunSenderTests.cs
-│   ├── IgSenderResilienceTests.cs
-│   ├── IgSenderTests.cs
-│   ├── InSenderMissingBranchTests.cs
-│   ├── InSenderResilienceTests.cs
-│   ├── InSenderSendAsyncTests.cs
-│   ├── InSenderTests.cs
-│   ├── XSenderMissingBranchTests.cs
-│   ├── XSenderSendAsyncTests.cs
-│   └── XSenderTests.cs
-└── Services/
-    ├── AiServiceHelperTests.cs
-    ├── AzureFoundryServiceTests.cs
-    ├── CryptoServiceTests.cs
-    ├── DeepSeekServiceTests.cs
-    ├── FalAiImageServiceTests.cs
-    ├── FeedServiceTests.cs
-    ├── HybridAiServiceTests.cs
-    ├── KeyVaultServiceTests.cs
-    ├── OpenAiServiceTests.cs
-    └── TimeProviderTests.cs
+├── Contracts/        # AiProviderExtensions, BaseOrchestrator abstract contracts
+├── Helpers/          # shared HTTP mock helpers for resilience tests
+├── Orchestrators/    # FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory, AiServiceFactory…
+├── Integration/      # Polly resilience pipelines — not run in CI
+├── Models/           # domain model invariants, options validators
+├── SenderPlugins/    # XSender, InSender, IgSender, DryRunSender
+└── Services/         # OpenAiService, AzureFoundryService, KeyVaultService…
 ```
-
-| Folder | What is covered |
-|---|---|
-| *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Contracts/` | `AiProviderExtensions` enum extension method contracts |
-| `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Orchestrators/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `AiServiceFactory` resolution logic; `OrchestratorFactory` using synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` provider behaviour (`SlotProfileProviderTests.cs`) |
-| `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
-| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
-| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
-| `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
 
 ### Running Tests
 
@@ -513,42 +458,11 @@ tests/
 # All tests
 dotnet test
 
-# Specific tests
-dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
-
-# With coverage (exclusions defined in coverlet.runsettings at repo root)
+# With coverage
 dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 ```
 
-> 📖 Full testing strategy, mocking patterns, and coverage goals: [tests/README.md](tests/README.md).
-
-### Mocking External Services
-
-```csharp
-[Fact]
-public async Task FeedOrchestrator_ShouldGenerateSummary()
-{
-    // Arrange
-    var mockAiService = new Mock<IAiService>();
-    mockAiService
-        .Setup(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
-        .ReturnsAsync("Test summary");
-
-    var orchestrator = new FeedOrchestrator(
-        mockSender.Object,
-        mockLogger.Object,
-        mockFeedService.Object,
-        mockAiService.Object
-    );
-
-    // Act
-    var result = await orchestrator.OrchestrateAsync();
-
-    // Assert
-    Assert.NotNull(result);
-    Assert.Contains("Test summary", result.Content);
-}
-```
+> 📖 Full test structure (per-file listing), naming conventions, mocking patterns, coverage exclusions, and checklist for adding new tests: **[tests/README.md](tests/README.md)**.
 
 ---
 
