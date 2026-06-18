@@ -116,18 +116,18 @@ internal static class AiServiceHelper
         string? allowedOrigin,
         CancellationToken cancellationToken)
     {
-        var providerName = GetProviderLabel(provider);
+        var label = provider.GetLabel();
 
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
-            logger.LogWarning("{Provider} returned 429 (TooManyRequests) during image generation.", providerName);
+            logger.LogWarning("{Provider} returned 429 (TooManyRequests) during image generation.", label);
             return Array.Empty<byte>();
         }
 
         if (!response.IsSuccessStatusCode)
         {
             logger.LogError("{Provider} image generation failed with status code {StatusCode}.",
-                providerName, response.StatusCode);
+                label, response.StatusCode);
             return Array.Empty<byte>();
         }
 
@@ -138,26 +138,28 @@ internal static class AiServiceHelper
         }
         catch (JsonException)
         {
-            logger.LogError("{Provider} image generation returned malformed JSON.", providerName);
+            logger.LogError("{Provider} image generation returned malformed JSON.", label);
             return Array.Empty<byte>();
         }
 
         return provider switch
         {
-            AiProvider.OpenAi => ExtractOpenAiBytes(root, providerName, logger),
-            AiProvider.AzureFoundry => await ExtractAzureFoundryBytesAsync(root, providerName, allowedOrigin, httpClient, logger, cancellationToken),
-            AiProvider.DeepSeekWithFal => await ExtractFalAiBytesAsync(root, providerName, httpClient, logger, cancellationToken),
-            _ => LogAndReturnEmpty(logger, providerName, "Image byte extraction is not supported for this provider.")
+            AiProvider.OpenAi        => ExtractOpenAiBytes(root, provider, logger),
+            AiProvider.AzureFoundry  => await ExtractAzureFoundryBytesAsync(root, provider, allowedOrigin, httpClient, logger, cancellationToken),
+            AiProvider.DeepSeekWithFal => await ExtractFalAiBytesAsync(root, provider, httpClient, logger, cancellationToken),
+            _                        => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
         };
     }
 
     // --- provider-specific extractors ---
 
-    private static byte[] ExtractOpenAiBytes(JsonElement root, string providerName, ILogger logger)
+    private static byte[] ExtractOpenAiBytes(JsonElement root, AiProvider provider, ILogger logger)
     {
+        var label = provider.GetLabel();
+
         if (!root.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
-            logger.LogError("{Provider} image generation response does not contain data entries.", providerName);
+            logger.LogError("{Provider} image generation response does not contain data entries.", label);
             return Array.Empty<byte>();
         }
 
@@ -165,14 +167,14 @@ internal static class AiServiceHelper
 
         if (!first.TryGetProperty("b64_json", out var b64Property))
         {
-            logger.LogError("{Provider} image data entry does not contain b64_json.", providerName);
+            logger.LogError("{Provider} image data entry does not contain b64_json.", label);
             return Array.Empty<byte>();
         }
 
         var base64 = b64Property.GetString();
         if (string.IsNullOrWhiteSpace(base64))
         {
-            logger.LogError("{Provider} image data entry contains an empty b64_json value.", providerName);
+            logger.LogError("{Provider} image data entry contains an empty b64_json value.", label);
             return Array.Empty<byte>();
         }
 
@@ -181,15 +183,17 @@ internal static class AiServiceHelper
 
     private static async Task<byte[]> ExtractAzureFoundryBytesAsync(
         JsonElement root,
-        string providerName,
+        AiProvider provider,
         string? allowedOrigin,
         HttpClient httpClient,
         ILogger logger,
         CancellationToken cancellationToken)
     {
+        var label = provider.GetLabel();
+
         if (!root.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
         {
-            logger.LogError("{Provider} image generation response does not contain data entries.", providerName);
+            logger.LogError("{Provider} image generation response does not contain data entries.", label);
             return Array.Empty<byte>();
         }
 
@@ -200,7 +204,7 @@ internal static class AiServiceHelper
             var base64 = b64Property.GetString();
             if (string.IsNullOrWhiteSpace(base64))
             {
-                logger.LogError("{Provider} image data entry contains an empty b64_json value.", providerName);
+                logger.LogError("{Provider} image data entry contains an empty b64_json value.", label);
                 return Array.Empty<byte>();
             }
 
@@ -220,27 +224,37 @@ internal static class AiServiceHelper
                 {
                     logger.LogWarning(
                         "{Provider} image generation returned a fallback URL from a different origin: {ImageUrl}. Expected origin: {ConfiguredOrigin}.",
-                        providerName, imageUrl, allowedOrigin);
+                        label, imageUrl, allowedOrigin);
                 }
             }
 
-            return await httpClient.GetByteArrayAsync(imageUrl, cancellationToken);
+            try
+            {
+                return await httpClient.GetByteArrayAsync(imageUrl, cancellationToken);
+            }
+            catch (HttpRequestException ex)
+            {
+                logger.LogError(ex, "{Provider} failed to download image from fallback URL: {Url}", label, imageUrl);
+                return Array.Empty<byte>();
+            }
         }
 
-        logger.LogError("{Provider} image data entry does not contain b64_json or url.", providerName);
+        logger.LogError("{Provider} image data entry does not contain b64_json or url.", label);
         return Array.Empty<byte>();
     }
 
     private static async Task<byte[]> ExtractFalAiBytesAsync(
         JsonElement root,
-        string providerName,
+        AiProvider provider,
         HttpClient httpClient,
         ILogger logger,
         CancellationToken cancellationToken)
     {
+        var label = provider.GetLabel();
+
         if (!root.TryGetProperty("images", out var images) || images.GetArrayLength() == 0)
         {
-            logger.LogError("{Provider} response does not contain any images.", providerName);
+            logger.LogError("{Provider} response does not contain any images.", label);
             return Array.Empty<byte>();
         }
 
@@ -248,36 +262,35 @@ internal static class AiServiceHelper
 
         if (!firstImage.TryGetProperty("url", out var urlProperty))
         {
-            logger.LogError("{Provider} image entry does not contain a URL.", providerName);
+            logger.LogError("{Provider} image entry does not contain a URL.", label);
             return Array.Empty<byte>();
         }
 
         var imageUrl = urlProperty.GetString();
         if (string.IsNullOrWhiteSpace(imageUrl))
         {
-            logger.LogError("{Provider} returned an empty image URL.", providerName);
+            logger.LogError("{Provider} returned an empty image URL.", label);
             return Array.Empty<byte>();
         }
 
         logger.LogInformation("Downloading generated image from {ImageUrl}", imageUrl);
-        return await httpClient.GetByteArrayAsync(imageUrl, cancellationToken);
+
+        try
+        {
+            return await httpClient.GetByteArrayAsync(imageUrl, cancellationToken);
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.LogError(ex, "{Provider} failed to download generated image from URL: {Url}", label, imageUrl);
+            return Array.Empty<byte>();
+        }
     }
 
     // --- utilities ---
 
-    internal static string GetProviderLabel(AiProvider provider) => provider switch
+    private static byte[] LogAndReturnEmpty(ILogger logger, AiProvider provider, string reason)
     {
-        AiProvider.OpenAi => "OpenAI",
-        AiProvider.AzureFoundry => "Azure Foundry",
-        AiProvider.DeepSeekWithFal => "fal.ai",
-        AiProvider.Perplexity => "Perplexity",
-        AiProvider.None => "None",
-        _ => provider.ToString()
-    };
-
-    private static byte[] LogAndReturnEmpty(ILogger logger, string providerName, string reason)
-    {
-        logger.LogError("{Provider} image byte extraction skipped: {Reason}", providerName, reason);
+        logger.LogError("{Provider} image byte extraction skipped: {Reason}", provider.GetLabel(), reason);
         return Array.Empty<byte>();
     }
 }
