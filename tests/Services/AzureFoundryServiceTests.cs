@@ -49,8 +49,6 @@ public class AzureFoundryServiceTests
     private static string ChatCompletionJson(string content) =>
         "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
-    // ── GetSummaryAsync ──────────────────────────────────────────────────────
-
     [Fact]
     public async Task GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()
     {
@@ -110,8 +108,6 @@ public class AzureFoundryServiceTests
         Assert.Equal(string.Empty, result);
     }
 
-    // ── GetImagePromptAsync ─────────────────────────────────────────────────
-
     [Fact]
     public async Task GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()
     {
@@ -142,8 +138,6 @@ public class AzureFoundryServiceTests
         Assert.Equal(string.Empty, result);
     }
 
-    // ── GenerateImageAsync ──────────────────────────────────────────────────
-
     [Fact]
     public async Task GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()
     {
@@ -167,7 +161,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G1 — 429 on image generation must return empty, not fall through to success path.</summary>
     [Fact]
     public async Task GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()
     {
@@ -178,7 +171,25 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G2 — Malformed JSON on 200 must not throw; must return empty array.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out var loggerMock);
+
+        await svc.GenerateImageAsync("image prompt");
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains("Azure Foundry") &&
+                    (v.ToString()!.Contains("429") || v.ToString()!.Contains("TooManyRequests"))),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
     [Fact]
     public async Task GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()
     {
@@ -189,7 +200,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G3 — Empty data array on 200 must return empty array without throwing IndexOutOfRangeException.</summary>
     [Fact]
     public async Task GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()
     {
@@ -200,7 +210,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G4 — b64_json null must return empty array, not throw FormatException.</summary>
     [Fact]
     public async Task GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()
     {
@@ -211,10 +220,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>
-    /// G5 — When b64_json is absent but a url is present, the service downloads from the url
-    /// and returns the bytes.
-    /// </summary>
     [Fact]
     public async Task GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()
     {
@@ -249,9 +254,6 @@ public class AzureFoundryServiceTests
         Assert.Equal(imageBytes, result);
     }
 
-    /// <summary>
-    /// G6 — A fallback url that does not originate from the configured endpoint must emit a LogWarning.
-    /// </summary>
     [Fact]
     public async Task GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()
     {
@@ -293,7 +295,49 @@ public class AzureFoundryServiceTests
             Times.Once);
     }
 
-    /// <summary>G7 — Empty prompt must return empty array immediately, without making any HTTP call.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new HttpRequestException("network failure"));
+
+        var svc = BuildService(handler.Object, out _);
+
+        var result = await svc.GenerateImageAsync("image prompt");
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new HttpRequestException("network failure"));
+
+        var svc = BuildService(handler.Object, out var loggerMock);
+
+        await svc.GenerateImageAsync("image prompt");
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Azure Foundry image generation HTTP request failed")),
+                It.IsAny<HttpRequestException>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
     [Fact]
     public async Task GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()
     {
@@ -310,7 +354,24 @@ public class AzureFoundryServiceTests
             ItExpr.IsAny<CancellationToken>());
     }
 
-    /// <summary>G8 — Whitespace-only prompt must also be rejected before any HTTP call.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()
+    {
+        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
+        var svc = BuildService(handler.Object, out var loggerMock);
+
+        await svc.GenerateImageAsync(string.Empty);
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("empty or whitespace prompt")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
     [Fact]
     public async Task GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()
     {
@@ -327,10 +388,6 @@ public class AzureFoundryServiceTests
             ItExpr.IsAny<CancellationToken>());
     }
 
-    /// <summary>
-    /// E1 — GenerateImageAsync must POST to the Foundry /images/generations path,
-    /// not the classic Azure OpenAI /openai/deployments/{name}/images/generations path.
-    /// </summary>
     [Fact]
     public async Task GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()
     {
@@ -352,9 +409,6 @@ public class AzureFoundryServiceTests
             ItExpr.IsAny<CancellationToken>());
     }
 
-    /// <summary>
-    /// E2 — The image request body must include the `model` field set to ImageDeploymentName.
-    /// </summary>
     [Fact]
     public async Task GenerateImageAsync_RequestBodyContainsModelField()
     {
@@ -387,10 +441,6 @@ public class AzureFoundryServiceTests
         Assert.Equal("gpt-image-1.5", modelProp.GetString());
     }
 
-    /// <summary>
-    /// C1 — GetSummaryAsync must POST to the Foundry /chat/completions path,
-    /// not the classic Azure OpenAI /openai/deployments/{name}/chat/completions path.
-    /// </summary>
     [Fact]
     public async Task GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()
     {
@@ -409,9 +459,6 @@ public class AzureFoundryServiceTests
             ItExpr.IsAny<CancellationToken>());
     }
 
-    /// <summary>
-    /// C2 — The chat request body must include the `model` field set to DeploymentName.
-    /// </summary>
     [Fact]
     public async Task GetSummaryAsync_RequestBodyContainsModelField()
     {
