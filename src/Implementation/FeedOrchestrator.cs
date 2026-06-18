@@ -12,11 +12,9 @@ namespace XPoster.Implementation;
 public class FeedOrchestrator : BaseOrchestrator
 {
     private readonly IFeedService _feedService;
+    private readonly IFeedUrlProvider _feedUrlProvider;
     private readonly IAiService? _aiService;
     private bool _sendIt = true;
-
-    /// <summary>Default RSS feed URLs polled for Bitcoin news.</summary>
-    private List<string> _feedUrls = new List<string> { "https://cointelegraph.com/rss/tag/bitcoin", "https://www.coindesk.com/arc/outboundfeeds/rss" };
 
     /// <summary>Word-to-hashtag replacement map applied to the generated summary.</summary>
     private Dictionary<string, string> _replacements = new Dictionary<string, string> { { "bitcoin", "#Bitcoin" }, { "btc", "#BTC" }, { "blockchain", "#Blockchain" }, { "fed", "#FED" } };
@@ -33,10 +31,16 @@ public class FeedOrchestrator : BaseOrchestrator
     /// <summary>
     /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>
-    public FeedOrchestrator(ISender sender, ILogger<FeedOrchestrator> logger, IFeedService feedService, IAiService? aiService)
+    public FeedOrchestrator(
+        ISender sender,
+        ILogger<FeedOrchestrator> logger,
+        IFeedService feedService,
+        IFeedUrlProvider feedUrlProvider,
+        IAiService? aiService)
         : base(sender, logger)
     {
         _feedService = feedService;
+        _feedUrlProvider = feedUrlProvider;
         _aiService = aiService;
     }
 
@@ -95,8 +99,17 @@ public class FeedOrchestrator : BaseOrchestrator
         var end = DateTimeOffset.UtcNow;
         var start = end.AddDays(-1);
 
+        var feedUrls = _feedUrlProvider.GetFeedUrls();
+
+        if (feedUrls.Count == 0)
+        {
+            _logger.LogWarning("IFeedUrlProvider returned an empty URL list. No feeds will be fetched.");
+            SendIt = false;
+            return string.Empty;
+        }
+
         var allFeeds = new List<RSSFeed>();
-        foreach (string url in _feedUrls)
+        foreach (string url in feedUrls)
         {
             var feeds = await _feedService.GetFeedsAsync(url, start, end, _replacements.Keys);
             if (feeds != null && feeds.Any())
@@ -128,7 +141,7 @@ public class FeedOrchestrator : BaseOrchestrator
             return string.Empty;
         }
 
-        _logger.LogInformation("Generated summary: {0}", summary);
+        _logger.LogInformation("Generated summary: {Summary}", summary);
         summary = ReplaceEveryFirstOccurenceOf(summary, _replacements);
         return summary;
     }

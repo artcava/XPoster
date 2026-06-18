@@ -111,6 +111,14 @@
     "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 
+    // -----------------------------------------------------------------------
+    // Feed URL provider — RSS/Atom sources polled by FeedOrchestrator.
+    // Uses flat Azure Functions naming convention: FeedOptions__Urls__0, etc.
+    // Add as many entries as needed; the list is processed in order.
+    // -----------------------------------------------------------------------
+    "FeedOptions__Urls__0": "https://cointelegraph.com/rss/tag/bitcoin",
+    "FeedOptions__Urls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
