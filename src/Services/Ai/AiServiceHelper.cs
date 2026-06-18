@@ -131,10 +131,10 @@ internal static class AiServiceHelper
 
         return provider switch
         {
-            AiProvider.OpenAi        => ExtractOpenAiBytes(root, provider, logger),
-            AiProvider.AzureFoundry  => await ExtractAzureFoundryBytesAsync(root, provider, allowedOrigin, httpClient, logger, cancellationToken),
+            AiProvider.OpenAi          => ExtractOpenAiBytes(root, provider, logger),
+            AiProvider.AzureFoundry    => await ExtractAzureFoundryBytesAsync(root, provider, allowedOrigin, httpClient, logger, cancellationToken),
             AiProvider.DeepSeekWithFal => await ExtractFalAiBytesAsync(root, provider, httpClient, logger, cancellationToken),
-            _                        => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
+            _                          => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
         };
     }
 
@@ -195,14 +195,15 @@ internal static class AiServiceHelper
             var origin = uri.GetLeftPart(UriPartial.Authority);
             if (!string.Equals(origin, allowedOrigin, StringComparison.OrdinalIgnoreCase))
             {
-                logger.LogError("{Provider} image URL origin '{Origin}' does not match expected '{Expected}'.", label, origin, allowedOrigin);
+                logger.LogWarning("{Provider} image URL has a different origin '{Origin}' than expected '{Expected}': {ImageUrl}.",
+                    label, origin, allowedOrigin, imageUrl);
                 return Array.Empty<byte>();
             }
         }
         try { return await httpClient.GetByteArrayAsync(imageUrl, cancellationToken); }
         catch (HttpRequestException ex)
         {
-            logger.LogError(ex, "{Provider} failed to download image from URL.", label);
+            logger.LogError(ex, "{Provider} failed to download image from fallback URL {ImageUrl}.", label, imageUrl);
             return Array.Empty<byte>();
         }
     }
@@ -232,7 +233,7 @@ internal static class AiServiceHelper
         try { return await httpClient.GetByteArrayAsync(imageUrl, cancellationToken); }
         catch (HttpRequestException ex)
         {
-            logger.LogError(ex, "{Provider} failed to download image from fal.ai URL.", label);
+            logger.LogError(ex, "{Provider} failed to download generated image from URL {ImageUrl}.", label, imageUrl);
             return Array.Empty<byte>();
         }
     }
