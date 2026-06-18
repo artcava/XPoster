@@ -13,8 +13,17 @@ namespace XPoster.Tests.Services;
 /// </summary>
 public class AiServiceHelperImageTests
 {
-    private static (HttpClient Client, Mock<HttpMessageHandler> Handler) MakeSingleResponseClient(
-        HttpStatusCode code, string body)
+    private static HttpClient MakeNoOpClient()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        return new HttpClient(handler.Object);
+    }
+
+    /// <summary>
+    /// Returns an HttpClient whose handler returns <paramref name="downloadBytes"/> on the first SendAsync
+    /// (i.e. the image download request issued inside the extractor).
+    /// </summary>
+    private static HttpClient MakeDownloadClient(byte[] downloadBytes)
     {
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
@@ -22,39 +31,26 @@ public class AiServiceHelperImageTests
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(code)
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(body, Encoding.UTF8, "application/json")
+                Content = new ByteArrayContent(downloadBytes)
             });
-        return (new HttpClient(handler.Object), handler);
+        return new HttpClient(handler.Object);
     }
 
-    private static (HttpClient Client, Mock<HttpMessageHandler> Handler) MakeSequenceClient(
-        HttpResponseMessage first, HttpResponseMessage second)
+    /// <summary>
+    /// Returns an HttpClient whose handler throws <see cref="HttpRequestException"/> on the first SendAsync.
+    /// </summary>
+    private static (HttpClient Client, Mock<ILogger> Logger) MakeThrowingDownloadClient()
     {
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
-            .SetupSequence<Task<HttpResponseMessage>>(
+            .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(first)
-            .ReturnsAsync(second);
-        return (new HttpClient(handler.Object), handler);
-    }
-
-    private static (HttpClient Client, Mock<HttpMessageHandler> Handler) MakeThrowingDownloadClient(
-        HttpResponseMessage first)
-    {
-        var handler = new Mock<HttpMessageHandler>();
-        handler.Protected()
-            .SetupSequence<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(first)
             .ThrowsAsync(new HttpRequestException("download failed"));
-        return (new HttpClient(handler.Object), handler);
+        return (new HttpClient(handler.Object), new Mock<ILogger>());
     }
 
     private static HttpResponseMessage JsonResponse(string body) =>
@@ -71,12 +67,11 @@ public class AiServiceHelperImageTests
     [InlineData(AiProvider.DeepSeekWithFal)]
     public async Task Parse_Returns429_ReturnsEmpty(AiProvider provider)
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.TooManyRequests, "{}");
         var logger = new Mock<ILogger>();
         var response = new HttpResponseMessage(HttpStatusCode.TooManyRequests);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, provider, client, logger.Object, null, CancellationToken.None);
+            response, provider, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -87,12 +82,11 @@ public class AiServiceHelperImageTests
     [InlineData(AiProvider.DeepSeekWithFal)]
     public async Task Parse_Returns429_LogsWarning(AiProvider provider)
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.TooManyRequests, "{}");
         var logger = new Mock<ILogger>();
         var response = new HttpResponseMessage(HttpStatusCode.TooManyRequests);
 
         await AiServiceHelper.ParseImageResponseAsync(
-            response, provider, client, logger.Object, null, CancellationToken.None);
+            response, provider, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         logger.Verify(
             x => x.Log(
@@ -111,12 +105,11 @@ public class AiServiceHelperImageTests
     [InlineData(AiProvider.DeepSeekWithFal)]
     public async Task Parse_NonSuccessStatus_ReturnsEmpty(AiProvider provider)
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.InternalServerError, "{}");
         var logger = new Mock<ILogger>();
         var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, provider, client, logger.Object, null, CancellationToken.None);
+            response, provider, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -127,7 +120,6 @@ public class AiServiceHelperImageTests
     [InlineData(AiProvider.DeepSeekWithFal)]
     public async Task Parse_MalformedJson_ReturnsEmpty(AiProvider provider)
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
@@ -135,7 +127,7 @@ public class AiServiceHelperImageTests
         };
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, provider, client, logger.Object, null, CancellationToken.None);
+            response, provider, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -148,12 +140,10 @@ public class AiServiceHelperImageTests
         var expected = new byte[] { 1, 2, 3, 4 };
         var b64 = Convert.ToBase64String(expected);
         var json = $"{{\"data\":[{{\"b64_json\":\"{b64}\"}}]}}";
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.OpenAi, client, logger.Object, null, CancellationToken.None);
+            JsonResponse(json), AiProvider.OpenAi, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Equal(expected, result);
     }
@@ -161,12 +151,10 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_OpenAi_MissingDataProperty_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"other\":\"value\"}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.OpenAi, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"other\":\"value\"}"), AiProvider.OpenAi, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -174,12 +162,10 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_OpenAi_EmptyDataArray_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"data\":[]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.OpenAi, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"data\":[]}"), AiProvider.OpenAi, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -187,12 +173,10 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_OpenAi_EmptyB64Value_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"data\":[{\"b64_json\":\"\"}]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.OpenAi, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"data\":[{\"b64_json\":\"\"}]}"), AiProvider.OpenAi, MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -205,15 +189,11 @@ public class AiServiceHelperImageTests
         var expected = new byte[] { 10, 20, 30 };
         var imageUrl = "https://cdn.fal.ai/img.png";
         var json = $"{{\"images\":[{{\"url\":\"{imageUrl}\"}}]}}";
-
-        var (client, _) = MakeSequenceClient(
-            JsonResponse(json),
-            new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(expected) });
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse(json), AiProvider.DeepSeekWithFal,
+            MakeDownloadClient(expected), logger.Object, null, CancellationToken.None);
 
         Assert.Equal(expected, result);
     }
@@ -221,12 +201,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_FalAi_MissingImagesProperty_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"other\":\"value\"}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"other\":\"value\"}"), AiProvider.DeepSeekWithFal,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -234,12 +213,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_FalAi_EmptyImagesArray_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"images\":[]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"images\":[]}"), AiProvider.DeepSeekWithFal,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -247,12 +225,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_FalAi_MissingUrlProperty_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"images\":[{\"width\":512}]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"images\":[{\"width\":512}]}"), AiProvider.DeepSeekWithFal,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -260,12 +237,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_FalAi_EmptyUrl_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"images\":[{\"url\":\"\"}]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"images\":[{\"url\":\"\"}]}"), AiProvider.DeepSeekWithFal,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -275,12 +251,12 @@ public class AiServiceHelperImageTests
     {
         var imageUrl = "https://cdn.fal.ai/img.png";
         var json = $"{{\"images\":[{{\"url\":\"{imageUrl}\"}}]}}";
-        var (client, _) = MakeThrowingDownloadClient(JsonResponse(json));
+        var (client, _) = MakeThrowingDownloadClient();
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse(json), AiProvider.DeepSeekWithFal,
+            client, logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -290,12 +266,12 @@ public class AiServiceHelperImageTests
     {
         var imageUrl = "https://cdn.fal.ai/img.png";
         var json = $"{{\"images\":[{{\"url\":\"{imageUrl}\"}}]}}";
-        var (client, _) = MakeThrowingDownloadClient(JsonResponse(json));
+        var (client, _) = MakeThrowingDownloadClient();
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, client, logger.Object, null, CancellationToken.None);
+            JsonResponse(json), AiProvider.DeepSeekWithFal,
+            client, logger.Object, null, CancellationToken.None);
 
         logger.Verify(
             x => x.Log(
@@ -318,12 +294,11 @@ public class AiServiceHelperImageTests
         var expected = new byte[] { 5, 6, 7, 8 };
         var b64 = Convert.ToBase64String(expected);
         var json = $"{{\"data\":[{{\"b64_json\":\"{b64}\"}}]}}";
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object, null, CancellationToken.None);
+            JsonResponse(json), AiProvider.AzureFoundry,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Equal(expected, result);
     }
@@ -334,15 +309,11 @@ public class AiServiceHelperImageTests
         var expected = new byte[] { 11, 22, 33 };
         var imageUrl = "https://foundry.azure.com/img.png";
         var json = $"{{\"data\":[{{\"url\":\"{imageUrl}\"}}]}}";
-
-        var (client, _) = MakeSequenceClient(
-            JsonResponse(json),
-            new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(expected) });
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object,
+            JsonResponse(json), AiProvider.AzureFoundry,
+            MakeDownloadClient(expected), logger.Object,
             allowedOrigin: "https://foundry.azure.com", CancellationToken.None);
 
         Assert.Equal(expected, result);
@@ -354,15 +325,11 @@ public class AiServiceHelperImageTests
         var imageUrl = "https://other-cdn.net/img.png";
         var json = $"{{\"data\":[{{\"url\":\"{imageUrl}\"}}]}}";
         var expected = new byte[] { 1, 2 };
-
-        var (client, _) = MakeSequenceClient(
-            JsonResponse(json),
-            new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(expected) });
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object,
+            JsonResponse(json), AiProvider.AzureFoundry,
+            MakeDownloadClient(expected), logger.Object,
             allowedOrigin: "https://foundry.azure.com", CancellationToken.None);
 
         logger.Verify(
@@ -380,12 +347,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"other\":\"value\"}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"other\":\"value\"}"), AiProvider.AzureFoundry,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -393,12 +359,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"data\":[{\"width\":512}]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"data\":[{\"width\":512}]}"), AiProvider.AzureFoundry,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -408,12 +373,12 @@ public class AiServiceHelperImageTests
     {
         var imageUrl = "https://foundry.azure.com/img.png";
         var json = $"{{\"data\":[{{\"url\":\"{imageUrl}\"}}]}}";
-        var (client, _) = MakeThrowingDownloadClient(JsonResponse(json));
+        var (client, _) = MakeThrowingDownloadClient();
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object,
+            JsonResponse(json), AiProvider.AzureFoundry,
+            client, logger.Object,
             allowedOrigin: "https://foundry.azure.com", CancellationToken.None);
 
         Assert.Empty(result);
@@ -424,12 +389,12 @@ public class AiServiceHelperImageTests
     {
         var imageUrl = "https://foundry.azure.com/img.png";
         var json = $"{{\"data\":[{{\"url\":\"{imageUrl}\"}}]}}";
-        var (client, _) = MakeThrowingDownloadClient(JsonResponse(json));
+        var (client, _) = MakeThrowingDownloadClient();
         var logger = new Mock<ILogger>();
-        var response = JsonResponse(json);
 
         await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.AzureFoundry, client, logger.Object,
+            JsonResponse(json), AiProvider.AzureFoundry,
+            client, logger.Object,
             allowedOrigin: "https://foundry.azure.com", CancellationToken.None);
 
         logger.Verify(
@@ -450,12 +415,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_UnsupportedProvider_ReturnsEmpty()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}");
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.Perplexity, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}"), AiProvider.Perplexity,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -463,12 +427,11 @@ public class AiServiceHelperImageTests
     [Fact]
     public async Task Parse_UnsupportedProvider_LogsError()
     {
-        var (client, _) = MakeSingleResponseClient(HttpStatusCode.OK, "{}");
         var logger = new Mock<ILogger>();
-        var response = JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}");
 
         await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.Perplexity, client, logger.Object, null, CancellationToken.None);
+            JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}"), AiProvider.Perplexity,
+            MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         logger.Verify(
             x => x.Log(
