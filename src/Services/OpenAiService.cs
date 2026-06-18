@@ -61,11 +61,10 @@ public class OpenAiService : IAiService
 
     /// <inheritdoc/>
     /// <remarks>
-    /// Delegates HTTP-level guards (429, non-2xx, JSON deserialisation failure) to
-    /// <see cref="AiServiceHelper.ParseImageResponseAsync"/>.
+    /// Delegates the full pipeline (HTTP guards, JSON deserialisation, b64_json extraction)
+    /// to <see cref="AiServiceHelper.ParseImageResponseAsync(HttpResponseMessage,AiProvider,HttpClient,ILogger,string?,CancellationToken)"/>.
     /// <see cref="System.Net.Http.HttpRequestException"/> on the POST call is caught and logged as an error.
     /// An empty or whitespace prompt emits <c>LogWarning</c> and returns immediately without making any HTTP call.
-    /// Schema-specific parsing (<c>data[0].b64_json</c>) remains inside this service.
     /// </remarks>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
@@ -96,31 +95,8 @@ public class OpenAiService : IAiService
             return Array.Empty<byte>();
         }
 
-        var (success, content) = await AiServiceHelper.ParseImageResponseAsync(
-            response, "OpenAI", _logger, cancellationToken);
-
-        if (!success || content is null)
-            return Array.Empty<byte>();
-
-        var result = content.Value;
-
-        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
-        {
-            _logger.LogError("OpenAI image generation response does not contain data entries.");
-            return Array.Empty<byte>();
-        }
-
-        var first = data[0];
-
-        if (first.TryGetProperty("b64_json", out var b64Property))
-        {
-            var base64 = b64Property.GetString();
-            return string.IsNullOrWhiteSpace(base64)
-                ? Array.Empty<byte>()
-                : Convert.FromBase64String(base64);
-        }
-
-        return Array.Empty<byte>();
+        return await AiServiceHelper.ParseImageResponseAsync(
+            response, AiProvider.OpenAi, _client, _logger, allowedOrigin: null, cancellationToken);
     }
 
     private object GetSummary(string text, int messageMaxLength)

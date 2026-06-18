@@ -62,12 +62,11 @@ public sealed class AzureFoundryService : IAiService
 
     /// <inheritdoc/>
     /// <remarks>
-    /// Delegates HTTP-level guards (429, non-2xx, JSON deserialisation failure) to
-    /// <see cref="AiServiceHelper.ParseImageResponseAsync"/>.
+    /// Delegates the full pipeline (HTTP guards, JSON deserialisation, b64_json extraction,
+    /// url fallback with origin validation) to
+    /// <see cref="AiServiceHelper.ParseImageResponseAsync(HttpResponseMessage,AiProvider,HttpClient,ILogger,string?,CancellationToken)"/>.
     /// <see cref="System.Net.Http.HttpRequestException"/> on the POST call is caught and logged as an error.
     /// An empty or whitespace prompt emits <c>LogWarning</c> and returns immediately without making any HTTP call.
-    /// Schema-specific parsing (<c>data[0].b64_json</c>, <c>data[0].url</c> fallback, origin validation)
-    /// remains inside this service.
     /// </remarks>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
@@ -77,8 +76,6 @@ public sealed class AzureFoundryService : IAiService
             return Array.Empty<byte>();
         }
 
-        // Azure AI Foundry /openai/v1 expects the deployment name as `model` in the
-        // request body. The endpoint does not embed it in the URL path.
         var requestBody = new
         {
             model = _options.ImageDeploymentName,
@@ -98,61 +95,15 @@ public sealed class AzureFoundryService : IAiService
             return Array.Empty<byte>();
         }
 
-        var (success, content) = await AiServiceHelper.ParseImageResponseAsync(
-            response, "Azure Foundry", _logger, cancellationToken);
+        var allowedOrigin = new Uri(_options.Endpoint.TrimEnd('/')).GetLeftPart(UriPartial.Authority);
 
-        if (!success || content is null)
-            return Array.Empty<byte>();
-
-        var result = content.Value;
-
-        if (!result.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
-        {
-            _logger.LogError("Azure Foundry image generation response does not contain data entries.");
-            return Array.Empty<byte>();
-        }
-
-        var first = data[0];
-
-        if (first.TryGetProperty("b64_json", out var b64Property))
-        {
-            var base64 = b64Property.GetString();
-            return string.IsNullOrWhiteSpace(base64)
-                ? Array.Empty<byte>()
-                : Convert.FromBase64String(base64);
-        }
-
-        if (first.TryGetProperty("url", out var urlProperty))
-        {
-            var imageUrl = urlProperty.GetString();
-            if (string.IsNullOrWhiteSpace(imageUrl))
-                return Array.Empty<byte>();
-
-            // Warn when the fallback URL origin differs from the configured endpoint.
-            var configuredOrigin = new Uri(_options.Endpoint.TrimEnd('/')).GetLeftPart(UriPartial.Authority);
-            var imageOrigin = new Uri(imageUrl).GetLeftPart(UriPartial.Authority);
-            if (!string.Equals(configuredOrigin, imageOrigin, StringComparison.OrdinalIgnoreCase))
-            {
-                _logger.LogWarning(
-                    "Azure Foundry image generation returned a fallback URL from a different origin: {ImageUrl}. Expected origin: {ConfiguredOrigin}.",
-                    imageUrl, configuredOrigin);
-            }
-
-            return await _client.GetByteArrayAsync(imageUrl, cancellationToken);
-        }
-
-        return Array.Empty<byte>();
+        return await AiServiceHelper.ParseImageResponseAsync(
+            response, AiProvider.AzureFoundry, _client, _logger, allowedOrigin, cancellationToken);
     }
 
-    // Azure AI Foundry /openai/v1 exposes a unified chat completions path.
-    // The deployment name is passed as `model` in the request body, so the URL
-    // does not include the deployment segment or an api-version query parameter.
     private string GetChatCompletionsEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
-    // Azure AI Foundry /openai/v1 exposes a unified image generation path.
-    // The deployment name is passed as `model` in the request body, so the URL
-    // does not include the deployment segment or an api-version query parameter.
     private string GetImageGenerationEndpoint() =>
         $"{_options.Endpoint.TrimEnd('/')}/images/generations";
 
