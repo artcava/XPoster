@@ -2,6 +2,8 @@
 
 This document describes the testing philosophy, tooling, naming conventions, mocking patterns, and coverage goals for the XPoster test suite.
 
+> For the project overview, architecture, and contribution guidelines, see [README.md](../README.md) and [CONTRIBUTING.md](../CONTRIBUTING.md).
+
 ---
 
 ## 1. Testing Philosophy
@@ -33,32 +35,87 @@ XPoster uses a **unit-first** approach:
 
 ---
 
-## 3. Naming Conventions
+## 3. Test Structure
 
-### Test files
-
-One test file per production class, mirroring the `src/` directory structure:
+One test file per production class, mirroring the `src/` directory structure. The folders below reflect the layout after the [issue #186](https://github.com/artcava/XPoster/issues/186) restructure.
 
 ```
 tests/
-├── Abstraction/                     # tests for src/Abstraction/
-├── Helpers/                         # shared test helpers (e.g. ResilienceTestHelpers)
-├── Implementation/                  # tests for src/Implementation/ (FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory…)
-├── Integration/                     # Polly resilience pipeline integration tests (not in CI)
+├── XPoster.Tests.csproj
+├── XFunctionTests.cs
+├── XFunctionMissingBranchTests.cs
+├── Contracts/                                    # mirrors src/Contracts/ and src/Abstraction/
+│   ├── AiProviderExtensionsTests.cs              # XPoster.Contracts — AiProviderExtensions enum extension
+│   └── BaseOrchestratorTests.cs                  # XPoster.Abstraction — BaseOrchestrator abstract contracts
+├── Helpers/
+│   └── ResilienceTestHelpers.cs                  # shared HTTP mock helpers for resilience tests
+├── Orchestrators/                                # mirrors src/Orchestrators/
+│   ├── AiServiceFactoryTests.cs                  # AiServiceFactory — provider resolution by AiProvider enum
+│   ├── ConfigurationFeedUrlProviderTests.cs      # ConfigurationFeedUrlProvider — URL list from config
+│   ├── FeedOrchestratorFeedUrlProviderTests.cs   # FeedOrchestrator — IFeedUrlProvider integration paths
+│   ├── FeedOrchestratorTests.cs                  # FeedOrchestrator — main happy/failure paths
+│   ├── NoOrchestratorTests.cs                    # NoOrchestrator — null-object contract
+│   ├── OrchestratorFactoryTests.cs               # OrchestratorFactory + SlotProfileProvider behaviour
+│   └── PowerLawOrchestratorTests.cs              # PowerLawOrchestrator — price/model computation
+├── Integration/
 │   ├── PollyIntegrationTestBase.cs
 │   ├── LinkedInResiliencePipelineTests.cs
 │   ├── InstagramResiliencePipelineTests.cs
 │   ├── AiClientsResiliencePipelineTests.cs
 │   └── CaptureLoggerProvider.cs
-├── Models/                          # tests for src/Models/
-├── SenderPlugins/                   # tests for src/SenderPlugins/ (XSender, InSender, IgSender, DryRunSender…)
-├── Services/                        # tests for src/Services/ (OpenAiService, AzureFoundryService, KeyVaultService…)
-├── XFunctionMissingBranchTests.cs
-├── XFunctionTests.cs
-└── XPoster.Tests.csproj
+├── Models/
+│   ├── AzureFoundryOptionsValidatorTests.cs
+│   ├── DeepSeekOptionsTests.cs
+│   ├── DeepSeekOptionsValidatorTests.cs
+│   ├── FalAiOptionsValidatorTests.cs
+│   ├── ModelsTests.cs
+│   ├── OpenAiOptionsValidatorTests.cs
+│   ├── PostMissingBranchTests.cs
+│   └── RSSFeedMissingBranchTests.cs
+├── SenderPlugins/
+│   ├── DryRunSenderTests.cs
+│   ├── IgSenderResilienceTests.cs
+│   ├── IgSenderTests.cs
+│   ├── InSenderMissingBranchTests.cs
+│   ├── InSenderResilienceTests.cs
+│   ├── InSenderSendAsyncTests.cs
+│   ├── InSenderTests.cs
+│   ├── XSenderMissingBranchTests.cs
+│   ├── XSenderSendAsyncTests.cs
+│   └── XSenderTests.cs
+└── Services/
+    ├── AiServiceHelperTests.cs
+    ├── AzureFoundryServiceTests.cs
+    ├── CryptoServiceTests.cs
+    ├── DeepSeekServiceTests.cs
+    ├── FalAiImageServiceTests.cs
+    ├── FeedServiceTests.cs
+    ├── HybridAiServiceTests.cs
+    ├── KeyVaultServiceTests.cs
+    ├── OpenAiServiceTests.cs
+    └── TimeProviderTests.cs
 ```
 
-The `tests/` directory is itself the test project root. Mirror the folder name from `src/` — e.g., new tests for `src/Services/KeyVaultService.cs` go in `tests/Services/KeyVaultServiceTests.cs`.
+### Folder responsibilities
+
+| Folder | Namespace under test | What is covered |
+|---|---|---|
+| *(root)* | `XPoster` | `XFunction` entry point — happy path and missing-branch edge cases |
+| `Contracts/` | `XPoster.Contracts`, `XPoster.Abstraction` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts |
+| `Helpers/` | — | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
+| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration); `PowerLawOrchestrator`; `NoOrchestrator`; `AiServiceFactory` provider resolution; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config |
+| `Integration/` | `XPoster.*` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — **not run in CI** |
+| `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
+| `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
+| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
+
+---
+
+## 4. Naming Conventions
+
+### Test files
+
+Mirror the folder name from `src/` — e.g., new tests for `src/Services/KeyVaultService.cs` go in `tests/Services/KeyVaultServiceTests.cs`.
 
 ### Test method names
 
@@ -78,7 +135,7 @@ public async Task SendTest2()
 
 ---
 
-## 4. Running Tests Locally
+## 5. Running Tests Locally
 
 ### All tests
 
@@ -121,7 +178,7 @@ start coverage-report/index.html  # Windows
 
 ---
 
-## 5. Mocking External Services
+## 6. Mocking External Services
 
 All external dependencies (`IAiService`, `IFeedService`, `ISender`, `IKeyVaultService`, `ILogger`) are injected via constructor and replaced with Moq mocks in tests.
 
@@ -202,7 +259,7 @@ public async Task SendAsync_WhenPostIsValid_ReturnsTrueAndOnlyProbesKeyVault()
 
 ---
 
-## 6. Adding New Tests — Checklist
+## 7. Adding New Tests — Checklist
 
 When adding a new feature or fixing a bug, follow this checklist before opening a PR:
 
@@ -216,7 +273,7 @@ When adding a new feature or fixing a bug, follow this checklist before opening 
 
 ---
 
-## 7. Coverage Target
+## 8. Coverage Target
 
 The project targets **≥ 80% line coverage** across all non-generated code.
 
