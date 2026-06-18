@@ -31,8 +31,12 @@ public class FeedOrchestratorTests
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(DefaultUrls);
     }
 
-    private FeedOrchestrator CreateOrchestrator(IAiService? aiService = null) =>
-        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockFeedUrlProvider.Object, aiService ?? _mockAiService.Object);
+    /// <summary>
+    /// Factory for the happy-path orchestrator. Tests that need a null dependency
+    /// (AiServiceIsNull, SenderIsNull) instantiate the constructor directly.
+    /// </summary>
+    private FeedOrchestrator CreateOrchestrator() =>
+        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockFeedUrlProvider.Object, _mockAiService.Object);
 
     [Fact]
     public async Task OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()
@@ -229,8 +233,13 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()
     {
-        // ARRANGE
-        var orchestrator = CreateOrchestrator(aiService: null);
+        // ARRANGE — direct instantiation: factory must not be used for null-dependency tests
+        var orchestrator = new FeedOrchestrator(
+            _mockSender.Object,
+            _mockLogger.Object,
+            _mockFeedService.Object,
+            _mockFeedUrlProvider.Object,
+            null);
 
         // ACT
         var result = await orchestrator.OrchestrateAsync();
@@ -248,7 +257,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()
     {
-        // ARRANGE
+        // ARRANGE — direct instantiation: factory must not be used for null-dependency tests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
