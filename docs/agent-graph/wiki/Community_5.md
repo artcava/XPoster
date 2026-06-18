@@ -1,27 +1,29 @@
 # Community 5
 
-> 18 nodes · cohesion 0.22
+> 20 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **AiServiceHelperTests.cs** (17 connections)
-- **AiServiceHelperTests.cs** (17 connections)
-- **ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenContentIsWhitespaceOnly_ReturnsTrueAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()** (2 connections)
+- **DryRunSenderTests.cs** (19 connections)
+- **DryRunSenderTests.cs** (19 connections)
+- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
+- **ValidPost()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()** (2 connections)
+- **SendAsync_WithImageBytes_LogsImagePresence()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeThrows_LogsError()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
+- **DryRunSenderTests()** (2 connections)
 - **new()** (2 connections)
-- **ChatJson()** (2 connections)
-- **MakeResponse()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()** (2 connections)
-- **var()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()** (2 connections)
-- **AiServiceHelperTests** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()** (2 connections)
+- **MessageMaxLenght_ReturnsIntMaxValue()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()** (2 connections)
 
 ## Relationships
 
@@ -29,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 74 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

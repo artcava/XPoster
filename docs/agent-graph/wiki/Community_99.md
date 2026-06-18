@@ -1,20 +1,21 @@
 # Community 99
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction()** (2 connections)
-- **if()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **for()** (2 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **StringContent()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (3 shared connections)
+- [[Community 76]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

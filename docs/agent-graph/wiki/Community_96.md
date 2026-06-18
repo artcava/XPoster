@@ -1,20 +1,21 @@
 # Community 96
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 114]] (2 shared connections)
+- [[Community 105]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

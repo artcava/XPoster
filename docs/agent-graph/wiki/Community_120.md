@@ -1,19 +1,19 @@
-# Community 116
+# Community 120
 
 > 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **BaseOrchestrator.cs** (5 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 110]] (2 shared connections)
+- [[Community 92]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

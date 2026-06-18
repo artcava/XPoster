@@ -1,26 +1,27 @@
 # Community 26
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
+- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **XPoster.Tests.Implementation** (2 connections)
+- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
+- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 54]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

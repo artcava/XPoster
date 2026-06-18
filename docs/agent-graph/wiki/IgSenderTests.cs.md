@@ -2,12 +2,11 @@
 
 > God node · 23 connections
 
-**Community:** [[Community 1]]
+**Community:** [[Community 3]]
 
 ## Connections by Relation
 
 ### contains
-- [[IgSenderTests.cs]]
 - [[XPoster.Tests.SenderPlugins]]
 - [[IgSenderTests()]]
 - [[BuildSender()]]
@@ -27,6 +26,7 @@
 - [[SendAsync_WithImage_ReadsIgAccountIdFromKv()]]
 - [[SendAsync_WithoutImage_DoesNotQueryKv()]]
 - [[SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()]]
+- [[SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()]]
 
 ---
 

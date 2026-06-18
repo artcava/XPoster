@@ -1,21 +1,21 @@
 # Community 89
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
-- **PostAsync()** (2 connections)
-- **BaseOrchestrator()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator()** (2 connections)
+- **XPoster.Implementation** (2 connections)
 
 ## Relationships
 
-- [[Community 116]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

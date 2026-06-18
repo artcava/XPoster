@@ -1,32 +1,33 @@
 # Community 8
 
-> 15 nodes · cohesion 0.13
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (31 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **if()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
-- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
+- **KeyVaultServiceTests.cs** (15 connections)
+- **KeyVaultServiceTests.cs** (15 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **InSenderKv()** (2 connections)
+- **KeyVaultServiceTests** (2 connections)
+- **KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()** (2 connections)
+- **StubHttpMessageHandler()** (2 connections)
+- **XSender_SendAsync_RequestsAllFourXCredentials()** (2 connections)
+- **GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()** (2 connections)
+- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
+- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
+- **HttpFactory()** (2 connections)
+- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
+- **InSender_SendAsync_RequestsLinkedInOwnerCode()** (2 connections)
+- **GetSecretAsync_ReturnsExpectedValue()** (2 connections)
+- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
 
 ## Relationships
 
-- [[Community 6]] (16 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 59 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

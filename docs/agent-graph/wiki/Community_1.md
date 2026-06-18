@@ -1,41 +1,43 @@
 # Community 1
 
-> 24 nodes · cohesion 0.16
+> 30 nodes · cohesion 0.07
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (23 connections)
-- **IgSenderTests.cs** (23 connections)
-- **BuildSenderWithFactory()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WithoutImage_DoesNotQueryKv()** (2 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenInstagramApiReturns429_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImage_TriesUploadAndReturnsFalse()** (2 connections)
-- **SendAsync_WithImage_ReadsIgAccessTokenFromKv()** (2 connections)
-- **SendAsync_WithImage_ReadsIgAccountIdFromKv()** (2 connections)
-- **MessageMaxLenght_Returns2200()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **new()** (2 connections)
-- **SendAsync_WithWhitespaceContent_ReturnsFalse()** (2 connections)
+- **AiServiceHelperImageTests.cs** (35 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()** (2 connections)
+- **static()** (2 connections)
+- **Parse_UnsupportedProvider_LogsError()** (2 connections)
+- **return()** (2 connections)
+- **Parse_UnsupportedProvider_ReturnsEmpty()** (2 connections)
+- **Parse_Returns429_ReturnsEmpty()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **Parse_Returns429_LogsWarning()** (2 connections)
+- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_AzureFoundry_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_ReturnsBytes()** (2 connections)
+- **Parse_NonSuccessStatus_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_ValidUrl_ReturnsBytes()** (2 connections)
+- **Parse_MalformedJson_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_DownloadThrows_LogsError()** (2 connections)
+- **Parse_FalAi_MissingImagesProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_MissingUrlProperty_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()** (2 connections)
+- *... and 5 more nodes in this community*
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 59]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 90 (100%)
+- EXTRACTED: 93 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,24 @@
 # Community 53
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **catch()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **while()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 37]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

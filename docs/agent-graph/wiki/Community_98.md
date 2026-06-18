@@ -1,20 +1,21 @@
 # Community 98
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (4 shared connections)
+- [[Community 100]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

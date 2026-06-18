@@ -1,25 +1,25 @@
 # Community 36
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FeedServiceTests.cs** (7 connections)
-- **FeedServiceTests.cs** (7 connections)
-- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
-- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
-- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **FeedServiceTests()** (2 connections)
+- **InSender.cs** (11 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
+- **Exception()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **ResolveAuthorUrnAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 83]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

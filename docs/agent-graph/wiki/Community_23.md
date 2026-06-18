@@ -1,27 +1,28 @@
 # Community 23
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **OrchestrateAsync_ReturnsNull()** (2 connections)
-- **NoOrchestratorTests()** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
-- **ProduceImage_IsAlwaysFalse()** (2 connections)
-- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **DeepSeekService()** (2 connections)
+- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
+- **BuildHybrid()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **HybridAiServiceTests** (2 connections)
+- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 63]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 72
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **catch()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Implementation** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 82]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

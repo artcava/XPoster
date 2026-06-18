@@ -1,15 +1,15 @@
-# Community 116
+# Community 118
 
 > 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 110]] (2 shared connections)
+- [[Community 113]] (2 shared connections)
 
 ## Audit Trail
 

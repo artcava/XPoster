@@ -1,17 +1,18 @@
 # Community 81
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **FeedOrchestrator()** (2 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **GetByProvider()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **IAiServiceFactory** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

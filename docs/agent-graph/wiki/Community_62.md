@@ -1,14 +1,15 @@
 # Community 62
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **GetCryptoValue()** (2 connections)
-- **ICryptoService** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

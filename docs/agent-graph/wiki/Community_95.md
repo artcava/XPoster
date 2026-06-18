@@ -1,20 +1,21 @@
 # Community 95
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **catch()** (2 connections)
 - **if()** (2 connections)
-- **FeedService()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (4 shared connections)
+- [[Community 47]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

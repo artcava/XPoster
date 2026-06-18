@@ -1,17 +1,18 @@
 # Community 82
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **for()** (2 connections)
-- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **StringContent()** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

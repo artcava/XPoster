@@ -1,27 +1,28 @@
 # Community 24
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
+- **XSenderMissingBranchTests.cs** (10 connections)
+- **XSenderMissingBranchTests.cs** (10 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **MessageMaxLenght_Returns250()** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
+- **XSenderMissingBranchTests()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

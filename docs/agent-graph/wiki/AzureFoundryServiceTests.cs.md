@@ -1,8 +1,8 @@
 # AzureFoundryServiceTests.cs
 
-> God node · 31 connections
+> God node · 35 connections
 
-**Community:** [[Community 8]]
+**Community:** [[Community 7]]
 
 ## Connections by Relation
 
@@ -11,11 +11,13 @@
 - [[BuildService()]]
 - [[GenerateImageAsync_RequestBodyContainsModelField()]]
 - [[GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()]]
-- [[GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()]]
+- [[GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()]]
+- [[GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()]]
+- [[GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()]]
 - [[GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()]]
+- [[GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()]]
 - [[GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()]]
 - [[GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()]]
-- [[GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()]]
 - [[GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()]]
 - [[GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()]]
 - [[GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()]]
@@ -25,8 +27,6 @@
 - [[XPoster.Tests.Services]]
 - [[AzureFoundryService()]]
 - [[ChatCompletionJson()]]
-- [[GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()]]
-- [[GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()]]
 
 ---
 
