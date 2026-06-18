@@ -446,11 +446,11 @@ tests/
 ├── XPoster.Tests.csproj
 ├── XFunctionTests.cs
 ├── XFunctionMissingBranchTests.cs
-├── Abstraction/
-│   └── BaseOrchestratorTests.cs
+├── Contracts/
+│   └── AiProviderExtensionsTests.cs
 ├── Helpers/
 │   └── ResilienceTestHelpers.cs
-├── Implementation/
+├── Orchestrators/
 │   ├── AiServiceFactoryTests.cs
 │   ├── FeedOrchestratorTests.cs
 │   ├── OrchestratorFactoryTests.cs
@@ -499,9 +499,9 @@ tests/
 | Folder | What is covered |
 |---|---|
 | *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Abstraction/` | `BaseOrchestrator` abstract class contracts |
+| `Contracts/` | `AiProviderExtensions` enum extension method contracts |
 | `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `AiServiceFactory` resolution logic; `OrchestratorFactory` using synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` provider behaviour (`SlotProfileProviderTests.cs`) |
+| `Orchestrators/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `AiServiceFactory` resolution logic; `OrchestratorFactory` using synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` provider behaviour (`SlotProfileProviderTests.cs`) |
 | `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
 | `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
 | `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
