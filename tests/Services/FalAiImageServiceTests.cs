@@ -232,12 +232,14 @@ public class FalAiImageServiceTests
 
         await svc.GenerateImageAsync("a prompt");
 
+        // Message is now emitted by AiServiceHelper.ExtractFalAiBytesAsync
         loggerMock.Verify(
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, _) =>
-                    v.ToString()!.Contains("Failed to download generated image from fal.ai URL") &&
+                    v.ToString()!.Contains("fal.ai") &&
+                    v.ToString()!.Contains("failed to download generated image from URL") &&
                     v.ToString()!.Contains(imageUrl)),
                 It.IsAny<HttpRequestException>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
