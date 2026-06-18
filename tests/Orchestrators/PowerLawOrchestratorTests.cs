@@ -34,7 +34,10 @@ public class PowerLawOrchestratorTests
 
         Assert.NotNull(message);
         Assert.Contains("Value of #BTC for the #powerlaw today would be:", message.Content);
-        Assert.Contains("% of actual", message.Content);
+        // The orchestrator appends "{deviation:+0.00;-0.00}% {Post.Firm}" when actualValue > 0.
+        // Post.Firm = "\n\n#XPoster #AI"
+        Assert.Contains("#XPoster #AI", message.Content);
+        Assert.Contains("%", message.Content);
         _mockCryptoService.Verify(s => s.GetCryptoValue("BTC"), Times.Once);
     }
 
@@ -92,7 +95,7 @@ public class PowerLawOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotNull(result);
-        Assert.DoesNotContain("% of actual", result.Content);
+        Assert.DoesNotContain("#XPoster #AI", result.Content);
     }
 
     [Theory]
