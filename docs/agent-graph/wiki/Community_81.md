@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **FeedOrchestrator()** (2 connections)
 - **if()** (2 connections)
-- **var()** (2 connections)
-- **OpenAiService()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (8 shared connections)
+- [[Community 70]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
+- **FalAiImageService.cs** (6 connections)
+- **catch()** (2 connections)
 - **if()** (2 connections)
-- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 73]] (4 shared connections)
+- [[Community 86]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **Exception()** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **GenerateMessage()** (2 connections)
 - **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
 
 ## Relationships
 
-- [[Community 110]] (3 shared connections)
+- [[Community 81]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

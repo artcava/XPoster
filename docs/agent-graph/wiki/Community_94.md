@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **catch()** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **var()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 55]] (5 shared connections)
+- [[Community 20]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,26 +1,26 @@
 # Community 28
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **while()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetSummary()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **params()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

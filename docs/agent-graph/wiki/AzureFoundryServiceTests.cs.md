@@ -2,12 +2,11 @@
 
 > God node · 31 connections
 
-**Community:** [[Community 6]]
+**Community:** [[Community 8]]
 
 ## Connections by Relation
 
 ### contains
-- [[AzureFoundryServiceTests.cs]]
 - [[AzureFoundryServiceTests]]
 - [[BuildService()]]
 - [[GenerateImageAsync_RequestBodyContainsModelField()]]
@@ -27,6 +26,7 @@
 - [[AzureFoundryService()]]
 - [[ChatCompletionJson()]]
 - [[GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()]]
+- [[GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()]]
 
 ---
 

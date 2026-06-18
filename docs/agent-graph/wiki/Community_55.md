@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **for()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **Resolve()** (2 connections)
+- **ResolveAiProvider()** (2 connections)
+- **XPoster.Implementation** (2 connections)
+- **return()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 94]] (4 shared connections)
+- [[Community 87]] (4 shared connections)
 
 ## Audit Trail
 

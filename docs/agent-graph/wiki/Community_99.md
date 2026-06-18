@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Implementation** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 116]] (2 shared connections)
+- [[Community 92]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

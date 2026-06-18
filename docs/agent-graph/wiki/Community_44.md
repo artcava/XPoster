@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
-- **IAiService** (2 connections)
-- **XPoster.Abstraction** (2 connections)
+- **HybridAiService.cs** (6 connections)
+- **HybridAiService.cs** (6 connections)
 - **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **HybridAiService()** (2 connections)
 - **GetImagePromptAsync()** (2 connections)
 - **GetSummaryAsync()** (2 connections)
 

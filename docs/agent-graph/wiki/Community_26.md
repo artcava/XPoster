@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeedMissingBranchTests** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
 - **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
+- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
 
 ## Relationships
 

@@ -1,23 +1,23 @@
 # Community 23
 
-> 10 nodes · cohesion 0.20
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **OrchestrateAsync_ReturnsNull()** (2 connections)
+- **NoOrchestratorTests()** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
 - **XPoster.Tests.Implementation** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **ProduceImage_IsAlwaysFalse()** (2 connections)
+- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
 
 ## Relationships
 
-- [[Community 46]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
