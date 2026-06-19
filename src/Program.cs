@@ -80,15 +80,12 @@ builder.Services.AddTransient<IFeedService, FeedService>();
 builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection(FeedOptions.SectionName));
 builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
 
-builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
-builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
-builder.Services.Configure<AzureFoundryOptions>(builder.Configuration.GetSection("AzureFoundry"));
-builder.Services.AddSingleton<IValidateOptions<AzureFoundryOptions>, AzureFoundryOptionsValidator>();
-builder.Services.Configure<DeepSeekOptions>(builder.Configuration.GetSection("DeepSeek"));
-builder.Services.AddSingleton<IValidateOptions<DeepSeekOptions>, DeepSeekOptionsValidator>();
-builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi"));
-builder.Services.AddSingleton<IValidateOptions<FalAiOptions>, FalAiOptionsValidator>();
-builder.Services.Configure<PerplexityOptions>(builder.Configuration.GetSection("Perplexity"));
-builder.Services.AddSingleton<IValidateOptions<PerplexityOptions>, PerplexityOptionsValidator>();
+// AI provider options: each extension method owns its SectionName constant
+// and encapsulates Configure<T> + AddSingleton<IValidateOptions<T>> in one call.
+builder.Services.AddOpenAiOptions(builder.Configuration);
+builder.Services.AddAzureFoundryOptions(builder.Configuration);
+builder.Services.AddDeepSeekOptions(builder.Configuration);
+builder.Services.AddFalAiOptions(builder.Configuration);
+builder.Services.AddPerplexityOptions(builder.Configuration);
 
 builder.Build().Run();
