@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Services;
 
 namespace XPoster.Tests.Services;

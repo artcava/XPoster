@@ -1,7 +1,6 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 
 namespace XPoster.Tests.Services;
 

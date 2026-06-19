@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Options;
 using XPoster.Models;
 
 namespace XPoster.Tests.Models;

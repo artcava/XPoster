@@ -1,6 +1,6 @@
 using LinqToTwitter;
 using LinqToTwitter.OAuth;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.SenderPlugins;

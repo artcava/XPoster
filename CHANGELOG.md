@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Source folder restructure** ([#186](https://github.com/artcava/XPoster/issues/186)): purely structural reorganisation of `src/` and `tests/` — no behavioral changes, no new public API surface, no changes to DI registrations or scheduling logic.
+  - `src/Abstraction/` split into `src/Abstraction/` (base classes and shared profile records: `BaseOrchestrator`, `ScheduledOrchestrationProfile`) and `src/Contracts/` (all interfaces, enums, and extension methods: `I*.cs`, `AiProvider`, `AiProviderExtensions`, `Enums`). Namespace `XPoster.Abstraction` → `XPoster.Contracts` for moved files; all consumer `using` directives updated.
+  - `src/Implementation/` renamed to `src/Orchestrators/` (concrete orchestrators, `OrchestratorFactory`, `AiServiceFactory`, slot profile providers). Namespace `XPoster.Implementation` → `XPoster.Orchestrators`; all consumer `using` directives updated.
+  - `src/Models/` reorganised with provider subfolders (`AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) for discoverability; namespace `XPoster.Models` unchanged across all files.
+  - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
+  - `tests/Abstraction/` renamed to `tests/Contracts/`; `tests/Implementation/` renamed to `tests/Orchestrators/` to mirror source layout.
+  - Documentation updated: `README.md`, `tests/README.md`, `docs/extending-xposter.md` aligned to new folder paths and namespace names.
+
 ### Added
 - **`IFeedUrlProvider` abstraction + `ConfigurationFeedUrlProvider`** ([#185](https://github.com/artcava/XPoster/issues/185)): introduces `IFeedUrlProvider` (returns `IReadOnlyList<string>`) and `ConfigurationFeedUrlProvider` bound from `FeedOptions__Urls__N` app settings; `FeedOrchestrator` now resolves feed URLs via the injected provider instead of a hardcoded list; `local.settings.json.example` updated with example `FeedOptions__Urls__0` / `FeedOptions__Urls__1` entries.
 
@@ -147,4 +156,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/artcava/XPoster/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/artcava/XPoster/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/artcava/XPoster/releases/tag/v0.1.0
+[0.1.0]: https://github.com/artcava/XPoster/release

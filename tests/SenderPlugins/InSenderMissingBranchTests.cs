@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 

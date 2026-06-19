@@ -1,7 +1,7 @@
 namespace XPoster.Models;
 
 /// <summary>
-/// Configuration model for RSS/Atom feed URLs consumed by <see cref="XPoster.Implementation.ConfigurationFeedUrlProvider"/>.
+/// Configuration model for RSS/Atom feed URLs consumed by <see cref="XPoster.Orchestrators.ConfigurationFeedUrlProvider"/>.
 /// Bind from the <c>FeedOptions</c> section in app settings.
 /// </summary>
 public sealed class FeedOptions
