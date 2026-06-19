@@ -49,6 +49,31 @@ public class PerplexityServiceTests
         return mock;
     }
 
+    /// <summary>
+    /// Returns a handler mock that replies with <paramref name="responses"/> in sequence,
+    /// one per SendAsync call. Useful to exercise the retry loop in GetSummaryAsync.
+    /// </summary>
+    private static Mock<HttpMessageHandler> MakeSequentialHandlerMock(
+        IEnumerable<(HttpStatusCode code, string json)> responses)
+    {
+        var mock    = new Mock<HttpMessageHandler>();
+        var setup   = mock.Protected()
+            .SetupSequence<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>());
+
+        foreach (var (code, json) in responses)
+        {
+            setup.ReturnsAsync(new HttpResponseMessage(code)
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+            });
+        }
+
+        return mock;
+    }
+
     private static string ChatCompletionJson(string content) =>
         "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
@@ -126,6 +151,63 @@ public class PerplexityServiceTests
         var result = await svc.GetSummaryAsync(new string('a', 300), 100);
 
         Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_WhenFirstResponseStillTooLong_RetriesAndReturnsSecondResponse()
+    {
+        // Arrange: first call returns a string still longer than the limit (200 chars),
+        // second call returns a short string that satisfies the while condition.
+        const int limit       = 100;
+        var firstResponse     = new string('b', 200);  // still > 100 → triggers second iteration
+        var secondResponse    = "final short summary";  // < 100 → loop exits
+
+        var handler = MakeSequentialHandlerMock(new[]
+        {
+            (HttpStatusCode.OK, ChatCompletionJson(firstResponse)),
+            (HttpStatusCode.OK, ChatCompletionJson(secondResponse))
+        });
+        var svc = BuildService(handler.Object, out _);
+
+        // Act
+        var result = await svc.GetSummaryAsync(new string('a', 300), limit);
+
+        // Assert: two HTTP calls were made and the last returned content is propagated
+        Assert.Equal(secondResponse, result);
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(2),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_WhenTextRemainsLongAfterMaxRetries_ReturnsLastApiContent()
+    {
+        // Arrange: all three API responses return text that is still longer than the limit.
+        // After tries > 2 the while exits and the last assigned value of `text` is returned.
+        const int limit    = 10;
+        var longResponse   = new string('c', 50); // always > 10
+
+        var handler = MakeSequentialHandlerMock(new[]
+        {
+            (HttpStatusCode.OK, ChatCompletionJson(longResponse)),
+            (HttpStatusCode.OK, ChatCompletionJson(longResponse)),
+            (HttpStatusCode.OK, ChatCompletionJson(longResponse))
+        });
+        var svc = BuildService(handler.Object, out _);
+
+        // Act
+        var result = await svc.GetSummaryAsync(new string('a', 100), limit);
+
+        // Assert: the loop ran exactly 3 times (tries 1, 2, 3 where tries <= 2 means max index 2)
+        // and the last content from the API is returned as-is.
+        Assert.Equal(longResponse, result);
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(3),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>());
     }
 
     // ── GetImagePromptAsync ──────────────────────────────────────────────────
