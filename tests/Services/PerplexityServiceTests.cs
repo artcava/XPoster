@@ -190,7 +190,7 @@ public class PerplexityServiceTests
 
         var result = await svc.GenerateImageAsync("any prompt");
 
-        Assert.Equal(Array.Empty<byte[]>(), result);
+        Assert.Equal(Array.Empty<byte>(), result);
     }
 
     [Fact]
