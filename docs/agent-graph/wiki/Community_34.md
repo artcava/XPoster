@@ -1,17 +1,18 @@
 # Community 34
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **InSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **var()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
+- **params()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

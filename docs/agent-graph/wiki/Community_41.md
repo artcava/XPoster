@@ -1,24 +1,25 @@
 # Community 41
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **DryRunSender.cs** (6 connections)
-- **DryRunSender.cs** (6 connections)
-- **DryRunSender()** (2 connections)
-- **catch()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **nameof()** (2 connections)
 - **if()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 71]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

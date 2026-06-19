@@ -1,21 +1,22 @@
 # Community 87
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **PostAsync()** (2 connections)
+- **IOrchestrator** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 107]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

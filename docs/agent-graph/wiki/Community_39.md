@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **FeedServiceTests.cs** (7 connections)
-- **FeedServiceTests.cs** (7 connections)
-- **FeedServiceTests()** (2 connections)
-- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
-- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLogger()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Dispose()** (2 connections)
+- **IsEnabled()** (2 connections)
 
 ## Relationships
 

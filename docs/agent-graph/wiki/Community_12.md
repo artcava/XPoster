@@ -1,22 +1,23 @@
 # Community 12
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingModelId_Fails()** (2 connections)
-- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
-- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
-- **Validate_MissingApiKey_Fails()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_WhitespaceApiKey_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WhitespaceModelId_Fails()** (2 connections)
-- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
+- **FeedOrchestratorTests.cs** (13 connections)
+- **FeedOrchestratorTests.cs** (13 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
+- **new()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

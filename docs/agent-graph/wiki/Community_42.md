@@ -1,16 +1,17 @@
 # Community 42
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XPoster.Tests** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **PostMissingBranchTests.cs** (7 connections)
+- **PostMissingBranchTests.cs** (7 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PostMissingBranchTests** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

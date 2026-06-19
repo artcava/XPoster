@@ -1,20 +1,21 @@
 # Community 103
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 
-- [[Community 112]] (2 shared connections)
+- [[Community 125]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

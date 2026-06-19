@@ -1,22 +1,23 @@
 # Community 71
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **catch()** (2 connections)
-- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **var()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
 
 ## Relationships
 
-- [[Community 89]] (4 shared connections)
+- [[Community 41]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

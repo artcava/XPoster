@@ -1,22 +1,23 @@
 # Community 65
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **XPoster.Implementation** (2 connections)
-- **catch()** (2 connections)
-- **ReplaceEveryFirstOccurenceOf()** (2 connections)
-- **GenerateMessage()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **var()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **DeepSeekService()** (2 connections)
 
 ## Relationships
 
-- [[Community 91]] (4 shared connections)
+- [[Community 50]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

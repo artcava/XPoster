@@ -1,25 +1,29 @@
 # Community 7
 
-> 16 nodes · cohesion 0.24
+> 20 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **KeyVaultServiceTests.cs** (15 connections)
-- **KeyVaultServiceTests.cs** (15 connections)
-- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
-- **GetSecretAsync_ReturnsExpectedValue()** (2 connections)
-- **HttpFactory()** (2 connections)
-- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
-- **KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
-- **InSenderKv()** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInOwnerCode()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **XSender_SendAsync_RequestsAllFourXCredentials()** (2 connections)
-- **GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()** (2 connections)
-- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
-- **KeyVaultServiceTests** (2 connections)
+- **DryRunSenderTests.cs** (19 connections)
+- **DryRunSenderTests.cs** (19 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeThrows_LogsError()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
+- **ValidPost()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **new()** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **MessageMaxLenght_ReturnsIntMaxValue()** (2 connections)
+- **DryRunSenderTests()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()** (2 connections)
+- **SendAsync_WithImageBytes_LogsImagePresence()** (2 connections)
+- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
 
 ## Relationships
 
@@ -27,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 58 (100%)
+- EXTRACTED: 74 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

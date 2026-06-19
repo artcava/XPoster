@@ -1,6 +1,6 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 
 namespace XPoster.Services;
 

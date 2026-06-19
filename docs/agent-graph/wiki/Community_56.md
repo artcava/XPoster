@@ -1,23 +1,24 @@
 # Community 56
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **BuildDeepSeekService()** (2 connections)
-- **HybridAiService()** (2 connections)
-- **BuildFalService()** (2 connections)
-- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
-- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (10 shared connections)
+- [[Community 97]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

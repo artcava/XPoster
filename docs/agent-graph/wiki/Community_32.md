@@ -1,25 +1,26 @@
 # Community 32
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **ResolveAuthorUrnAsync()** (2 connections)
-- **SendAsync()** (2 connections)
-- **using()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **Exception()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **XSenderSendAsyncTests.cs** (8 connections)
+- **XSenderSendAsyncTests.cs** (8 connections)
+- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSenderSendAsyncTests()** (2 connections)
+- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

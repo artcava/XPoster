@@ -1,21 +1,22 @@
 # Community 15
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (11 connections)
-- **IgSenderResilienceTests.cs** (11 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **new()** (2 connections)
-- **PostWithoutImage()** (2 connections)
-- **PostWithImage()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **IgSender()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **OpenAiService.cs** (12 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetSummary()** (2 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **OpenAiService()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetPromptForImage()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

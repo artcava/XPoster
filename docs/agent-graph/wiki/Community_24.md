@@ -1,18 +1,20 @@
 # Community 24
 
-> 9 nodes · cohesion 0.42
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **MakeService()** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
-- **CryptoServiceTests** (2 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **CryptoService()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **XSenderTests.cs** (10 connections)
+- **XSenderTests.cs** (10 connections)
+- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **BuildKeyVaultMock()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

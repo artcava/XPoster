@@ -1,17 +1,18 @@
 # Community 33
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
-- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeedMissingBranchTests** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
-- **AzureFoundryOptionsValidatorTests** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

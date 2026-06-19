@@ -1,21 +1,22 @@
 # Community 88
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **var()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **if()** (2 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 18]] (10 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

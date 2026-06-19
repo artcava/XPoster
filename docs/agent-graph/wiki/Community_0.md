@@ -1,35 +1,35 @@
 # Community 0
 
-> 30 nodes · cohesion 0.13
+> 49 nodes · cohesion 0.08
 
 ## Key Concepts
 
-- **OpenAiServiceTests.cs** (29 connections)
-- **OpenAiServiceTests.cs** (29 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsError_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyArrayWithoutCallingApi()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsError_ReturnsEmptyArray()** (2 connections)
+- **AiServiceHelperTests.cs** (48 connections)
+- **AiServiceHelperTests.cs** (48 connections)
+- **MakeResponse()** (2 connections)
+- **var()** (2 connections)
+- **MakeHttpClientThatThrows()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_WhenApiReturns200_ReturnsDecodedBytes()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyArray()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns200_ReturnsTrimmedContent()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenTextAlreadyShort_ReturnsTextUnchanged()** (2 connections)
-- **GetSummaryAsync_WhenSummaryAlwaysTooLong_StopsAfterThreeAttempts()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturns200_ReturnsTrimmedContent()** (2 connections)
-- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyArrayWithoutCallingApi()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsTooManyRequests_LogsInformation()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsError_ReturnsEmpty()** (2 connections)
-- **OpenAiService()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- *... and 5 more nodes in this community*
+- **OpenAiB64Json()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
+- **new()** (2 connections)
+- **MakeHttpClient()** (2 connections)
+- **ParseImageResponseAsync_WhenStatusIs429_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_WhenStatusIsNonSuccess_LogsError()** (2 connections)
+- **HttpClient()** (2 connections)
+- **FalAiJson()** (2 connections)
+- **ChatJson()** (2 connections)
+- **ParseImageResponseAsync_UnsupportedProvider_LogsError()** (2 connections)
+- **ParseImageResponseAsync_OpenAi_ValidB64Json_ReturnsDecodedBytes()** (2 connections)
+- **ParseImageResponseAsync_OpenAi_MissingDataArray_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_OpenAi_MissingB64JsonProperty_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_OpenAi_EmptyB64JsonValue_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_OpenAi_EmptyDataArray_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_FalAi_ValidUrl_ReturnsDownloadedBytes()** (2 connections)
+- **ParseImageResponseAsync_FalAi_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **AiServiceHelperTests** (2 connections)
+- *... and 24 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 114 (100%)
+- EXTRACTED: 190 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

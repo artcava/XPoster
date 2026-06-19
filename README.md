@@ -156,8 +156,11 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
 | `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
 | `DeepSeekWithFal` | `HybridAiService` | `DeepSeekService` → DeepSeek API | `FalAiImageService` → fal.ai FLUX.2 Turbo |
+| `Perplexity` | `PerplexityService` | Perplexity Sonar Chat Completions API | ❌ Not supported — posts published text-only |
 
 > ℹ️ `DeepSeekService` and `FalAiImageService` are independent services, each with their own registration and test coverage. `HybridAiService` composes the two, delegating text requests to `DeepSeekService` and image requests to `FalAiImageService`. This composition is transparent to orchestrators, which always program to `IAiService`.
+>
+> ℹ️ `PerplexityService` implements `IAiService` but does not support image generation. `GenerateImageAsync` always returns an empty byte array and logs a `Warning` — posts are published text-only when this provider is active.
 
 ### Social Media APIs
 
@@ -206,6 +209,7 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
 | **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
 | **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
+| **Perplexity** | [perplexity.ai](https://www.perplexity.ai/) | Text only | [docs/integrations/setup-perplexity.md](docs/integrations/setup-perplexity.md) |
 
 > ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
@@ -439,73 +443,18 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 ## Testing
 
-### Test Structure
+The test suite uses **xUnit + Moq** with a unit-first approach. Tests are organized to mirror the `src/` folder structure and target ≥ 80% line coverage on every CI run.
 
 ```
 tests/
-├── XPoster.Tests.csproj
-├── XFunctionTests.cs
-├── XFunctionMissingBranchTests.cs
-├── Abstraction/
-│   └── BaseOrchestratorTests.cs
-├── Helpers/
-│   └── ResilienceTestHelpers.cs
-├── Implementation/
-│   ├── AiServiceFactoryTests.cs
-│   ├── FeedOrchestratorTests.cs
-│   ├── OrchestratorFactoryTests.cs
-│   ├── NoOrchestratorTests.cs
-│   ├── PowerLawOrchestratorTests.cs
-│   └── SlotProfileProviderTests.cs
-├── Integration/
-│   ├── PollyIntegrationTestBase.cs
-│   ├── LinkedInResiliencePipelineTests.cs
-│   ├── InstagramResiliencePipelineTests.cs
-│   ├── AiClientsResiliencePipelineTests.cs
-│   └── CaptureLoggerProvider.cs
-├── Models/
-│   ├── AzureFoundryOptionsValidatorTests.cs
-│   ├── DeepSeekOptionsTests.cs
-│   ├── DeepSeekOptionsValidatorTests.cs
-│   ├── FalAiOptionsValidatorTests.cs
-│   ├── ModelsTests.cs
-│   ├── OpenAiOptionsValidatorTests.cs
-│   ├── PostMissingBranchTests.cs
-│   └── RSSFeedMissingBranchTests.cs
-├── SenderPlugins/
-│   ├── DryRunSenderTests.cs
-│   ├── IgSenderResilienceTests.cs
-│   ├── IgSenderTests.cs
-│   ├── InSenderMissingBranchTests.cs
-│   ├── InSenderResilienceTests.cs
-│   ├── InSenderSendAsyncTests.cs
-│   ├── InSenderTests.cs
-│   ├── XSenderMissingBranchTests.cs
-│   ├── XSenderSendAsyncTests.cs
-│   └── XSenderTests.cs
-└── Services/
-    ├── AiServiceHelperTests.cs
-    ├── AzureFoundryServiceTests.cs
-    ├── CryptoServiceTests.cs
-    ├── DeepSeekServiceTests.cs
-    ├── FalAiImageServiceTests.cs
-    ├── FeedServiceTests.cs
-    ├── HybridAiServiceTests.cs
-    ├── KeyVaultServiceTests.cs
-    ├── OpenAiServiceTests.cs
-    └── TimeProviderTests.cs
+├── Contracts/        # AiProviderExtensions, BaseOrchestrator abstract contracts
+├── Helpers/          # shared HTTP mock helpers for resilience tests
+├── Orchestrators/    # FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory, AiServiceFactory…
+├── Integration/      # Polly resilience pipelines — not run in CI
+├── Models/           # domain model invariants, options validators
+├── SenderPlugins/    # XSender, InSender, IgSender, DryRunSender
+└── Services/         # OpenAiService, AzureFoundryService, KeyVaultService…
 ```
-
-| Folder | What is covered |
-|---|---|
-| *(root)* | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Abstraction/` | `BaseOrchestrator` abstract class contracts |
-| `Helpers/` | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Implementation/` | `FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`, `AiServiceFactory` resolution logic; `OrchestratorFactory` using synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` provider behaviour (`SlotProfileProviderTests.cs`) |
-| `Integration/` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — not run in CI |
-| `Models/` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
-| `SenderPlugins/` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
-| `Services/` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
 
 ### Running Tests
 
@@ -513,42 +462,11 @@ tests/
 # All tests
 dotnet test
 
-# Specific tests
-dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
-
-# With coverage (exclusions defined in coverlet.runsettings at repo root)
+# With coverage
 dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 ```
 
-> 📖 Full testing strategy, mocking patterns, and coverage goals: [tests/README.md](tests/README.md).
-
-### Mocking External Services
-
-```csharp
-[Fact]
-public async Task FeedOrchestrator_ShouldGenerateSummary()
-{
-    // Arrange
-    var mockAiService = new Mock<IAiService>();
-    mockAiService
-        .Setup(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
-        .ReturnsAsync("Test summary");
-
-    var orchestrator = new FeedOrchestrator(
-        mockSender.Object,
-        mockLogger.Object,
-        mockFeedService.Object,
-        mockAiService.Object
-    );
-
-    // Act
-    var result = await orchestrator.OrchestrateAsync();
-
-    // Assert
-    Assert.NotNull(result);
-    Assert.Contains("Test summary", result.Content);
-}
-```
+> 📖 Full test structure (per-file listing), naming conventions, mocking patterns, coverage exclusions, and checklist for adding new tests: **[tests/README.md](tests/README.md)**.
 
 ---
 
@@ -623,6 +541,7 @@ Key monitoring capabilities at a glance:
 - [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) - Alternative AI provider
 - [DeepSeek](https://www.deepseek.com/) - Cost-effective text generation
 - [fal.ai](https://fal.ai/) - FLUX.2 Turbo image generation
+- [Perplexity](https://www.perplexity.ai/) - Sonar text generation
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 

@@ -1,20 +1,21 @@
 # Community 109
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **FeedService()** (2 connections)
-- **if()** (2 connections)
+- **XSender.cs** (6 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (4 shared connections)
+- [[Community 119]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

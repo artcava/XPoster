@@ -1,29 +1,35 @@
 # Community 4
 
-> 20 nodes · cohesion 0.19
+> 26 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (19 connections)
-- **DryRunSenderTests.cs** (19 connections)
-- **MessageMaxLenght_ReturnsIntMaxValue()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **DryRunSenderTests()** (2 connections)
-- **SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()** (2 connections)
-- **new()** (2 connections)
-- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
-- **SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
-- **ValidPost()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenKeyVaultProbeThrows_LogsError()** (2 connections)
-- **SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithImageBytes_LogsImagePresence()** (2 connections)
+- **PerplexityServiceTests.cs** (25 connections)
+- **PerplexityServiceTests.cs** (25 connections)
+- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsContent()** (2 connections)
+- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenFirstResponseStillTooLong_RetriesAndReturnsSecondResponse()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **PerplexityService()** (2 connections)
+- **GetSummaryAsync_WhenTextWithinLimit_DoesNotCallApi()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **MakeSequentialHandlerMock()** (2 connections)
+- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
+- **GetImagePromptAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GetImagePromptAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **BuildService()** (2 connections)
+- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_AlwaysReturnsEmptyByteArray()** (2 connections)
+- **foreach()** (2 connections)
+- **GenerateImageAsync_AlwaysLogsWarning()** (2 connections)
+- **GetSummaryAsync_WhenTextRemainsLongAfterMaxRetries_ReturnsLastApiContent()** (2 connections)
+- **PerplexityServiceTests** (2 connections)
+- **GenerateImageAsync_DoesNotThrow()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- *... and 1 more nodes in this community*
 
 ## Relationships
 
@@ -31,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 74 (100%)
+- EXTRACTED: 98 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

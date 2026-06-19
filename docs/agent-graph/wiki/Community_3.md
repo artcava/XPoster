@@ -1,30 +1,35 @@
 # Community 3
 
-> 21 nodes · cohesion 0.19
+> 29 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **DeepSeekServiceTests.cs** (20 connections)
-- **DeepSeekServiceTests.cs** (20 connections)
-- **BuildService()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsContent()** (2 connections)
-- **GetSummaryAsync_WhenTextWithinLimit_DoesNotCallApi()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **DeepSeekServiceTests** (2 connections)
-- **GenerateImageAsync_ExceptionMessage_MentionsHybridAiService()** (2 connections)
-- **GenerateImageAsync_AlwaysThrows_NotSupportedException()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **BuildProvider()** (2 connections)
+- **AzureFoundryOptionsExtensionsTests** (2 connections)
+- **BuildConfig()** (2 connections)
+- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
+- **AddFalAiOptions_RegistersValidator()** (2 connections)
+- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **new()** (2 connections)
+- **DeepSeekOptionsExtensionsTests** (2 connections)
+- **FalAiOptionsExtensionsTests** (2 connections)
+- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddOpenAiOptions_RegistersValidator()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **SectionName_IsPerplexity()** (2 connections)
+- **SectionName_IsFalAi()** (2 connections)
+- **SectionName_IsDeepSeek()** (2 connections)
+- **SectionName_IsOpenAI()** (2 connections)
+- **register()** (2 connections)
+- **OptionsExtensionsTests** (2 connections)
+- **PerplexityOptionsExtensionsTests** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **AddDeepSeekOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- *... and 4 more nodes in this community*
 
 ## Relationships
 
@@ -32,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (100%)
+- EXTRACTED: 110 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

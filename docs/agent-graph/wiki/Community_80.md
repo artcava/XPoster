@@ -1,21 +1,22 @@
 # Community 80
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **OrchestratorFactory()** (2 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **if()** (2 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ISender** (2 connections)
 
 ## Relationships
 
-- [[Community 55]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

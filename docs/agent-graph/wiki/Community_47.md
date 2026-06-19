@@ -1,15 +1,17 @@
 # Community 47
 
-> 6 nodes · cohesion 0.60
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **AiServiceFactoryTests.cs** (7 connections)
+- **AiServiceFactoryTests.cs** (7 connections)
+- **GetByProvider_Should_ReturnService_When_ProviderIsMappedAndResolvable()** (2 connections)
+- **GetByProvider_Should_ThrowArgumentException_When_ProviderIsNotMapped()** (2 connections)
+- **GetByProvider_Should_ThrowInvalidOperationException_When_MappedServiceCannotBeResolved()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GetByProvider_Should_ReturnAzureFoundryService_When_ProviderIsMappedAndResolvable()** (2 connections)
+- **AiServiceFactoryTests()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

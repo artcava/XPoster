@@ -1,17 +1,18 @@
 # Community 89
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **for()** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetProfiles()** (2 connections)
+- **ISlotProfileProvider** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

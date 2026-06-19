@@ -1,19 +1,21 @@
 # Community 113
 
-> 2 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **RSSFeed** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

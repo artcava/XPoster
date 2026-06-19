@@ -1,23 +1,24 @@
 # Community 57
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 29]] (9 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

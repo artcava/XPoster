@@ -1,16 +1,17 @@
 # Community 107
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **AddOpenAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 87]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

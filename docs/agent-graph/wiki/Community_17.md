@@ -1,20 +1,22 @@
 # Community 17
 
-> 11 nodes · cohesion 0.35
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **InSender()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **ValidPost()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **BuildKeyVaultMockWithOrg()** (2 connections)
+- **BuildKeyVaultMock()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
 
 ## Relationships
 
@@ -22,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

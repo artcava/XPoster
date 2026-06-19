@@ -1,24 +1,25 @@
 # Community 45
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
+- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
+- **FeedServiceTests()** (2 connections)
+- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (9 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,19 +1,21 @@
 # Community 112
 
-> 2 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **foreach()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (2 shared connections)
+- [[Community 79]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

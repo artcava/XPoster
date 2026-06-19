@@ -1,22 +1,23 @@
 # Community 14
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
-- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
-- **BuildProvider()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **OpenAIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **ModelsTests** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

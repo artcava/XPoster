@@ -1,4 +1,6 @@
 using System.Net;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -22,7 +24,7 @@ public class AzureFoundryServiceTests
             Endpoint = "https://myfoundry.openai.azure.com",
             ApiKey = "fake-key",
             DeploymentName = "gpt-4.1-nano",
-            ImageDeploymentName = "gpt-image-1"
+            ImageDeploymentName = "gpt-image-1.5"
         });
 
         return new AzureFoundryService(factory.Object, options, loggerMock.Object);
@@ -47,8 +49,6 @@ public class AzureFoundryServiceTests
     private static string ChatCompletionJson(string content) =>
         "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
-    // ── GetSummaryAsync ──────────────────────────────────────────────────────
-
     [Fact]
     public async Task GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()
     {
@@ -61,7 +61,10 @@ public class AzureFoundryServiceTests
         handler.Protected().Verify(
             "SendAsync",
             Times.Once(),
-            ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Post && r.RequestUri!.AbsolutePath.Contains("/chat/completions", StringComparison.Ordinal)),
+            ItExpr.Is<HttpRequestMessage>(r =>
+                r.Method == HttpMethod.Post &&
+                r.RequestUri!.AbsolutePath.EndsWith("/chat/completions", StringComparison.Ordinal) &&
+                !r.RequestUri.AbsolutePath.Contains("/openai/deployments/", StringComparison.Ordinal)),
             ItExpr.IsAny<CancellationToken>());
     }
 
@@ -105,8 +108,6 @@ public class AzureFoundryServiceTests
         Assert.Equal(string.Empty, result);
     }
 
-    // ── GetImagePromptAsync ─────────────────────────────────────────────────
-
     [Fact]
     public async Task GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()
     {
@@ -137,8 +138,6 @@ public class AzureFoundryServiceTests
         Assert.Equal(string.Empty, result);
     }
 
-    // ── GenerateImageAsync ──────────────────────────────────────────────────
-
     [Fact]
     public async Task GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()
     {
@@ -162,7 +161,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G1 — 429 on image generation must return empty, not fall through to success path.</summary>
     [Fact]
     public async Task GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()
     {
@@ -173,7 +171,25 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G2 — Malformed JSON on 200 must not throw; must return empty array.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()
+    {
+        var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out var loggerMock);
+
+        await svc.GenerateImageAsync("image prompt");
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains("Azure Foundry") &&
+                    (v.ToString()!.Contains("429") || v.ToString()!.Contains("TooManyRequests"))),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
     [Fact]
     public async Task GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()
     {
@@ -184,7 +200,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G3 — Empty data array on 200 must return empty array without throwing IndexOutOfRangeException.</summary>
     [Fact]
     public async Task GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()
     {
@@ -195,7 +210,6 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>G4 — b64_json null must return empty array, not throw FormatException.</summary>
     [Fact]
     public async Task GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()
     {
@@ -206,16 +220,9 @@ public class AzureFoundryServiceTests
         Assert.Empty(result);
     }
 
-    /// <summary>
-    /// G5 — When b64_json is absent but a url is present, the service downloads from the url
-    /// and returns the bytes. In this test the url points to a second endpoint served by the
-    /// same mock handler, which returns a fixed byte payload.
-    /// </summary>
     [Fact]
     public async Task GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()
     {
-        // The image download call is also intercepted by the same HttpClient/handler.
-        // We configure the handler to return the image bytes for any request.
         var imageBytes = new byte[] { 10, 20, 30 };
         var mock = new Mock<HttpMessageHandler>();
         mock.Protected()
@@ -225,8 +232,6 @@ public class AzureFoundryServiceTests
                 ItExpr.IsAny<CancellationToken>())
             .Returns<HttpRequestMessage, CancellationToken>((req, _) =>
             {
-                // First call is the POST to the image generation endpoint.
-                // Second call is the GET for the image URL.
                 if (req.Method == HttpMethod.Post)
                 {
                     var json = "{\"data\":[{\"url\":\"https://myfoundry.openai.azure.com/generated/img.png\"}]}";
@@ -249,10 +254,6 @@ public class AzureFoundryServiceTests
         Assert.Equal(imageBytes, result);
     }
 
-    /// <summary>
-    /// G6 — A fallback url that does not originate from the configured endpoint must emit a
-    /// LogWarning. The download is still attempted (defence-in-depth, not a hard block).
-    /// </summary>
     [Fact]
     public async Task GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()
     {
@@ -267,7 +268,6 @@ public class AzureFoundryServiceTests
             {
                 if (req.Method == HttpMethod.Post)
                 {
-                    // URL originates from a different host — should trigger LogWarning.
                     var json = "{\"data\":[{\"url\":\"https://cdn.unknown.example.com/img.png\"}]}";
                     return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
                     {
@@ -295,7 +295,49 @@ public class AzureFoundryServiceTests
             Times.Once);
     }
 
-    /// <summary>G7 — Empty prompt must return empty array immediately, without making any HTTP call.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new HttpRequestException("network failure"));
+
+        var svc = BuildService(handler.Object, out _);
+
+        var result = await svc.GenerateImageAsync("image prompt");
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new HttpRequestException("network failure"));
+
+        var svc = BuildService(handler.Object, out var loggerMock);
+
+        await svc.GenerateImageAsync("image prompt");
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Azure Foundry image generation HTTP request failed")),
+                It.IsAny<HttpRequestException>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
     [Fact]
     public async Task GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()
     {
@@ -312,7 +354,24 @@ public class AzureFoundryServiceTests
             ItExpr.IsAny<CancellationToken>());
     }
 
-    /// <summary>G8 — Whitespace-only prompt must also be rejected before any HTTP call.</summary>
+    [Fact]
+    public async Task GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()
+    {
+        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
+        var svc = BuildService(handler.Object, out var loggerMock);
+
+        await svc.GenerateImageAsync(string.Empty);
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("empty or whitespace prompt")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
     [Fact]
     public async Task GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()
     {
@@ -327,5 +386,107 @@ public class AzureFoundryServiceTests
             Times.Never(),
             ItExpr.IsAny<HttpRequestMessage>(),
             ItExpr.IsAny<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()
+    {
+        var imageBytes = new byte[] { 1, 2, 3 };
+        var base64 = Convert.ToBase64String(imageBytes);
+        var json = "{\"data\":[{\"b64_json\":\"" + base64 + "\"}]}";
+        var handler = MakeHandlerMock(HttpStatusCode.OK, json);
+        var svc = BuildService(handler.Object, out _);
+
+        await svc.GenerateImageAsync("a polar bear");
+
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Once(),
+            ItExpr.Is<HttpRequestMessage>(r =>
+                r.Method == HttpMethod.Post &&
+                r.RequestUri!.AbsolutePath.EndsWith("/images/generations", StringComparison.Ordinal) &&
+                !r.RequestUri.AbsolutePath.Contains("/openai/deployments/", StringComparison.Ordinal)),
+            ItExpr.IsAny<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_RequestBodyContainsModelField()
+    {
+        var imageBytes = new byte[] { 5, 6, 7 };
+        var base64 = Convert.ToBase64String(imageBytes);
+        var json = "{\"data\":[{\"b64_json\":\"" + base64 + "\"}]}";
+
+        string? capturedBody = null;
+        var mock = new Mock<HttpMessageHandler>();
+        mock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Returns<HttpRequestMessage, CancellationToken>(async (req, _) =>
+            {
+                capturedBody = await req.Content!.ReadAsStringAsync();
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
+            });
+
+        var svc = BuildService(mock.Object, out _);
+        await svc.GenerateImageAsync("a polar bear");
+
+        Assert.NotNull(capturedBody);
+        using var doc = JsonDocument.Parse(capturedBody!);
+        Assert.True(doc.RootElement.TryGetProperty("model", out var modelProp));
+        Assert.Equal("gpt-image-1.5", modelProp.GetString());
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()
+    {
+        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("short"));
+        var svc = BuildService(handler.Object, out _);
+
+        await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        handler.Protected().Verify(
+            "SendAsync",
+            Times.Once(),
+            ItExpr.Is<HttpRequestMessage>(r =>
+                r.Method == HttpMethod.Post &&
+                r.RequestUri!.AbsolutePath.EndsWith("/chat/completions", StringComparison.Ordinal) &&
+                !r.RequestUri.AbsolutePath.Contains("/openai/deployments/", StringComparison.Ordinal)),
+            ItExpr.IsAny<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetSummaryAsync_RequestBodyContainsModelField()
+    {
+        string? capturedBody = null;
+        var mock = new Mock<HttpMessageHandler>();
+        mock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Returns<HttpRequestMessage, CancellationToken>(async (req, _) =>
+            {
+                capturedBody = await req.Content!.ReadAsStringAsync();
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        ChatCompletionJson("short"),
+                        Encoding.UTF8,
+                        "application/json")
+                };
+            });
+
+        var svc = BuildService(mock.Object, out _);
+        await svc.GetSummaryAsync(new string('a', 300), 100);
+
+        Assert.NotNull(capturedBody);
+        using var doc = JsonDocument.Parse(capturedBody!);
+        Assert.True(doc.RootElement.TryGetProperty("model", out var modelProp));
+        Assert.Equal("gpt-4.1-nano", modelProp.GetString());
     }
 }

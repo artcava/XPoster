@@ -1,22 +1,23 @@
 # Community 70
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **XPoster.Services** (2 connections)
-- **catch()** (2 connections)
-- **GetFeedsAsync()** (2 connections)
-- **Exception()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **ResolveAiProvider()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **return()** (2 connections)
+- **Resolve()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 109]] (3 shared connections)
+- [[Community 106]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

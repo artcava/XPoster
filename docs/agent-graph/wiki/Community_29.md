@@ -1,26 +1,27 @@
 # Community 29
 
-> 9 nodes · cohesion 0.22
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
+- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
+- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (4 shared connections)
+- [[Community 57]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

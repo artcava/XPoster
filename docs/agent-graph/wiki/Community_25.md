@@ -1,18 +1,20 @@
 # Community 25
 
-> 9 nodes · cohesion 0.42
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (8 connections)
-- **DeepSeekOptionsTests.cs** (8 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **DeepSeekOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **DeepSeekOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **BuildSender()** (2 connections)
+- **InSender()** (2 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
+- **ValidPost()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

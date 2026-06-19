@@ -1,22 +1,23 @@
 # Community 64
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **XPoster.Services** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **TestOrchestrator()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

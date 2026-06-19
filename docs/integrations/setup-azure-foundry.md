@@ -13,7 +13,7 @@ This guide explains how to provision Azure AI Foundry and configure XPoster to u
 2. Search for **Azure AI Foundry** and click **Create**.
 3. Choose subscription, resource group, region, and pricing tier.
 4. After deployment, open the resource and note:
-   - **Endpoint URL** (e.g. `https://<resource>.openai.azure.com`)
+   - **Endpoint URL** (e.g. `https://<resource>.services.ai.azure.com/openai/v1`)
    - **Key 1** (or Key 2)
 
 ## 2. Create a Project and Deploy Models
@@ -21,7 +21,7 @@ This guide explains how to provision Azure AI Foundry and configure XPoster to u
 1. Open [Azure AI Foundry Studio](https://ai.azure.com) for your resource.
 2. Create a project (or use an existing one).
 3. Deploy a **chat completion** model for summaries and prompt generation (e.g. `gpt-4o-mini`).
-4. Deploy an **image generation** model (e.g. `dall-e-3` or `gpt-image-1`).
+4. Deploy an **image generation** model (e.g. `dall-e-3` or `gpt-image-1.5`).
 5. Save both deployment names.
 
 Recommended mapping:
@@ -34,11 +34,10 @@ Collect these values from the Portal / Foundry Studio:
 
 | Parameter | Where to find it |
 |-----------|------------------|
-| `Endpoint` | Resource overview blade → Endpoint |
+| `Endpoint` | Resource overview blade → Endpoint (use the `/openai/v1` base URL) |
 | `ApiKey` | Resource overview blade → Keys and Endpoint → Key 1 |
 | `DeploymentName` | Foundry Studio → Deployments → chat model name |
 | `ImageDeploymentName` | Foundry Studio → Deployments → image model name |
-| `ApiVersion` | Azure OpenAI docs (default in XPoster: `2024-02-01`) |
 
 ## 4. Configure XPoster
 
@@ -48,11 +47,10 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 {
   "Values": {
     "AiProvider": "AzureFoundry",
-    "AzureFoundry__Endpoint": "https://<resource>.openai.azure.com",
+    "AzureFoundry__Endpoint": "https://<resource>.services.ai.azure.com/openai/v1",
     "AzureFoundry__ApiKey": "<secret>",
     "AzureFoundry__DeploymentName": "<chat-deployment>",
-    "AzureFoundry__ImageDeploymentName": "<image-deployment>",
-    "AzureFoundry__ApiVersion": "2024-02-01"
+    "AzureFoundry__ImageDeploymentName": "<image-deployment>"
   }
 }
 ```
@@ -85,11 +83,6 @@ If `AiProvider` is missing or invalid, XPoster falls back to the schedule defaul
 
 - Confirm `DeploymentName` and `ImageDeploymentName` match the exact names in Foundry Studio.
 - Check region and project alignment.
-
-### 400 Bad Request (API version)
-
-- Set `AzureFoundry__ApiVersion` to a version supported by your deployment.
-- Validate endpoint format (no trailing slash issues).
 
 ### 429 Too Many Requests
 

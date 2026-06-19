@@ -39,7 +39,7 @@ builder.Services.AddTransient<TikTokSender>();
 ### Step 3 — Add Enum Value
 
 ```csharp
-// src/Abstraction/Enums.cs
+// src/Contracts/Enums.cs
 public enum MessageSender
 {
     // existing values...
@@ -55,7 +55,7 @@ public enum MessageSender
 Add two arms to the existing switch expression inside `Resolve()`:
 
 ```csharp
-// src/Implementation/OrchestratorFactory.cs — sender switch expression
+// src/Orchestrators/OrchestratorFactory.cs — sender switch expression
 ISender? sender = profile.SenderType switch
 {
     // existing arms ...
@@ -69,10 +69,10 @@ ISender? sender = profile.SenderType switch
 
 ### Step 5 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Implementation/DefaultSlotProfileProvider.cs`), which implements `ISlotProfileProvider`. Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`), which implements `ISlotProfileProvider`. Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
-// src/Implementation/DefaultSlotProfileProvider.cs
+// src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
@@ -93,7 +93,7 @@ An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync
 ### Step 1 — Extend BaseOrchestrator
 
 ```csharp
-// src/Implementation/QuoteOrchestrator.cs
+// src/Orchestrators/QuoteOrchestrator.cs
 public class QuoteOrchestrator : BaseOrchestrator
 {
     public QuoteOrchestrator(ISender sender, ILogger<QuoteOrchestrator> logger, IAiService aiService)
@@ -117,7 +117,7 @@ public class QuoteOrchestrator : BaseOrchestrator
 Reference the new orchestrator type in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
-// src/Implementation/DefaultSlotProfileProvider.cs
+// src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
@@ -138,7 +138,7 @@ The AI layer is abstracted behind `IAiService`. `AiServiceFactory` resolves impl
 Append a new value to `AiProvider`. Assign an explicit integer to avoid accidental renumbering of existing values:
 
 ```csharp
-// src/Abstraction/AiProvider.cs
+// src/Contracts/AiProvider.cs
 public enum AiProvider
 {
     None         = 0,
@@ -152,7 +152,7 @@ public enum AiProvider
 ### Step 2 — Implement IAiService
 
 ```csharp
-// src/Services/AnthropicAiService.cs
+// src/Services/Ai/AnthropicAiService.cs
 public class AnthropicAiService : IAiService
 {
     // Model names, SDK dependencies, and API keys are internal to this class.
@@ -176,12 +176,13 @@ public class AnthropicAiService : IAiService
 ```csharp
 // src/Program.cs
 builder.Services.AddKeyedTransient<IAiService, AnthropicAiService>(AiProvider.Anthropic);
+builder.Services.AddAnthropicOptions(builder.Configuration);  // see Step 4
 ```
 
 Then add the new value to the `_supportedProviders` set in `AiServiceFactory`. This guard is what `GetByProvider` checks before attempting resolution; without it the factory throws `ArgumentException` even if the service is correctly registered:
 
 ```csharp
-// src/Implementation/AiServiceFactory.cs
+// src/Orchestrators/AiServiceFactory.cs
 private static readonly HashSet<AiProvider> _supportedProviders =
 [
     AiProvider.OpenAi,
@@ -192,20 +193,74 @@ private static readonly HashSet<AiProvider> _supportedProviders =
 
 No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledOrchestrationProfile` and via the global `AiProvider` configuration key.
 
+### Step 4 — Add an `*OptionsExtensions.cs` file
+
+Every AI provider **must** ship an `*OptionsExtensions.cs` file alongside its `*Options.cs` and `*OptionsValidator.cs` in `src/Models/<ProviderName>/`. This file is the single source of truth for the configuration section key and encapsulates both the binding and the startup-validation registration in one method call.
+
+```
+src/Models/
+  Anthropic/
+    AnthropicOptions.cs
+    AnthropicOptionsValidator.cs
+    AnthropicOptionsExtensions.cs   ← required
+```
+
+The file must follow this exact shape:
+
+```csharp
+// src/Models/Anthropic/AnthropicOptionsExtensions.cs
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+namespace XPoster.Models;
+
+/// <summary>
+/// Extension methods for registering <see cref="AnthropicOptions"/> binding and validation.
+/// </summary>
+public static class AnthropicOptionsExtensions
+{
+    /// <summary>App-settings section name: <c>Anthropic</c>.</summary>
+    public const string SectionName = "Anthropic";
+
+    /// <summary>
+    /// Binds the <c>Anthropic</c> configuration section to <see cref="AnthropicOptions"/>
+    /// and registers <see cref="AnthropicOptionsValidator"/> for startup validation.
+    /// </summary>
+    public static IServiceCollection AddAnthropicOptions(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<AnthropicOptions>(configuration.GetSection(SectionName));
+        services.AddSingleton<IValidateOptions<AnthropicOptions>, AnthropicOptionsValidator>();
+        return services;
+    }
+}
+```
+
+Key rules for this file:
+
+- `SectionName` lives on the **extension class**, not on `AnthropicOptions`. The Options DTO must remain a pure data model with no infrastructure concerns.
+- The method encapsulates **both** `Configure<T>` and `AddSingleton<IValidateOptions<T>>`. Never register them separately in `Program.cs`.
+- `Program.cs` must call only `builder.Services.AddAnthropicOptions(builder.Configuration)` — never raw `Configure<T>(configuration.GetSection("..."))` literals for AI providers.
+- Add the corresponding `appsettings.json` / `local.settings.json` section using `SectionName` as the key.
+
+> This pattern mirrors `HttpClientExtensions.AddHttpClients()` already present in the codebase and is consistent with the approach used by ASP.NET Core, the Azure SDK, and `Microsoft.Extensions` libraries throughout the .NET ecosystem.
+
 ---
 
 ## Adding a New Service (Data Source)
 
-For new external data integrations (e.g., a news API, a stock ticker, a weather feed), define an interface in `src/Abstraction/Interfaces/` and implement it in `src/Implementation/Services/`. Inject the new service into the orchestrator that needs it — `CreateOrchestratorInstance` will resolve it automatically.
+For new external data integrations (e.g., a news API, a stock ticker, a weather feed), define an interface in `src/Contracts/` and implement it in `src/Services/`. Inject the new service into the orchestrator that needs it — `CreateOrchestratorInstance` will resolve it automatically.
 
 ```csharp
-// src/Abstraction/Interfaces/INewsService.cs
+// src/Contracts/INewsService.cs
 public interface INewsService
 {
     Task<IEnumerable<string>> GetHeadlinesAsync(int count);
 }
 
-// src/Implementation/Services/NewsService.cs
+// src/Services/NewsService.cs
 public class NewsService : INewsService
 {
     public async Task<IEnumerable<string>> GetHeadlinesAsync(int count)
@@ -233,4 +288,5 @@ All extensions must respect the following invariants to integrate correctly with
 - **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, retry policies, and timeout configuration are applied consistently.
+- **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

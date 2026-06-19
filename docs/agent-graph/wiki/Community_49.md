@@ -1,15 +1,17 @@
 # Community 49
 
-> 6 nodes · cohesion 0.60
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **AddHttpClients()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
+- **AiServiceFactory.cs** (7 connections)
+- **AiServiceFactory.cs** (7 connections)
+- **AiServiceFactory()** (2 connections)
+- **GetByProvider()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **ArgumentException()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

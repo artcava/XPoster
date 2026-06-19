@@ -210,6 +210,23 @@ See [tests/README.md](tests/README.md) for the full testing strategy, mocking pa
 - Add XML documentation for public APIs
 - Keep methods focused (Single Responsibility)
 
+### Namespace Conventions
+
+When adding new files, place them in the folder that matches their responsibility and use the corresponding namespace:
+
+| Folder | Namespace | What belongs here |
+|---|---|---|
+| `src/Contracts/` | `XPoster.Contracts` | Interfaces (`I*.cs`), enums, extension methods |
+| `src/Abstraction/` | `XPoster.Abstraction` | Abstract base classes, shared profile records (`BaseOrchestrator`, `ScheduledOrchestrationProfile`) |
+| `src/Orchestrators/` | `XPoster.Orchestrators` | Concrete orchestrators, `OrchestratorFactory`, `AiServiceFactory`, slot profile providers |
+| `src/Models/` | `XPoster.Models` | Domain models, provider options and validators (use provider subfolders: `AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) |
+| `src/Services/` | `XPoster.Services` | Infrastructure services (`FeedService`, `CryptoService`, `KeyVaultService`, `TimeProvider`…) |
+| `src/Services/Ai/` | `XPoster.Services` | AI model integration services (`OpenAiService`, `AzureFoundryService`, `HybridAiService`…) |
+| `src/SenderPlugins/` | `XPoster.SenderPlugins` | Platform-specific sender implementations (`ISender`) |
+| `src/Extensions/` | `XPoster.Extensions` | Cross-cutting extension methods (e.g. `HttpClientExtensions`) |
+
+> 📐 For the full architectural rationale behind this layout, see [docs/architecture.md](docs/architecture.md). For step-by-step guides on adding new senders, orchestrators, or AI providers, see [docs/extending-xposter.md](docs/extending-xposter.md).
+
 ### Commit Messages
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):

@@ -1,28 +1,29 @@
 # Community 20
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **XSenderTests.cs** (10 connections)
-- **XSenderTests.cs** (10 connections)
-- **XSenderTests()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **BuildKeyVaultMock()** (2 connections)
-- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **XSender_ImplementsISender()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **BuildService()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **FalImageJson()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 28]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

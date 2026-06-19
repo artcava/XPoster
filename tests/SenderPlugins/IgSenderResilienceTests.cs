@@ -2,7 +2,7 @@ using System.Net;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 using XPoster.Tests.Helpers;

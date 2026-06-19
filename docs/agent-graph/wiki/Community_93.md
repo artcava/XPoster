@@ -1,16 +1,17 @@
 # Community 93
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction()** (2 connections)
-- **if()** (2 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **AddFalAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 79]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

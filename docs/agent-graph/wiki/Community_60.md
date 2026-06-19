@@ -1,14 +1,16 @@
 # Community 60
 
-> 5 nodes · cohesion 0.70
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **XPoster.Abstraction** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **ITimeProvider** (2 connections)
+- **DryRunSender.cs** (6 connections)
+- **DryRunSender.cs** (6 connections)
+- **if()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
@@ -16,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

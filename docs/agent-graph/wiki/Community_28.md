@@ -1,26 +1,28 @@
 # Community 28
 
-> 9 nodes · cohesion 0.42
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
-- **XPoster.Tests.Implementation** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 20]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

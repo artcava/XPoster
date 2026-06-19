@@ -1,5 +1,5 @@
 using Microsoft.Azure.Functions.Worker;
-using XPoster.Abstraction;
+using XPoster.Contracts;
 
 namespace XPoster;
 

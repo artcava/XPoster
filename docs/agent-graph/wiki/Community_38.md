@@ -1,17 +1,18 @@
 # Community 38
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
-- **PostMissingBranchTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
