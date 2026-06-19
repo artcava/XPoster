@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.1.4] - 2026-06-19
+
 ### Added
 - **Per-provider `*OptionsExtensions.cs` files** ([#189](https://github.com/artcava/XPoster/issues/189)): `OpenAiOptionsExtensions`, `AzureFoundryOptionsExtensions`, `DeepSeekOptionsExtensions`, `FalAiOptionsExtensions`, and `PerplexityOptionsExtensions` introduced in `src/Models/<Provider>/`. Each exposes a `SectionName` constant and an `Add*Options(IServiceCollection, IConfiguration)` extension method that encapsulates both the `Configure<T>` binding and the `IValidateOptions<T>` startup-validation registration. `Program.cs` updated to call these extension methods in place of the previous inline `Configure<T>` + `AddSingleton<IValidateOptions<T>>` pairs.
 - **`PerplexityService`** ([#91](https://github.com/artcava/XPoster/issues/91)): new `IAiService` implementation that targets the Perplexity Sonar Chat Completions API (`api.perplexity.ai/chat/completions`). Supports `GetSummaryAsync` and `GetImagePromptAsync`; `GenerateImageAsync` always returns `Array.Empty<byte>()` and emits a structured `Warning` log — posts are published text-only when this provider is active.
@@ -166,7 +170,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/artcava/XPoster/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/artcava/XPoster/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/artcava/XPoster/compare/v0.1.0...v0.1.1
