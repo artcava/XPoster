@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **XFunction.cs** (6 connections)
 - **if()** (2 connections)
-- **CryptoService()** (2 connections)
+- **XFunction()** (2 connections)
 
 ## Relationships
 
-- [[Community 98]] (3 shared connections)
+- [[Community 101]] (3 shared connections)
 
 ## Audit Trail
 

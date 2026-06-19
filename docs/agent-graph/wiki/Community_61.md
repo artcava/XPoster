@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
-- **HybridAiService()** (2 connections)
-- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
-- **BuildFalService()** (2 connections)
-- **BuildDeepSeekService()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **for()** (2 connections)
 
 ## Relationships
 
-- [[Community 26]] (10 shared connections)
+- [[Community 94]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,35 +1,35 @@
 # Community 0
 
-> 34 nodes · cohesion 0.12
+> 49 nodes · cohesion 0.08
 
 ## Key Concepts
 
-- **OpenAiServiceTests.cs** (33 connections)
-- **OpenAiServiceTests.cs** (33 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionThrown_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionThrown_LogsError()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **MakeHandler()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsError_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyArrayWithoutCallingApi()** (2 connections)
-- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturns200_ReturnsDecodedBytes()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyArray()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsError_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns200_ReturnsTrimmedContent()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmpty()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturns200_ReturnsTrimmedContent()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsError_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenSummaryAlwaysTooLong_StopsAfterThreeAttempts()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmpty()** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()** (2 connections)
-- *... and 9 more nodes in this community*
+- **AiServiceHelperTests.cs** (48 connections)
+- **AiServiceHelperTests.cs** (48 connections)
+- **ParseImageResponseAsync_AzureFoundry_ValidB64Json_ReturnsDecodedBytes()** (2 connections)
+- **ParseImageResponseAsync_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()** (2 connections)
+- **AiServiceHelperTests** (2 connections)
+- **AzureFoundryUrlJson()** (2 connections)
+- **AzureFoundryB64Json()** (2 connections)
+- **ParseImageResponseAsync_FalAi_ValidUrl_ReturnsDownloadedBytes()** (2 connections)
+- **ParseImageResponseAsync_FalAi_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
+- **OpenAiB64Json()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **ParseImageResponseAsync_FalAi_MissingImagesArray_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_FalAi_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_FalAi_DownloadFails_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_AzureFoundry_UrlFallback_DownloadFails_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_AzureFoundry_MissingDataArray_ReturnsEmptyArray()** (2 connections)
+- **ParseImageResponseAsync_AzureFoundry_UrlFallback_AllowedOrigin_ReturnsDownloadedBytes()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
+- **ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
+- *... and 24 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 130 (100%)
+- EXTRACTED: 190 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

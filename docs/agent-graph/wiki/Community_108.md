@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **XPoster.Models** (2 connections)
 - **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 122]] (2 shared connections)
+- [[Community 123]] (2 shared connections)
 
 ## Audit Trail
 

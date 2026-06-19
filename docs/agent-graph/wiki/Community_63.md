@@ -1,23 +1,23 @@
 # Community 63
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (5 connections)
-- **XFunctionTests.cs** (5 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **XPoster.Tests** (2 connections)
+- **AiServiceHelperImageTests.cs** (35 connections)
+- **MakeDownloadClient()** (2 connections)
+- **HttpClient()** (2 connections)
+- **JsonResponse()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 2]] (29 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 45 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

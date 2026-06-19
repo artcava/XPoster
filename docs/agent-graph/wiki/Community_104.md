@@ -1,20 +1,21 @@
 # Community 104
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **InSender.cs** (11 connections)
 - **if()** (2 connections)
-- **XSender()** (2 connections)
+- **InSender()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 99]] (3 shared connections)
+- [[Community 40]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

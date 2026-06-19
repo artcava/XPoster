@@ -5,12 +5,12 @@
 ## Key Concepts
 
 - **ResilienceTestHelpers.cs** (6 connections)
-- **params()** (2 connections)
 - **BuildFactory()** (2 connections)
+- **params()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (3 shared connections)
+- [[Community 96]] (3 shared connections)
 
 ## Audit Trail
 

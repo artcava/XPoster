@@ -1,32 +1,32 @@
 # AiServiceHelperTests.cs
 
-> God node · 26 connections
+> God node · 48 connections
 
-**Community:** [[Community 2]]
+**Community:** [[Community 0]]
 
 ## Connections by Relation
 
 ### contains
-- [[XPoster.Tests.Services]]
+- [[AiServiceHelperTests.cs]]
 - [[AiServiceHelperTests]]
+- [[AzureFoundryB64Json()]]
+- [[AzureFoundryUrlJson()]]
+- [[ChatJson()]]
+- [[FalAiJson()]]
+- [[HttpClient()]]
+- [[MakeHttpClient()]]
+- [[MakeHttpClientThatThrows()]]
 - [[MakeResponse()]]
 - [[new()]]
-- [[ChatJson()]]
-- [[ImageJson()]]
-- [[ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()]]
-- [[var()]]
-- [[ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()]]
-- [[ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()]]
-- [[ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()]]
+- [[OpenAiB64Json()]]
 - [[ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()]]
-- [[ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()]]
-- [[ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()]]
+- [[ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()]]
 - [[ParseChatCompletionResponseAsync_WhenContentIsWhitespaceOnly_ReturnsTrueAndEmpty()]]
-- [[ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()]]
 - [[ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()]]
-- [[ParseImageResponseAsync_WhenStatusIs429_ReturnsFalseAndNull()]]
-- [[ParseImageResponseAsync_WhenStatusIs429_LogsWarning()]]
-- [[ParseImageResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndNull()]]
+- [[ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()]]
+- [[ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()]]
+- [[ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()]]
+- [[ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()]]
 
 ---
 

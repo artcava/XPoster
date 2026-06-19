@@ -1,43 +1,43 @@
 # Community 2
 
-> 27 nodes · cohesion 0.15
+> 30 nodes · cohesion 0.07
 
 ## Key Concepts
 
-- **AiServiceHelperTests.cs** (26 connections)
-- **AiServiceHelperTests.cs** (26 connections)
+- **AiServiceHelperImageTests.cs** (35 connections)
+- **static()** (2 connections)
+- **return()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenNonSuccess_LogsProviderNameAndStatusCode()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIs429_LogsInformation()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenResponseBodyIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
-- **var()** (2 connections)
-- **ParseImageResponseAsync_WhenStatusIs429_ReturnsFalseAndNull()** (2 connections)
-- **ParseImageResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndNull()** (2 connections)
-- **ParseImageResponseAsync_WhenStatusIsNonSuccess_LogsError()** (2 connections)
-- **ParseImageResponseAsync_WhenResponseBodyIsMalformedJson_ReturnsFalseAndNull()** (2 connections)
-- **ParseImageResponseAsync_WhenResponseIs200WithValidJson_ReturnsTrueAndContent()** (2 connections)
-- **ParseImageResponseAsync_WhenStatusIs429_LogsWarning()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIs429_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenStatusIsNonSuccess_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenValidResponse_ReturnsTrueAndTrimmedContent()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenContentIsWhitespaceOnly_ReturnsTrueAndEmpty()** (2 connections)
+- **Parse_UnsupportedProvider_LogsError()** (2 connections)
+- **Parse_Returns429_LogsWarning()** (2 connections)
+- **Parse_Returns429_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()** (2 connections)
+- **Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_EmptyUrl_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_EmptyImagesArray_ReturnsEmpty()** (2 connections)
+- **AiServiceHelperImageTests** (2 connections)
 - **new()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenChoicesIsEmpty_ReturnsFalseAndEmpty()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenChoicesIsNull_ReturnsFalseAndEmpty()** (2 connections)
-- **ImageJson()** (2 connections)
-- **AiServiceHelperTests** (2 connections)
-- **ChatJson()** (2 connections)
-- **ParseChatCompletionResponseAsync_WhenEmptyChoices_LogsWarningWithProviderName()** (2 connections)
-- **ParseImageResponseAsync_WhenResponseBodyIsMalformedJson_LogsError()** (2 connections)
-- *... and 2 more nodes in this community*
+- **Parse_AzureFoundry_UrlFallback_ReturnsBytes()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()** (2 connections)
+- **Parse_AzureFoundry_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_OpenAi_EmptyB64Value_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
+- **Parse_NonSuccessStatus_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_ValidUrl_ReturnsBytes()** (2 connections)
+- **Parse_MalformedJson_ReturnsEmpty()** (2 connections)
+- *... and 5 more nodes in this community*
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 63]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 102 (100%)
+- EXTRACTED: 93 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
