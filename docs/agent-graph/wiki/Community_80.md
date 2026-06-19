@@ -1,22 +1,22 @@
 # Community 80
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
+- **FeedService.cs** (7 connections)
+- **XPoster.Services** (2 connections)
+- **Exception()** (2 connections)
 - **GetFeedsAsync()** (2 connections)
-- **IFeedService** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 132]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,17 +1,18 @@
 # Community 38
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory.cs** (7 connections)
-- **InvalidOperationException()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **ArgumentException()** (2 connections)
-- **AiServiceFactory()** (2 connections)
-- **if()** (2 connections)
-- **GetByProvider()** (2 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

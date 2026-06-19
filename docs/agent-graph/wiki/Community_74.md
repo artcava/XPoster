@@ -1,23 +1,23 @@
 # Community 74
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **var()** (2 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService.cs** (5 connections)
+- **KeyVaultService()** (2 connections)
+- **SetSecretAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetSecretAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

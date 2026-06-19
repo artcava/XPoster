@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory** (2 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory.cs** (4 connections)
+- **IAiServiceFactory** (2 connections)
+- **GetByProvider()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **Resolve()** (2 connections)
 
 ## Relationships
 

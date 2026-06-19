@@ -1,23 +1,25 @@
 # Community 10
 
-> 14 nodes · cohesion 0.27
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **InSenderMissingBranchTests.cs** (13 connections)
-- **InSenderMissingBranchTests.cs** (13 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **if()** (2 connections)
-- **InSenderMissingBranchTests()** (2 connections)
-- **BuildKv()** (2 connections)
-- **MessageMaxLenght_Returns800()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **KeyVaultServiceTests.cs** (15 connections)
+- **KeyVaultServiceTests.cs** (15 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **InSenderKv()** (2 connections)
+- **StubHttpMessageHandler()** (2 connections)
+- **KeyVaultServiceTests** (2 connections)
+- **KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()** (2 connections)
+- **XSender_SendAsync_RequestsAllFourXCredentials()** (2 connections)
+- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
+- **GetSecretAsync_ReturnsExpectedValue()** (2 connections)
+- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
+- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
+- **HttpFactory()** (2 connections)
+- **InSender_SendAsync_RequestsLinkedInOwnerCode()** (2 connections)
+- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
+- **GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +27,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (6 shared connections)
+- [[Community 95]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

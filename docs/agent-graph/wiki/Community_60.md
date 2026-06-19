@@ -1,15 +1,16 @@
 # Community 60
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **IKeyVaultService.cs** (5 connections)
-- **IKeyVaultService.cs** (5 connections)
-- **GetSecretAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **SetSecretAsync()** (2 connections)
-- **IKeyVaultService** (2 connections)
+- **DryRunSender.cs** (6 connections)
+- **DryRunSender.cs** (6 connections)
+- **SendAsync()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

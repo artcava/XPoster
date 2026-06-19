@@ -1,22 +1,22 @@
 # Community 84
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **catch()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **SendAsync()** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 115]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

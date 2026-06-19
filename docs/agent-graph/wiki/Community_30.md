@@ -1,18 +1,19 @@
 # Community 30
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **HttpResponseMessage()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **var()** (2 connections)
-- **params()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **ProduceImage_IsAlwaysFalse()** (2 connections)
+- **NoOrchestratorTests()** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **OrchestrateAsync_ReturnsNull()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

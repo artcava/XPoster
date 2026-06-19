@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **GetProfiles()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddHttpClients()** (2 connections)
 
 ## Relationships
 

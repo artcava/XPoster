@@ -1,22 +1,23 @@
 # Community 14
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **BuildKeyVaultMockWithOrg()** (2 connections)
-- **BuildKeyVaultMock()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
+- **FeedOrchestratorTests.cs** (13 connections)
+- **FeedOrchestratorTests.cs** (13 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **new()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

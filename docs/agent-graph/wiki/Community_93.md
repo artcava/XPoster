@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **catch()** (2 connections)
-- **InSender()** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **FeedOrchestrator()** (2 connections)
 - **if()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (7 shared connections)
+- [[Community 78]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

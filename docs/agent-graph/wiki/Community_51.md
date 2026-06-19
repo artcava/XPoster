@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
+- **FalAiImageService.cs** (6 connections)
+- **FalAiImageService.cs** (6 connections)
+- **catch()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **FalAiImageService()** (2 connections)
 - **GenerateImageAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiService** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,19 @@
-# Community 130
+# Community 137
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
 - **AzureFoundryOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 137]] (2 shared connections)
+- [[Community 130]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

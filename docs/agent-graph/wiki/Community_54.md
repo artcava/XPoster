@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (9 shared connections)
+- [[Community 72]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

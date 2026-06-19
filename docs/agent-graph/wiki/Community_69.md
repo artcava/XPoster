@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **foreach()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

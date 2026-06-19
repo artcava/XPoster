@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **Program.cs** (3 connections)
-- **Program.cs** (3 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **if()** (2 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **AddFalAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

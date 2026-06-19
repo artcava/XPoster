@@ -1,20 +1,19 @@
-# Community 120
+# Community 139
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
 - **DefaultSlotProfileProvider.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **GetProfiles()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 
-- [[Community 139]] (2 shared connections)
+- [[Community 120]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

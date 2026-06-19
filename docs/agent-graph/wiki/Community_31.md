@@ -6,13 +6,13 @@
 
 - **RSSFeedMissingBranchTests.cs** (8 connections)
 - **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeedMissingBranchTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
 - **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
 - **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
 - **RSSFeed_CanSetPublishDate()** (2 connections)
 - **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
-- **RSSFeedMissingBranchTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
 
 ## Relationships
 

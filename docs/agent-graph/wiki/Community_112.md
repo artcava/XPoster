@@ -1,20 +1,21 @@
 # Community 112
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **FeedOptions.cs** (2 connections)
-- **FeedOptions.cs** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **for()** (2 connections)
+- **StringContent()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 82]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

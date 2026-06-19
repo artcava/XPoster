@@ -1,20 +1,21 @@
 # Community 113
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
 - **XFunction.cs** (6 connections)
-- **XFunction()** (2 connections)
-- **if()** (2 connections)
+- **XPoster** (2 connections)
+- **Run()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 100]] (3 shared connections)
+- [[Community 123]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

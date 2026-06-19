@@ -1,27 +1,28 @@
 # Community 28
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **XSenderTests.cs** (10 connections)
+- **XSenderTests.cs** (10 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **BuildKeyVaultMock()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XSenderTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

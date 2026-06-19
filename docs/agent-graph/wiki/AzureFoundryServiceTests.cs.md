@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### contains
+- [[AzureFoundryServiceTests.cs]]
 - [[AzureFoundryServiceTests]]
 - [[BuildService()]]
 - [[GenerateImageAsync_RequestBodyContainsModelField()]]
@@ -26,7 +27,6 @@
 - [[MakeHandlerMock()]]
 - [[XPoster.Tests.Services]]
 - [[AzureFoundryService()]]
-- [[ChatCompletionJson()]]
 
 ---
 

@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (35 connections)
+- **PerplexityService.cs** (13 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **PerplexityService()** (2 connections)
 - **var()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **HttpClient()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
 
 ## Relationships
 
-- [[Community 2]] (29 shared connections)
+- [[Community 45]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

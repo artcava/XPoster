@@ -1,19 +1,20 @@
 # Community 132
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
+- **FeedService.cs** (7 connections)
+- **FeedService()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 106]] (3 shared connections)
+- [[Community 80]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **GetCurrentTime()** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

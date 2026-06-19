@@ -1,23 +1,23 @@
 # Community 71
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **TestOrchestrator()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 58]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
