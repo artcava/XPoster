@@ -48,6 +48,8 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddOpenAiOptions_BindsOptionsFromCorrectSection()
         {
+            // OpenAiOptionsValidator does not enforce ApiKey as required;
+            // all prompt templates already ship with valid placeholder defaults.
             var config = BuildConfig(OpenAiOptionsExtensions.SectionName,
                 new() { ["ApiKey"] = "test-key" });
 
@@ -85,14 +87,21 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddAzureFoundryOptions_BindsOptionsFromCorrectSection()
         {
-            var config = BuildConfig(AzureFoundryOptionsExtensions.SectionName,
-                new() { ["ApiKey"] = "az-key" });
+            // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
+            var config = BuildConfig(AzureFoundryOptionsExtensions.SectionName, new()
+            {
+                ["Endpoint"]           = "https://myfoundry.openai.azure.com",
+                ["ApiKey"]             = "az-key",
+                ["DeploymentName"]     = "gpt-4.1-nano",
+                ["ImageDeploymentName"]= "gpt-image-1",
+            });
 
             using var provider = BuildProvider(config,
                 (svc, cfg) => svc.AddAzureFoundryOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<AzureFoundryOptions>>().Value;
             Assert.Equal("az-key", options.ApiKey);
+            Assert.Equal("https://myfoundry.openai.azure.com", options.Endpoint);
         }
 
         [Fact]
@@ -122,14 +131,20 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddDeepSeekOptions_BindsOptionsFromCorrectSection()
         {
-            var config = BuildConfig(DeepSeekOptionsExtensions.SectionName,
-                new() { ["ApiKey"] = "ds-key" });
+            // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
+            var config = BuildConfig(DeepSeekOptionsExtensions.SectionName, new()
+            {
+                ["Endpoint"]       = "https://api.deepseek.com",
+                ["ApiKey"]         = "ds-key",
+                ["DeploymentName"] = "deepseek-chat",
+            });
 
             using var provider = BuildProvider(config,
                 (svc, cfg) => svc.AddDeepSeekOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<DeepSeekOptions>>().Value;
             Assert.Equal("ds-key", options.ApiKey);
+            Assert.Equal("https://api.deepseek.com", options.Endpoint);
         }
 
         [Fact]
@@ -159,14 +174,19 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddFalAiOptions_BindsOptionsFromCorrectSection()
         {
-            var config = BuildConfig(FalAiOptionsExtensions.SectionName,
-                new() { ["ApiKey"] = "fal-key" });
+            // Validator requires ApiKey and ModelId to be non-empty.
+            var config = BuildConfig(FalAiOptionsExtensions.SectionName, new()
+            {
+                ["ApiKey"]  = "fal-key",
+                ["ModelId"] = "fal-ai/flux/schnell",
+            });
 
             using var provider = BuildProvider(config,
                 (svc, cfg) => svc.AddFalAiOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<FalAiOptions>>().Value;
             Assert.Equal("fal-key", options.ApiKey);
+            Assert.Equal("fal-ai/flux/schnell", options.ModelId);
         }
 
         [Fact]
@@ -196,14 +216,20 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddPerplexityOptions_BindsOptionsFromCorrectSection()
         {
-            var config = BuildConfig(PerplexityOptionsExtensions.SectionName,
-                new() { ["ApiKey"] = "px-key" });
+            // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
+            var config = BuildConfig(PerplexityOptionsExtensions.SectionName, new()
+            {
+                ["Endpoint"]       = "https://api.perplexity.ai",
+                ["ApiKey"]         = "px-key",
+                ["DeploymentName"] = "sonar",
+            });
 
             using var provider = BuildProvider(config,
                 (svc, cfg) => svc.AddPerplexityOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<PerplexityOptions>>().Value;
             Assert.Equal("px-key", options.ApiKey);
+            Assert.Equal("https://api.perplexity.ai", options.Endpoint);
         }
 
         [Fact]
