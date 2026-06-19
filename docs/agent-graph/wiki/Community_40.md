@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **SendAsync()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **ResolveAuthorUrnAsync()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **Exception()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **using()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (4 shared connections)
+- [[Community 56]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

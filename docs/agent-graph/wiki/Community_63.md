@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (35 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **var()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **return()** (2 connections)
+- **foreach()** (2 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **ResolveAiProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 2]] (29 shared connections)
+- [[Community 96]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

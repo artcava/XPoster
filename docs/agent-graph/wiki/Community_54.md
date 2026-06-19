@@ -1,24 +1,24 @@
 # Community 54
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **if()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 28]] (9 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

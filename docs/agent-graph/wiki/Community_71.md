@@ -1,22 +1,23 @@
 # Community 71
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **catch()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
+- **TestOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 106]] (3 shared connections)
+- [[Community 58]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,24 +1,24 @@
 # Community 56
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DryRunSender.cs** (6 connections)
-- **DryRunSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **catch()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
 - **if()** (2 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 40]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

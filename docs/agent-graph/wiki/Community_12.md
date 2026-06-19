@@ -1,22 +1,23 @@
 # Community 12
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_CalledTwice_QueriesKvAccessTokenOnEachCall()** (2 connections)
-- **SendAsync_WhenLinkedInOrgIdPresent_UsesOrgIdAndSkipsOwnerCode()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **BuildKeyVaultMockWithOrg()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildKeyVaultMock()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **OpenAIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **ModelsTests** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

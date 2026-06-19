@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **OrchestratorFactory()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 115]] (3 shared connections)
+- [[Community 63]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

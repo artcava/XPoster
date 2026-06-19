@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XFunctionTests.cs** (5 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
 
 ## Relationships
 

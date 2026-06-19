@@ -1,21 +1,21 @@
 # Community 93
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **Program.cs** (3 connections)
-- **Program.cs** (3 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **InSender.cs** (11 connections)
+- **catch()** (2 connections)
+- **InSender()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 41]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

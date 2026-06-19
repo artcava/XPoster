@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **catch()** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **foreach()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
 - **if()** (2 connections)
-- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 53]] (6 shared connections)
+- [[Community 83]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

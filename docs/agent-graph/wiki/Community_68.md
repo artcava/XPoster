@@ -1,23 +1,23 @@
 # Community 68
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IKeyVaultService.cs** (5 connections)
-- **IKeyVaultService.cs** (5 connections)
-- **IKeyVaultService** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetSecretAsync()** (2 connections)
-- **SetSecretAsync()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **var()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 44]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
