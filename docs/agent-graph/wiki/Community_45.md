@@ -1,25 +1,25 @@
 # Community 45
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **while()** (2 connections)
-- **nameof()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **FeedServiceTests.cs** (7 connections)
+- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
+- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
+- **FeedServiceTests()** (2 connections)
+- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
 
 ## Relationships
 
-- [[Community 64]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

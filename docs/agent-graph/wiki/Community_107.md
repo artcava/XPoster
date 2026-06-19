@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **Program.cs** (3 connections)
-- **Program.cs** (3 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **if()** (2 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **AddOpenAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

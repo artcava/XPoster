@@ -1,23 +1,23 @@
 # Community 61
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **return()** (2 connections)
-- **Resolve()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **TimeProviderTests** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

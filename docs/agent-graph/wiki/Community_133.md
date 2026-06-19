@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **FeedOptions.cs** (2 connections)
-- **FeedOptions.cs** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **AiProvider.cs** (2 connections)
 
 ## Relationships
 

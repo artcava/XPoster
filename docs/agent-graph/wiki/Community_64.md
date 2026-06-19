@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **PerplexityService()** (2 connections)
-- **var()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **TestOrchestrator()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (7 shared connections)
+- [[Community 58]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

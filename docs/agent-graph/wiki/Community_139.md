@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 120]] (2 shared connections)
+- [[Community 128]] (2 shared connections)
 
 ## Audit Trail
 

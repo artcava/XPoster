@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **SendAsync()** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 - **catch()** (2 connections)
+- **GenerateMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 126]] (3 shared connections)
+- [[Community 112]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

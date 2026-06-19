@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddPerplexityOptions()** (2 connections)
+- **Program.cs** (3 connections)
+- **Program.cs** (3 connections)
+- **if()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

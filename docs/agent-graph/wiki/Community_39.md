@@ -1,25 +1,25 @@
 # Community 39
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **AzureFoundryService()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLogger()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Dispose()** (2 connections)
+- **IsEnabled()** (2 connections)
 
 ## Relationships
 
-- [[Community 59]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

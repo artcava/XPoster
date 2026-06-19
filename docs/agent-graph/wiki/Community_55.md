@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
-- **XPoster.Tests** (2 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
 
 ## Relationships
 

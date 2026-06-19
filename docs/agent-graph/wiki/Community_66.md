@@ -5,15 +5,15 @@
 ## Key Concepts
 
 - **HybridAiServiceTests.cs** (16 connections)
-- **BuildDeepSeekService()** (2 connections)
 - **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
 - **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
 - **HybridAiService()** (2 connections)
 - **BuildFalService()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
 
 ## Relationships
 
-- [[Community 26]] (10 shared connections)
+- [[Community 27]] (10 shared connections)
 
 ## Audit Trail
 
