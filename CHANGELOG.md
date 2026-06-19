@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`AiProvider.Perplexity`** activated in `AiServiceFactory` and `Program.cs` DI composition ([#91](https://github.com/artcava/XPoster/issues/91)).
 - **`local.settings.json.example`** updated with `Perplexity__Endpoint`, `Perplexity__ApiKey`, and `Perplexity__DeploymentName` entries ([#91](https://github.com/artcava/XPoster/issues/91)).
 - **`docs/integrations/setup-perplexity.md`** ([#91](https://github.com/artcava/XPoster/issues/91)): new integration guide covering account setup, API key generation, billing, model selection, XPoster configuration, Key Vault secret storage, dry-run verification, image generation behaviour, and troubleshooting.
+- **`IFeedUrlProvider` abstraction + `ConfigurationFeedUrlProvider`** ([#185](https://github.com/artcava/XPoster/issues/185)): introduces `IFeedUrlProvider` (returns `IReadOnlyList<string>`) and `ConfigurationFeedUrlProvider` bound from `FeedOptions__Urls__N` app settings; `FeedOrchestrator` now resolves feed URLs via the injected provider instead of a hardcoded list; `local.settings.json.example` updated with example `FeedOptions__Urls__0` / `FeedOptions__Urls__1` entries.
 
 ### Changed
 - **Source folder restructure** ([#186](https://github.com/artcava/XPoster/issues/186)): purely structural reorganisation of `src/` and `tests/` — no behavioral changes, no new public API surface, no changes to DI registrations or scheduling logic.
@@ -25,11 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
   - `tests/Abstraction/` renamed to `tests/Contracts/`; `tests/Implementation/` renamed to `tests/Orchestrators/` to mirror source layout.
   - Documentation updated: `README.md`, `tests/README.md`, `docs/extending-xposter.md` aligned to new folder paths and namespace names.
-- **`docs/architecture.md`** — `PerplexityService` added to the *AI Provider Services* table; supported provider count updated from 4 to 5 ([#91](https://github.com/artcava/XPoster/issues/91)).
+- **`docs/architecture.md`** — `PerplexityService` added to the *AI Provider Services* section; supported provider count updated from 4 to 5 ([#91](https://github.com/artcava/XPoster/issues/91)).
 - **`docs/configuration.md`** — `Perplexity__*` settings documented; `AiProvider` enum table updated with `Perplexity` entry ([#91](https://github.com/artcava/XPoster/issues/91)).
-
-### Added
-- **`IFeedUrlProvider` abstraction + `ConfigurationFeedUrlProvider`** ([#185](https://github.com/artcava/XPoster/issues/185)): introduces `IFeedUrlProvider` (returns `IReadOnlyList<string>`) and `ConfigurationFeedUrlProvider` bound from `FeedOptions__Urls__N` app settings; `FeedOrchestrator` now resolves feed URLs via the injected provider instead of a hardcoded list; `local.settings.json.example` updated with example `FeedOptions__Urls__0` / `FeedOptions__Urls__1` entries.
 
 ### Fixed
 - **`AzureFoundryService.GenerateImageAsync` — image generation endpoint aligned to Azure AI Foundry `/openai/v1` format**: `GetImageGenerationEndpoint()` now builds `{Endpoint}/images/generations` without the `/openai/deployments/{name}/` path segment and without `api-version`; the `model = ImageDeploymentName` field is now included in the request body instead of being embedded in the URL.
