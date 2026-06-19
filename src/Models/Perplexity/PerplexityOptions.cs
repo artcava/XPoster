@@ -1,0 +1,68 @@
+namespace XPoster.Models;
+
+/// <summary>
+/// Strongly-typed configuration for the Perplexity provider, bound from the <c>Perplexity</c> section.
+/// </summary>
+public sealed class PerplexityOptions
+{
+    /// <summary>Gets or sets the Perplexity endpoint base URL (for example, <c>https://api.perplexity.ai</c>).</summary>
+    public string Endpoint { get; set; } = "https://api.perplexity.ai";
+
+    /// <summary>Gets or sets the API key used for Perplexity authentication.</summary>
+    public string ApiKey { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the chat/completions model name (e.g. <c>sonar</c>).</summary>
+    public string DeploymentName { get; set; } = "sonar";
+
+    /// <summary>Gets or sets the temperature used for summary generation.</summary>
+    public double SummaryTemperature { get; set; } = 0.5;
+
+    /// <summary>
+    /// Gets or sets the divisor used to convert a character budget into a <c>max_tokens</c> value.
+    /// Formula: <c>max_tokens = messageMaxLength / SummaryMaxTokensPerChar</c>.
+    /// </summary>
+    public int SummaryMaxTokensPerChar { get; set; } = 5;
+
+    /// <summary>
+    /// Gets or sets the safety margin (in characters) subtracted from the character budget
+    /// when building the "keep under N characters" prompt.
+    /// </summary>
+    public int SummarySafetyMarginChars { get; set; } = 50;
+
+    /// <summary>
+    /// Gets or sets the system prompt template for summarisation.
+    /// Supports placeholder <c>{MaxChars}</c>.
+    /// </summary>
+    public string SummarySystemPromptTemplate { get; set; } =
+        "You are an assistant that summarizes text concisely. " +
+        "It's very important that you keep summaries under {MaxChars} characters.";
+
+    /// <summary>
+    /// Gets or sets the user prompt template for summarisation.
+    /// Supports placeholder <c>{Text}</c>.
+    /// </summary>
+    public string SummaryUserPromptTemplate { get; set; } =
+        "Summarize this text in a few sentences. text: {Text}";
+
+    /// <summary>
+    /// Gets or sets the system prompt template for image prompt generation.
+    /// No placeholder is required.
+    /// </summary>
+    public string ImagePromptSystemTemplate { get; set; } =
+        "You are an assistant that generates image prompts for an AI image generation model based on text summaries. " +
+        "Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), " +
+        "and avoids text, signs, or words in the image. Respect content policy for generating images.";
+
+    /// <summary>
+    /// Gets or sets the user prompt template for image prompt generation.
+    /// Supports placeholder <c>{Summary}</c>.
+    /// </summary>
+    public string ImagePromptUserTemplate { get; set; } =
+        "Generate an image prompt based on this summary: {Summary}";
+
+    /// <summary>Gets or sets max tokens for image prompt generation requests.</summary>
+    public int ImagePromptMaxTokens { get; set; } = 60;
+
+    /// <summary>Gets or sets the temperature for image prompt generation requests.</summary>
+    public double ImagePromptTemperature { get; set; } = 0.7;
+}

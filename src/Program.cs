@@ -55,6 +55,7 @@ builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
 builder.Services.AddKeyedTransient<IAiService, OpenAiService>(AiProvider.OpenAi);
 builder.Services.AddKeyedTransient<IAiService, AzureFoundryService>(AiProvider.AzureFoundry);
 builder.Services.AddKeyedTransient<IAiService, HybridAiService>(AiProvider.DeepSeekWithFal);
+builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity);
 builder.Services.AddTransient<DeepSeekService>();
 builder.Services.AddTransient<FalAiImageService>();
 
@@ -87,5 +88,7 @@ builder.Services.Configure<DeepSeekOptions>(builder.Configuration.GetSection("De
 builder.Services.AddSingleton<IValidateOptions<DeepSeekOptions>, DeepSeekOptionsValidator>();
 builder.Services.Configure<FalAiOptions>(builder.Configuration.GetSection("FalAi"));
 builder.Services.AddSingleton<IValidateOptions<FalAiOptions>, FalAiOptionsValidator>();
+builder.Services.Configure<PerplexityOptions>(builder.Configuration.GetSection("Perplexity"));
+builder.Services.AddSingleton<IValidateOptions<PerplexityOptions>, PerplexityOptionsValidator>();
 
 builder.Build().Run();
