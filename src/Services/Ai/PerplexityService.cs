@@ -69,8 +69,8 @@ public class PerplexityService : IAiService
     /// <inheritdoc/>
     /// <remarks>
     /// Perplexity does not offer an image generation API. This method always returns
-    /// <see cref="Array.Empty{T}"/> and logs a warning so the orchestrator can decide
-    /// whether to skip the image or fall back to another provider.
+    /// an empty <see cref="byte"/> array and logs a warning so the orchestrator can
+    /// decide whether to skip the image or fall back to another provider.
     /// </remarks>
     public Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
@@ -78,7 +78,7 @@ public class PerplexityService : IAiService
             "{Service} does not support image generation. Returning empty byte array.",
             nameof(PerplexityService));
 
-        return Task.FromResult(Array.Empty<byte[]>());
+        return Task.FromResult(Array.Empty<byte>());
     }
 
     private string GetChatCompletionsEndpoint() =>
