@@ -156,8 +156,11 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
 | `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
 | `DeepSeekWithFal` | `HybridAiService` | `DeepSeekService` → DeepSeek API | `FalAiImageService` → fal.ai FLUX.2 Turbo |
+| `Perplexity` | `PerplexityService` | Perplexity Sonar Chat Completions API | ❌ Not supported — posts published text-only |
 
 > ℹ️ `DeepSeekService` and `FalAiImageService` are independent services, each with their own registration and test coverage. `HybridAiService` composes the two, delegating text requests to `DeepSeekService` and image requests to `FalAiImageService`. This composition is transparent to orchestrators, which always program to `IAiService`.
+>
+> ℹ️ `PerplexityService` implements `IAiService` but does not support image generation. `GenerateImageAsync` always returns an empty byte array and logs a `Warning` — posts are published text-only when this provider is active.
 
 ### Social Media APIs
 
@@ -206,6 +209,7 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 | **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
 | **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
 | **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
+| **Perplexity** | [perplexity.ai](https://www.perplexity.ai/) | Text only | [docs/integrations/setup-perplexity.md](docs/integrations/setup-perplexity.md) |
 
 > ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
 >
@@ -537,6 +541,7 @@ Key monitoring capabilities at a glance:
 - [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) - Alternative AI provider
 - [DeepSeek](https://www.deepseek.com/) - Cost-effective text generation
 - [fal.ai](https://fal.ai/) - FLUX.2 Turbo image generation
+- [Perplexity](https://www.perplexity.ai/) - Sonar text generation
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
