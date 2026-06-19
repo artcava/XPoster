@@ -1,46 +1,49 @@
-# XPoster — Documentation
+# XPoster Documentation
 
-Welcome to the XPoster documentation hub. Use the links below to navigate to each topic.
+Welcome to the XPoster documentation. Use the links below to navigate to the relevant section.
 
-## Contents
+---
 
-| Document | Description |
-|---|---|
-| [Getting Started](getting-started.md) | Setup, prerequisites, first run |
-| [Architecture](architecture.md) | Architectural decisions and design patterns |
-| [Configuration Reference](configuration.md) | All environment variables with type, default, and description |
-| [Deployment Guide](deployment.md) | Step-by-step Azure deployment |
-| [Extending XPoster](extending-xposter.md) | Adding new senders and orchestrators |
-| [Monitoring & Alerting](monitoring.md) | Application Insights setup and KQL queries |
+## Getting Started
 
-## Architecture Decision Records
+- [Getting Started](getting-started.md) — prerequisites, first run, local setup
+- [Configuration Reference](configuration.md) — all environment variables and app settings
+- [Deployment](deployment.md) — Azure Functions deployment guide
 
-| Document | Status |
-|---|---|
-| [ADR-001 — Azure Functions as Compute](analysis/ADR-001-azure-functions-as-compute.md) | Accepted |
-| [ADR-002 — Strategy Pattern for Content Generators](analysis/ADR-002-strategy-pattern-generators.md) | Accepted |
-| [ADR-003 — Plugin Pattern for Senders](analysis/ADR-003-plugin-pattern-senders.md) | Accepted |
-| [ADR-004 — Provider-Agnostic AI Integration](analysis/ADR-004-provider-agnostic-ai.md) | Accepted |
-| [ADR-005 — Capability-based Extension Points](analysis/ADR-005-capability-based-extension-points.md) | Proposed |
+---
 
-## Analysis
+## Architecture & Extension
 
-| Document | Description |
-|---|---|
-| [LinkedIn Token Auto-Refresh](analysis/analysis-linkedin-token-auto-refresh.md) | Architecture analysis and implementation plan for automated LinkedIn OAuth token renewal |
+- [Architecture](architecture.md) — component map, data flow, design decisions
+- [Extending XPoster](extending-xposter.md) — adding senders, orchestrators, AI providers, feed URL providers
+
+---
 
 ## Integrations
 
-| Document | Description |
-|---|---|
-| [Azure AI Foundry Setup](integrations/setup-azure-foundry.md) | Provisioning and configuration for Azure AI Foundry integration |
-| [OpenAI Setup](integrations/setup-openai.md) | API key, model selection, and configuration for the OpenAI provider |
-| [DeepSeek Setup](integrations/setup-deepseek.md) | API key and configuration for the DeepSeek text provider (used in HybridAiService) |
-| [fal.ai Setup](integrations/setup-falai.md) | API key and configuration for the fal.ai image provider (used in HybridAiService) |
-| [Agent Graph](agent-graph.md) | Auto-generated code-graph for AI-assisted development: what it is, output formats, CI pipeline, and usage guide |
+Setup guides for each external service XPoster integrates with.
 
-## Quick Links
+| Integration | Guide | Notes |
+|---|---|---|
+| Twitter / X | [setup-x.md](integrations/setup-x.md) | OAuth 1.0a, API v2 |
+| LinkedIn | [setup-linkedin.md](integrations/setup-linkedin.md) | OAuth 2.0, 60-day token rotation |
+| Instagram | [setup-instagram.md](integrations/setup-instagram.md) | Not yet active — see [#72](https://github.com/artcava/XPoster/issues/72) |
+| fal.ai | [setup-fal.md](integrations/setup-fal.md) | Image generation for `DeepSeekWithFal` provider |
+| Perplexity | [setup-perplexity.md](integrations/setup-perplexity.md) | Text-only provider; image generation not supported |
 
-- [README](../README.md) — Project overview
-- [CONTRIBUTING.md](../CONTRIBUTING.md) — Contribution guidelines
-- [tests/README.md](../tests/README.md) — Testing strategy
+---
+
+## AI Provider Capabilities
+
+| Provider | `AiProvider` value | Summarisation | Image Prompt | Image Generation |
+|---|---|---|---|---|
+| OpenAI | `OpenAi` | ✅ | ✅ | ✅ |
+| Azure AI Foundry | `AzureFoundry` | ✅ | ✅ | ✅ |
+| DeepSeek + fal.ai | `DeepSeekWithFal` | ✅ | ✅ | ✅ |
+| Perplexity | `Perplexity` | ✅ | ✅ | ❌ |
+
+---
+
+## Observability
+
+- [Monitoring](monitoring.md) — Application Insights, structured logs, alerts

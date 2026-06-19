@@ -13,7 +13,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
     private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
     {
         new ScheduledOrchestrationProfile(6,  MessageSender.InSummaryFeed, typeof(FeedOrchestrator),      AiProvider.OpenAi),
-        new ScheduledOrchestrationProfile(8,  MessageSender.XSummaryFeed,  typeof(FeedOrchestrator),      AiProvider.OpenAi),
+        new ScheduledOrchestrationProfile(8,  MessageSender.XSummaryFeed,  typeof(FeedOrchestrator),      AiProvider.AzureFoundry),
         //new ScheduledOrchestrationProfile(10, MessageSender.IgSummaryFeed, typeof(FeedOrchestrator),  AiProvider.OpenAi),
         new ScheduledOrchestrationProfile(14, MessageSender.InPowerLaw,    typeof(PowerLawOrchestrator)),
         new ScheduledOrchestrationProfile(16, MessageSender.XPowerLaw,     typeof(PowerLawOrchestrator)),

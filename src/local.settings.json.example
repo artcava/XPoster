@@ -30,7 +30,7 @@
     //   2. Set "ForceHour": "9"            → forces the clock to hour 9 so the
     //      dry-run slot is selected at startup.
     //   3. Set "AiProvider" to the provider under test: "OpenAi", "AzureFoundry",
-    //      or "DeepSeekWithFal".
+    //      "DeepSeekWithFal", or "Perplexity".
     //   4. Ensure KEYVAULT_URI is set and `az login` has been run.
     //   5. Run the function — orchestration executes normally but no post is published.
     //
@@ -105,6 +105,19 @@
     "DeepSeek__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
     "DeepSeek__ImagePromptMaxTokens": "60",
     "DeepSeek__ImagePromptTemperature": "0.7",
+
+    "Perplexity__Endpoint": "https://api.perplexity.ai",
+    "Perplexity__ApiKey": "",
+    "Perplexity__DeploymentName": "sonar",
+    "Perplexity__SummaryTemperature": "0.5",
+    "Perplexity__SummaryMaxTokensPerChar": "5",
+    "Perplexity__SummarySafetyMarginChars": "50",
+    "Perplexity__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "Perplexity__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "Perplexity__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "Perplexity__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "Perplexity__ImagePromptMaxTokens": "60",
+    "Perplexity__ImagePromptTemperature": "0.7",
 
     "FalAi__ApiKey": "",
     "FalAi__ModelId": "fal-ai/flux/schnell",

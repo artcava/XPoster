@@ -120,6 +120,7 @@ Services are registered as singletons or transients in the DI container and are 
 - **DeepSeekService**: direct HTTP client to the DeepSeek API (`api.deepseek.com/v1`), OpenAI-compatible. Used standalone or as the text leg of `HybridAiService`.
 - **FalAiImageService**: HTTP client to the fal.ai API for FLUX.2 Turbo image generation. Used standalone or as the image leg of `HybridAiService`.
 - **HybridAiService**: composes `DeepSeekService` (text) and `FalAiImageService` (image) behind a single `IAiService` contract, enabling the `DeepSeekWithFal` provider option. It introduces no additional API surface and is the only consumer of both inner services.
+- **PerplexityService**: direct HTTP client to the Perplexity Sonar Chat Completions API (`api.perplexity.ai/chat/completions`). Supports text summarisation (`GetSummaryAsync`) and image prompt generation (`GetImagePromptAsync`). **Image generation is not supported** — `GenerateImageAsync` always returns an empty byte array and logs a `Warning`, causing the orchestrator to publish text-only posts.
 
 ### Sender Plugins — Platform Abstraction
 
@@ -175,7 +176,7 @@ Senders that require OAuth tokens not available in plain application settings (`
 
 **Why**: Decoupling provider selection from orchestrator construction means a new AI provider requires only a new `IAiService` implementation, a DI registration, and an `AiProvider` enum value — the factory and all orchestrators remain untouched. It also enables per-slot provider assignment (e.g. use `Perplexity` at 08:00 and `AzureFoundry` at 14:00) and a global override via configuration.
 
-**Trade-off**: Introduces one additional indirection layer between `OrchestratorFactory` and the AI service. Acceptable given the number of supported providers (currently 4: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`).
+**Trade-off**: Introduces one additional indirection layer between `OrchestratorFactory` and the AI service. Acceptable given the number of supported providers (currently 5: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`, and `HybridAiService` via `DeepSeekWithFal`).
 
 ---
 

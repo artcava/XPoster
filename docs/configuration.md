@@ -23,6 +23,10 @@ For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block w
 - [ ] `DeepSeek__ApiKey`
 - [ ] `FalAi__ApiKey`
 
+For the `Perplexity` provider, replace the OpenAI block with:
+
+- [ ] `Perplexity__ApiKey`
+
 > 💡 For local development, run `az login` before starting the function. `KeyVaultService` uses `DefaultAzureCredential`, which picks up your Azure CLI session automatically.
 
 ### 🧪 Quick-Start: DryRunSender (no social API credentials needed)
@@ -126,6 +130,20 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 
+    // ══ AI — Perplexity (AiProvider = "Perplexity") ══════════════════════════════
+    "Perplexity__Endpoint": "https://api.perplexity.ai",
+    "Perplexity__ApiKey": "",
+    "Perplexity__DeploymentName": "sonar",
+    "Perplexity__SummaryTemperature": "0.5",
+    "Perplexity__SummaryMaxTokensPerChar": "5",
+    "Perplexity__SummarySafetyMarginChars": "50",
+    "Perplexity__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "Perplexity__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "Perplexity__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "Perplexity__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "Perplexity__ImagePromptMaxTokens": "60",
+    "Perplexity__ImagePromptTemperature": "0.7",
+
     // ── Observability ────────────────────────────────────────────
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
@@ -176,7 +194,7 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`. |
+| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`, `Perplexity`. |
 
 ---
 
@@ -373,6 +391,43 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 | `FalAi__ModelId` | string | No | `fal-ai/flux/schnell` | fal.ai model identifier. |
 | `FalAi__ImageSize` | string | No | `landscape_4_3` | Image output size preset. |
 | `FalAi__NumInferenceSteps` | int | No | `4` | Number of diffusion steps. |
+
+---
+
+## AI — Perplexity (`AiProvider = Perplexity`)
+
+Configuration bound from the `Perplexity` prefix using double-underscore notation.
+
+> ⚠️ **Image generation is not supported.** `GenerateImageAsync` always returns an empty byte array and logs a `Warning`. The orchestrator will attach no image when this provider is active.
+
+### Connection
+
+| Setting | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `Perplexity__ApiKey` | string | ✅ Yes | — | Perplexity platform API key. Obtain from [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api). |
+| `Perplexity__Endpoint` | string | No | `https://api.perplexity.ai` | Perplexity API base URL. |
+| `Perplexity__DeploymentName` | string | No | `sonar` | Model identifier passed as `model` in each chat completions request. |
+
+### Summarisation Tuning
+
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| `Perplexity__SummaryTemperature` | double | `0.5` | Temperature for summary generation. |
+| `Perplexity__SummaryMaxTokensPerChar` | int | `5` | Divisor to convert a character budget to `max_tokens`. |
+| `Perplexity__SummarySafetyMarginChars` | int | `50` | Character margin subtracted from the platform character limit. |
+| `Perplexity__SummarySystemPromptTemplate` | string | *(see example)* | System prompt. Must contain `{MaxChars}`. |
+| `Perplexity__SummaryUserPromptTemplate` | string | *(see example)* | User prompt. Must contain `{Text}`. |
+
+### Image Prompt Tuning
+
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| `Perplexity__ImagePromptSystemTemplate` | string | *(see example)* | System prompt for image prompt generation. No required placeholders. |
+| `Perplexity__ImagePromptUserTemplate` | string | *(see example)* | User prompt. Must contain `{Summary}`. |
+| `Perplexity__ImagePromptMaxTokens` | int | `60` | Max tokens for image prompt generation. |
+| `Perplexity__ImagePromptTemperature` | double | `0.7` | Temperature for image prompt generation. |
+
+> See [docs/integrations/setup-perplexity.md](integrations/setup-perplexity.md) for the full setup guide.
 
 ---
 

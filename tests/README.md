@@ -13,7 +13,7 @@ XPoster uses a **unit-first** approach:
 | Layer | Test Type | Goal |
 |---|---|---|
 | Orchestrators (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) | Unit | Verify content-production logic in isolation, with all external services mocked |
-| Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `HybridAiService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
+| Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `HybridAiService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
 | Key Vault (`KeyVaultService` via `IKeyVaultService`) | Unit | Verify secret-name contracts, rotation behaviour, and constructor guards; mock `IKeyVaultService` — no live Key Vault connection |
 | Sender plugins (`XSender`, `InSender`, `IgSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client and `IKeyVaultService`. `DryRunSender` additionally verifies the Key Vault connectivity probe, null-guard path, and that no outbound social API call is made |
 | `OrchestratorFactory` | Unit | Verify correct orchestrator and sender selection per hour slot |
@@ -50,7 +50,7 @@ tests/
 ├── Helpers/
 │   └── ResilienceTestHelpers.cs                  # shared HTTP mock helpers for resilience tests
 ├── Orchestrators/                                # mirrors src/Orchestrators/
-│   ├── AiServiceFactoryTests.cs                  # AiServiceFactory — provider resolution by AiProvider enum
+│   ├── AiServiceFactoryTests.cs                  # AiServiceFactory — provider resolution by AiProvider enum (includes Perplexity case)
 │   ├── ConfigurationFeedUrlProviderTests.cs      # ConfigurationFeedUrlProvider — URL list from config
 │   ├── FeedOrchestratorFeedUrlProviderTests.cs   # FeedOrchestrator — IFeedUrlProvider integration paths
 │   ├── FeedOrchestratorTests.cs                  # FeedOrchestrator — main happy/failure paths
@@ -70,6 +70,7 @@ tests/
 │   ├── FalAiOptionsValidatorTests.cs
 │   ├── ModelsTests.cs
 │   ├── OpenAiOptionsValidatorTests.cs
+│   ├── PerplexityOptionsValidatorTests.cs        # PerplexityOptions — required fields, placeholder validation
 │   ├── PostMissingBranchTests.cs
 │   └── RSSFeedMissingBranchTests.cs
 ├── SenderPlugins/
@@ -93,6 +94,7 @@ tests/
     ├── HybridAiServiceTests.cs
     ├── KeyVaultServiceTests.cs
     ├── OpenAiServiceTests.cs
+    ├── PerplexityServiceTests.cs                 # PerplexityService — summary, image prompt, GenerateImageAsync graceful degradation
     └── TimeProviderTests.cs
 ```
 
@@ -103,11 +105,11 @@ tests/
 | *(root)* | `XPoster` | `XFunction` entry point — happy path and missing-branch edge cases |
 | `Contracts/` | `XPoster.Contracts`, `XPoster.Abstraction` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts |
 | `Helpers/` | — | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration); `PowerLawOrchestrator`; `NoOrchestrator`; `AiServiceFactory` provider resolution; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config |
+| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration); `PowerLawOrchestrator`; `NoOrchestrator`; `AiServiceFactory` provider resolution (including `AiProvider.Perplexity`); `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config |
 | `Integration/` | `XPoster.*` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — **not run in CI** |
-| `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, and fal.ai |
+| `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, fal.ai, and Perplexity |
 | `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
-| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
+| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
 
 ---
 

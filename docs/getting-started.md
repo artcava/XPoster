@@ -1,77 +1,77 @@
 # Getting Started
 
-This guide walks you through cloning, configuring, and running XPoster locally for the first time.
+This guide walks you through running XPoster locally for the first time.
+
+---
 
 ## Prerequisites
 
-| Tool | Version | Link |
-|---|---|---|
-| .NET SDK | 8.0+ | [Download](https://dotnet.microsoft.com/download/dotnet/8.0) |
-| Azure Functions Core Tools | v4 | [Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local) |
-| Visual Studio Code | Latest | [Download](https://code.visualstudio.com/download) |
-| Azure Account | Active subscription | [Sign up](https://azure.microsoft.com/free/) |
-| Azure OpenAI Service | Some model deployments | [Docs](https://learn.microsoft.com/azure/cognitive-services/openai/) |
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Azure Functions Core Tools v4](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local)
+- [Azurite](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite) (local Azure Storage emulator)
+- An Azure subscription with a Key Vault instance
+- `az login` authenticated Azure CLI session
+- An API key for at least one AI provider:
+  - **OpenAI** — `OpenAI__ApiKey` (default provider)
+  - **Azure AI Foundry** — `AzureFoundry__Endpoint` + `AzureFoundry__ApiKey`
+  - **DeepSeek + fal.ai** — `DeepSeek__ApiKey` + `FalAi__ApiKey`
+  - **Perplexity** — `Perplexity__ApiKey` (text-only; no image generation)
 
-## 1. Clone the Repository
+---
 
-```bash
-git clone https://github.com/artcava/XPoster.git
-cd XPoster
-```
+## First Run (Dry Run — no social credentials needed)
 
-## 2. Restore Dependencies
+The fastest way to verify the full pipeline locally is with `DryRunSender`, which runs all orchestration steps but never publishes to any social platform.
 
-```bash
-dotnet restore
-```
+1. Clone the repository and restore dependencies:
+   ```bash
+   git clone https://github.com/artcava/XPoster.git
+   cd XPoster
+   dotnet restore
+   ```
 
-## 3. Configure Local Settings
+2. Copy the settings template:
+   ```bash
+   cp src/local.settings.json.example src/local.settings.json
+   ```
 
-A template with all required keys is versioned at `src/local.settings.json.example`.
+3. Fill in `src/local.settings.json`:
+   - `KEYVAULT_URI` — your Key Vault URI
+   - `OpenAI__ApiKey` — your OpenAI key (or swap `AiProvider` to another provider)
+   - `FeedOptions__Urls__0` — any RSS/Atom feed URL
+   - Set `EnableDryRunSlot` to `"true"` and `ForceHour` to `"9"`
 
-```bash
-cp src/local.settings.json.example src/local.settings.json
-```
+4. Start Azurite:
+   ```bash
+   azurite --silent --location .azurite --debug .azurite/debug.log
+   ```
 
-Open `src/local.settings.json` and fill in your credentials.
-See [Configuration Reference](configuration.md) for the full list of variables.
+5. Start the function:
+   ```bash
+   cd src && func start
+   ```
 
-> ⚠️ `local.settings.json` is listed in `.gitignore` and will **never** be committed.
+6. Watch the logs for `[DryRunSender] Dry run complete — no post published.`
 
-## 4. Build
+See [Configuration Reference](configuration.md#dryrunsender--local-testing) for the full dry-run `local.settings.json` snippet.
 
-```bash
-dotnet build
-```
+---
 
-## 5. Run Tests
+## Running Tests
 
 ```bash
 dotnet test
 ```
 
-For coverage reports:
-
+To collect code coverage:
 ```bash
 dotnet test --collect:"XPlat Code Coverage"
-reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report"
 ```
 
-## 6. Start Locally
+---
 
-```bash
-cd src
-func start
-```
+## Next Steps
 
-The function starts and listens according to the `CronSchedule` variable.
-For quick local testing use `*/30 * * * * *` (every 30 seconds) in `local.settings.json`.
-
-## Troubleshooting
-
-| Symptom | Likely Cause | Fix |
-|---|---|---|
-| `Missing value for 'AzureWebJobsStorage'` | Storage emulator not running | Start Azurite or set `UseDevelopmentStorage=true` |
-| `401 Unauthorized` on Twitter | Expired or wrong tokens | Regenerate tokens on [developer.twitter.com](https://developer.twitter.com) |
-| `OpenAI endpoint not found` | Wrong endpoint URL | Verify `AZURE_OPENAI_ENDPOINT` in Azure Portal |
-| Tests fail locally but pass on CI | Missing env vars in test runner | Add vars to your shell or use `dotnet user-secrets` |
+- [Configuration Reference](configuration.md) — full list of all settings
+- [Architecture](architecture.md) — understand the component model
+- [Extending XPoster](extending-xposter.md) — add a new sender or AI provider
