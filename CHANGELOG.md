@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`PerplexityService`** ([#91](https://github.com/artcava/XPoster/issues/91)): new `IAiService` implementation that targets the Perplexity Sonar Chat Completions API (`api.perplexity.ai/chat/completions`). Supports `GetSummaryAsync` and `GetImagePromptAsync`; `GenerateImageAsync` always returns `Array.Empty<byte>()` and emits a structured `Warning` log — posts are published text-only when this provider is active.
+- **`PerplexityOptions`** and **`PerplexityOptionsValidator`** ([#91](https://github.com/artcava/XPoster/issues/91)): configuration model bound from `Perplexity__*` app settings, with startup validation of required fields and prompt-placeholder format; mirrors the existing `DeepSeekOptions` / `DeepSeekOptionsValidator` pattern.
+- **Named `HttpClient` registration `"Perplexity"`** in `HttpClientExtensions` ([#91](https://github.com/artcava/XPoster/issues/91)): resilient client registered via `AddResilientHttpClient` with the same timeout profile as other AI provider clients.
+- **`AiProvider.Perplexity`** activated in `AiServiceFactory` and `Program.cs` DI composition ([#91](https://github.com/artcava/XPoster/issues/91)).
+- **`local.settings.json.example`** updated with `Perplexity__Endpoint`, `Perplexity__ApiKey`, and `Perplexity__DeploymentName` entries ([#91](https://github.com/artcava/XPoster/issues/91)).
+- **`docs/integrations/setup-perplexity.md`** ([#91](https://github.com/artcava/XPoster/issues/91)): new integration guide covering account setup, API key generation, billing, model selection, XPoster configuration, Key Vault secret storage, dry-run verification, image generation behaviour, and troubleshooting.
+
 ### Changed
 - **Source folder restructure** ([#186](https://github.com/artcava/XPoster/issues/186)): purely structural reorganisation of `src/` and `tests/` — no behavioral changes, no new public API surface, no changes to DI registrations or scheduling logic.
   - `src/Abstraction/` split into `src/Abstraction/` (base classes and shared profile records: `BaseOrchestrator`, `ScheduledOrchestrationProfile`) and `src/Contracts/` (all interfaces, enums, and extension methods: `I*.cs`, `AiProvider`, `AiProviderExtensions`, `Enums`). Namespace `XPoster.Abstraction` → `XPoster.Contracts` for moved files; all consumer `using` directives updated.
@@ -17,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
   - `tests/Abstraction/` renamed to `tests/Contracts/`; `tests/Implementation/` renamed to `tests/Orchestrators/` to mirror source layout.
   - Documentation updated: `README.md`, `tests/README.md`, `docs/extending-xposter.md` aligned to new folder paths and namespace names.
+- **`docs/architecture.md`** — `PerplexityService` added to the *AI Provider Services* table; supported provider count updated from 4 to 5 ([#91](https://github.com/artcava/XPoster/issues/91)).
+- **`docs/configuration.md`** — `Perplexity__*` settings documented; `AiProvider` enum table updated with `Perplexity` entry ([#91](https://github.com/artcava/XPoster/issues/91)).
 
 ### Added
 - **`IFeedUrlProvider` abstraction + `ConfigurationFeedUrlProvider`** ([#185](https://github.com/artcava/XPoster/issues/185)): introduces `IFeedUrlProvider` (returns `IReadOnlyList<string>`) and `ConfigurationFeedUrlProvider` bound from `FeedOptions__Urls__N` app settings; `FeedOrchestrator` now resolves feed URLs via the injected provider instead of a hardcoded list; `local.settings.json.example` updated with example `FeedOptions__Urls__0` / `FeedOptions__Urls__1` entries.
@@ -28,6 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`AzureFoundryService.GenerateImageAsync` — removed unsupported `response_format` parameter**: the `response_format` field is not accepted by the Foundry image generation endpoint; removed from the request body to prevent `400 Bad Request` responses.
 
 ### Tests
+- **`PerplexityServiceTests`** ([#91](https://github.com/artcava/XPoster/issues/91)): covers `GetSummaryAsync` success and failure paths (HTTP 200 with valid/empty/null `choices`, HTTP 4xx/5xx), `GetImagePromptAsync` success and failure paths, and `GenerateImageAsync` graceful-degradation path (always returns empty byte array and logs `Warning`).
+- **`PerplexityOptionsValidatorTests`** ([#91](https://github.com/artcava/XPoster/issues/91)): validates required fields, prompt-placeholder presence, and the intentional no-op behaviour of `ImagePromptSystemTemplate` validation.
+- **`AiServiceFactoryTests`** ([#91](https://github.com/artcava/XPoster/issues/91)): new test case asserting `GetByProvider(AiProvider.Perplexity)` resolves to `PerplexityService`.
 - **`ConfigurationFeedUrlProviderTests`** ([#185](https://github.com/artcava/XPoster/issues/185)): covers configured-URL return, empty list when section absent, and `ArgumentNullException` on null options.
 - **`FeedOrchestratorTests`** ([#185](https://github.com/artcava/XPoster/issues/185)): verifies `GetFeedUrls()` is called during `OrchestrateAsync()`; empty-URL-list returns `null` with `SendIt = false`; URLs from provider are forwarded to `IFeedService`.
 - **`AzureFoundryServiceTests` — endpoint and payload coverage for image generation and chat completions**:
