@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSenderTests.cs** (10 connections)
-- **XSenderTests.cs** (10 connections)
-- **SendAsync_CalledTwice_QueriesKvOnEachCall()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSender_ImplementsISender()** (2 connections)
-- **XSenderTests()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildKeyVaultMock()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()** (2 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
 
 ## Relationships
 

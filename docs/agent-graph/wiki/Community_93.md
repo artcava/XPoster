@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **FalAiOptionsExtensions.cs** (3 connections)
-- **FalAiOptionsExtensions.cs** (3 connections)
-- **AddFalAiOptions()** (2 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **AddDeepSeekOptions()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

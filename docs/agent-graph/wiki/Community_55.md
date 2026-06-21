@@ -1,20 +1,20 @@
 # Community 55
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiProviderExtensionsTests.cs** (6 connections)
-- **AiProviderExtensionsTests.cs** (6 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
-- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
-- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
-- **AiProviderExtensionsTests** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **XPoster.Services** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 113]] (4 shared connections)
 
 ## Audit Trail
 

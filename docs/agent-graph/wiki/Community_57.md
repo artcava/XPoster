@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **if()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **catch()** (2 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (9 shared connections)
+- [[Community 39]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

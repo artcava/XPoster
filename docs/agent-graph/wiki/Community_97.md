@@ -1,21 +1,21 @@
 # Community 97
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **catch()** (2 connections)
-- **return()** (2 connections)
-- **if()** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **NoOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 56]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **KeyVaultService.cs** (5 connections)
-- **KeyVaultService.cs** (5 connections)
-- **XPoster.Services** (2 connections)
-- **SetSecretAsync()** (2 connections)
-- **KeyVaultService()** (2 connections)
-- **GetSecretAsync()** (2 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
 
 ## Relationships
 

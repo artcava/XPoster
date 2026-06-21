@@ -1,21 +1,21 @@
 # Community 101
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddPerplexityOptions()** (2 connections)
+- **BaseOrchestrator.cs** (5 connections)
+- **XPoster.Abstraction** (2 connections)
+- **PostAsync()** (2 connections)
+- **BaseOrchestrator()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 135]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

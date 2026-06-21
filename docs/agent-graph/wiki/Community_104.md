@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
+- **XSender.cs** (6 connections)
 - **catch()** (2 connections)
-- **Run()** (2 connections)
-- **XPoster** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 126]] (3 shared connections)
+- [[Community 118]] (3 shared connections)
 
 ## Audit Trail
 

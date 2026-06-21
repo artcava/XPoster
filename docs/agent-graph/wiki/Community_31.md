@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **PowerLawOrchestratorTests.cs** (8 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
 
 ## Relationships
 

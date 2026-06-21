@@ -1,23 +1,23 @@
 # Community 69
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **DeepSeekService()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **var()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

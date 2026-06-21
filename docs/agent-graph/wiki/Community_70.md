@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **ResolveAiProvider()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **return()** (2 connections)
-- **Resolve()** (2 connections)
-- **foreach()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **var()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- [[Community 106]] (4 shared connections)
+- [[Community 42]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
