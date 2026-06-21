@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **KeyVaultService.cs** (5 connections)
-- **KeyVaultService.cs** (5 connections)
-- **XPoster.Services** (2 connections)
-- **GetSecretAsync()** (2 connections)
-- **KeyVaultService()** (2 connections)
-- **SetSecretAsync()** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **if()** (2 connections)
+- **DryRunSender()** (2 connections)
 
 ## Relationships
 

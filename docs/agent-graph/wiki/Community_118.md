@@ -1,20 +1,20 @@
 # Community 118
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **if()** (2 connections)
-- **XSender()** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

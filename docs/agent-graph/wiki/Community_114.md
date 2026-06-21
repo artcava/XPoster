@@ -1,21 +1,20 @@
 # Community 114
 
-> 4 nodes · cohesion 0.50
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
 - **CryptoService.cs** (6 connections)
-- **GetCryptoValue()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **CryptoService()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 119]] (3 shared connections)
+- [[Community 104]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

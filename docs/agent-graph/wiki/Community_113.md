@@ -1,21 +1,20 @@
 # Community 113
 
-> 4 nodes · cohesion 0.50
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **return()** (2 connections)
+- **XSender.cs** (6 connections)
+- **XSender()** (2 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 55]] (6 shared connections)
+- [[Community 97]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (9 shared connections)
+- [[Community 64]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

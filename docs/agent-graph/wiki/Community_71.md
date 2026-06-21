@@ -1,23 +1,23 @@
 # Community 71
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **PerplexityService()** (2 connections)
+- **var()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 43]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **if()** (2 connections)
-- **CryptoService()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 
-- [[Community 114]] (3 shared connections)
+- [[Community 138]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

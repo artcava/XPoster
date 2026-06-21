@@ -1,22 +1,22 @@
 # Community 85
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IAiServiceFactory.cs** (4 connections)
-- **IAiServiceFactory.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiServiceFactory** (2 connections)
-- **GetByProvider()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 95]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

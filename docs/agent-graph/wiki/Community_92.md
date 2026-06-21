@@ -1,22 +1,21 @@
 # Community 92
 
-> 5 nodes · cohesion 0.70
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ConfigurationFeedUrlProvider.cs** (4 connections)
-- **ConfigurationFeedUrlProvider.cs** (4 connections)
-- **ConfigurationFeedUrlProvider()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **GetFeedUrls()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 124]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

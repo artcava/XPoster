@@ -1,27 +1,26 @@
 # Community 29
 
-> 10 nodes · cohesion 0.20
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (16 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **InSender.cs** (11 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **catch()** (2 connections)
+- **Exception()** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **using()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 53]] (7 shared connections)
+- [[Community 115]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

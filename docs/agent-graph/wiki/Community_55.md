@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **XPoster.Services** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **CreateFactory()** (2 connections)
+- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 113]] (4 shared connections)
+- [[Community 28]] (9 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

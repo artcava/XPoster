@@ -1,23 +1,22 @@
 # Community 13
 
-> 14 nodes · cohesion 0.27
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **InSenderMissingBranchTests.cs** (13 connections)
-- **InSenderMissingBranchTests.cs** (13 connections)
-- **InSenderMissingBranchTests()** (2 connections)
-- **BuildKv()** (2 connections)
-- **if()** (2 connections)
-- **BuildSender()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **MessageMaxLenght_Returns800()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
+- **Validate_DefaultOptions_Succeeds()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
+- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

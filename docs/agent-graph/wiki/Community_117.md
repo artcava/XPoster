@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
+- **IgSender.cs** (7 connections)
 - **if()** (2 connections)
-- **FeedService()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 89]] (4 shared connections)
+- [[Community 78]] (4 shared connections)
 
 ## Audit Trail
 

@@ -6,8 +6,8 @@
 
 - **ISlotProfileProvider.cs** (4 connections)
 - **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider** (2 connections)
 - **GetProfiles()** (2 connections)
+- **ISlotProfileProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

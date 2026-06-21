@@ -1,20 +1,20 @@
 # Community 56
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **HybridAiService.cs** (6 connections)
-- **HybridAiService.cs** (6 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
 - **XPoster.Services** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **HybridAiService()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 96]] (4 shared connections)
 
 ## Audit Trail
 

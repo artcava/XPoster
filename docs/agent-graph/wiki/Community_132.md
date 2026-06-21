@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
+- **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 138]] (2 shared connections)
+- [[Community 136]] (2 shared connections)
 
 ## Audit Trail
 

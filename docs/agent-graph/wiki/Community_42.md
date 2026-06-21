@@ -1,25 +1,25 @@
 # Community 42
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **nameof()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **IsEnabled()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **CreateLogger()** (2 connections)
+- **Dispose()** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

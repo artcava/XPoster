@@ -1,16 +1,15 @@
 # Community 60
 
-> 7 nodes · cohesion 0.52
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DryRunSender.cs** (6 connections)
-- **DryRunSender.cs** (6 connections)
-- **if()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **catch()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

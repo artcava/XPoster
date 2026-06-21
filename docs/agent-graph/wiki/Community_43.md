@@ -1,25 +1,25 @@
 # Community 43
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **InSenderSendAsyncTests()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **while()** (2 connections)
+- **if()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **nameof()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 71]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

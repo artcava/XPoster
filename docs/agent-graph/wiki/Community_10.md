@@ -1,25 +1,23 @@
 # Community 10
 
-> 16 nodes · cohesion 0.24
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **KeyVaultServiceTests.cs** (15 connections)
-- **KeyVaultServiceTests.cs** (15 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **KeyVaultServiceTests** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInOwnerCode()** (2 connections)
-- **InSenderKv()** (2 connections)
-- **KeyVaultService_MissingKeyVaultUri_ThrowsInvalidOperationException()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
-- **InSender_SendAsync_RequestsLinkedInAccessToken()** (2 connections)
-- **GetSecretAsync_ThrowsWhenSecretNotFound()** (2 connections)
-- **HttpFactory()** (2 connections)
-- **IgSender_SendAsync_WithImage_RequestsBothIgSecrets()** (2 connections)
-- **GetSecretAsync_ReturnsExpectedValue()** (2 connections)
-- **IgSender_SendAsync_WithoutImage_DoesNotRequestIgSecrets()** (2 connections)
-- **XSender_SendAsync_RequestsAllFourXCredentials()** (2 connections)
-- **GetSecretAsync_OnRotation_ReturnsNewValueOnNextCall()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
+- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
 
 ## Relationships
 
@@ -27,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 58 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
