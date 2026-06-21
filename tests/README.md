@@ -14,8 +14,7 @@ XPoster uses a **unit-first** approach:
 |---|---|---|
 | Orchestrators (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) | Unit | Verify content-production logic in isolation, with all external services mocked |
 | Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `HybridAiService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
-| Key Vault (`KeyVaultService` via `IKeyVaultService`) | Unit | Verify secret-name contracts, rotation behaviour, and constructor guards; mock `IKeyVaultService` — no live Key Vault connection |
-| Sender plugins (`XSender`, `InSender`, `IgSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client and `IKeyVaultService`. `DryRunSender` additionally verifies the Key Vault connectivity probe, null-guard path, and that no outbound social API call is made |
+| Sender plugins (`XSender`, `InSender`, `IgSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client. Sender credentials are injected via `IOptions<TCredentials>` and bound from configuration — no `IKeyVaultService` mock required. `DryRunSender` additionally verifies the null-guard path and that no outbound social API call is made |
 | `OrchestratorFactory` | Unit | Verify correct orchestrator and sender selection per hour slot |
 | Polly resilience pipelines | Integration | Verify retry, circuit-breaker, and attempt-timeout policies end-to-end using a real `IServiceProvider`; innermost `HttpMessageHandler` replaced with a test double — no outbound network calls |
 | End-to-end flow | Integration (optional, not in CI) | Verify full pipeline against a staging environment with real credentials |
@@ -92,11 +91,12 @@ tests/
     ├── FalAiImageServiceTests.cs
     ├── FeedServiceTests.cs
     ├── HybridAiServiceTests.cs
-    ├── KeyVaultServiceTests.cs
     ├── OpenAiServiceTests.cs
     ├── PerplexityServiceTests.cs                 # PerplexityService — summary, image prompt, GenerateImageAsync graceful degradation
     └── TimeProviderTests.cs
 ```
+
+> `KeyVaultServiceTests.cs` has been removed. `KeyVaultService` / `IKeyVaultService` are no longer part of the production codebase — secrets are loaded at startup via the Azure Key Vault Configuration Provider and consumed through `IOptions<TCredentials>` in each sender.
 
 ### Folder responsibilities
 
@@ -108,8 +108,8 @@ tests/
 | `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration); `PowerLawOrchestrator`; `NoOrchestrator`; `AiServiceFactory` provider resolution (including `AiProvider.Perplexity`); `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config |
 | `Integration/` | `XPoster.*` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — **not run in CI** |
 | `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, fal.ai, and Perplexity |
-| `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, Key Vault probe, dry-run success/failure paths) |
-| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider`, and `KeyVaultService` unit tests |
+| `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, dry-run success/failure paths — no Key Vault probe) |
+| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider` unit tests |
 
 ---
 
@@ -117,7 +117,7 @@ tests/
 
 ### Test files
 
-Mirror the folder name from `src/` — e.g., new tests for `src/Services/KeyVaultService.cs` go in `tests/Services/KeyVaultServiceTests.cs`.
+Mirror the folder name from `src/` — e.g., new tests for `src/Services/OpenAiService.cs` go in `tests/Services/OpenAiServiceTests.cs`.
 
 ### Test method names
 
@@ -182,7 +182,9 @@ start coverage-report/index.html  # Windows
 
 ## 6. Mocking External Services
 
-All external dependencies (`IAiService`, `IFeedService`, `ISender`, `IKeyVaultService`, `ILogger`) are injected via constructor and replaced with Moq mocks in tests.
+All external dependencies (`IAiService`, `IFeedService`, `ISender`, `ILogger`) are injected via constructor and replaced with Moq mocks in tests.
+
+Sender credentials are bound from `IConfiguration` at application startup via the Key Vault Configuration Provider and consumed through `IOptions<TCredentials>`. In unit tests, use `Options.Create(new TCredentials { ... })` to supply test values — no `IKeyVaultService` mock is needed.
 
 ### Pattern — mocking `IAiService`
 
@@ -233,20 +235,28 @@ public async Task OrchestrateAsync_WhenPostIsValid_CallsSendAsync()
 }
 ```
 
-### Pattern — testing `DryRunSender` (no outbound call verification)
+### Pattern — supplying sender credentials via `IOptions<T>`
 
-`DryRunSender` is a no-op sender: it must **never** make an outbound social API call. Tests verify this by confirming that only the Key Vault probe call is made and nothing beyond it.
+Sender implementations receive credentials through `IOptions<TCredentials>`. In unit tests, use `Options.Create(...)` to provide test values without wiring up Key Vault or configuration infrastructure:
 
 ```csharp
 [Fact]
-public async Task SendAsync_WhenPostIsValid_ReturnsTrueAndOnlyProbesKeyVault()
+public async Task SendAsync_WhenPostIsValid_ReturnsTrue()
 {
     // Arrange
-    var mockKv     = new Mock<IKeyVaultService>();
-    var mockLogger = new Mock<ILogger<DryRunSender>>();
-    mockKv.Setup(x => x.GetSecretAsync("XApiKey")).ReturnsAsync("probe-value");
+    var credentials = Options.Create(new XCredentials
+    {
+        ApiKey    = "test-api-key",
+        ApiSecret = "test-api-secret",
+        // ... other required fields
+    });
+    var mockLogger = new Mock<ILogger<XSender>>();
+    var mockClient = new Mock<IXApiClient>();
+    mockClient
+        .Setup(x => x.PostTweetAsync(It.IsAny<string>()))
+        .ReturnsAsync(true);
 
-    var sender = new DryRunSender(mockKv.Object, mockLogger.Object);
+    var sender = new XSender(credentials, mockClient.Object, mockLogger.Object);
     var post   = new Post { Content = "Test post content" };
 
     // Act
@@ -254,8 +264,50 @@ public async Task SendAsync_WhenPostIsValid_ReturnsTrueAndOnlyProbesKeyVault()
 
     // Assert
     Assert.True(result);
-    mockKv.Verify(x => x.GetSecretAsync("XApiKey"), Times.Once);  // probe only
-    mockKv.Verify(x => x.GetSecretAsync(It.Is<string>(s => s != "XApiKey")), Times.Never);
+}
+```
+
+### Pattern — testing `DryRunSender` (no outbound call verification)
+
+`DryRunSender` is a no-op sender: it must **never** make an outbound social API call. Tests verify only the null-guard path and the dry-run success return — no Key Vault probe is expected.
+
+```csharp
+[Fact]
+public async Task SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()
+{
+    // Arrange
+    var mockLogger = new Mock<ILogger<DryRunSender>>();
+    var sender     = new DryRunSender(mockLogger.Object);
+
+    // Act
+    var result = await sender.SendAsync(null);
+
+    // Assert
+    Assert.False(result);
+    mockLogger.Verify(
+        x => x.Log(
+            LogLevel.Warning,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("null")),
+            null,
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+        Times.Once);
+}
+
+[Fact]
+public async Task SendAsync_WhenPostIsValid_ReturnsTrueWithoutCallingAnyApi()
+{
+    // Arrange
+    var mockLogger = new Mock<ILogger<DryRunSender>>();
+    var sender     = new DryRunSender(mockLogger.Object);
+    var post       = new Post { Content = "Test post content" };
+
+    // Act
+    var result = await sender.SendAsync(post);
+
+    // Assert
+    Assert.True(result);
+    // No API client or Key Vault interaction expected — DryRunSender is a pure no-op.
 }
 ```
 
@@ -268,6 +320,7 @@ When adding a new feature or fixing a bug, follow this checklist before opening 
 - [ ] Create (or update) the corresponding `*Tests.cs` file in the mirrored directory
 - [ ] Each public method has at least one **happy path** test and one **error/edge case** test
 - [ ] All external dependencies are mocked — no real HTTP calls or API keys in unit tests
+- [ ] Sender credentials supplied via `Options.Create(new TCredentials { ... })` — no `IKeyVaultService` mock
 - [ ] Test method names follow the `MethodName_Condition_ExpectedResult` pattern
 - [ ] Run `dotnet test` locally — all tests pass
 - [ ] Run coverage and confirm the changed class is above the 80% threshold
