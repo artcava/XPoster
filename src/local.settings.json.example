@@ -35,7 +35,8 @@
     //   5. Run the function — orchestration executes normally but no post is published.
     //
     // The DryRunSender will:
-    //   - Probe Key Vault by reading the "XApiKey" secret (verifies connectivity)
+    //   - Probe configuration by checking that "XApiKey" is non-empty
+    //     (verifies that AddAzureKeyVault loaded secrets successfully)
     //   - Log the post content (character count + full text) and image presence
     //   - Return true without calling any social platform API
     //
@@ -45,20 +46,27 @@
     "EnableDryRunSlot": "false",
 
     // -----------------------------------------------------------------------
-    // Key Vault — all sender credentials are now read from Azure Key Vault.
-    // Local development: run `az login` and set KEYVAULT_URI to the vault URI.
+    // Azure Key Vault — all sender credentials are loaded via the
+    // AddAzureKeyVault Configuration Provider registered in Program.cs.
+    //
+    // Local development:
+    //   1. Run `az login` (or set AZURE_CLIENT_ID / AZURE_CLIENT_SECRET for
+    //      a service principal) so DefaultAzureCredential can authenticate.
+    //   2. Set KEYVAULT_URI to your vault URI below.
+    //   Secrets are read automatically at startup and bound to typed IOptions<T>.
+    //
     // Azure deployment: Managed Identity handles authentication automatically.
     //
-    // Required secrets in Key Vault (exact casing enforced):
-    //   LinkedInAccessToken   — LinkedIn Bearer token
-    //   LinkedInOwnerCode     — LinkedIn person/owner ID
-    //   LinkedInOrgId         — LinkedIn organization ID (optional; org posts)
-    //   XApiKey               — X (Twitter) API key
-    //   XApiSecret            — X (Twitter) API secret
-    //   XAccessToken          — X (Twitter) access token
-    //   XAccessTokenSecret    — X (Twitter) access token secret
-    //   IgAccessToken         — Instagram Graph API access token
-    //   IgAccountId           — Instagram account ID
+    // Required secrets in Key Vault (exact casing, matched to Options properties):
+    //   LinkedInAccessToken   — LinkedIn Bearer token         → LinkedInCredentials.LinkedInAccessToken
+    //   LinkedInOwnerCode     — LinkedIn person/owner ID      → LinkedInCredentials.LinkedInOwnerCode
+    //   LinkedInOrgId         — LinkedIn organization ID      → LinkedInCredentials.LinkedInOrgId (optional; org posts)
+    //   XApiKey               — X (Twitter) API key           → XCredentials.XApiKey
+    //   XApiSecret            — X (Twitter) API secret        → XCredentials.XApiSecret
+    //   XAccessToken          — X (Twitter) access token      → XCredentials.XAccessToken
+    //   XAccessTokenSecret    — X (Twitter) access token sec  → XCredentials.XAccessTokenSecret
+    //   IgAccessToken         — Instagram Graph API token     → IgCredentials.IgAccessToken
+    //   IgAccountId           — Instagram account ID          → IgCredentials.IgAccountId
     // -----------------------------------------------------------------------
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
