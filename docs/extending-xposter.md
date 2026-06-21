@@ -12,23 +12,25 @@ A sender is a class that implements `ISender` and knows how to publish a `Post` 
 
 Sender credentials are loaded from Azure Key Vault at application startup via the Key Vault Configuration Provider and injected through `IOptions<TCredentials>` — no Key Vault calls occur at publish time.
 
-### Step 1 — Define the Credentials Options class
+### Step 1 — Define the Credentials class
 
-Create a plain options DTO and its validator in `src/Models/TikTok/`:
+Create a plain credentials DTO and its validator in `src/Credentials/`:
 
 ```csharp
-// src/Models/TikTok/TikTokCredentials.cs
+// src/Credentials/TikTokCredentials.cs
 namespace XPoster.Credentials;
 
 public class TikTokCredentials
 {
-    public string AccessToken { get; set; } = string.Empty;
-    public string ClientKey   { get; set; } = string.Empty;
+    public const string SectionName = "TikTokCredentials";
+
+    public string TikTokAccessToken { get; init; } = string.Empty;
+    public string TikTokClientKey   { get; init; } = string.Empty;
 }
 ```
 
 ```csharp
-// src/Models/TikTok/TikTokCredentialsValidator.cs
+// src/Credentials/TikTokCredentialsValidator.cs
 using Microsoft.Extensions.Options;
 
 namespace XPoster.Credentials;
@@ -37,17 +39,17 @@ public class TikTokCredentialsValidator : IValidateOptions<TikTokCredentials>
 {
     public ValidateOptionsResult Validate(string? name, TikTokCredentials options)
     {
-        if (string.IsNullOrWhiteSpace(options.AccessToken))
-            return ValidateOptionsResult.Fail("TikTok:AccessToken is required.");
-        if (string.IsNullOrWhiteSpace(options.ClientKey))
-            return ValidateOptionsResult.Fail("TikTok:ClientKey is required.");
+        if (string.IsNullOrWhiteSpace(options.TikTokAccessToken))
+            return ValidateOptionsResult.Fail("TikTokCredentials:TikTokAccessToken is required.");
+        if (string.IsNullOrWhiteSpace(options.TikTokClientKey))
+            return ValidateOptionsResult.Fail("TikTokCredentials:TikTokClientKey is required.");
         return ValidateOptionsResult.Success;
     }
 }
 ```
 
 ```csharp
-// src/Models/TikTok/TikTokCredentialsExtensions.cs
+// src/Credentials/TikTokCredentialsExtensions.cs
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -56,21 +58,18 @@ namespace XPoster.Credentials;
 
 public static class TikTokCredentialsExtensions
 {
-    /// <summary>Key Vault secret name prefix / IConfiguration section key: <c>TikTok</c>.</summary>
-    public const string SectionName = "TikTok";
-
     public static IServiceCollection AddTikTokCredentials(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<TikTokCredentials>(configuration.GetSection(SectionName));
+        services.Configure<TikTokCredentials>(configuration.GetSection(TikTokCredentials.SectionName));
         services.AddSingleton<IValidateOptions<TikTokCredentials>, TikTokCredentialsValidator>();
         return services;
     }
 }
 ```
 
-> The Key Vault Configuration Provider maps secret names to `IConfiguration` keys using the Azure SDK default convention: a secret named `TikTokAccessToken` is available as `TikTok:AccessToken` (or `TikTok__AccessToken` in environment-variable notation). `SectionName` is the prefix that ties secret names to the options DTO.
+> The Key Vault Configuration Provider maps secret names to `IConfiguration` keys using the Azure SDK default convention: a secret named `TikTokCredentialsTikTokAccessToken` is available as `TikTokCredentials:TikTokAccessToken`. `SectionName` is the prefix that ties secret names to the credentials DTO. This mirrors the convention used by `XCredentials`, `LinkedInCredentials`, and `IgCredentials`.
 
 ### Step 2 — Implement ISender
 
@@ -100,7 +99,7 @@ public class TikTokSender : ISender
             return false;
         }
 
-        // Use _credentials.AccessToken and _credentials.ClientKey here.
+        // Use _credentials.TikTokAccessToken and _credentials.TikTokClientKey here.
         // Return false (do not throw) on non-fatal platform errors.
         return true;
     }
@@ -121,21 +120,21 @@ builder.Services.AddTransient<TikTokSender>();
 
 ### Step 4 — Add the secrets to Key Vault
 
-Add one secret per credentials property, using the `{SectionName}{PropertyName}` naming convention so the Configuration Provider maps them correctly:
+Add one secret per credentials property, using the `{SectionName}{PropertyName}` naming convention:
 
 ```bash
-az keyvault secret set --vault-name <your-keyvault-name> --name TikTokAccessToken --value "<value>"
-az keyvault secret set --vault-name <your-keyvault-name> --name TikTokClientKey   --value "<value>"
+az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentialsTikTokAccessToken --value "<value>"
+az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentialsTikTokClientKey   --value "<value>"
 ```
 
-For local development only, you can also set them directly in `src/local.settings.json`:
+For local development only, set them in `src/local.settings.json` using the double-underscore separator:
 
 ```json
-"TikTok__AccessToken": "<local-dev-value>",
-"TikTok__ClientKey":   "<local-dev-value>"
+"TikTokCredentials__TikTokAccessToken": "<local-dev-value>",
+"TikTokCredentials__TikTokClientKey":   "<local-dev-value>"
 ```
 
-> Do not add social-platform credentials to `local.settings.json.example`. Use Key Vault for all non-local environments.
+> Do not add social-platform credentials to `src/local.settings.json.example`. Use Key Vault for all non-local environments.
 
 ### Step 5 — Add Enum Value
 
@@ -350,35 +349,6 @@ Key rules for this file:
 
 ---
 
-## Adding a New Service (Data Source)
-
-For new external data integrations (e.g., a news API, a stock ticker, a weather feed), define an interface in `src/Contracts/` and implement it in `src/Services/`. Inject the new service into the orchestrator that needs it — `CreateOrchestratorInstance` will resolve it automatically.
-
-```csharp
-// src/Contracts/INewsService.cs
-public interface INewsService
-{
-    Task<IEnumerable<string>> GetHeadlinesAsync(int count);
-}
-
-// src/Services/NewsService.cs
-public class NewsService : INewsService
-{
-    public async Task<IEnumerable<string>> GetHeadlinesAsync(int count)
-    {
-        // Call a news API
-    }
-}
-```
-
-Register in `Program.cs`:
-
-```csharp
-builder.Services.AddTransient<INewsService, NewsService>();
-```
-
----
-
 ## Design Constraints
 
 All extensions must respect the following invariants to integrate correctly with the pipeline:
@@ -389,6 +359,6 @@ All extensions must respect the following invariants to integrate correctly with
 - **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, retry policies, and timeout configuration are applied consistently.
-- **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Models/<PlatformName>/`, declaring `SectionName` and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
+- **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

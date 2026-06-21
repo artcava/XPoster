@@ -227,7 +227,8 @@ When adding new files, place them in the folder that matches their responsibilit
 | `src/Contracts/` | `XPoster.Contracts` | Interfaces (`I*.cs`), enums, extension methods |
 | `src/Abstraction/` | `XPoster.Abstraction` | Abstract base classes, shared profile records (`BaseOrchestrator`, `ScheduledOrchestrationProfile`) |
 | `src/Orchestrators/` | `XPoster.Orchestrators` | Concrete orchestrators, `OrchestratorFactory`, `AiServiceFactory`, slot profile providers |
-| `src/Models/` | `XPoster.Models` | Domain models, provider options and validators (use provider subfolders: `AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`); sender credentials and validators (use platform subfolders: `X/`, `LinkedIn/`, `Instagram/`) |
+| `src/Models/` | `XPoster.Models` | Domain models, provider options and validators (use provider subfolders: `AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) |
+| `src/Credentials/` | `XPoster.Credentials` | Sender credentials DTOs, validators, and extension methods (`XCredentials`, `LinkedInCredentials`, `IgCredentials`…) |
 | `src/Services/` | `XPoster.Services` | Infrastructure services (`FeedService`, `CryptoService`, `TimeProvider`…) |
 | `src/Services/Ai/` | `XPoster.Services` | AI model integration services (`OpenAiService`, `AzureFoundryService`, `HybridAiService`…) |
 | `src/SenderPlugins/` | `XPoster.SenderPlugins` | Platform-specific sender implementations (`ISender`) |
