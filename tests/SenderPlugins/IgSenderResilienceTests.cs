@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
+using XPoster.Credentials;
 using XPoster.Models;
-using XPoster.Options;
 using XPoster.SenderPlugins;
 using XPoster.Tests.Helpers;
 

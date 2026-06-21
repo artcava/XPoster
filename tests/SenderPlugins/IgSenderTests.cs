@@ -4,8 +4,8 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
-using XPoster.Options;
 using XPoster.SenderPlugins;
 using XPoster.Tests.Helpers;
 
@@ -149,7 +149,7 @@ public class IgSenderTests
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            .ReturnsAsync(new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)
             {
                 Content = new StringContent("{\"error\":\"bad_request\"}")
             });
@@ -167,7 +167,7 @@ public class IgSenderTests
     {
         var factory = ResilienceTestHelpers.BuildFactory(
             "Instagram",
-            (HttpStatusCode.TooManyRequests, "{\"error\":\"rate_limited\"}"));
+            (System.Net.HttpStatusCode.TooManyRequests, "{\"error\":\"rate_limited\"}"));
 
         Assert.False(await BuildSenderWithFactory(factory).SendAsync(
             new Post { Content = "caption", Image = new byte[] { 1, 2, 3 } }));

@@ -2,8 +2,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
-using XPoster.Options;
 using XPoster.SenderPlugins;
 
 namespace XPoster.Tests.SenderPlugins;

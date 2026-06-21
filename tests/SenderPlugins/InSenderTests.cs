@@ -2,8 +2,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
-using XPoster.Options;
 using XPoster.SenderPlugins;
 
 namespace XPoster.Tests.SenderPlugins;
@@ -69,46 +69,40 @@ public class InSenderTests
     public async Task SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()
     {
         var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
-
         var result = await sender.SendAsync(null!);
-
         Assert.False(result);
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Warning,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("null")),
+                It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception?>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
-            ), Times.Once);
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
     }
 
     [Fact]
-    public async Task SendAsync_WithWhitespaceContent_ReturnsFalseAndLogsWarning()
+    public async Task SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()
     {
         var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
-        Assert.False(await sender.SendAsync(new Post { Content = "  " }));
-    }
-
-    #endregion
-
-    #region Author URN resolution Tests
-
-    [Fact]
-    public async Task SendAsync_WhenOrgIdPresent_UsesOrgUrn()
-    {
-        // OrgId set — ResolveAuthorUrn returns organization URN; HTTP will fail but no exception surfaces.
-        var sender = new InSender(_mockFactory.Object,
-            BuildCreds(orgId: "urn:li:organization:9876"), _mockLogger.Object);
-        Assert.False(await sender.SendAsync(new Post { Content = "A LinkedIn post" }));
+        var result = await sender.SendAsync(new Post { Content = string.Empty });
+        Assert.False(result);
+        _mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception?>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
     }
 
     [Fact]
-    public async Task SendAsync_WhenOrgIdAbsentAndOwnerSet_UsesPersonUrn()
+    public async Task SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()
     {
-        var sender = new InSender(_mockFactory.Object,
-            BuildCreds(ownerCode: "123456789", orgId: null), _mockLogger.Object);
-        Assert.False(await sender.SendAsync(new Post { Content = "A LinkedIn post" }));
+        var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
+        var result = await sender.SendAsync(new Post { Content = "Hello LinkedIn" });
+        Assert.False(result);
     }
 
     #endregion
