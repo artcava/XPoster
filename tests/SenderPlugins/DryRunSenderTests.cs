@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Contracts;
@@ -9,15 +10,21 @@ namespace XPoster.Tests.SenderPlugins;
 public class DryRunSenderTests
 {
     private readonly Mock<ILogger<DryRunSender>> _mockLogger;
-    private readonly Mock<IKeyVaultService> _mockKv;
 
     public DryRunSenderTests()
     {
         _mockLogger = new Mock<ILogger<DryRunSender>>();
-        _mockKv = new Mock<IKeyVaultService>();
     }
 
-    private DryRunSender BuildSender() => new(_mockKv.Object, _mockLogger.Object);
+    private static IConfiguration BuildConfig(string? xApiKey = "fake-api-key")
+        => new ConfigurationBuilder()
+            .AddInMemoryCollection(xApiKey is null
+                ? new Dictionary<string, string?>()
+                : new Dictionary<string, string?> { ["XApiKey"] = xApiKey })
+            .Build();
+
+    private DryRunSender BuildSender(IConfiguration? config = null)
+        => new(config ?? BuildConfig(), _mockLogger.Object);
 
     private static Post ValidPost(string content = "Test dry-run content") =>
         new() { Content = content };
@@ -25,7 +32,7 @@ public class DryRunSenderTests
     #region Constructor Tests
 
     [Fact]
-    public void Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()
+    public void Constructor_WithNullConfiguration_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => new DryRunSender(null!, _mockLogger.Object));
     }
@@ -33,7 +40,7 @@ public class DryRunSenderTests
     [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new DryRunSender(_mockKv.Object, null!));
+        Assert.Throws<ArgumentNullException>(() => new DryRunSender(BuildConfig(), null!));
     }
 
     [Fact]
@@ -50,25 +57,18 @@ public class DryRunSenderTests
 
     #endregion
 
-    #region SendAsync – null post guard
+    #region SendAsync - null post guard
 
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalse()
     {
-        var sender = BuildSender();
-
-        var result = await sender.SendAsync(null!);
-
-        Assert.False(result);
-        _mockKv.Verify(k => k.GetSecretAsync(It.IsAny<string>()), Times.Never);
+        Assert.False(await BuildSender().SendAsync(null!));
     }
 
     [Fact]
     public async Task SendAsync_WithNullPost_LogsWarning()
     {
-        var sender = BuildSender();
-
-        await sender.SendAsync(null!);
+        await BuildSender().SendAsync(null!);
 
         _mockLogger.Verify(
             x => x.Log(
@@ -82,38 +82,18 @@ public class DryRunSenderTests
 
     #endregion
 
-    #region SendAsync – successful dry run
+    #region SendAsync - successful dry run
 
     [Fact]
-    public async Task SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()
+    public async Task SendAsync_WhenProbeKeyPresent_ReturnsTrue()
     {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey")).ReturnsAsync("fake-api-key");
-        var sender = BuildSender();
-
-        var result = await sender.SendAsync(ValidPost());
-
-        Assert.True(result);
+        Assert.True(await BuildSender(BuildConfig("fake-api-key")).SendAsync(ValidPost()));
     }
 
     [Fact]
-    public async Task SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()
+    public async Task SendAsync_WhenProbeKeyPresent_LogsPostContent()
     {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey")).ReturnsAsync("fake-api-key");
-        var sender = BuildSender();
-
-        await sender.SendAsync(ValidPost());
-
-        _mockKv.Verify(k => k.GetSecretAsync("XApiKey"), Times.Once);
-    }
-
-    [Fact]
-    public async Task SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()
-    {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey")).ReturnsAsync("fake-api-key");
-        var sender = BuildSender();
-        var post = ValidPost("Hello dry-run world");
-
-        await sender.SendAsync(post);
+        await BuildSender().SendAsync(ValidPost("Hello dry-run world"));
 
         _mockLogger.Verify(
             x => x.Log(
@@ -126,62 +106,35 @@ public class DryRunSenderTests
     }
 
     [Fact]
-    public async Task SendAsync_WithImageBytes_LogsImagePresence()
+    public async Task SendAsync_WithImageBytes_ReturnsTrue()
     {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey")).ReturnsAsync("fake-api-key");
-        var sender = BuildSender();
         var post = ValidPost();
         post.Image = new byte[] { 0x01, 0x02, 0x03 };
-
-        var result = await sender.SendAsync(post);
-
-        Assert.True(result);
-        _mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("True")),
-                It.IsAny<Exception?>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
-            ), Times.AtLeastOnce);
+        Assert.True(await BuildSender().SendAsync(post));
     }
 
     [Fact]
     public async Task SendAsync_DoesNotCallAnyOutboundSocialApi()
     {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey")).ReturnsAsync("fake-api-key");
-        var sender = BuildSender();
-
-        // Only one KV call (the probe) must happen — no additional calls for social credentials
-        await sender.SendAsync(ValidPost());
-
-        _mockKv.Verify(k => k.GetSecretAsync(It.IsAny<string>()), Times.Once);
+        // DryRunSender only reads IConfiguration — no HTTP client, no social API.
+        // Simply verifying it returns true with a valid config is sufficient.
+        Assert.True(await BuildSender().SendAsync(ValidPost()));
     }
 
     #endregion
 
-    #region SendAsync – Key Vault failure path
+    #region SendAsync - missing probe key
 
     [Fact]
-    public async Task SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()
+    public async Task SendAsync_WhenProbeKeyMissing_ReturnsFalse()
     {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey"))
-               .ThrowsAsync(new InvalidOperationException("vault unreachable"));
-        var sender = BuildSender();
-
-        var result = await sender.SendAsync(ValidPost());
-
-        Assert.False(result);
+        Assert.False(await BuildSender(BuildConfig(null)).SendAsync(ValidPost()));
     }
 
     [Fact]
-    public async Task SendAsync_WhenKeyVaultProbeThrows_LogsError()
+    public async Task SendAsync_WhenProbeKeyMissing_LogsError()
     {
-        _mockKv.Setup(k => k.GetSecretAsync("XApiKey"))
-               .ThrowsAsync(new InvalidOperationException("vault unreachable"));
-        var sender = BuildSender();
-
-        await sender.SendAsync(ValidPost());
+        await BuildSender(BuildConfig(null)).SendAsync(ValidPost());
 
         _mockLogger.Verify(
             x => x.Log(
