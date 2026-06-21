@@ -73,7 +73,7 @@ public class FeedService : IFeedService
 
             if (channel == null)
             {
-                Console.WriteLine("No feeds found");
+                _logger.LogWarning("RSS feed channel element not found for URL {Url}. Possible invalid feed format.", url);
                 throw new Exception("Invalid RSS feed format");
             }
 
