@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Azure Key Vault Configuration Provider** ([#195](https://github.com/artcava/XPoster/issues/195)): `AddAzureKeyVault` registered in `Program.cs` via an explicit `((IConfigurationBuilder)builder.Configuration)` cast (required because `FunctionsApplicationBuilder.Configuration` is a `ConfigurationManager` that implements `IConfigurationBuilder` but does not expose extension methods without the cast). Secrets are merged into `IConfiguration` at application startup using `DefaultAzureCredential`; no Key Vault calls occur at post-publish time.
+- **`Azure.Extensions.AspNetCore.Configuration.Secrets` v1.4.0** added to `XPoster.csproj` ([#195](https://github.com/artcava/XPoster/issues/195)).
+- **Typed sender credentials via `IOptions<T>`** ([#195](https://github.com/artcava/XPoster/issues/195)): `XCredentials`, `LinkedInCredentials`, and `IgCredentials` DTOs introduced in `src/Credentials/`; each bound flat from `IConfiguration` via `BindConfiguration(string.Empty)` with `ValidateOnStart()`. Senders receive credentials through constructor-injected `IOptions<TCredentials>` — no runtime Key Vault calls.
+
+### Changed
+- **`XSender`, `InSender`, `IgSender`** ([#195](https://github.com/artcava/XPoster/issues/195)): constructor signature updated — `IKeyVaultService` dependency replaced by `IOptions<XCredentials>`, `IOptions<LinkedInCredentials>`, and `IOptions<IgCredentials>` respectively. Credential values read once from `options.Value` at construction time.
+- **`DryRunSender`** ([#195](https://github.com/artcava/XPoster/issues/195)): Key Vault connectivity probe (`GetSecretAsync("XApiKey")`) removed; sender now has no infrastructure dependency and logs post content directly without any startup side-effect.
+- **`Program.cs`** ([#195](https://github.com/artcava/XPoster/issues/195)): `KeyVaultService` / `IKeyVaultService` registrations replaced by `AddAzureKeyVault` Configuration Provider + `AddOptions<TCredentials>().BindConfiguration(string.Empty).ValidateOnStart()` blocks for all three sender credential types.
+
+### Removed
+- **`IKeyVaultService`** (`src/Contracts/IKeyVaultService.cs`) and **`KeyVaultService`** (`src/Services/KeyVaultService.cs`) ([#195](https://github.com/artcava/XPoster/issues/195)): runtime secret-fetch abstraction superseded by the startup-time Configuration Provider pattern. All consumer references removed from senders, DI composition, and tests.
+
+### Tests
+- **`DryRunSenderTests`** ([#195](https://github.com/artcava/XPoster/issues/195)): rewritten — `IKeyVaultService` mock removed; tests cover null-post guard and dry-run success path using no infrastructure dependencies.
+- **`XSenderTests`, `InSenderTests`, `IgSenderTests`** ([#195](https://github.com/artcava/XPoster/issues/195)): updated to supply credentials via `Options.Create(new TCredentials { … })` in place of the removed `IKeyVaultService` mock.
+- **`KeyVaultServiceTests`** removed ([#195](https://github.com/artcava/XPoster/issues/195)): test class deleted together with the removed service.
+
 ---
 
 ## [0.1.4] - 2026-06-19

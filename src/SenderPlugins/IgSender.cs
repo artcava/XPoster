@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
 
 namespace XPoster.SenderPlugins
@@ -8,27 +10,27 @@ namespace XPoster.SenderPlugins
     /// <summary>
     /// Publishes image posts to Instagram using the Instagram Graph API (v20.0).
     /// Requires an image; text-only posts are not supported by the API and will return <c>false</c>.
-    /// Credentials are read from Azure Key Vault on every <see cref="SendAsync"/> call:
-    /// <c>IgAccessToken</c> and <c>IgAccountId</c>.
+    /// Credentials are resolved from <see cref="IgCredentials"/> bound via the Azure Key Vault Configuration Provider.
     /// </summary>
     public class IgSender : ISender
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<IgSender> _logger;
-        private readonly IKeyVaultService _keyVaultService;
+        private readonly IgCredentials _creds;
 
         /// <summary>
         /// Initialises a new instance of <see cref="IgSender"/> using an <see cref="IHttpClientFactory"/>-provided
         /// client registered as "Instagram", which carries the Polly resilience pipeline.
         /// </summary>
         /// <param name="httpClientFactory">The factory used to create the named "Instagram" client.</param>
-        /// <param name="keyVaultService">The Key Vault service used to retrieve credentials at runtime.</param>
+        /// <param name="credentials">Typed Instagram credentials resolved from configuration.</param>
         /// <param name="logger">The logger for diagnostic output.</param>
         /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-        public IgSender(IHttpClientFactory httpClientFactory, IKeyVaultService keyVaultService, ILogger<IgSender> logger)
+        public IgSender(IHttpClientFactory httpClientFactory, IOptions<IgCredentials> credentials, ILogger<IgSender> logger)
         {
             ArgumentNullException.ThrowIfNull(httpClientFactory);
-            _keyVaultService = keyVaultService ?? throw new ArgumentNullException(nameof(keyVaultService));
+            ArgumentNullException.ThrowIfNull(credentials);
+            _creds = credentials.Value;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = httpClientFactory.CreateClient("Instagram");
         }
@@ -39,7 +41,6 @@ namespace XPoster.SenderPlugins
         /// <summary>
         /// Publishes <paramref name="post"/> to Instagram via a two-step Graph API flow:
         /// create a media container, then publish it. Requires a non-null image.
-        /// Credentials are read fresh from Key Vault at the start of each call.
         /// </summary>
         /// <param name="post">The post to publish. Must include a non-null <see cref="Post.Image"/>.</param>
         /// <returns><c>true</c> if the post was published successfully; <c>false</c> otherwise.</returns>
@@ -56,9 +57,6 @@ namespace XPoster.SenderPlugins
 
                 if (post.Image != null && post.Image.Length > 0)
                 {
-                    var accessToken = await _keyVaultService.GetSecretAsync("IgAccessToken");
-                    var instagramAccountId = await _keyVaultService.GetSecretAsync("IgAccountId");
-
                     string imageUrl = await UploadImageToPublicUrl(post.Image);
                     if (string.IsNullOrEmpty(imageUrl))
                     {
@@ -70,11 +68,11 @@ namespace XPoster.SenderPlugins
                     {
                         image_url = imageUrl,
                         caption = caption,
-                        access_token = accessToken
+                        access_token = _creds.IgAccessToken
                     };
                     var mediaContent = new StringContent(JsonSerializer.Serialize(mediaPayload), Encoding.UTF8, "application/json");
                     var mediaResponse = await _httpClient.PostAsync(
-                        $"https://graph.instagram.com/v20.0/{instagramAccountId}/media", mediaContent);
+                        $"https://graph.instagram.com/v20.0/{_creds.IgAccountId}/media", mediaContent);
 
                     if (!mediaResponse.IsSuccessStatusCode)
                     {
@@ -90,11 +88,11 @@ namespace XPoster.SenderPlugins
                     var publishPayload = new
                     {
                         creation_id = creationId,
-                        access_token = accessToken
+                        access_token = _creds.IgAccessToken
                     };
                     var publishContent = new StringContent(JsonSerializer.Serialize(publishPayload), Encoding.UTF8, "application/json");
                     var publishResponse = await _httpClient.PostAsync(
-                        $"https://graph.instagram.com/v20.0/{instagramAccountId}/media_publish", publishContent);
+                        $"https://graph.instagram.com/v20.0/{_creds.IgAccountId}/media_publish", publishContent);
 
                     if (!publishResponse.IsSuccessStatusCode)
                     {
