@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Options;
 using XPoster.Contracts;
 using XPoster.Extensions;
 using XPoster.Models;
+using XPoster.Options;
 using XPoster.Orchestrators;
 using XPoster.SenderPlugins;
 using XPoster.Services;
@@ -26,12 +28,39 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
     }
 });
 
+// Azure Key Vault Configuration Provider.
+// Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.
+// DefaultAzureCredential is the same credential chain used by KeyVaultService.
+var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
+    ?? throw new InvalidOperationException("KEYVAULT_URI app setting is not set.");
+
+builder.Configuration.AddAzureKeyVault(
+    new Uri(keyVaultUri),
+    new DefaultAzureCredential());
+
+// Typed sender credentials — bound flat from IConfiguration (secret names match property names).
+// ValidateOnStart() ensures missing secrets fail at startup rather than at first invocation.
+builder.Services
+    .AddOptions<XCredentials>()
+    .BindConfiguration(string.Empty)
+    .ValidateOnStart();
+
+builder.Services
+    .AddOptions<LinkedInCredentials>()
+    .BindConfiguration(string.Empty)
+    .ValidateOnStart();
+
+builder.Services
+    .AddOptions<IgCredentials>()
+    .BindConfiguration(string.Empty)
+    .ValidateOnStart();
+
 builder.Services.AddHttpClients();
 
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();
 
-// Key Vault service — Singleton; credentials are read per-call via DefaultAzureCredential.
+// Key Vault service — Singleton; will be removed once all senders are migrated to IOptions.
 builder.Services.AddSingleton<IKeyVaultService, KeyVaultService>();
 
 builder.Services.AddTransient<XSender>();
