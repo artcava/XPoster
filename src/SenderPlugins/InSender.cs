@@ -2,8 +2,8 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
-using XPoster.Options;
 
 namespace XPoster.SenderPlugins;
 

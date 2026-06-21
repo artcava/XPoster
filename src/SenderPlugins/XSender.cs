@@ -2,8 +2,8 @@ using LinqToTwitter;
 using LinqToTwitter.OAuth;
 using Microsoft.Extensions.Options;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
-using XPoster.Options;
 
 namespace XPoster.SenderPlugins;
 
