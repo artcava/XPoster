@@ -1,30 +1,32 @@
 using LinqToTwitter;
 using LinqToTwitter.OAuth;
+using Microsoft.Extensions.Options;
 using XPoster.Contracts;
 using XPoster.Models;
+using XPoster.Options;
 
 namespace XPoster.SenderPlugins;
 
 /// <summary>
 /// Publishes posts to X (Twitter) using the LinqToTwitter library with OAuth 1.0a single-user authentication.
-/// Credentials are read from Azure Key Vault on every <see cref="SendAsync"/> call:
-/// <c>XApiKey</c>, <c>XApiSecret</c>, <c>XAccessToken</c>, <c>XAccessTokenSecret</c>.
-/// A <see cref="TwitterContext"/> is rebuilt per invocation to reflect any mid-cycle credential rotation.
+/// Credentials are resolved from <see cref="XCredentials"/> bound via the Azure Key Vault Configuration Provider.
+/// A <see cref="TwitterContext"/> is rebuilt per invocation.
 /// </summary>
 public class XSender : ISender
 {
-    private readonly IKeyVaultService _keyVaultService;
+    private readonly XCredentials _creds;
     private readonly ILogger<XSender> _logger;
 
     /// <summary>
     /// Initialises a new instance of <see cref="XSender"/>.
     /// </summary>
-    /// <param name="keyVaultService">The Key Vault service used to retrieve credentials at runtime.</param>
+    /// <param name="credentials">Typed X credentials resolved from configuration.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
     /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-    public XSender(IKeyVaultService keyVaultService, ILogger<XSender> logger)
+    public XSender(IOptions<XCredentials> credentials, ILogger<XSender> logger)
     {
-        _keyVaultService = keyVaultService ?? throw new ArgumentNullException(nameof(keyVaultService));
+        ArgumentNullException.ThrowIfNull(credentials);
+        _creds = credentials.Value;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -34,7 +36,6 @@ public class XSender : ISender
     /// <summary>
     /// Publishes <paramref name="post"/> as a tweet. If an image is attached, it is uploaded
     /// first and the tweet is created with the resulting media ID.
-    /// Credentials are read fresh from Key Vault at the start of each call.
     /// </summary>
     /// <param name="post">The post to publish. Must not be <c>null</c> and must have non-empty content.</param>
     /// <returns><c>true</c> if the tweet was published successfully; otherwise <c>false</c>.</returns>
@@ -54,19 +55,14 @@ public class XSender : ISender
 
         try
         {
-            var apiKey = await _keyVaultService.GetSecretAsync("XApiKey");
-            var apiSecret = await _keyVaultService.GetSecretAsync("XApiSecret");
-            var accessToken = await _keyVaultService.GetSecretAsync("XAccessToken");
-            var accessTokenSecret = await _keyVaultService.GetSecretAsync("XAccessTokenSecret");
-
             var auth = new SingleUserAuthorizer
             {
                 CredentialStore = new SingleUserInMemoryCredentialStore
                 {
-                    ConsumerKey = apiKey,
-                    ConsumerSecret = apiSecret,
-                    AccessToken = accessToken,
-                    AccessTokenSecret = accessTokenSecret
+                    ConsumerKey = _creds.XApiKey,
+                    ConsumerSecret = _creds.XApiSecret,
+                    AccessToken = _creds.XAccessToken,
+                    AccessTokenSecret = _creds.XAccessTokenSecret
                 }
             };
             using var twitterContext = new TwitterContext(auth);
