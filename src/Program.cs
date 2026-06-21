@@ -30,7 +30,7 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 
 // Azure Key Vault Configuration Provider.
 // Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.
-// DefaultAzureCredential is the same credential chain used by KeyVaultService.
+// DefaultAzureCredential is the same credential chain used by the former KeyVaultService.
 var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     ?? throw new InvalidOperationException("KEYVAULT_URI app setting is not set.");
 
@@ -59,9 +59,6 @@ builder.Services.AddHttpClients();
 
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();
-
-// Key Vault service — Singleton; will be removed once all senders are migrated to IOptions.
-builder.Services.AddSingleton<IKeyVaultService, KeyVaultService>();
 
 builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
