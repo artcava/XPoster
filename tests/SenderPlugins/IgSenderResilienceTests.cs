@@ -1,9 +1,10 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
-using XPoster.Contracts;
 using XPoster.Models;
+using XPoster.Options;
 using XPoster.SenderPlugins;
 using XPoster.Tests.Helpers;
 
@@ -19,10 +20,12 @@ public class IgSenderResilienceTests
 
     private IgSender BuildSender(IHttpClientFactory factory)
     {
-        var kv = new Mock<IKeyVaultService>();
-        kv.Setup(s => s.GetSecretAsync("IgAccessToken")).ReturnsAsync("fake_ig_token");
-        kv.Setup(s => s.GetSecretAsync("IgAccountId")).ReturnsAsync("9876543210");
-        return new IgSender(factory, kv.Object, _loggerMock.Object);
+        var creds = Options.Create(new IgCredentials
+        {
+            IgAccessToken = "fake_ig_token",
+            IgAccountId = "9876543210"
+        });
+        return new IgSender(factory, creds, _loggerMock.Object);
     }
 
     private static Post PostWithImage() =>
@@ -42,14 +45,10 @@ public class IgSenderResilienceTests
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new Exception("Should not be called"));
 
-        var client = new HttpClient(handler.Object);
         var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(client);
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(handler.Object));
 
-        var sender = BuildSender(factoryMock.Object);
-        var result = await sender.SendAsync(PostWithoutImage());
-
-        Assert.False(result);
+        Assert.False(await BuildSender(factoryMock.Object).SendAsync(PostWithoutImage()));
         handler.Protected().Verify(
             "SendAsync",
             Times.Never(),
@@ -64,10 +63,7 @@ public class IgSenderResilienceTests
             "Instagram",
             (HttpStatusCode.OK, "{}"));
 
-        var sender = BuildSender(factory);
-        var result = await sender.SendAsync(PostWithImage());
-
-        Assert.False(result);
+        Assert.False(await BuildSender(factory).SendAsync(PostWithImage()));
         _loggerMock.Verify(
             x => x.Log(
                 LogLevel.Error,
@@ -89,13 +85,9 @@ public class IgSenderResilienceTests
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new HttpRequestException("Network error"));
 
-        var client = new HttpClient(mock.Object);
         var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(client);
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(mock.Object));
 
-        var sender = BuildSender(factoryMock.Object);
-        var result = await sender.SendAsync(PostWithImage());
-
-        Assert.False(result);
+        Assert.False(await BuildSender(factoryMock.Object).SendAsync(PostWithImage()));
     }
 }
