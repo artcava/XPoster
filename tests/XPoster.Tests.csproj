@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Microsoft.Extensions.Options" />
     <Using Include="Xunit" />
   </ItemGroup>
 
