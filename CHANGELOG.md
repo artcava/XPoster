@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`PowerLawOrchestrator` — duplicate `Post.Firm` footer in published posts** ([#202](https://github.com/artcava/XPoster/issues/202)): `Post.Firm` was appended both inside `OrchestrateAsync()` and again by every sender plugin (`XSender`, `InSender`, `IgSender`), causing the firm footer to appear twice in all posts from slots `InPowerLaw` (hour 14) and `XPowerLaw` (hour 16). Removed `Post.Firm` from the orchestrator content string; the sender layer remains the single, authoritative place for appending the footer.
+
+### Tests
+- **`PowerLawOrchestratorTests`** ([#202](https://github.com/artcava/XPoster/issues/202)): `Assert.Contains("#XPoster #AI", ...)` replaced with `Assert.DoesNotContain(Post.Firm, ...)` to verify the orchestrator no longer embeds the firm footer in `post.Content`; `using XPoster.Models` added to reference `Post.Firm` directly instead of a magic string.
+
 ### Added
 - **Azure Key Vault Configuration Provider** ([#195](https://github.com/artcava/XPoster/issues/195)): `AddAzureKeyVault` registered in `Program.cs` via an explicit `((IConfigurationBuilder)builder.Configuration)` cast (required because `FunctionsApplicationBuilder.Configuration` is a `ConfigurationManager` that implements `IConfigurationBuilder` but does not expose extension methods without the cast). Secrets are merged into `IConfiguration` at application startup using `DefaultAzureCredential`; no Key Vault calls occur at post-publish time.
 - **`Azure.Extensions.AspNetCore.Configuration.Secrets` v1.4.0** added to `XPoster.csproj` ([#195](https://github.com/artcava/XPoster/issues/195)).
@@ -176,7 +182,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `README.md` translated to English ([#20](https://github.com/artcava/XPoster/issues/20))
 - CI: `dotnet test` added as mandatory gate before deployment ([#22](https://github.com/artcava/XPoster/issues/22))
-- CI coverage threshold raised to **70%** ([#62](https://github.com/artcava/XPoster/issues/62))
+- CI coverage threshold raised to **70%** ([#22](https://github.com/artcava/XPoster/issues/22))
 
 ### Fixed
 - **Nullable Reference Types**: resolved all `CS86xx` warnings ([#46](https://github.com/artcava/XPoster/issues/46))

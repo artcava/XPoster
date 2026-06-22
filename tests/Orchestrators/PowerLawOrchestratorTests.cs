@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Contracts;
+using XPoster.Models;
 using XPoster.Orchestrators;
 
 namespace XPoster.Tests.Orchestrators;
@@ -34,10 +35,9 @@ public class PowerLawOrchestratorTests
 
         Assert.NotNull(message);
         Assert.Contains("Value of #BTC for the #powerlaw today would be:", message.Content);
-        // The orchestrator appends "{deviation:+0.00;-0.00}% {Post.Firm}" when actualValue > 0.
-        // Post.Firm = "\n\n#XPoster #AI"
-        Assert.Contains("#XPoster #AI", message.Content);
         Assert.Contains("%", message.Content);
+        // Post.Firm is appended exclusively by sender plugins, not by the orchestrator.
+        Assert.DoesNotContain(Post.Firm, message.Content);
         _mockCryptoService.Verify(s => s.GetCryptoValue("BTC"), Times.Once);
     }
 
@@ -95,7 +95,7 @@ public class PowerLawOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotNull(result);
-        Assert.DoesNotContain("#XPoster #AI", result.Content);
+        Assert.DoesNotContain(Post.Firm, result.Content);
     }
 
     [Theory]
