@@ -18,6 +18,12 @@ public interface IOrchestrator
     bool ProduceImage { get; set; }
 
     /// <summary>
+    /// Gets the list of target platforms this orchestrator supports.
+    /// Used for optional validation — confirms the resolved sender platform is compatible with this orchestrator.
+    /// </summary>
+    IReadOnlyList<SenderPlatform> SupportedPlatforms { get; }
+
+    /// <summary>
     /// Asynchronously orchestrates the production of a <see cref="Post"/> ready for publishing.
     /// </summary>
     /// <returns>

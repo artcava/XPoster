@@ -37,21 +37,21 @@ public class OrchestratorFactoryTests
     }
 
     // ---------------------------------------------------------------------------
-    // Orchestrator type resolution — sender-driven, not hour-driven
+    // Orchestrator type resolution — platform-driven, not sender-enum-driven
     // ---------------------------------------------------------------------------
 
     [Theory]
-    [InlineData(typeof(FeedOrchestrator),     MessageSender.InSummaryFeed)]
-    [InlineData(typeof(FeedOrchestrator),     MessageSender.XSummaryFeed)]
-    [InlineData(typeof(FeedOrchestrator),     MessageSender.DryRunSend)]
-    [InlineData(typeof(PowerLawOrchestrator), MessageSender.InPowerLaw)]
-    [InlineData(typeof(PowerLawOrchestrator), MessageSender.XPowerLaw)]
+    [InlineData(typeof(FeedOrchestrator),     SenderPlatform.LinkedIn)]
+    [InlineData(typeof(FeedOrchestrator),     SenderPlatform.X)]
+    [InlineData(typeof(FeedOrchestrator),     SenderPlatform.DryRun)]
+    [InlineData(typeof(PowerLawOrchestrator), SenderPlatform.LinkedIn)]
+    [InlineData(typeof(PowerLawOrchestrator), SenderPlatform.X)]
     public void Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile(
-        Type expectedType, MessageSender sender)
+        Type expectedType, SenderPlatform platform)
     {
-        // ARRANGE — synthetic profile at an arbitrary hour; no coupling to slotProfiles
+        // ARRANGE — synthetic profile at an arbitrary hour; no coupling to production schedule
         const int arbitraryHour = 10;
-        var profile = new ScheduledOrchestrationProfile(arbitraryHour, sender, expectedType, AiProvider.OpenAi);
+        var profile = new ScheduledOrchestrationProfile(arbitraryHour, platform, expectedType, AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -84,16 +84,16 @@ public class OrchestratorFactoryTests
     }
 
     // ---------------------------------------------------------------------------
-    // Sender wiring verification
+    // Sender wiring — O(senders) switch, independent of orchestrator type
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()
+    public void Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()
     {
         // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.LinkedIn, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -105,12 +105,12 @@ public class OrchestratorFactoryTests
     }
 
     [Fact]
-    public void Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()
+    public void Resolve_Should_ResolveXSender_WhenProfileUsesX()
     {
         // ARRANGE
         const int arbitraryHour = 11;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -122,12 +122,29 @@ public class OrchestratorFactoryTests
     }
 
     [Fact]
-    public void Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()
+    public void Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()
+    {
+        // ARRANGE
+        const int arbitraryHour = 12;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.Instagram, typeof(FeedOrchestrator), AiProvider.OpenAi);
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        var orchestrator = factory.Resolve();
+
+        // ASSERT
+        Assert.IsType<FeedOrchestrator>(orchestrator);
+        _mockServiceProvider.Verify(sp => sp.GetService(typeof(IgSender)), Times.Once);
+    }
+
+    [Fact]
+    public void Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()
     {
         // ARRANGE — DryRun profile injected synthetically; no dependency on production schedule
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.DryRun, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -136,6 +153,40 @@ public class OrchestratorFactoryTests
         // ASSERT
         Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(DryRunSender)), Times.Once);
+    }
+
+    [Fact]
+    public void Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()
+    {
+        // ARRANGE — same platform (LinkedIn), different orchestrator type: switch must be O(senders)
+        const int arbitraryHour = 14;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.LinkedIn, typeof(PowerLawOrchestrator));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        var orchestrator = factory.Resolve();
+
+        // ASSERT
+        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
+    }
+
+    [Fact]
+    public void Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()
+    {
+        // ARRANGE — same platform (X), different orchestrator type: switch must be O(senders)
+        const int arbitraryHour = 16;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.X, typeof(PowerLawOrchestrator));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        var orchestrator = factory.Resolve();
+
+        // ASSERT
+        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
     }
 
     // ---------------------------------------------------------------------------
@@ -148,7 +199,7 @@ public class OrchestratorFactoryTests
         // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, MessageSender.XSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -164,7 +215,7 @@ public class OrchestratorFactoryTests
         // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, MessageSender.InPowerLaw, typeof(PowerLawOrchestrator));
+            arbitraryHour, SenderPlatform.LinkedIn, typeof(PowerLawOrchestrator));
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -183,7 +234,7 @@ public class OrchestratorFactoryTests
     {
         // ARRANGE
         var innerProfile = new ScheduledOrchestrationProfile(
-            6, MessageSender.InSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            6, SenderPlatform.LinkedIn, typeof(FeedOrchestrator), AiProvider.OpenAi);
 
         var mockInner = new Mock<ISlotProfileProvider>();
         mockInner.Setup(p => p.GetProfiles())
@@ -196,7 +247,7 @@ public class OrchestratorFactoryTests
 
         // ASSERT
         Assert.Equal(2, profiles.Count);
-        Assert.Contains(profiles, p => p.SenderType == MessageSender.DryRunSend);
+        Assert.Contains(profiles, p => p.SenderPlatform == SenderPlatform.DryRun);
     }
 
     [Fact]
@@ -209,7 +260,73 @@ public class OrchestratorFactoryTests
         var profiles = provider.GetProfiles();
 
         // ASSERT
-        Assert.DoesNotContain(profiles, p => p.SenderType == MessageSender.DryRunSend);
+        Assert.DoesNotContain(profiles, p => p.SenderPlatform == SenderPlatform.DryRun);
+    }
+
+    // ---------------------------------------------------------------------------
+    // SupportedPlatforms contract
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public void FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()
+    {
+        // ARRANGE
+        const int arbitraryHour = 10;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        var orchestrator = factory.Resolve();
+
+        // ASSERT
+        var feedOrchestrator = Assert.IsType<FeedOrchestrator>(orchestrator);
+        Assert.Contains(SenderPlatform.X,         feedOrchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.LinkedIn,  feedOrchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.Instagram, feedOrchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.DryRun,    feedOrchestrator.SupportedPlatforms);
+    }
+
+    [Fact]
+    public void PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()
+    {
+        // ARRANGE
+        const int arbitraryHour = 14;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.LinkedIn, typeof(PowerLawOrchestrator));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        var orchestrator = factory.Resolve();
+
+        // ASSERT
+        var powerLawOrchestrator = Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        Assert.Contains(SenderPlatform.X,        powerLawOrchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.LinkedIn, powerLawOrchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.DryRun,   powerLawOrchestrator.SupportedPlatforms);
+        Assert.DoesNotContain(SenderPlatform.Instagram, powerLawOrchestrator.SupportedPlatforms);
+    }
+
+    [Fact]
+    public void NoOrchestrator_SupportedPlatforms_IsEmpty()
+    {
+        // ARRANGE — empty schedule forces NoOrchestrator
+        var mockProfileProvider = new Mock<ISlotProfileProvider>();
+        mockProfileProvider.Setup(p => p.GetProfiles())
+            .Returns(new List<ScheduledOrchestrationProfile>());
+
+        _mockTimeProvider.Setup(tp => tp.GetCurrentTime())
+            .Returns(new DateTime(2025, 1, 1, 3, 0, 0));
+
+        SetupMocksForOrchestratorFactory();
+        var factory = CreateFactory(mockProfileProvider.Object);
+
+        // ACT
+        var orchestrator = factory.Resolve();
+
+        // ASSERT
+        var noOrchestrator = Assert.IsType<NoOrchestrator>(orchestrator);
+        Assert.Empty(noOrchestrator.SupportedPlatforms);
     }
 
     // ---------------------------------------------------------------------------

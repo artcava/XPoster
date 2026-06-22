@@ -28,6 +28,11 @@ namespace XPoster.Orchestrators
         /// <summary>Always <c>false</c>; this orchestrator does not attach images to its posts.</summary>
         public override bool ProduceImage { get => false; set => throw new NotImplementedException(); }
 
+        /// <inheritdoc/>
+        /// <remarks>PowerLawOrchestrator supports X and LinkedIn. DryRun is also supported for testing.</remarks>
+        public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
+            new List<SenderPlatform> { SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.DryRun }.AsReadOnly();
+
         /// <summary>
         /// Initialises a new instance of <see cref="PowerLawOrchestrator"/>.
         /// </summary>

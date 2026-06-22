@@ -1,4 +1,5 @@
 using XPoster.Abstraction;
+using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.Orchestrators
@@ -17,6 +18,11 @@ namespace XPoster.Orchestrators
 
         /// <summary>Always <c>false</c>; this orchestrator never produces images.</summary>
         public override bool ProduceImage { get => false; set => throw new System.NotImplementedException(); }
+
+        /// <inheritdoc/>
+        /// <remarks>NoOrchestrator supports no platforms — it is a no-op slot.</remarks>
+        public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
+            new List<SenderPlatform>().AsReadOnly();
 
         /// <summary>
         /// Returns <c>null</c> unconditionally — no content is orchestrated in a no-send slot.

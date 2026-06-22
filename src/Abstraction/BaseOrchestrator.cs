@@ -19,6 +19,9 @@ public abstract class BaseOrchestrator(ISender? sender, ILogger logger) : IOrche
     /// <inheritdoc/>
     public abstract bool ProduceImage { get; set; }
 
+    /// <inheritdoc/>
+    public abstract IReadOnlyList<SenderPlatform> SupportedPlatforms { get; }
+
     /// <summary>The sender used to publish posts to the target social-media platform. May be <c>null</c> for no-op orchestrators.</summary>
     protected ISender? _sender { get; } = sender;
 

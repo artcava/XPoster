@@ -9,6 +9,7 @@ namespace XPoster.Orchestrators;
 /// <summary>
 /// Resolves and instantiates the correct <see cref="BaseOrchestrator"/> for the current hour of the day
 /// by consulting the <see cref="ISlotProfileProvider"/> schedule, including AI provider orchestration.
+/// Sender resolution is O(senders) via <see cref="SenderPlatform"/> switch — independent of orchestrator type.
 /// </summary>
 public class OrchestratorFactory : IOrchestratorFactory
 {
@@ -60,18 +61,16 @@ public class OrchestratorFactory : IOrchestratorFactory
             return CreateOrchestratorInstance(typeof(NoOrchestrator), null, null);
         }
 
-        _log.LogInformation("Creating orchestrator {OrchestratorType} for sender {SenderType} at hour {Hour} with AI provider {AiProvider}",
-            profile.OrchestratorType.Name, profile.SenderType, profile.Hour, profile.AiProvider);
+        _log.LogInformation("Creating orchestrator {OrchestratorType} for platform {SenderPlatform} at hour {Hour} with AI provider {AiProvider}",
+            profile.OrchestratorType.Name, profile.SenderPlatform, profile.Hour, profile.AiProvider);
 
-        ISender? sender = profile.SenderType switch
+        // O(senders) switch — never changes when new orchestrators are added
+        ISender? sender = profile.SenderPlatform switch
         {
-            MessageSender.XPowerLaw     => _serviceProvider.GetService(typeof(XSender))     as ISender,
-            MessageSender.XSummaryFeed  => _serviceProvider.GetService(typeof(XSender))     as ISender,
-            MessageSender.InSummaryFeed => _serviceProvider.GetService(typeof(InSender))    as ISender,
-            MessageSender.InPowerLaw    => _serviceProvider.GetService(typeof(InSender))    as ISender,
-            MessageSender.IgSummaryFeed => _serviceProvider.GetService(typeof(IgSender))    as ISender,
-            MessageSender.IgPowerLaw    => _serviceProvider.GetService(typeof(IgSender))    as ISender,
-            MessageSender.DryRunSend    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
+            SenderPlatform.X         => _serviceProvider.GetService(typeof(XSender))     as ISender,
+            SenderPlatform.LinkedIn  => _serviceProvider.GetService(typeof(InSender))    as ISender,
+            SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender))    as ISender,
+            SenderPlatform.DryRun    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
             _ => null
         };
 

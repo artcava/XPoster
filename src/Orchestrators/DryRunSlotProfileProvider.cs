@@ -28,14 +28,14 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
 
     /// <inheritdoc />
     /// <remarks>
-    /// Appends <see cref="MessageSender.DryRunSend"/> at hour 9 to the profiles
+    /// Appends <see cref="SenderPlatform.DryRun"/> at hour 9 to the profiles
     /// returned by the inner provider.
     /// </remarks>
     public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles()
     {
         var profiles = new List<ScheduledOrchestrationProfile>(_inner.GetProfiles())
         {
-            new ScheduledOrchestrationProfile(9, MessageSender.DryRunSend, typeof(FeedOrchestrator), AiProvider.OpenAi)
+            new ScheduledOrchestrationProfile(9, SenderPlatform.DryRun, typeof(FeedOrchestrator), AiProvider.OpenAi)
         };
         return profiles.AsReadOnly();
     }
