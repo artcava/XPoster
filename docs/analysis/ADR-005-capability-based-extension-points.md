@@ -58,8 +58,6 @@ ISender? sender = profile.SenderPlatform switch
 };
 ```
 
-`profile.AiProvider` is **not affected** by this change — it remains in `ScheduledOrchestrationProfile` as the per-slot AI provider selector (see Decision §2).
-
 ### 2. Introduce capability-based AI provider contracts
 
 Replace `HybridAiService` with two capability interfaces resolved from DI. Consumers declare which capability they need; the DI container resolves the configured implementation.
@@ -87,42 +85,65 @@ Concrete services implement only the interfaces matching their actual capabiliti
 |---|---|---|---|
 | `OpenAiService` | ✅ | ✅ | Fully implemented |
 | `AzureFoundryService` | ✅ | ✅ | `GenerateImageAsync` calls `/images/generations` — fully implemented |
-| `DeepSeekService` | ✅ | ❌ | `GenerateImageAsync` throws `NotSupportedException` |
+| `DeepSeekService` | ✅ | ❌ | Text only |
 | `PerplexityService` | ✅ | ❌ | `GenerateImageAsync` removed — previously returned `byte[0]` silently; misconfiguration now fails at startup |
-| `FalAiImageService` | ❌ | ✅ | Fully implemented |
+| `FalAiImageService` | ❌ | ✅ | Image only |
 
-#### Per-slot provider selection — keyed DI registration
+#### Per-slot provider selection — two independent fields
 
-Per-slot AI provider selection is a core XPoster invariant: the slot at 06:00 can use OpenAI for LinkedIn while the slot at 08:00 uses AzureFoundry for X, from the same running instance. This is preserved by registering capability interfaces as **keyed services by `AiProvider`**, exactly as `IAiService` is registered today.
-
-#### Rename `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek`
-
-The existing value `DeepSeekWithFal` encodes the old `HybridAiService` pairing in the enum name itself. In the new model an `AiProvider` value identifies the **text provider** for a slot; which image provider is used for that key is a consequence of the DI registration, not of the enum value name. The value is therefore renamed to `DeepSeek`. `FalAiImageService` is registered independently for the same key:
+Each `AiProvider` value identifies **exactly one concrete service**. Because text and image generation can come from different providers (e.g. DeepSeek for text, Fal for images), `ScheduledOrchestrationProfile` exposes two independent fields instead of one:
 
 ```csharp
-// Program.cs — AddXPosterAiProviders()
-builder.Services.AddKeyedTransient<ITextToTextProvider, OpenAiService>(AiProvider.OpenAi);
-builder.Services.AddKeyedTransient<ITextToImageProvider, OpenAiService>(AiProvider.OpenAi);
-
-builder.Services.AddKeyedTransient<ITextToTextProvider, AzureFoundryService>(AiProvider.AzureFoundry);
-builder.Services.AddKeyedTransient<ITextToImageProvider, AzureFoundryService>(AiProvider.AzureFoundry);
-
-builder.Services.AddKeyedTransient<ITextToTextProvider, DeepSeekService>(AiProvider.DeepSeek);
-builder.Services.AddKeyedTransient<ITextToImageProvider, FalAiImageService>(AiProvider.DeepSeek);
-// DeepSeek key: text → DeepSeekService, image → FalAiImageService.
-// The image provider is a DI configuration choice, not encoded in the enum name.
-
-builder.Services.AddKeyedTransient<ITextToTextProvider, PerplexityService>(AiProvider.Perplexity);
-// Perplexity: text only. No ITextToImageProvider registration for this key.
-// Attempting to configure Perplexity as image provider fails explicitly at startup.
+public class ScheduledOrchestrationProfile
+{
+    public SenderPlatform SenderPlatform { get; init; }
+    public AiProvider     TextAiProvider  { get; init; }  // replaces AiProvider
+    public AiProvider     ImageAiProvider { get; init; }
+    // ...
+}
 ```
 
-`profile.AiProvider` **remains in `ScheduledOrchestrationProfile`** — it is the per-slot selector. `OrchestratorFactory` reads it and resolves both capability interfaces via keyed resolution:
+`AiProvider` is extended with `FalAi`:
 
 ```csharp
-// OrchestratorFactory — replaces AiServiceFactory.GetByProvider()
-var textProvider  = _serviceProvider.GetRequiredKeyedService<ITextToTextProvider>(profile.AiProvider);
-var imageProvider = _serviceProvider.GetRequiredKeyedService<ITextToImageProvider>(profile.AiProvider);
+public enum AiProvider
+{
+    None,
+    OpenAi,
+    AzureFoundry,
+    DeepSeek,   // renamed from DeepSeekWithFal
+    Perplexity,
+    FalAi       // new — image-only provider
+}
+```
+
+Registration in `Program.cs` via `AddXPosterAiProviders()`:
+
+```csharp
+// Text providers
+builder.Services.AddKeyedTransient<ITextToTextProvider, OpenAiService>(AiProvider.OpenAi);
+builder.Services.AddKeyedTransient<ITextToTextProvider, AzureFoundryService>(AiProvider.AzureFoundry);
+builder.Services.AddKeyedTransient<ITextToTextProvider, DeepSeekService>(AiProvider.DeepSeek);
+builder.Services.AddKeyedTransient<ITextToTextProvider, PerplexityService>(AiProvider.Perplexity);
+
+// Image providers
+builder.Services.AddKeyedTransient<ITextToImageProvider, OpenAiService>(AiProvider.OpenAi);
+builder.Services.AddKeyedTransient<ITextToImageProvider, AzureFoundryService>(AiProvider.AzureFoundry);
+builder.Services.AddKeyedTransient<ITextToImageProvider, FalAiImageService>(AiProvider.FalAi);
+```
+
+Each key maps to exactly one concrete class per interface. `OrchestratorFactory` resolves the two capabilities independently:
+
+```csharp
+var textProvider  = _serviceProvider.GetRequiredKeyedService<ITextToTextProvider>(profile.TextAiProvider);
+var imageProvider = _serviceProvider.GetRequiredKeyedService<ITextToImageProvider>(profile.ImageAiProvider);
+```
+
+A slot that previously used `AiProvider.DeepSeekWithFal` now declares:
+
+```csharp
+TextAiProvider  = AiProvider.DeepSeek,
+ImageAiProvider = AiProvider.FalAi
 ```
 
 #### Removal of `AiServiceFactory`
@@ -131,7 +152,7 @@ var imageProvider = _serviceProvider.GetRequiredKeyedService<ITextToImageProvide
 
 #### Removal of `HybridAiService`
 
-`HybridAiService` is removed. The `DeepSeek` combination — text via `DeepSeekService`, image via `FalAiImageService` — is now expressed as keyed DI configuration. No new "hybrid" wrapper class is ever needed for future provider combinations.
+`HybridAiService` is removed. The combination text via `DeepSeekService` + image via `FalAiImageService` is now expressed as two independent profile fields pointing to two independent keyed registrations. No new "hybrid" wrapper class is ever needed for future provider combinations.
 
 ---
 
@@ -141,7 +162,7 @@ The two problems share a root cause: the current model uses a single opaque iden
 
 For Problem 1, the `SenderPlatform` split restores the invariant that was implicit in ADR-003: a sender knows only how to publish to a platform, not what content strategy produced the post.
 
-For Problem 2, the capability-interface model aligns with the direction already taken in ADR-004: capability gaps are now explicit at compile time and runtime branching in `HybridAiService` is eliminated. The keyed registration pattern preserves the per-slot provider flexibility that is fundamental to XPoster's scheduling model.
+For Problem 2, the capability-interface model aligns with the direction already taken in ADR-004: capability gaps are now explicit at compile time and runtime branching in `HybridAiService` is eliminated. The two-field profile design (`TextAiProvider` + `ImageAiProvider`) ensures each `AiProvider` value identifies exactly one service, preserving clear semantics and independent per-slot flexibility.
 
 ---
 
@@ -152,6 +173,7 @@ For Problem 2, the capability-interface model aligns with the direction already 
 | Keep `HybridAiService` and add new providers via switch | Violates OCP; grows unboundedly with each new provider |
 | Use a Strategy dictionary keyed by provider name string | Loses compile-time safety; discovery is implicit |
 | Global (non-keyed) DI registration per capability | Destroys per-slot flexibility — all slots would use the same provider pair |
+| Single `AiProvider` field with `FalAiImageService` under `DeepSeek` key | `AiProvider` would identify a pairing rather than a single provider; semantically wrong |
 | Semantic Kernel / Microsoft.Extensions.AI abstraction layer | Introduces a large dependency for a relatively small problem; can be reconsidered in later stages |
 
 ---
@@ -169,13 +191,13 @@ For Problem 2, the capability-interface model aligns with the direction already 
 
 | File | Change |
 |---|---|
-| `src/Contracts/AiProvider.cs` | Rename `DeepSeekWithFal` → `DeepSeek` |
+| `src/Contracts/AiProvider.cs` | Rename `DeepSeekWithFal` → `DeepSeek`; add `FalAi` |
 | `src/Contracts/Enums.cs` | Add `SenderPlatform`; remove `MessageSender` |
-| `src/Abstraction/ScheduledOrchestrationProfile.cs` | Replace `MessageSender` with `SenderPlatform` |
+| `src/Abstraction/ScheduledOrchestrationProfile.cs` | Replace `MessageSender` with `SenderPlatform`; replace `AiProvider` with `TextAiProvider` + `ImageAiProvider` |
 | `src/Contracts/IOrchestrator.cs` | Add `SupportedPlatforms` property |
 | `src/Abstraction/BaseOrchestrator.cs` | Implement `SupportedPlatforms` |
-| `src/Orchestrators/OrchestratorFactory.cs` | `SenderPlatform` switch; keyed capability resolution; remove `IAiServiceFactory` |
-| `src/Orchestrators/DefaultSlotProfileProvider.cs` | Use `SenderPlatform` in all profiles; replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek` |
+| `src/Orchestrators/OrchestratorFactory.cs` | `SenderPlatform` switch; independent keyed resolution of `TextAiProvider` and `ImageAiProvider`; remove `IAiServiceFactory` |
+| `src/Orchestrators/DefaultSlotProfileProvider.cs` | Use `SenderPlatform`; replace `AiProvider.DeepSeekWithFal` with `TextAiProvider = DeepSeek, ImageAiProvider = FalAi` |
 | `src/Orchestrators/DryRunSlotProfileProvider.cs` | Use `SenderPlatform.DryRun` |
 | `src/Orchestrators/FeedOrchestrator.cs` | Replace `IAiService` with `ITextToTextProvider` + `ITextToImageProvider`; implement `SupportedPlatforms` |
 | `src/Orchestrators/PowerLawOrchestrator.cs` | Implement `SupportedPlatforms` |
@@ -185,13 +207,13 @@ For Problem 2, the capability-interface model aligns with the direction already 
 | `src/Services/Ai/DeepSeekService.cs` | Implement `ITextToTextProvider` only; remove `IAiService` |
 | `src/Services/Ai/PerplexityService.cs` | Implement `ITextToTextProvider` only; remove `IAiService` and `GenerateImageAsync` |
 | `src/Services/Ai/FalAiImageService.cs` | Implement `ITextToImageProvider` only; remove `IAiService` |
-| `src/Program.cs` | Replace keyed `IAiService` registrations with `AddXPosterAiProviders()`; use `AiProvider.DeepSeek` |
+| `src/Program.cs` | Replace keyed `IAiService` registrations with `AddXPosterAiProviders()`; use `AiProvider.DeepSeek` + `AiProvider.FalAi` |
 
 ### Files to remove
 
 | File | Reason |
 |---|---|
-| `src/Services/Ai/HybridAiService.cs` | Replaced by keyed DI configuration |
+| `src/Services/Ai/HybridAiService.cs` | Replaced by two independent keyed registrations |
 | `src/Contracts/IAiService.cs` | Replaced by `ITextToTextProvider` + `ITextToImageProvider` |
 | `src/Orchestrators/AiServiceFactory.cs` | Replaced by direct keyed resolution in `OrchestratorFactory` |
 | `src/Contracts/IAiServiceFactory.cs` | No longer needed |
@@ -202,12 +224,12 @@ For Problem 2, the capability-interface model aligns with the direction already 
 |---|---|
 | `tests/Services/HybridAiServiceTests.cs` | **Delete** |
 | `tests/Orchestrators/AiServiceFactoryTests.cs` | **Delete** |
-| `tests/Orchestrators/OrchestratorFactoryTests.cs` | Rewrite for `SenderPlatform` switch and keyed capability resolution |
-| `tests/Orchestrators/FeedOrchestratorTests.cs` | Replace `IAiService` mock with `ITextToTextProvider` + `ITextToImageProvider` mocks |
+| `tests/Orchestrators/OrchestratorFactoryTests.cs` | Rewrite for `SenderPlatform` switch; independent resolution of `TextAiProvider` + `ImageAiProvider` |
+| `tests/Orchestrators/FeedOrchestratorTests.cs` | Replace `IAiService` mock with `ITextToTextProvider` + `ITextToImageProvider` mocks; update profile construction |
 | `tests/Services/PerplexityServiceTests.cs` | Remove `GenerateImageAsync` tests; add `ITextToTextProvider` contract tests |
-| `tests/Services/DeepSeekServiceTests.cs` | Rename `GenerateImageAsync_ExceptionMessage_MentionsHybridAiService` → `GenerateImageAsync_AlwaysThrows_NotSupportedException`; replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek` |
-| `tests/Contracts/AiProviderExtensionsTests.cs` | Replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek` in all `InlineData` |
-| NEW `tests/Integration/DiWiringTests.cs` | Verify keyed resolution per `AiProvider`; verify `Perplexity` has no `ITextToImageProvider` registration; use `AiProvider.DeepSeek` |
+| `tests/Services/DeepSeekServiceTests.cs` | Rename `GenerateImageAsync_ExceptionMessage_MentionsHybridAiService` → `GenerateImageAsync_AlwaysThrows_NotSupportedException` |
+| `tests/Contracts/AiProviderExtensionsTests.cs` | Replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek`; add `AiProvider.FalAi` case |
+| NEW `tests/Integration/DiWiringTests.cs` | Verify keyed resolution for all `AiProvider` values per interface; verify `Perplexity` has no `ITextToImageProvider` registration; verify `FalAi` has no `ITextToTextProvider` registration |
 
 ---
 
@@ -216,15 +238,16 @@ For Problem 2, the capability-interface model aligns with the direction already 
 **Positive:**
 - Adding a new Orchestrator does not require touching `SenderPlatform` or `OrchestratorFactory` sender switch.
 - Adding a new AI Provider requires only implementing the relevant capability interface(s) and adding keyed registrations in `AddXPosterAiProviders()`.
-- Per-slot provider flexibility is preserved: each `ScheduledOrchestrationProfile` independently selects its AI provider via `AiProvider`; the 06:00 slot and 08:00 slot can use different providers from the same running instance.
+- Each `AiProvider` enum value identifies exactly one concrete service — no implicit pairings encoded in enum names.
+- Text and image providers can be mixed freely per slot: any `ITextToTextProvider` + any `ITextToImageProvider` combination is expressed as two independent profile fields.
+- Per-slot flexibility is fully preserved: `TextAiProvider` and `ImageAiProvider` are independent per slot.
 - Future modalities (text-to-video, text-to-audio) are a new interface + keyed registration — zero changes to existing code.
 - `HybridAiService` is eliminated, removing an internal branch that is currently a maintenance burden.
 - `PerplexityService` silent failure (`GenerateImageAsync` returning `byte[0]`) is eliminated — misconfiguration fails explicitly at startup.
-- `AiProvider` enum values now name only the text provider, removing the implicit coupling to a fixed image provider encoded in the name (`DeepSeekWithFal` → `DeepSeek`).
 
 **Negative / Trade-offs:**
 - Requires a breaking refactor of `OrchestratorFactory`, `AiServiceFactory`, `HybridAiService`, and all AI service classes.
 - `AiProvider.DeepSeekWithFal` is a breaking rename — any configuration file or app setting referencing this value must be updated to `DeepSeek`.
+- `ScheduledOrchestrationProfile` gains a second AI provider field (`ImageAiProvider`) — a minor breaking change to profile construction.
 - `Program.cs` DI registration becomes more verbose; `AddXPosterAiProviders()` helper extension method keeps it readable.
 - Existing tests for `OrchestratorFactory` and `AiServiceFactory` must be rewritten.
-- Per-slot provider selection is global to the key (all slots using `AiProvider.DeepSeek` share the same `DeepSeekService` + `FalAiImageService` pair per request lifetime); mixing text and image from different providers within the same `AiProvider` key requires a new enum value.
