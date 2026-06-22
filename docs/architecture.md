@@ -48,7 +48,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     ├────────────────────┤
     │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
     │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
-    │ • Feed Service     │ ◄─── RSS Parser
+    │ • Feed Service     │ ◄─── RSS Parser (IHttpClientFactory + Polly)
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
     │ • FeedUrlProvider  │ ◄─── Feed URL resolution (IFeedUrlProvider)
     └────────┬───────────┘
@@ -110,7 +110,7 @@ Services are registered as singletons or transients in the DI container and are 
 
 - **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledOrchestrationProfile` and can be overridden globally via the `AiProvider` configuration key.
 - **AiServiceHelper**: a shared utility class used internally by AI service implementations (`DeepSeekService`, `FalAiImageService`, and others). It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
-- **FeedService**: RSS parser with in-memory caching and deduplication; exposes a clean `IEnumerable<FeedItem>` contract.
+- **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
 - **ConfigurationFeedUrlProvider** (`IFeedUrlProvider`): resolves the list of RSS feed URLs consumed by `FeedOrchestrator` from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
 
@@ -121,6 +121,19 @@ Services are registered as singletons or transients in the DI container and are 
 - **FalAiImageService**: HTTP client to the fal.ai API for FLUX.2 Turbo image generation. Used standalone or as the image leg of `HybridAiService`.
 - **HybridAiService**: composes `DeepSeekService` (text) and `FalAiImageService` (image) behind a single `IAiService` contract, enabling the `DeepSeekWithFal` provider option. It introduces no additional API surface and is the only consumer of both inner services.
 - **PerplexityService**: direct HTTP client to the Perplexity Sonar Chat Completions API (`api.perplexity.ai/chat/completions`). Supports text summarisation (`GetSummaryAsync`) and image prompt generation (`GetImagePromptAsync`). **Image generation is not supported** — `GenerateImageAsync` always returns an empty byte array and logs a `Warning`, causing the orchestrator to publish text-only posts.
+
+### HttpClientFactory — Named Clients
+
+All outbound HTTP integrations in XPoster use named clients registered via `IHttpClientFactory` in `HttpClientExtensions`. Each client is backed by a Polly standard resilience pipeline (retry on transient failures, circuit breaker, attempt timeout) configured with service-appropriate timeout values.
+
+| Named Client | Consumer | Attempt Timeout | Total Timeout |
+|---|---|---|---|
+| `"Feed"` | `FeedService` | 15 s | 60 s |
+| `"LinkedIn"` | `InSender` | *(per registration)* | *(per registration)* |
+| `"Instagram"` | `IgSender` | *(per registration)* | *(per registration)* |
+| *(AI provider clients)* | `DeepSeekService`, `FalAiImageService`, `PerplexityService` | *(per registration)* | *(per registration)* |
+
+> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline is prohibited — it bypasses the resilience pipeline and risks socket exhaustion on Azure Functions.
 
 ### Sender Plugins — Platform Abstraction
 
@@ -234,7 +247,7 @@ sequenceDiagram
     participant Orch as BaseOrchestrator<br/>(Feed / PowerLaw)
     participant AI as IAiService<br/>(resolved by AiProvider)
     participant FeedUrl as IFeedUrlProvider
-    participant Feed as FeedService<br/>(RSS)
+    participant Feed as FeedService<br/>(RSS + IHttpClientFactory)
     participant Crypto as CryptoService<br/>(cryptoprices.cc)
     participant Sender as ISender<br/>(X / LinkedIn / Instagram)
     participant DryRun as DryRunSender<br/>(local testing only)
