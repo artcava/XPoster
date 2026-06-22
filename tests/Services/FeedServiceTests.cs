@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using XPoster.Models;
@@ -21,6 +22,8 @@ public class FeedServiceTests
     // Helpers
     // ---------------------------------------------------------------------------
 
+    private const string RssDateFormat = "ddd, dd MMM yyyy HH:mm:ss zzz";
+
     private static string BuildRssXml(IEnumerable<(string title, DateTimeOffset pubDate)> items)
     {
         var sb = new StringBuilder();
@@ -32,7 +35,7 @@ public class FeedServiceTests
             sb.AppendLine($"  <title>{title}</title>");
             sb.AppendLine($"  <link>https://example.com/{title.Replace(" ", "-")}</link>");
             sb.AppendLine($"  <description>Description of {title}</description>");
-            sb.AppendLine($"  <pubDate>{pubDate:ddd, dd MMM yyyy HH:mm:ss zzz}</pubDate>");
+            sb.AppendLine($"  <pubDate>{pubDate.ToString(RssDateFormat, CultureInfo.InvariantCulture)}</pubDate>");
             sb.AppendLine("</item>");
         }
         sb.AppendLine("</channel></rss>");
