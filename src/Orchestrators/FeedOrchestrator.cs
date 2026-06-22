@@ -29,6 +29,11 @@ public class FeedOrchestrator : BaseOrchestrator
     /// <summary>Always <c>true</c>; this orchestrator always attempts to attach an AI-generated image.</summary>
     public override bool ProduceImage { get => true; set => throw new NotImplementedException(); }
 
+    /// <inheritdoc/>
+    /// <remarks>FeedOrchestrator supports X, LinkedIn, and Instagram. DryRun is also supported for testing.</remarks>
+    public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
+        new List<SenderPlatform> { SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.Instagram, SenderPlatform.DryRun }.AsReadOnly();
+
     /// <summary>
     /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>

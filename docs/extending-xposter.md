@@ -136,47 +136,47 @@ For local development only, set them in `src/local.settings.json` using the doub
 
 > Do not add social-platform credentials to `src/local.settings.json.example`. Use Key Vault for all non-local environments.
 
-### Step 5 — Add Enum Value
+### Step 5 — Add SenderPlatform Enum Value
+
+Add a single value to `SenderPlatform` representing the new platform. Each value maps to exactly one sender class, independent of which orchestrator produces the content:
 
 ```csharp
 // src/Contracts/Enums.cs
-public enum MessageSender
+public enum SenderPlatform
 {
-    // existing values...
-    TikTokSummaryFeed,
-    TikTokPowerLaw,
+    // existing values ...
+    TikTok,
 }
 ```
 
+> `SenderPlatform` represents **where** to publish. It is orthogonal to the orchestrator type (what content strategy to use), so a single `TikTok` value covers all orchestrators that target TikTok. This is the key difference from the legacy `MessageSender` enum, which conflated platform identity with content strategy.
+
 ### Step 6 — Wire in OrchestratorFactory
 
-`OrchestratorFactory.Resolve()` resolves the concrete sender through a **switch expression** that maps each `MessageSender` enum value to a specific class retrieved from the DI container. The result is cast to `ISender` because `GetService` returns `object?`; the factory then passes the interface reference to `CreateOrchestratorInstance`, keeping orchestrators fully decoupled from sender implementations.
-
-Add two arms to the existing switch expression inside `Resolve()`:
+`OrchestratorFactory.Resolve()` resolves the concrete sender through a **switch expression** that maps each `SenderPlatform` value to the class retrieved from the DI container. Because `SenderPlatform` is platform-only, there is **one arm per platform** — independent of how many orchestrators target that platform. Add one arm to the existing switch expression inside `Resolve()`:
 
 ```csharp
 // src/Orchestrators/OrchestratorFactory.cs — sender switch expression
-ISender? sender = profile.SenderType switch
+ISender? sender = profile.SenderPlatform switch
 {
     // existing arms ...
-    MessageSender.TikTokSummaryFeed => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
-    MessageSender.TikTokPowerLaw    => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
+    SenderPlatform.TikTok => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
     _ => null
 };
 ```
 
-> Both `TikTokSummaryFeed` and `TikTokPowerLaw` resolve to the same `TikTokSender` class. The two enum values express *what is being posted* (content strategy + platform), not *how* — `TikTokSender` owns the how. This mirrors the existing pattern for `XSender` and `InSender`.
+> One enum value, one switch arm, one sender class. Adding a new orchestrator that posts to TikTok (e.g. `TrendingOrchestrator`) requires **no change** to this switch — only a new `ScheduledOrchestrationProfile` entry referencing `SenderPlatform.TikTok`.
 
 ### Step 7 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`), which implements `ISlotProfileProvider`. Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
-    new ScheduledOrchestrationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(20, SenderPlatform.TikTok, typeof(FeedOrchestrator), AiProvider.OpenAi),
 ];
 ```
 
@@ -188,7 +188,7 @@ public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 
 ## Adding a New Orchestrator (Content Strategy)
 
-An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It receives its dependencies — sender, AI service, and any data services — via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
+An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It must also implement the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. Dependencies — sender, AI service, and any data services — are received via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
 
 ### Step 1 — Extend BaseOrchestrator
 
@@ -198,6 +198,9 @@ public class QuoteOrchestrator : BaseOrchestrator
 {
     public QuoteOrchestrator(ISender sender, ILogger<QuoteOrchestrator> logger, IAiService aiService)
         : base(sender, logger, aiService) { }
+
+    public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
+        [SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.DryRun];
 
     public override async Task<Post>? OrchestrateAsync()
     {
@@ -210,18 +213,20 @@ public class QuoteOrchestrator : BaseOrchestrator
 }
 ```
 
-> **Invariant**: `OrchestrateAsync()` must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+> **`SupportedPlatforms` invariant**: always include `SenderPlatform.DryRun` so the orchestrator can be exercised locally without live API calls. Declare only the platforms the orchestrator has been validated against — omitting a platform is a deliberate signal that the content format may not be compatible.
+
+> **`OrchestrateAsync` invariant**: must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new orchestrator type in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type and the target `SenderPlatform` in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
-    new ScheduledOrchestrationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
+    new ScheduledOrchestrationProfile(10, SenderPlatform.X, typeof(QuoteOrchestrator), AiProvider.Perplexity),
 ];
 ```
 
@@ -357,6 +362,7 @@ All extensions must respect the following invariants to integrate correctly with
 - **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
 - **`MessageMaxLength` must be accurate.** Orchestrators rely on this value to truncate content before calling `SendAsync`. An incorrect value causes silent data loss at the platform layer.
 - **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+- **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.

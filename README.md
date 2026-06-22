@@ -383,12 +383,12 @@ az functionapp config appsettings set \
 
 The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles:
 
-| UTC Hour | Sender | Orchestrator | AI Provider |
-|----------|--------|--------------|-------------|
-| 6 | `InSummaryFeed` | `FeedOrchestrator` | OpenAi |
-| 8 | `XSummaryFeed` | `FeedOrchestrator` | OpenAi |
-| 14 | `InPowerLaw` | `PowerLawOrchestrator` | *(default)* |
-| 16 | `XPowerLaw` | `PowerLawOrchestrator` | *(default)* |
+| UTC Hour | `SenderPlatform` | Orchestrator | AI Provider |
+|----------|------------------|--------------|-------------|
+| 6 | `LinkedIn` | `FeedOrchestrator` | OpenAi |
+| 8 | `X` | `FeedOrchestrator` | OpenAi |
+| 14 | `LinkedIn` | `PowerLawOrchestrator` | *(default)* |
+| 16 | `X` | `PowerLawOrchestrator` | *(default)* |
 
 `OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
 
@@ -408,7 +408,7 @@ To run the full pipeline locally without publishing to any social platform, acti
 
 | Key | Value | Effect |
 |-----|-------|--------|
-| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRunSend` entry at hour 9 |
+| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRun` entry at hour 9 |
 | `ForceHour` | `9` | Overrides the UTC clock so `OrchestratorFactory` selects the dry-run slot at startup |
 
 `DryRunSender` will probe Key Vault connectivity (reads the `XApiKey` secret), log the generated post content (character count + full text and image presence), and return `true` — without calling any social platform API.
@@ -432,8 +432,8 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
-| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()`, register in `OrchestratorFactory` | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add a value to `SenderPlatform`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
+| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()` and `SupportedPlatforms`, add a `ScheduledOrchestrationProfile` entry | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
 | **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All orchestrators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
 | **Scheduling profiles** (`ISlotProfileProvider`) | Implement `ISlotProfileProvider` (or subclass `DryRunSlotProfileProvider` as a decorator) and register it in `Program.cs` | The schedule is a swappable dependency injected into `OrchestratorFactory` — operators can alter or extend the slot list without touching factory or orchestrator code |
 

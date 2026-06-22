@@ -86,11 +86,11 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 | Field | Type | Purpose |
 |---|---|---|
 | `Hour` | `int` | Hour of day (0–23) when this slot is active |
-| `SenderType` | `MessageSender` | Identifies which `ISender` implementation to resolve |
+| `SenderPlatform` | `SenderPlatform` | Identifies which `ISender` implementation to resolve |
 | `OrchestratorType` | `Type` | The concrete `BaseOrchestrator` subclass to instantiate |
 | `AiProvider?` | `AiProvider?` | Optional AI provider for slots that require AI services |
 
-At runtime, the factory calls `Resolve()` to match the current hour to a profile returned by `ISlotProfileProvider.GetProfiles()`, independently resolves the **sender** (via the DI container) and the **AI service** (via `IAiServiceFactory.GetByProvider()`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes.
+At runtime, the factory calls `Resolve()` to match the current hour to a profile returned by `ISlotProfileProvider.GetProfiles()`, independently resolves the **sender** (via the DI container, keyed by `SenderPlatform`) and the **AI service** (via `IAiServiceFactory.GetByProvider()`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes.
 
 The **schedule itself is a dependency**, not a compile-time constant. In production, `DefaultSlotProfileProvider` supplies the four canonical slots (06:00, 08:00, 14:00, 16:00). For local dry-run testing, `DryRunSlotProfileProvider` decorates `DefaultSlotProfileProvider` and appends the dry-run slot at hour 9; it is activated by setting `EnableDryRunSlot = true` in app settings and registered in `Program.cs` via conditional DI. This means adding or switching the dry-run slot requires no changes to `OrchestratorFactory`.
 
@@ -143,12 +143,12 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 
 **Current sender implementations:**
 
-| Sender | `MessageSender` value | Target | Notes |
+| Sender | `SenderPlatform` value | Target | Notes |
 |---|---|---|---|
-| `XSender` | `XSummaryFeed`, `XPowerLaw` | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; credentials injected via `IOptions<XCredentials>` |
-| `InSender` | `InSummaryFeed`, `InPowerLaw` | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
-| `IgSender` | *(in development)* | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<IgCredentials>` |
-| `DryRunSender` | `DryRunSend` | **None** | **Local development and testing only.** Logs post content (character count, full text, image presence) but makes **no outbound social API calls**. Always returns `true` on a well-formed post. `MessageMaxLength` is `int.MaxValue`. Activated via `EnableDryRunSlot = true` in app settings; must never be used in a production environment. |
+| `XSender` | `X` | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; credentials injected via `IOptions<XCredentials>` |
+| `InSender` | `LinkedIn` | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
+| `IgSender` | `Instagram` | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<IgCredentials>` |
+| `DryRunSender` | `DryRun` | **None** | **Local development and testing only.** Logs post content (character count, full text, image presence) but makes **no outbound social API calls**. Always returns `true` on a well-formed post. `MessageMaxLength` is `int.MaxValue`. Activated via `EnableDryRunSlot = true` in app settings; must never be used in a production environment. |
 
 ---
 
@@ -166,15 +166,15 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 
 **What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, IAiService)` triples. Its `Resolve()` method reads the current UTC hour, calls `ISlotProfileProvider.GetProfiles()` to obtain the active schedule, looks up the matching `ScheduledOrchestrationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
 
-**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, MessageSender>` to a typed `ScheduledOrchestrationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation using a mock `ISlotProfileProvider` with synthetic profiles, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
+**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, SenderPlatform>` to a typed `ScheduledOrchestrationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation using a mock `ISlotProfileProvider` with synthetic profiles, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
 
 **Trade-off**: The schedule is now an injected dependency (`ISlotProfileProvider`), which means schedule changes — including adding or removing the dry-run slot — are controlled entirely via DI registration and app settings, with no changes required to `OrchestratorFactory` itself. Adding a fully externalised schedule (e.g. from Azure App Configuration) would only require a new `ISlotProfileProvider` implementation registered in `Program.cs`.
 
 ### Plugin Pattern — Sender Architecture
 
-**What**: Platform senders implement a common `ISender` interface and are registered in the DI container as concrete types. `OrchestratorFactory` resolves the appropriate sender from the DI container by matching the `MessageSender` enum value in the profile.
+**What**: Platform senders implement a common `ISender` interface and are registered in the DI container as concrete types. `OrchestratorFactory` resolves the appropriate sender from the DI container by matching the `SenderPlatform` enum value in the profile.
 
-**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new enum value, and a profile entry. This directly supports the Roadmap's expansion goals (Threads, Mastodon, BlueSky, etc.).
+**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new `SenderPlatform` enum value, and a profile entry. This directly supports the Roadmap's expansion goals (Threads, Mastodon, BlueSky, etc.).
 
 **Extensibility contract**: Any sender must:
 1. Implement `ISender`
@@ -215,13 +215,13 @@ XPoster exposes three well-defined extension points. Each maps to a distinct abs
 
 A sender encapsulates everything needed to publish a `Post` to a specific social platform: authentication, payload serialisation, and error handling. The `ISender` interface is intentionally minimal — it receives a fully-formed post and returns a boolean outcome — so platform-specific complexity is completely isolated from the rest of the pipeline.
 
-Adding a new platform has no impact on existing senders, orchestrators, or the factory. The only touch points are a new implementing class, a DI registration, a new `MessageSender` enum value, and one entry in the scheduling profile (either in `DefaultSlotProfileProvider` for production slots, or in a custom `ISlotProfileProvider` decorator for environment-specific slots). This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
+Adding a new platform has no impact on existing senders, orchestrators, or the factory. The only touch points are a new implementing class, a DI registration, a new `SenderPlatform` enum value, and one entry in the scheduling profile (either in `DefaultSlotProfileProvider` for production slots, or in a custom `ISlotProfileProvider` decorator for environment-specific slots). This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
 
 ### Content Orchestrators
 
-An orchestrator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting `Post` takes. Each orchestrator extends `BaseOrchestrator` and is selected at runtime based on the current time slot via `OrchestratorFactory.Resolve()`, so different algorithms can run at different hours without any conditional logic in `XFunction`.
+An orchestrator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting `Post` takes. Each orchestrator extends `BaseOrchestrator` and implements the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. The orchestrator is selected at runtime based on the current time slot via `OrchestratorFactory.Resolve()`, so different algorithms can run at different hours without any conditional logic in `XFunction`.
 
-Because orchestrators receive their dependencies (sender, AI service, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically; the only required change is adding a `ScheduledOrchestrationProfile` entry to the appropriate `ISlotProfileProvider` implementation — no changes to `OrchestratorFactory` itself.
+Because orchestrators receive their dependencies (sender, AI service, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically; the only required changes are implementing `SupportedPlatforms` on the new class and adding a `ScheduledOrchestrationProfile` entry to the appropriate `ISlotProfileProvider` implementation — no changes to `OrchestratorFactory` itself.
 
 ### AI Providers
 
@@ -264,7 +264,7 @@ sequenceDiagram
     Factory->>ProfileProvider: GetProfiles()
     ProfileProvider-->>Factory: List<ScheduledOrchestrationProfile>
     Factory->>Factory: Match currentHour → ScheduledOrchestrationProfile
-    Factory->>Factory: Resolve ISender from DI (by SenderType)
+    Factory->>Factory: Resolve ISender from DI (by SenderPlatform)
     Factory->>AiFactory: GetByProvider(profile.AiProvider)
     AiFactory-->>Factory: IAiService (concrete implementation)
     Factory->>Factory: CreateOrchestratorInstance(type, sender, aiService)

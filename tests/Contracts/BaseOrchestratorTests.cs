@@ -20,6 +20,8 @@ public class BaseOrchestratorTests
         public override string Name => "TestOrchestrator";
         public override bool SendIt { get => _sendIt; set => _sendIt = value; }
         public override bool ProduceImage { get; set; } = produceImage;
+        public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
+            new List<SenderPlatform>().AsReadOnly();
         public override Task<Post?> OrchestrateAsync() => Task.FromResult<Post?>(null);
     }
 
