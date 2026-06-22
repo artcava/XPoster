@@ -1,23 +1,23 @@
 # Community 73
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **GetProfiles()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **BuildFalService()** (2 connections)
+- **BuildDeepSeekService()** (2 connections)
+- **HybridAiService()** (2 connections)
+- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
+- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 23]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

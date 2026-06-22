@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **PerplexityService()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **var()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSenderTests()** (2 connections)
+- **InSender()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 42]] (7 shared connections)
+- [[Community 57]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

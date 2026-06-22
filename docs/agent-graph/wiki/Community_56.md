@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
+- **DeepSeekService.cs** (12 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 - **while()** (2 connections)
-- **var()** (2 connections)
 - **if()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **catch()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 44]] (7 shared connections)
+- [[Community 71]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

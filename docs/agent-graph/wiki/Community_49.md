@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
-- **GetSummaryAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiService** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
 
 ## Relationships
 

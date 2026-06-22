@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationFeedUrlProvider.cs** (4 connections)
-- **ConfigurationFeedUrlProvider.cs** (4 connections)
-- **GetFeedUrls()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator()** (2 connections)
 - **XPoster.Orchestrators** (2 connections)
-- **ConfigurationFeedUrlProvider()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

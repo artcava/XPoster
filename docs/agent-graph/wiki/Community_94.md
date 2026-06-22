@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **foreach()** (2 connections)
-- **FeedOrchestrator()** (2 connections)
-- **if()** (2 connections)
+- **BaseOrchestrator.cs** (5 connections)
+- **BaseOrchestrator()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 83]] (4 shared connections)
+- [[Community 138]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

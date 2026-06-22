@@ -1,26 +1,26 @@
 # Community 35
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **Exception()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **catch()** (2 connections)
-- **using()** (2 connections)
-- **SendAsync()** (2 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
+- **CryptoServiceTests** (2 connections)
+- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
+- **CryptoService()** (2 connections)
+- **MakeService()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

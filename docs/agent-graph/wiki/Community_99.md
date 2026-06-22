@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **StringContent()** (2 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **for()** (2 connections)
 
 ## Relationships
 
-- [[Community 129]] (3 shared connections)
+- [[Community 77]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

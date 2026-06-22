@@ -1,23 +1,23 @@
 # Community 63
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **var()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **IsTransientHttpFailure()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- [[Community 51]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

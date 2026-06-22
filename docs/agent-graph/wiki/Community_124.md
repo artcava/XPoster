@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (3 shared connections)
+- [[Community 137]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

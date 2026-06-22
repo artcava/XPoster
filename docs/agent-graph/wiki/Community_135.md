@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 102]] (3 shared connections)
+- [[Community 114]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
