@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **IgCredentials.cs** (2 connections)
-- **IgCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **FeedOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
+- **FeedOptions.cs** (2 connections)
 
 ## Relationships
 

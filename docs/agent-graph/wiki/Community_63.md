@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (35 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **HttpClient()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
 - **var()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 2]] (29 shared connections)
+- [[Community 52]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

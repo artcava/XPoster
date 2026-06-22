@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator.cs** (4 connections)
-- **PostAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IOrchestrator** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Services** (2 connections)
+- **TimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 

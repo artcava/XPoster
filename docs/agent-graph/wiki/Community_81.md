@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService** (2 connections)
+- **GetCryptoValue()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **IFeedService** (2 connections)
-- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 

@@ -1,22 +1,23 @@
 # Community 14
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingApiKey_Fails()** (2 connections)
-- **FalAiOptionsValidatorTests** (2 connections)
-- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **OpenAIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **ModelsTests** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **Validate_WhitespaceModelId_Fails()** (2 connections)
-- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
-- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_WhitespaceApiKey_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_MissingModelId_Fails()** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

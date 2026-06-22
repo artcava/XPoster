@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **if()** (2 connections)
-- **InSender()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 30]] (8 shared connections)
+- [[Community 134]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

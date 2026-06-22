@@ -1,22 +1,21 @@
 # Community 91
 
-> 5 nodes · cohesion 0.40
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **StringContent()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 - **catch()** (2 connections)
-- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (4 shared connections)
+- [[Community 73]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

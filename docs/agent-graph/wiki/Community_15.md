@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService.cs** (12 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **if()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **OpenAiService()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **var()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
+- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **Validate_DefaultOptions_Succeeds()** (2 connections)
 
 ## Relationships
 

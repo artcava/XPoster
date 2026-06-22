@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
+- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
 
 ## Relationships
 

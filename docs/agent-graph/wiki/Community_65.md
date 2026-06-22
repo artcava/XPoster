@@ -1,23 +1,23 @@
 # Community 65
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (5 connections)
-- **XFunctionTests.cs** (5 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **InSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 57]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

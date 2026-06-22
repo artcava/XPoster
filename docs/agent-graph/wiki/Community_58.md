@@ -1,24 +1,23 @@
 # Community 58
 
-> 7 nodes · cohesion 0.29
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

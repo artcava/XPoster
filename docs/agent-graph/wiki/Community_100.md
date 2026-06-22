@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (5 connections)
-- **XPoster.Abstraction** (2 connections)
-- **BaseOrchestrator()** (2 connections)
-- **PostAsync()** (2 connections)
+- **XSender.cs** (6 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 138]] (2 shared connections)
+- [[Community 118]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
