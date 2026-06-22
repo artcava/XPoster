@@ -32,7 +32,7 @@ public class FeedServiceTests
             sb.AppendLine($"  <title>{title}</title>");
             sb.AppendLine($"  <link>https://example.com/{title.Replace(" ", "-")}</link>");
             sb.AppendLine($"  <description>Description of {title}</description>");
-            sb.AppendLine($"  <pubDate>{pubDate:ddd, dd MMM yyyy HH:mm:ss} +0000</pubDate>");
+            sb.AppendLine($"  <pubDate>{pubDate:ddd, dd MMM yyyy HH:mm:ss zzz}</pubDate>");
             sb.AppendLine("</item>");
         }
         sb.AppendLine("</channel></rss>");
