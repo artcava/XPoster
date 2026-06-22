@@ -9,29 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Named HTTP client `"Feed"` with Polly resilience pipeline** ([#204](https://github.com/artcava/XPoster/issues/204)): `HttpClientExtensions.AddHttpClients()` now registers a `"Feed"` named client configured with a three-layer Polly pipeline — per-attempt timeout, exponential-backoff retry, and circuit breaker. All pipeline parameters (timeout, retry count, failure threshold, sampling window, break duration) are driven by `FeedOptions` app settings with safe defaults, making resilience behaviour configurable per environment without code changes.
+- **`FeedOptions` resilience properties** ([#204](https://github.com/artcava/XPoster/issues/204)): `AttemptTimeoutSeconds`, `RetryCount`, `CircuitBreakerFailureThreshold`, `CircuitBreakerSamplingDurationSeconds`, and `CircuitBreakerBreakDurationSeconds` added to `FeedOptions`; `FeedOptionsValidator` updated to enforce valid ranges for all five fields.
+
+### Changed
+- **`FeedService` — migrated from `new HttpClient()` to `IHttpClientFactory`** ([#204](https://github.com/artcava/XPoster/issues/204)): constructor now accepts `IHttpClientFactory` and resolves the named client `"Feed"` per fetch call via `CreateClient("Feed")`. Eliminates the inline `new HttpClient()` that bypassed connection pooling and the Polly resilience pipeline. `FeedService` is now fully compliant with the `IHttpClientFactory` invariant enforced across the rest of the codebase.
+- **`local.settings.json.example`** ([#204](https://github.com/artcava/XPoster/issues/204)): five new `FeedOptions__*` resilience keys added with their default values.
+- **`docs/architecture.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): `FeedService` description updated to reflect `IHttpClientFactory` usage and the named client `"Feed"`; named HTTP client table updated; `IHttpClientFactory` invariant strengthened.
+- **`docs/configuration.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): new *Feed HTTP Client* section documenting all five `FeedOptions__*` resilience keys with types, defaults, and tuning guidance; *Feed URLs* section updated to reference the named client and Polly pipeline.
+- **`docs/extending-xposter.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): *Design Constraints* — `IHttpClientFactory` invariant bullet updated to confirm all services (including `FeedService`) now conform and to prohibit `new HttpClient()` inline explicitly.
+- **`docs/monitoring.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): new *Feed HTTP Client Resilience Observability* section documenting structured log events (retry, circuit breaker opened/reset, attempt timeout, fetch failed), two KQL queries (`Feed fetch retries`, `Feed circuit breaker open events`), an alert rule, and a Bicep snippet. *Key Metrics* table updated with `Feed Fetch Failures` row. *Recommended Alert Rules* table updated with the feed circuit breaker alert.
+
 ### Fixed
 - **`PowerLawOrchestrator` — duplicate `Post.Firm` footer in published posts** ([#202](https://github.com/artcava/XPoster/issues/202)): `Post.Firm` was appended both inside `OrchestrateAsync()` and again by every sender plugin (`XSender`, `InSender`, `IgSender`), causing the firm footer to appear twice in all posts from slots `InPowerLaw` (hour 14) and `XPowerLaw` (hour 16). Removed `Post.Firm` from the orchestrator content string; the sender layer remains the single, authoritative place for appending the footer.
 
 ### Tests
+- **`FeedServiceTests`** ([#204](https://github.com/artcava/XPoster/issues/204)): three previously failing tests fixed by replacing the direct `HttpClient` construction with an `IHttpClientFactory` mock that returns a client backed by a `MockHttpMessageHandler`. Tests now cover: cache miss → HTTP fetch → cache set (`GetFeedsAsync_FetchesAndCachesFeeds_WhenCacheMissAndHttpSucceeds`), date-range filtering (`GetFeedsAsync_FiltersOutItemsOutsideDateRange`), and keyword filtering (`GetFeedsAsync_FiltersOutItemsWithNoKeywordMatch`).
 - **`PowerLawOrchestratorTests`** ([#202](https://github.com/artcava/XPoster/issues/202)): `Assert.Contains("#XPoster #AI", ...)` replaced with `Assert.DoesNotContain(Post.Firm, ...)` to verify the orchestrator no longer embeds the firm footer in `post.Content`; `using XPoster.Models` added to reference `Post.Firm` directly instead of a magic string.
-
-### Added
-- **Azure Key Vault Configuration Provider** ([#195](https://github.com/artcava/XPoster/issues/195)): `AddAzureKeyVault` registered in `Program.cs` via an explicit `((IConfigurationBuilder)builder.Configuration)` cast (required because `FunctionsApplicationBuilder.Configuration` is a `ConfigurationManager` that implements `IConfigurationBuilder` but does not expose extension methods without the cast). Secrets are merged into `IConfiguration` at application startup using `DefaultAzureCredential`; no Key Vault calls occur at post-publish time.
-- **`Azure.Extensions.AspNetCore.Configuration.Secrets` v1.4.0** added to `XPoster.csproj` ([#195](https://github.com/artcava/XPoster/issues/195)).
-- **Typed sender credentials via `IOptions<T>`** ([#195](https://github.com/artcava/XPoster/issues/195)): `XCredentials`, `LinkedInCredentials`, and `IgCredentials` DTOs introduced in `src/Credentials/`; each bound flat from `IConfiguration` via `BindConfiguration(string.Empty)` with `ValidateOnStart()`. Senders receive credentials through constructor-injected `IOptions<TCredentials>` — no runtime Key Vault calls.
-
-### Changed
-- **`XSender`, `InSender`, `IgSender`** ([#195](https://github.com/artcava/XPoster/issues/195)): constructor signature updated — `IKeyVaultService` dependency replaced by `IOptions<XCredentials>`, `IOptions<LinkedInCredentials>`, and `IOptions<IgCredentials>` respectively. Credential values read once from `options.Value` at construction time.
-- **`DryRunSender`** ([#195](https://github.com/artcava/XPoster/issues/195)): Key Vault connectivity probe (`GetSecretAsync("XApiKey")`) removed; sender now has no infrastructure dependency and logs post content directly without any startup side-effect.
-- **`Program.cs`** ([#195](https://github.com/artcava/XPoster/issues/195)): `KeyVaultService` / `IKeyVaultService` registrations replaced by `AddAzureKeyVault` Configuration Provider + `AddOptions<TCredentials>().BindConfiguration(string.Empty).ValidateOnStart()` blocks for all three sender credential types.
-
-### Removed
-- **`IKeyVaultService`** (`src/Contracts/IKeyVaultService.cs`) and **`KeyVaultService`** (`src/Services/KeyVaultService.cs`) ([#195](https://github.com/artcava/XPoster/issues/195)): runtime secret-fetch abstraction superseded by the startup-time Configuration Provider pattern. All consumer references removed from senders, DI composition, and tests.
-
-### Tests
-- **`DryRunSenderTests`** ([#195](https://github.com/artcava/XPoster/issues/195)): rewritten — `IKeyVaultService` mock removed; tests cover null-post guard and dry-run success path using no infrastructure dependencies.
-- **`XSenderTests`, `InSenderTests`, `IgSenderTests`** ([#195](https://github.com/artcava/XPoster/issues/195)): updated to supply credentials via `Options.Create(new TCredentials { … })` in place of the removed `IKeyVaultService` mock.
-- **`KeyVaultServiceTests`** removed ([#195](https://github.com/artcava/XPoster/issues/195)): test class deleted together with the removed service.
 
 ---
 
