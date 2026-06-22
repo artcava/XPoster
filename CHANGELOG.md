@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Replaced `MessageSender` enum with `SenderPlatform` enum; platform and orchestrator identity are now independent (ADR-005)
+- `OrchestratorFactory` resolves `ISender` from `SenderPlatform`; adding a new orchestrator no longer requires enum changes
+- `ScheduledOrchestrationProfile` uses `SenderPlatform` instead of `MessageSender`
+
+### Removed
+- `MessageSender` enum
+
 ---
 
 ## [0.1.5] - 2026-06-22
