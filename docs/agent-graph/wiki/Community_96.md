@@ -11,7 +11,7 @@
 
 ## Relationships
 
-- [[Community 56]] (6 shared connections)
+- [[Community 50]] (6 shared connections)
 
 ## Audit Trail
 

@@ -1,28 +1,28 @@
 # Community 21
 
-> 11 nodes · cohesion 0.35
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSender()** (2 connections)
-- **BuildSender()** (2 connections)
-- **ValidPost()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **HybridAiServiceTests** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **BuildHybrid()** (2 connections)
+- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 67]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

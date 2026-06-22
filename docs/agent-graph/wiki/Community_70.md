@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **return()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **foreach()** (2 connections)
-- **Resolve()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **InSender()** (2 connections)
+- **InSenderTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (4 shared connections)
+- [[Community 55]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

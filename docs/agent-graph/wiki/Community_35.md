@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **RSSFeedMissingBranchTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
 
 ## Relationships
 

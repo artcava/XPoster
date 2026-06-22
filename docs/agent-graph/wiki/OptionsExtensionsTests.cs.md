@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### contains
+- [[OptionsExtensionsTests.cs]]
 - [[XPoster.Tests.Models]]
 - [[OptionsExtensionsTests]]
 - [[OpenAiOptionsExtensionsTests]]
@@ -26,7 +27,6 @@
 - [[AddAzureFoundryOptions_BindsOptionsFromCorrectSection()]]
 - [[AddAzureFoundryOptions_RegistersValidator()]]
 - [[SectionName_IsDeepSeek()]]
-- [[AddDeepSeekOptions_BindsOptionsFromCorrectSection()]]
 
 ---
 

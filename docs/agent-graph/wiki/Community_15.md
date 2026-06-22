@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService.cs** (12 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **catch()** (2 connections)
-- **OpenAiService()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
-- **if()** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **BuildProvider()** (2 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
 
 ## Relationships
 

@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
-- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
-- **HybridAiService()** (2 connections)
-- **BuildDeepSeekService()** (2 connections)
-- **BuildFalService()** (2 connections)
+- **PerplexityService.cs** (13 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **var()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (10 shared connections)
+- [[Community 45]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

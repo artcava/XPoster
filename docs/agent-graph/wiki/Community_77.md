@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PowerLawOrchestrator.cs** (4 connections)
-- **PowerLawOrchestrator.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **if()** (2 connections)
-- **PowerLawOrchestrator()** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetFeedsAsync()** (2 connections)
+- **IFeedService** (2 connections)
 
 ## Relationships
 

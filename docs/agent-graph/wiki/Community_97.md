@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **CryptoService.cs** (6 connections)
+- **GetCryptoValue()** (2 connections)
+- **XPoster.Services** (2 connections)
 - **catch()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 113]] (3 shared connections)
+- [[Community 129]] (3 shared connections)
 
 ## Audit Trail
 

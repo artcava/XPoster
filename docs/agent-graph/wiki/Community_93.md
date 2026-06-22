@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **catch()** (2 connections)
-- **XPoster** (2 connections)
-- **Run()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (3 shared connections)
+- [[Community 61]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

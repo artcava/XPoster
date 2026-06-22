@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSender()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **InSenderTests()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **DeepSeekService()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **var()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 52]] (6 shared connections)
+- [[Community 57]] (6 shared connections)
 
 ## Audit Trail
 

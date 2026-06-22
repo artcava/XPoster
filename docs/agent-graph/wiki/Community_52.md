@@ -1,24 +1,24 @@
 # Community 52
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionMissingBranchTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

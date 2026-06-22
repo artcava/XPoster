@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **AddHttpClients()** (2 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 
