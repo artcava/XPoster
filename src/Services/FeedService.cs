@@ -12,21 +12,26 @@ namespace XPoster.Services;
 /// Fetches, parses, and caches RSS feed items from remote sources,
 /// filtering by publication date range and keyword match on the item title.
 /// Results are cached for 24 hours to avoid redundant network calls.
+/// Uses the named <c>"Feed"</c> <see cref="System.Net.Http.HttpClient"/> registered in
+/// <c>HttpClientExtensions</c> with a Polly standard resilience pipeline.
 /// </summary>
 public class FeedService : IFeedService
 {
     private readonly IMemoryCache _cache;
     private readonly ILogger<FeedService> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
 
     /// <summary>
     /// Initialises a new instance of <see cref="FeedService"/>.
     /// </summary>
     /// <param name="cache">The in-memory cache used to store fetched feed results.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
-    public FeedService(IMemoryCache cache, ILogger<FeedService> logger)
+    /// <param name="httpClientFactory">The factory used to create the named <c>"Feed"</c> HTTP client.</param>
+    public FeedService(IMemoryCache cache, ILogger<FeedService> logger, IHttpClientFactory httpClientFactory)
     {
         _cache = cache;
         _logger = logger;
+        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
@@ -48,21 +53,21 @@ public class FeedService : IFeedService
 
         if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed>? cachedFeeds) && cachedFeeds != null)
         {
-            _logger.LogInformation($"Feed served from cache for {url}");
+            _logger.LogInformation("Feed served from cache for {Url}", url);
             return cachedFeeds;
         }
 
         var feeds = new List<RSSFeed>();
 
-        using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+        var httpClient = _httpClientFactory.CreateClient("Feed");
 
         const string DateFormat = "ddd, dd MMM yyyy HH:mm:ss zzz";
         CultureInfo Culture = CultureInfo.InvariantCulture;
 
         try
         {
-            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; ConsoleApp/1.0)");
-            using var response = httpClient.GetAsync(url).GetAwaiter().GetResult();
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; XPoster/1.0)");
+            using var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -113,9 +118,13 @@ public class FeedService : IFeedService
                     PublishDate = item.PublishDate!.Value
                 }));
         }
-        catch (Exception) { return Enumerable.Empty<RSSFeed>(); }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to fetch or parse RSS feed from {Url}", url);
+            return Enumerable.Empty<RSSFeed>();
+        }
 
         _cache.Set(cacheKey, feeds, TimeSpan.FromHours(24));
-        return await Task.FromResult(feeds);
+        return feeds;
     }
 }
