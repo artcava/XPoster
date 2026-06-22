@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Net;
+using System.Text;
 using XPoster.Models;
 using XPoster.Services;
 
@@ -8,34 +10,74 @@ namespace XPoster.Tests.Services;
 
 public class FeedServiceTests
 {
-    private readonly Mock<IMemoryCache> _mockCache;
-    private readonly IMemoryCache _memoryCache;
-    private readonly Mock<ILogger<FeedService>> _mockLogger;
-    private readonly FeedService _feedService;
-    private readonly FeedService _feedServiceWithMockedCache;
-    private readonly Mock<ICacheEntry> _mockCacheEntry;
+    private static readonly DateTimeOffset Now = new DateTimeOffset(2026, 6, 22, 10, 0, 0, TimeSpan.Zero);
+    private static readonly DateTimeOffset Start = Now.AddDays(-2);
+    private static readonly DateTimeOffset End = Now;
 
-    public FeedServiceTests()
+    private const string FeedUrl = "https://fake-feed.example.com/rss";
+    private static readonly string[] Keywords = ["bitcoin", "btc"];
+
+    // ---------------------------------------------------------------------------
+    // Helpers
+    // ---------------------------------------------------------------------------
+
+    private static string BuildRssXml(IEnumerable<(string title, DateTimeOffset pubDate)> items)
     {
-        _mockCache = new Mock<IMemoryCache>();
-        _memoryCache = new MemoryCache(new MemoryCacheOptions());
-        _mockLogger = new Mock<ILogger<FeedService>>();
-        _mockCacheEntry = new Mock<ICacheEntry>();
-        _feedService = new FeedService(_memoryCache, _mockLogger.Object);
-        _feedServiceWithMockedCache = new FeedService(_mockCache.Object, _mockLogger.Object);
+        var sb = new StringBuilder();
+        sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        sb.AppendLine("<rss version=\"2.0\"><channel>");
+        foreach (var (title, pubDate) in items)
+        {
+            sb.AppendLine("<item>");
+            sb.AppendLine($"  <title>{title}</title>");
+            sb.AppendLine($"  <link>https://example.com/{title.Replace(" ", "-")}</link>");
+            sb.AppendLine($"  <description>Description of {title}</description>");
+            sb.AppendLine($"  <pubDate>{pubDate:ddd, dd MMM yyyy HH:mm:ss} +0000</pubDate>");
+            sb.AppendLine("</item>");
+        }
+        sb.AppendLine("</channel></rss>");
+        return sb.ToString();
     }
+
+    private static IHttpClientFactory BuildFactory(HttpStatusCode statusCode, string? body = null)
+    {
+        var handler = new FakeHttpMessageHandler(statusCode, body ?? string.Empty);
+        var client = new HttpClient(handler);
+        var factory = new Mock<IHttpClientFactory>();
+        factory.Setup(f => f.CreateClient("Feed")).Returns(client);
+        return factory.Object;
+    }
+
+    private static FeedService BuildService(
+        IHttpClientFactory factory,
+        IMemoryCache? cache = null,
+        ILogger<FeedService>? logger = null)
+    {
+        cache ??= new MemoryCache(new MemoryCacheOptions());
+        logger ??= new Mock<ILogger<FeedService>>().Object;
+        return new FeedService(cache, logger, factory);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Cache hit
+    // ---------------------------------------------------------------------------
 
     [Fact]
     public async Task GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()
     {
-        // Arrange
-        var cachedFeeds = new List<RSSFeed> { new RSSFeed { Title = "Test Feed", Content = "the feed test content", Link = "http://test.org" } };
-        // CS8600: out param in TryGetValue is object? — cast via object is required by Moq API
+        var cachedFeeds = new List<RSSFeed>
+        {
+            new() { Title = "Test Feed", Content = "the feed test content", Link = "http://test.org", PublishDate = Now }
+        };
         object? outValue = cachedFeeds;
 
-        _mockCache.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out outValue!)).Returns(true);
+        var mockCache = new Mock<IMemoryCache>();
+        mockCache.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out outValue!)).Returns(true);
 
-        var result = await _feedServiceWithMockedCache.GetFeedsAsync("http://fakeurl.com", DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow, new[] { "bitcoin" });
+        var factory = BuildFactory(HttpStatusCode.OK);
+        var sut = BuildService(factory, mockCache.Object);
+
+        var result = await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords);
 
         Assert.NotNull(result);
         Assert.Single(result);
@@ -44,47 +86,140 @@ public class FeedServiceTests
         Assert.Equal("http://test.org", result.First().Link);
     }
 
-    [Fact]
-    public async Task GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()
-    {
-        // CS8600: null intentional — simulating cache miss
-        object? outValue = null;
-        _mockCache.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out outValue!)).Returns(false);
+    // ---------------------------------------------------------------------------
+    // Cache miss + successful HTTP fetch
+    // ---------------------------------------------------------------------------
 
-        var result = await _feedServiceWithMockedCache.GetFeedsAsync("http://invalidurl", DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow, new[] { "bitcoin" });
+    [Fact]
+    public async Task GetFeedsAsync_FetchesAndCachesFeeds_WhenCacheMissAndHttpSucceeds()
+    {
+        var rss = BuildRssXml(
+        [
+            ("Bitcoin hits new ATH",    Now.AddHours(-1)),
+            ("Ethereum upgrade today",  Now.AddHours(-2)),  // no keyword match — excluded
+            ("BTC dominance rises",     Now.AddDays(-1))
+        ]);
+
+        var realCache = new MemoryCache(new MemoryCacheOptions());
+        var factory = BuildFactory(HttpStatusCode.OK, rss);
+        var sut = BuildService(factory, realCache);
+
+        var result = (await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords)).ToList();
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, f => f.Title == "Bitcoin hits new ATH");
+        Assert.Contains(result, f => f.Title == "BTC dominance rises");
+
+        // Second call must be served from cache (handler would return empty on retry)
+        var cachedResult = (await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords)).ToList();
+        Assert.Equal(2, cachedResult.Count);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Cache miss + HTTP failure
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetFeedsAsync_ReturnsEmpty_WhenHttpFails()
+    {
+        object? outValue = null;
+        var mockCache = new Mock<IMemoryCache>();
+        mockCache.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out outValue!)).Returns(false);
+
+        var factory = BuildFactory(HttpStatusCode.ServiceUnavailable);
+        var sut = BuildService(factory, mockCache.Object);
+
+        var result = await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords);
 
         Assert.NotNull(result);
         Assert.Empty(result);
     }
 
-    [Fact]
-    public async Task GetFeedsAsync_FiltersByKeyword_AndDate()
-    {
-        var feeds = await _feedService.GetFeedsAsync("https://cointelegraph.com/rss/tag/bitcoin", DateTimeOffset.UtcNow.AddDays(-2), DateTimeOffset.UtcNow, new[] { "bitcoin", "btc" });
+    // ---------------------------------------------------------------------------
+    // Cache miss + invalid RSS
+    // ---------------------------------------------------------------------------
 
-        Assert.NotNull(feeds);
-        Assert.All(feeds, f => Assert.True(f.PublishDate >= DateTimeOffset.UtcNow.AddDays(-2) && f.PublishDate <= DateTimeOffset.UtcNow));
-        Assert.All(feeds, f => Assert.True(System.Text.RegularExpressions.Regex.IsMatch(f.Title ?? string.Empty, "(bitcoin|btc)", System.Text.RegularExpressions.RegexOptions.IgnoreCase)));
-    }
-
-    /// <summary>
-    /// Verifies that when the cache has no entry and the HTTP fetch fails (unreachable URL),
-    /// FeedService returns an empty result without throwing.
-    /// NOTE: This is a temporary workaround — the original test verified cache population
-    /// after a successful HTTP fetch, but FeedService uses new HttpClient() internally,
-    /// making it impossible to mock the HTTP layer. A proper HttpMessageHandler-based
-    /// test will replace this once IHttpClientFactory is injected (see #204).
-    /// </summary>
     [Fact]
-    public async Task GetFeedsAsync_ReturnsEmpty_WhenCacheMissAndFetchFails()
+    public async Task GetFeedsAsync_ReturnsEmpty_WhenFeedIsInvalidXml()
     {
         object? outValue = null;
-        _mockCache.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out outValue!)).Returns(false);
+        var mockCache = new Mock<IMemoryCache>();
+        mockCache.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out outValue!)).Returns(false);
 
-        // Use an unreachable URL to simulate fetch failure — no real network call intended.
-        var result = await _feedServiceWithMockedCache.GetFeedsAsync("http://localhost:0/invalid-feed", DateTimeOffset.UtcNow.AddDays(-2), DateTimeOffset.UtcNow, new[] { "bitcoin" });
+        var factory = BuildFactory(HttpStatusCode.OK, "<not-valid-rss>broken</not-valid-rss>");
+        var sut = BuildService(factory, mockCache.Object);
+
+        var result = await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords);
 
         Assert.NotNull(result);
         Assert.Empty(result);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Date and keyword filtering
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetFeedsAsync_FiltersOutItemsOutsideDateRange()
+    {
+        var rss = BuildRssXml(
+        [
+            ("Bitcoin news today",  Now.AddHours(-1)),          // in range
+            ("Old Bitcoin article", Now.AddDays(-10))           // out of range
+        ]);
+
+        var factory = BuildFactory(HttpStatusCode.OK, rss);
+        var sut = BuildService(factory);
+
+        var result = (await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords)).ToList();
+
+        Assert.Single(result);
+        Assert.Equal("Bitcoin news today", result.First().Title);
+    }
+
+    [Fact]
+    public async Task GetFeedsAsync_FiltersOutItemsWithNoKeywordMatch()
+    {
+        var rss = BuildRssXml(
+        [
+            ("Ethereum price update", Now.AddHours(-1)),   // no match
+            ("BTC on the rise",       Now.AddHours(-2))    // match
+        ]);
+
+        var factory = BuildFactory(HttpStatusCode.OK, rss);
+        var sut = BuildService(factory);
+
+        var result = (await sut.GetFeedsAsync(FeedUrl, Start, End, Keywords)).ToList();
+
+        Assert.Single(result);
+        Assert.Equal("BTC on the rise", result.First().Title);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Test infrastructure
+// ---------------------------------------------------------------------------
+
+internal sealed class FakeHttpMessageHandler : HttpMessageHandler
+{
+    private readonly HttpStatusCode _statusCode;
+    private readonly string _body;
+
+    public FakeHttpMessageHandler(HttpStatusCode statusCode, string body)
+    {
+        _statusCode = statusCode;
+        _body = body;
+    }
+
+    protected override Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken)
+    {
+        var response = new HttpResponseMessage(_statusCode)
+        {
+            Content = new StringContent(_body, Encoding.UTF8, "application/rss+xml")
+        };
+        return Task.FromResult(response);
     }
 }
