@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.1.5] - 2026-06-22
+
 ### Added
 - **Named HTTP client `"Feed"` with Polly resilience pipeline** ([#204](https://github.com/artcava/XPoster/issues/204)): `HttpClientExtensions.AddHttpClients()` now registers a `"Feed"` named client configured with a three-layer Polly pipeline — per-attempt timeout, exponential-backoff retry, and circuit breaker. All pipeline parameters (timeout, retry count, failure threshold, sampling window, break duration) are driven by `FeedOptions` app settings with safe defaults, making resilience behaviour configurable per environment without code changes.
 - **`FeedOptions` resilience properties** ([#204](https://github.com/artcava/XPoster/issues/204)): `AttemptTimeoutSeconds`, `RetryCount`, `CircuitBreakerFailureThreshold`, `CircuitBreakerSamplingDurationSeconds`, and `CircuitBreakerBreakDurationSeconds` added to `FeedOptions`; `FeedOptionsValidator` updated to enforce valid ranges for all five fields.
@@ -189,7 +193,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/artcava/XPoster/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/artcava/XPoster/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/artcava/XPoster/compare/v0.1.1...v0.1.2
