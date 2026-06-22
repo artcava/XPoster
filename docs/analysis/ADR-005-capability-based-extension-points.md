@@ -93,7 +93,11 @@ Concrete services implement only the interfaces matching their actual capabiliti
 
 #### Per-slot provider selection — keyed DI registration
 
-Per-slot AI provider selection is a core XPoster invariant: the slot at 06:00 can use OpenAI for LinkedIn while the slot at 08:00 uses AzureFoundry for X, from the same running instance. This is preserved by registering capability interfaces as **keyed services by `AiProvider`**, exactly as `IAiService` is registered today:
+Per-slot AI provider selection is a core XPoster invariant: the slot at 06:00 can use OpenAI for LinkedIn while the slot at 08:00 uses AzureFoundry for X, from the same running instance. This is preserved by registering capability interfaces as **keyed services by `AiProvider`**, exactly as `IAiService` is registered today.
+
+#### Rename `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek`
+
+The existing value `DeepSeekWithFal` encodes the old `HybridAiService` pairing in the enum name itself. In the new model an `AiProvider` value identifies the **text provider** for a slot; which image provider is used for that key is a consequence of the DI registration, not of the enum value name. The value is therefore renamed to `DeepSeek`. `FalAiImageService` is registered independently for the same key:
 
 ```csharp
 // Program.cs — AddXPosterAiProviders()
@@ -103,10 +107,10 @@ builder.Services.AddKeyedTransient<ITextToImageProvider, OpenAiService>(AiProvid
 builder.Services.AddKeyedTransient<ITextToTextProvider, AzureFoundryService>(AiProvider.AzureFoundry);
 builder.Services.AddKeyedTransient<ITextToImageProvider, AzureFoundryService>(AiProvider.AzureFoundry);
 
-builder.Services.AddKeyedTransient<ITextToTextProvider, DeepSeekService>(AiProvider.DeepSeekWithFal);
-builder.Services.AddKeyedTransient<ITextToImageProvider, FalAiImageService>(AiProvider.DeepSeekWithFal);
-// DeepSeekWithFal: text → DeepSeekService, image → FalAiImageService.
-// This is what HybridAiService did with code; now it is pure DI configuration.
+builder.Services.AddKeyedTransient<ITextToTextProvider, DeepSeekService>(AiProvider.DeepSeek);
+builder.Services.AddKeyedTransient<ITextToImageProvider, FalAiImageService>(AiProvider.DeepSeek);
+// DeepSeek key: text → DeepSeekService, image → FalAiImageService.
+// The image provider is a DI configuration choice, not encoded in the enum name.
 
 builder.Services.AddKeyedTransient<ITextToTextProvider, PerplexityService>(AiProvider.Perplexity);
 // Perplexity: text only. No ITextToImageProvider registration for this key.
@@ -127,7 +131,7 @@ var imageProvider = _serviceProvider.GetRequiredKeyedService<ITextToImageProvide
 
 #### Removal of `HybridAiService`
 
-`HybridAiService` is removed. The `DeepSeekWithFal` combination — text via `DeepSeekService`, image via `FalAiImageService` — is now expressed as keyed DI configuration. No new "hybrid" wrapper class is ever needed for future provider combinations.
+`HybridAiService` is removed. The `DeepSeek` combination — text via `DeepSeekService`, image via `FalAiImageService` — is now expressed as keyed DI configuration. No new "hybrid" wrapper class is ever needed for future provider combinations.
 
 ---
 
@@ -165,12 +169,13 @@ For Problem 2, the capability-interface model aligns with the direction already 
 
 | File | Change |
 |---|---|
+| `src/Contracts/AiProvider.cs` | Rename `DeepSeekWithFal` → `DeepSeek` |
 | `src/Contracts/Enums.cs` | Add `SenderPlatform`; remove `MessageSender` |
 | `src/Abstraction/ScheduledOrchestrationProfile.cs` | Replace `MessageSender` with `SenderPlatform` |
 | `src/Contracts/IOrchestrator.cs` | Add `SupportedPlatforms` property |
 | `src/Abstraction/BaseOrchestrator.cs` | Implement `SupportedPlatforms` |
 | `src/Orchestrators/OrchestratorFactory.cs` | `SenderPlatform` switch; keyed capability resolution; remove `IAiServiceFactory` |
-| `src/Orchestrators/DefaultSlotProfileProvider.cs` | Use `SenderPlatform` in all profiles |
+| `src/Orchestrators/DefaultSlotProfileProvider.cs` | Use `SenderPlatform` in all profiles; replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek` |
 | `src/Orchestrators/DryRunSlotProfileProvider.cs` | Use `SenderPlatform.DryRun` |
 | `src/Orchestrators/FeedOrchestrator.cs` | Replace `IAiService` with `ITextToTextProvider` + `ITextToImageProvider`; implement `SupportedPlatforms` |
 | `src/Orchestrators/PowerLawOrchestrator.cs` | Implement `SupportedPlatforms` |
@@ -180,7 +185,7 @@ For Problem 2, the capability-interface model aligns with the direction already 
 | `src/Services/Ai/DeepSeekService.cs` | Implement `ITextToTextProvider` only; remove `IAiService` |
 | `src/Services/Ai/PerplexityService.cs` | Implement `ITextToTextProvider` only; remove `IAiService` and `GenerateImageAsync` |
 | `src/Services/Ai/FalAiImageService.cs` | Implement `ITextToImageProvider` only; remove `IAiService` |
-| `src/Program.cs` | Replace keyed `IAiService` registrations with `AddXPosterAiProviders()` |
+| `src/Program.cs` | Replace keyed `IAiService` registrations with `AddXPosterAiProviders()`; use `AiProvider.DeepSeek` |
 
 ### Files to remove
 
@@ -200,8 +205,9 @@ For Problem 2, the capability-interface model aligns with the direction already 
 | `tests/Orchestrators/OrchestratorFactoryTests.cs` | Rewrite for `SenderPlatform` switch and keyed capability resolution |
 | `tests/Orchestrators/FeedOrchestratorTests.cs` | Replace `IAiService` mock with `ITextToTextProvider` + `ITextToImageProvider` mocks |
 | `tests/Services/PerplexityServiceTests.cs` | Remove `GenerateImageAsync` tests; add `ITextToTextProvider` contract tests |
-| `tests/Services/DeepSeekServiceTests.cs` | Rename `GenerateImageAsync_ExceptionMessage_MentionsHybridAiService` → `GenerateImageAsync_AlwaysThrows_NotSupportedException` |
-| NEW `tests/Integration/DiWiringTests.cs` | Verify keyed resolution per `AiProvider`; verify `Perplexity` has no `ITextToImageProvider` registration |
+| `tests/Services/DeepSeekServiceTests.cs` | Rename `GenerateImageAsync_ExceptionMessage_MentionsHybridAiService` → `GenerateImageAsync_AlwaysThrows_NotSupportedException`; replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek` |
+| `tests/Contracts/AiProviderExtensionsTests.cs` | Replace `AiProvider.DeepSeekWithFal` → `AiProvider.DeepSeek` in all `InlineData` |
+| NEW `tests/Integration/DiWiringTests.cs` | Verify keyed resolution per `AiProvider`; verify `Perplexity` has no `ITextToImageProvider` registration; use `AiProvider.DeepSeek` |
 
 ---
 
@@ -214,9 +220,11 @@ For Problem 2, the capability-interface model aligns with the direction already 
 - Future modalities (text-to-video, text-to-audio) are a new interface + keyed registration — zero changes to existing code.
 - `HybridAiService` is eliminated, removing an internal branch that is currently a maintenance burden.
 - `PerplexityService` silent failure (`GenerateImageAsync` returning `byte[0]`) is eliminated — misconfiguration fails explicitly at startup.
+- `AiProvider` enum values now name only the text provider, removing the implicit coupling to a fixed image provider encoded in the name (`DeepSeekWithFal` → `DeepSeek`).
 
 **Negative / Trade-offs:**
 - Requires a breaking refactor of `OrchestratorFactory`, `AiServiceFactory`, `HybridAiService`, and all AI service classes.
+- `AiProvider.DeepSeekWithFal` is a breaking rename — any configuration file or app setting referencing this value must be updated to `DeepSeek`.
 - `Program.cs` DI registration becomes more verbose; `AddXPosterAiProviders()` helper extension method keeps it readable.
 - Existing tests for `OrchestratorFactory` and `AiServiceFactory` must be rewritten.
-- Per-slot provider selection is global to the key (all slots using `AiProvider.AzureFoundry` share the same `AzureFoundryService` instance per request lifetime); mixing text and image from different providers within the same `AiProvider` key is not supported — a new `AiProvider` enum value is required for such combinations (e.g. `DeepSeekWithFal` today).
+- Per-slot provider selection is global to the key (all slots using `AiProvider.DeepSeek` share the same `DeepSeekService` + `FalAiImageService` pair per request lifetime); mixing text and image from different providers within the same `AiProvider` key requires a new enum value.
