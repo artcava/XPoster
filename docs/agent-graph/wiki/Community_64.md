@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **TestOrchestrator()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **AiServiceHelperImageTests.cs** (35 connections)
+- **HttpClient()** (2 connections)
+- **JsonResponse()** (2 connections)
+- **var()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
 
 ## Relationships
 
-- [[Community 49]] (6 shared connections)
+- [[Community 2]] (29 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 45 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **AiServiceFactoryTests.cs** (7 connections)
-- **AiServiceFactoryTests.cs** (7 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **GetByProvider_Should_ThrowArgumentException_When_ProviderIsNotMapped()** (2 connections)
-- **AiServiceFactoryTests()** (2 connections)
-- **GetByProvider_Should_ThrowInvalidOperationException_When_MappedServiceCannotBeResolved()** (2 connections)
-- **GetByProvider_Should_ReturnService_When_ProviderIsMappedAndResolvable()** (2 connections)
-- **GetByProvider_Should_ReturnAzureFoundryService_When_ProviderIsMappedAndResolvable()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

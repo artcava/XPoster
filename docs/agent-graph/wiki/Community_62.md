@@ -5,15 +5,15 @@
 ## Key Concepts
 
 - **PerplexityService.cs** (13 connections)
-- **BuildImagePromptPayload()** (2 connections)
 - **PerplexityService()** (2 connections)
-- **var()** (2 connections)
 - **BuildSummaryPayload()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **var()** (2 connections)
 - **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (7 shared connections)
+- [[Community 42]] (7 shared connections)
 
 ## Audit Trail
 

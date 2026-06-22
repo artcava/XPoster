@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **GenerateImageAsync()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **if()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (6 shared connections)
+- [[Community 69]] (6 shared connections)
 
 ## Audit Trail
 

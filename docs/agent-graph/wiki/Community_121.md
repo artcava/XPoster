@@ -1,20 +1,20 @@
 # Community 121
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XPoster.Credentials** (2 connections)
-- **XCredentials.cs** (2 connections)
-- **XCredentials.cs** (2 connections)
+- **InSender.cs** (11 connections)
+- **InSender()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 35]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

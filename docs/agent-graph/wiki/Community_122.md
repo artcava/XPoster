@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
 - **Validate()** (2 connections)
 - **XPoster.Models** (2 connections)
 

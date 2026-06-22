@@ -1,29 +1,30 @@
 # Community 18
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **FalImageJson()** (2 connections)
-- **BuildService()** (2 connections)
-- **FalAiImageServiceTests** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_DefaultOptions_Succeeds()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
 
 ## Relationships
 
-- [[Community 22]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 44 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

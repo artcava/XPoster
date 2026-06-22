@@ -1,28 +1,28 @@
 # Community 23
 
-> 11 nodes · cohesion 0.35
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **new()** (2 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
+- **HybridAiServiceTests.cs** (16 connections)
+- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
+- **HybridAiServiceTests** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
+- **BuildHybrid()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
+- **FalAiImageService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 66]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,31 +1,34 @@
 # Community 10
 
-> 14 nodes · cohesion 0.27
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **AzureFoundryServiceTests.cs** (35 connections)
+- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
+- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
+- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
+- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **if()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 8]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 67 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

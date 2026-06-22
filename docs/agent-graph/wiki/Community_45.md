@@ -1,25 +1,25 @@
 # Community 45
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **GetSummaryAsync()** (2 connections)
-- **nameof()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **Message** (2 connections)
+- **ImageData** (2 connections)
+- **Choice** (2 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **OpenAIResponse** (2 connections)
 
 ## Relationships
 
-- [[Community 62]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

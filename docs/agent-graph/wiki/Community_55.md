@@ -1,24 +1,24 @@
 # Community 55
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,23 @@
 # Community 28
 
-> 10 nodes · cohesion 0.38
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **XSenderTests.cs** (9 connections)
-- **XSenderTests.cs** (9 connections)
-- **XSenderTests()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **XSender_ImplementsISender()** (2 connections)
+- **OrchestratorFactoryTests.cs** (16 connections)
+- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **Resolve_Should_ResolveInSender_WhenProfileUsesInSummaryFeed()** (2 connections)
+- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRunSend()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesXSummaryFeed()** (2 connections)
+- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (7 shared connections)
 
 ## Audit Trail
 

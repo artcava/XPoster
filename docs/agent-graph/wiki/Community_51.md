@@ -1,24 +1,24 @@
 # Community 51
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiService** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
 - **GetSummaryAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **if()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 63]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

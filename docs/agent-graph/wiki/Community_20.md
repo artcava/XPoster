@@ -1,20 +1,21 @@
 # Community 20
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **ConfigurationFeedUrlProviderTests** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
-- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
-- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
-- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
-- **ConfigurationFeedUrlProvider()** (2 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **PostWithoutImage()** (2 connections)
+- **BuildSender()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **new()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
@@ -22,7 +23,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

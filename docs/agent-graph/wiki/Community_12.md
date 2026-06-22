@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **FeedOrchestratorTests.cs** (13 connections)
-- **FeedOrchestratorTests.cs** (13 connections)
-- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
-- **new()** (2 connections)
-- **FeedOrchestratorTests()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsNull()** (2 connections)
-- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_AiServiceIsNull()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
+- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
 
 ## Relationships
 

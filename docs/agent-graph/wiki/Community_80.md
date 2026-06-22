@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiServiceFactory.cs** (4 connections)
-- **IAiServiceFactory.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetByProvider()** (2 connections)
-- **IAiServiceFactory** (2 connections)
+- **GetFeedUrls()** (2 connections)
+- **IFeedUrlProvider** (2 connections)
 
 ## Relationships
 
