@@ -36,6 +36,9 @@ public static class HttpClientExtensions
         // FalAi image generation is slower: wider timeouts to match.
         services.AddResilientHttpClient("FalAi",        attemptTimeoutSeconds: 60,  totalRequestTimeoutSeconds: 300, samplingDurationSeconds: 130);
 
+        // Feed RSS client: moderate timeouts aligned with feed provider expectations.
+        services.AddResilientHttpClient("Feed",         attemptTimeoutSeconds: 15,  totalRequestTimeoutSeconds: 60,  samplingDurationSeconds: 35);
+
         return services;
     }
 
