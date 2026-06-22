@@ -1,23 +1,23 @@
 # Community 64
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **OrchestratorFactory.cs** (9 connections)
+- **foreach()** (2 connections)
+- **return()** (2 connections)
+- **ResolveAiProvider()** (2 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 106]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

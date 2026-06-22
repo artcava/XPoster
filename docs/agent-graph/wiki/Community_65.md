@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **Uri()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **if()** (2 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
 
 ## Relationships
 

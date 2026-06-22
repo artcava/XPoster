@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **DeepSeekService.cs** (12 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 62]] (6 shared connections)
+- [[Community 67]] (6 shared connections)
 
 ## Audit Trail
 

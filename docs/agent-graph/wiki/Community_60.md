@@ -1,23 +1,23 @@
 # Community 60
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **var()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **PerplexityService()** (2 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 42]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

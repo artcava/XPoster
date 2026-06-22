@@ -1,24 +1,24 @@
 # Community 51
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
-- **IAiService** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 69]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

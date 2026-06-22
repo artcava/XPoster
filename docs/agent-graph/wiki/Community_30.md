@@ -1,26 +1,26 @@
 # Community 30
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **InSender.cs** (11 connections)
+- **SendAsync()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **catch()** (2 connections)
+- **Exception()** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 130]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

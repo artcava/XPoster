@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (35 connections)
-- **JsonResponse()** (2 connections)
-- **HttpClient()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **var()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **InSenderTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 2]] (29 shared connections)
+- [[Community 51]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -5,12 +5,12 @@
 ## Key Concepts
 
 - **OrchestratorFactoryTests.cs** (16 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **CreateFactory()** (2 connections)
 - **OrchestratorFactoryTests()** (2 connections)
 - **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
 - **SetupMocksForOrchestratorFactory()** (2 connections)
+- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
 
 ## Relationships
 
