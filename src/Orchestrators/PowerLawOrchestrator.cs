@@ -75,7 +75,7 @@ namespace XPoster.Orchestrators
                 return post;
             }
 
-            post.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}% {Post.Firm}";
+            post.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}%";
             return post;
         }
     }

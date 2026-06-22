@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **XSender.cs** (6 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 125]] (3 shared connections)
+- [[Community 116]] (3 shared connections)
 
 ## Audit Trail
 

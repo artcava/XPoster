@@ -10,17 +10,96 @@ XPoster is designed around three extension points: **Senders** (platform plugins
 
 A sender is a class that implements `ISender` and knows how to publish a `Post` to a specific social network. It owns all platform-specific concerns: authentication, payload serialisation, rate-limit handling, and error mapping.
 
-### Step 1 — Implement ISender
+Sender credentials are loaded from Azure Key Vault at application startup via the Key Vault Configuration Provider and injected through `IOptions<TCredentials>` — no Key Vault calls occur at publish time.
+
+### Step 1 — Define the Credentials class
+
+Create a plain credentials DTO and its validator in `src/Credentials/`:
+
+```csharp
+// src/Credentials/TikTokCredentials.cs
+namespace XPoster.Credentials;
+
+public class TikTokCredentials
+{
+    public const string SectionName = "TikTokCredentials";
+
+    public string TikTokAccessToken { get; init; } = string.Empty;
+    public string TikTokClientKey   { get; init; } = string.Empty;
+}
+```
+
+```csharp
+// src/Credentials/TikTokCredentialsValidator.cs
+using Microsoft.Extensions.Options;
+
+namespace XPoster.Credentials;
+
+public class TikTokCredentialsValidator : IValidateOptions<TikTokCredentials>
+{
+    public ValidateOptionsResult Validate(string? name, TikTokCredentials options)
+    {
+        if (string.IsNullOrWhiteSpace(options.TikTokAccessToken))
+            return ValidateOptionsResult.Fail("TikTokCredentials:TikTokAccessToken is required.");
+        if (string.IsNullOrWhiteSpace(options.TikTokClientKey))
+            return ValidateOptionsResult.Fail("TikTokCredentials:TikTokClientKey is required.");
+        return ValidateOptionsResult.Success;
+    }
+}
+```
+
+```csharp
+// src/Credentials/TikTokCredentialsExtensions.cs
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+namespace XPoster.Credentials;
+
+public static class TikTokCredentialsExtensions
+{
+    public static IServiceCollection AddTikTokCredentials(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<TikTokCredentials>(configuration.GetSection(TikTokCredentials.SectionName));
+        services.AddSingleton<IValidateOptions<TikTokCredentials>, TikTokCredentialsValidator>();
+        return services;
+    }
+}
+```
+
+> The Key Vault Configuration Provider maps secret names to `IConfiguration` keys using the Azure SDK default convention: a secret named `TikTokCredentialsTikTokAccessToken` is available as `TikTokCredentials:TikTokAccessToken`. `SectionName` is the prefix that ties secret names to the credentials DTO. This mirrors the convention used by `XCredentials`, `LinkedInCredentials`, and `IgCredentials`.
+
+### Step 2 — Implement ISender
 
 ```csharp
 // src/SenderPlugins/TikTokSender.cs
+using Microsoft.Extensions.Options;
+using XPoster.Credentials;
+
 public class TikTokSender : ISender
 {
+    private readonly TikTokCredentials _credentials;
+    private readonly ILogger<TikTokSender> _logger;
+
+    public TikTokSender(IOptions<TikTokCredentials> credentials, ILogger<TikTokSender> logger)
+    {
+        _credentials = credentials.Value;
+        _logger = logger;
+    }
+
     public int MessageMaxLength => 150;
 
     public async Task<bool> SendAsync(Post post)
     {
-        // Call TikTok API here.
+        if (post is null)
+        {
+            _logger.LogWarning("[TikTokSender] Received null post — skipping.");
+            return false;
+        }
+
+        // Use _credentials.TikTokAccessToken and _credentials.TikTokClientKey here.
         // Return false (do not throw) on non-fatal platform errors.
         return true;
     }
@@ -29,14 +108,35 @@ public class TikTokSender : ISender
 
 > `MessageMaxLength` must reflect the platform's actual character limit. Orchestrators use this value to truncate content before calling `SendAsync`.
 
-### Step 2 — Register in DI
+### Step 3 — Register in DI
 
 ```csharp
 // src/Program.cs
+builder.Services.AddTikTokCredentials(builder.Configuration); // binds IOptions + startup validation
 builder.Services.AddTransient<TikTokSender>();
 ```
 
-### Step 3 — Add Enum Value
+> Call only the extension method — never raw `Configure<T>(configuration.GetSection("..."))` literals for sender credentials in `Program.cs`.
+
+### Step 4 — Add the secrets to Key Vault
+
+Add one secret per credentials property, using the `{SectionName}{PropertyName}` naming convention:
+
+```bash
+az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentialsTikTokAccessToken --value "<value>"
+az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentialsTikTokClientKey   --value "<value>"
+```
+
+For local development only, set them in `src/local.settings.json` using the double-underscore separator:
+
+```json
+"TikTokCredentials__TikTokAccessToken": "<local-dev-value>",
+"TikTokCredentials__TikTokClientKey":   "<local-dev-value>"
+```
+
+> Do not add social-platform credentials to `src/local.settings.json.example`. Use Key Vault for all non-local environments.
+
+### Step 5 — Add Enum Value
 
 ```csharp
 // src/Contracts/Enums.cs
@@ -48,7 +148,7 @@ public enum MessageSender
 }
 ```
 
-### Step 4 — Wire in OrchestratorFactory
+### Step 6 — Wire in OrchestratorFactory
 
 `OrchestratorFactory.Resolve()` resolves the concrete sender through a **switch expression** that maps each `MessageSender` enum value to a specific class retrieved from the DI container. The result is cast to `ISender` because `GetService` returns `object?`; the factory then passes the interface reference to `CreateOrchestratorInstance`, keeping orchestrators fully decoupled from sender implementations.
 
@@ -67,7 +167,7 @@ ISender? sender = profile.SenderType switch
 
 > Both `TikTokSummaryFeed` and `TikTokPowerLaw` resolve to the same `TikTokSender` class. The two enum values express *what is being posted* (content strategy + platform), not *how* — `TikTokSender` owns the how. This mirrors the existing pattern for `XSender` and `InSender`.
 
-### Step 5 — Add a ScheduledOrchestrationProfile entry
+### Step 7 — Add a ScheduledOrchestrationProfile entry
 
 The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`), which implements `ISlotProfileProvider`. Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
 
@@ -249,44 +349,16 @@ Key rules for this file:
 
 ---
 
-## Adding a New Service (Data Source)
-
-For new external data integrations (e.g., a news API, a stock ticker, a weather feed), define an interface in `src/Contracts/` and implement it in `src/Services/`. Inject the new service into the orchestrator that needs it — `CreateOrchestratorInstance` will resolve it automatically.
-
-```csharp
-// src/Contracts/INewsService.cs
-public interface INewsService
-{
-    Task<IEnumerable<string>> GetHeadlinesAsync(int count);
-}
-
-// src/Services/NewsService.cs
-public class NewsService : INewsService
-{
-    public async Task<IEnumerable<string>> GetHeadlinesAsync(int count)
-    {
-        // Call a news API
-    }
-}
-```
-
-Register in `Program.cs`:
-
-```csharp
-builder.Services.AddTransient<INewsService, NewsService>();
-```
-
----
-
 ## Design Constraints
 
 All extensions must respect the following invariants to integrate correctly with the pipeline:
 
-- **Senders must be stateless.** Do not cache authentication tokens in instance fields; use the DI-injected configuration or a token-provider service. The DI container manages lifetime.
+- **Senders must be stateless.** Do not cache authentication tokens in instance fields; inject them via `IOptions<TCredentials>` (bound at startup from Key Vault via the Configuration Provider). The DI container manages lifetime.
 - **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
 - **`MessageMaxLength` must be accurate.** Orchestrators rely on this value to truncate content before calling `SendAsync`. An incorrect value causes silent data loss at the platform layer.
 - **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
-- **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, retry policies, and timeout configuration are applied consistently.
+- **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
+- **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

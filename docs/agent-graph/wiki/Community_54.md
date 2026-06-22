@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 46]] (7 shared connections)
+- [[Community 59]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

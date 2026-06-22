@@ -99,6 +99,12 @@ All branches must follow this pattern:
 - Use `src/local.settings.json.example` as the starting template. It contains no real values.
 - Never add API keys, tokens, or passwords to any file tracked by Git.
 
+### How secrets are loaded at runtime
+
+XPoster uses the **Azure Key Vault Configuration Provider** to load secrets at application startup. Secrets stored in Key Vault are mapped automatically to `IConfiguration` keys using the Azure SDK naming convention (e.g., a secret named `XApiKey` becomes `X:ApiKey` in configuration). Each sender and AI provider reads its credentials through `IOptions<TCredentials>`, bound at startup from `IConfiguration` — no runtime Key Vault calls occur during publish.
+
+For non-local environments (staging, production) all secrets must be stored in Azure Key Vault. See [docs/configuration.md](docs/configuration.md) for the full variable reference and Key Vault secret naming conventions.
+
 ### Setting up local credentials
 
 ```bash
@@ -109,24 +115,26 @@ cp src/local.settings.json.example src/local.settings.json
 code src/local.settings.json
 ```
 
-See [docs/configuration.md](docs/configuration.md) for the full variable reference.
+For local development the Key Vault Configuration Provider is bypassed and credentials are read directly from `src/local.settings.json`. Use the double-underscore separator to match the `IOptions<T>` binding (e.g., `X__ApiKey` maps to `X:ApiKey`).
+
+> Do not add real credentials to `src/local.settings.json.example`. The example file is tracked by Git and must contain only placeholder values.
 
 ### Alternative: dotnet user-secrets
 
-For .NET projects that use the `Microsoft.Extensions.Configuration` secrets manager:
+For local development you can also use the .NET user-secrets manager instead of `local.settings.json`. Secrets are stored outside the repository folder and are never committed.
 
 ```bash
 # Initialise user-secrets for the project
 dotnet user-secrets init --project src/
 
-# Set a secret
-dotnet user-secrets set "X_API_KEY" "your_value" --project src/
+# Set a secret (use double-underscore to match IOptions<T> section binding)
+dotnet user-secrets set "X__ApiKey" "your_value" --project src/
 
 # List stored secrets
 dotnet user-secrets list --project src/
 ```
 
-User-secrets are stored outside the repository folder and are never committed.
+> `dotnet user-secrets` is for **local development only**. It is not available in Azure Functions hosted environments — use Key Vault for all non-local deployments.
 
 ### If you accidentally commit a secret
 
@@ -220,7 +228,8 @@ When adding new files, place them in the folder that matches their responsibilit
 | `src/Abstraction/` | `XPoster.Abstraction` | Abstract base classes, shared profile records (`BaseOrchestrator`, `ScheduledOrchestrationProfile`) |
 | `src/Orchestrators/` | `XPoster.Orchestrators` | Concrete orchestrators, `OrchestratorFactory`, `AiServiceFactory`, slot profile providers |
 | `src/Models/` | `XPoster.Models` | Domain models, provider options and validators (use provider subfolders: `AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) |
-| `src/Services/` | `XPoster.Services` | Infrastructure services (`FeedService`, `CryptoService`, `KeyVaultService`, `TimeProvider`…) |
+| `src/Credentials/` | `XPoster.Credentials` | Sender credentials DTOs, validators, and extension methods (`XCredentials`, `LinkedInCredentials`, `IgCredentials`…) |
+| `src/Services/` | `XPoster.Services` | Infrastructure services (`FeedService`, `CryptoService`, `TimeProvider`…) |
 | `src/Services/Ai/` | `XPoster.Services` | AI model integration services (`OpenAiService`, `AzureFoundryService`, `HybridAiService`…) |
 | `src/SenderPlugins/` | `XPoster.SenderPlugins` | Platform-specific sender implementations (`ISender`) |
 | `src/Extensions/` | `XPoster.Extensions` | Cross-cutting extension methods (e.g. `HttpClientExtensions`) |

@@ -1,23 +1,23 @@
 # Community 65
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **var()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **DeepSeekService()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **Uri()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 50]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

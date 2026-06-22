@@ -1,21 +1,20 @@
 # Community 114
 
-> 4 nodes · cohesion 0.83
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **Program.cs** (3 connections)
-- **Program.cs** (3 connections)
-- **if()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 135]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

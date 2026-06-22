@@ -1,20 +1,19 @@
 # Community 59
 
-> 7 nodes · cohesion 0.52
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
+- **BaseOrchestratorTests.cs** (12 connections)
+- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **TestOrchestrator()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 54]] (6 shared connections)
 
 ## Audit Trail
 

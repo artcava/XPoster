@@ -1,25 +1,25 @@
 # Community 45
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FeedServiceTests.cs** (7 connections)
-- **FeedServiceTests.cs** (7 connections)
-- **GetFeedsAsync_SetsCache_WhenFeedsFetched()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
-- **GetFeedsAsync_FiltersByKeyword_AndDate()** (2 connections)
-- **FeedServiceTests()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenInvalidFeed()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

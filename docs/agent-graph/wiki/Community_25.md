@@ -6,15 +6,15 @@
 
 - **InSenderResilienceTests.cs** (10 connections)
 - **InSenderResilienceTests.cs** (10 connections)
+- **ValidPost()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **BuildSender()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
 - **InSender()** (2 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
 - **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
 - **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **ValidPost()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
 
 ## Relationships
 

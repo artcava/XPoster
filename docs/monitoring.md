@@ -88,6 +88,7 @@ No explicit `HostBuilder` or `.Build().Run()` wiring is required — `FunctionsA
 | **AI Token Usage** | Tokens consumed per run (custom dimension `tokenCount`) | > monthly budget |
 | **Failure Count** | Invocations ending in exception | > 3 in 1 hour |
 | **Sender Failures** | `SendAsync` errors broken down by sender plugin | Any spike |
+| **Feed Fetch Failures** | `FeedService` HTTP errors and circuit breaker open events | > 3 in 1 hour |
 
 ---
 
@@ -135,11 +136,106 @@ traces
 | order by failures desc
 ```
 
+### Feed fetch retries (last 24 hours)
+
+```kql
+traces
+| where timestamp > ago(24h)
+| where message contains "[FeedService] Retry"
+| extend feedUrl = tostring(customDimensions.feedUrl)
+| summarize retries = count() by feedUrl, bin(timestamp, 1h)
+| order by retries desc
+```
+
+### Feed circuit breaker open events
+
+```kql
+traces
+| where timestamp > ago(7d)
+| where message contains "[FeedService] Circuit breaker opened"
+| extend feedUrl = tostring(customDimensions.feedUrl)
+| summarize opens = count() by feedUrl, bin(timestamp, 1d)
+| order by opens desc
+```
+
 > 💡 To pin any query result to an Azure Dashboard, run it in the **Logs** blade and click the **Pin to dashboard** icon (📌) in the top-right corner of the results panel.
 
 ---
 
-## 6. Setting Up Alerts
+## 6. Feed HTTP Client Resilience Observability
+
+`FeedService` fetches RSS/Atom feeds via the named HTTP client `"Feed"`, protected by a Polly resilience pipeline (attempt timeout → retry → circuit breaker). Each pipeline event emits a structured `ILogger` trace that flows to Application Insights as a `traces` record with `customDimensions`.
+
+### Structured log events
+
+| Event | Severity | Message pattern | Key `customDimensions` |
+|---|---|---|---|
+| Retry attempt | Warning | `[FeedService] Retry {attempt}/{max} for {feedUrl} after {delay}ms — {reason}` | `feedUrl`, `attempt`, `max`, `delayMs`, `reason` |
+| Circuit breaker opened | Error | `[FeedService] Circuit breaker opened for {feedUrl}. Break duration: {breakSeconds}s` | `feedUrl`, `breakSeconds` |
+| Circuit breaker reset | Information | `[FeedService] Circuit breaker reset for {feedUrl}` | `feedUrl` |
+| Attempt timeout | Warning | `[FeedService] Attempt timeout ({timeoutSeconds}s) reached for {feedUrl}` | `feedUrl`, `timeoutSeconds` |
+| Feed fetch failed (all retries exhausted) | Error | `[FeedService] Failed to fetch feed {feedUrl} after {attempts} attempt(s): {exceptionMessage}` | `feedUrl`, `attempts`, `exceptionMessage` |
+
+> These events are emitted by `FeedService` via the standard `ILogger<FeedService>` instance injected at construction. No additional telemetry client configuration is required beyond the Application Insights SDK wiring in `Program.cs`.
+
+### Diagnosing a feed outage
+
+When a feed starts failing, the sequence of log events is:
+
+1. One or more **Retry attempt** (Warning) — the pipeline is retrying with exponential back-off.
+2. If all retries are exhausted: **Feed fetch failed** (Error) for that execution slot.
+3. After the failure ratio threshold is reached across the sampling window: **Circuit breaker opened** (Error) — subsequent executions skip the HTTP call entirely until the break duration elapses.
+4. Once the break elapses, a single probe request is allowed. On success: **Circuit breaker reset** (Information).
+
+The KQL queries in §5 (**Feed fetch retries** and **Feed circuit breaker open events**) surface this sequence directly in Application Insights Logs.
+
+### Alert rule: feed circuit breaker opened
+
+Add this alert alongside the existing rules in §6 to be notified when a feed circuit breaker opens:
+
+| Alert | KQL Signal | Threshold | Severity |
+|---|---|---|---|
+| Feed circuit breaker opened | `traces \| where message contains "[FeedService] Circuit breaker opened"` | ≥ 1 in 1 h | Sev 2 – Warning |
+
+**Bicep snippet:**
+
+```bicep
+resource feedCircuitBreakerAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-15' = {
+  name: 'XPoster-FeedCircuitBreakerOpened'
+  location: resourceGroup().location
+  properties: {
+    description: 'Fires when the FeedService circuit breaker opens for any feed URL'
+    severity: 2
+    enabled: true
+    scopes: [ appInsights.id ]
+    evaluationFrequency: 'PT5M'
+    windowSize: 'PT1H'
+    criteria: {
+      allOf: [
+        {
+          query: 'traces | where message contains "[FeedService] Circuit breaker opened" | summarize opens = count()'
+          timeAggregation: 'Count'
+          operator: 'GreaterThanOrEqual'
+          threshold: 1
+          failingPeriods: {
+            numberOfEvaluationPeriods: 1
+            minFailingPeriodsToAlert: 1
+          }
+        }
+      ]
+    }
+    actions: {
+      actionGroups: [ actionGroup.id ]
+    }
+  }
+}
+```
+
+> The resilience parameters that control when these events fire (retry count, circuit breaker thresholds, timeout) are configurable via `FeedOptions` app settings. See [configuration.md — Feed HTTP Client](configuration.md#feed-http-client) for the full reference.
+
+---
+
+## 7. Setting Up Alerts
 
 ### Step-by-Step: Create an Alert via Azure Portal
 
@@ -170,6 +266,7 @@ The following example creates an alert for **more than 3 consecutive errors with
 | Token budget exceeded | `dependencies \| where target contains "openai" \| extend t = toint(customDimensions.tokenCount) \| summarize sum(t)` | > monthly budget | Sev 2 – Warning |
 | High latency | `requests \| where name == "XPosterFunction" \| summarize avg(duration)` | > 60 000 ms | Sev 3 – Informational |
 | Function downtime | Built-in **Availability** test on the Function App URL | < 100% | Sev 1 – Error |
+| Feed circuit breaker opened | `traces \| where message contains "[FeedService] Circuit breaker opened"` | ≥ 1 in 1 h | Sev 2 – Warning |
 
 ### IaC: Bicep Snippet
 
@@ -207,7 +304,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 
 ---
 
-## 7. Live Debugging
+## 8. Live Debugging
 
 ### Live Metrics (Azure Portal)
 

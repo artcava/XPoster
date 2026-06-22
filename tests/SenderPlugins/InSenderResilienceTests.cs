@@ -1,8 +1,9 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
-using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 using XPoster.Tests.Helpers;
@@ -19,12 +20,13 @@ public class InSenderResilienceTests
 
     private InSender BuildSender(IHttpClientFactory factory)
     {
-        var kv = new Mock<IKeyVaultService>();
-        kv.Setup(s => s.GetSecretAsync("LinkedInAccessToken")).ReturnsAsync("fake_token");
-        kv.Setup(s => s.GetSecretAsync("LinkedInOwnerCode")).ReturnsAsync("12345");
-        kv.Setup(s => s.GetSecretAsync("LinkedInOrgId"))
-            .ThrowsAsync(new Azure.RequestFailedException("not found"));
-        return new InSender(factory, kv.Object, _loggerMock.Object);
+        var creds = Options.Create(new LinkedInCredentials
+        {
+            LinkedInAccessToken = "fake_token",
+            LinkedInOwnerCode = "12345",
+            LinkedInOrgId = string.Empty
+        });
+        return new InSender(factory, creds, _loggerMock.Object);
     }
 
     private static Post ValidPost() => new() { Content = "A valid LinkedIn post" };
@@ -39,9 +41,7 @@ public class InSenderResilienceTests
             (HttpStatusCode.TooManyRequests, "{}"),
             (HttpStatusCode.OK, successBody));
 
-        var sender = BuildSender(factory);
-        var result = await sender.SendAsync(ValidPost());
-        Assert.False(result);
+        Assert.False(await BuildSender(factory).SendAsync(ValidPost()));
     }
 
     [Fact]
@@ -51,8 +51,7 @@ public class InSenderResilienceTests
             "LinkedIn",
             (HttpStatusCode.ServiceUnavailable, "{\"message\":\"Service Unavailable\"}"));
 
-        var sender = BuildSender(factory);
-        var result = await sender.SendAsync(ValidPost());
+        var result = await BuildSender(factory).SendAsync(ValidPost());
 
         Assert.False(result);
         _loggerMock.Verify(
@@ -76,14 +75,10 @@ public class InSenderResilienceTests
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new HttpRequestException("Connection refused"));
 
-        var client = new HttpClient(handlerMock.Object);
         var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("LinkedIn")).Returns(client);
+        factoryMock.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient(handlerMock.Object));
 
-        var sender = BuildSender(factoryMock.Object);
-        var result = await sender.SendAsync(ValidPost());
-
-        Assert.False(result);
+        Assert.False(await BuildSender(factoryMock.Object).SendAsync(ValidPost()));
     }
 
     [Fact]
@@ -94,9 +89,6 @@ public class InSenderResilienceTests
             "LinkedIn",
             (HttpStatusCode.OK, successBody));
 
-        var sender = BuildSender(factory);
-        var result = await sender.SendAsync(ValidPost());
-
-        Assert.True(result);
+        Assert.True(await BuildSender(factory).SendAsync(ValidPost()));
     }
 }

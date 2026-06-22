@@ -11,6 +11,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.5] - 2026-06-22
+
+### Added
+- **Named HTTP client `"Feed"` with Polly resilience pipeline** ([#204](https://github.com/artcava/XPoster/issues/204)): `HttpClientExtensions.AddHttpClients()` now registers a `"Feed"` named client configured with a three-layer Polly pipeline — per-attempt timeout, exponential-backoff retry, and circuit breaker. All pipeline parameters (timeout, retry count, failure threshold, sampling window, break duration) are driven by `FeedOptions` app settings with safe defaults, making resilience behaviour configurable per environment without code changes.
+- **`FeedOptions` resilience properties** ([#204](https://github.com/artcava/XPoster/issues/204)): `AttemptTimeoutSeconds`, `RetryCount`, `CircuitBreakerFailureThreshold`, `CircuitBreakerSamplingDurationSeconds`, and `CircuitBreakerBreakDurationSeconds` added to `FeedOptions`; `FeedOptionsValidator` updated to enforce valid ranges for all five fields.
+
+### Changed
+- **`FeedService` — migrated from `new HttpClient()` to `IHttpClientFactory`** ([#204](https://github.com/artcava/XPoster/issues/204)): constructor now accepts `IHttpClientFactory` and resolves the named client `"Feed"` per fetch call via `CreateClient("Feed")`. Eliminates the inline `new HttpClient()` that bypassed connection pooling and the Polly resilience pipeline. `FeedService` is now fully compliant with the `IHttpClientFactory` invariant enforced across the rest of the codebase.
+- **`local.settings.json.example`** ([#204](https://github.com/artcava/XPoster/issues/204)): five new `FeedOptions__*` resilience keys added with their default values.
+- **`docs/architecture.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): `FeedService` description updated to reflect `IHttpClientFactory` usage and the named client `"Feed"`; named HTTP client table updated; `IHttpClientFactory` invariant strengthened.
+- **`docs/configuration.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): new *Feed HTTP Client* section documenting all five `FeedOptions__*` resilience keys with types, defaults, and tuning guidance; *Feed URLs* section updated to reference the named client and Polly pipeline.
+- **`docs/extending-xposter.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): *Design Constraints* — `IHttpClientFactory` invariant bullet updated to confirm all services (including `FeedService`) now conform and to prohibit `new HttpClient()` inline explicitly.
+- **`docs/monitoring.md`** ([#204](https://github.com/artcava/XPoster/issues/204)): new *Feed HTTP Client Resilience Observability* section documenting structured log events (retry, circuit breaker opened/reset, attempt timeout, fetch failed), two KQL queries (`Feed fetch retries`, `Feed circuit breaker open events`), an alert rule, and a Bicep snippet. *Key Metrics* table updated with `Feed Fetch Failures` row. *Recommended Alert Rules* table updated with the feed circuit breaker alert.
+
+### Fixed
+- **`PowerLawOrchestrator` — duplicate `Post.Firm` footer in published posts** ([#202](https://github.com/artcava/XPoster/issues/202)): `Post.Firm` was appended both inside `OrchestrateAsync()` and again by every sender plugin (`XSender`, `InSender`, `IgSender`), causing the firm footer to appear twice in all posts from slots `InPowerLaw` (hour 14) and `XPowerLaw` (hour 16). Removed `Post.Firm` from the orchestrator content string; the sender layer remains the single, authoritative place for appending the footer.
+
+### Tests
+- **`FeedServiceTests`** ([#204](https://github.com/artcava/XPoster/issues/204)): three previously failing tests fixed by replacing the direct `HttpClient` construction with an `IHttpClientFactory` mock that returns a client backed by a `MockHttpMessageHandler`. Tests now cover: cache miss → HTTP fetch → cache set (`GetFeedsAsync_FetchesAndCachesFeeds_WhenCacheMissAndHttpSucceeds`), date-range filtering (`GetFeedsAsync_FiltersOutItemsOutsideDateRange`), and keyword filtering (`GetFeedsAsync_FiltersOutItemsWithNoKeywordMatch`).
+- **`PowerLawOrchestratorTests`** ([#202](https://github.com/artcava/XPoster/issues/202)): `Assert.Contains("#XPoster #AI", ...)` replaced with `Assert.DoesNotContain(Post.Firm, ...)` to verify the orchestrator no longer embeds the firm footer in `post.Content`; `using XPoster.Models` added to reference `Post.Firm` directly instead of a magic string.
+
+---
+
 ## [0.1.4] - 2026-06-19
 
 ### Added
@@ -158,7 +181,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `README.md` translated to English ([#20](https://github.com/artcava/XPoster/issues/20))
 - CI: `dotnet test` added as mandatory gate before deployment ([#22](https://github.com/artcava/XPoster/issues/22))
-- CI coverage threshold raised to **70%** ([#62](https://github.com/artcava/XPoster/issues/62))
+- CI coverage threshold raised to **70%** ([#22](https://github.com/artcava/XPoster/issues/22))
 
 ### Fixed
 - **Nullable Reference Types**: resolved all `CS86xx` warnings ([#46](https://github.com/artcava/XPoster/issues/46))
@@ -170,7 +193,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/artcava/XPoster/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/artcava/XPoster/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/artcava/XPoster/compare/v0.1.1...v0.1.2

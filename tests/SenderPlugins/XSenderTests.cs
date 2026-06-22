@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 
@@ -9,22 +11,18 @@ namespace XPoster.Tests.SenderPlugins;
 public class XSenderTests
 {
     private readonly Mock<ILogger<XSender>> _mockLogger;
-    private readonly Mock<IKeyVaultService> _mockKv;
+    private readonly IOptions<XCredentials> _credentials;
 
     public XSenderTests()
     {
         _mockLogger = new Mock<ILogger<XSender>>();
-        _mockKv = BuildKeyVaultMock();
-    }
-
-    private static Mock<IKeyVaultService> BuildKeyVaultMock()
-    {
-        var kv = new Mock<IKeyVaultService>();
-        kv.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("fake_key");
-        kv.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("fake_secret");
-        kv.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("fake_token");
-        kv.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("fake_token_secret");
-        return kv;
+        _credentials = Options.Create(new XCredentials
+        {
+            XApiKey = "fake_key",
+            XApiSecret = "fake_secret",
+            XAccessToken = "fake_token",
+            XAccessTokenSecret = "fake_token_secret"
+        });
     }
 
     #region Constructor and Properties Tests
@@ -32,35 +30,39 @@ public class XSenderTests
     [Fact]
     public void Constructor_InitializesCorrectly()
     {
-        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
+        var sender = new XSender(_credentials, _mockLogger.Object);
         Assert.NotNull(sender);
         Assert.Equal(250, sender.MessageMaxLenght);
     }
 
     [Fact]
+    public void Constructor_WithNullCredentials_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => new XSender(null!, _mockLogger.Object));
+    }
+
+    [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new XSender(_mockKv.Object, null!));
+        Assert.Throws<ArgumentNullException>(() => new XSender(_credentials, null!));
     }
 
     [Fact]
     public void XSender_ImplementsISender()
     {
-        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
-        Assert.IsAssignableFrom<ISender>(sender);
+        Assert.IsAssignableFrom<ISender>(new XSender(_credentials, _mockLogger.Object));
     }
 
     #endregion
 
-    #region SendAsync with Content Validation Tests
+    #region SendAsync Guard Tests
 
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()
     {
-        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
-        Post? post = null;
+        var sender = new XSender(_credentials, _mockLogger.Object);
 
-        var result = await sender.SendAsync(post!);
+        var result = await sender.SendAsync(null!);
 
         Assert.False(result);
         _mockLogger.Verify(
@@ -73,35 +75,13 @@ public class XSenderTests
             ), Times.Once);
     }
 
-    #endregion
-
-    #region Credential resolution Tests
-
     [Fact]
-    public void Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()
+    public async Task SendAsync_ValidPost_TriesTwitterAndReturnsFalse()
     {
-        Assert.Throws<ArgumentNullException>(() => new XSender(null!, _mockLogger.Object));
-    }
-
-    /// <summary>
-    /// GAP-2: verifies that Key Vault is queried on EVERY SendAsync invocation,
-    /// not cached from construction time — core behaviour of issue #113.
-    /// TwitterContext will throw (no real credentials), but KV reads happen before that.
-    /// </summary>
-    [Fact]
-    public async Task SendAsync_CalledTwice_QueriesKvOnEachCall()
-    {
-        var sender = new XSender(_mockKv.Object, _mockLogger.Object);
-        var post = new Post { Content = "Hello world" };
-
-        await sender.SendAsync(post);
-        await sender.SendAsync(post);
-
-        // Each call must read all four credentials from KV (Times.Exactly(2) per secret)
-        _mockKv.Verify(s => s.GetSecretAsync("XApiKey"),           Times.Exactly(2));
-        _mockKv.Verify(s => s.GetSecretAsync("XApiSecret"),        Times.Exactly(2));
-        _mockKv.Verify(s => s.GetSecretAsync("XAccessToken"),      Times.Exactly(2));
-        _mockKv.Verify(s => s.GetSecretAsync("XAccessTokenSecret"),Times.Exactly(2));
+        // Fake credentials cause TwitterContext to throw — caught internally.
+        var sender = new XSender(_credentials, _mockLogger.Object);
+        var result = await sender.SendAsync(new Post { Content = "Hello world" });
+        Assert.False(result);
     }
 
     #endregion

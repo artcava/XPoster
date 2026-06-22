@@ -1,17 +1,16 @@
 # Community 49
 
-> 8 nodes · cohesion 0.46
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory.cs** (7 connections)
-- **AiServiceFactory()** (2 connections)
-- **GetByProvider()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **ArgumentException()** (2 connections)
-- **if()** (2 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **AiProviderExtensionsTests.cs** (6 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
 
 ## Relationships
 
@@ -19,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

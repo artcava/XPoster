@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **DeepSeekOptions.cs** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
+- **PerplexityOptions.cs** (2 connections)
+- **PerplexityOptions.cs** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

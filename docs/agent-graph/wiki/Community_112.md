@@ -1,21 +1,20 @@
 # Community 112
 
-> 4 nodes · cohesion 0.50
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **foreach()** (2 connections)
-- **FeedOrchestrator()** (2 connections)
-- **if()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **params()** (2 connections)
+- **BuildFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 79]] (4 shared connections)
+- [[Community 93]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

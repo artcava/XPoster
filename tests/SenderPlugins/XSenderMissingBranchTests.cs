@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
-using XPoster.Contracts;
+using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
 
@@ -14,56 +15,48 @@ namespace XPoster.Tests.SenderPlugins;
 public class XSenderMissingBranchTests
 {
     private readonly Mock<ILogger<XSender>> _logger = new();
-    private readonly Mock<IKeyVaultService> _kv = new();
-
-    public XSenderMissingBranchTests()
+    private readonly IOptions<XCredentials> _creds = Options.Create(new XCredentials
     {
-        _kv.Setup(s => s.GetSecretAsync("XApiKey")).ReturnsAsync("key");
-        _kv.Setup(s => s.GetSecretAsync("XApiSecret")).ReturnsAsync("secret");
-        _kv.Setup(s => s.GetSecretAsync("XAccessToken")).ReturnsAsync("token");
-        _kv.Setup(s => s.GetSecretAsync("XAccessTokenSecret")).ReturnsAsync("token_secret");
-    }
+        XApiKey = "key",
+        XApiSecret = "secret",
+        XAccessToken = "token",
+        XAccessTokenSecret = "token_secret"
+    });
 
-    private XSender BuildSender() => new(_kv.Object, _logger.Object);
+    private XSender BuildSender() => new(_creds, _logger.Object);
 
     [Fact]
     public async Task SendAsync_NullPost_ReturnsFalse()
     {
-        var result = await BuildSender().SendAsync(null!);
-        Assert.False(result);
+        Assert.False(await BuildSender().SendAsync(null!));
     }
 
     [Fact]
     public async Task SendAsync_EmptyContent_ReturnsFalse()
     {
-        var result = await BuildSender().SendAsync(new Post { Content = string.Empty });
-        Assert.False(result);
+        Assert.False(await BuildSender().SendAsync(new Post { Content = string.Empty }));
     }
 
     [Fact]
     public async Task SendAsync_WhitespaceContent_ReturnsFalse()
     {
-        var result = await BuildSender().SendAsync(new Post { Content = "   " });
-        Assert.False(result);
+        Assert.False(await BuildSender().SendAsync(new Post { Content = "   " }));
     }
 
     [Fact]
     public async Task SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()
     {
-        // No real Twitter credentials — TwitterContext.TweetAsync throws -> catch -> false
-        var result = await BuildSender().SendAsync(new Post { Content = "Hello world" });
-        Assert.False(result);
+        Assert.False(await BuildSender().SendAsync(new Post { Content = "Hello world" }));
     }
 
     [Fact]
     public async Task SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()
     {
-        var result = await BuildSender().SendAsync(new Post
+        Assert.False(await BuildSender().SendAsync(new Post
         {
             Content = "Hello with image",
             Image = new byte[] { 1, 2, 3 }
-        });
-        Assert.False(result);
+        }));
     }
 
     [Fact]

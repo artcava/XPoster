@@ -1,15 +1,15 @@
-# Community 137
+# Community 140
 
 > 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 124]] (2 shared connections)
+- [[Community 128]] (2 shared connections)
 
 ## Audit Trail
 

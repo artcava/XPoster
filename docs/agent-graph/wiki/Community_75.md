@@ -1,23 +1,22 @@
 # Community 75
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **for()** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Services** (2 connections)
+- **TimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

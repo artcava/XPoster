@@ -87,7 +87,7 @@ cd src
 func azure functionapp publish xposterfunction
 ```
 
-> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **not** set via App Settings — they are resolved at runtime from Azure Key Vault by `KeyVaultService`. See [Configuration Reference — Key Vault](configuration.md#key-vault) for the required secret names and role assignment.
+> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **not** set via App Settings — they are loaded from Azure Key Vault at application startup via the **Azure Key Vault Configuration Provider** (`AddAzureKeyVault` registered in `Program.cs`) and injected into senders through standard `IOptions` binding. See [Configuration Reference — Key Vault](configuration.md#key-vault) for the required secret names and role assignment.
 
 > ⚠️ **Never set `EnableDryRunSlot = true` or `ForceHour` in production App Settings.** These are local-development-only keys; see [Configuration Reference — Scheduler](configuration.md#scheduler) for details.
 
@@ -124,4 +124,4 @@ Assign a **System-assigned Managed Identity** to the Function App to authenticat
 2. Azure Key Vault → Access control (IAM) → Add role assignment → **Key Vault Secrets User** → select the Function App identity
 3. (If using `AiProvider = AzureFoundry`) Azure AI Foundry resource → Access control (IAM) → Add role assignment → **Cognitive Services OpenAI User** → select the Function App identity; omit `AzureFoundry__ApiKey` from App Settings
 
-`KeyVaultService` uses `DefaultAzureCredential`, which picks up the Managed Identity automatically in production — no code changes required.
+The Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`) uses `DefaultAzureCredential`, which picks up the Managed Identity automatically in production — no code changes required.

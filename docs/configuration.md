@@ -4,7 +4,7 @@ All configuration is passed via environment variables — locally in `src/local.
 
 The file [`src/local.settings.json.example`](../src/local.settings.json.example) is the canonical starting template: copy it to `src/local.settings.json`, fill in the empty strings, and the function is ready to run locally.
 
-> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **no longer configured via environment variables**. They are resolved at runtime by `KeyVaultService` directly from Azure Key Vault. See the [Key Vault](#key-vault) section below.
+> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **no longer configured via environment variables**. They are loaded from Azure Key Vault at application startup via the **Azure Key Vault Configuration Provider** (registered in `Program.cs`), and injected into senders through standard `IOptions` / `IConfiguration` binding. No runtime secret-fetch calls occur during post publishing. See the [Key Vault](#key-vault) section below.
 
 ---
 
@@ -27,20 +27,20 @@ For the `Perplexity` provider, replace the OpenAI block with:
 
 - [ ] `Perplexity__ApiKey`
 
-> 💡 For local development, run `az login` before starting the function. `KeyVaultService` uses `DefaultAzureCredential`, which picks up your Azure CLI session automatically.
+> 💡 For local development, run `az login` before starting the function. The Key Vault Configuration Provider uses `DefaultAzureCredential`, which picks up your Azure CLI session automatically and loads all secrets into `IConfiguration` at startup.
 
 ### 🧪 Quick-Start: DryRunSender (no social API credentials needed)
 
 If you only want to verify the end-to-end pipeline locally **without publishing to any social platform**, you can use `DryRunSender`. This is the recommended first step for new contributors or when onboarding a new environment.
 
 - [ ] `AzureWebJobsStorage` — `UseDevelopmentStorage=true` (Azurite)
-- [ ] `KEYVAULT_URI` — Key Vault URI (needed for the connectivity probe)
+- [ ] `KEYVAULT_URI` — Key Vault URI (needed for the Configuration Provider to load at startup)
 - [ ] `OpenAI__ApiKey` — required if `AiProvider = OpenAi` (default)
 - [ ] `FeedOptions__Urls__0` — at least one RSS feed URL
 - [ ] `az login` executed in the terminal before `func start`
 - [ ] `EnableDryRunSlot` set to `true` in `local.settings.json` (registers the dry-run slot via `DryRunSlotProfileProvider`)
 - [ ] `ForceHour` set to `9` in `local.settings.json` (routes execution to the dry-run slot regardless of wall-clock time)
-- [ ] **No** Twitter/X, LinkedIn, or Instagram secrets required
+- [ ] **No** Twitter/X, LinkedIn, or Instagram secrets required in Key Vault (the provider loads only what is present)
 
 > See the [DryRunSender — Local Testing](#dryrunsender--local-testing) section below for the full `local.settings.json` snippet and step-by-step instructions.
 
@@ -70,6 +70,13 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // Add additional entries as FeedOptions__Urls__2, __3, etc.
     // In Azure App Settings use the same flat key convention.
     // At least one URL is required for FeedOrchestrator to produce content.
+
+    // ── Feed HTTP Client (resilience) ─────────────────────────
+    "FeedOptions__AttemptTimeoutSeconds": "10",
+    "FeedOptions__RetryCount": "3",
+    "FeedOptions__CircuitBreakerFailureThreshold": "0.5",
+    "FeedOptions__CircuitBreakerSamplingDurationSeconds": "30",
+    "FeedOptions__CircuitBreakerBreakDurationSeconds": "15",
 
     // ── AI Provider Selector ────────────────────────────────────────
     "AiProvider": "OpenAi",
@@ -177,6 +184,8 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions` section bound via double-underscore notation.
 
+`FeedService` fetches each URL using the named HTTP client `"Feed"` registered in `HttpClientExtensions.AddHttpClients()`. The client is configured with a Polly resilience pipeline (per-attempt timeout → exponential-backoff retry → circuit breaker) whose parameters are driven by the `FeedOptions` resilience keys documented in the [Feed HTTP Client](#feed-http-client) section below.
+
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `FeedOptions__Urls__0` | string | ✅ Yes (at least one) | — | First RSS/Atom feed URL consumed by `FeedOrchestrator`. |
@@ -190,6 +199,28 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 
 ---
 
+## Feed HTTP Client
+
+`FeedService` fetches RSS/Atom feeds via the named HTTP client `"Feed"`, registered in `HttpClientExtensions.AddHttpClients()` and protected by a Polly resilience pipeline composed of three layers (innermost to outermost):
+
+1. **Attempt timeout** — cancels a single HTTP attempt if it exceeds `AttemptTimeoutSeconds`.
+2. **Retry** — retries up to `RetryCount` times with exponential back-off on transient failures (network errors, 5xx, 429).
+3. **Circuit breaker** — opens the circuit when the failure ratio over `CircuitBreakerSamplingDurationSeconds` exceeds `CircuitBreakerFailureThreshold`, and keeps it open for `CircuitBreakerBreakDurationSeconds` before allowing a probe request.
+
+All five resilience settings are optional. When omitted the values shown in the **Default** column are used.
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `FeedOptions__AttemptTimeoutSeconds` | int | No | `10` | Per-attempt HTTP timeout in seconds. Applied before the retry layer. |
+| `FeedOptions__RetryCount` | int | No | `3` | Maximum number of retry attempts on transient failures. Set to `0` to disable retries. |
+| `FeedOptions__CircuitBreakerFailureThreshold` | double | No | `0.5` | Failure ratio (0.0–1.0) that triggers the circuit breaker within the sampling window. |
+| `FeedOptions__CircuitBreakerSamplingDurationSeconds` | int | No | `30` | Sliding window duration in seconds over which the failure ratio is measured. |
+| `FeedOptions__CircuitBreakerBreakDurationSeconds` | int | No | `15` | Duration in seconds the circuit stays open before allowing a single probe request. |
+
+> **Tuning guidance:** For feeds served by CDNs or well-maintained public endpoints the defaults are appropriate. For slow or unreliable internal feeds, increase `AttemptTimeoutSeconds` and reduce `RetryCount` to avoid long tail latencies. For high-frequency schedules where a broken feed should not block the pipeline, lower `CircuitBreakerFailureThreshold` to trip the breaker faster.
+
+---
+
 ## AI Provider Selector
 
 | Variable | Type | Required | Default | Description |
@@ -200,7 +231,7 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 
 ## Key Vault
 
-All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are resolved at runtime by `KeyVaultService` directly from Azure Key Vault.
+All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are loaded from Azure Key Vault **at application startup** via the [Azure Key Vault Configuration Provider](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-integrate-kubernetes) registered in `Program.cs` (`builder.Configuration.AddAzureKeyVault(...)`). Secrets are merged into `IConfiguration` and injected into senders through standard `IOptions` / `IConfiguration` binding — no runtime Key Vault calls occur during post publishing.
 
 | Variable | Type | Required | Description |
 |---|---|---|---|
@@ -208,7 +239,7 @@ All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are resolved at ru
 
 ### Authentication
 
-`KeyVaultService` uses `DefaultAzureCredential` from `Azure.Identity`:
+The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 
 | Environment | Credential used |
 |---|---|
@@ -217,13 +248,15 @@ All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are resolved at ru
 
 ### Required Secrets in Key Vault
 
-> 🧪 **Using `DryRunSender`?** Only `XApiKey` is required — it is read as a connectivity probe.
+> 🧪 **Using `DryRunSender`?** No social-platform secrets are required — only `KEYVAULT_URI` must be reachable so the Configuration Provider can start up successfully.
+
+> ℹ️ **Secret names do not need to be renamed.** The Key Vault Configuration Provider maps secret names directly to `IConfiguration` keys using the Azure SDK's default name-to-key mapping (hyphens become double-underscores). The secret names listed below are the exact names already present in your Key Vault.
 
 #### Twitter / X
 
 | Secret name | Description |
 |---|---|
-| `XApiKey` | Twitter App API Key (Consumer Key). Also used as Key Vault connectivity probe by `DryRunSender`. |
+| `XApiKey` | Twitter App API Key (Consumer Key). |
 | `XApiSecret` | Twitter App API Secret (Consumer Secret). |
 | `XAccessToken` | User Access Token (OAuth 1.0a). |
 | `XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
@@ -283,39 +316,30 @@ All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are resolved at ru
    az login
    ```
 
-2. **Add `XApiKey` to Key Vault** (if not already present)
-   ```bash
-   az keyvault secret set \
-     --vault-name <your-keyvault-name> \
-     --name XApiKey \
-     --value "probe-value"
-   ```
-
-3. **Start Azurite**
+2. **Start Azurite**
    ```bash
    azurite --silent --location .azurite --debug .azurite/debug.log
    ```
 
-4. **Copy and configure `local.settings.json`**
+3. **Copy and configure `local.settings.json`**
    ```bash
    cp src/local.settings.json.example src/local.settings.json
    ```
    Set `EnableDryRunSlot` to `"true"`, `ForceHour` to `"9"`, fill in `KEYVAULT_URI`, `OpenAI__ApiKey`, and at least one `FeedOptions__Urls__N`.
 
-5. **Start the function**
+4. **Start the function**
    ```bash
    cd src && func start
    ```
 
-6. **Observe the logs.** A successful dry run produces:
+5. **Observe the logs.** A successful dry run produces:
    ```
-   [DryRunSender] Key Vault connectivity probe: OK (secret 'XApiKey' resolved)
    [DryRunSender] Post content (743 chars): "Breaking: Bitcoin Power Law model signals..."
    [DryRunSender] Image attached: True
    [DryRunSender] Dry run complete — no post published.
    ```
 
-7. **Cleanup** — ensure `EnableDryRunSlot` and `ForceHour` are not copied into `src/local.settings.json.example` or Azure App Settings.
+6. **Cleanup** — ensure `EnableDryRunSlot` and `ForceHour` are not copied into `src/local.settings.json.example` or Azure App Settings.
 
 ---
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **HybridAiService.cs** (6 connections)
-- **HybridAiService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **HybridAiService()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **FalAiImageService.cs** (6 connections)
+- **if()** (2 connections)
 - **GenerateImageAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **catch()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 

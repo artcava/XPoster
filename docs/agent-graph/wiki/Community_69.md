@@ -1,23 +1,23 @@
 # Community 69
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **AiServiceHelperImageTests.cs** (35 connections)
+- **JsonResponse()** (2 connections)
+- **HttpClient()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **var()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 2]] (29 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 45 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

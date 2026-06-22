@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **FeedService()** (2 connections)
-- **if()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (4 shared connections)
+- [[Community 137]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 93
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FalAiOptionsExtensions.cs** (3 connections)
-- **FalAiOptionsExtensions.cs** (3 connections)
-- **AddFalAiOptions()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 112]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
