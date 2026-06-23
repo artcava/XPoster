@@ -1,6 +1,6 @@
 # Extending XPoster
 
-XPoster is designed around four extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), **AI Providers** (model integrations), and **Tag Replacement Providers** (hashtag mapping sources). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
+XPoster is designed around five extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), **AI Providers** (model integrations), **Feed URL Providers** (RSS/Atom feed sources), and **Tag Replacement Providers** (hashtag mapping sources). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
 
 > For the architectural rationale behind each extension point, see [architecture.md §5](architecture.md#5-extension-points).
 
@@ -412,6 +412,75 @@ Key rules for this file:
 
 ---
 
+## Adding a New Feed URL Provider
+
+The feed URL provider supplies the list of RSS/Atom URLs that `FeedService` fetches on every timer-trigger execution. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions:Urls` list in app settings. If you need to source URLs from a different store — a database, a remote API, Azure App Configuration, or a feature-flag service — implement `IFeedUrlProvider` and swap the registration in `Program.cs`.
+
+### Contract
+
+```csharp
+// src/Contracts/IFeedUrlProvider.cs
+public interface IFeedUrlProvider
+{
+    IReadOnlyList<string> GetUrls();
+}
+```
+
+`GetUrls()` must:
+- Return an `IReadOnlyList<string>` of absolute RSS/Atom feed URLs.
+- Return an **empty list** — never `null` — when no URLs are configured. `FeedOrchestrator` treats an empty list as a valid no-op and emits a `LogWarning` without calling any AI provider.
+- Be **synchronous and cheap**. `FeedService` calls `GetUrls()` once per execution, before issuing any HTTP request. Load data at construction time or cache it; do not make blocking I/O calls inside `GetUrls()`.
+
+### Step 1 — Implement IFeedUrlProvider
+
+```csharp
+// src/Services/DatabaseFeedUrlProvider.cs
+using XPoster.Contracts;
+
+namespace XPoster.Services;
+
+/// <summary>
+/// Loads RSS/Atom feed URLs from a remote database, refreshed at startup.
+/// </summary>
+public class DatabaseFeedUrlProvider : IFeedUrlProvider
+{
+    private readonly IReadOnlyList<string> _urls;
+
+    public DatabaseFeedUrlProvider(IMyDatabaseClient db)
+    {
+        // Load once at construction time; FeedService calls GetUrls() synchronously.
+        _urls = db.FetchFeedUrls().ToList().AsReadOnly();
+    }
+
+    public IReadOnlyList<string> GetUrls() => _urls;
+}
+```
+
+> If your URL source changes frequently and must be refreshed between executions, wrap the load in a cached background service and inject the cache here rather than fetching inside `GetUrls()`. The synchronous contract of the interface must be respected — `FeedService` does not `await` this call.
+
+### Step 2 — Register in DI
+
+Replace the existing `ConfigurationFeedUrlProvider` registration in `Program.cs` with your implementation. Keep the lifetime as `Singleton` — `FeedService` is resolved per-trigger and `GetUrls()` must be cheap.
+
+```csharp
+// src/Program.cs
+// Remove or comment out:
+// builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
+
+// Add your implementation:
+builder.Services.AddSingleton<IFeedUrlProvider, DatabaseFeedUrlProvider>();
+```
+
+No other change is required. `FeedService` and `FeedOrchestrator` depend only on `IFeedUrlProvider` — they are unaware of the concrete implementation.
+
+### Step 3 — Remove the `FeedOptions__Urls__*` configuration keys (optional)
+
+If your new provider does not use `FeedOptions`, you can remove the `FeedOptions__Urls__*` keys from `local.settings.json` and Azure App Settings. The `ConfigurationFeedUrlProvider` binding will no longer be active.
+
+> The `FeedOptions` resilience keys (`AttemptTimeoutSeconds`, `RetryCount`, etc.) are consumed by the HTTP client pipeline registered in `HttpClientExtensions`, **not** by `ConfigurationFeedUrlProvider`. Removing the URL keys does not affect HTTP resilience configuration.
+
+---
+
 ## Adding a New Tag Replacement Provider
 
 The tag replacement provider resolves the word-to-hashtag map consumed by `FeedOrchestrator` at Step 3 of its pipeline. The default implementation, `ConfigurationTagReplacementProvider`, reads the map from `TagReplacementOptions:Replacements` in app settings. If you need to source replacements from a different store — a database, a remote API, Azure App Configuration, or Key Vault — implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
@@ -496,10 +565,11 @@ All extensions must respect the following invariants to integrate correctly with
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
 - **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return `null` early when `textProvider` is null and text generation is required.
-- **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for “capability not available”.
+- **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
 - **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **`IFeedUrlProvider` must return an empty list — never `null`.** `FeedService` iterates the result directly; returning `null` causes a `NullReferenceException` at runtime.
 - **`ITagReplacementProvider` must return an empty dictionary — never `null`.** `FeedOrchestrator` iterates the result directly without a null-guard; returning `null` causes a `NullReferenceException` at runtime.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.
