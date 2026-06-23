@@ -3,9 +3,12 @@
 XPoster supports Perplexity as an AI provider for text summarisation and image
 prompt generation via the [Sonar Chat Completions API](https://docs.perplexity.ai/reference/post_chat_completions).
 
-> ⚠️ **Image generation is not supported.** When `AiProvider = Perplexity`,
-> `GenerateImageAsync` always returns an empty byte array and logs a `Warning`.
-> Posts will be published **without an attached image**.
+> **Provider capabilities:** Text only (`ITextToTextProvider`)  
+> **`AiProvider` enum value:** `Perplexity`
+
+> ⚠️ **Image generation is not supported.** When `AiProvider = Perplexity`, no
+> `ITextToImageProvider` is resolved and posts will be published **without an attached image**.
+> If image generation is required, switch to `OpenAi`, `AzureFoundry`, or `FalAi`.
 
 ---
 
@@ -47,28 +50,20 @@ Set `Perplexity__DeploymentName` to the model identifier you want to use.
 
 ## 5. Configure XPoster
 
-Copy the Perplexity block from `src/local.settings.json.example` into your
-`src/local.settings.json` and fill in the required values:
+Set these values in `src/local.settings.json` (local) or Azure App Settings (production):
 
-```jsonc
-// ══ AI — Perplexity (AiProvider = "Perplexity") ════════════════════════
-"AiProvider":                              "Perplexity",
-"Perplexity__ApiKey":                      "<your-perplexity-api-key>",
-"Perplexity__Endpoint":                    "https://api.perplexity.ai",
-"Perplexity__DeploymentName":              "sonar",
-"Perplexity__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-"Perplexity__SummaryUserPromptTemplate":   "Summarize this text in a few sentences. text: {Text}",
-"Perplexity__ImagePromptSystemTemplate":   "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content and avoids text, signs, or words in the image.",
-"Perplexity__ImagePromptUserTemplate":     "Generate an image prompt based on this summary: {Summary}",
-"Perplexity__SummaryTemperature":          "0.5",
-"Perplexity__SummaryMaxTokensPerChar":     "5",
-"Perplexity__SummarySafetyMarginChars":    "50",
-"Perplexity__ImagePromptMaxTokens":        "60",
-"Perplexity__ImagePromptTemperature":      "0.7"
+```json
+{
+  "Values": {
+    "AiProvider": "Perplexity",
+    "Perplexity__ApiKey": "<your-perplexity-api-key>",
+    "Perplexity__Endpoint": "https://api.perplexity.ai",
+    "Perplexity__DeploymentName": "sonar"
+  }
+}
 ```
 
-All settings except `Perplexity__ApiKey` have sensible defaults and can be
-omitted if the default values suit your use case.
+All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
 
 ---
 
@@ -99,31 +94,16 @@ Expected log output on success:
 ```
 [PerplexityService] Summary generated (312 chars)
 [PerplexityService] Image prompt generated
-[PerplexityService] does not support image generation. Returning empty byte array.
 [DryRunSender] Image attached: False
 [DryRunSender] Dry run complete — no post published.
 ```
 
----
-
-## 8. Image Generation Behaviour
-
-`PerplexityService.GenerateImageAsync` always returns `Array.Empty<byte>()` and
-emits a structured `Warning` log:
-
-```
-{Service} does not support image generation. Returning empty byte array.
-```
-
-The orchestrator interprets an empty byte array as "no image" and publishes the
-post as text-only. This is intentional and not an error condition.
-
-If image generation is required, switch to `OpenAi`, `AzureFoundry`, or
-`FalAi` instead.
+> ℹ️ `Image attached: False` is expected — Perplexity implements `ITextToTextProvider` only
+> and is not registered as an `ITextToImageProvider`. The orchestrator publishes text-only posts.
 
 ---
 
-## 9. Troubleshooting
+## 8. Troubleshooting
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
@@ -131,4 +111,4 @@ If image generation is required, switch to `OpenAi`, `AzureFoundry`, or
 | `402 Payment Required` | Insufficient credits | Add credits at perplexity.ai/settings/api |
 | `404 Not Found` | Wrong endpoint or model name | Check `Perplexity__Endpoint` and `Perplexity__DeploymentName` |
 | Summary always empty | `choices` array empty or API error | Check structured logs for `[Perplexity]` warning entries |
-| Posts published without image | Expected — Perplexity does not support image generation | Use a different provider if images are required |
+| Posts published without image | Expected — Perplexity is `ITextToTextProvider` only | Use `OpenAi`, `AzureFoundry`, or `FalAi` if images are required |
