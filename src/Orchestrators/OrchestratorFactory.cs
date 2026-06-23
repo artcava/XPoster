@@ -16,31 +16,27 @@ public class OrchestratorFactory : IOrchestratorFactory
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<OrchestratorFactory> _log;
     private readonly ITimeProvider _timeProvider;
-    private readonly IAiServiceFactory _aiServiceFactory;
     private readonly ISlotProfileProvider _slotProfileProvider;
     private readonly IConfiguration? _configuration;
 
     /// <summary>
     /// Initialises a new instance of <see cref="OrchestratorFactory"/>.
     /// </summary>
-    /// <param name="serviceProvider">DI service provider used to resolve senders and dependencies.</param>
+    /// <param name="serviceProvider">DI service provider used to resolve senders and keyed capability providers.</param>
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
-    /// <param name="aiServiceFactory">Factory used to resolve the AI service by provider.</param>
     /// <param name="slotProfileProvider">Provider that supplies the scheduled orchestration profiles.</param>
     /// <param name="configuration">Optional configuration used to override the AI provider via <c>AiProvider</c> setting.</param>
     public OrchestratorFactory(
         IServiceProvider serviceProvider,
         ILogger<OrchestratorFactory> log,
         ITimeProvider timeProvider,
-        IAiServiceFactory aiServiceFactory,
         ISlotProfileProvider slotProfileProvider,
         IConfiguration? configuration = null)
     {
         _serviceProvider = serviceProvider;
         _log = log;
         _timeProvider = timeProvider;
-        _aiServiceFactory = aiServiceFactory;
         _slotProfileProvider = slotProfileProvider;
         _configuration = configuration;
     }
@@ -58,33 +54,43 @@ public class OrchestratorFactory : IOrchestratorFactory
         if (profile == null)
         {
             _log.LogInformation("No slot profile for hour {Hour}, using NoOrchestrator", currentHour);
-            return CreateOrchestratorInstance(typeof(NoOrchestrator), null, null);
+            return CreateOrchestratorInstance(typeof(NoOrchestrator), null, null, null);
         }
 
         _log.LogInformation("Creating orchestrator {OrchestratorType} for platform {SenderPlatform} at hour {Hour} with AI provider {AiProvider}",
             profile.OrchestratorType.Name, profile.SenderPlatform, profile.Hour, profile.AiProvider);
 
-        // O(senders) switch — never changes when new orchestrators are added
         ISender? sender = profile.SenderPlatform switch
         {
-            SenderPlatform.X         => _serviceProvider.GetService(typeof(XSender))     as ISender,
-            SenderPlatform.LinkedIn  => _serviceProvider.GetService(typeof(InSender))    as ISender,
-            SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender))    as ISender,
+            SenderPlatform.X         => _serviceProvider.GetService(typeof(XSender))      as ISender,
+            SenderPlatform.LinkedIn  => _serviceProvider.GetService(typeof(InSender))     as ISender,
+            SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender))     as ISender,
             SenderPlatform.DryRun    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
             _ => null
         };
 
-        IAiService? aiService = null;
+        ITextToTextProvider? textProvider = null;
+        ITextToImageProvider? imageProvider = null;
+
         if (profile.AiProvider.HasValue)
         {
             var effectiveProvider = ResolveAiProvider(profile.AiProvider.Value);
-            aiService = _aiServiceFactory.GetByProvider(effectiveProvider);
+            // Both providers are optional capabilities: not every AiProvider implements both interfaces.
+            // FeedOrchestrator accepts ITextToTextProvider? and ITextToImageProvider? — null is intentional.
+            // Misconfiguration (e.g. using a text-only provider for image generation) surfaces explicitly
+            // inside the orchestrator at the point of use, not silently.
+            textProvider  = _serviceProvider.GetKeyedService<ITextToTextProvider>(effectiveProvider);
+            imageProvider = _serviceProvider.GetKeyedService<ITextToImageProvider>(effectiveProvider);
         }
 
-        return CreateOrchestratorInstance(profile.OrchestratorType, sender, aiService);
+        return CreateOrchestratorInstance(profile.OrchestratorType, sender, textProvider, imageProvider);
     }
 
-    private BaseOrchestrator CreateOrchestratorInstance(Type orchestratorType, ISender? sender, IAiService? aiService)
+    private BaseOrchestrator CreateOrchestratorInstance(
+        Type orchestratorType,
+        ISender? sender,
+        ITextToTextProvider? textProvider,
+        ITextToImageProvider? imageProvider)
     {
         var loggerType = typeof(ILogger<>).MakeGenericType(orchestratorType);
         var logger = _serviceProvider.GetRequiredService(loggerType);
@@ -101,8 +107,10 @@ public class OrchestratorFactory : IOrchestratorFactory
             {
                 if (param.ParameterType == typeof(ISender))
                     args.Add(sender);
-                else if (typeof(IAiService).IsAssignableFrom(param.ParameterType))
-                    args.Add(aiService);
+                else if (param.ParameterType == typeof(ITextToTextProvider))
+                    args.Add(textProvider);
+                else if (param.ParameterType == typeof(ITextToImageProvider))
+                    args.Add(imageProvider);
                 else if (param.ParameterType.IsGenericType && param.ParameterType.GetGenericTypeDefinition() == typeof(ILogger<>))
                     args.Add(logger);
                 else

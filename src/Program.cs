@@ -22,22 +22,17 @@ builder.Services
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
-    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
+    LoggerFilterOptions? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
+        == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider") as LoggerFilterOptions;
+    LoggerFilterRule? rule = options.Rules.FirstOrDefault(r => r.ProviderName
         == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-    if (defaultRule is not null)
+    if (rule is not null)
     {
-        options.Rules.Remove(defaultRule);
+        options.Rules.Remove(rule);
     }
 });
 
 // Azure Key Vault Configuration Provider.
-// Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.
-// DefaultAzureCredential is the same credential chain used by the former KeyVaultService.
-//
-// NOTE: FunctionsApplicationBuilder.Configuration is a ConfigurationManager.
-// AddAzureKeyVault is an extension method on IConfigurationBuilder, so an explicit
-// cast is required — ConfigurationManager implements IConfigurationBuilder but does
-// not expose the extension methods without the cast.
 var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     ?? throw new InvalidOperationException("KEYVAULT_URI app setting is not set.");
 
@@ -45,8 +40,7 @@ var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     new Uri(keyVaultUri),
     new DefaultAzureCredential());
 
-// Typed sender credentials — bound flat from IConfiguration (secret names match property names).
-// ValidateOnStart() ensures missing secrets fail at startup rather than at first invocation.
+// Typed sender credentials.
 builder.Services
     .AddOptions<XCredentials>()
     .BindConfiguration(string.Empty)
@@ -83,14 +77,11 @@ if (isDevelopment && !string.IsNullOrWhiteSpace(forceHour))
 else
     builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
 
-// Register IAiServiceFactory and all IAiService implementations
-builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
-builder.Services.AddKeyedTransient<IAiService, OpenAiService>(AiProvider.OpenAi);
-builder.Services.AddKeyedTransient<IAiService, AzureFoundryService>(AiProvider.AzureFoundry);
-builder.Services.AddKeyedTransient<IAiService, HybridAiService>(AiProvider.DeepSeekWithFal);
-builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity);
-builder.Services.AddTransient<DeepSeekService>();
-builder.Services.AddTransient<FalAiImageService>();
+// Register AI capability interfaces as keyed services by AiProvider.
+// Each key activates only the capabilities the provider actually supports.
+// Attempting to resolve an unsupported capability returns null via GetKeyedService —
+// this surfaces explicitly at the point of use inside FeedOrchestrator, not silently.
+builder.Services.AddXPosterAiProviders();
 
 // ISlotProfileProvider registration:
 //   EnableDryRunSlot = true   → DryRunSlotProfileProvider
