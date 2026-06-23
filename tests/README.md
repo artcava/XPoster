@@ -13,7 +13,8 @@ XPoster uses a **unit-first** approach:
 | Layer | Test Type | Goal |
 |---|---|---|
 | Orchestrators (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) | Unit | Verify content-production logic in isolation, with all external services mocked |
-| Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `HybridAiService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
+| Providers (`ConfigurationFeedUrlProvider`, `ConfigurationTagReplacementProvider`) | Unit | Verify config-backed provider contract: correct return value from bound `IOptions`, empty-collection on absent/null config, `ArgumentNullException` on null options |
+| Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
 | Sender plugins (`XSender`, `InSender`, `IgSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client. Sender credentials are injected via `IOptions<TCredentials>` and bound from configuration — no `IKeyVaultService` mock required. `DryRunSender` additionally verifies the null-guard path and that no outbound social API call is made |
 | `OrchestratorFactory` | Unit | Verify correct orchestrator and sender selection per hour slot |
 | Polly resilience pipelines | Integration | Verify retry, circuit-breaker, and attempt-timeout policies end-to-end using a real `IServiceProvider`; innermost `HttpMessageHandler` replaced with a test double — no outbound network calls |
@@ -51,8 +52,9 @@ tests/
 ├── Orchestrators/                                # mirrors src/Orchestrators/
 │   ├── AiServiceFactoryTests.cs                  # AiServiceFactory — provider resolution by AiProvider enum (includes Perplexity case)
 │   ├── ConfigurationFeedUrlProviderTests.cs      # ConfigurationFeedUrlProvider — URL list from config
+│   ├── ConfigurationTagReplacementProviderTests.cs  # ConfigurationTagReplacementProvider — replacement map from config (#216)
 │   ├── FeedOrchestratorFeedUrlProviderTests.cs   # FeedOrchestrator — IFeedUrlProvider integration paths
-│   ├── FeedOrchestratorTests.cs                  # FeedOrchestrator — main happy/failure paths
+│   ├── FeedOrchestratorTests.cs                  # FeedOrchestrator — main happy/failure paths + #216 new scenarios
 │   ├── NoOrchestratorTests.cs                    # NoOrchestrator — null-object contract
 │   ├── OrchestratorFactoryTests.cs               # OrchestratorFactory + SlotProfileProvider behaviour
 │   └── PowerLawOrchestratorTests.cs              # PowerLawOrchestrator — price/model computation
@@ -90,13 +92,14 @@ tests/
     ├── DeepSeekServiceTests.cs
     ├── FalAiImageServiceTests.cs
     ├── FeedServiceTests.cs
-    ├── HybridAiServiceTests.cs
     ├── OpenAiServiceTests.cs
     ├── PerplexityServiceTests.cs                 # PerplexityService — summary, image prompt, GenerateImageAsync graceful degradation
     └── TimeProviderTests.cs
 ```
 
 > `KeyVaultServiceTests.cs` has been removed. `KeyVaultService` / `IKeyVaultService` are no longer part of the production codebase — secrets are loaded at startup via the Azure Key Vault Configuration Provider and consumed through `IOptions<TCredentials>` in each sender.
+
+> `HybridAiServiceTests.cs` has been removed. `HybridAiService` / `DeepSeekWithFal` have been removed from the production codebase. `DeepSeekService` and `FalAiImageService` are tested independently in `Services/`.
 
 ### Folder responsibilities
 
@@ -105,11 +108,11 @@ tests/
 | *(root)* | `XPoster` | `XFunction` entry point — happy path and missing-branch edge cases |
 | `Contracts/` | `XPoster.Contracts`, `XPoster.Abstraction` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts |
 | `Helpers/` | — | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration); `PowerLawOrchestrator`; `NoOrchestrator`; `AiServiceFactory` provider resolution (including `AiProvider.Perplexity`); `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config |
+| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration + #216 explicit-pipeline scenarios); `PowerLawOrchestrator`; `NoOrchestrator`; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config; `ConfigurationTagReplacementProvider` replacement map from config |
 | `Integration/` | `XPoster.*` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — **not run in CI** |
 | `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, fal.ai, and Perplexity |
 | `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, dry-run success/failure paths — no Key Vault probe) |
-| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider` unit tests |
+| `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider` unit tests |
 
 ---
 
@@ -156,6 +159,9 @@ dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
 
 # Only DryRunSender tests
 dotnet test --filter "FullyQualifiedName~DryRunSender"
+
+# Only tag replacement provider tests
+dotnet test --filter "FullyQualifiedName~ConfigurationTagReplacementProvider"
 ```
 
 ### With coverage report
@@ -182,39 +188,52 @@ start coverage-report/index.html  # Windows
 
 ## 6. Mocking External Services
 
-All external dependencies (`IAiService`, `IFeedService`, `ISender`, `ILogger`) are injected via constructor and replaced with Moq mocks in tests.
+All external dependencies (`ITextToTextProvider`, `ITextToImageProvider`, `IFeedService`, `IFeedUrlProvider`, `ITagReplacementProvider`, `ISender`, `ILogger`) are injected via constructor and replaced with Moq mocks in tests.
 
 Sender credentials are bound from `IConfiguration` at application startup via the Key Vault Configuration Provider and consumed through `IOptions<TCredentials>`. In unit tests, use `Options.Create(new TCredentials { ... })` to supply test values — no `IKeyVaultService` mock is needed.
 
-### Pattern — mocking `IAiService`
+### Pattern — mocking `ITextToTextProvider` and `ITagReplacementProvider`
 
 ```csharp
 [Fact]
-public async Task OrchestrateAsync_WhenAiReturnsValidSummary_PostContentIsSet()
+public async Task OrchestrateAsync_WhenSummaryIsValid_AppliesTagReplacementsOnce()
 {
     // Arrange
-    var mockAi = new Mock<IAiService>();
-    mockAi
-        .Setup(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()))
+    var mockTextProvider = new Mock<ITextToTextProvider>();
+    mockTextProvider
+        .Setup(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync("BTC breaks ATH driven by ETF inflows");
+    mockTextProvider
+        .Setup(x => x.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        .ReturnsAsync("A chart showing BTC price spike");
 
-    var mockSender  = new Mock<ISender>();
-    var mockLogger  = new Mock<ILogger<FeedOrchestrator>>();
-    var mockFeed    = new Mock<IFeedService>();
-    mockFeed
-        .Setup(x => x.GetLatestItemAsync())
-        .ReturnsAsync(new FeedItem { Title = "BTC News", Content = "..." });
+    var mockTagProvider = new Mock<ITagReplacementProvider>();
+    mockTagProvider
+        .Setup(x => x.GetReplacements())
+        .Returns(new Dictionary<string, string> { { "btc", "#BTC" } });
 
-    var orchestrator = new FeedOrchestrator(mockSender.Object, mockLogger.Object,
-                                            mockFeed.Object, mockAi.Object);
+    var mockSender      = new Mock<ISender>();
+    var mockLogger      = new Mock<ILogger<FeedOrchestrator>>();
+    var mockFeedService = new Mock<IFeedService>();
+    mockFeedService
+        .Setup(x => x.GetFeedItemsAsync(It.IsAny<IEnumerable<string>>()))
+        .ReturnsAsync([new FeedItem { Title = "BTC News", Content = "BTC breaks ATH" }]);
+
+    var mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
+    mockFeedUrlProvider.Setup(x => x.GetUrls()).Returns(["https://example.com/feed"]);
+
+    var orchestrator = new FeedOrchestrator(
+        mockSender.Object, mockLogger.Object,
+        mockTextProvider.Object, null,
+        mockFeedService.Object, mockFeedUrlProvider.Object,
+        mockTagProvider.Object);
 
     // Act
     var post = await orchestrator.OrchestrateAsync();
 
     // Assert
     Assert.NotNull(post);
-    Assert.Contains("BTC breaks ATH", post.Content);
-    mockAi.Verify(x => x.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+    mockTagProvider.Verify(x => x.GetReplacements(), Times.Once);
 }
 ```
 
@@ -264,6 +283,49 @@ public async Task SendAsync_WhenPostIsValid_ReturnsTrue()
 
     // Assert
     Assert.True(result);
+}
+```
+
+### Pattern — testing `ConfigurationTagReplacementProvider`
+
+```csharp
+[Fact]
+public void GetReplacements_WhenConfigured_ReturnsExpectedMap()
+{
+    // Arrange
+    var options = Options.Create(new TagReplacementOptions
+    {
+        Replacements = new Dictionary<string, string>
+        {
+            { "bitcoin", "#Bitcoin" },
+            { "btc",     "#BTC"     }
+        }
+    });
+    var provider = new ConfigurationTagReplacementProvider(options);
+
+    // Act
+    var replacements = provider.GetReplacements();
+
+    // Assert
+    Assert.Equal(2, replacements.Count);
+    Assert.Equal("#Bitcoin", replacements["bitcoin"]);
+    Assert.Equal("#BTC",     replacements["btc"]);
+}
+
+[Fact]
+public void GetReplacements_WhenSectionAbsent_ReturnsEmptyDictionary()
+{
+    var options  = Options.Create(new TagReplacementOptions());
+    var provider = new ConfigurationTagReplacementProvider(options);
+
+    Assert.Empty(provider.GetReplacements());
+}
+
+[Fact]
+public void Constructor_WhenOptionsIsNull_ThrowsArgumentNullException()
+{
+    Assert.Throws<ArgumentNullException>(
+        () => new ConfigurationTagReplacementProvider(null!));
 }
 ```
 
