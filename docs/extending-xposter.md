@@ -188,7 +188,7 @@ public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 
 ## Adding a New Orchestrator (Content Strategy)
 
-An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It must also implement the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. Dependencies — sender, AI service, and any data services — are received via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
+An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It must also implement the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. Dependencies — sender, AI capability providers, and any data services — are received via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
 
 ### Step 1 — Extend BaseOrchestrator
 
@@ -196,8 +196,12 @@ An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync
 // src/Orchestrators/QuoteOrchestrator.cs
 public class QuoteOrchestrator : BaseOrchestrator
 {
-    public QuoteOrchestrator(ISender sender, ILogger<QuoteOrchestrator> logger, IAiService aiService)
-        : base(sender, logger, aiService) { }
+    public QuoteOrchestrator(
+        ISender sender,
+        ILogger<QuoteOrchestrator> logger,
+        ITextToTextProvider? textProvider,
+        ITextToImageProvider? imageProvider)
+        : base(sender, logger, textProvider, imageProvider) { }
 
     public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
         [SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.DryRun];
@@ -206,9 +210,16 @@ public class QuoteOrchestrator : BaseOrchestrator
     {
         // Return null (do not throw) when no content can be produced.
         // XFunction will skip posting gracefully.
-        var quote = await _aiService.GetCompletionAsync("Generate a motivational tech quote.", 100);
+        if (_textProvider is null) return null;
+
+        var quote = await _textProvider.GetSummaryAsync("Generate a motivational tech quote.", 100);
         if (string.IsNullOrWhiteSpace(quote)) return null;
-        return new Post { Content = quote };
+
+        byte[]? image = null;
+        if (_imageProvider is not null)
+            image = await _imageProvider.GenerateImageAsync(quote);
+
+        return new Post { Content = quote, Image = image };
     }
 }
 ```
@@ -216,6 +227,8 @@ public class QuoteOrchestrator : BaseOrchestrator
 > **`SupportedPlatforms` invariant**: always include `SenderPlatform.DryRun` so the orchestrator can be exercised locally without live API calls. Declare only the platforms the orchestrator has been validated against — omitting a platform is a deliberate signal that the content format may not be compatible.
 
 > **`OrchestrateAsync` invariant**: must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+
+> **Null capability providers**: `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. When a slot references a text-only provider (e.g. `AiProvider.DeepSeek`), `imageProvider` will be `null` — check before use and degrade gracefully (text-only post). When a slot references an image-only provider (e.g. `AiProvider.FalAi`), `textProvider` will be `null` — return `null` early if the orchestrator cannot produce content without text generation.
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
@@ -236,11 +249,23 @@ No other change to `OrchestratorFactory` is required. The factory receives the u
 
 ## Adding a New AI Provider
 
-The AI layer is abstracted behind `IAiService`. `AiServiceFactory` resolves implementations using the .NET **keyed services** mechanism: each `IAiService` is registered against its `AiProvider` enum value as the key, and `AiServiceFactory.GetByProvider()` calls `GetKeyedService<IAiService>(provider)` to retrieve it. There is no switch inside the factory — adding a new provider requires only registering the implementation under the correct key and declaring that key as supported.
+The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. `OrchestratorFactory` resolves both capabilities independently via `IServiceProvider.GetKeyedService<T>(profile.AiProvider)`. There is no factory class or switch expression to modify — adding a new provider requires only implementing the relevant interface(s) and adding the keyed DI registrations.
+
+### Capability model
+
+A provider can implement one or both capability interfaces:
+
+| Provider type | Implements | Keyed registrations to add |
+|---|---|---|
+| Text + Image | `ITextToTextProvider` and `ITextToImageProvider` | Both interfaces under the same key |
+| Text only | `ITextToTextProvider` | `ITextToTextProvider` only; `GetKeyedService<ITextToImageProvider>` returns `null` |
+| Image only | `ITextToImageProvider` | `ITextToImageProvider` only; `GetKeyedService<ITextToTextProvider>` returns `null` |
+
+`null` resolution is **intentional**: orchestrators check for null providers and degrade gracefully. Misconfiguring a text-only provider for an image-generating slot surfaces explicitly inside `FeedOrchestrator` at the point of use, not silently.
 
 ### Step 1 — Add the Enum Value
 
-Append a new value to `AiProvider`. Assign an explicit integer to avoid accidental renumbering of existing values:
+Append a new value to `AiProvider`. Assign an explicit integer to avoid accidental renumbering of existing values, and add a `[Description]` attribute if the display label differs from the enum name:
 
 ```csharp
 // src/Contracts/AiProvider.cs
@@ -250,53 +275,86 @@ public enum AiProvider
     OpenAi       = 1,
     Perplexity   = 2,
     AzureFoundry = 3,
-    Anthropic    = 4,  // new
+    DeepSeek     = 4,
+    FalAi        = 5,
+    [Description("Anthropic")]
+    Anthropic    = 6,  // new
 }
 ```
 
-### Step 2 — Implement IAiService
+> Also update `DefaultSlotProfileProvider` if the new provider should be active for a production slot. Any slot profile that previously referenced `AiProvider.DeepSeekWithFal` must be migrated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate — `DeepSeekWithFal` has been removed.
+
+### Step 2 — Implement the Capability Interface(s)
+
+**Text + Image provider** (e.g. Anthropic supports both):
 
 ```csharp
-// src/Services/Ai/AnthropicAiService.cs
-public class AnthropicAiService : IAiService
+// src/Services/Ai/AnthropicService.cs
+public class AnthropicService : ITextToTextProvider, ITextToImageProvider
 {
-    // Model names, SDK dependencies, and API keys are internal to this class.
-    public async Task<string> GetCompletionAsync(string prompt, int maxTokens)
+    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default)
     {
-        // Call Anthropic Messages API
+        // Call Anthropic Messages API for summarisation
     }
 
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default)
     {
-        // Anthropic does not offer a native image model;
-        // delegate to a compatible image provider or throw NotSupportedException.
+        // Call Anthropic Messages API for prompt generation
+    }
+
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default)
+    {
+        // Call Anthropic image generation API
     }
 }
 ```
 
-### Step 3 — Register as a Keyed Service and Declare as Supported
-
-`AiServiceFactory` resolves providers via `GetKeyedService<IAiService>(provider)`, so the implementation must be registered as a **keyed transient** against its `AiProvider` enum value — not as a plain `AddTransient`. A plain registration would be invisible to the factory.
+**Text-only provider** (e.g. a provider that has no image model):
 
 ```csharp
-// src/Program.cs
-builder.Services.AddKeyedTransient<IAiService, AnthropicAiService>(AiProvider.Anthropic);
-builder.Services.AddAnthropicOptions(builder.Configuration);  // see Step 4
+// src/Services/Ai/MyTextOnlyService.cs
+public class MyTextOnlyService : ITextToTextProvider
+{
+    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default) { ... }
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default) { ... }
+    // No GenerateImageAsync — ITextToImageProvider is not implemented.
+    // Slots using this provider will receive null for imageProvider — intentional.
+}
 ```
 
-Then add the new value to the `_supportedProviders` set in `AiServiceFactory`. This guard is what `GetByProvider` checks before attempting resolution; without it the factory throws `ArgumentException` even if the service is correctly registered:
+**Image-only provider** (e.g. a specialised diffusion model):
 
 ```csharp
-// src/Orchestrators/AiServiceFactory.cs
-private static readonly HashSet<AiProvider> _supportedProviders =
-[
-    AiProvider.OpenAi,
-    AiProvider.AzureFoundry,
-    AiProvider.Anthropic,  // new
-];
+// src/Services/Ai/MyImageOnlyService.cs
+public class MyImageOnlyService : ITextToImageProvider
+{
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default) { ... }
+    // No text methods — ITextToTextProvider is not implemented.
+    // Slots using this provider will receive null for textProvider — intentional.
+}
 ```
 
-No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledOrchestrationProfile` and via the global `AiProvider` configuration key.
+### Step 3 — Register as Keyed Services
+
+Add the keyed registrations to `AddXPosterAiProviders()` in `Program.cs`. Register only the interfaces the service actually implements:
+
+```csharp
+// src/Program.cs — inside AddXPosterAiProviders()
+
+// Text + Image provider
+builder.Services.AddKeyedTransient<ITextToTextProvider,  AnthropicService>(AiProvider.Anthropic);
+builder.Services.AddKeyedTransient<ITextToImageProvider, AnthropicService>(AiProvider.Anthropic);
+
+// Text-only provider
+builder.Services.AddKeyedTransient<ITextToTextProvider, MyTextOnlyService>(AiProvider.MyTextOnly);
+// No ITextToImageProvider registration — GetKeyedService returns null for this key
+
+// Image-only provider
+builder.Services.AddKeyedTransient<ITextToImageProvider, MyImageOnlyService>(AiProvider.MyImageOnly);
+// No ITextToTextProvider registration — GetKeyedService returns null for this key
+```
+
+No switch expression, no factory class, and no `_supportedProviders` set to maintain. The keyed DI registration is the single source of truth for capability availability.
 
 ### Step 4 — Add an `*OptionsExtensions.cs` file
 
@@ -364,6 +422,9 @@ All extensions must respect the following invariants to integrate correctly with
 - **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
+- **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return `null` early when `textProvider` is null and text generation is required.
+- **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
+- **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
