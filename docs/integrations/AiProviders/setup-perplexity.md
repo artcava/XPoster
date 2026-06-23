@@ -51,7 +51,7 @@ Copy the Perplexity block from `src/local.settings.json.example` into your
 `src/local.settings.json` and fill in the required values:
 
 ```jsonc
-// ══ AI — Perplexity (AiProvider = "Perplexity") ══════════════════════════
+// ══ AI — Perplexity (AiProvider = "Perplexity") ════════════════════════
 "AiProvider":                              "Perplexity",
 "Perplexity__ApiKey":                      "<your-perplexity-api-key>",
 "Perplexity__Endpoint":                    "https://api.perplexity.ai",
@@ -119,7 +119,7 @@ The orchestrator interprets an empty byte array as "no image" and publishes the
 post as text-only. This is intentional and not an error condition.
 
 If image generation is required, switch to `OpenAi`, `AzureFoundry`, or
-`DeepSeekWithFal` instead.
+`FalAi` instead.
 
 ---
 
