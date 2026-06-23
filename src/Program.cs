@@ -22,17 +22,22 @@ builder.Services
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
-    LoggerFilterOptions? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
-        == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider") as LoggerFilterOptions;
-    LoggerFilterRule? rule = options.Rules.FirstOrDefault(r => r.ProviderName
+    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
         == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-    if (rule is not null)
+    if (defaultRule is not null)
     {
-        options.Rules.Remove(rule);
+        options.Rules.Remove(defaultRule);
     }
 });
 
 // Azure Key Vault Configuration Provider.
+// Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.
+// DefaultAzureCredential is the same credential chain used by the former KeyVaultService.
+//
+// NOTE: FunctionsApplicationBuilder.Configuration is a ConfigurationManager.
+// AddAzureKeyVault is an extension method on IConfigurationBuilder, so an explicit
+// cast is required — ConfigurationManager implements IConfigurationBuilder but does
+// not expose the extension methods without the cast.
 var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     ?? throw new InvalidOperationException("KEYVAULT_URI app setting is not set.");
 
@@ -40,7 +45,8 @@ var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     new Uri(keyVaultUri),
     new DefaultAzureCredential());
 
-// Typed sender credentials.
+// Typed sender credentials — bound flat from IConfiguration (secret names match property names).
+// ValidateOnStart() ensures missing secrets fail at startup rather than at first invocation.
 builder.Services
     .AddOptions<XCredentials>()
     .BindConfiguration(string.Empty)

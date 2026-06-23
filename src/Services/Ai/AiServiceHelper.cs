@@ -8,7 +8,7 @@ namespace XPoster.Services;
 
 /// <summary>
 /// Shared helper for parsing OpenAI-compatible HTTP responses.
-/// Centralises guard pipelines used by every <see cref="IAiService"/> implementation.
+/// Centralises guard pipelines used by every AI provider implementation.
 /// </summary>
 internal static class AiServiceHelper
 {
@@ -97,10 +97,10 @@ internal static class AiServiceHelper
 
         return provider switch
         {
-            AiProvider.OpenAi          => ExtractOpenAiBytes(root, provider, logger),
-            AiProvider.AzureFoundry    => await ExtractAzureFoundryBytesAsync(root, provider, allowedOrigin, httpClient, logger, cancellationToken),
-            AiProvider.DeepSeekWithFal => await ExtractFalAiBytesAsync(root, provider, httpClient, logger, cancellationToken),
-            _                          => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
+            AiProvider.OpenAi       => ExtractOpenAiBytes(root, provider, logger),
+            AiProvider.AzureFoundry => await ExtractAzureFoundryBytesAsync(root, provider, allowedOrigin, httpClient, logger, cancellationToken),
+            AiProvider.FalAi        => await ExtractFalAiBytesAsync(root, provider, httpClient, logger, cancellationToken),
+            _                       => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
         };
     }
 
