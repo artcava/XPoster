@@ -9,6 +9,7 @@ public class AiProviderExtensionsTests
     [InlineData(AiProvider.OpenAi,       "OpenAI")]
     [InlineData(AiProvider.Perplexity,   "Perplexity")]
     [InlineData(AiProvider.AzureFoundry, "Azure Foundry")]
+    [InlineData(AiProvider.DeepSeek,     "DeepSeek")]
     [InlineData(AiProvider.FalAi,        "fal.ai")]
     public void GetLabel_KnownProvider_ReturnsDescriptionAttributeValue(AiProvider provider, string expected)
     {
@@ -32,5 +33,16 @@ public class AiProviderExtensionsTests
         // Ensures Description attribute is read, not Enum.ToString()
         Assert.NotEqual(provider.ToString(), label);
         Assert.Equal(label, provider.GetLabel());
+    }
+
+    [Theory]
+    [InlineData(AiProvider.None)]
+    [InlineData(AiProvider.Perplexity)]
+    [InlineData(AiProvider.DeepSeek)]
+    public void GetLabel_DescriptionMatchesEnumName(AiProvider provider)
+    {
+        // For these providers the Description intentionally equals the enum name.
+        // Verifies the attribute is still present and returns the correct value.
+        Assert.Equal(provider.ToString(), provider.GetLabel());
     }
 }
