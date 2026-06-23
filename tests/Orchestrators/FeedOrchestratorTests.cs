@@ -296,4 +296,83 @@ public class FeedOrchestratorTests
         _mockTextProvider.Verify(s => s.GetSummaryAsync(
             It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
     }
+
+    // ---------------------------------------------------------------------------
+    // Image prompt fallback — GetImagePromptAsync returns empty → summary used as prompt
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsEmpty()
+    {
+        // ARRANGE
+        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
+        var fakeSummary = "Fallback summary used as prompt";
+        var fakeImage   = new byte[] { 9, 8, 7 };
+
+        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(
+                It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeSummary);
+        // GetImagePromptAsync returns empty — triggers the fallback branch
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(string.Empty);
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeImage);
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        var result = await orchestrator.OrchestrateAsync();
+
+        // ASSERT — post is published with image; summary was used as fallback prompt
+        Assert.NotNull(result);
+        Assert.Equal(fakeSummary, result.Content);
+        Assert.Equal(fakeImage, result.Image);
+        Assert.True(orchestrator.SendIt);
+        // GenerateImageAsync must have been called with the summary as fallback prompt
+        _mockImageProvider.Verify(
+            s => s.GenerateImageAsync(fakeSummary, It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsWhitespace()
+    {
+        // ARRANGE
+        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
+        var fakeSummary = "Fallback summary";
+        var fakeImage   = new byte[] { 1 };
+
+        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(
+                It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeSummary);
+        // whitespace triggers the same fallback as empty string
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("   ");
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeImage);
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT
+        var result = await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        Assert.NotNull(result);
+        Assert.Equal(fakeImage, result.Image);
+        _mockImageProvider.Verify(
+            s => s.GenerateImageAsync(fakeSummary, It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
 }
