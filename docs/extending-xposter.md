@@ -1,6 +1,6 @@
 # Extending XPoster
 
-XPoster is designed around three extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), and **AI Providers** (model integrations). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
+XPoster is designed around four extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), **AI Providers** (model integrations), and **Tag Replacement Providers** (hashtag mapping sources). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
 
 > For the architectural rationale behind each extension point, see [architecture.md §5](architecture.md#5-extension-points).
 
@@ -412,6 +412,79 @@ Key rules for this file:
 
 ---
 
+## Adding a New Tag Replacement Provider
+
+The tag replacement provider resolves the word-to-hashtag map consumed by `FeedOrchestrator` at Step 3 of its pipeline. The default implementation, `ConfigurationTagReplacementProvider`, reads the map from `TagReplacementOptions:Replacements` in app settings. If you need to source replacements from a different store — a database, a remote API, Azure App Configuration, or Key Vault — implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
+
+### Contract
+
+```csharp
+// src/Contracts/ITagReplacementProvider.cs
+public interface ITagReplacementProvider
+{
+    IReadOnlyDictionary<string, string> GetReplacements();
+}
+```
+
+`GetReplacements()` must:
+- Return an `IReadOnlyDictionary<string, string>` mapping plain words (keys) to their hashtag replacements (values).
+- Return an **empty dictionary** — never `null` — when no replacements are configured. `FeedOrchestrator` treats an empty map as a valid no-op.
+- Be **synchronous and cheap**. `FeedOrchestrator` calls it twice per execution (once for feed keyword filtering, once for post-summary replacement). Load data at construction time or cache it; do not make blocking HTTP calls inside `GetReplacements()`.
+
+### Step 1 — Implement ITagReplacementProvider
+
+```csharp
+// src/Orchestrators/DatabaseTagReplacementProvider.cs
+using XPoster.Contracts;
+
+namespace XPoster.Orchestrators;
+
+/// <summary>
+/// Loads word-to-hashtag replacements from a remote database, refreshed at startup.
+/// </summary>
+public class DatabaseTagReplacementProvider : ITagReplacementProvider
+{
+    private readonly IReadOnlyDictionary<string, string> _replacements;
+
+    public DatabaseTagReplacementProvider(IMyDatabaseClient db)
+    {
+        // Load once at construction; FeedOrchestrator calls GetReplacements() synchronously.
+        var rows = db.FetchReplacements();
+        _replacements = rows.ToDictionary(
+            r => r.Word,
+            r => r.Hashtag,
+            StringComparer.OrdinalIgnoreCase);
+    }
+
+    public IReadOnlyDictionary<string, string> GetReplacements() => _replacements;
+}
+```
+
+> Use `StringComparer.OrdinalIgnoreCase` on the dictionary to honour the case-insensitive matching contract. `FeedOrchestrator.ReplaceEveryFirstOccurrenceOf()` performs its own case-insensitive scan, but a case-insensitive dictionary prevents duplicate keys with different casing from causing silent overrides.
+
+### Step 2 — Register in DI
+
+Replace the existing `ConfigurationTagReplacementProvider` registration in `Program.cs` with your implementation. The registration must remain `Singleton` — `FeedOrchestrator` is resolved per-trigger and expects the provider to be cheap to call.
+
+```csharp
+// src/Program.cs
+// Remove or comment out:
+// builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
+
+// Add your implementation:
+builder.Services.AddSingleton<ITagReplacementProvider, DatabaseTagReplacementProvider>();
+```
+
+No other change is required. `FeedOrchestrator` depends only on `ITagReplacementProvider` — it is unaware of the concrete implementation.
+
+### Step 3 — Remove the `TagReplacementOptions` configuration keys (optional)
+
+If your new provider does not use `TagReplacementOptions`, you can remove the `TagReplacementOptions__Replacements__*` keys from `local.settings.json` and Azure App Settings. The `ConfigurationTagReplacementProvider` binding will no longer be active.
+
+> If you keep the configuration keys but switch to a different provider, the bound `TagReplacementOptions` values are simply ignored — no error is raised.
+
+---
+
 ## Design Constraints
 
 All extensions must respect the following invariants to integrate correctly with the pipeline:
@@ -423,9 +496,10 @@ All extensions must respect the following invariants to integrate correctly with
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
 - **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return `null` early when `textProvider` is null and text generation is required.
-- **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
+- **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for “capability not available”.
 - **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **`ITagReplacementProvider` must return an empty dictionary — never `null`.** `FeedOrchestrator` iterates the result directly without a null-guard; returning `null` causes a `NullReferenceException` at runtime.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.
