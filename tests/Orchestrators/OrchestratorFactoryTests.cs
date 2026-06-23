@@ -44,7 +44,9 @@ public class OrchestratorFactoryTests
     {
         // ARRANGE
         const int arbitraryHour = 10;
-        var profile = new ScheduledOrchestrationProfile(arbitraryHour, platform, expectedType, AiProvider.OpenAi);
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, platform, expectedType,
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
@@ -84,7 +86,8 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, SenderPlatform.LinkedIn, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.LinkedIn, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         var orchestrator = factory.Resolve();
@@ -98,7 +101,8 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 11;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         var orchestrator = factory.Resolve();
@@ -112,7 +116,8 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 12;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, SenderPlatform.Instagram, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.Instagram, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         var orchestrator = factory.Resolve();
@@ -126,7 +131,8 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, SenderPlatform.DryRun, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.DryRun, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         var orchestrator = factory.Resolve();
@@ -164,33 +170,81 @@ public class OrchestratorFactoryTests
     }
 
     // ---------------------------------------------------------------------------
-    // AI capability provider wiring
+    // AI capability provider wiring — independent TextProvider / ImageProvider
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void Resolve_Should_RequestKeyedCapabilityProviders_WhenProfileSpecifiesAiProvider()
+    public void Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()
     {
         // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         // ACT
         factory.Resolve();
 
-        // ASSERT — factory must attempt to resolve both capability interfaces for the configured key
+        // ASSERT — factory must request ITextToTextProvider with TextProvider key
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(
             sp => sp.GetKeyedService(typeof(ITextToTextProvider), (object)AiProvider.OpenAi),
             Times.Once);
+    }
+
+    [Fact]
+    public void Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()
+    {
+        // ARRANGE
+        const int arbitraryHour = 10;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        factory.Resolve();
+
+        // ASSERT — factory must request ITextToImageProvider with ImageProvider key
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(
             sp => sp.GetKeyedService(typeof(ITextToImageProvider), (object)AiProvider.OpenAi),
             Times.Once);
     }
 
     [Fact]
-    public void Resolve_Should_NotRequestAiCapabilityProviders_WhenProfileHasNoAiProvider()
+    public void Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent()
+    {
+        // ARRANGE — split-provider slot: DeepSeek for text, FalAi for image
+        const int arbitraryHour = 10;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator),
+            textProvider: AiProvider.DeepSeek, imageProvider: AiProvider.FalAi);
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        factory.Resolve();
+
+        // ASSERT — text capability resolved from DeepSeek key, image from FalAi key
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToTextProvider), (object)AiProvider.DeepSeek),
+            Times.Once);
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToImageProvider), (object)AiProvider.FalAi),
+            Times.Once);
+        // Ensure no cross-contamination
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToTextProvider), (object)AiProvider.FalAi),
+            Times.Never);
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToImageProvider), (object)AiProvider.DeepSeek),
+            Times.Never);
+    }
+
+    [Fact]
+    public void Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()
     {
         // ARRANGE
         const int arbitraryHour = 10;
@@ -204,7 +258,27 @@ public class OrchestratorFactoryTests
         // ASSERT
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(
-            sp => sp.GetKeyedService(It.IsAny<Type>(), It.IsAny<object>()),
+            sp => sp.GetKeyedService(typeof(ITextToTextProvider), It.IsAny<object>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public void Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()
+    {
+        // ARRANGE — text-only slot: DeepSeek text, no image
+        const int arbitraryHour = 10;
+        var profile = new ScheduledOrchestrationProfile(
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator),
+            textProvider: AiProvider.DeepSeek, imageProvider: null);
+        var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
+
+        // ACT
+        factory.Resolve();
+
+        // ASSERT
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToImageProvider), It.IsAny<object>()),
             Times.Never);
     }
 
@@ -216,7 +290,8 @@ public class OrchestratorFactoryTests
     public void DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()
     {
         var innerProfile = new ScheduledOrchestrationProfile(
-            6, SenderPlatform.LinkedIn, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            6, SenderPlatform.LinkedIn, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
 
         var mockInner = new Mock<ISlotProfileProvider>();
         mockInner.Setup(p => p.GetProfiles())
@@ -247,7 +322,8 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
-            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
+            arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi, imageProvider: AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
         var orchestrator = factory.Resolve();

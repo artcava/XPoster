@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using XPoster.Abstraction;
 using XPoster.Contracts;
@@ -8,8 +7,10 @@ namespace XPoster.Orchestrators;
 
 /// <summary>
 /// Resolves and instantiates the correct <see cref="BaseOrchestrator"/> for the current hour of the day
-/// by consulting the <see cref="ISlotProfileProvider"/> schedule, including AI provider orchestration.
-/// Sender resolution is O(senders) via <see cref="SenderPlatform"/> switch — independent of orchestrator type.
+/// by consulting the <see cref="ISlotProfileProvider"/> schedule.
+/// Sender resolution is O(senders) via <see cref="SenderPlatform"/> switch.
+/// Text and image capabilities are resolved independently via keyed DI, allowing a slot to mix
+/// different providers for each capability (e.g. DeepSeek for text, FalAi for image).
 /// </summary>
 public class OrchestratorFactory : IOrchestratorFactory
 {
@@ -17,7 +18,6 @@ public class OrchestratorFactory : IOrchestratorFactory
     private readonly ILogger<OrchestratorFactory> _log;
     private readonly ITimeProvider _timeProvider;
     private readonly ISlotProfileProvider _slotProfileProvider;
-    private readonly IConfiguration? _configuration;
 
     /// <summary>
     /// Initialises a new instance of <see cref="OrchestratorFactory"/>.
@@ -26,24 +26,24 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="slotProfileProvider">Provider that supplies the scheduled orchestration profiles.</param>
-    /// <param name="configuration">Optional configuration used to override the AI provider via <c>AiProvider</c> setting.</param>
     public OrchestratorFactory(
         IServiceProvider serviceProvider,
         ILogger<OrchestratorFactory> log,
         ITimeProvider timeProvider,
-        ISlotProfileProvider slotProfileProvider,
-        IConfiguration? configuration = null)
+        ISlotProfileProvider slotProfileProvider)
     {
         _serviceProvider = serviceProvider;
         _log = log;
         _timeProvider = timeProvider;
         _slotProfileProvider = slotProfileProvider;
-        _configuration = configuration;
     }
 
     /// <summary>
-    /// Creates and returns the <see cref="BaseOrchestrator"/> mapped to the current hour, including AI provider orchestration.
+    /// Creates and returns the <see cref="BaseOrchestrator"/> mapped to the current hour.
     /// Falls back to <see cref="NoOrchestrator"/> when no entry exists for the current hour.
+    /// Text and image capability providers are resolved independently:
+    /// a null result for either interface means the capability is unavailable for this slot,
+    /// and the orchestrator is expected to degrade gracefully.
     /// </summary>
     /// <returns>A fully initialised <see cref="BaseOrchestrator"/> instance.</returns>
     public BaseOrchestrator Resolve()
@@ -57,8 +57,14 @@ public class OrchestratorFactory : IOrchestratorFactory
             return CreateOrchestratorInstance(typeof(NoOrchestrator), null, null, null);
         }
 
-        _log.LogInformation("Creating orchestrator {OrchestratorType} for platform {SenderPlatform} at hour {Hour} with AI provider {AiProvider}",
-            profile.OrchestratorType.Name, profile.SenderPlatform, profile.Hour, profile.AiProvider);
+        _log.LogInformation(
+            "Creating orchestrator {OrchestratorType} for platform {SenderPlatform} at hour {Hour} " +
+            "with TextProvider={TextProvider} ImageProvider={ImageProvider}",
+            profile.OrchestratorType.Name,
+            profile.SenderPlatform,
+            profile.Hour,
+            profile.TextProvider?.ToString() ?? "none",
+            profile.ImageProvider?.ToString() ?? "none");
 
         ISender? sender = profile.SenderPlatform switch
         {
@@ -69,19 +75,16 @@ public class OrchestratorFactory : IOrchestratorFactory
             _ => null
         };
 
-        ITextToTextProvider? textProvider = null;
-        ITextToImageProvider? imageProvider = null;
+        // Text and image capabilities are resolved independently from their respective provider keys.
+        // A null result is intentional: not every AiProvider implements both interfaces.
+        // Misconfiguration surfaces explicitly inside the orchestrator at the point of use, not silently.
+        ITextToTextProvider?  textProvider  = profile.TextProvider.HasValue
+            ? _serviceProvider.GetKeyedService<ITextToTextProvider>(profile.TextProvider.Value)
+            : null;
 
-        if (profile.AiProvider.HasValue)
-        {
-            var effectiveProvider = ResolveAiProvider(profile.AiProvider.Value);
-            // Both providers are optional capabilities: not every AiProvider implements both interfaces.
-            // FeedOrchestrator accepts ITextToTextProvider? and ITextToImageProvider? — null is intentional.
-            // Misconfiguration (e.g. using a text-only provider for image generation) surfaces explicitly
-            // inside the orchestrator at the point of use, not silently.
-            textProvider  = _serviceProvider.GetKeyedService<ITextToTextProvider>(effectiveProvider);
-            imageProvider = _serviceProvider.GetKeyedService<ITextToImageProvider>(effectiveProvider);
-        }
+        ITextToImageProvider? imageProvider = profile.ImageProvider.HasValue
+            ? _serviceProvider.GetKeyedService<ITextToImageProvider>(profile.ImageProvider.Value)
+            : null;
 
         return CreateOrchestratorInstance(profile.OrchestratorType, sender, textProvider, imageProvider);
     }
@@ -118,26 +121,5 @@ public class OrchestratorFactory : IOrchestratorFactory
             }
         }
         return (BaseOrchestrator)Activator.CreateInstance(orchestratorType, args.ToArray())!;
-    }
-
-    private AiProvider ResolveAiProvider(AiProvider defaultProvider)
-    {
-        if (defaultProvider != AiProvider.None)
-            return defaultProvider;
-
-        var configuredProvider = _configuration?["AiProvider"];
-        if (string.IsNullOrWhiteSpace(configuredProvider))
-        {
-            _log.LogWarning("No AiProvider specified in profile and no global fallback configured.");
-            return defaultProvider;
-        }
-
-        if (Enum.TryParse<AiProvider>(configuredProvider, ignoreCase: true, out var parsedProvider))
-            return parsedProvider;
-
-        _log.LogWarning("Invalid AiProvider value '{AiProvider}' in configuration. No fallback available.",
-            configuredProvider);
-
-        return defaultProvider;
     }
 }
