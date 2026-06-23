@@ -9,19 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `DiWiringTests`: integration tests verifying correct capability resolution per `AiProvider` key, including null-resolution for text-only and image-only providers ([#211](https://github.com/artcava/XPoster/issues/211))
+- `AddXPosterAiProviders()` DI extension method; registers capability interfaces as keyed services by `AiProvider` ([#211](https://github.com/artcava/XPoster/issues/211))
+- `ITextToImageProvider` interface: capability contract for image generation ([#211](https://github.com/artcava/XPoster/issues/211))
+- `ITextToTextProvider` interface: capability contract for text summarisation and image prompt generation ([#211](https://github.com/artcava/XPoster/issues/211))
+
 ### Changed
+- `DefaultSlotProfileProvider`: any slot previously referencing `AiProvider.DeepSeekWithFal` updated to `AiProvider.DeepSeek` or `AiProvider.FalAi` ([#211](https://github.com/artcava/XPoster/issues/211))
+- `PerplexityService.GenerateImageAsync` previously returned `byte[0]` silently; this silent failure is eliminated — the method is removed; misconfiguration surfaces explicitly at point of use ([#211](https://github.com/artcava/XPoster/issues/211))
+- `FalAiImageService` implements `ITextToImageProvider` only ([#211](https://github.com/artcava/XPoster/issues/211))
+- `DeepSeekService` and `PerplexityService` implement `ITextToTextProvider` only ([#211](https://github.com/artcava/XPoster/issues/211))
+- `OpenAiService` and `AzureFoundryService` implement both capability interfaces ([#211](https://github.com/artcava/XPoster/issues/211))
+- Per-slot AI provider selection preserved: `profile.AiProvider` still drives which implementation is active for each time slot ([#211](https://github.com/artcava/XPoster/issues/211))
+- `OrchestratorFactory` resolves two keyed capability services via `GetKeyedService` (nullable); `IAiServiceFactory` dependency removed ([#211](https://github.com/artcava/XPoster/issues/211))
+- `FeedOrchestrator` depends on `ITextToTextProvider?` + `ITextToImageProvider?` instead of `IAiService` ([#211](https://github.com/artcava/XPoster/issues/211))
 - Replaced `MessageSender` enum with `SenderPlatform` enum; platform and orchestrator identity are now independent (ADR-005)
 - `OrchestratorFactory` resolves `ISender` from `SenderPlatform`; adding a new orchestrator no longer requires enum changes
 - `ScheduledOrchestrationProfile` uses `SenderPlatform` instead of `MessageSender`
-- **`ScheduledOrchestrationProfile` — split single `AiProvider?` into independent `TextProvider?` and `ImageProvider?`** ([#211](https://github.com/artcava/XPoster/issues/211)): previously a single `AiProvider` field was used for both capability interfaces, making it impossible to assign different providers for text and image generation within the same slot. Each field is independently nullable: `null` means the capability is unavailable for that slot and the orchestrator degrades gracefully. The canonical split-provider pattern (e.g. DeepSeek for text + FalAi for image) is now expressible directly in the schedule.
-- **`OrchestratorFactory.Resolve()` — capability providers resolved independently via separate keyed lookups** ([#211](https://github.com/artcava/XPoster/issues/211)): `ITextToTextProvider` is now resolved using `profile.TextProvider` as the keyed service key, and `ITextToImageProvider` using `profile.ImageProvider`. The two lookups are fully independent; a `null` key skips the resolution entirely. The `ResolveAiProvider()` helper and the optional `IConfiguration` constructor parameter have been removed — global provider override is now the responsibility of the slot profile, not the factory.
-- **`DefaultSlotProfileProvider` — slot profiles updated to new two-field signature** ([#211](https://github.com/artcava/XPoster/issues/211)): FeedOrchestrator slots (hours 6 and 8) now declare `textProvider` and `imageProvider` explicitly via named parameters. PowerLaw slots (hours 14 and 16) remain with both fields `null`, as they require no AI capability.
-- **`DryRunSlotProfileProvider` — dry-run slot updated to new two-field signature** ([#211](https://github.com/artcava/XPoster/issues/211)): the appended DryRun slot at hour 9 now sets both `textProvider: AiProvider.OpenAi` and `imageProvider: AiProvider.OpenAi` explicitly.
 
 ### Removed
+- `PerplexityService.GenerateImageAsync`: method removed; Perplexity is a text-only provider ([#211](https://github.com/artcava/XPoster/issues/211))
+- `AiServiceFactory` / `IAiServiceFactory` ([#211](https://github.com/artcava/XPoster/issues/211))
+- `IAiService` monolithic interface ([#211](https://github.com/artcava/XPoster/issues/211))
+- `AiProvider.DeepSeekWithFal`: enum value removed; replaced by independent `AiProvider.DeepSeek` and `AiProvider.FalAi` keys ([#211](https://github.com/artcava/XPoster/issues/211))
+- `HybridAiService`: no longer needed; `DeepSeek` and `FalAi` are now independent `AiProvider` keys ([#211](https://github.com/artcava/XPoster/issues/211))
 - `MessageSender` enum
-- **`OrchestratorFactory.ResolveAiProvider()` helper method** ([#211](https://github.com/artcava/XPoster/issues/211)): no longer needed after the split-provider refactor; global `AiProvider` configuration override is now applied at the profile level.
-- **`IConfiguration` optional constructor parameter from `OrchestratorFactory`** ([#211](https://github.com/artcava/XPoster/issues/211)): removed together with `ResolveAiProvider()`; the factory no longer reads the `AiProvider` app setting.
 
 ### Tests
 - **`OrchestratorFactoryTests`** ([#211](https://github.com/artcava/XPoster/issues/211)): all `ScheduledOrchestrationProfile` usages updated to the new two-field constructor signature. Four new tests added: `Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider`, `Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider`, `Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent` (verifies DeepSeek+FalAi split scenario with no cross-contamination), `Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider` (text-only slot).
