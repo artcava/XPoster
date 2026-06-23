@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Abstraction;
@@ -20,20 +21,12 @@ public class OrchestratorFactoryTests
     private readonly Mock<IServiceProvider> _mockServiceProvider;
     private readonly Mock<ILogger<OrchestratorFactory>> _mockLogger;
     private readonly Mock<ITimeProvider> _mockTimeProvider;
-    private readonly Mock<IAiServiceFactory> _mockAiServiceFactory;
-    private readonly Mock<IAiService> _mockAiService;
 
     public OrchestratorFactoryTests()
     {
         _mockServiceProvider = new Mock<IServiceProvider>();
-        _mockLogger = new Mock<ILogger<OrchestratorFactory>>();
-        _mockTimeProvider = new Mock<ITimeProvider>();
-        _mockAiServiceFactory = new Mock<IAiServiceFactory>();
-        _mockAiService = new Mock<IAiService>();
-
-        _mockAiServiceFactory
-            .Setup(x => x.GetByProvider(AiProvider.OpenAi))
-            .Returns(_mockAiService.Object);
+        _mockLogger          = new Mock<ILogger<OrchestratorFactory>>();
+        _mockTimeProvider    = new Mock<ITimeProvider>();
     }
 
     // ---------------------------------------------------------------------------
@@ -49,7 +42,7 @@ public class OrchestratorFactoryTests
     public void Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile(
         Type expectedType, SenderPlatform platform)
     {
-        // ARRANGE — synthetic profile at an arbitrary hour; no coupling to production schedule
+        // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(arbitraryHour, platform, expectedType, AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
@@ -64,7 +57,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()
     {
-        // ARRANGE — empty schedule: any hour maps to NoOrchestrator
+        // ARRANGE
         var mockProfileProvider = new Mock<ISlotProfileProvider>();
         mockProfileProvider.Setup(p => p.GetProfiles())
             .Returns(new List<ScheduledOrchestrationProfile>());
@@ -80,7 +73,6 @@ public class OrchestratorFactoryTests
 
         // ASSERT
         Assert.IsType<NoOrchestrator>(orchestrator);
-        _mockAiServiceFactory.Verify(x => x.GetByProvider(It.IsAny<AiProvider>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -90,16 +82,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()
     {
-        // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.LinkedIn, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
     }
@@ -107,16 +96,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveXSender_WhenProfileUsesX()
     {
-        // ARRANGE
         const int arbitraryHour = 11;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
     }
@@ -124,16 +110,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()
     {
-        // ARRANGE
         const int arbitraryHour = 12;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.Instagram, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(IgSender)), Times.Once);
     }
@@ -141,16 +124,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()
     {
-        // ARRANGE — DryRun profile injected synthetically; no dependency on production schedule
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.DryRun, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         Assert.IsType<FeedOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(DryRunSender)), Times.Once);
     }
@@ -158,16 +138,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()
     {
-        // ARRANGE — same platform (LinkedIn), different orchestrator type: switch must be O(senders)
         const int arbitraryHour = 14;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.LinkedIn, typeof(PowerLawOrchestrator));
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         Assert.IsType<PowerLawOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
     }
@@ -175,26 +152,23 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()
     {
-        // ARRANGE — same platform (X), different orchestrator type: switch must be O(senders)
         const int arbitraryHour = 16;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.X, typeof(PowerLawOrchestrator));
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         Assert.IsType<PowerLawOrchestrator>(orchestrator);
         _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
     }
 
     // ---------------------------------------------------------------------------
-    // AI provider wiring
+    // AI capability provider wiring
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()
+    public void Resolve_Should_RequestKeyedCapabilityProviders_WhenProfileSpecifiesAiProvider()
     {
         // ARRANGE
         const int arbitraryHour = 10;
@@ -205,12 +179,18 @@ public class OrchestratorFactoryTests
         // ACT
         factory.Resolve();
 
-        // ASSERT
-        _mockAiServiceFactory.Verify(x => x.GetByProvider(AiProvider.OpenAi), Times.Once);
+        // ASSERT — factory must attempt to resolve both capability interfaces for the configured key
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToTextProvider), (object)AiProvider.OpenAi),
+            Times.Once);
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(typeof(ITextToImageProvider), (object)AiProvider.OpenAi),
+            Times.Once);
     }
 
     [Fact]
-    public void Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()
+    public void Resolve_Should_NotRequestAiCapabilityProviders_WhenProfileHasNoAiProvider()
     {
         // ARRANGE
         const int arbitraryHour = 10;
@@ -222,7 +202,10 @@ public class OrchestratorFactoryTests
         factory.Resolve();
 
         // ASSERT
-        _mockAiServiceFactory.Verify(x => x.GetByProvider(It.IsAny<AiProvider>()), Times.Never);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(
+            sp => sp.GetKeyedService(It.IsAny<Type>(), It.IsAny<object>()),
+            Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -232,7 +215,6 @@ public class OrchestratorFactoryTests
     [Fact]
     public void DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()
     {
-        // ARRANGE
         var innerProfile = new ScheduledOrchestrationProfile(
             6, SenderPlatform.LinkedIn, typeof(FeedOrchestrator), AiProvider.OpenAi);
 
@@ -242,10 +224,8 @@ public class OrchestratorFactoryTests
 
         var provider = new DryRunSlotProfileProvider(mockInner.Object);
 
-        // ACT
         var profiles = provider.GetProfiles();
 
-        // ASSERT
         Assert.Equal(2, profiles.Count);
         Assert.Contains(profiles, p => p.SenderPlatform == SenderPlatform.DryRun);
     }
@@ -253,13 +233,8 @@ public class OrchestratorFactoryTests
     [Fact]
     public void DefaultSlotProfileProvider_Should_NotContainDryRunProfile()
     {
-        // ARRANGE
         var provider = new DefaultSlotProfileProvider();
-
-        // ACT
         var profiles = provider.GetProfiles();
-
-        // ASSERT
         Assert.DoesNotContain(profiles, p => p.SenderPlatform == SenderPlatform.DryRun);
     }
 
@@ -270,16 +245,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()
     {
-        // ARRANGE
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.X, typeof(FeedOrchestrator), AiProvider.OpenAi);
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         var feedOrchestrator = Assert.IsType<FeedOrchestrator>(orchestrator);
         Assert.Contains(SenderPlatform.X,         feedOrchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.LinkedIn,  feedOrchestrator.SupportedPlatforms);
@@ -290,16 +262,13 @@ public class OrchestratorFactoryTests
     [Fact]
     public void PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()
     {
-        // ARRANGE
         const int arbitraryHour = 14;
         var profile = new ScheduledOrchestrationProfile(
             arbitraryHour, SenderPlatform.LinkedIn, typeof(PowerLawOrchestrator));
         var factory = CreateFactoryWithProfiles(arbitraryHour, profile);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         var powerLawOrchestrator = Assert.IsType<PowerLawOrchestrator>(orchestrator);
         Assert.Contains(SenderPlatform.X,        powerLawOrchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.LinkedIn, powerLawOrchestrator.SupportedPlatforms);
@@ -310,7 +279,6 @@ public class OrchestratorFactoryTests
     [Fact]
     public void NoOrchestrator_SupportedPlatforms_IsEmpty()
     {
-        // ARRANGE — empty schedule forces NoOrchestrator
         var mockProfileProvider = new Mock<ISlotProfileProvider>();
         mockProfileProvider.Setup(p => p.GetProfiles())
             .Returns(new List<ScheduledOrchestrationProfile>());
@@ -321,10 +289,8 @@ public class OrchestratorFactoryTests
         SetupMocksForOrchestratorFactory();
         var factory = CreateFactory(mockProfileProvider.Object);
 
-        // ACT
         var orchestrator = factory.Resolve();
 
-        // ASSERT
         var noOrchestrator = Assert.IsType<NoOrchestrator>(orchestrator);
         Assert.Empty(noOrchestrator.SupportedPlatforms);
     }
@@ -353,7 +319,6 @@ public class OrchestratorFactoryTests
             _mockServiceProvider.Object,
             _mockLogger.Object,
             _mockTimeProvider.Object,
-            _mockAiServiceFactory.Object,
             profileProvider);
     }
 
@@ -364,10 +329,11 @@ public class OrchestratorFactoryTests
         var mockIgSender     = new Mock<ISender>();
         var mockDryRunSender = new Mock<ISender>();
 
-        var mockCryptoService  = new Mock<ICryptoService>();
-        var mockTimeProvider   = new Mock<ITimeProvider>();
-        var mockFeedService    = new Mock<IFeedService>();
-        var mockAiService      = new Mock<IAiService>();
+        var mockCryptoService    = new Mock<ICryptoService>();
+        var mockTimeProvider     = new Mock<ITimeProvider>();
+        var mockFeedService      = new Mock<IFeedService>();
+        var mockTextProvider     = new Mock<ITextToTextProvider>();
+        var mockImageProvider    = new Mock<ITextToImageProvider>();
 
         var mockLoggerPowerLaw = new Mock<ILogger<PowerLawOrchestrator>>();
         var mockLoggerFeed     = new Mock<ILogger<FeedOrchestrator>>();
@@ -385,6 +351,14 @@ public class OrchestratorFactoryTests
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ICryptoService))).Returns(mockCryptoService.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ITimeProvider))).Returns(mockTimeProvider.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(IFeedService))).Returns(mockFeedService.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(IAiService))).Returns(mockAiService.Object);
+
+        // Keyed capability providers — return mocks for any AiProvider key
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ITextToTextProvider), It.IsAny<object>()))
+            .Returns(mockTextProvider.Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ITextToImageProvider), It.IsAny<object>()))
+            .Returns(mockImageProvider.Object);
     }
 }
