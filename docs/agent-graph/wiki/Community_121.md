@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **FeedService()** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **CryptoService()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 78]] (4 shared connections)
+- [[Community 99]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

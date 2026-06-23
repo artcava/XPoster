@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **AddAzureFoundryOptions()** (2 connections)
 
 ## Relationships
 

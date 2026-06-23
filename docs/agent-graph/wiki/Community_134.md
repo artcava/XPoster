@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 115]] (2 shared connections)
+- [[Community 109]] (2 shared connections)
 
 ## Audit Trail
 

@@ -10,7 +10,7 @@
 
 ## Relationships
 
-- [[Community 92]] (3 shared connections)
+- [[Community 106]] (3 shared connections)
 
 ## Audit Trail
 

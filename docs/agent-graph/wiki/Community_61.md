@@ -1,23 +1,23 @@
 # Community 61
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **TestOrchestrator()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **if()** (2 connections)
+- **Uri()** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

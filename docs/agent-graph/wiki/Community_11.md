@@ -1,34 +1,34 @@
 # Community 11
 
-> 17 nodes · cohesion 0.12
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **HttpResponseMessage()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
-- **if()** (2 connections)
-- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
+- **FeedOrchestratorTests.cs** (16 connections)
+- **FeedOrchestratorTests.cs** (16 connections)
+- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsWhitespace()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsEmpty()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsEmpty()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageProviderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_TextProviderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
+- **new()** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 8]] (18 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 67 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

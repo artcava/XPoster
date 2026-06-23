@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (9 connections)
-- **ScheduledOrchestrationProfileTests.cs** (9 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **XPoster.Tests.Abstraction** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
+- **OrchestrateAsync_ReturnsNull()** (2 connections)
+- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **NoOrchestratorTests()** (2 connections)
+- **ProduceImage_IsAlwaysFalse()** (2 connections)
 
 ## Relationships
 

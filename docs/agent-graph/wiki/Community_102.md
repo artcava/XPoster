@@ -1,21 +1,21 @@
 # Community 102
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **AddOpenAiOptions()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **foreach()** (2 connections)
+- **if()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 82]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

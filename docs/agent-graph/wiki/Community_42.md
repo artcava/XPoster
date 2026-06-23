@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **RSSFeedMissingBranchTests** (2 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **params()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
 
 ## Relationships
 
