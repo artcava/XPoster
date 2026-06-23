@@ -28,8 +28,11 @@ Setup guides for each external service XPoster integrates with.
 | Twitter / X | [setup-x.md](integrations/setup-x.md) | OAuth 1.0a, API v2 |
 | LinkedIn | [setup-linkedin.md](integrations/setup-linkedin.md) | OAuth 2.0, 60-day token rotation |
 | Instagram | [setup-instagram.md](integrations/setup-instagram.md) | Not yet active — see [#72](https://github.com/artcava/XPoster/issues/72) |
-| fal.ai | [setup-fal.md](integrations/setup-fal.md) | Image generation for `DeepSeekWithFal` provider |
+| fal.ai | [setup-falai.md](integrations/setup-falai.md) | Image generation for `DeepSeekWithFal` provider |
 | Perplexity | [setup-perplexity.md](integrations/setup-perplexity.md) | Text-only provider; image generation not supported |
+| Azure AI Foundry | [setup-azure-foundry.md](integrations/setup-azure-foundry.md) | AI provider for summarisation + image generation |
+| DeepSeek | [setup-deepseek.md](integrations/setup-deepseek.md) | Used in `DeepSeekWithFal` provider |
+| graphify-ci | [graphify-ci.md](integrations/graphify-ci.md) | CI integration documentation |
 
 ---
 
