@@ -1,37 +1,36 @@
 # Community 8
 
-> 20 nodes · cohesion 0.19
+> 19 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (19 connections)
-- **DryRunSenderTests.cs** (19 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
-- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
-- **ValidPost()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
-- **new()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
-- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
-- **DryRunSenderTests()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
-- **MessageMaxLenght_ReturnsIntMaxValue()** (2 connections)
-- **BuildSender()** (2 connections)
+- **AzureFoundryServiceTests.cs** (35 connections)
+- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
+- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()** (2 connections)
+- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
+- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
+- **BuildService()** (2 connections)
+- **AzureFoundryServiceTests** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
+- **GenerateImageAsync_RequestBodyContainsModelField()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 11]] (17 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 74 (100%)
+- EXTRACTED: 71 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

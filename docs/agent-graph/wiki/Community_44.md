@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **XPoster.Services** (2 connections)
-- **nameof()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **if()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
 - **GetImagePromptAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
 - **GenerateImageAsync()** (2 connections)
-- **while()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (6 shared connections)
+- [[Community 52]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

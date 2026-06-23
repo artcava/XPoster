@@ -1,27 +1,26 @@
 # Community 10
 
-> 18 nodes · cohesion 0.22
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **FeedServiceTests.cs** (17 connections)
-- **FeedServiceTests.cs** (17 connections)
-- **SendAsync()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenFeedIsInvalidXml()** (2 connections)
+- **FeedOrchestratorTests.cs** (16 connections)
+- **FeedOrchestratorTests.cs** (16 connections)
+- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsWhitespace()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsEmpty()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageProviderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsEmpty()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
 - **new()** (2 connections)
-- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenHttpFails()** (2 connections)
-- **BuildService()** (2 connections)
-- **BuildRssXml()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **GetFeedsAsync_FetchesAndCachesFeeds_WhenCacheMissAndHttpSucceeds()** (2 connections)
-- **FeedService()** (2 connections)
-- **FakeHttpMessageHandler()** (2 connections)
-- **foreach()** (2 connections)
-- **FeedServiceTests** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetFeedsAsync_FiltersOutItemsWithNoKeywordMatch()** (2 connections)
-- **GetFeedsAsync_FiltersOutItemsOutsideDateRange()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_TextProviderIsNull()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **FeedOrchestratorTests()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
 
 ## Relationships
 
@@ -29,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

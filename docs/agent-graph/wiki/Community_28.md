@@ -1,19 +1,20 @@
 # Community 28
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (10 connections)
+- **DefaultSlotProfileProviderTests.cs** (10 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **GetProfiles_Should_ReturnFourActiveSlots()** (2 connections)
 - **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_ReturnsNull()** (2 connections)
-- **ProduceImage_IsAlwaysFalse()** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **NoOrchestratorTests()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **ProduceImage_Set_ThrowsNotImplementedException()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

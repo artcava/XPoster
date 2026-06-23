@@ -1,8 +1,8 @@
 # AiServiceHelperImageTests.cs
 
-> God node · 35 connections
+> God node · 37 connections
 
-**Community:** [[Community 69]]
+**Community:** [[Community 60]]
 
 ## Connections by Relation
 
@@ -13,8 +13,10 @@
 - [[Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()]]
 - [[Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()]]
 - [[Parse_AzureFoundry_UrlFallback_DownloadThrows_ReturnsEmpty()]]
+- [[Parse_AzureFoundry_UrlFallback_NullAllowedOrigin_SkipsOriginCheckAndDownloads()]]
 - [[Parse_AzureFoundry_UrlFallback_ReturnsBytes()]]
 - [[Parse_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()]]
+- [[Parse_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmpty()]]
 - [[Parse_AzureFoundry_ValidB64_ReturnsBytes()]]
 - [[Parse_FalAi_DownloadThrows_LogsError()]]
 - [[Parse_FalAi_DownloadThrows_ReturnsEmpty()]]
@@ -25,8 +27,6 @@
 - [[Parse_FalAi_ValidUrl_ReturnsBytes()]]
 - [[Parse_MalformedJson_ReturnsEmpty()]]
 - [[Parse_NonSuccessStatus_ReturnsEmpty()]]
-- [[Parse_OpenAi_EmptyB64Value_ReturnsEmpty()]]
-- [[Parse_OpenAi_EmptyDataArray_ReturnsEmpty()]]
 
 ---
 

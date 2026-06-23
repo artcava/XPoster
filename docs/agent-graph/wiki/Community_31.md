@@ -1,18 +1,19 @@
 # Community 31
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **PowerLawOrchestratorTests.cs** (8 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
+- **ScheduledOrchestrationProfileTests.cs** (9 connections)
+- **ScheduledOrchestrationProfileTests.cs** (9 connections)
+- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
+- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
+- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
+- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
+- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
+- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
+- **XPoster.Tests.Abstraction** (2 connections)
+- **ScheduledOrchestrationProfileTests** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

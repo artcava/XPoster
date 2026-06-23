@@ -1,25 +1,26 @@
 # Community 42
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **AzureFoundryService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **RSSFeedMissingBranchTests** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 51]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

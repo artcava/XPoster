@@ -1,32 +1,30 @@
 # Community 5
 
-> 23 nodes · cohesion 0.17
+> 21 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (22 connections)
-- **OrchestratorFactoryTests.cs** (22 connections)
-- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
-- **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()** (2 connections)
-- **Resolve_Should_NotRequestAiProvider_WhenProfileHasNoAiProvider()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **Resolve_Should_RequestConfiguredAiProvider_WhenProfileSpecifiesOne()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
+- **IgSenderTests.cs** (20 connections)
+- **IgSenderTests.cs** (20 connections)
+- **SendAsync_WhenInstagramApiReturns429_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithImage_TriesUploadAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WithWhitespaceContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **BuildSenderWithFactory()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **MessageMaxLenght_Returns2200()** (2 connections)
+- **new()** (2 connections)
+- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
+- **IgSender()** (2 connections)
+- **SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **BuildSender()** (2 connections)
 
 ## Relationships
 
@@ -34,7 +32,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 86 (100%)
+- EXTRACTED: 78 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

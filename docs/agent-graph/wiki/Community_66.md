@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 

@@ -1,28 +1,29 @@
 # Community 22
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
-- **new()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **BuildService()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **FalImageJson()** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 24]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

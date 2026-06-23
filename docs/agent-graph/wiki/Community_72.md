@@ -1,23 +1,22 @@
 # Community 72
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **PerplexityService()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **var()** (2 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetFeedUrls()** (2 connections)
 
 ## Relationships
 
-- [[Community 44]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

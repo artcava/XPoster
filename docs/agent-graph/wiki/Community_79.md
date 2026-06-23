@@ -1,22 +1,22 @@
 # Community 79
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **ITimeProvider** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **catch()** (2 connections)
+- **GenerateMessage()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **ReplaceEveryFirstOccurenceOf()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 87]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

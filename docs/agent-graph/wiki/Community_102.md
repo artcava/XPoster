@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **AddOpenAiOptions()** (2 connections)
 - **XPoster.Models** (2 connections)
-- **AddAzureFoundryOptions()** (2 connections)
 
 ## Relationships
 

@@ -1,16 +1,17 @@
 # Community 48
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **HybridAiService.cs** (6 connections)
-- **HybridAiService.cs** (6 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **HybridAiService()** (2 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **ImageData** (2 connections)
+- **Choice** (2 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAIResponse** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **Message** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

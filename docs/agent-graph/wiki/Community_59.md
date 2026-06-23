@@ -1,23 +1,23 @@
 # Community 59
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **return()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **foreach()** (2 connections)
+- **XFunctionTests.cs** (5 connections)
+- **XFunctionTests.cs** (5 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **XPoster.Tests** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

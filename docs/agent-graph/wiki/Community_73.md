@@ -1,23 +1,22 @@
 # Community 73
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **for()** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **OrchestratorFactory.cs** (8 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **return()** (2 connections)
+- **foreach()** (2 connections)
+- **Resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 91]] (4 shared connections)
+- [[Community 101]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,18 +1,19 @@
 # Community 33
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (8 connections)
-- **DeepSeekOptionsTests.cs** (8 connections)
-- **DeepSeekOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **DeepSeekOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **XSenderTests.cs** (9 connections)
+- **XSenderTests.cs** (9 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **XSenderTests()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,22 @@
 # Community 69
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (35 connections)
-- **var()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **GenerateImageAsync()** (2 connections)
+- **ITextToImageProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 2]] (29 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

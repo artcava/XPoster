@@ -1,22 +1,21 @@
 # Community 87
 
-> 5 nodes · cohesion 0.40
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **catch()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **foreach()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (3 shared connections)
+- [[Community 79]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

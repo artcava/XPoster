@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
-- **var()** (2 connections)
-- **catch()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **BuildCreds()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 42]] (7 shared connections)
+- [[Community 62]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
