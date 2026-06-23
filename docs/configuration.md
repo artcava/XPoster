@@ -18,12 +18,20 @@ For a minimal local setup with the default provider (`OpenAi`) you need at minim
 - [ ] `FeedOptions__Urls__0` — at least one RSS feed URL
 - [ ] (Optional) `APPLICATIONINSIGHTS_CONNECTION_STRING` for local telemetry
 
-For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block with:
+For the `DeepSeek` provider (text-only — posts without image), replace the OpenAI block with:
+
+- [ ] `DeepSeek__ApiKey`
+
+For the `FalAi` provider (image-only — requires a slot orchestrator that handles null `textProvider`):
+
+- [ ] `FalAi__ApiKey`
+
+For the `DeepSeek` + `FalAi` combination (text from DeepSeek, image from FalAi), assign each to a separate slot in `DefaultSlotProfileProvider` with the respective `AiProvider` key, and supply both:
 
 - [ ] `DeepSeek__ApiKey`
 - [ ] `FalAi__ApiKey`
 
-For the `Perplexity` provider, replace the OpenAI block with:
+For the `Perplexity` provider (text-only — posts without image), replace the OpenAI block with:
 
 - [ ] `Perplexity__ApiKey`
 
@@ -55,36 +63,36 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
   "IsEncrypted": false,
   "Values": {
 
-    // ── Azure Functions Runtime ─────────────────────────────────────────────
+    // ── Azure Functions Runtime ───────────────────────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
 
-    // ── Scheduler ────────────────────────────────────────────
+    // ── Scheduler ────────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
     "ForceHour": "",
     "EnableDryRunSlot": "false",
 
-    // ── Feed URLs ────────────────────────────────────────────
+    // ── Feed URLs ────────────────────────────────────────────────
     "FeedOptions__Urls__0": "https://example.com/feed/rss",
     "FeedOptions__Urls__1": "https://another.example.com/rss",
     // Add additional entries as FeedOptions__Urls__2, __3, etc.
     // In Azure App Settings use the same flat key convention.
     // At least one URL is required for FeedOrchestrator to produce content.
 
-    // ── Feed HTTP Client (resilience) ─────────────────────────
+    // ── Feed HTTP Client (resilience) ─────────────────────────────────────
     "FeedOptions__AttemptTimeoutSeconds": "10",
     "FeedOptions__RetryCount": "3",
     "FeedOptions__CircuitBreakerFailureThreshold": "0.5",
     "FeedOptions__CircuitBreakerSamplingDurationSeconds": "30",
     "FeedOptions__CircuitBreakerBreakDurationSeconds": "15",
 
-    // ── AI Provider Selector ────────────────────────────────────────
+    // ── AI Provider Selector ──────────────────────────────────────────
     "AiProvider": "OpenAi",
 
-    // ── Key Vault ────────────────────────────────────────────
+    // ── Key Vault ────────────────────────────────────────────────
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
-    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════
+    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════════════
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
     "OpenAI__ChatModel": "gpt-4.1-nano",
@@ -102,7 +110,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "OpenAI__ImagePromptMaxTokens": "60",
     "OpenAI__ImagePromptTemperature": "0.7",
 
-    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════════════
+    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ════════════════════════════════════
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
@@ -117,7 +125,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
 
-    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ══════════════════
+    // ══ AI — DeepSeek (AiProvider = "DeepSeek", text-only) ══════════════════════════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
     "DeepSeek__DeploymentName": "deepseek-chat",
@@ -131,13 +139,13 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "DeepSeek__ImagePromptMaxTokens": "60",
     "DeepSeek__ImagePromptTemperature": "0.7",
 
-    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ═════════════════
+    // ══ AI — fal.ai (AiProvider = "FalAi", image-only) ═══════════════════════════════
     "FalAi__ApiKey": "",
     "FalAi__ModelId": "fal-ai/flux/schnell",
     "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 
-    // ══ AI — Perplexity (AiProvider = "Perplexity") ══════════════════════════════
+    // ══ AI — Perplexity (AiProvider = "Perplexity", text-only) ═══════════════════════════
     "Perplexity__Endpoint": "https://api.perplexity.ai",
     "Perplexity__ApiKey": "",
     "Perplexity__DeploymentName": "sonar",
@@ -151,7 +159,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "Perplexity__ImagePromptMaxTokens": "60",
     "Perplexity__ImagePromptTemperature": "0.7",
 
-    // ── Observability ────────────────────────────────────────────
+    // ── Observability ────────────────────────────────────────────────
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
@@ -223,9 +231,31 @@ All five resilience settings are optional. When omitted the values shown in the 
 
 ## AI Provider Selector
 
+XPoster uses a **capability-based** AI provider model. Each `AiProvider` value is registered as a keyed service in the DI container, exposing one or both capability interfaces (`ITextToTextProvider`, `ITextToImageProvider`). `OrchestratorFactory` resolves both capabilities independently via `GetKeyedService<T>(profile.AiProvider)` — a `null` result means the capability is not available for that provider and the orchestrator degrades gracefully.
+
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`, `Perplexity`. |
+| `AiProvider` | string | No | `OpenAi` | Selects the AI provider for the global override slot. Per-slot provider is set in `DefaultSlotProfileProvider`. |
+
+### Valid `AiProvider` values
+
+| Value | `ITextToTextProvider` | `ITextToImageProvider` | Notes |
+|---|---|---|---|
+| `OpenAi` | ✅ | ✅ | Full text + image capabilities |
+| `AzureFoundry` | ✅ | ✅ | Full text + image capabilities |
+| `DeepSeek` | ✅ | ❌ | Text only — slots using this provider publish without image |
+| `Perplexity` | ✅ | ❌ | Text only — slots using this provider publish without image |
+| `FalAi` | ❌ | ✅ | Image only — only valid for orchestrators that handle null `textProvider` |
+| `None` | ❌ | ❌ | No AI — reserved; do not use in production slots |
+
+> **Removed value:** `DeepSeekWithFal` has been removed. Any slot profile previously referencing `AiProvider.DeepSeekWithFal` must be updated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate.
+
+### Invalid slot combinations
+
+The following combinations will cause `FeedOrchestrator` to surface an explicit error at the point of use (not silently):
+
+- Assigning `AiProvider.FalAi` to a slot whose orchestrator calls `ITextToTextProvider.GetSummaryAsync` — `textProvider` will be `null`
+- Assigning `AiProvider.DeepSeek` or `AiProvider.Perplexity` to a slot that expects image output — `imageProvider` will be `null`; the post will be published without an image
 
 ---
 
@@ -234,7 +264,7 @@ All five resilience settings are optional. When omitted the values shown in the 
 All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are loaded from Azure Key Vault **at application startup** via the [Azure Key Vault Configuration Provider](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-integrate-kubernetes) registered in `Program.cs` (`builder.Configuration.AddAzureKeyVault(...)`). Secrets are merged into `IConfiguration` and injected into senders through standard `IOptions` / `IConfiguration` binding — no runtime Key Vault calls occur during post publishing.
 
 | Variable | Type | Required | Description |
-|---|---|---|---|
+|---|---|---|
 | `KEYVAULT_URI` | string | ✅ Yes | Full URI of the Azure Key Vault instance, e.g. `https://<vault-name>.vault.azure.net/`. |
 
 ### Authentication
@@ -347,6 +377,8 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 
 Configuration bound from the `OpenAI` prefix using double-underscore notation.
 
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ✅
+
 ### Connection
 
 | Setting | Type | Required | Default | Description |
@@ -384,6 +416,8 @@ Configuration bound from the `OpenAI` prefix using double-underscore notation.
 
 Configuration bound from the `AzureFoundry` prefix.
 
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ✅
+
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `AzureFoundry__Endpoint` | string | ✅ Yes | — | Azure AI Foundry resource endpoint. |
@@ -395,9 +429,11 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 
 ---
 
-## AI — DeepSeek + fal.ai (`AiProvider = DeepSeekWithFal`)
+## AI — DeepSeek (`AiProvider = DeepSeek`)
 
-### DeepSeek (text half)
+Configuration bound from the `DeepSeek` prefix using double-underscore notation.
+
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image)
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -407,7 +443,15 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block, using the `DeepSeek__` prefix.
 
-### fal.ai (image half)
+> **Migration note:** `AiProvider.DeepSeekWithFal` has been removed. If you previously used `DeepSeekWithFal` to combine DeepSeek text with fal.ai image generation, assign `AiProvider.DeepSeek` to text slots and `AiProvider.FalAi` to image slots independently in `DefaultSlotProfileProvider`.
+
+---
+
+## AI — fal.ai (`AiProvider = FalAi`)
+
+Configuration bound from the `FalAi` prefix using double-underscore notation.
+
+**Capabilities:** `ITextToTextProvider` ❌ · `ITextToImageProvider` ✅ (image-only — only valid for orchestrators that handle null `textProvider`)
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -422,7 +466,7 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 
 Configuration bound from the `Perplexity` prefix using double-underscore notation.
 
-> ⚠️ **Image generation is not supported.** `GenerateImageAsync` always returns an empty byte array and logs a `Warning`. The orchestrator will attach no image when this provider is active.
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image; `GenerateImageAsync` has been removed)
 
 ### Connection
 
