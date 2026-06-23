@@ -33,7 +33,7 @@ Setup guides for each external service XPoster integrates with.
 | Open AI | [setup-openai.md](integrations/AiProviders/setup-openai.md) | AI provider for summarisation + image generation |
 | Azure AI Foundry | [setup-azure-foundry.md](integrations/AiProviders/setup-azure-foundry.md) | AI provider for summarisation + image generation |
 | DeepSeek | [setup-deepseek.md](integrations/AiProviders/setup-deepseek.md) | Text-only provider; image generation not supported |
-| graphify-ci | [graphify-ci.md](integrations/AiProviders/graphify-ci.md) | CI integration documentation |
+| graphify-ci | [graphify-ci.md](integrations/graphify-ci.md) | CI integration documentation |
 
 ---
 
@@ -45,7 +45,7 @@ Setup guides for each external service XPoster integrates with.
 | Azure AI Foundry | `AzureFoundry` | ✅ | ✅ | ✅ |
 | DeepSeek | `DeepSeek` | ✅ | ✅ | ❌ |
 | Perplexity | `Perplexity` | ✅ | ✅ | ❌ |
-| fal.ai | `Fal.Ai` | ❌ | ❌ | ✅ |
+| fal.ai | `FalAi` | ❌ | ❌ | ✅ |
 
 ---
 

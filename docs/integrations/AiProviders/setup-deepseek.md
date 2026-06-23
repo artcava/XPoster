@@ -1,9 +1,9 @@
 # DeepSeek — Setup Guide
 
-This guide explains how to obtain DeepSeek API credentials and configure XPoster to use `DeepSeekService` as the text provider, either standalone or as part of `HybridAiService`.
+This guide explains how to obtain DeepSeek API credentials and configure XPoster to use `DeepSeekService` as the text provider.
 
 > **Provider capabilities:** Text only (chat completion)  
-> **`AiProvider` enum value:** `DeepSeekWithFal` (paired with fal.ai for images — see [setup-falai.md](setup-falai.md))
+> **`AiProvider` enum value:** `DeepSeek`
 
 ---
 
@@ -46,20 +46,15 @@ For XPoster's summarization tasks, `deepseek-chat` offers the best cost/quality 
 
 ## 5. Configure XPoster
 
-DeepSeek is always paired with fal.ai in `HybridAiService`. Set all four keys together:
-
 ```json
 {
   "Values": {
-    "AiProvider": "DeepSeekWithFal",
+    "AiProvider": "DeepSeek",
     "DEEPSEEK_API_KEY": "<your-deepseek-api-key>",
-    "DEEPSEEK_MODEL": "deepseek-chat",
-    "FALAI_API_KEY": "<your-falai-api-key>"
+    "DEEPSEEK_MODEL": "deepseek-chat"
   }
 }
 ```
-
-> ℹ️ See [setup-falai.md](setup-falai.md) to obtain `FALAI_API_KEY`.
 
 ## 6. Store Secrets Safely
 
@@ -68,17 +63,7 @@ For production environments:
 - Store `DEEPSEEK_API_KEY` in **Azure Key Vault** and reference it from Function App Settings.
 - Never commit secrets to source control. `local.settings.json` is in `.gitignore`.
 
-## 7. How DeepSeek Fits in HybridAiService
-
-`HybridAiService` routes each `IAiService` operation to the most suitable backend:
-
-| Operation | Routed to | Rationale |
-|-----------|-----------|----------|
-| `GetSummaryAsync` | `DeepSeekService` | Strong cost/quality ratio for text summarization |
-| `GetImagePromptAsync` | `DeepSeekService` | Prompt crafting is a text task; consistent model avoids style drift |
-| `GenerateImageAsync` | `FalAiImageService` | Image generation delegated to fal.ai — DeepSeek is text-only |
-
-## 8. Troubleshooting
+## 7. Troubleshooting
 
 ### 401 Unauthorized
 
