@@ -14,12 +14,10 @@ public class FeedOrchestrator : BaseOrchestrator
 {
     private readonly IFeedService _feedService;
     private readonly IFeedUrlProvider _feedUrlProvider;
+    private readonly ITagReplacementProvider _tagReplacementProvider;
     private readonly ITextToTextProvider? _textProvider;
     private readonly ITextToImageProvider? _imageProvider;
     private bool _sendIt = true;
-
-    /// <summary>Word-to-hashtag replacement map applied to the generated summary.</summary>
-    private Dictionary<string, string> _replacements = new Dictionary<string, string> { { "bitcoin", "#Bitcoin" }, { "btc", "#BTC" }, { "blockchain", "#Blockchain" }, { "fed", "#FED" } };
 
     /// <inheritdoc/>
     public override string Name => typeof(FeedOrchestrator).Name;
@@ -43,20 +41,28 @@ public class FeedOrchestrator : BaseOrchestrator
         ILogger<FeedOrchestrator> logger,
         IFeedService feedService,
         IFeedUrlProvider feedUrlProvider,
+        ITagReplacementProvider tagReplacementProvider,
         ITextToTextProvider? textProvider,
         ITextToImageProvider? imageProvider)
         : base(sender, logger)
     {
         _feedService = feedService;
         _feedUrlProvider = feedUrlProvider;
+        _tagReplacementProvider = tagReplacementProvider;
         _textProvider = textProvider;
         _imageProvider = imageProvider;
     }
 
     /// <summary>
-    /// Fetches recent RSS items, generates an AI summary, derives an image prompt,
-    /// and returns a <see cref="Post"/> ready for publishing.
-    /// Posting is disabled and <c>null</c> is returned if no relevant news is found or summarisation fails.
+    /// Executes the five-step content production pipeline:
+    /// <list type="number">
+    ///   <item>Acquire feed content from the configured URLs.</item>
+    ///   <item>Generate a summary via the text provider.</item>
+    ///   <item>Apply word-to-hashtag tag replacements via the tag replacement provider.</item>
+    ///   <item>Generate an image prompt via the text provider.</item>
+    ///   <item>Generate the image via the image provider.</item>
+    /// </list>
+    /// Posting is disabled and <c>null</c> is returned if any mandatory step fails.
     /// </summary>
     public override async Task<Post?> OrchestrateAsync()
     {
@@ -67,43 +73,26 @@ public class FeedOrchestrator : BaseOrchestrator
             return null;
         }
 
-        var summary = await GenerateMessage();
-        if (string.IsNullOrWhiteSpace(summary))
+        // Step 1 – Acquire feed content
+        var feedContent = await AcquireFeedContentAsync();
+        if (string.IsNullOrWhiteSpace(feedContent))
         {
-            _logger.LogInformation("No summary generated");
-            SendIt = false;
             return null;
         }
 
-        byte[]? image = null;
-
-        if (_imageProvider == null)
+        // Step 2 – Generate summary
+        var summary = await GenerateSummaryAsync(feedContent);
+        if (string.IsNullOrWhiteSpace(summary))
         {
-            _logger.LogWarning("No ITextToImageProvider configured for this slot. Post will be published without image.");
+            return null;
         }
-        else
-        {
-            var prompt4Image = await _textProvider.GetImagePromptAsync(summary);
-            if (string.IsNullOrWhiteSpace(prompt4Image))
-            {
-                _logger.LogError("Unable to get image prompt from text provider. Falling back to summary as prompt.");
-                prompt4Image = summary;
-            }
 
-            try
-            {
-                image = await _imageProvider.GenerateImageAsync(prompt4Image);
-                if (image == null || image.Length == 0)
-                {
-                    _logger.LogWarning("Image generation returned empty result for prompt: {Prompt}. Post will be published without image.", prompt4Image);
-                    image = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception occurred while generating image with prompt: {Prompt}. Post will be published without image.", prompt4Image);
-            }
-        }
+        // Step 3 – Apply tag replacements
+        summary = ApplyTagReplacements(summary);
+
+        // Step 4 – Generate image prompt
+        // Step 5 – Generate image
+        var image = await GenerateImageAsync(summary);
 
         return new Post
         {
@@ -112,11 +101,8 @@ public class FeedOrchestrator : BaseOrchestrator
         };
     }
 
-    private async Task<string> GenerateMessage()
+    private async Task<string> AcquireFeedContentAsync()
     {
-        var end = DateTimeOffset.UtcNow;
-        var start = end.AddDays(-1);
-
         var feedUrls = _feedUrlProvider.GetFeedUrls();
 
         if (feedUrls.Count == 0)
@@ -126,10 +112,14 @@ public class FeedOrchestrator : BaseOrchestrator
             return string.Empty;
         }
 
+        var end = DateTimeOffset.UtcNow;
+        var start = end.AddDays(-1);
+        var keywords = _tagReplacementProvider.GetReplacements().Keys;
+
         var allFeeds = new List<RSSFeed>();
         foreach (string url in feedUrls)
         {
-            var feeds = await _feedService.GetFeedsAsync(url, start, end, _replacements.Keys);
+            var feeds = await _feedService.GetFeedsAsync(url, start, end, keywords);
             if (feeds != null && feeds.Any())
             {
                 allFeeds.AddRange(feeds);
@@ -138,11 +128,18 @@ public class FeedOrchestrator : BaseOrchestrator
 
         if (!allFeeds.Any())
         {
-            _logger.LogInformation("No feeds found");
+            _logger.LogInformation("No feeds found in the last 24 hours.");
             SendIt = false;
             return string.Empty;
         }
 
+        return allFeeds
+            .Select(f => f.Content)
+            .Aggregate(string.Empty, (current, next) => current + "\n" + next);
+    }
+
+    private async Task<string> GenerateSummaryAsync(string feedContent)
+    {
         if (_sender == null)
         {
             _logger.LogError("No sender configured for FeedOrchestrator.");
@@ -150,7 +147,6 @@ public class FeedOrchestrator : BaseOrchestrator
             return string.Empty;
         }
 
-        string feedContent = allFeeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
         var summary = await _textProvider!.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
         if (string.IsNullOrWhiteSpace(summary))
         {
@@ -160,26 +156,60 @@ public class FeedOrchestrator : BaseOrchestrator
         }
 
         _logger.LogInformation("Generated summary: {Summary}", summary);
-        summary = ReplaceEveryFirstOccurenceOf(summary, _replacements);
         return summary;
     }
 
-    private string ReplaceEveryFirstOccurenceOf(string text, Dictionary<string, string> replacements)
+    private string ApplyTagReplacements(string text)
     {
+        var replacements = _tagReplacementProvider.GetReplacements();
+        if (replacements.Count == 0)
+        {
+            return text;
+        }
+
         var sb = new StringBuilder(text);
         foreach (var entry in replacements)
         {
-            string key = entry.Key;
-            string value = entry.Value;
-            string pattern = @"\b" + Regex.Escape(key) + @"\b";
+            string pattern = @"\b" + Regex.Escape(entry.Key) + @"\b";
             Match match = Regex.Match(sb.ToString(), pattern, RegexOptions.IgnoreCase);
             if (match.Success)
             {
-                int index = match.Index;
-                sb.Remove(index, key.Length);
-                sb.Insert(index, value);
+                sb.Remove(match.Index, entry.Key.Length);
+                sb.Insert(match.Index, entry.Value);
             }
         }
         return sb.ToString();
+    }
+
+    private async Task<byte[]?> GenerateImageAsync(string summary)
+    {
+        if (_imageProvider == null)
+        {
+            _logger.LogWarning("No ITextToImageProvider configured for this slot. Post will be published without image.");
+            return null;
+        }
+
+        var prompt = await _textProvider!.GetImagePromptAsync(summary);
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            _logger.LogError("Unable to get image prompt from text provider. Falling back to summary as prompt.");
+            prompt = summary;
+        }
+
+        try
+        {
+            var image = await _imageProvider.GenerateImageAsync(prompt);
+            if (image == null || image.Length == 0)
+            {
+                _logger.LogWarning("Image generation returned empty result for prompt: {Prompt}. Post will be published without image.", prompt);
+                return null;
+            }
+            return image;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred while generating image with prompt: {Prompt}. Post will be published without image.", prompt);
+            return null;
+        }
     }
 }

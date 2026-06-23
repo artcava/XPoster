@@ -140,6 +140,17 @@
     "FeedOptions__Urls__0": "https://cointelegraph.com/rss/tag/bitcoin",
     "FeedOptions__Urls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
 
+    // -----------------------------------------------------------------------
+    // Tag replacement provider — word-to-hashtag map applied to generated summaries.
+    // Uses flat Azure Functions naming convention: TagReplacementOptions__Replacements__<word>.
+    // Keys are matched case-insensitively; only the first occurrence per word is replaced.
+    // Add or remove entries freely without code changes or redeployment.
+    // -----------------------------------------------------------------------
+    "TagReplacementOptions__Replacements__bitcoin": "#Bitcoin",
+    "TagReplacementOptions__Replacements__btc": "#BTC",
+    "TagReplacementOptions__Replacements__blockchain": "#Blockchain",
+    "TagReplacementOptions__Replacements__fed": "#FED",
+
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
