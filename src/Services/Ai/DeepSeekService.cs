@@ -6,9 +6,10 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Implements <see cref="IAiService"/> using the DeepSeek API.
+/// Implements <see cref="ITextToTextProvider"/> using the DeepSeek API.
+/// Image generation is not supported by this provider.
 /// </summary>
-public class DeepSeekService : IAiService
+public class DeepSeekService : ITextToTextProvider
 {
     private readonly HttpClient _client;
     private readonly ILogger<DeepSeekService> _logger;
@@ -52,13 +53,6 @@ public class DeepSeekService : IAiService
             response, "DeepSeek", "image prompt generation", _logger, cancellationToken);
         return success ? content : string.Empty;
     }
-
-    /// <inheritdoc/>
-    /// <exception cref="NotSupportedException">Always thrown. Use <see cref="HybridAiService"/>.</exception>
-    public Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
-        => throw new NotSupportedException(
-            $"{nameof(DeepSeekService)} does not support image generation. " +
-            $"Use {nameof(HybridAiService)} to delegate image generation to fal.ai.");
 
     private string GetChatCompletionsEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 

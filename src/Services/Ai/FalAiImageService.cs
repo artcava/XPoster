@@ -6,9 +6,10 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Generates images using the fal.ai REST API with the FLUX.1 Turbo model.
+/// Implements <see cref="ITextToImageProvider"/> by calling the fal.ai REST API with the FLUX.1 Turbo model.
+/// Text-to-text operations are not supported by this provider.
 /// </summary>
-public sealed class FalAiImageService
+public sealed class FalAiImageService : ITextToImageProvider
 {
     private const string FalApiBaseUrl = "https://fal.run";
 
@@ -30,9 +31,7 @@ public sealed class FalAiImageService
         _client.DefaultRequestHeaders.Add("Authorization", $"Key {_options.ApiKey}");
     }
 
-    /// <summary>
-    /// Generates an image from the given prompt using FLUX.1 Turbo on fal.ai.
-    /// </summary>
+    /// <inheritdoc/>
     public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(prompt))
@@ -51,6 +50,6 @@ public sealed class FalAiImageService
             return Array.Empty<byte>();
         }
         return await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, _client, _logger, allowedOrigin: null, cancellationToken);
+            response, AiProvider.FalAi, _client, _logger, allowedOrigin: null, cancellationToken);
     }
 }

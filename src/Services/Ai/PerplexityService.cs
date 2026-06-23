@@ -6,12 +6,10 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Implements <see cref="IAiService"/> using the Perplexity Sonar Chat Completions API.
-/// Image generation is not supported; <see cref="GenerateImageAsync"/> returns an empty
-/// byte array and logs a warning instead of throwing, allowing callers to handle the
-/// absence of an image gracefully.
+/// Implements <see cref="ITextToTextProvider"/> using the Perplexity Sonar Chat Completions API.
+/// Image generation is not supported by this provider; <see cref="ITextToImageProvider"/> is not implemented.
 /// </summary>
-public class PerplexityService : IAiService
+public class PerplexityService : ITextToTextProvider
 {
     private readonly HttpClient _client;
     private readonly ILogger<PerplexityService> _logger;
@@ -64,21 +62,6 @@ public class PerplexityService : IAiService
             response, "Perplexity", "image prompt generation", _logger, cancellationToken);
 
         return success ? content : string.Empty;
-    }
-
-    /// <inheritdoc/>
-    /// <remarks>
-    /// Perplexity does not offer an image generation API. This method always returns
-    /// an empty <see cref="byte"/> array and logs a warning so the orchestrator can
-    /// decide whether to skip the image or fall back to another provider.
-    /// </remarks>
-    public Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
-    {
-        _logger.LogWarning(
-            "{Service} does not support image generation. Returning empty byte array.",
-            nameof(PerplexityService));
-
-        return Task.FromResult(Array.Empty<byte>());
     }
 
     private string GetChatCompletionsEndpoint() =>

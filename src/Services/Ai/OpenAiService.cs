@@ -6,9 +6,10 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Implements <see cref="IAiService"/> by calling the OpenAI Chat Completions and Image Generations APIs.
+/// Implements <see cref="ITextToTextProvider"/> and <see cref="ITextToImageProvider"/>
+/// by calling the OpenAI Chat Completions and Image Generations APIs.
 /// </summary>
-public class OpenAiService : IAiService
+public class OpenAiService : ITextToTextProvider, ITextToImageProvider
 {
     private readonly HttpClient _client;
     private readonly ILogger<OpenAiService> _logger;
