@@ -205,11 +205,11 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 
 | Provider | Website | Capabilities | Setup Guide |
 |----------|---------|--------------|-------------|
-| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/integrations/setup-azure-foundry.md](docs/integrations/setup-azure-foundry.md) |
-| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
-| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
-| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
-| **Perplexity** | [perplexity.ai](https://www.perplexity.ai/) | Text only | [docs/integrations/setup-perplexity.md](docs/integrations/setup-perplexity.md) |
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [setup-azure-foundry.md](docs/integrations/AiProviders/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [setup-openai.md](docs/integrations/AiProviders/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [setup-deepseek.md](docs/integrations/AiProviders/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [setup-falai.md](docs/integrations/AiProviders/setup-falai.md) |
+| **Perplexity** | [perplexity.ai](https://www.perplexity.ai/) | Text only | [setup-perplexity.md](docs/integrations/AiProviders/setup-perplexity.md) |
 
 > ⚠️ The setup guides above are present and cover account creation, API key configuration, and troubleshooting. Some validation tasks (model names, key naming, SDK version checks) are tracked in issues [#130](https://github.com/artcava/XPoster/issues/130), [#131](https://github.com/artcava/XPoster/issues/131), and [#132](https://github.com/artcava/XPoster/issues/132) and will be completed before the next stable release.
 
