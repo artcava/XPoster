@@ -16,38 +16,44 @@ public class FeedOrchestratorFeedUrlProviderTests
     private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
     private readonly Mock<IFeedService> _mockFeedService;
     private readonly Mock<IFeedUrlProvider> _mockFeedUrlProvider;
-    private readonly Mock<IAiService> _mockAiService;
+    private readonly Mock<ITextToTextProvider> _mockTextProvider;
+    private readonly Mock<ITextToImageProvider> _mockImageProvider;
 
     public FeedOrchestratorFeedUrlProviderTests()
     {
-        _mockSender = new Mock<ISender>();
-        _mockLogger = new Mock<ILogger<FeedOrchestrator>>();
-        _mockFeedService = new Mock<IFeedService>();
+        _mockSender          = new Mock<ISender>();
+        _mockLogger          = new Mock<ILogger<FeedOrchestrator>>();
+        _mockFeedService     = new Mock<IFeedService>();
         _mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
-        _mockAiService = new Mock<IAiService>();
+        _mockTextProvider    = new Mock<ITextToTextProvider>();
+        _mockImageProvider   = new Mock<ITextToImageProvider>();
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
     }
 
     private FeedOrchestrator CreateOrchestrator() =>
-        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object, _mockFeedUrlProvider.Object, _mockAiService.Object);
+        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object,
+            _mockFeedUrlProvider.Object, _mockTextProvider.Object, _mockImageProvider.Object);
 
     [Fact]
     public async Task OrchestrateAsync_Should_CallGetFeedUrls_Once()
     {
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(["https://feed1.com/rss"]);
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
-        _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(
+                It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Summary");
-        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Prompt");
-        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
-
         await orchestrator.OrchestrateAsync();
 
         _mockFeedUrlProvider.Verify(p => p.GetFeedUrls(), Times.Once);
@@ -65,13 +71,17 @@ public class FeedOrchestratorFeedUrlProviderTests
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(urls);
 
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
-        _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(
+                It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Summary");
-        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Prompt");
-        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
@@ -90,13 +100,17 @@ public class FeedOrchestratorFeedUrlProviderTests
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([url1, url2]);
 
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
-        _mockFeedService.Setup(s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(fakeFeeds);
-        _mockAiService.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(
+                It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Summary");
-        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Prompt");
-        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
@@ -123,7 +137,9 @@ public class FeedOrchestratorFeedUrlProviderTests
         _mockFeedService.Verify(
             s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
             Times.Never);
-        _mockAiService.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
+        _mockTextProvider.Verify(
+            s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     [Fact]
@@ -144,13 +160,15 @@ public class FeedOrchestratorFeedUrlProviderTests
             .ReturnsAsync(feedsFromUrl2);
 
         string? capturedFeedContent = null;
-        _mockAiService
+        _mockTextProvider
             .Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .Callback<string, int, CancellationToken>((content, _, _) => capturedFeedContent = content)
             .ReturnsAsync("AggregatedSummary");
-        _mockAiService.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("Prompt");
-        _mockAiService.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();

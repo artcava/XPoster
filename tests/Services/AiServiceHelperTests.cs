@@ -490,7 +490,7 @@ public class AiServiceHelperTests
     }
 
     // -------------------------------------------------------------------------
-    // ParseImageResponseAsync — DeepSeekWithFal branch
+    // ParseImageResponseAsync — FalAi branch
     // -------------------------------------------------------------------------
 
     [Fact]
@@ -507,7 +507,7 @@ public class AiServiceHelperTests
         var httpClient = MakeHttpClient(imageResponse);
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, httpClient, _logger.Object, null, CancellationToken.None);
+            response, AiProvider.FalAi, httpClient, _logger.Object, null, CancellationToken.None);
 
         Assert.Equal(expected, result);
     }
@@ -519,7 +519,7 @@ public class AiServiceHelperTests
         var httpClient = MakeHttpClient(MakeResponse(HttpStatusCode.OK, "{}"));
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, httpClient, _logger.Object, null, CancellationToken.None);
+            response, AiProvider.FalAi, httpClient, _logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -531,7 +531,7 @@ public class AiServiceHelperTests
         var httpClient = MakeHttpClient(MakeResponse(HttpStatusCode.OK, "{}"));
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, httpClient, _logger.Object, null, CancellationToken.None);
+            response, AiProvider.FalAi, httpClient, _logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -543,7 +543,7 @@ public class AiServiceHelperTests
         var httpClient = MakeHttpClient(MakeResponse(HttpStatusCode.OK, "{}"));
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, httpClient, _logger.Object, null, CancellationToken.None);
+            response, AiProvider.FalAi, httpClient, _logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
@@ -555,7 +555,7 @@ public class AiServiceHelperTests
         var httpClient = MakeHttpClientThatThrows(new HttpRequestException("timeout"));
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            response, AiProvider.DeepSeekWithFal, httpClient, _logger.Object, null, CancellationToken.None);
+            response, AiProvider.FalAi, httpClient, _logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }

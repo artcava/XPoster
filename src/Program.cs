@@ -83,14 +83,11 @@ if (isDevelopment && !string.IsNullOrWhiteSpace(forceHour))
 else
     builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
 
-// Register IAiServiceFactory and all IAiService implementations
-builder.Services.AddSingleton<IAiServiceFactory, AiServiceFactory>();
-builder.Services.AddKeyedTransient<IAiService, OpenAiService>(AiProvider.OpenAi);
-builder.Services.AddKeyedTransient<IAiService, AzureFoundryService>(AiProvider.AzureFoundry);
-builder.Services.AddKeyedTransient<IAiService, HybridAiService>(AiProvider.DeepSeekWithFal);
-builder.Services.AddKeyedTransient<IAiService, PerplexityService>(AiProvider.Perplexity);
-builder.Services.AddTransient<DeepSeekService>();
-builder.Services.AddTransient<FalAiImageService>();
+// Register AI capability interfaces as keyed services by AiProvider.
+// Each key activates only the capabilities the provider actually supports.
+// Attempting to resolve an unsupported capability returns null via GetKeyedService —
+// this surfaces explicitly at the point of use inside FeedOrchestrator, not silently.
+builder.Services.AddXPosterAiProviders();
 
 // ISlotProfileProvider registration:
 //   EnableDryRunSlot = true   → DryRunSlotProfileProvider

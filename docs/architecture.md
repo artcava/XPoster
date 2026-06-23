@@ -46,7 +46,6 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     ┌────────────────────┐
     │   Services         │
     ├────────────────────┤
-    │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
     │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
     │ • Feed Service     │ ◄─── RSS Parser (IHttpClientFactory + Polly)
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
@@ -90,7 +89,9 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 | `OrchestratorType` | `Type` | The concrete `BaseOrchestrator` subclass to instantiate |
 | `AiProvider?` | `AiProvider?` | Optional AI provider for slots that require AI services |
 
-At runtime, the factory calls `Resolve()` to match the current hour to a profile returned by `ISlotProfileProvider.GetProfiles()`, independently resolves the **sender** (via the DI container, keyed by `SenderPlatform`) and the **AI service** (via `IAiServiceFactory.GetByProvider()`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes.
+At runtime, the factory calls `Resolve()` to match the current hour to a profile returned by `ISlotProfileProvider.GetProfiles()`, independently resolves the **sender** (via the DI container, keyed by `SenderPlatform`) and the **AI capability services** (via `IServiceProvider.GetKeyedService<ITextToTextProvider>` and `GetKeyedService<ITextToImageProvider>` keyed by `profile.AiProvider`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes.
+
+Both capability services are **optional**: not every `AiProvider` implements both interfaces. `GetKeyedService` returns `null` when the requested capability is not registered for the given key — this is intentional and surfaces explicitly at the point of use inside `FeedOrchestrator`, not silently.
 
 The **schedule itself is a dependency**, not a compile-time constant. In production, `DefaultSlotProfileProvider` supplies the four canonical slots (06:00, 08:00, 14:00, 16:00). For local dry-run testing, `DryRunSlotProfileProvider` decorates `DefaultSlotProfileProvider` and appends the dry-run slot at hour 9; it is activated by setting `EnableDryRunSlot = true` in app settings and registered in `Program.cs` via conditional DI. This means adding or switching the dry-run slot requires no changes to `OrchestratorFactory`.
 
@@ -100,27 +101,30 @@ The factory enforces the invariant that every unscheduled hour resolves to `NoOr
 
 Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**:
 
-- **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `AiService` to produce a text summary, and requests a generated image. Feed URLs are resolved at runtime via `IFeedUrlProvider` (default: `ConfigurationFeedUrlProvider`, bound from `FeedOptions__Urls__N` app settings). If the provider returns an empty list, `OrchestrateAsync()` returns `null` immediately with no AI or sender invocation. The specific AI model used is determined by the resolved `IAiService` implementation. It is stateless and side-effect-free until it hands off the `Post`.
-- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on `AiService`.
+- **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `ITextToTextProvider` to produce a text summary and an image prompt, then calls `ITextToImageProvider` to generate an image. Feed URLs are resolved at runtime via `IFeedUrlProvider` (default: `ConfigurationFeedUrlProvider`, bound from `FeedOptions__Urls__N` app settings). If the provider returns an empty list, `OrchestrateAsync()` returns `null` immediately with no AI or sender invocation. Both AI capability providers are injected as nullable — `FeedOrchestrator` handles `null` text or image providers explicitly at the point of use.
+- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on AI providers.
 - **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.
 
 ### Services Layer — Shared Infrastructure
 
 Services are registered as singletons or transients in the DI container and are consumed by orchestrators and sender plugins:
 
-- **AiServiceFactory**: resolves the correct `IAiService` implementation by `AiProvider` enum value. Supported providers: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`. The active provider is determined per slot by the `ScheduledOrchestrationProfile` and can be overridden globally via the `AiProvider` configuration key.
-- **AiServiceHelper**: a shared utility class used internally by AI service implementations (`DeepSeekService`, `FalAiImageService`, and others). It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
+- **AiServiceHelper**: a shared utility class used internally by AI service implementations. It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
 - **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
 - **ConfigurationFeedUrlProvider** (`IFeedUrlProvider`): resolves the list of RSS feed URLs consumed by `FeedOrchestrator` from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
 
-**AI Provider Services** (consumed via `IAiService` abstraction):
-- **OpenAiService**: bridges `Microsoft.Extensions.AI` to the OpenAI / Azure OpenAI endpoint for both text and image generation.
-- **AzureFoundryService**: bridges `Microsoft.Extensions.AI` to an Azure AI Foundry deployment.
-- **DeepSeekService**: direct HTTP client to the DeepSeek API (`api.deepseek.com/v1`), OpenAI-compatible. Used standalone or as the text leg of `HybridAiService`.
-- **FalAiImageService**: HTTP client to the fal.ai API for FLUX.2 Turbo image generation. Used standalone or as the image leg of `HybridAiService`.
-- **HybridAiService**: composes `DeepSeekService` (text) and `FalAiImageService` (image) behind a single `IAiService` contract, enabling the `DeepSeekWithFal` provider option. It introduces no additional API surface and is the only consumer of both inner services.
-- **PerplexityService**: direct HTTP client to the Perplexity Sonar Chat Completions API (`api.perplexity.ai/chat/completions`). Supports text summarisation (`GetSummaryAsync`) and image prompt generation (`GetImagePromptAsync`). **Image generation is not supported** — `GenerateImageAsync` always returns an empty byte array and logs a `Warning`, causing the orchestrator to publish text-only posts.
+**AI Provider Services** — registered as **keyed services** by `AiProvider` via `AddXPosterAiProviders()` in `Program.cs`:
+
+| `AiProvider` key | Concrete service | `ITextToTextProvider` | `ITextToImageProvider` |
+|---|---|---|---|
+| `OpenAi` | `OpenAiService` | ✅ | ✅ |
+| `AzureFoundry` | `AzureFoundryService` | ✅ | ✅ |
+| `DeepSeek` | `DeepSeekService` | ✅ | ❌ — `GenerateImageAsync` throws `NotSupportedException` |
+| `Perplexity` | `PerplexityService` | ✅ | ❌ — method removed; misconfiguration surfaces at point of use |
+| `FalAi` | `FalAiImageService` | ❌ | ✅ |
+
+Providers that do not implement a capability have no keyed registration for the missing interface. `GetKeyedService` returns `null` for that capability — this is intentional. Attempting to use a text-only provider in an image-generating slot (or vice versa) surfaces explicitly inside `FeedOrchestrator`, not silently.
 
 ### HttpClientFactory — Named Clients
 
@@ -164,11 +168,11 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 
 ### Factory Pattern — Time-based Orchestrator Selection
 
-**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, IAiService)` triples. Its `Resolve()` method reads the current UTC hour, calls `ISlotProfileProvider.GetProfiles()` to obtain the active schedule, looks up the matching `ScheduledOrchestrationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and AI service.
+**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, ISender, ITextToTextProvider?, ITextToImageProvider?)` tuples. Its `Resolve()` method reads the current UTC hour, calls `ISlotProfileProvider.GetProfiles()` to obtain the active schedule, looks up the matching `ScheduledOrchestrationProfile`, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender and capability providers.
 
 **Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. Moving from a flat `Dictionary<int, SenderPlatform>` to a typed `ScheduledOrchestrationProfile` list makes each slot self-documenting and allows per-slot AI provider assignment without additional lookup tables. The factory can be unit-tested in isolation using a mock `ISlotProfileProvider` with synthetic profiles, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
 
-**Trade-off**: The schedule is now an injected dependency (`ISlotProfileProvider`), which means schedule changes — including adding or removing the dry-run slot — are controlled entirely via DI registration and app settings, with no changes required to `OrchestratorFactory` itself. Adding a fully externalised schedule (e.g. from Azure App Configuration) would only require a new `ISlotProfileProvider` implementation registered in `Program.cs`.
+**Trade-off**: The schedule is now an injected dependency (`ISlotProfileProvider`), which means schedule changes are controlled entirely via DI registration and app settings, with no changes required to `OrchestratorFactory` itself.
 
 ### Plugin Pattern — Sender Architecture
 
@@ -183,13 +187,27 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 
 > ⚠️ **Special case — `DryRunSender`**: this sender satisfies the `ISender` contract but is explicitly excluded from production use. It serves as a reference implementation that demonstrates the minimal contract surface: null-guard on the incoming post, structured logging of the post payload, and `return true` with no outbound call. New sender authors can use it as a scaffold to verify DI wiring before implementing the real platform API.
 
-### Abstract Factory Pattern — AI Provider Resolution
+### Keyed Services Pattern — AI Capability Resolution
 
-**What**: `IAiServiceFactory` acts as an abstract factory that maps an `AiProvider` enum value to the concrete `IAiService` implementation registered for that provider. `OrchestratorFactory` delegates all AI service resolution to it.
+**What**: `ITextToTextProvider` and `ITextToImageProvider` are registered as **keyed services** in the DI container, keyed by `AiProvider` enum value via `AddXPosterAiProviders()` in `Program.cs`. `OrchestratorFactory` resolves both capabilities independently using `IServiceProvider.GetKeyedService<T>(profile.AiProvider)`. Since not every provider implements both interfaces, resolution returns `null` for missing capabilities — this is intentional.
 
-**Why**: Decoupling provider selection from orchestrator construction means a new AI provider requires only a new `IAiService` implementation, a DI registration, and an `AiProvider` enum value — the factory and all orchestrators remain untouched. It also enables per-slot provider assignment (e.g. use `Perplexity` at 08:00 and `AzureFoundry` at 14:00) and a global override via configuration.
+**Why**: Replacing the former `IAiService` monolithic interface and `AiServiceFactory` with capability-segregated interfaces means:
+- A provider that only generates text (`DeepSeek`, `Perplexity`) never needs to implement image generation
+- A provider that only generates images (`FalAi`) never needs to implement text operations
+- Adding a new provider requires implementing only the relevant capability interfaces and adding keyed DI registrations — no factory or orchestrator changes
+- Silent failures are eliminated: misconfiguring a text-only provider in an image-generating slot surfaces explicitly at the point of use inside `FeedOrchestrator`
 
-**Trade-off**: Introduces one additional indirection layer between `OrchestratorFactory` and the AI service. Acceptable given the number of supported providers (currently 5: `OpenAi`, `Perplexity`, `AzureFoundry`, `DeepSeekWithFal`, and `HybridAiService` via `DeepSeekWithFal`).
+**Capability map**:
+
+| `AiProvider` | `ITextToTextProvider` | `ITextToImageProvider` |
+|---|---|---|
+| `OpenAi` | ✅ `OpenAiService` | ✅ `OpenAiService` |
+| `AzureFoundry` | ✅ `AzureFoundryService` | ✅ `AzureFoundryService` |
+| `DeepSeek` | ✅ `DeepSeekService` | ❌ `null` |
+| `Perplexity` | ✅ `PerplexityService` | ❌ `null` |
+| `FalAi` | ❌ `null` | ✅ `FalAiImageService` |
+
+**Trade-off**: Two separate interface registrations per provider (where applicable) replace the single `IAiService` registration. For the expected number of providers (< 10), this is negligible.
 
 ---
 
@@ -203,7 +221,7 @@ Each ADR is maintained as a standalone document in [`docs/analysis/`](analysis/)
 | [ADR-002](analysis/ADR-002-strategy-pattern-generators.md) | Strategy Pattern for Content Orchestrators | Accepted |
 | [ADR-003](analysis/ADR-003-plugin-pattern-senders.md) | Plugin Pattern for Senders | Accepted |
 | [ADR-004](analysis/ADR-004-provider-agnostic-ai.md) | Provider-Agnostic AI Integration | Accepted |
-| [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134) |
+| [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | **Accepted** — implemented in [Issue #211](https://github.com/artcava/XPoster/issues/211) |
 
 ---
 
@@ -221,13 +239,19 @@ Adding a new platform has no impact on existing senders, orchestrators, or the f
 
 An orchestrator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting `Post` takes. Each orchestrator extends `BaseOrchestrator` and implements the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. The orchestrator is selected at runtime based on the current time slot via `OrchestratorFactory.Resolve()`, so different algorithms can run at different hours without any conditional logic in `XFunction`.
 
-Because orchestrators receive their dependencies (sender, AI service, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically; the only required changes are implementing `SupportedPlatforms` on the new class and adding a `ScheduledOrchestrationProfile` entry to the appropriate `ISlotProfileProvider` implementation — no changes to `OrchestratorFactory` itself.
+Because orchestrators receive their dependencies (sender, AI capability providers, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically; the only required changes are implementing `SupportedPlatforms` on the new class and adding a `ScheduledOrchestrationProfile` entry to the appropriate `ISlotProfileProvider` implementation — no changes to `OrchestratorFactory` itself.
 
 ### AI Providers
 
-The AI layer is abstracted behind `IAiService`, which decouples content production logic from any specific model or vendor. The `AiProvider` enum identifies which implementation to resolve at runtime; the concrete model names, API keys, and SDK details are entirely internal to each implementation.
+The AI layer is abstracted behind two capability interfaces: `ITextToTextProvider` (text summarisation and image prompt generation) and `ITextToImageProvider` (image generation from a text prompt). Both are registered as keyed services by `AiProvider` enum value.
 
-This design enables per-slot provider assignment (different providers can be active at different hours) and a global configuration override for A/B testing without code changes. Adding a new provider — whether a hosted API or a self-hosted model — requires only a new `IAiService` implementation, a DI registration, and an enum value. No orchestrator or scheduling logic needs to change.
+A provider can implement one or both interfaces depending on its capabilities. Adding a new provider requires:
+1. Implement `ITextToTextProvider`, `ITextToImageProvider`, or both
+2. Add the corresponding keyed registrations in `AddXPosterAiProviders()` in `Program.cs`
+3. Add the new `AiProvider` enum value
+4. Update `DefaultSlotProfileProvider` if the new provider should be active for a production slot
+
+No orchestrator, factory, or scheduling logic needs to change. Per-slot provider assignment and the global `AiProvider` configuration override are fully preserved.
 
 ---
 
@@ -243,9 +267,10 @@ sequenceDiagram
     participant Fn as XFunction
     participant Factory as OrchestratorFactory
     participant ProfileProvider as ISlotProfileProvider
-    participant AiFactory as AiServiceFactory
+    participant SP as IServiceProvider
     participant Orch as BaseOrchestrator<br/>(Feed / PowerLaw)
-    participant AI as IAiService<br/>(resolved by AiProvider)
+    participant T2T as ITextToTextProvider<br/>(resolved by AiProvider)
+    participant T2I as ITextToImageProvider<br/>(resolved by AiProvider)
     participant FeedUrl as IFeedUrlProvider
     participant Feed as FeedService<br/>(RSS + IHttpClientFactory)
     participant Crypto as CryptoService<br/>(cryptoprices.cc)
@@ -256,7 +281,7 @@ sequenceDiagram
     Note over Startup,KV: Application startup — runs once
     Startup->>KV: AddAzureKeyVault (Configuration Provider)
     KV-->>Startup: secrets merged into IConfiguration
-    Startup->>Startup: Register services, bind IOptions<*Credentials>
+    Startup->>Startup: Register services, AddXPosterAiProviders() keyed registrations
 
     Note over Timer,Platform: Per-trigger execution
     Timer->>Fn: Trigger (cron schedule)
@@ -265,9 +290,11 @@ sequenceDiagram
     ProfileProvider-->>Factory: List<ScheduledOrchestrationProfile>
     Factory->>Factory: Match currentHour → ScheduledOrchestrationProfile
     Factory->>Factory: Resolve ISender from DI (by SenderPlatform)
-    Factory->>AiFactory: GetByProvider(profile.AiProvider)
-    AiFactory-->>Factory: IAiService (concrete implementation)
-    Factory->>Factory: CreateOrchestratorInstance(type, sender, aiService)
+    Factory->>SP: GetKeyedService<ITextToTextProvider>(profile.AiProvider)
+    SP-->>Factory: ITextToTextProvider? (null if provider is image-only)
+    Factory->>SP: GetKeyedService<ITextToImageProvider>(profile.AiProvider)
+    SP-->>Factory: ITextToImageProvider? (null if provider is text-only)
+    Factory->>Factory: CreateOrchestratorInstance(type, sender, textProvider, imageProvider)
     Factory-->>Fn: BaseOrchestrator instance
 
     Fn->>Orch: OrchestrateAsync()
@@ -277,10 +304,12 @@ sequenceDiagram
         FeedUrl-->>Orch: IReadOnlyList<string>
         Orch->>Feed: GetLatestItemAsync(url)
         Feed-->>Orch: FeedItem (title, url, content)
-        Orch->>AI: GetCompletionAsync(content, maxLength)
-        AI-->>Orch: summary text
-        Orch->>AI: GenerateImageAsync(title)
-        AI-->>Orch: image bytes
+        Orch->>T2T: GetSummaryAsync(content, maxLength)
+        T2T-->>Orch: summary text
+        Orch->>T2T: GetImagePromptAsync(title)
+        T2T-->>Orch: image prompt
+        Orch->>T2I: GenerateImageAsync(prompt)
+        T2I-->>Orch: image bytes
     else PowerLawOrchestrator
         Orch->>Crypto: GetPriceAsync(symbol)
         Crypto-->>Orch: current price

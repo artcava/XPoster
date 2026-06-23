@@ -14,7 +14,8 @@ public class FeedOrchestrator : BaseOrchestrator
 {
     private readonly IFeedService _feedService;
     private readonly IFeedUrlProvider _feedUrlProvider;
-    private readonly IAiService? _aiService;
+    private readonly ITextToTextProvider? _textProvider;
+    private readonly ITextToImageProvider? _imageProvider;
     private bool _sendIt = true;
 
     /// <summary>Word-to-hashtag replacement map applied to the generated summary.</summary>
@@ -42,12 +43,14 @@ public class FeedOrchestrator : BaseOrchestrator
         ILogger<FeedOrchestrator> logger,
         IFeedService feedService,
         IFeedUrlProvider feedUrlProvider,
-        IAiService? aiService)
+        ITextToTextProvider? textProvider,
+        ITextToImageProvider? imageProvider)
         : base(sender, logger)
     {
         _feedService = feedService;
         _feedUrlProvider = feedUrlProvider;
-        _aiService = aiService;
+        _textProvider = textProvider;
+        _imageProvider = imageProvider;
     }
 
     /// <summary>
@@ -57,9 +60,9 @@ public class FeedOrchestrator : BaseOrchestrator
     /// </summary>
     public override async Task<Post?> OrchestrateAsync()
     {
-        if (_aiService == null)
+        if (_textProvider == null)
         {
-            _logger.LogError("No IAiService instance provided to FeedOrchestrator. Cannot orchestrate content.");
+            _logger.LogError("No ITextToTextProvider instance provided to FeedOrchestrator. Cannot orchestrate content.");
             SendIt = false;
             return null;
         }
@@ -72,25 +75,34 @@ public class FeedOrchestrator : BaseOrchestrator
             return null;
         }
 
-        var prompt4Image = await _aiService.GetImagePromptAsync(summary);
-        if (string.IsNullOrWhiteSpace(prompt4Image))
-        {
-            _logger.LogError("Unable to get image prompt from AI service");
-            prompt4Image = summary;
-        }
-
         byte[]? image = null;
-        try
+
+        if (_imageProvider == null)
         {
-            image = await _aiService.GenerateImageAsync(prompt4Image);
-            if (image == null)
-            {
-                _logger.LogWarning("Image generation returned null for prompt: {Prompt}. Message will be posted without image.", prompt4Image);
-            }
+            _logger.LogWarning("No ITextToImageProvider configured for this slot. Post will be published without image.");
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError(ex, "Exception occurred while generating image with prompt: {Prompt}. Message will be posted without image.", prompt4Image);
+            var prompt4Image = await _textProvider.GetImagePromptAsync(summary);
+            if (string.IsNullOrWhiteSpace(prompt4Image))
+            {
+                _logger.LogError("Unable to get image prompt from text provider. Falling back to summary as prompt.");
+                prompt4Image = summary;
+            }
+
+            try
+            {
+                image = await _imageProvider.GenerateImageAsync(prompt4Image);
+                if (image == null || image.Length == 0)
+                {
+                    _logger.LogWarning("Image generation returned empty result for prompt: {Prompt}. Post will be published without image.", prompt4Image);
+                    image = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while generating image with prompt: {Prompt}. Post will be published without image.", prompt4Image);
+            }
         }
 
         return new Post
@@ -139,10 +151,10 @@ public class FeedOrchestrator : BaseOrchestrator
         }
 
         string feedContent = allFeeds.Select(f => f.Content).Aggregate(string.Empty, (current, next) => current + "\n" + next);
-        var summary = await _aiService!.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
+        var summary = await _textProvider!.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
         if (string.IsNullOrWhiteSpace(summary))
         {
-            _logger.LogError("Unable to get summary from OpenAI");
+            _logger.LogError("Unable to get summary from text provider.");
             SendIt = false;
             return string.Empty;
         }
