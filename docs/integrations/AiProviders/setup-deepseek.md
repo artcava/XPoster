@@ -1,9 +1,14 @@
 # DeepSeek — Setup Guide
 
-This guide explains how to obtain DeepSeek API credentials and configure XPoster to use `DeepSeekService` as the text provider, either standalone or as part of `HybridAiService`.
+This guide explains how to obtain DeepSeek API credentials and configure XPoster to use `DeepSeekService` as the text provider.
 
-> **Provider capabilities:** Text only (chat completion)  
-> **`AiProvider` enum value:** `DeepSeekWithFal` (paired with fal.ai for images — see [setup-falai.md](setup-falai.md))
+> **Provider capabilities:** Text only (`ITextToTextProvider`)  
+> **`AiProvider` enum value:** `DeepSeek`
+
+> ℹ️ DeepSeek does not support image generation. When `AiProvider = DeepSeek`, no
+> `ITextToImageProvider` is resolved and posts are published **without an attached image**.
+> If image generation is required, use `OpenAi`, `AzureFoundry`, or pair `DeepSeek` with
+> `FalAi` by setting `AiProvider = FalAi` for the image slot.
 
 ---
 
@@ -40,54 +45,44 @@ For XPoster's summarization tasks, `deepseek-chat` offers the best cost/quality 
 
 | Parameter | Value |
 |-----------|-------|
-| `Endpoint` | `https://api.deepseek.com/v1` |
-| `ApiKey` | The API key created in step 1 |
-| `Model` | e.g. `deepseek-chat` |
+| `DeepSeek__Endpoint` | `https://api.deepseek.com` |
+| `DeepSeek__ApiKey` | The API key created in step 1 |
+| `DeepSeek__DeploymentName` | e.g. `deepseek-chat` |
 
 ## 5. Configure XPoster
 
-DeepSeek is always paired with fal.ai in `HybridAiService`. Set all four keys together:
+Set these values in `src/local.settings.json` (local) or Azure App Settings (production):
 
 ```json
 {
   "Values": {
-    "AiProvider": "DeepSeekWithFal",
-    "DEEPSEEK_API_KEY": "<your-deepseek-api-key>",
-    "DEEPSEEK_MODEL": "deepseek-chat",
-    "FALAI_API_KEY": "<your-falai-api-key>"
+    "AiProvider": "DeepSeek",
+    "DeepSeek__Endpoint": "https://api.deepseek.com",
+    "DeepSeek__ApiKey": "<your-deepseek-api-key>",
+    "DeepSeek__DeploymentName": "deepseek-chat"
   }
 }
 ```
 
-> ℹ️ See [setup-falai.md](setup-falai.md) to obtain `FALAI_API_KEY`.
+All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
 
 ## 6. Store Secrets Safely
 
 For production environments:
 
-- Store `DEEPSEEK_API_KEY` in **Azure Key Vault** and reference it from Function App Settings.
+- Store `DeepSeek__ApiKey` in **Azure Key Vault** and reference it from Function App Settings.
 - Never commit secrets to source control. `local.settings.json` is in `.gitignore`.
 
-## 7. How DeepSeek Fits in HybridAiService
-
-`HybridAiService` routes each `IAiService` operation to the most suitable backend:
-
-| Operation | Routed to | Rationale |
-|-----------|-----------|----------|
-| `GetSummaryAsync` | `DeepSeekService` | Strong cost/quality ratio for text summarization |
-| `GetImagePromptAsync` | `DeepSeekService` | Prompt crafting is a text task; consistent model avoids style drift |
-| `GenerateImageAsync` | `FalAiImageService` | Image generation delegated to fal.ai — DeepSeek is text-only |
-
-## 8. Troubleshooting
+## 7. Troubleshooting
 
 ### 401 Unauthorized
 
-- Check that `DEEPSEEK_API_KEY` is valid and not revoked.
+- Check that `DeepSeek__ApiKey` is valid and not revoked.
 - Ensure there are sufficient credits in your DeepSeek account.
 
 ### 404 Model Not Found
 
-- Verify that `DEEPSEEK_MODEL` is a valid model identifier (e.g. `deepseek-chat`).
+- Verify that `DeepSeek__DeploymentName` is a valid model identifier (e.g. `deepseek-chat`).
 - Check the [DeepSeek model list](https://platform.deepseek.com/api-docs) for supported names.
 
 ### 429 Too Many Requests
@@ -98,7 +93,7 @@ For production environments:
 ### Empty or Truncated Output
 
 - Verify that prompt templates include all required placeholders:
-  - `SummarySystemPromptTemplate` must include `{MaxChars}`
-  - `SummaryUserPromptTemplate` must include `{Text}`
-  - `ImagePromptUserTemplate` must include `{Summary}`
-- Check `DEEPSEEK_MODEL` is not set to a reasoning model (`deepseek-reasoner`) when low latency is needed — reasoning models are slower and more expensive.
+  - `DeepSeek__SummarySystemPromptTemplate` must include `{MaxChars}`
+  - `DeepSeek__SummaryUserPromptTemplate` must include `{Text}`
+  - `DeepSeek__ImagePromptUserTemplate` must include `{Summary}`
+- Check `DeepSeek__DeploymentName` is not set to a reasoning model (`deepseek-reasoner`) when low latency is needed — reasoning models are slower and more expensive.

@@ -2,7 +2,7 @@
 
 This guide explains how to obtain OpenAI API credentials and configure XPoster to use `OpenAiService` as the `IAiService` provider.
 
-> **Provider capabilities:** Text (chat completion) + Image generation  
+> **Provider capabilities:** Text (`ITextToTextProvider`) + Image generation (`ITextToImageProvider`)  
 > **`AiProvider` enum value:** `OpenAi`
 
 ---
@@ -31,7 +31,7 @@ XPoster requires two model types:
 | Role | Recommended models | Notes |
 |------|--------------------|-------|
 | Text (chat completion) | `gpt-4.1-nano`, `gpt-4o-mini`, `gpt-4o` | Cost-efficient options recommended for high-volume summarization |
-| Image generation | `gpt-image-1`, `dall-e-3` | `gpt-image-1` offers better instruction following; `dall-e-3` is widely available |
+| Image generation | `gpt-image-1.5`, `dall-e-3` | `gpt-image-1.5` offers better instruction following; `dall-e-3` is widely available |
 
 Model availability depends on your account tier. Check [platform.openai.com/docs/models](https://platform.openai.com/docs/models) for the current list.
 
@@ -39,10 +39,9 @@ Model availability depends on your account tier. Check [platform.openai.com/docs
 
 | Parameter | Value |
 |-----------|-------|
-| `Endpoint` | `https://api.openai.com/v1` |
-| `ApiKey` | The secret key created in step 1 |
-| `DeploymentName` | The chat model name (e.g. `gpt-4o-mini`) |
-| `ImageDeploymentName` | The image model name (e.g. `dall-e-3`) |
+| `OpenAI__ApiKey` | The secret key created in step 1 |
+| `OpenAI__ChatModel` | The chat model name (e.g. `gpt-4.1-nano`) |
+| `OpenAI__ImageModel` | The image model name (e.g. `gpt-image-1.5`) |
 
 ## 5. Configure XPoster
 
@@ -52,32 +51,35 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 {
   "Values": {
     "AiProvider": "OpenAi",
-    "AZURE_OPENAI_ENDPOINT": "https://api.openai.com/v1",
-    "AZURE_OPENAI_KEY": "<your-openai-api-key>",
-    "AZURE_OPENAI_DEPLOYMENT_NAME": "gpt-4o-mini"
+    "OpenAI__ApiKey": "<your-openai-api-key>",
+    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
+    "OpenAI__ChatModel": "gpt-4.1-nano",
+    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
+    "OpenAI__ImageModel": "gpt-image-1.5",
+    "OpenAI__ImageSize": "1024x1024"
   }
 }
 ```
 
-> ℹ️ `OpenAiService` reuses the `AZURE_OPENAI_*` environment variable names for compatibility. The endpoint value distinguishes whether the target is the public OpenAI API or an Azure OpenAI resource.
+All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
 
 ## 6. Store Secrets Safely
 
 For production environments:
 
-- Store `AZURE_OPENAI_KEY` in **Azure Key Vault** and reference it from Function App Settings.
+- Store `OpenAI__ApiKey` in **Azure Key Vault** and reference it from Function App Settings.
 - Never commit secrets to source control. `local.settings.json` is in `.gitignore`.
 
 ## 7. Troubleshooting
 
 ### 401 Unauthorized
 
-- Check that `AZURE_OPENAI_KEY` matches the key in your OpenAI dashboard.
+- Check that `OpenAI__ApiKey` matches the key in your OpenAI dashboard.
 - Ensure the key has not been revoked or rotated.
 
 ### 404 Model Not Found
 
-- Verify the model name in `AZURE_OPENAI_DEPLOYMENT_NAME` is correct and available on your account tier.
+- Verify the model name in `OpenAI__ChatModel` or `OpenAI__ImageModel` is correct and available on your account tier.
 - Check [platform.openai.com/docs/models](https://platform.openai.com/docs/models) for availability.
 
 ### 429 Too Many Requests / Rate Limit
@@ -87,13 +89,13 @@ For production environments:
 
 ### 400 Bad Request
 
-- Verify the endpoint URL format: `https://api.openai.com/v1` (no trailing slash).
-- Ensure the request payload matches the model's expected parameters (e.g. `dall-e-3` does not support all `gpt-image-1` parameters).
+- Verify the endpoint URL format: no trailing slash.
+- Ensure the request payload matches the model's expected parameters (e.g. `dall-e-3` does not support all `gpt-image-1.5` parameters).
 
 ### Empty or Low-Quality Output
 
 - Verify that prompt templates include all required placeholders:
-  - `SummarySystemPromptTemplate` must include `{MaxChars}`
-  - `SummaryUserPromptTemplate` must include `{Text}`
-  - `ImagePromptUserTemplate` must include `{Summary}`
+  - `OpenAI__SummarySystemPromptTemplate` must include `{MaxChars}`
+  - `OpenAI__SummaryUserPromptTemplate` must include `{Text}`
+  - `OpenAI__ImagePromptUserTemplate` must include `{Summary}`
 - Consider using a larger model for better output quality.

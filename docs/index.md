@@ -25,11 +25,15 @@ Setup guides for each external service XPoster integrates with.
 
 | Integration | Guide | Notes |
 |---|---|---|
-| Twitter / X | [setup-x.md](integrations/setup-x.md) | OAuth 1.0a, API v2 |
-| LinkedIn | [setup-linkedin.md](integrations/setup-linkedin.md) | OAuth 2.0, 60-day token rotation |
-| Instagram | [setup-instagram.md](integrations/setup-instagram.md) | Not yet active — see [#72](https://github.com/artcava/XPoster/issues/72) |
-| fal.ai | [setup-fal.md](integrations/setup-fal.md) | Image generation for `DeepSeekWithFal` provider |
-| Perplexity | [setup-perplexity.md](integrations/setup-perplexity.md) | Text-only provider; image generation not supported |
+| Twitter / X | [setup-x.md](integrations/SenderPlugins/setup-x.md) | OAuth 1.0a, API v2 |
+| LinkedIn | [setup-linkedin.md](integrations/SenderPlugins/setup-linkedin.md) | OAuth 2.0, 60-day token rotation |
+| Instagram | [setup-instagram.md](integrations/SenderPlugins/setup-instagram.md) | Not yet active — see [#72](https://github.com/artcava/XPoster/issues/72) |
+| fal.ai | [setup-falai.md](integrations/AiProviders/setup-falai.md) | Image-only provider; text generation not supported |
+| Perplexity | [setup-perplexity.md](integrations/AiProviders/setup-perplexity.md) | Text-only provider; image generation not supported |
+| Open AI | [setup-openai.md](integrations/AiProviders/setup-openai.md) | AI provider for summarisation + image generation |
+| Azure AI Foundry | [setup-azure-foundry.md](integrations/AiProviders/setup-azure-foundry.md) | AI provider for summarisation + image generation |
+| DeepSeek | [setup-deepseek.md](integrations/AiProviders/setup-deepseek.md) | Text-only provider; image generation not supported |
+| graphify-ci | [graphify-ci.md](integrations/graphify-ci.md) | CI integration documentation |
 
 ---
 
@@ -39,8 +43,9 @@ Setup guides for each external service XPoster integrates with.
 |---|---|---|---|---|
 | OpenAI | `OpenAi` | ✅ | ✅ | ✅ |
 | Azure AI Foundry | `AzureFoundry` | ✅ | ✅ | ✅ |
-| DeepSeek + fal.ai | `DeepSeekWithFal` | ✅ | ✅ | ✅ |
+| DeepSeek | `DeepSeek` | ✅ | ✅ | ❌ |
 | Perplexity | `Perplexity` | ✅ | ✅ | ❌ |
+| fal.ai | `FalAi` | ❌ | ❌ | ✅ |
 
 ---
 
