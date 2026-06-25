@@ -71,7 +71,7 @@ XPoster is a **serverless, event-driven pipeline** built on four structural pill
 - **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
 - **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
 
-The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. `OrchestratorFactory` resolves both capabilities independently via `IServiceProvider.GetKeyedService<T>(profile.AiProvider)`. A `null` result means the capability is not available for that provider; orchestrators degrade gracefully (text-only post or skip).
+The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
 
 Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing.
 
@@ -141,7 +141,7 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
 
 ### AI & ML
 
-The AI layer uses two capability interfaces — `ITextToTextProvider` (text summarisation + image prompt generation) and `ITextToImageProvider` (image generation) — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. `OrchestratorFactory` resolves both independently; a `null` result signals that the capability is unavailable for that provider and the orchestrator degrades gracefully.
+The AI layer uses two capability interfaces — `ITextToTextProvider` (text summarisation + image prompt generation) and `ITextToImageProvider` (image generation) — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. Each `ScheduledOrchestrationProfile` carries independent `TextProvider` and `ImageProvider` fields, allowing different providers per capability within the same slot. `OrchestratorFactory` resolves each independently; a `null` field means the capability is not assigned for that slot and the orchestrator degrades gracefully.
 
 | Package | Version | Role |
 |---------|---------|------|
@@ -160,7 +160,7 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 | `Perplexity` | ✅ `PerplexityService` | ❌ | Text only — posts published without image |
 | `FalAi` | ❌ | ✅ `FalAiImageService` | Image only — only valid for orchestrators that handle null `textProvider` |
 
-> ℹ️ `DeepSeekWithFal` / `HybridAiService` have been removed. Assign `AiProvider.DeepSeek` to text slots and `AiProvider.FalAi` to image slots independently in `DefaultSlotProfileProvider`.
+> ℹ️ `DeepSeekWithFal` / `HybridAiService` have been removed. Assign `AiProvider.DeepSeek` to `TextProvider` and `AiProvider.FalAi` to `ImageProvider` independently in `DefaultSlotProfileProvider`.
 
 ### Social Media APIs
 
@@ -379,14 +379,16 @@ az functionapp config appsettings set \
 
 ### Time-based Strategy (ISlotProfileProvider)
 
-The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles:
+The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles. Each slot declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` — `null` means the capability is not assigned for that slot.
 
-| UTC Hour | `SenderPlatform` | Orchestrator | AI Provider |
-|----------|------------------|--------------|-------------|
-| 6 | `LinkedIn` | `FeedOrchestrator` | `OpenAi` |
-| 8 | `X` | `FeedOrchestrator` | `OpenAi` |
-| 14 | `LinkedIn` | `PowerLawOrchestrator` | *(default)* |
-| 16 | `X` | `PowerLawOrchestrator` | *(default)* |
+| UTC Hour | `SenderPlatform` | Orchestrator | `TextProvider` | `ImageProvider` |
+|----------|------------------|--------------|----------------|-----------------|
+| 6 | `LinkedIn` | `FeedOrchestrator` | `OpenAi` | `OpenAi` |
+| 8 | `X` | `FeedOrchestrator` | `AzureFoundry` | `AzureFoundry` |
+| 14 | `LinkedIn` | `PowerLawOrchestrator` | `null` | `null` |
+| 16 | `X` | `PowerLawOrchestrator` | `null` | `null` |
+
+> ℹ️ `PowerLawOrchestrator` slots at 14 and 16 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
 
 `OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
 
