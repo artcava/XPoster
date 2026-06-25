@@ -160,8 +160,6 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 | `Perplexity` | ✅ `PerplexityService` | ❌ | Text only — posts published without image |
 | `FalAi` | ❌ | ✅ `FalAiImageService` | Image only — only valid for orchestrators that handle null `textProvider` |
 
-> ℹ️ `DeepSeekWithFal` / `HybridAiService` have been removed. Assign `AiProvider.DeepSeek` to `TextProvider` and `AiProvider.FalAi` to `ImageProvider` independently in `DefaultSlotProfileProvider`.
-
 ### Social Media APIs
 
 | Library / API | Version | Platform |
