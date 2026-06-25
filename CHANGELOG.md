@@ -10,14 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `ITagReplacementProvider` abstraction: config-backed keyword replacement contract for orchestrators, decoupling hashtag/tag mapping from code and enabling operator-managed replacements via configuration ([#216](https://github.com/artcava/XPoster/issues/216))
+- `ConfigurationTagReplacementProvider`: `ITagReplacementProvider` implementation bound from `TagReplacementOptions`, returning the configured replacement dictionary with empty-map fallback when the section is absent ([#216](https://github.com/artcava/XPoster/issues/216))
+- `ConfigurationTagReplacementProviderTests`: new test class covering configured replacement-map return, empty-map fallback when the `TagReplacementOptions` section is absent, and `ArgumentNullException` on null options ([#216](https://github.com/artcava/XPoster/issues/216))
+- `FeedOrchestratorTests` — staged-pipeline coverage: `GetFeedUrls()` invocation, early return when the configured URL list is empty, forwarding provider URLs into `IFeedService`, tag replacement execution before image prompt generation, single retrieval of replacement map, and graceful continuation when no replacements are configured ([#216](https://github.com/artcava/XPoster/issues/216))
 - `DiWiringTests`: integration tests verifying correct capability resolution per `AiProvider` key, including null-resolution for text-only and image-only providers ([#211](https://github.com/artcava/XPoster/issues/211))
 - `AddXPosterAiProviders()` DI extension method; registers capability interfaces as keyed services by `AiProvider` ([#211](https://github.com/artcava/XPoster/issues/211))
 - `ITextToImageProvider` interface: capability contract for image generation ([#211](https://github.com/artcava/XPoster/issues/211))
 - `ITextToTextProvider` interface: capability contract for text summarisation and image prompt generation ([#211](https://github.com/artcava/XPoster/issues/211))
-- `ITagReplacementProvider` abstraction: config-backed keyword replacement contract for orchestrators, decoupling hashtag/tag mapping from code and enabling operator-managed replacements via configuration ([#216](https://github.com/artcava/XPoster/issues/216))
-- `ConfigurationTagReplacementProvider`: `ITagReplacementProvider` implementation bound from `TagReplacementOptions`, returning the configured replacement dictionary with empty-map fallback when the section is absent ([#216](https://github.com/artcava/XPoster/issues/216))
+- `OrchestratorFactoryTests` ([#211](https://github.com/artcava/XPoster/issues/211)): all `ScheduledOrchestrationProfile` usages updated to the new two-field constructor signature. Four new tests added: `Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider`, `Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider`, `Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent` (verifies DeepSeek+FalAi split scenario with no cross-contamination), `Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider` (text-only slot).
+- `ScheduledOrchestrationProfileTests` ([#211](https://github.com/artcava/XPoster/issues/211)): new test class (`tests/Abstraction/`) covering all constructor combinations — both providers set, text-only, image-only, neither (PowerLaw pattern), canonical split-provider (DeepSeek+FalAi), and hour boundary values `[0, 6, 23]`.
+- `DefaultSlotProfileProviderTests` ([#211](https://github.com/artcava/XPoster/issues/211)): new test class verifying slot count (4), hour uniqueness, that FeedOrchestrator slots at hours 6 and 8 have both `TextProvider` and `ImageProvider` configured and non-`None`, that PowerLaw slots at hours 14 and 16 have both `null`, that no DryRun slot exists in the production schedule, and that `DryRunSlotProfileProvider` appends a slot with both providers configured.
+- `FeedOrchestratorTests` ([#211](https://github.com/artcava/XPoster/issues/211)): two new tests covering the `GetImagePromptAsync` empty-string and whitespace fallback branch — verifies that when `GetImagePromptAsync` returns an empty or whitespace result, `GenerateImageAsync` is called with the summary as the fallback prompt, and the post is published with the image.
 
 ### Changed
+- `FeedOrchestrator` refactored to an explicit staged pipeline (`GetFeedUrls` → `GetFeedsAsync` → `GetSummaryAsync` → tag replacement → `GetImagePromptAsync` → `GenerateImageAsync` → `BuildPost`) with structured logging at each decision point; hashtag replacement is now externalised through `ITagReplacementProvider` instead of inline logic ([#216](https://github.com/artcava/XPoster/issues/216))
 - `DefaultSlotProfileProvider`: any slot previously referencing `AiProvider.DeepSeekWithFal` updated to `AiProvider.DeepSeek` or `AiProvider.FalAi` ([#211](https://github.com/artcava/XPoster/issues/211))
 - `PerplexityService.GenerateImageAsync` previously returned `byte[0]` silently; this silent failure is eliminated — the method is removed; misconfiguration surfaces explicitly at point of use ([#211](https://github.com/artcava/XPoster/issues/211))
 - `FalAiImageService` implements `ITextToImageProvider` only ([#211](https://github.com/artcava/XPoster/issues/211))
@@ -29,7 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced `MessageSender` enum with `SenderPlatform` enum; platform and orchestrator identity are now independent (ADR-005)
 - `OrchestratorFactory` resolves `ISender` from `SenderPlatform`; adding a new orchestrator no longer requires enum changes
 - `ScheduledOrchestrationProfile` uses `SenderPlatform` instead of `MessageSender`
-- `FeedOrchestrator` refactored to an explicit staged pipeline (`GetFeedUrls` → `GetFeedsAsync` → `GetSummaryAsync` → tag replacement → `GetImagePromptAsync` → `GenerateImageAsync` → `BuildPost`) with structured logging at each decision point; hashtag replacement is now externalised through `ITagReplacementProvider` instead of inline logic ([#216](https://github.com/artcava/XPoster/issues/216))
 
 ### Removed
 - `PerplexityService.GenerateImageAsync`: method removed; Perplexity is a text-only provider ([#211](https://github.com/artcava/XPoster/issues/211))
@@ -38,14 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `AiProvider.DeepSeekWithFal`: enum value removed; replaced by independent `AiProvider.DeepSeek` and `AiProvider.FalAi` keys ([#211](https://github.com/artcava/XPoster/issues/211))
 - `HybridAiService`: no longer needed; `DeepSeek` and `FalAi` are now independent `AiProvider` keys ([#211](https://github.com/artcava/XPoster/issues/211))
 - `MessageSender` enum
-
-### Tests
-- **`OrchestratorFactoryTests`** ([#211](https://github.com/artcava/XPoster/issues/211)): all `ScheduledOrchestrationProfile` usages updated to the new two-field constructor signature. Four new tests added: `Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider`, `Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider`, `Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent` (verifies DeepSeek+FalAi split scenario with no cross-contamination), `Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider` (text-only slot).
-- **`ScheduledOrchestrationProfileTests`** ([#211](https://github.com/artcava/XPoster/issues/211)): new test class (`tests/Abstraction/`) covering all constructor combinations — both providers set, text-only, image-only, neither (PowerLaw pattern), canonical split-provider (DeepSeek+FalAi), and hour boundary values `[0, 6, 23]`.
-- **`DefaultSlotProfileProviderTests`** ([#211](https://github.com/artcava/XPoster/issues/211)): new test class verifying slot count (4), hour uniqueness, that FeedOrchestrator slots at hours 6 and 8 have both `TextProvider` and `ImageProvider` configured and non-`None`, that PowerLaw slots at hours 14 and 16 have both `null`, that no DryRun slot exists in the production schedule, and that `DryRunSlotProfileProvider` appends a slot with both providers configured.
-- **`FeedOrchestratorTests`** ([#211](https://github.com/artcava/XPoster/issues/211)): two new tests covering the `GetImagePromptAsync` empty-string and whitespace fallback branch — verifies that when `GetImagePromptAsync` returns an empty or whitespace result, `GenerateImageAsync` is called with the summary as the fallback prompt, and the post is published with the image.
-- **`ConfigurationTagReplacementProviderTests`** ([#216](https://github.com/artcava/XPoster/issues/216)): new test class covering configured replacement-map return, empty-map fallback when the `TagReplacementOptions` section is absent, and `ArgumentNullException` on null options.
-- **`FeedOrchestratorTests`** ([#216](https://github.com/artcava/XPoster/issues/216)): added staged-pipeline coverage for `GetFeedUrls()` invocation, early return when the configured URL list is empty, forwarding provider URLs into `IFeedService`, tag replacement execution before image prompt generation, single retrieval of replacement map, and graceful continuation when no replacements are configured.
 
 ---
 
