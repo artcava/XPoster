@@ -50,6 +50,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
     │ • Feed Service     │ ◄─── RSS Parser (IHttpClientFactory + Polly)
     │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
     │ • FeedUrlProvider  │ ◄─── Feed URL resolution (IFeedUrlProvider)
+    │ • TagReplacement   │ ◄─── Hashtag map resolution (ITagReplacementProvider)
     └────────┬───────────┘
              │
              ▼
@@ -101,7 +102,15 @@ The factory enforces the invariant that every unscheduled hour resolves to `NoOr
 
 Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**:
 
-- **FeedOrchestrator**: fetches RSS entries via `FeedService`, calls `ITextToTextProvider` to produce a text summary and an image prompt, then calls `ITextToImageProvider` to generate an image. Feed URLs are resolved at runtime via `IFeedUrlProvider` (default: `ConfigurationFeedUrlProvider`, bound from `FeedOptions__Urls__N` app settings). If the provider returns an empty list, `OrchestrateAsync()` returns `null` immediately with no AI or sender invocation. Both AI capability providers are injected as nullable — `FeedOrchestrator` handles `null` text or image providers explicitly at the point of use.
+- **FeedOrchestrator**: executes a five-step pipeline to produce a social post from RSS news:
+  1. **Acquire feed content** — resolves URLs via `IFeedUrlProvider`, fetches RSS entries via `FeedService`, aggregates content from the last 24 hours.
+  2. **Generate summary** — calls `ITextToTextProvider.GetSummaryAsync()` with the aggregated content and the sender's `MessageMaxLength`.
+  3. **Apply tag replacements** — calls `ITagReplacementProvider.GetReplacements()` and replaces the first occurrence of each configured word with its hashtag equivalent (e.g. `bitcoin` → `#Bitcoin`). The replacement map is resolved from `TagReplacementOptions:Replacements` via `ConfigurationTagReplacementProvider` (registered as `Singleton`). An empty map is a valid configuration — the summary passes through unchanged.
+  4. **Generate image prompt** — calls `ITextToTextProvider.GetImagePromptAsync()` on the tagged summary; falls back to using the summary directly if the prompt is empty.
+  5. **Generate image** — calls `ITextToImageProvider.GenerateImageAsync()` with the prompt; returns the post without an image if the provider is `null`, returns empty bytes, or throws.
+
+  Both `IFeedUrlProvider` and `ITagReplacementProvider` follow the same provider pattern: registered as `Singleton`, bound from app settings, swappable via DI without touching orchestrator logic. If `IFeedUrlProvider` returns an empty list, `OrchestrateAsync()` returns `null` immediately with no AI or sender invocation. Both AI capability providers are injected as nullable — `FeedOrchestrator` handles `null` text or image providers explicitly at the point of use.
+
 - **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. It has no dependency on AI providers.
 - **NoOrchestrator**: a null-object implementation that returns `null` immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.
 
@@ -112,6 +121,7 @@ Services are registered as singletons or transients in the DI container and are 
 - **AiServiceHelper**: a shared utility class used internally by AI service implementations. It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
 - **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
 - **ConfigurationFeedUrlProvider** (`IFeedUrlProvider`): resolves the list of RSS feed URLs consumed by `FeedOrchestrator` from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
+- **ConfigurationTagReplacementProvider** (`ITagReplacementProvider`): resolves the word-to-hashtag replacement map consumed by `FeedOrchestrator` from the `TagReplacementOptions:Replacements` configuration section (bound via `TagReplacementOptions__Replacements__<word>` double-underscore notation). Registered as `Singleton`. Matching is case-insensitive; only the first occurrence of each word per post is replaced. An empty or absent section is valid — the summary passes through unchanged. To source replacements from a different store (database, remote config), implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
 
 **AI Provider Services** — registered as **keyed services** by `AiProvider` via `AddXPosterAiProviders()` in `Program.cs`:
@@ -272,6 +282,7 @@ sequenceDiagram
     participant T2T as ITextToTextProvider<br/>(resolved by AiProvider)
     participant T2I as ITextToImageProvider<br/>(resolved by AiProvider)
     participant FeedUrl as IFeedUrlProvider
+    participant TagRepl as ITagReplacementProvider
     participant Feed as FeedService<br/>(RSS + IHttpClientFactory)
     participant Crypto as CryptoService<br/>(cryptoprices.cc)
     participant Sender as ISender<br/>(X / LinkedIn / Instagram)
@@ -299,17 +310,27 @@ sequenceDiagram
 
     Fn->>Orch: OrchestrateAsync()
 
-    alt FeedOrchestrator
+    alt FeedOrchestrator — 5-step pipeline
+        Note over Orch,TagRepl: Step 1 — Acquire feed content
         Orch->>FeedUrl: GetFeedUrls()
         FeedUrl-->>Orch: IReadOnlyList<string>
-        Orch->>Feed: GetLatestItemAsync(url)
-        Feed-->>Orch: FeedItem (title, url, content)
+        Orch->>TagRepl: GetReplacements() (keys used as feed keywords)
+        TagRepl-->>Orch: IReadOnlyDictionary<string,string>
+        Orch->>Feed: GetFeedsAsync(url, start, end, keywords)
+        Feed-->>Orch: List<RSSFeed>
+        Note over Orch,T2T: Step 2 — Generate summary
         Orch->>T2T: GetSummaryAsync(content, maxLength)
         T2T-->>Orch: summary text
-        Orch->>T2T: GetImagePromptAsync(title)
-        T2T-->>Orch: image prompt
+        Note over Orch,TagRepl: Step 3 — Apply tag replacements
+        Orch->>TagRepl: GetReplacements()
+        TagRepl-->>Orch: IReadOnlyDictionary<string,string>
+        Orch->>Orch: ApplyTagReplacements(summary)
+        Note over Orch,T2T: Step 4 — Generate image prompt
+        Orch->>T2T: GetImagePromptAsync(taggedSummary)
+        T2T-->>Orch: image prompt (falls back to summary if empty)
+        Note over Orch,T2I: Step 5 — Generate image
         Orch->>T2I: GenerateImageAsync(prompt)
-        T2I-->>Orch: image bytes
+        T2I-->>Orch: image bytes (null if provider absent or error)
     else PowerLawOrchestrator
         Orch->>Crypto: GetPriceAsync(symbol)
         Crypto-->>Orch: current price

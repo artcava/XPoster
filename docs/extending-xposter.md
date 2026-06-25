@@ -1,6 +1,6 @@
 # Extending XPoster
 
-XPoster is designed around three extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), and **AI Providers** (model integrations). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
+XPoster is designed around five extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), **AI Providers** (model integrations), **Feed URL Providers** (RSS/Atom feed sources), and **Tag Replacement Providers** (hashtag mapping sources). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
 
 > For the architectural rationale behind each extension point, see [architecture.md §5](architecture.md#5-extension-points).
 
@@ -412,6 +412,148 @@ Key rules for this file:
 
 ---
 
+## Adding a New Feed URL Provider
+
+The feed URL provider supplies the list of RSS/Atom URLs that `FeedService` fetches on every timer-trigger execution. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions:Urls` list in app settings. If you need to source URLs from a different store — a database, a remote API, Azure App Configuration, or a feature-flag service — implement `IFeedUrlProvider` and swap the registration in `Program.cs`.
+
+### Contract
+
+```csharp
+// src/Contracts/IFeedUrlProvider.cs
+public interface IFeedUrlProvider
+{
+    IReadOnlyList<string> GetUrls();
+}
+```
+
+`GetUrls()` must:
+- Return an `IReadOnlyList<string>` of absolute RSS/Atom feed URLs.
+- Return an **empty list** — never `null` — when no URLs are configured. `FeedOrchestrator` treats an empty list as a valid no-op and emits a `LogWarning` without calling any AI provider.
+- Be **synchronous and cheap**. `FeedService` calls `GetUrls()` once per execution, before issuing any HTTP request. Load data at construction time or cache it; do not make blocking I/O calls inside `GetUrls()`.
+
+### Step 1 — Implement IFeedUrlProvider
+
+```csharp
+// src/Services/DatabaseFeedUrlProvider.cs
+using XPoster.Contracts;
+
+namespace XPoster.Services;
+
+/// <summary>
+/// Loads RSS/Atom feed URLs from a remote database, refreshed at startup.
+/// </summary>
+public class DatabaseFeedUrlProvider : IFeedUrlProvider
+{
+    private readonly IReadOnlyList<string> _urls;
+
+    public DatabaseFeedUrlProvider(IMyDatabaseClient db)
+    {
+        // Load once at construction time; FeedService calls GetUrls() synchronously.
+        _urls = db.FetchFeedUrls().ToList().AsReadOnly();
+    }
+
+    public IReadOnlyList<string> GetUrls() => _urls;
+}
+```
+
+> If your URL source changes frequently and must be refreshed between executions, wrap the load in a cached background service and inject the cache here rather than fetching inside `GetUrls()`. The synchronous contract of the interface must be respected — `FeedService` does not `await` this call.
+
+### Step 2 — Register in DI
+
+Replace the existing `ConfigurationFeedUrlProvider` registration in `Program.cs` with your implementation. Keep the lifetime as `Singleton` — `FeedService` is resolved per-trigger and `GetUrls()` must be cheap.
+
+```csharp
+// src/Program.cs
+// Remove or comment out:
+// builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
+
+// Add your implementation:
+builder.Services.AddSingleton<IFeedUrlProvider, DatabaseFeedUrlProvider>();
+```
+
+No other change is required. `FeedService` and `FeedOrchestrator` depend only on `IFeedUrlProvider` — they are unaware of the concrete implementation.
+
+### Step 3 — Remove the `FeedOptions__Urls__*` configuration keys (optional)
+
+If your new provider does not use `FeedOptions`, you can remove the `FeedOptions__Urls__*` keys from `local.settings.json` and Azure App Settings. The `ConfigurationFeedUrlProvider` binding will no longer be active.
+
+> The `FeedOptions` resilience keys (`AttemptTimeoutSeconds`, `RetryCount`, etc.) are consumed by the HTTP client pipeline registered in `HttpClientExtensions`, **not** by `ConfigurationFeedUrlProvider`. Removing the URL keys does not affect HTTP resilience configuration.
+
+---
+
+## Adding a New Tag Replacement Provider
+
+The tag replacement provider resolves the word-to-hashtag map consumed by `FeedOrchestrator` at Step 3 of its pipeline. The default implementation, `ConfigurationTagReplacementProvider`, reads the map from `TagReplacementOptions:Replacements` in app settings. If you need to source replacements from a different store — a database, a remote API, Azure App Configuration, or Key Vault — implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
+
+### Contract
+
+```csharp
+// src/Contracts/ITagReplacementProvider.cs
+public interface ITagReplacementProvider
+{
+    IReadOnlyDictionary<string, string> GetReplacements();
+}
+```
+
+`GetReplacements()` must:
+- Return an `IReadOnlyDictionary<string, string>` mapping plain words (keys) to their hashtag replacements (values).
+- Return an **empty dictionary** — never `null` — when no replacements are configured. `FeedOrchestrator` treats an empty map as a valid no-op.
+- Be **synchronous and cheap**. `FeedOrchestrator` calls it twice per execution (once for feed keyword filtering, once for post-summary replacement). Load data at construction time or cache it; do not make blocking HTTP calls inside `GetReplacements()`.
+
+### Step 1 — Implement ITagReplacementProvider
+
+```csharp
+// src/Orchestrators/DatabaseTagReplacementProvider.cs
+using XPoster.Contracts;
+
+namespace XPoster.Orchestrators;
+
+/// <summary>
+/// Loads word-to-hashtag replacements from a remote database, refreshed at startup.
+/// </summary>
+public class DatabaseTagReplacementProvider : ITagReplacementProvider
+{
+    private readonly IReadOnlyDictionary<string, string> _replacements;
+
+    public DatabaseTagReplacementProvider(IMyDatabaseClient db)
+    {
+        // Load once at construction; FeedOrchestrator calls GetReplacements() synchronously.
+        var rows = db.FetchReplacements();
+        _replacements = rows.ToDictionary(
+            r => r.Word,
+            r => r.Hashtag,
+            StringComparer.OrdinalIgnoreCase);
+    }
+
+    public IReadOnlyDictionary<string, string> GetReplacements() => _replacements;
+}
+```
+
+> Use `StringComparer.OrdinalIgnoreCase` on the dictionary to honour the case-insensitive matching contract. `FeedOrchestrator.ReplaceEveryFirstOccurrenceOf()` performs its own case-insensitive scan, but a case-insensitive dictionary prevents duplicate keys with different casing from causing silent overrides.
+
+### Step 2 — Register in DI
+
+Replace the existing `ConfigurationTagReplacementProvider` registration in `Program.cs` with your implementation. The registration must remain `Singleton` — `FeedOrchestrator` is resolved per-trigger and expects the provider to be cheap to call.
+
+```csharp
+// src/Program.cs
+// Remove or comment out:
+// builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
+
+// Add your implementation:
+builder.Services.AddSingleton<ITagReplacementProvider, DatabaseTagReplacementProvider>();
+```
+
+No other change is required. `FeedOrchestrator` depends only on `ITagReplacementProvider` — it is unaware of the concrete implementation.
+
+### Step 3 — Remove the `TagReplacementOptions` configuration keys (optional)
+
+If your new provider does not use `TagReplacementOptions`, you can remove the `TagReplacementOptions__Replacements__*` keys from `local.settings.json` and Azure App Settings. The `ConfigurationTagReplacementProvider` binding will no longer be active.
+
+> If you keep the configuration keys but switch to a different provider, the bound `TagReplacementOptions` values are simply ignored — no error is raised.
+
+---
+
 ## Design Constraints
 
 All extensions must respect the following invariants to integrate correctly with the pipeline:
@@ -428,4 +570,6 @@ All extensions must respect the following invariants to integrate correctly with
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **`IFeedUrlProvider` must return an empty list — never `null`.** `FeedService` iterates the result directly; returning `null` causes a `NullReferenceException` at runtime.
+- **`ITagReplacementProvider` must return an empty dictionary — never `null`.** `FeedOrchestrator` iterates the result directly without a null-guard; returning `null` causes a `NullReferenceException` at runtime.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

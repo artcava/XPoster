@@ -12,28 +12,33 @@ namespace XPoster.Tests.Orchestrators;
 /// </summary>
 public class FeedOrchestratorFeedUrlProviderTests
 {
-    private readonly Mock<ISender> _mockSender;
-    private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
-    private readonly Mock<IFeedService> _mockFeedService;
-    private readonly Mock<IFeedUrlProvider> _mockFeedUrlProvider;
-    private readonly Mock<ITextToTextProvider> _mockTextProvider;
-    private readonly Mock<ITextToImageProvider> _mockImageProvider;
+    private readonly Mock<ISender>                     _mockSender;
+    private readonly Mock<ILogger<FeedOrchestrator>>   _mockLogger;
+    private readonly Mock<IFeedService>                _mockFeedService;
+    private readonly Mock<IFeedUrlProvider>            _mockFeedUrlProvider;
+    private readonly Mock<ITagReplacementProvider>     _mockTagReplacementProvider;
+    private readonly Mock<ITextToTextProvider>         _mockTextProvider;
+    private readonly Mock<ITextToImageProvider>        _mockImageProvider;
 
     public FeedOrchestratorFeedUrlProviderTests()
     {
-        _mockSender          = new Mock<ISender>();
-        _mockLogger          = new Mock<ILogger<FeedOrchestrator>>();
-        _mockFeedService     = new Mock<IFeedService>();
-        _mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
-        _mockTextProvider    = new Mock<ITextToTextProvider>();
-        _mockImageProvider   = new Mock<ITextToImageProvider>();
+        _mockSender                 = new Mock<ISender>();
+        _mockLogger                 = new Mock<ILogger<FeedOrchestrator>>();
+        _mockFeedService            = new Mock<IFeedService>();
+        _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
+        _mockTagReplacementProvider = new Mock<ITagReplacementProvider>();
+        _mockTextProvider           = new Mock<ITextToTextProvider>();
+        _mockImageProvider          = new Mock<ITextToImageProvider>();
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockTagReplacementProvider.Setup(p => p.GetReplacements())
+            .Returns(new Dictionary<string, string>());
     }
 
     private FeedOrchestrator CreateOrchestrator() =>
         new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object,
-            _mockFeedUrlProvider.Object, _mockTextProvider.Object, _mockImageProvider.Object);
+            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTextProvider.Object, _mockImageProvider.Object);
 
     [Fact]
     public async Task OrchestrateAsync_Should_CallGetFeedUrls_Once()

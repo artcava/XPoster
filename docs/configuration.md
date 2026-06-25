@@ -86,6 +86,14 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "FeedOptions__CircuitBreakerSamplingDurationSeconds": "30",
     "FeedOptions__CircuitBreakerBreakDurationSeconds": "15",
 
+    // ── Tag Replacements ─────────────────────────────────────────
+    // Optional. Maps plain words in the AI summary to hashtag equivalents.
+    // FeedOrchestrator replaces the first occurrence of each key (case-insensitive).
+    // An absent or empty section is valid — summaries pass through unchanged.
+    "TagReplacementOptions__Replacements__bitcoin": "#Bitcoin",
+    "TagReplacementOptions__Replacements__btc": "#BTC",
+    // Add further entries as TagReplacementOptions__Replacements__<word>.
+
     // ── AI Provider Selector ──────────────────────────────────────────
     "AiProvider": "OpenAi",
 
@@ -229,6 +237,34 @@ All five resilience settings are optional. When omitted the values shown in the 
 
 ---
 
+## Tag Replacements
+
+`FeedOrchestrator` applies a word-to-hashtag replacement pass on the AI-generated summary before producing the image prompt (Step 3 of the pipeline). Replacements are resolved at runtime by `ITagReplacementProvider`. The default implementation, `ConfigurationTagReplacementProvider`, reads from the `TagReplacementOptions:Replacements` section bound via double-underscore notation.
+
+**Matching rules:**
+- Only the **first occurrence** of each configured word per post is replaced.
+- Matching is **case-insensitive** — the key `bitcoin` matches `Bitcoin`, `BITCOIN`, etc.
+- The replacement value is used verbatim (e.g. `#Bitcoin` preserves the casing you configure).
+- Keys from this map are also passed as keywords to `FeedService.GetFeedsAsync()` to pre-filter feed items that mention the configured topics.
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `TagReplacementOptions__Replacements__<word>` | string | No | — | Maps `<word>` to its hashtag replacement. E.g. `TagReplacementOptions__Replacements__bitcoin` = `#Bitcoin`. |
+
+**Example — Azure App Settings (flat key notation):**
+
+```
+TagReplacementOptions__Replacements__bitcoin   →   #Bitcoin
+TagReplacementOptions__Replacements__btc       →   #BTC
+TagReplacementOptions__Replacements__fed       →   #FED
+```
+
+**Behaviour with an empty or absent section:** `ConfigurationTagReplacementProvider` returns an empty `IReadOnlyDictionary<string, string>`. `FeedOrchestrator` applies no replacements and passes the summary through unchanged. This is a valid configuration — no warning is emitted.
+
+**Extending the provider:** to source replacements from a different store (database, remote config, Key Vault), implement `ITagReplacementProvider` and register the new implementation in `Program.cs` in place of `ConfigurationTagReplacementProvider`.
+
+---
+
 ## AI Provider Selector
 
 XPoster uses a **capability-based** AI provider model. Each `AiProvider` value is registered as a keyed service in the DI container, exposing one or both capability interfaces (`ITextToTextProvider`, `ITextToImageProvider`). `OrchestratorFactory` resolves both capabilities independently via `GetKeyedService<T>(profile.AiProvider)` — a `null` result means the capability is not available for that provider and the orchestrator degrades gracefully.
@@ -264,7 +300,7 @@ The following combinations will cause `FeedOrchestrator` to surface an explicit 
 All sender OAuth credentials (Twitter/X, LinkedIn, Instagram) are loaded from Azure Key Vault **at application startup** via the [Azure Key Vault Configuration Provider](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-integrate-kubernetes) registered in `Program.cs` (`builder.Configuration.AddAzureKeyVault(...)`). Secrets are merged into `IConfiguration` and injected into senders through standard `IOptions` / `IConfiguration` binding — no runtime Key Vault calls occur during post publishing.
 
 | Variable | Type | Required | Description |
-|---|---|---|
+|---|---|---|---|
 | `KEYVAULT_URI` | string | ✅ Yes | Full URI of the Azure Key Vault instance, e.g. `https://<vault-name>.vault.azure.net/`. |
 
 ### Authentication
