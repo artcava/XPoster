@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PowerLawOrchestrator.cs** (4 connections)
-- **PowerLawOrchestrator.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **PowerLawOrchestrator()** (2 connections)
-- **if()** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITagReplacementProvider** (2 connections)
 
 ## Relationships
 

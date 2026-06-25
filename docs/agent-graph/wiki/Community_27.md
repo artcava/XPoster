@@ -4,25 +4,25 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (25 connections)
-- **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
 
 ## Relationships
 
-- [[Community 12]] (14 shared connections)
+- [[Community 20]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

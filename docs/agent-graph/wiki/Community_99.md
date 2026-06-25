@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetCryptoValue()** (2 connections)
+- **FeedOrchestrator.cs** (9 connections)
+- **if()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (3 shared connections)
+- [[Community 66]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

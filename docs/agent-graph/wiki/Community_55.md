@@ -1,20 +1,20 @@
 # Community 55
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsNull()** (2 connections)
+- **XFunctionMissingBranchTests()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
 
 ## Relationships
 
-- [[Community 101]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

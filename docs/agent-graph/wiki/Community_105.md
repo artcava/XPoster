@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **FalAiOptionsExtensions.cs** (3 connections)
-- **FalAiOptionsExtensions.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **Post** (2 connections)
 - **XPoster.Models** (2 connections)
-- **AddFalAiOptions()** (2 connections)
 
 ## Relationships
 

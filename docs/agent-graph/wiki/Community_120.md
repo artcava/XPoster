@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
+- **Enums.cs** (2 connections)
+- **Enums.cs** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

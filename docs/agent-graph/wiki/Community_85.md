@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ICryptoService** (2 connections)
-- **GetCryptoValue()** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **XPoster.Services** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
 
 ## Relationships
 

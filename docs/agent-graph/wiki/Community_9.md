@@ -1,35 +1,36 @@
 # Community 9
 
-> 18 nodes · cohesion 0.22
+> 19 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **FeedServiceTests.cs** (17 connections)
-- **FeedServiceTests.cs** (17 connections)
-- **SendAsync()** (2 connections)
+- **AzureFoundryServiceTests.cs** (35 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
+- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **GetFeedsAsync_ReturnsFeedsFromCache_IfPresent()** (2 connections)
-- **GetFeedsAsync_FiltersOutItemsOutsideDateRange()** (2 connections)
-- **GetFeedsAsync_FiltersOutItemsWithNoKeywordMatch()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenHttpFails()** (2 connections)
-- **GetFeedsAsync_ReturnsEmpty_WhenFeedIsInvalidXml()** (2 connections)
-- **FakeHttpMessageHandler()** (2 connections)
-- **FeedService()** (2 connections)
-- **FeedServiceTests** (2 connections)
-- **foreach()** (2 connections)
-- **BuildRssXml()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **new()** (2 connections)
-- **GetFeedsAsync_FetchesAndCachesFeeds_WhenCacheMissAndHttpSucceeds()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
 - **BuildService()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_RequestBodyContainsModelField()** (2 connections)
+- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
+- **AzureFoundryServiceTests** (2 connections)
+- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
+- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 11]] (17 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 71 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

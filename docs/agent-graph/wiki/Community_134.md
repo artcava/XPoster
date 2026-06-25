@@ -1,15 +1,16 @@
 # Community 134
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
-- **if()** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 109]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

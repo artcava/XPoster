@@ -1,28 +1,28 @@
 # Community 28
 
-> 11 nodes · cohesion 0.35
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **DefaultSlotProfileProviderTests.cs** (10 connections)
-- **DefaultSlotProfileProviderTests.cs** (10 connections)
-- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
-- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
-- **DefaultSlotProfileProviderTests** (2 connections)
-- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
-- **GetProfiles_Should_ReturnFourActiveSlots()** (2 connections)
-- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **OrchestratorFactoryTests.cs** (25 connections)
+- **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()** (2 connections)
+- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()** (2 connections)
+- **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 12]] (14 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 45 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
