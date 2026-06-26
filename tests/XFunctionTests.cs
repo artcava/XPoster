@@ -57,4 +57,38 @@ public class XFunctionTests
         _mockOrchestrator.Verify(g => g.OrchestrateAsync(CancellationToken.None), Times.Once());
         _mockOrchestrator.Verify(g => g.PostAsync(testPosts, CancellationToken.None), Times.Once());
     }
+
+    // ---------------------------------------------------------------------------
+    // Cancellation
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()
+    {
+        // ARRANGE — OrchestrateAsync throws OperationCanceledException with the same token
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
+        _mockOrchestrator.Setup(g => g.Name).Returns("CancelledOrchestrator");
+        _mockOrchestrator
+            .Setup(g => g.OrchestrateAsync(cts.Token))
+            .ThrowsAsync(new OperationCanceledException(cts.Token));
+        _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
+
+        var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
+
+        // ACT + ASSERT — must not throw
+        await function.Run(null!, cts.Token);
+
+        // Verify warning was logged (not error)
+        _mockLogger.Verify(
+            l => l.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("cancelled gracefully")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
 }

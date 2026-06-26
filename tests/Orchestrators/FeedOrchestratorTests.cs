@@ -739,4 +739,36 @@ public class FeedOrchestratorTests
             s => s.GenerateImageAsync(fakeSummary, It.IsAny<CancellationToken>()),
             Times.Once);
     }
+
+    // ---------------------------------------------------------------------------
+    // Cancellation
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_Rethrow_When_ImageGenerationIsCancelled()
+    {
+        // ARRANGE — image provider throws OperationCanceledException (e.g. HTTP timeout on AI call)
+        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeSummary = "Summary";
+        using var cts   = new CancellationTokenSource();
+        cts.Cancel();
+
+        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(),
+                It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(
+                It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeSummary);
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(
+                It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException(cts.Token));
+
+        var orchestrator = CreateOrchestrator();
+
+        // ACT + ASSERT — must propagate, not be swallowed by catch(Exception ex)
+        await Assert.ThrowsAsync<OperationCanceledException>(
+            () => orchestrator.OrchestrateAsync(cts.Token));
+    }
 }
