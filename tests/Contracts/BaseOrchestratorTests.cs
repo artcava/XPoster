@@ -22,8 +22,10 @@ public class BaseOrchestratorTests
         public override bool ProduceImage { get; set; }
         public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
             new List<SenderPlatform>().AsReadOnly();
-        public override Task<IReadOnlyList<Post?>> OrchestrateAsync() =>
-            Task.FromResult<IReadOnlyList<Post?>>(Array.Empty<Post?>());
+
+        public override Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync() =>
+            Task.FromResult<IReadOnlyDictionary<SenderPlatform, Post?>>(
+                new Dictionary<SenderPlatform, Post?>().AsReadOnly());
 
         public TestOrchestrator(
             IReadOnlyList<ISender> senders,
@@ -43,6 +45,7 @@ public class BaseOrchestratorTests
     public BaseOrchestratorTests()
     {
         _mockSender = new Mock<ISender>();
+        _mockSender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         _mockLogger = new Mock<ILogger>();
     }
 
@@ -58,7 +61,12 @@ public class BaseOrchestratorTests
             _mockLogger.Object,
             sendIt: false);
 
-        var result = await orchestrator.PostAsync(new List<Post?> { new Post { Content = "Hello" } }.AsReadOnly());
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = "Hello" } }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
         _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
@@ -75,13 +83,18 @@ public class BaseOrchestratorTests
             new List<ISender>().AsReadOnly(),
             _mockLogger.Object);
 
-        var result = await orchestrator.PostAsync(new List<Post?> { new Post { Content = "Hello" } }.AsReadOnly());
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = "Hello" } }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
     }
 
     // ---------------------------------------------------------------------------
-    // Guard: null post at position i
+    // Guard: null post for the sender's platform
     // ---------------------------------------------------------------------------
 
     [Fact]
@@ -91,7 +104,12 @@ public class BaseOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
 
-        var result = await orchestrator.PostAsync(new List<Post?> { null }.AsReadOnly());
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, null }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
         _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
@@ -108,7 +126,12 @@ public class BaseOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
 
-        var result = await orchestrator.PostAsync(new List<Post?> { new Post { Content = string.Empty } }.AsReadOnly());
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = string.Empty } }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
         _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
@@ -121,7 +144,12 @@ public class BaseOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
 
-        var result = await orchestrator.PostAsync(new List<Post?> { new Post { Content = "   " } }.AsReadOnly());
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = "   " } }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
         _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
@@ -136,6 +164,8 @@ public class BaseOrchestratorTests
     {
         var mockSender1 = new Mock<ISender>();
         var mockSender2 = new Mock<ISender>();
+        mockSender1.Setup(s => s.Platform).Returns(SenderPlatform.X);
+        mockSender2.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         mockSender1.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
         mockSender2.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
 
@@ -146,7 +176,13 @@ public class BaseOrchestratorTests
             new List<ISender> { mockSender1.Object, mockSender2.Object }.AsReadOnly(),
             _mockLogger.Object);
 
-        var result = await orchestrator.PostAsync(new List<Post?> { post1, post2 }.AsReadOnly());
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X,        post1 },
+            { SenderPlatform.LinkedIn, post2 }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.True(result);
         mockSender1.Verify(s => s.SendAsync(post1), Times.Once);
@@ -160,12 +196,41 @@ public class BaseOrchestratorTests
         var orchestrator = new TestOrchestrator(
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
-        var post = new Post { Content = "Hello" };
 
-        var result = await orchestrator.PostAsync(new List<Post?> { post }.AsReadOnly());
+        var post = new Post { Content = "Hello" };
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, post }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.True(result);
         _mockSender.Verify(s => s.SendAsync(post), Times.Once);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Guard: platform missing from dispatch map
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()
+    {
+        _mockSender.Setup(s => s.Platform).Returns(SenderPlatform.X);
+        var orchestrator = new TestOrchestrator(
+            new List<ISender> { _mockSender.Object }.AsReadOnly(),
+            _mockLogger.Object);
+
+        // Dictionary does not contain an entry for X
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.LinkedIn, new Post { Content = "Hello" } }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
+
+        Assert.False(result);
+        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -177,6 +242,8 @@ public class BaseOrchestratorTests
     {
         var mockSender1 = new Mock<ISender>();
         var mockSender2 = new Mock<ISender>();
+        mockSender1.Setup(s => s.Platform).Returns(SenderPlatform.X);
+        mockSender2.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         mockSender1.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
         mockSender2.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(false);
 
@@ -184,11 +251,13 @@ public class BaseOrchestratorTests
             new List<ISender> { mockSender1.Object, mockSender2.Object }.AsReadOnly(),
             _mockLogger.Object);
 
-        var result = await orchestrator.PostAsync(new List<Post?>
+        var posts = new Dictionary<SenderPlatform, Post?>
         {
-            new Post { Content = "OK" },
-            new Post { Content = "Fail" }
-        }.AsReadOnly());
+            { SenderPlatform.X,        new Post { Content = "OK" }   },
+            { SenderPlatform.LinkedIn, new Post { Content = "Fail" } }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
     }
@@ -205,9 +274,14 @@ public class BaseOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object,
             produceImage: true);
-        var post = new Post { Content = "Hello", Image = null };
 
-        var result = await orchestrator.PostAsync(new List<Post?> { post }.AsReadOnly());
+        var post = new Post { Content = "Hello", Image = null };
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, post }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         // Warning does not block posting
         Assert.True(result);
@@ -229,9 +303,14 @@ public class BaseOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object,
             produceImage: true);
-        var post = new Post { Content = "Hello", Image = new byte[] { 1, 2, 3 } };
 
-        var result = await orchestrator.PostAsync(new List<Post?> { post }.AsReadOnly());
+        var post = new Post { Content = "Hello", Image = new byte[] { 1, 2, 3 } };
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, post }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.True(result);
         _mockLogger.Verify(
@@ -251,9 +330,14 @@ public class BaseOrchestratorTests
         var orchestrator = new TestOrchestrator(
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
-        var post = new Post { Content = "Hello" };
 
-        var result = await orchestrator.PostAsync(new List<Post?> { post }.AsReadOnly());
+        var post = new Post { Content = "Hello" };
+        var posts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, post }
+        }.AsReadOnly();
+
+        var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
     }
