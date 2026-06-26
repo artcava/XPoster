@@ -25,12 +25,14 @@ public class XFunction
     }
 
     /// <summary>
-    /// Timer-triggered function body. Resolves the orchestrator, produces a list of posts (one per sender),
-    /// and dispatches each post to its aligned sender in parallel.
-    /// Exceptions are re-thrown to surface failures in Azure Monitor.
+    /// Timer-triggered function body. Resolves the orchestrator, produces a dictionary of posts keyed by
+    /// <see cref="XPoster.Contracts.SenderPlatform"/>, and dispatches each post to its aligned sender in parallel.
+    /// Cancellation (graceful shutdown or timeout) is handled separately from unexpected errors.
+    /// Unexpected exceptions are re-thrown to surface failures in Azure Monitor.
     /// </summary>
     /// <param name="myTimer">Timer metadata injected by the Azure Functions runtime.</param>
-    /// <param name="cancellationToken">Cancellation token to signal function cancellation.</param>
+    /// <param name="cancellationToken">Cancellation token injected by the Azure Functions runtime.
+    /// Signalled on graceful shutdown or function timeout.</param>
     [Function("XPosterFunction")]
     public async Task Run([TimerTrigger("%CronSchedule%")] TimerInfo myTimer, CancellationToken cancellationToken)
     {
@@ -54,11 +56,16 @@ public class XFunction
                 return;
             }
 
-            var result = await orchestrator.PostAsync(posts);
+            var result = await orchestrator.PostAsync(posts, cancellationToken);
             if (!result)
             {
                 _log.LogError("One or more senders failed with {Name}", orchestrator.Name);
             }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // Graceful shutdown or timeout — not an application error.
+            _log.LogWarning("XPoster Function was cancelled gracefully at: {Time}", DateTimeOffset.UtcNow);
         }
         catch (Exception ex)
         {

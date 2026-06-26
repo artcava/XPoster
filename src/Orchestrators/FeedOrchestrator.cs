@@ -12,7 +12,7 @@ namespace XPoster.Orchestrators;
 /// </summary>
 /// <remarks>
 /// Implements a fan-out pattern: the base summary and image are generated once from the primary sender
-/// (index 0, widest <c>MessageMaxLength</c>), then each secondary sender receives an AI re-summarisation
+/// (widest <c>MessageMaxLength</c>), then each secondary sender receives an AI re-summarisation
 /// only when the base summary exceeds its limit. Hashtag substitution is applied independently per sender.
 /// Returns an <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>
 /// for unambiguous nominal routing.
@@ -43,8 +43,8 @@ public class FeedOrchestrator : BaseOrchestrator
     /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>
     /// <param name="senders">
-    /// Ordered list of senders for this slot, by descending <c>MessageMaxLength</c>.
-    /// The first sender drives base summary generation; subsequent senders are re-summarised when needed.
+    /// Ordered list of senders for this slot. Internally sorted by descending <c>MessageMaxLength</c>;
+    /// the sender with the widest limit drives base summary generation.
     /// </param>
     /// <param name="logger">The logger for diagnostic output.</param>
     /// <param name="feedService">The service used to fetch RSS feeds.</param>
@@ -75,6 +75,7 @@ public class FeedOrchestrator : BaseOrchestrator
     /// per sender, generates a shared image, and returns an
     /// <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>.
     /// </summary>
+    /// <param name="ct">Cancellation token propagated from the Azure Functions runtime.</param>
     /// <returns>
     /// A dictionary with one entry per configured sender, or an empty dictionary when a
     /// mandatory pipeline step fails (no feeds, empty summary, no text provider).
@@ -96,11 +97,13 @@ public class FeedOrchestrator : BaseOrchestrator
         }
 
         // Step 1 — acquire feed content
-        var feedContent = await AcquireFeedContentAsync();
+        ct.ThrowIfCancellationRequested();
+        var feedContent = await AcquireFeedContentAsync(ct);
         if (string.IsNullOrWhiteSpace(feedContent))
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
 
         // Step 2 — select primary sender (widest limit) and generate base summary
+        ct.ThrowIfCancellationRequested();
         var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
         var primarySender  = orderedSenders[0];
         var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, ct);
@@ -112,12 +115,15 @@ public class FeedOrchestrator : BaseOrchestrator
         }
 
         // Step 3 — generate image (shared across all senders)
+        ct.ThrowIfCancellationRequested();
         var imageBytes = await GenerateImageAsync(rawBaseSummary, ct);
 
         // Step 4 — build per-sender posts
         var result = new Dictionary<SenderPlatform, Post?>();
         foreach (var sender in orderedSenders)
         {
+            ct.ThrowIfCancellationRequested();
+
             string summaryForSender;
             if (sender == primarySender || rawBaseSummary.Length <= sender.MessageMaxLenght)
             {
@@ -140,7 +146,6 @@ public class FeedOrchestrator : BaseOrchestrator
                 summaryForSender = reSummarised;
             }
 
-            // Apply hashtags independently per sender
             var content = ApplyTagReplacements(summaryForSender);
             result[sender.Platform] = new Post { Content = content, Image = imageBytes };
         }
@@ -151,6 +156,7 @@ public class FeedOrchestrator : BaseOrchestrator
     // ---------------------------------------------------------------------------
     // Private pipeline steps
     // ---------------------------------------------------------------------------
+
     private async Task<string> AcquireFeedContentAsync(CancellationToken ct = default)
     {
         var feedUrls = _feedUrlProvider.GetFeedUrls();
@@ -168,6 +174,7 @@ public class FeedOrchestrator : BaseOrchestrator
         var allFeeds = new List<RSSFeed>();
         foreach (var url in feedUrls)
         {
+            ct.ThrowIfCancellationRequested();
             var feeds = await _feedService.GetFeedsAsync(url, start, end, replacementKeys, ct);
             if (feeds != null && feeds.Any())
                 allFeeds.AddRange(feeds);
@@ -200,6 +207,11 @@ public class FeedOrchestrator : BaseOrchestrator
 
             var image = await _imageProvider.GenerateImageAsync(prompt, ct);
             return image is { Length: > 0 } ? image : null;
+        }
+        catch (OperationCanceledException)
+        {
+            // Re-throw so the cancellation bubbles up correctly to OrchestrateAsync
+            throw;
         }
         catch (Exception ex)
         {
