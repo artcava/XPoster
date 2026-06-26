@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **typeof()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **XPoster.Tests.Abstraction** (2 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **IgSender()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **new()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **PostWithoutImage()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **BuildSender()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,20 @@
 # Community 114
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **IgSender()** (2 connections)
-- **if()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

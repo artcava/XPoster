@@ -1,24 +1,24 @@
 # Community 57
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (6 connections)
-- **XFunctionTests.cs** (6 connections)
-- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **if()** (2 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
+- **catch()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 47]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

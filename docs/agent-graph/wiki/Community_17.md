@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WhitespaceApiKey_Fails()** (2 connections)
-- **Validate_WhitespaceModelId_Fails()** (2 connections)
-- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingModelId_Fails()** (2 connections)
-- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
-- **FalAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingApiKey_Fails()** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
 
 ## Relationships
 

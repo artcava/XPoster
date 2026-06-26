@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **ICryptoService** (2 connections)
+- **GetProfiles()** (2 connections)
+- **ISlotProfileProvider** (2 connections)
 
 ## Relationships
 

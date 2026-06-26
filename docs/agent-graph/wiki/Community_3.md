@@ -1,43 +1,43 @@
 # Community 3
 
-> 32 nodes · cohesion 0.12
+> 32 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **FeedOrchestratorTests.cs** (31 connections)
-- **FeedOrchestratorTests.cs** (31 connections)
-- **OrchestrateAsync_ReturnsNullEntry_WhenReSummarisationFails()** (2 connections)
-- **OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()** (2 connections)
-- **OrchestrateAsync_DerivesImagePromptFromRawBaseSummary_BeforeHashtags()** (2 connections)
-- **OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()** (2 connections)
-- **OrchestrateAsync_SharesImageBytes_AcrossSenders()** (2 connections)
-- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
-- **OrchestrateAsync_Should_CallTagReplacementProvider_ExactlyOnce_WhenOrchestrationSucceeds()** (2 connections)
-- **OrchestrateAsync_ThirdSender_ReusesUpdatedPreviousSummary_WhenItFitsThirdLimit()** (2 connections)
-- **OrchestrateAsync_ThirdSender_ChecksAgainstPreviousSummary_AndReSummarisesFromFeedContent()** (2 connections)
-- **OrchestrateAsync_ThirdSender_ReusesSecondSummary_WhenSecondFitsAndThirdDoesNot()** (2 connections)
-- **OrchestrateAsync_AppliesHashtagsIndependently_PerSender()** (2 connections)
-- **FeedOrchestratorTests()** (2 connections)
-- **new()** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsEmpty()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_TextProviderIsNull()** (2 connections)
-- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsWhitespace()** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithUnmodifiedContent_When_ProviderReturnsEmptyReplacements()** (2 connections)
-- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsEmpty()** (2 connections)
-- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageProviderIsNull()** (2 connections)
-- **OrchestrateAsync_Should_Rethrow_When_ImageGenerationIsCancelled()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_FeedUrlProviderReturnsEmptyList()** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_ReturnsBytes()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()** (2 connections)
+- **Parse_FalAi_ValidUrl_ReturnsBytes()** (2 connections)
+- **Parse_FalAi_MissingImagesProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_MissingUrlProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_EmptyUrl_ReturnsEmpty()** (2 connections)
+- **AiServiceHelperImageTests** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()** (2 connections)
+- **Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **static()** (2 connections)
+- **Parse_UnsupportedProvider_ReturnsEmpty()** (2 connections)
+- **return()** (2 connections)
+- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_FalAi_DownloadThrows_LogsError()** (2 connections)
+- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
+- **Parse_NonSuccessStatus_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_EmptyB64Value_ReturnsEmpty()** (2 connections)
+- **Parse_Returns429_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_Returns429_LogsWarning()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_NullAllowedOrigin_SkipsOriginCheckAndDownloads()** (2 connections)
 - *... and 7 more nodes in this community*
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 62]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 122 (100%)
+- EXTRACTED: 99 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

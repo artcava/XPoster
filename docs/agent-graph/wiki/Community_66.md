@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **if()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 

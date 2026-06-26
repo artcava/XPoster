@@ -1,23 +1,23 @@
 # Community 64
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **Uri()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **if()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **for()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 107]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

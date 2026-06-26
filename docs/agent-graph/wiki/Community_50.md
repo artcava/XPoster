@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
-- **AiProviderExtensionsTests** (2 connections)
-- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
-- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **IsEnabled()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **Dispose()** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 

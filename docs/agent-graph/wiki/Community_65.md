@@ -1,23 +1,23 @@
 # Community 65
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **SendAsync()** (2 connections)
-- **if()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSenderTests()** (2 connections)
+- **InSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

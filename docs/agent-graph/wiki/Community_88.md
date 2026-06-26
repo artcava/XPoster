@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **IFeedService** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **PostAsync()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **IOrchestrator** (2 connections)
 
 ## Relationships
 

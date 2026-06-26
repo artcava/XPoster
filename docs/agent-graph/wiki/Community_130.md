@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **IgSender.cs** (7 connections)
+- **if()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 136]] (2 shared connections)
+- [[Community 72]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
