@@ -16,7 +16,6 @@ public class XFunctionTests
     {
         _mockFactory      = new Mock<IOrchestratorFactory>();
         _mockLogger       = new Mock<ILogger<XFunction>>();
-        // BaseOrchestrator ctor: (IReadOnlyList<ISender>, ILogger)
         _mockOrchestrator = new Mock<BaseOrchestrator>(
             MockBehavior.Strict,
             new object[] { new List<ISender>().AsReadOnly(), Mock.Of<ILogger>() });
@@ -34,18 +33,21 @@ public class XFunctionTests
 
         _mockOrchestrator.Verify(g => g.OrchestrateAsync(), Times.Never());
         _mockOrchestrator.Verify(
-            g => g.PostAsync(It.IsAny<IReadOnlyList<Post?>>()), Times.Never());
+            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>()), Times.Never());
     }
 
     [Fact]
     public async Task Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()
     {
-        var testPosts = new List<Post?> { new Post { Content = "Test" } }.AsReadOnly();
+        var testPosts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = "Test" } }
+        }.AsReadOnly();
 
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("EnabledTestOrchestrator");
         _mockOrchestrator.Setup(g => g.OrchestrateAsync())
-            .ReturnsAsync((IReadOnlyList<Post?>)testPosts);
+            .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)testPosts);
         _mockOrchestrator.Setup(g => g.PostAsync(testPosts)).ReturnsAsync(true);
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 

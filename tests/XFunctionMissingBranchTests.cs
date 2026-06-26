@@ -8,7 +8,7 @@ namespace XPoster.Tests;
 
 /// <summary>
 /// Additional XFunction.Run tests covering branches not exercised by XFunctionTests:
-/// empty posts list from OrchestrateAsync, PostAsync returning false, and exception re-throw.
+/// empty posts dictionary from OrchestrateAsync, PostAsync returning false, and exception re-throw.
 /// </summary>
 public class XFunctionMissingBranchTests
 {
@@ -26,20 +26,21 @@ public class XFunctionMissingBranchTests
     }
 
     [Fact]
-    public async Task Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyList()
+    public async Task Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()
     {
         // posts.Count == 0 branch: LogError("Failed to orchestrate messages...") then return
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
         _mockOrchestrator.Setup(g => g.OrchestrateAsync())
-            .ReturnsAsync((IReadOnlyList<Post?>)Array.Empty<Post?>());
+            .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)
+                new Dictionary<SenderPlatform, Post?>().AsReadOnly());
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
         await function.Run(null!);
 
         _mockOrchestrator.Verify(
-            g => g.PostAsync(It.IsAny<IReadOnlyList<Post?>>()), Times.Never);
+            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>()), Times.Never);
         _mockLogger.Verify(
             l => l.Log(
                 LogLevel.Error,
@@ -53,12 +54,15 @@ public class XFunctionMissingBranchTests
     [Fact]
     public async Task Run_Should_LogError_When_PostAsync_ReturnsFalse()
     {
-        var testPosts = new List<Post?> { new Post { Content = "Test" } }.AsReadOnly();
+        var testPosts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = "Test" } }
+        }.AsReadOnly();
 
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
         _mockOrchestrator.Setup(g => g.OrchestrateAsync())
-            .ReturnsAsync((IReadOnlyList<Post?>)testPosts);
+            .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)testPosts);
         _mockOrchestrator.Setup(g => g.PostAsync(testPosts)).ReturnsAsync(false);
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 
