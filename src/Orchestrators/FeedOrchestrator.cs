@@ -9,6 +9,9 @@ namespace XPoster.Orchestrators;
 /// <summary>
 /// Orchestrates a social-media post by aggregating Bitcoin-related RSS news from the last 24 hours,
 /// summarising the content via AI, and optionally attaching an AI-generated image.
+/// Implements a fan-out pattern: the base summary and image are generated once from the primary sender
+/// (index 0, widest <c>MessageMaxLength</c>), then each secondary sender receives an AI re-summarisation
+/// only when the base summary exceeds its limit. Hashtag substitution is applied independently per sender.
 /// </summary>
 public class FeedOrchestrator : BaseOrchestrator
 {
@@ -36,15 +39,19 @@ public class FeedOrchestrator : BaseOrchestrator
     /// <summary>
     /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>
+    /// <param name="senders">
+    /// Ordered list of senders for this slot, by descending <c>MessageMaxLength</c>.
+    /// Index 0 is the primary sender and drives base summary generation.
+    /// </param>
     public FeedOrchestrator(
-        ISender sender,
+        IReadOnlyList<ISender> senders,
         ILogger<FeedOrchestrator> logger,
         IFeedService feedService,
         IFeedUrlProvider feedUrlProvider,
         ITagReplacementProvider tagReplacementProvider,
         ITextToTextProvider? textProvider,
         ITextToImageProvider? imageProvider)
-        : base(sender, logger)
+        : base(senders, logger)
     {
         _feedService = feedService;
         _feedUrlProvider = feedUrlProvider;
@@ -54,51 +61,69 @@ public class FeedOrchestrator : BaseOrchestrator
     }
 
     /// <summary>
-    /// Executes the five-step content production pipeline:
+    /// Executes the fan-out content production pipeline:
     /// <list type="number">
     ///   <item>Acquire feed content from the configured URLs.</item>
-    ///   <item>Generate a summary via the text provider.</item>
-    ///   <item>Apply word-to-hashtag tag replacements via the tag replacement provider.</item>
-    ///   <item>Generate an image prompt via the text provider.</item>
-    ///   <item>Generate the image via the image provider.</item>
+    ///   <item>Generate a base summary at the primary sender's <c>MessageMaxLength</c> (widest limit).</item>
+    ///   <item>Derive an image prompt from <c>rawBaseSummary</c> before hashtag substitution (clean prose).</item>
+    ///   <item>Generate the image once, shared across all senders.</item>
+    ///   <item>For each sender: re-summarise via AI only when <c>rawBaseSummary</c> exceeds the sender's limit; otherwise reuse as-is.</item>
+    ///   <item>Apply hashtag substitution independently on each sender's raw summary.</item>
     /// </list>
-    /// Posting is disabled and <c>null</c> is returned if any mandatory step fails.
+    /// Returns an empty list if any mandatory step fails.
     /// </summary>
-    public override async Task<Post?> OrchestrateAsync()
+    public override async Task<IReadOnlyList<Post?>> OrchestrateAsync()
     {
         if (_textProvider == null)
         {
             _logger.LogError("No ITextToTextProvider instance provided to FeedOrchestrator. Cannot orchestrate content.");
             SendIt = false;
-            return null;
+            return Array.Empty<Post?>();
         }
 
         // Step 1 – Acquire feed content
         var feedContent = await AcquireFeedContentAsync();
         if (string.IsNullOrWhiteSpace(feedContent))
+            return Array.Empty<Post?>();
+
+        // Step 2 – Generate base summary at primary sender's limit (widest, index 0)
+        var rawBaseSummary = await GenerateRawSummaryAsync(feedContent, _sender?.MessageMaxLenght ?? int.MaxValue);
+        if (string.IsNullOrWhiteSpace(rawBaseSummary))
+            return Array.Empty<Post?>();
+
+        // Step 3 & 4 – Generate image from raw base summary (before hashtag substitution — clean prose)
+        var image = await GenerateImageAsync(rawBaseSummary);
+
+        // Step 5 & 6 – Build one Post per sender
+        var posts = new List<Post?>();
+        for (int i = 0; i < _senders.Count; i++)
         {
-            return null;
+            var sender = _senders[i];
+
+            // AI re-summarisation guard: skip AI call when base summary already fits the sender's limit.
+            // Guaranteed correct when senders are ordered by descending MaxLength (convention).
+            string rawSummary;
+            if (i == 0 || rawBaseSummary.Length <= sender.MessageMaxLenght)
+            {
+                rawSummary = rawBaseSummary;
+            }
+            else
+            {
+                rawSummary = await _textProvider.GetSummaryAsync(rawBaseSummary, sender.MessageMaxLenght);
+                if (string.IsNullOrWhiteSpace(rawSummary))
+                {
+                    _logger.LogError("Re-summarisation failed for sender {Sender}", sender.GetType().Name);
+                    posts.Add(null);
+                    continue;
+                }
+            }
+
+            // Apply hashtag substitution independently on each sender's raw summary
+            var content = ApplyTagReplacements(rawSummary);
+            posts.Add(new Post { Content = content, Image = image });
         }
 
-        // Step 2 – Generate summary
-        var summary = await GenerateSummaryAsync(feedContent);
-        if (string.IsNullOrWhiteSpace(summary))
-        {
-            return null;
-        }
-
-        // Step 3 – Apply tag replacements
-        summary = ApplyTagReplacements(summary);
-
-        // Step 4 – Generate image prompt
-        // Step 5 – Generate image
-        var image = await GenerateImageAsync(summary);
-
-        return new Post
-        {
-            Content = summary,
-            Image = image
-        };
+        return posts.AsReadOnly();
     }
 
     private async Task<string> AcquireFeedContentAsync()
@@ -121,9 +146,7 @@ public class FeedOrchestrator : BaseOrchestrator
         {
             var feeds = await _feedService.GetFeedsAsync(url, start, end, keywords);
             if (feeds != null && feeds.Any())
-            {
                 allFeeds.AddRange(feeds);
-            }
         }
 
         if (!allFeeds.Any())
@@ -138,7 +161,11 @@ public class FeedOrchestrator : BaseOrchestrator
             .Aggregate(string.Empty, (current, next) => current + "\n" + next);
     }
 
-    private async Task<string> GenerateSummaryAsync(string feedContent)
+    /// <summary>
+    /// Generates a raw AI summary of <paramref name="feedContent"/> within <paramref name="maxLength"/> characters,
+    /// without applying hashtag substitution (returns clean prose for downstream use as image prompt source).
+    /// </summary>
+    private async Task<string> GenerateRawSummaryAsync(string feedContent, int maxLength)
     {
         if (_sender == null)
         {
@@ -147,7 +174,7 @@ public class FeedOrchestrator : BaseOrchestrator
             return string.Empty;
         }
 
-        var summary = await _textProvider!.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
+        var summary = await _textProvider!.GetSummaryAsync(feedContent, maxLength);
         if (string.IsNullOrWhiteSpace(summary))
         {
             _logger.LogError("Unable to get summary from text provider.");
@@ -155,7 +182,7 @@ public class FeedOrchestrator : BaseOrchestrator
             return string.Empty;
         }
 
-        _logger.LogInformation("Generated summary: {Summary}", summary);
+        _logger.LogInformation("Generated base summary: {Summary}", summary);
         return summary;
     }
 
@@ -163,9 +190,7 @@ public class FeedOrchestrator : BaseOrchestrator
     {
         var replacements = _tagReplacementProvider.GetReplacements();
         if (replacements.Count == 0)
-        {
             return text;
-        }
 
         var sb = new StringBuilder(text);
         foreach (var entry in replacements)
@@ -181,7 +206,7 @@ public class FeedOrchestrator : BaseOrchestrator
         return sb.ToString();
     }
 
-    private async Task<byte[]?> GenerateImageAsync(string summary)
+    private async Task<byte[]?> GenerateImageAsync(string rawBaseSummary)
     {
         if (_imageProvider == null)
         {
@@ -189,11 +214,11 @@ public class FeedOrchestrator : BaseOrchestrator
             return null;
         }
 
-        var prompt = await _textProvider!.GetImagePromptAsync(summary);
+        var prompt = await _textProvider!.GetImagePromptAsync(rawBaseSummary);
         if (string.IsNullOrWhiteSpace(prompt))
         {
             _logger.LogError("Unable to get image prompt from text provider. Falling back to summary as prompt.");
-            prompt = summary;
+            prompt = rawBaseSummary;
         }
 
         try
