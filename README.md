@@ -383,7 +383,7 @@ The production schedule is defined in `DefaultSlotProfileProvider`, which return
 
 | UTC Hour | `SenderPlatforms` | Orchestrator | `TextProvider` | `ImageProvider` |
 |----------|-------------------|--------------|----------------|-----------------|
-| 8 | `LinkedIn`, `X`, `Instagram` | `FeedOrchestrator` | `OpenAi` | `OpenAi` |
+| 8 | `LinkedIn`, `X`, `Instagram` | `FeedOrchestrator` | `OpenAi` | `AzureFoundry` |
 | 14 | `LinkedIn` | `PowerLawOrchestrator` | `null` | `null` |
 | 16 | `X` | `PowerLawOrchestrator` | `null` | `null` |
 
