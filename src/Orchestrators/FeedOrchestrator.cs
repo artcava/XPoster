@@ -100,11 +100,13 @@ public class FeedOrchestrator : BaseOrchestrator
         if (string.IsNullOrWhiteSpace(feedContent))
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
 
-        // Step 2 — generate base summary at primary sender's limit
-        var primarySender  = _senders[0];
-        var rawBaseSummary = await GenerateRawSummaryAsync(feedContent, primarySender.MessageMaxLenght);
+        // Step 2 — select primary sender (widest limit) and generate base summary
+        var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
+        var primarySender  = orderedSenders[0];
+        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, CancellationToken.None);
         if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
+            _logger.LogError("Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
             _sendIt = false;
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
@@ -114,7 +116,7 @@ public class FeedOrchestrator : BaseOrchestrator
 
         // Step 4 — build per-sender posts
         var result = new Dictionary<SenderPlatform, Post?>();
-        foreach (var sender in _senders)
+        foreach (var sender in orderedSenders)
         {
             string summaryForSender;
             if (sender == primarySender || rawBaseSummary.Length <= sender.MessageMaxLenght)
@@ -184,18 +186,6 @@ public class FeedOrchestrator : BaseOrchestrator
             sb.AppendLine($"{feed.Title}: {feed.Content} ({feed.Link})");
 
         return sb.ToString();
-    }
-
-    private async Task<string> GenerateRawSummaryAsync(string feedContent, int maxLength)
-    {
-        var summary = await _textProvider!.GetSummaryAsync(feedContent, maxLength, CancellationToken.None);
-        if (string.IsNullOrWhiteSpace(summary))
-        {
-            _logger.LogError("Summary generation returned an empty result.");
-            return string.Empty;
-        }
-
-        return summary;
     }
 
     private async Task<byte[]?> GenerateImageAsync(string rawBaseSummary)
