@@ -24,18 +24,21 @@ public interface IOrchestrator
     IReadOnlyList<SenderPlatform> SupportedPlatforms { get; }
 
     /// <summary>
-    /// Asynchronously orchestrates the production of a <see cref="Post"/> ready for publishing.
+    /// Asynchronously orchestrates the production of one <see cref="Post"/> per configured sender,
+    /// positionally aligned with the sender list.
     /// </summary>
     /// <returns>
-    /// A <see cref="Post"/> instance, or <c>null</c> if orchestration fails or is not applicable.
+    /// An <see cref="IReadOnlyList{T}"/> of <see cref="Post"/> instances, one per sender.
+    /// A <c>null</c> entry at position <c>i</c> signals that content generation failed for that sender.
+    /// Returns an empty list if orchestration fails or is not applicable.
     /// </returns>
-    // CS8609: return type is Task<Post?> to allow orchestrators to signal failure via null
-    Task<Post?> OrchestrateAsync();
+    Task<IReadOnlyList<Post?>> OrchestrateAsync();
 
     /// <summary>
-    /// Validates pre-conditions and publishes <paramref name="message"/> via the configured sender.
+    /// Dispatches each post to its positionally aligned sender in parallel via <c>Task.WhenAll</c>.
+    /// A <c>null</c> post at position <c>i</c> causes that sender to be skipped with a warning.
     /// </summary>
-    /// <param name="message">The post to publish.</param>
-    /// <returns><c>true</c> if published successfully; otherwise <c>false</c>.</returns>
-    Task<bool> PostAsync(Post message);
+    /// <param name="posts">The list of posts to publish, positionally aligned with the sender list.</param>
+    /// <returns><c>true</c> only if all dispatched senders succeed; otherwise <c>false</c>.</returns>
+    Task<bool> PostAsync(IReadOnlyList<Post?> posts);
 }
