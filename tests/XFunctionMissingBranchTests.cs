@@ -31,16 +31,16 @@ public class XFunctionMissingBranchTests
         // posts.Count == 0 branch: LogError("Failed to orchestrate messages...") then return
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
-        _mockOrchestrator.Setup(g => g.OrchestrateAsync())
+        _mockOrchestrator.Setup(g => g.OrchestrateAsync(CancellationToken.None))
             .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)
                 new Dictionary<SenderPlatform, Post?>().AsReadOnly());
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
-        await function.Run(null!);
+        await function.Run(null!, CancellationToken.None);
 
         _mockOrchestrator.Verify(
-            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>()), Times.Never);
+            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>(), It.IsAny<CancellationToken>()), Times.Never);
         _mockLogger.Verify(
             l => l.Log(
                 LogLevel.Error,
@@ -61,13 +61,13 @@ public class XFunctionMissingBranchTests
 
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
-        _mockOrchestrator.Setup(g => g.OrchestrateAsync())
+        _mockOrchestrator.Setup(g => g.OrchestrateAsync(CancellationToken.None))
             .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)testPosts);
-        _mockOrchestrator.Setup(g => g.PostAsync(testPosts)).ReturnsAsync(false);
+        _mockOrchestrator.Setup(g => g.PostAsync(testPosts, CancellationToken.None)).ReturnsAsync(false);
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
-        await function.Run(null!);
+        await function.Run(null!, CancellationToken.None);
 
         _mockLogger.Verify(
             l => l.Log(
@@ -86,7 +86,7 @@ public class XFunctionMissingBranchTests
 
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => function.Run(null!));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => function.Run(null!, CancellationToken.None));
         _mockLogger.Verify(
             l => l.Log(
                 LogLevel.Error,

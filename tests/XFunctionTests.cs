@@ -29,11 +29,11 @@ public class XFunctionTests
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
-        await function.Run(null!);
+        await function.Run(null!, CancellationToken.None);
 
-        _mockOrchestrator.Verify(g => g.OrchestrateAsync(), Times.Never());
+        _mockOrchestrator.Verify(g => g.OrchestrateAsync(CancellationToken.None), Times.Never());
         _mockOrchestrator.Verify(
-            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>()), Times.Never());
+            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>(), It.IsAny<CancellationToken>()), Times.Never());
     }
 
     [Fact]
@@ -46,15 +46,15 @@ public class XFunctionTests
 
         _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
         _mockOrchestrator.Setup(g => g.Name).Returns("EnabledTestOrchestrator");
-        _mockOrchestrator.Setup(g => g.OrchestrateAsync())
+        _mockOrchestrator.Setup(g => g.OrchestrateAsync(CancellationToken.None))
             .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)testPosts);
-        _mockOrchestrator.Setup(g => g.PostAsync(testPosts)).ReturnsAsync(true);
+        _mockOrchestrator.Setup(g => g.PostAsync(testPosts, CancellationToken.None)).ReturnsAsync(true);
         _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
 
         var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
-        await function.Run(null!);
+        await function.Run(null!, CancellationToken.None);
 
-        _mockOrchestrator.Verify(g => g.OrchestrateAsync(), Times.Once());
-        _mockOrchestrator.Verify(g => g.PostAsync(testPosts), Times.Once());
+        _mockOrchestrator.Verify(g => g.OrchestrateAsync(CancellationToken.None), Times.Once());
+        _mockOrchestrator.Verify(g => g.PostAsync(testPosts, CancellationToken.None), Times.Once());
     }
 }

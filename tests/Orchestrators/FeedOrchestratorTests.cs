@@ -76,7 +76,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeSummary);
@@ -100,7 +100,7 @@ public class FeedOrchestratorTests
 
         _mockFeedUrlProvider.Verify(p => p.GetFeedUrls(), Times.Once);
         _mockFeedService.Verify(s => s.GetFeedsAsync(
-            It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Exactly(2));
         _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Once);
         _mockTextProvider.Verify(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -126,7 +126,7 @@ public class FeedOrchestratorTests
         var baseSummary = new string('A', 300); // fits both limits
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
@@ -164,7 +164,7 @@ public class FeedOrchestratorTests
         var shortSummary = new string('B', 200);
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
@@ -209,7 +209,7 @@ public class FeedOrchestratorTests
         var baseSummary = new string('A', 200); // 200 <= 280: no re-summarisation
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
@@ -246,7 +246,7 @@ public class FeedOrchestratorTests
         var baseSummary = "bitcoin is rising fast and we are all excited"; // fits both limits
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
@@ -279,7 +279,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(700);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(rawBase);
@@ -316,7 +316,7 @@ public class FeedOrchestratorTests
         var sharedImage = new byte[] { 9, 8, 7 };
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
@@ -356,7 +356,7 @@ public class FeedOrchestratorTests
         var baseSummary = new string('A', 500);
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
@@ -390,7 +390,7 @@ public class FeedOrchestratorTests
     {
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed>());
 
         var orchestrator = CreateOrchestrator();
@@ -413,7 +413,7 @@ public class FeedOrchestratorTests
         Assert.Empty(result);
         Assert.False(orchestrator.SendIt);
         _mockFeedService.Verify(s => s.GetFeedsAsync(
-            It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 
@@ -428,7 +428,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -455,7 +455,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -482,7 +482,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -516,7 +516,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -548,7 +548,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -576,12 +576,13 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeSummary);
-        _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync("Prompt");
         _mockImageProvider.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Image generation failed"));
@@ -603,7 +604,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -643,7 +644,7 @@ public class FeedOrchestratorTests
         Assert.Empty(result);
         Assert.False(orchestrator.SendIt);
         _mockFeedService.Verify(s => s.GetFeedsAsync(
-            It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 
@@ -653,7 +654,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
 
         // Empty sender list — _sender will be null
@@ -684,7 +685,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -716,7 +717,7 @@ public class FeedOrchestratorTests
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))

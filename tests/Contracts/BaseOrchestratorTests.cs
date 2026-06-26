@@ -69,7 +69,7 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
-        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
+        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
-        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
+        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -134,7 +134,7 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
-        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
+        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -152,7 +152,7 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
-        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
+        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -166,8 +166,8 @@ public class BaseOrchestratorTests
         var mockSender2 = new Mock<ISender>();
         mockSender1.Setup(s => s.Platform).Returns(SenderPlatform.X);
         mockSender2.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        mockSender1.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
-        mockSender2.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+        mockSender1.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        mockSender2.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
         var post1 = new Post { Content = "Post for sender 1" };
         var post2 = new Post { Content = "Post for sender 2" };
@@ -185,14 +185,14 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.True(result);
-        mockSender1.Verify(s => s.SendAsync(post1), Times.Once);
-        mockSender2.Verify(s => s.SendAsync(post2), Times.Once);
+        mockSender1.Verify(s => s.SendAsync(post1, It.IsAny<CancellationToken>()), Times.Once);
+        mockSender2.Verify(s => s.SendAsync(post2, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
     public async Task PostAsync_ReturnsTrue_When_AllConditionsMet()
     {
-        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         var orchestrator = new TestOrchestrator(
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
@@ -206,7 +206,7 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.True(result);
-        _mockSender.Verify(s => s.SendAsync(post), Times.Once);
+        _mockSender.Verify(s => s.SendAsync(post, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     // ---------------------------------------------------------------------------
@@ -230,7 +230,7 @@ public class BaseOrchestratorTests
         var result = await orchestrator.PostAsync(posts);
 
         Assert.False(result);
-        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>()), Times.Never);
+        _mockSender.Verify(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
@@ -244,8 +244,8 @@ public class BaseOrchestratorTests
         var mockSender2 = new Mock<ISender>();
         mockSender1.Setup(s => s.Platform).Returns(SenderPlatform.X);
         mockSender2.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        mockSender1.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
-        mockSender2.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(false);
+        mockSender1.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        mockSender2.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
         var orchestrator = new TestOrchestrator(
             new List<ISender> { mockSender1.Object, mockSender2.Object }.AsReadOnly(),
@@ -269,7 +269,7 @@ public class BaseOrchestratorTests
     [Fact]
     public async Task PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()
     {
-        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         var orchestrator = new TestOrchestrator(
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object,
@@ -298,7 +298,7 @@ public class BaseOrchestratorTests
     [Fact]
     public async Task PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()
     {
-        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         var orchestrator = new TestOrchestrator(
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object,
@@ -326,7 +326,7 @@ public class BaseOrchestratorTests
     [Fact]
     public async Task PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()
     {
-        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>())).ReturnsAsync(false);
+        _mockSender.Setup(s => s.SendAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
         var orchestrator = new TestOrchestrator(
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object);
