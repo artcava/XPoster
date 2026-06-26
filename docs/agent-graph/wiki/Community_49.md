@@ -1,25 +1,25 @@
 # Community 49
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **PostMissingBranchTests** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 59]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

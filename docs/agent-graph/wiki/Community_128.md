@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **IgSender()** (2 connections)
+- **CryptoService.cs** (6 connections)
 - **if()** (2 connections)
+- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (4 shared connections)
+- [[Community 106]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

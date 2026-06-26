@@ -1,21 +1,21 @@
 # Community 107
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AddAzureFoundryOptions()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 121]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

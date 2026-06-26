@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProviderTests.cs** (10 connections)
-- **DefaultSlotProfileProviderTests.cs** (10 connections)
-- **DefaultSlotProfileProviderTests** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
-- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
-- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
-- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
-- **GetProfiles_Should_ReturnFourActiveSlots()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **XSenderMissingBranchTests.cs** (10 connections)
+- **XSenderMissingBranchTests.cs** (10 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **MessageMaxLenght_Returns250()** (2 connections)
+- **BuildSender()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **XSenderMissingBranchTests** (2 connections)
 
 ## Relationships
 

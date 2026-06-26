@@ -1,23 +1,24 @@
 # Community 13
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
-- **ValidOptions()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **GetProfiles_Should_ReturnTwoActiveSlots()** (2 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveLinkedInAsFirstSender()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

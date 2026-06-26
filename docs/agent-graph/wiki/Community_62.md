@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender()** (2 connections)
-- **SendAsync()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **ITextToTextProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 

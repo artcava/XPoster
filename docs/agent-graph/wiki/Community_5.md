@@ -1,30 +1,35 @@
 # Community 5
 
-> 21 nodes · cohesion 0.19
+> 29 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (20 connections)
-- **IgSenderTests.cs** (20 connections)
-- **SendAsync_WithImage_TriesUploadAndReturnsFalse()** (2 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhitespaceContent_ReturnsFalse()** (2 connections)
-- **BuildSenderWithFactory()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildSender()** (2 connections)
-- **MessageMaxLenght_Returns2200()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenInstagramApiReturns429_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
+- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddFalAiOptions_RegistersValidator()** (2 connections)
+- **AddAzureFoundryOptions_RegistersValidator()** (2 connections)
+- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddPerplexityOptions_RegistersValidator()** (2 connections)
+- **AzureFoundryOptionsExtensionsTests** (2 connections)
 - **new()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **DeepSeekOptionsExtensionsTests** (2 connections)
+- **FalAiOptionsExtensionsTests** (2 connections)
+- **SectionName_IsAzureFoundry()** (2 connections)
+- **OptionsExtensionsTests** (2 connections)
+- **PerplexityOptionsExtensionsTests** (2 connections)
+- **register()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **SectionName_IsFalAi()** (2 connections)
+- **SectionName_IsOpenAI()** (2 connections)
+- **SectionName_IsPerplexity()** (2 connections)
+- **AddOpenAiOptions_RegistersValidator()** (2 connections)
+- *... and 4 more nodes in this community*
 
 ## Relationships
 
@@ -32,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (100%)
+- EXTRACTED: 110 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

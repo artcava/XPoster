@@ -1,16 +1,15 @@
 # Community 134
 
-> 3 nodes · cohesion 1.00
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **LinkedInCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **LinkedInCredentials.cs** (2 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 132]] (2 shared connections)
 
 ## Audit Trail
 

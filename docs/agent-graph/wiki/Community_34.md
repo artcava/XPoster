@@ -1,19 +1,18 @@
 # Community 34
 
-> 10 nodes · cohesion 0.38
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (9 connections)
-- **ScheduledOrchestrationProfileTests.cs** (9 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **XPoster.Tests.Abstraction** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

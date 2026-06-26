@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **DispatchAsync()** (2 connections)
 - **if()** (2 connections)
-- **XFunction()** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (3 shared connections)
+- [[Community 105]] (3 shared connections)
 
 ## Audit Trail
 

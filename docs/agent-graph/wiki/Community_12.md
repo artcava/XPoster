@@ -1,32 +1,34 @@
 # Community 12
 
-> 15 nodes · cohesion 0.13
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (25 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
-- **Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()** (2 connections)
-- **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()** (2 connections)
+- **AzureFoundryServiceTests.cs** (35 connections)
+- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
+- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **if()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
+- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (11 shared connections)
+- [[Community 10]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 53 (100%)
+- EXTRACTED: 67 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

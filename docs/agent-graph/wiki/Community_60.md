@@ -1,15 +1,16 @@
 # Community 60
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **GetProfiles()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **typeof()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

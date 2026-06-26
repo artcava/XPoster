@@ -1,20 +1,21 @@
 # Community 51
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **var()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **while()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
 
 ## Relationships
 
-- [[Community 47]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
