@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **GetCryptoValue()** (2 connections)
-- **ICryptoService** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **ITagReplacementProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

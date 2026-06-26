@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **InstagramResiliencePipelineTests.cs** (8 connections)
+- **for()** (2 connections)
 - **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 - **StringContent()** (2 connections)
-- **for()** (2 connections)
 
 ## Relationships
 
-- [[Community 76]] (4 shared connections)
+- [[Community 90]] (4 shared connections)
 
 ## Audit Trail
 

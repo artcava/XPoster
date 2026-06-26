@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **StringContent()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
 
 ## Relationships
 

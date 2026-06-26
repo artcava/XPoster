@@ -1,23 +1,23 @@
 # Community 67
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **MakeNoOpClient()** (2 connections)
+- **var()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
+- **JsonResponse()** (2 connections)
+- **HttpClient()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 2]] (31 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

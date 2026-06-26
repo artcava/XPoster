@@ -9,14 +9,14 @@
 - **while()** (2 connections)
 - **XPoster.Services** (2 connections)
 - **OpenAiService()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
 - **GenerateImageAsync()** (2 connections)
-- **GetSummary()** (2 connections)
+- **if()** (2 connections)
+- **GetPromptForImage()** (2 connections)
 - **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GetSummary()** (2 connections)
 - **var()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 

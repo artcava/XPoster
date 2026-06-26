@@ -1,20 +1,20 @@
 # Community 60
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (6 connections)
-- **DryRunSlotProfileProvider.cs** (6 connections)
-- **GetProfiles()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **typeof()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 99]] (4 shared connections)
 
 ## Audit Trail
 

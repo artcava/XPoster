@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **Uri()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
 - **if()** (2 connections)
+- **foreach()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

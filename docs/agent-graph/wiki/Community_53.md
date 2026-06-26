@@ -6,11 +6,11 @@
 
 - **XFunction.cs** (6 connections)
 - **XFunction.cs** (6 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
 - **XPoster** (2 connections)
 - **XFunction()** (2 connections)
 - **Run()** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
