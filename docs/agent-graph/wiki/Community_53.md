@@ -1,20 +1,20 @@
 # Community 53
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (6 connections)
-- **XFunctionTests.cs** (6 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 101]] (4 shared connections)
 
 ## Audit Trail
 

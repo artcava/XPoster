@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (8 connections)
-- **foreach()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **return()** (2 connections)
-- **Resolve()** (2 connections)
+- **FeedService.cs** (7 connections)
+- **Exception()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 109]] (4 shared connections)
+- [[Community 125]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

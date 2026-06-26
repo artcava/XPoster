@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **while()** (2 connections)
+- **catch()** (2 connections)
+- **var()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (4 shared connections)
+- [[Community 49]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

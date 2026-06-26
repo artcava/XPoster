@@ -1,28 +1,28 @@
 # Community 30
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **BuildSender()** (2 connections)
+- **InSender()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **ValidPost()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

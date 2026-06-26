@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 

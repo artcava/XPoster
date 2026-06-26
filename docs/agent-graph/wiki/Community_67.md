@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
 - **if()** (2 connections)
-- **DryRunSender()** (2 connections)
+- **Uri()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
 
 ## Relationships
 

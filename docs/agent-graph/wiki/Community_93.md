@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **AddDeepSeekOptions()** (2 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
 - **XPoster.Models** (2 connections)
+- **AddOpenAiOptions()** (2 connections)
 
 ## Relationships
 
