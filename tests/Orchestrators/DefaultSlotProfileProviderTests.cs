@@ -17,10 +17,10 @@ public class DefaultSlotProfileProviderTests
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void GetProfiles_Should_ReturnThreeActiveSlots()
+    public void GetProfiles_Should_ReturnTwoActiveSlots()
     {
         var profiles = _provider.GetProfiles();
-        Assert.Equal(3, profiles.Count);
+        Assert.Equal(2, profiles.Count);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class DefaultSlotProfileProviderTests
     }
 
     // ---------------------------------------------------------------------------
-    // Fan-out slot at hour 8: FeedOrchestrator with LinkedIn + X + Instagram
+    // Fan-out slot at hour 8: FeedOrchestrator with LinkedIn + X
     // ---------------------------------------------------------------------------
 
     [Fact]
@@ -55,13 +55,23 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_ContainLinkedInXAndInstagram()
+    public void FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()
+    {
+        // OpenAi for text, AzureFoundry for image — must be stored independently
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+
+        Assert.NotEqual(profile.TextProvider, profile.ImageProvider);
+        Assert.Equal(AiProvider.OpenAi,       profile.TextProvider);
+        Assert.Equal(AiProvider.AzureFoundry, profile.ImageProvider);
+    }
+
+    [Fact]
+    public void FeedOrchestratorSlot_Should_ContainLinkedInAndX()
     {
         var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
 
-        Assert.Contains(SenderPlatform.LinkedIn,  profile.SenderPlatforms);
-        Assert.Contains(SenderPlatform.X,         profile.SenderPlatforms);
-        Assert.Contains(SenderPlatform.Instagram, profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
     }
 
     [Fact]
@@ -74,18 +84,24 @@ public class DefaultSlotProfileProviderTests
     }
 
     // ---------------------------------------------------------------------------
-    // PowerLaw slots — must have no AI provider
+    // PowerLaw slot at hour 14 — LinkedIn + X, no AI provider
     // ---------------------------------------------------------------------------
 
-    [Theory]
-    [InlineData(14, SenderPlatform.LinkedIn)]
-    [InlineData(16, SenderPlatform.X)]
-    public void PowerLawSlot_Should_HaveNullTextAndImageProvider(int hour, SenderPlatform platform)
+    [Fact]
+    public void PowerLawSlot_Should_ContainLinkedInAndX()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == hour);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 14);
 
-        Assert.Equal(platform,                    profile.SenderPlatforms[0]);
         Assert.Equal(typeof(PowerLawOrchestrator), profile.OrchestratorType);
+        Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
+    }
+
+    [Fact]
+    public void PowerLawSlot_Should_HaveNullTextAndImageProvider()
+    {
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 14);
+
         Assert.Null(profile.TextProvider);
         Assert.Null(profile.ImageProvider);
     }
