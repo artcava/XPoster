@@ -110,15 +110,15 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
     └────────┬───────────────────┘
              │
              ▼
-    ┌────────────────────────────┐
-    │ BaseOrchestrator.PostAsync │  ◄── Fan-out: Task.WhenAll per sender
-    └──┬──────┬──────┬──────┬──┘
+    ┌──────────────────────────────┐
+    │ BaseOrchestrator.PostAsync   │  ◄── Fan-out: Task.WhenAll per sender
+    └──┬──────┬──────┬──────┬──────┘
        │        │        │        │
        ▼        ▼        ▼        ▼
-  ┌───────┐ ┌───────┐ ┌───────┐ ┌───────────┐
-  │XSender│ │InSender│ │IgSender│ │DryRunSend.│
+  ┌────────┐ ┌────────┐ ┌─────────┐ ┌────────────┐
+  │XSender │ │InSender│ │IgSender │ │DryRunSend. │
   │ X/Twit.│ │LinkedIn│ │Instagram│ │(local only)│
-  └───────┘ └───────┘ └───────┘ └───────────┘
+  └────────┘ └────────┘ └─────────┘ └────────────┘
 ```
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
