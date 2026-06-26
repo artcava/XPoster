@@ -28,7 +28,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
         // Fan-out slot — LinkedIn (widest limit) drives base summary and image generation.
         // X (280 chars) always trigger re-summarisation.
         new ScheduledOrchestrationProfile(
-            hour: 8,
+            hour: 6,
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.OpenAi,
