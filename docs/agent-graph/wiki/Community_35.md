@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **params()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **FeedOrchestrator.cs** (8 connections)
+- **ApplyTagReplacements()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **catch()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
+- **if()** (2 connections)
+- **AcquireFeedContentAsync()** (2 connections)
 
 ## Relationships
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (8 connections)
-- **CreateOrchestratorInstance()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **catch()** (2 connections)
 - **if()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (4 shared connections)
+- [[Community 54]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **PerplexityOptions.cs** (2 connections)
-- **PerplexityOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
+- **IgCredentials.cs** (2 connections)
+- **IgCredentials.cs** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

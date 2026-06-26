@@ -1,21 +1,21 @@
 # Community 107
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
-- **catch()** (2 connections)
-- **StringContent()** (2 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 
-- [[Community 64]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

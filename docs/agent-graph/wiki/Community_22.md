@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
-- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
-- **foreach()** (2 connections)
-- **ConfigurationTagReplacementProviderTests** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **PostWithoutImage()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **IgSender()** (2 connections)
+- **BuildSender()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **new()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
 
 ## Relationships
 

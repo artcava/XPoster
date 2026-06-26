@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XSender()** (2 connections)
+- **CryptoService.cs** (6 connections)
 - **if()** (2 connections)
+- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 106]] (3 shared connections)
+- [[Community 110]] (3 shared connections)
 
 ## Audit Trail
 

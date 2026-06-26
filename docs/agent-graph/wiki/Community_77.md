@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory** (2 connections)
-- **Resolve()** (2 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **ITimeProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships
