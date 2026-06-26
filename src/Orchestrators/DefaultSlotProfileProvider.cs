@@ -25,23 +25,18 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
     {
         // Fan-out slot: LinkedIn (widest) drives base summary and image generation.
         // X (280 chars) always triggers re-summarisation.
-        // Instagram depends on base summary length.
         new ScheduledOrchestrationProfile(
-            8,
-            new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+            6,
+            new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
             typeof(FeedOrchestrator),
             textProvider:  AiProvider.AzureFoundry,
             imageProvider: AiProvider.AzureFoundry),
 
         new ScheduledOrchestrationProfile(
             14,
-            new[] { SenderPlatform.LinkedIn },
+            new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
             typeof(PowerLawOrchestrator)),
 
-        new ScheduledOrchestrationProfile(
-            16,
-            new[] { SenderPlatform.X },
-            typeof(PowerLawOrchestrator)),
     }.AsReadOnly();
 
     /// <inheritdoc />
