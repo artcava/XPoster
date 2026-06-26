@@ -41,8 +41,9 @@ public class XSender : ISender
     /// first and the tweet is created with the resulting media ID.
     /// </summary>
     /// <param name="post">The post to publish. Must not be <c>null</c> and must have non-empty content.</param>
+    /// <param name="ct">Cancellation token to signal operation cancellation.</param>
     /// <returns><c>true</c> if the tweet was published successfully; otherwise <c>false</c>.</returns>
-    public async Task<bool> SendAsync(Post post)
+    public async Task<bool> SendAsync(Post post, CancellationToken ct = default)
     {
         if (post == null)
         {
@@ -75,13 +76,14 @@ public class XSender : ISender
 
             if (post.Image != null && post.Image.Length > 0)
             {
-                var media = await twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image");
+                var media = await twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image", cancelToken: ct);
 
                 if (media == null) throw new Exception("Error uploading media");
 
                 var imageTweet = await twitterContext.TweetMediaAsync(
                     text: postText,
-                    mediaIds: new List<string> { media.MediaID.ToString() }
+                    mediaIds: new List<string> { media.MediaID.ToString() },
+                    cancelToken: ct
                 );
                 if (imageTweet == null) throw new Exception("Error tweeting");
 
@@ -89,7 +91,7 @@ public class XSender : ISender
             }
             else
             {
-                var tweet = await twitterContext.TweetAsync(postText);
+                var tweet = await twitterContext.TweetAsync(postText, cancelToken: ct);
 
                 if (tweet == null) throw new Exception("Error tweeting");
 

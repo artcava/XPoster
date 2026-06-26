@@ -65,7 +65,7 @@ namespace XPoster.Orchestrators
         /// A dictionary with one entry per sender, all mapping to the same <see cref="Post"/> instance.
         /// Returns an empty dictionary if the current date precedes the Bitcoin genesis block.
         /// </returns>
-        public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync()
+        public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default)
         {
             DateTime gemini = new DateTime(2009, 1, 3);
             DateTime date = _timeProvider.GetCurrentTime().Date;

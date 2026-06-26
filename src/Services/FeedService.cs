@@ -43,11 +43,12 @@ public class FeedService : IFeedService
     /// <param name="start">The inclusive lower bound of the publication date range.</param>
     /// <param name="end">The inclusive upper bound of the publication date range.</param>
     /// <param name="keywords">Keywords to match against item titles (case-insensitive).</param>
+    /// <param name="ct">A cancellation token to cancel the operation.</param>
     /// <returns>
     /// A collection of matching <see cref="RSSFeed"/> entries, or an empty enumerable
     /// if the feed cannot be fetched or no items match the criteria.
     /// </returns>
-    public async Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end, IEnumerable<string> keywords)
+    public async Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end, IEnumerable<string> keywords, CancellationToken ct = default)
     {
         var cacheKey = $"feeds_{url}_{start:yyyyMMdd}_{end:yyyyMMdd}";
 
@@ -67,10 +68,10 @@ public class FeedService : IFeedService
         try
         {
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; XPoster/1.0)");
-            using var response = await httpClient.GetAsync(url);
+            using var response = await httpClient.GetAsync(url, ct);
             response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync(ct);
             content = content.Trim();
 
             XDocument xmlDoc = XDocument.Parse(content);

@@ -23,7 +23,7 @@ public class BaseOrchestratorTests
         public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
             new List<SenderPlatform>().AsReadOnly();
 
-        public override Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync() =>
+        public override Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default) =>
             Task.FromResult<IReadOnlyDictionary<SenderPlatform, Post?>>(
                 new Dictionary<SenderPlatform, Post?>().AsReadOnly());
 

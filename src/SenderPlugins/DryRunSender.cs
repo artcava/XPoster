@@ -40,11 +40,12 @@ public class DryRunSender : ISender
     /// Returns <c>false</c> if the post is <c>null</c> or if the probe credential is missing.
     /// </summary>
     /// <param name="post">The post produced by the orchestrator. Must not be <c>null</c>.</param>
+    /// <param name="ct">Cancellation token to signal operation cancellation.</param>
     /// <returns>
     /// <c>true</c> when the probe credential is present and the post is valid;
     /// <c>false</c> when <paramref name="post"/> is <c>null</c> or the credential is missing.
     /// </returns>
-    public Task<bool> SendAsync(Post post)
+    public Task<bool> SendAsync(Post post, CancellationToken ct = default)
     {
         if (post == null)
         {

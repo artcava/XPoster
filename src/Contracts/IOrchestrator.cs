@@ -27,12 +27,13 @@ public interface IOrchestrator
     /// Asynchronously orchestrates the production of one <see cref="Post"/> per configured sender,
     /// keyed by <see cref="SenderPlatform"/>.
     /// </summary>
+    /// <param name="ct">Cancellation token to signal operation cancellation.</param>
     /// <returns>
     /// An <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> mapping each target platform to its post.
     /// A <c>null</c> value for a given key signals that content generation failed for that platform.
     /// Returns an empty dictionary if orchestration fails or is not applicable.
     /// </returns>
-    Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync();
+    Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Dispatches each post to the matching sender, resolved by <see cref="SenderPlatform"/> key, in parallel.
@@ -40,6 +41,7 @@ public interface IOrchestrator
     /// A sender whose platform is not present in <paramref name="posts"/> is also skipped with a warning.
     /// </summary>
     /// <param name="posts">Map of platform → post, as returned by <see cref="OrchestrateAsync"/>.</param>
+    /// <param name="ct">Cancellation token to signal operation cancellation.</param>
     /// <returns><c>true</c> only if all dispatched senders succeed; otherwise <c>false</c>.</returns>
-    Task<bool> PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts);
+    Task<bool> PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts, CancellationToken ct = default);
 }

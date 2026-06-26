@@ -36,7 +36,7 @@ namespace XPoster.Orchestrators
         /// <summary>
         /// Returns an empty dictionary unconditionally — no content is orchestrated in a no-send slot.
         /// </summary>
-        public override Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync() =>
+        public override Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default) =>
             Task.FromResult<IReadOnlyDictionary<SenderPlatform, Post?>>(new Dictionary<SenderPlatform, Post?>());
     }
 }

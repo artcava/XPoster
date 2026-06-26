@@ -79,7 +79,7 @@ public class FeedOrchestrator : BaseOrchestrator
     /// A dictionary with one entry per configured sender, or an empty dictionary when a
     /// mandatory pipeline step fails (no feeds, empty summary, no text provider).
     /// </returns>
-    public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync()
+    public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default)
     {
         if (_textProvider is null)
         {
@@ -103,7 +103,7 @@ public class FeedOrchestrator : BaseOrchestrator
         // Step 2 — select primary sender (widest limit) and generate base summary
         var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
         var primarySender  = orderedSenders[0];
-        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, CancellationToken.None);
+        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, ct);
         if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
             _logger.LogError("Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
@@ -112,7 +112,7 @@ public class FeedOrchestrator : BaseOrchestrator
         }
 
         // Step 3 — generate image (shared across all senders)
-        var imageBytes = await GenerateImageAsync(rawBaseSummary);
+        var imageBytes = await GenerateImageAsync(rawBaseSummary, ct);
 
         // Step 4 — build per-sender posts
         var result = new Dictionary<SenderPlatform, Post?>();
@@ -126,7 +126,7 @@ public class FeedOrchestrator : BaseOrchestrator
             else
             {
                 var reSummarised = await _textProvider.GetSummaryAsync(
-                    rawBaseSummary, sender.MessageMaxLenght, CancellationToken.None);
+                    rawBaseSummary, sender.MessageMaxLenght, ct);
 
                 if (string.IsNullOrWhiteSpace(reSummarised))
                 {
@@ -151,8 +151,7 @@ public class FeedOrchestrator : BaseOrchestrator
     // ---------------------------------------------------------------------------
     // Private pipeline steps
     // ---------------------------------------------------------------------------
-
-    private async Task<string> AcquireFeedContentAsync()
+    private async Task<string> AcquireFeedContentAsync(CancellationToken ct = default)
     {
         var feedUrls = _feedUrlProvider.GetFeedUrls();
         if (feedUrls.Count == 0)
@@ -169,7 +168,7 @@ public class FeedOrchestrator : BaseOrchestrator
         var allFeeds = new List<RSSFeed>();
         foreach (var url in feedUrls)
         {
-            var feeds = await _feedService.GetFeedsAsync(url, start, end, replacementKeys);
+            var feeds = await _feedService.GetFeedsAsync(url, start, end, replacementKeys, ct);
             if (feeds != null && feeds.Any())
                 allFeeds.AddRange(feeds);
         }
@@ -188,18 +187,18 @@ public class FeedOrchestrator : BaseOrchestrator
         return sb.ToString();
     }
 
-    private async Task<byte[]?> GenerateImageAsync(string rawBaseSummary)
+    private async Task<byte[]?> GenerateImageAsync(string rawBaseSummary, CancellationToken ct = default)
     {
         if (_imageProvider is null)
             return null;
 
         try
         {
-            var prompt = await _textProvider!.GetImagePromptAsync(rawBaseSummary, CancellationToken.None);
+            var prompt = await _textProvider!.GetImagePromptAsync(rawBaseSummary, ct);
             if (string.IsNullOrWhiteSpace(prompt))
                 prompt = rawBaseSummary;
 
-            var image = await _imageProvider.GenerateImageAsync(prompt, CancellationToken.None);
+            var image = await _imageProvider.GenerateImageAsync(prompt, ct);
             return image is { Length: > 0 } ? image : null;
         }
         catch (Exception ex)

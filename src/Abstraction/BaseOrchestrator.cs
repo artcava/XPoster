@@ -54,7 +54,7 @@ public abstract class BaseOrchestrator : IOrchestrator
     }
 
     /// <inheritdoc/>
-    public abstract Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync();
+    public abstract Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Dispatches each post to the sender whose <see cref="ISender.Platform"/> matches the dictionary key,
@@ -63,8 +63,9 @@ public abstract class BaseOrchestrator : IOrchestrator
     /// A sender whose platform has no entry in <paramref name="posts"/> is skipped with a warning.
     /// </summary>
     /// <param name="posts">Map of platform → post, as returned by <see cref="OrchestrateAsync"/>.</param>
+    /// <param name="ct">Cancellation token to signal operation cancellation.</param>
     /// <returns><c>true</c> only if all dispatched senders succeed; otherwise <c>false</c>.</returns>
-    public virtual async Task<bool> PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts)
+    public virtual async Task<bool> PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts, CancellationToken ct = default)
     {
         if (!SendIt)
         {
@@ -87,13 +88,13 @@ public abstract class BaseOrchestrator : IOrchestrator
                     sender.Platform, sender.GetType().Name);
                 return Task.FromResult(false);
             }
-            return DispatchAsync(sender, post);
+            return DispatchAsync(sender, post, ct);
         }));
 
         return results.All(r => r);
     }
 
-    private async Task<bool> DispatchAsync(ISender sender, Post? post)
+    private async Task<bool> DispatchAsync(ISender sender, Post? post, CancellationToken ct)
     {
         if (post == null)
         {
@@ -110,7 +111,7 @@ public abstract class BaseOrchestrator : IOrchestrator
         if (ProduceImage && post.Image == null)
             _logger.LogWarning("Orchestrator {Name} expected an image but none was produced for sender {Sender}", Name, sender.GetType().Name);
 
-        var ok = await sender.SendAsync(post);
+        var ok = await sender.SendAsync(post, ct);
         _logger.LogInformation("Sender {Sender} result: {Result}", sender.GetType().Name, ok);
         return ok;
     }

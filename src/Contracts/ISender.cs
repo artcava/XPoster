@@ -17,7 +17,8 @@ namespace XPoster.Contracts
         /// Asynchronously sends the given <see cref="Post"/> to the target social-media platform.
         /// </summary>
         /// <param name="post">The post to publish, including text content and an optional image.</param>
+        /// <param name="ct">Cancellation token to signal operation cancellation.</param>
         /// <returns><c>true</c> if the post was published successfully; otherwise <c>false</c>.</returns>
-        Task<bool> SendAsync(Post post);
+        Task<bool> SendAsync(Post post, CancellationToken ct = default);
     }
 }

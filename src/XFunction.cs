@@ -30,8 +30,9 @@ public class XFunction
     /// Exceptions are re-thrown to surface failures in Azure Monitor.
     /// </summary>
     /// <param name="myTimer">Timer metadata injected by the Azure Functions runtime.</param>
+    /// <param name="cancellationToken">Cancellation token to signal function cancellation.</param>
     [Function("XPosterFunction")]
-    public async Task Run([TimerTrigger("%CronSchedule%")] TimerInfo myTimer)
+    public async Task Run([TimerTrigger("%CronSchedule%")] TimerInfo myTimer, CancellationToken cancellationToken)
     {
         _log.LogInformation("XPoster Function started at: {Time}", DateTimeOffset.UtcNow);
 
@@ -45,7 +46,7 @@ public class XFunction
                 return;
             }
 
-            var posts = await orchestrator.OrchestrateAsync();
+            var posts = await orchestrator.OrchestrateAsync(cancellationToken);
 
             if (posts == null || posts.Count == 0)
             {

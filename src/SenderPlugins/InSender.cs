@@ -46,8 +46,9 @@ public class InSender : ISender
     /// and uploaded via the LinkedIn asset API before the UGC post is created.
     /// </summary>
     /// <param name="post">The post to publish. Must not be <c>null</c> and must have non-empty content.</param>
+    /// <param name="ct">Cancellation token to signal operation cancellation.</param>
     /// <returns><c>true</c> if the post was published successfully; otherwise <c>false</c>.</returns>
-    public async Task<bool> SendAsync(Post post)
+    public async Task<bool> SendAsync(Post post, CancellationToken ct = default)
     {
         if (post == null)
         {
@@ -87,7 +88,7 @@ public class InSender : ISender
 
                 var initJson = JsonSerializer.Serialize(initPayload);
                 var initContent = new StringContent(initJson, Encoding.UTF8, "application/json");
-                var initResponse = await _httpClient.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", initContent);
+                var initResponse = await _httpClient.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", initContent, ct);
 
                 if (!initResponse.IsSuccessStatusCode)
                 {
