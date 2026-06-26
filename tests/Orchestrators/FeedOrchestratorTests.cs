@@ -32,6 +32,7 @@ public class FeedOrchestratorTests
     public FeedOrchestratorTests()
     {
         _mockSender                 = new Mock<ISender>();
+        _mockSender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         _mockLogger                 = new Mock<ILogger<FeedOrchestrator>>();
         _mockFeedService            = new Mock<IFeedService>();
         _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
@@ -44,9 +45,7 @@ public class FeedOrchestratorTests
             .Returns(DefaultReplacements);
     }
 
-    /// <summary>
-    /// Factory for a single-sender orchestrator (happy-path baseline).
-    /// </summary>
+    /// <summary>Factory for a single-sender orchestrator (happy-path baseline).</summary>
     private FeedOrchestrator CreateOrchestrator(ISender? sender = null) =>
         new(
             new List<ISender> { sender ?? _mockSender.Object }.AsReadOnly(),
@@ -54,9 +53,7 @@ public class FeedOrchestratorTests
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
-    /// <summary>
-    /// Factory for a multi-sender orchestrator (fan-out tests).
-    /// </summary>
+    /// <summary>Factory for a multi-sender orchestrator (fan-out tests).</summary>
     private FeedOrchestrator CreateMultiSenderOrchestrator(IReadOnlyList<ISender> senders) =>
         new(
             senders,
@@ -96,9 +93,10 @@ public class FeedOrchestratorTests
         // ASSERT
         Assert.NotNull(posts);
         Assert.Single(posts);
-        Assert.NotNull(posts[0]);
-        Assert.Equal(fakeSummary, posts[0]!.Content);
-        Assert.Equal(fakeImage, posts[0]!.Image);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.Equal(fakeSummary, posts[SenderPlatform.X]!.Content);
+        Assert.Equal(fakeImage, posts[SenderPlatform.X]!.Image);
 
         _mockFeedUrlProvider.Verify(p => p.GetFeedUrls(), Times.Once);
         _mockFeedService.Verify(s => s.GetFeedsAsync(
@@ -119,7 +117,9 @@ public class FeedOrchestratorTests
         // ARRANGE — primary sender has limit 700, secondary 280
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
+        primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
         var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
@@ -146,8 +146,6 @@ public class FeedOrchestratorTests
         _mockTextProvider.Verify(
             s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()),
             Times.Once);
-        // No re-summarisation needed: base summary (300) <= secondary limit (280)? No — 300 > 280,
-        // but baseSummary is 300 chars and secondary limit is 280. Let's use a shorter base for this test.
     }
 
     [Fact]
@@ -156,10 +154,12 @@ public class FeedOrchestratorTests
         // ARRANGE — primary limit 700, secondary limit 280; base summary 500 chars > 280
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
+        primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var fakeFeeds    = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary  = new string('A', 500); // 500 > 280: re-summarisation needed
         var shortSummary = new string('B', 200);
 
@@ -183,10 +183,12 @@ public class FeedOrchestratorTests
 
         // ASSERT
         Assert.Equal(2, posts.Count);
-        Assert.NotNull(posts[0]);
-        Assert.NotNull(posts[1]);
-        Assert.Contains(baseSummary[..10],  posts[0]!.Content); // primary uses base
-        Assert.Contains(shortSummary[..10], posts[1]!.Content); // secondary uses re-summarised
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.NotNull(posts[SenderPlatform.LinkedIn]);
+        Assert.Contains(baseSummary[..10],  posts[SenderPlatform.X]!.Content);        // primary uses base
+        Assert.Contains(shortSummary[..10], posts[SenderPlatform.LinkedIn]!.Content); // secondary uses re-summarised
         _mockTextProvider.Verify(
             s => s.GetSummaryAsync(baseSummary, 280, It.IsAny<CancellationToken>()),
             Times.Once);
@@ -198,7 +200,9 @@ public class FeedOrchestratorTests
         // ARRANGE — base summary 200 chars <= secondary limit 280: AI call must be skipped
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
+        primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
         var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
@@ -230,14 +234,16 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_AppliesHashtagsIndependently_PerSender()
     {
-        // ARRANGE — base summary contains "bitcoin"; both senders should get "#Bitcoin" applied independently
+        // ARRANGE — base summary contains "bitcoin"; both senders get "#Bitcoin" applied independently
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
+        primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
         var fakeFeeds   = new List<RSSFeed> { new() { Content = "bitcoin news", Link = "x", Title = "t" } };
-        var baseSummary  = "bitcoin is rising fast and we are all excited";  // fits both limits
+        var baseSummary = "bitcoin is rising fast and we are all excited"; // fits both limits
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
@@ -257,8 +263,10 @@ public class FeedOrchestratorTests
 
         // ASSERT — each post independently has the hashtag applied
         Assert.Equal(2, posts.Count);
-        Assert.Contains("#Bitcoin", posts[0]!.Content);
-        Assert.Contains("#Bitcoin", posts[1]!.Content);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
+        Assert.Contains("#Bitcoin", posts[SenderPlatform.X]!.Content);
+        Assert.Contains("#Bitcoin", posts[SenderPlatform.LinkedIn]!.Content);
     }
 
     [Fact]
@@ -298,10 +306,12 @@ public class FeedOrchestratorTests
         // ARRANGE
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
+        primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds  = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
+        var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 200);
         var sharedImage = new byte[] { 9, 8, 7 };
 
@@ -323,7 +333,9 @@ public class FeedOrchestratorTests
 
         // ASSERT — image generated once and shared (same reference)
         Assert.Equal(2, posts.Count);
-        Assert.Same(posts[0]!.Image, posts[1]!.Image);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
+        Assert.Same(posts[SenderPlatform.X]!.Image, posts[SenderPlatform.LinkedIn]!.Image);
         _mockImageProvider.Verify(
             s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Once);
@@ -335,7 +347,9 @@ public class FeedOrchestratorTests
         // ARRANGE — base 500 > secondary 280; re-summarisation returns empty
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
+        primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
         var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
@@ -361,8 +375,10 @@ public class FeedOrchestratorTests
 
         // ASSERT
         Assert.Equal(2, posts.Count);
-        Assert.NotNull(posts[0]); // primary OK
-        Assert.Null(posts[1]);    // secondary failed → null entry
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
+        Assert.NotNull(posts[SenderPlatform.X]);       // primary OK
+        Assert.Null(posts[SenderPlatform.LinkedIn]);   // secondary failed → null entry
     }
 
     // ---------------------------------------------------------------------------
@@ -482,10 +498,11 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Contains("#Bitcoin", result[0]!.Content);
-        Assert.Contains("#BTC",     result[0]!.Content);
-        Assert.Contains("#FED",     result[0]!.Content);
-        Assert.Single(System.Text.RegularExpressions.Regex.Matches(result[0]!.Content, "#Bitcoin"));
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Contains("#Bitcoin", result[SenderPlatform.X]!.Content);
+        Assert.Contains("#BTC",     result[SenderPlatform.X]!.Content);
+        Assert.Contains("#FED",     result[SenderPlatform.X]!.Content);
+        Assert.Single(System.Text.RegularExpressions.Regex.Matches(result[SenderPlatform.X]!.Content, "#Bitcoin"));
     }
 
     [Fact]
@@ -515,7 +532,8 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Equal(fakeSummary, result[0]!.Content);
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Equal(fakeSummary, result[SenderPlatform.X]!.Content);
     }
 
     // ---------------------------------------------------------------------------
@@ -544,8 +562,9 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Equal(fakeSummary, result[0]!.Content);
-        Assert.Null(result[0]!.Image);
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Equal(fakeSummary, result[SenderPlatform.X]!.Content);
+        Assert.Null(result[SenderPlatform.X]!.Image);
         Assert.True(orchestrator.SendIt);
     }
 
@@ -571,7 +590,8 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Null(result[0]!.Image);
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Null(result[SenderPlatform.X]!.Image);
         Assert.True(orchestrator.SendIt);
     }
 
@@ -598,7 +618,8 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Null(result[0]!.Image);
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Null(result[SenderPlatform.X]!.Image);
         Assert.True(orchestrator.SendIt);
         _mockTextProvider.Verify(s => s.GetImagePromptAsync(
             It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -679,7 +700,8 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Equal(fakeImage, result[0]!.Image);
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Equal(fakeImage, result[SenderPlatform.X]!.Image);
         _mockImageProvider.Verify(
             s => s.GenerateImageAsync(fakeSummary, It.IsAny<CancellationToken>()),
             Times.Once);
@@ -710,7 +732,8 @@ public class FeedOrchestratorTests
         var result = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
-        Assert.Equal(fakeImage, result[0]!.Image);
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Equal(fakeImage, result[SenderPlatform.X]!.Image);
         _mockImageProvider.Verify(
             s => s.GenerateImageAsync(fakeSummary, It.IsAny<CancellationToken>()),
             Times.Once);
