@@ -43,6 +43,12 @@ public class FeedOrchestrator : BaseOrchestrator
     /// Ordered list of senders for this slot, by descending <c>MessageMaxLength</c>.
     /// Index 0 is the primary sender and drives base summary generation.
     /// </param>
+    /// <param name="logger">Logger instance for diagnostic output.</param>
+    /// <param name="feedService">Service used to fetch and parse RSS feeds.</param>
+    /// <param name="feedUrlProvider">Provider that supplies the RSS feed URLs to aggregate.</param>
+    /// <param name="tagReplacementProvider">Provider that supplies word-to-hashtag replacement rules.</param>
+    /// <param name="textProvider">Optional AI provider for text generation. Null means no text capability for this slot.</param>
+    /// <param name="imageProvider">Optional AI provider for image generation. Null means no image capability for this slot.</param>
     public FeedOrchestrator(
         IReadOnlyList<ISender> senders,
         ILogger<FeedOrchestrator> logger,
@@ -165,6 +171,8 @@ public class FeedOrchestrator : BaseOrchestrator
     /// Generates a raw AI summary of <paramref name="feedContent"/> within <paramref name="maxLength"/> characters,
     /// without applying hashtag substitution (returns clean prose for downstream use as image prompt source).
     /// </summary>
+    /// <param name="feedContent">The aggregated RSS feed text to summarise.</param>
+    /// <param name="maxLength">Maximum character length for the generated summary.</param>
     private async Task<string> GenerateRawSummaryAsync(string feedContent, int maxLength)
     {
         if (_sender == null)
