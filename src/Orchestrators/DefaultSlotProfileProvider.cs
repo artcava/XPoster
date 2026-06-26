@@ -8,10 +8,12 @@ namespace XPoster.Orchestrators;
 /// Contains the canonical posting schedule without the DryRun slot,
 /// which is intentionally excluded from production deployments.
 /// <para>
-/// Each slot declares <see cref="ScheduledOrchestrationProfile.TextProvider"/> and
-/// <see cref="ScheduledOrchestrationProfile.ImageProvider"/> independently, allowing
-/// different AI providers to be used for text generation and image generation within
-/// the same slot (e.g. DeepSeek for text, FalAi for image).
+/// Slots are defined as follows (UTC hours):
+/// <list type="table">
+///   <item><term>08:00</term><description>Fan-out: FeedOrchestrator → LinkedIn (primary), X, Instagram.</description></item>
+///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn.</description></item>
+///   <item><term>16:00</term><description>PowerLawOrchestrator → X.</description></item>
+/// </list>
 /// </para>
 /// <para>
 /// Senders within a slot are declared in <b>descending <c>MessageMaxLength</c> order</b>.
@@ -23,19 +25,25 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
 {
     private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
     {
-        // Fan-out slot: LinkedIn (widest) drives base summary and image generation.
-        // X (280 chars) always triggers re-summarisation.
+        // Fan-out slot — LinkedIn (widest limit) drives base summary and image generation.
+        // X (280 chars) and Instagram always trigger re-summarisation.
         new ScheduledOrchestrationProfile(
-            6,
-            new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
-            typeof(FeedOrchestrator),
+            hour: 8,
+            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+            orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.AzureFoundry,
             imageProvider: AiProvider.AzureFoundry),
 
+        // PowerLaw slots — no AI provider required.
         new ScheduledOrchestrationProfile(
-            14,
-            new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
-            typeof(PowerLawOrchestrator)),
+            hour: 14,
+            senderPlatforms: new[] { SenderPlatform.LinkedIn },
+            orchestratorType: typeof(PowerLawOrchestrator)),
+
+        new ScheduledOrchestrationProfile(
+            hour: 16,
+            senderPlatforms: new[] { SenderPlatform.X },
+            orchestratorType: typeof(PowerLawOrchestrator)),
 
     }.AsReadOnly();
 
