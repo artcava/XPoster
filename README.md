@@ -47,6 +47,7 @@
 - **Twitter/X**: Automated posting with image support
 - **LinkedIn**: Posts on personal profiles and company pages
 - **Instagram**: Publishing via Graph API (in development)
+- **Multi-Platform Fan-Out**: A single scheduled slot can publish to multiple platforms simultaneously. The base summary and image are generated once; per-platform re-summarisation is applied only when needed, reducing AI token and image credit consumption by up to ~67% compared to separate slots.
 
 ### ⚙️ Automation & Scheduling
 - **Timer-Based Execution**: Configurable automatic execution
@@ -67,9 +68,9 @@
 XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
 - **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
-- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
-- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
+- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
+- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
 
 The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
 
@@ -79,15 +80,15 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
 ┌────────────────────────────┐
 │   Azure Timer Trigger      │
 │   (configurable schedule)  │
-└───────────┬────────────────┘
+└───────────┬────────────┘
             │
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
 │   (ISlotProfileProvider)   │
-└───────────┬────────────────┘
+└───────────┬────────────┘
             │
-    ┌───────┴────────┬──────────────┐
+    ┌──────┴────────┬────────────┐
     ▼                ▼              ▼
 ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
 │     Feed     │   │  PowerLaw    │   │      No      │
@@ -109,14 +110,15 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
     └────────┬───────────────────┘
              │
              ▼
-    ┌────────────────────┐
-    │ Sender Plugins     │
-    ├────────────────────┤
-    │ • XSender          │ ◄─── Twitter/X API
-    │ • InSender         │ ◄─── LinkedIn API
-    │ • IgSender         │ ◄─── Instagram API
-    │ • DryRunSender     │ ◄─── Local testing only (no outbound API calls)
-    └────────────────────┘
+    ┌────────────────────────────┐
+    │ BaseOrchestrator.PostAsync │  ◄── Fan-out: Task.WhenAll per sender
+    └──┬──────┬──────┬──────┬──┘
+       │        │        │        │
+       ▼        ▼        ▼        ▼
+  ┌───────┐ ┌───────┐ ┌───────┐ ┌───────────┐
+  │XSender│ │InSender│ │IgSender│ │DryRunSend.│
+  │ X/Twit.│ │LinkedIn│ │Instagram│ │(local only)│
+  └───────┘ └───────┘ └───────┘ └───────────┘
 ```
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
@@ -263,7 +265,7 @@ All configuration is driven by environment variables — there is no application
 
 Platform OAuth credentials (Twitter/X, LinkedIn, Instagram) are **not** stored as environment variables. They are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing. `DefaultAzureCredential` picks up your `az login` session locally and the Function App's Managed Identity in production.
 
-> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, `TagReplacementOptions` hashtag map, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
+> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, `TagReplacementOptions` hashtag map, slot profile fan-out examples, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
@@ -377,14 +379,15 @@ az functionapp config appsettings set \
 
 ### Time-based Strategy (ISlotProfileProvider)
 
-The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles. Each slot declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` — `null` means the capability is not assigned for that slot.
+The production schedule is defined in `DefaultSlotProfileProvider`, which returns the fixed profiles below. Each slot declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` — `null` means the capability is not assigned for that slot. The `SenderPlatforms` column lists all platforms targeted in a single slot; content is generated once and fanned out in parallel.
 
-| UTC Hour | `SenderPlatform` | Orchestrator | `TextProvider` | `ImageProvider` |
-|----------|------------------|--------------|----------------|-----------------|
-| 6 | `LinkedIn` | `FeedOrchestrator` | `OpenAi` | `OpenAi` |
-| 8 | `X` | `FeedOrchestrator` | `AzureFoundry` | `AzureFoundry` |
+| UTC Hour | `SenderPlatforms` | Orchestrator | `TextProvider` | `ImageProvider` |
+|----------|-------------------|--------------|----------------|-----------------|
+| 8 | `LinkedIn`, `X`, `Instagram` | `FeedOrchestrator` | `OpenAi` | `OpenAi` |
 | 14 | `LinkedIn` | `PowerLawOrchestrator` | `null` | `null` |
 | 16 | `X` | `PowerLawOrchestrator` | `null` | `null` |
+
+> ℹ️ The fan-out slot at hour 8 generates the base summary and image **once** (sized for LinkedIn's 700-char limit), then re-summarises only when needed for X (280 chars). Instagram receives the same content as LinkedIn when the base fits. This reduces AI and image credit consumption compared to three separate scheduled slots.
 
 > ℹ️ `PowerLawOrchestrator` slots at 14 and 16 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
 
@@ -430,8 +433,8 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add a value to `SenderPlatform`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
-| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()` and `SupportedPlatforms`, add a `ScheduledOrchestrationProfile` entry | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add a value to `SenderPlatform`, add the platform to a `ScheduledOrchestrationProfile`'s `SenderPlatforms` list | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
+| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()` returning `IReadOnlyDictionary<SenderPlatform, Post?>`, implement `SupportedPlatforms`, add a `ScheduledOrchestrationProfile` entry | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
 | **AI Providers** (`ITextToTextProvider` / `ITextToImageProvider`) | Implement the relevant capability interface(s), register as keyed services in `AddXPosterAiProviders()`, add an `AiProvider` enum value | Providers expose only the capabilities they support; `null` resolution is the canonical signal for "capability not available" — no switch expressions or factory classes to modify |
 | **Feed URL Providers** (`IFeedUrlProvider`) | Implement `IFeedUrlProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationFeedUrlProvider` | Feed URLs are a swappable dependency; sourcing them from a database or remote config requires zero changes to `FeedService` or any orchestrator |
 | **Tag Replacement Providers** (`ITagReplacementProvider`) | Implement `ITagReplacementProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationTagReplacementProvider` | The hashtag map is externalised from orchestrator code; changing, adding, or removing replacements requires only a configuration update — no redeployment |
@@ -480,7 +483,8 @@ Key monitoring capabilities at a glance:
 - **Execution tracking**: every `XPosterFunction` invocation appears as a `request` in Application Insights
 - **Dependency tracing**: outbound HTTP calls to AI providers, social media APIs, and `cryptoprices.cc` are captured as `dependencies`
 - **Structured logging**: all `ILogger<T>` calls flow to the `traces` table with full custom dimensions
-- **Alerting**: recommended rules cover consecutive errors, high latency, token budget, and function downtime
+- **Fan-out observability**: per-sender publish outcomes and partial failures are logged independently by `BaseOrchestrator.PostAsync` with structured `customDimensions.platform` and `customDimensions.succeeded` fields
+- **Alerting**: recommended rules cover consecutive errors, high latency, token budget, function downtime, and fan-out partial failures
 
 > 📖 Full setup (resource creation, connection string, `Program.cs` wiring, KQL queries, alert rules, Bicep IaC, and live debugging): **[docs/monitoring.md](docs/monitoring.md)**.
 
@@ -502,6 +506,7 @@ Key monitoring capabilities at a glance:
 - [x] AI provider expansion
 - [x] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
 - [x] `FeedOrchestrator` explicit pipeline + tag replacement externalization [Issue #216](https://github.com/artcava/XPoster/issues/216)
+- [x] Multi-platform fan-out: single slot publishes to multiple platforms in parallel, AI generated once [Issue #176](https://github.com/artcava/XPoster/issues/176)
 - [x] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
@@ -568,9 +573,9 @@ If you find this project useful, consider leaving a ⭐ on GitHub!
 
 **Made with ❤️ in Turin, Italy**
 
-[🏠 Homepage](https://xposter.artcava.net/) • 
-[📖 Documentation](docs/index.md) • 
-[🐛 Report Bug](https://github.com/artcava/XPoster/issues) • 
-[💡 Request Feature](https://github.com/artcava/XPoster/issues)
+[&#x1F3E0; Homepage](https://xposter.artcava.net/) • 
+[&#x1F4D6; Documentation](docs/index.md) • 
+[&#x1F41B; Report Bug](https://github.com/artcava/XPoster/issues) • 
+[&#x1F4A1; Request Feature](https://github.com/artcava/XPoster/issues)
 
 </div>
