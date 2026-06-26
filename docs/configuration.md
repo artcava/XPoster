@@ -196,6 +196,81 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 ---
 
+## Slot Profiles and Multi-Platform Fan-Out
+
+Slot profiles are defined in `DefaultSlotProfileProvider` (production) and `DryRunSlotProfileProvider` (local dry-run). As of the fan-out feature (#176), each `ScheduledOrchestrationProfile` accepts an `IReadOnlyList<SenderPlatform>` instead of a single `SenderPlatform`.
+
+### Ordering rule — descending `MessageMaxLength`
+
+Senders within a slot **must be declared in descending `MessageMaxLength` order**. The first sender (index 0, widest limit) drives base summary and image generation. Subsequent senders receive an AI re-summarisation only when the base summary exceeds their character limit; otherwise the base summary is reused as-is, skipping the AI call entirely.
+
+| Platform | `MessageMaxLength` | Role in a fan-out slot |
+|---|---|---|
+| LinkedIn | 700 | Primary — widest limit; base summary generated at this length |
+| Instagram | 2 200 | Secondary — but image-first; in practice usually shorter captions |
+| X (Twitter) | 280 | Typically last — always triggers re-summarisation when base > 280 |
+| DryRun | 500 | Local testing only |
+
+> 💡 **Cost implication:** a single fan-out slot with N senders replaces N separate scheduled slots. Base summary and image are generated once; only cheap per-sender re-summarisation AI calls are added when needed. See the [Token / Credit Savings](#token--credit-savings) section below.
+
+### Production slot profile example
+
+The current `DefaultSlotProfileProvider` defines the following slots:
+
+```csharp
+// src/Orchestrators/DefaultSlotProfileProvider.cs
+
+new ScheduledOrchestrationProfile(
+    hour: 8,
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+    orchestratorType: typeof(FeedOrchestrator),
+    textProvider:  AiProvider.OpenAi,
+    imageProvider: AiProvider.OpenAi),
+
+new ScheduledOrchestrationProfile(
+    hour: 14,
+    senderPlatforms: new[] { SenderPlatform.LinkedIn },
+    orchestratorType: typeof(PowerLawOrchestrator)),
+
+new ScheduledOrchestrationProfile(
+    hour: 16,
+    senderPlatforms: new[] { SenderPlatform.X },
+    orchestratorType: typeof(PowerLawOrchestrator)),
+```
+
+At hour 8 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The two PowerLaw slots (hours 14 and 16) each publish deterministic content to a single platform — no AI calls involved.
+
+### DryRun slot profile example
+
+`DryRunSlotProfileProvider` appends a single-sender slot at hour 9 for local testing:
+
+```csharp
+// src/Orchestrators/DryRunSlotProfileProvider.cs
+
+new ScheduledOrchestrationProfile(
+    hour: 9,
+    senderPlatforms: new[] { SenderPlatform.DryRun },
+    orchestratorType: typeof(FeedOrchestrator),
+    textProvider:  AiProvider.OpenAi,
+    imageProvider: AiProvider.OpenAi)
+```
+
+Even single-sender profiles use the list constructor — the fan-out loop iterates over one element and behaves identically to the old single-sender path.
+
+---
+
+## Token / Credit Savings
+
+| Scenario | Full AI text pipelines | Image calls |
+|---|---|---|
+| Former approach (3 separate slots) | 3× full pipeline (feed fetch + summary + image prompt) | 3× |
+| Fan-out slot (3 senders, 1 slot) | 1× full pipeline + up to 2× cheap re-summarisation | 1× |
+| **Saving** | **~67 % fewer full AI pipelines** | **~67 % fewer image credits** |
+
+Re-summarisation of an already-short base summary (e.g. ~700 chars → 280 chars) is significantly cheaper than re-processing the full feed content from scratch. When the base summary already fits within a secondary sender's character limit, the AI call is skipped entirely.
+
+---
+
 ## Feed URLs
 
 Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions` section bound via double-underscore notation.
@@ -207,7 +282,7 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 | `FeedOptions__Urls__0` | string | ✅ Yes (at least one) | — | First RSS/Atom feed URL consumed by `FeedOrchestrator`. |
 | `FeedOptions__Urls__1` | string | No | — | Second feed URL. Add further entries as `__2`, `__3`, etc. |
 
-**Behaviour when the list is empty:** `FeedOrchestrator.OrchestrateAsync()` returns `null` (with `SendIt = false`) and emits a `LogWarning`. No AI call or sender invocation is made.
+**Behaviour when the list is empty:** `FeedOrchestrator.OrchestrateAsync()` returns an empty collection (with `SendIt = false`) and emits a `LogWarning`. No AI call or sender invocation is made.
 
 **Azure App Settings:** use the same flat double-underscore convention — e.g. `FeedOptions__Urls__0` — exactly as shown. The .NET configuration binder maps sequential numeric suffixes to `List<string>` automatically.
 
@@ -239,13 +314,14 @@ All five resilience settings are optional. When omitted the values shown in the 
 
 ## Tag Replacements
 
-`FeedOrchestrator` applies a word-to-hashtag replacement pass on the AI-generated summary before producing the image prompt (Step 3 of the pipeline). Replacements are resolved at runtime by `ITagReplacementProvider`. The default implementation, `ConfigurationTagReplacementProvider`, reads from the `TagReplacementOptions:Replacements` section bound via double-underscore notation.
+`FeedOrchestrator` applies a word-to-hashtag replacement pass on the AI-generated summary **independently per sender**, after each per-sender summary is finalised. Replacements are resolved at runtime by `ITagReplacementProvider`. The default implementation, `ConfigurationTagReplacementProvider`, reads from the `TagReplacementOptions:Replacements` section bound via double-underscore notation.
 
 **Matching rules:**
 - Only the **first occurrence** of each configured word per post is replaced.
 - Matching is **case-insensitive** — the key `bitcoin` matches `Bitcoin`, `BITCOIN`, etc.
 - The replacement value is used verbatim (e.g. `#Bitcoin` preserves the casing you configure).
 - Keys from this map are also passed as keywords to `FeedService.GetFeedsAsync()` to pre-filter feed items that mention the configured topics.
+- In a fan-out slot, hashtag substitution is applied **independently** on each sender's final raw summary — changes on one sender's content do not affect other senders.
 
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -374,6 +450,8 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
   }
 }
 ```
+
+The dry-run slot uses `SenderPlatforms: new[] { SenderPlatform.DryRun }` — a single-element list that exercises the same fan-out loop as a production multi-platform slot.
 
 ### Step-by-step dry-run setup
 
