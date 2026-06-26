@@ -25,20 +25,21 @@ public interface IOrchestrator
 
     /// <summary>
     /// Asynchronously orchestrates the production of one <see cref="Post"/> per configured sender,
-    /// positionally aligned with the sender list.
+    /// keyed by <see cref="SenderPlatform"/>.
     /// </summary>
     /// <returns>
-    /// An <see cref="IReadOnlyList{T}"/> of <see cref="Post"/> instances, one per sender.
-    /// A <c>null</c> entry at position <c>i</c> signals that content generation failed for that sender.
-    /// Returns an empty list if orchestration fails or is not applicable.
+    /// An <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> mapping each target platform to its post.
+    /// A <c>null</c> value for a given key signals that content generation failed for that platform.
+    /// Returns an empty dictionary if orchestration fails or is not applicable.
     /// </returns>
-    Task<IReadOnlyList<Post?>> OrchestrateAsync();
+    Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync();
 
     /// <summary>
-    /// Dispatches each post to its positionally aligned sender in parallel via <c>Task.WhenAll</c>.
-    /// A <c>null</c> post at position <c>i</c> causes that sender to be skipped with a warning.
+    /// Dispatches each post to the matching sender, resolved by <see cref="SenderPlatform"/> key, in parallel.
+    /// A <c>null</c> post for a platform causes that sender to be skipped with a warning.
+    /// A sender whose platform is not present in <paramref name="posts"/> is also skipped with a warning.
     /// </summary>
-    /// <param name="posts">The list of posts to publish, positionally aligned with the sender list.</param>
+    /// <param name="posts">Map of platform → post, as returned by <see cref="OrchestrateAsync"/>.</param>
     /// <returns><c>true</c> only if all dispatched senders succeed; otherwise <c>false</c>.</returns>
-    Task<bool> PostAsync(IReadOnlyList<Post?> posts);
+    Task<bool> PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts);
 }

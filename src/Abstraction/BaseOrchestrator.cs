@@ -54,16 +54,17 @@ public abstract class BaseOrchestrator : IOrchestrator
     }
 
     /// <inheritdoc/>
-    public abstract Task<IReadOnlyList<Post?>> OrchestrateAsync();
+    public abstract Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync();
 
     /// <summary>
-    /// Dispatches each post to its positionally aligned sender in parallel via <c>Task.WhenAll</c>.
-    /// A <c>null</c> post at position <c>i</c> causes that sender to be skipped with a warning.
-    /// An empty content post causes that sender to be skipped silently.
+    /// Dispatches each post to the sender whose <see cref="ISender.Platform"/> matches the dictionary key,
+    /// in parallel via <c>Task.WhenAll</c>.
+    /// A <c>null</c> post causes that sender to be skipped with a warning.
+    /// A sender whose platform has no entry in <paramref name="posts"/> is skipped with a warning.
     /// </summary>
-    /// <param name="posts">The list of posts to publish, positionally aligned with <see cref="_senders"/>.</param>
+    /// <param name="posts">Map of platform → post, as returned by <see cref="OrchestrateAsync"/>.</param>
     /// <returns><c>true</c> only if all dispatched senders succeed; otherwise <c>false</c>.</returns>
-    public virtual async Task<bool> PostAsync(IReadOnlyList<Post?> posts)
+    public virtual async Task<bool> PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts)
     {
         if (!SendIt)
         {
@@ -77,11 +78,18 @@ public abstract class BaseOrchestrator : IOrchestrator
             return false;
         }
 
-        var pairs = _senders
-            .Select((sender, i) => (sender, post: i < posts.Count ? posts[i] : null))
-            .ToList();
+        var results = await Task.WhenAll(_senders.Select(sender =>
+        {
+            if (!posts.TryGetValue(sender.Platform, out var post))
+            {
+                _logger.LogWarning(
+                    "No post entry found for platform {Platform} in dispatch map — skipping sender {Sender}",
+                    sender.Platform, sender.GetType().Name);
+                return Task.FromResult(false);
+            }
+            return DispatchAsync(sender, post);
+        }));
 
-        var results = await Task.WhenAll(pairs.Select(p => DispatchAsync(p.sender, p.post)));
         return results.All(r => r);
     }
 

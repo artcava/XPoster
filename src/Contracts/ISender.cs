@@ -7,8 +7,11 @@ namespace XPoster.Contracts
     /// </summary>
     public interface ISender
     {
+        /// <summary>Gets the platform this sender targets. Used as the routing key in the post dispatch map.</summary>
+        SenderPlatform Platform { get; }
+
         /// <summary>Gets the maximum number of characters allowed in a single post on this platform.</summary>
-        public int MessageMaxLenght { get; }
+        int MessageMaxLenght { get; }
 
         /// <summary>
         /// Asynchronously sends the given <see cref="Post"/> to the target social-media platform.
