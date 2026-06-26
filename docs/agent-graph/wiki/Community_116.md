@@ -1,20 +1,20 @@
 # Community 116
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **FeedOptions.cs** (2 connections)
-- **FeedOptions.cs** (2 connections)
+- **InSender.cs** (11 connections)
+- **if()** (2 connections)
+- **InSender()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 37]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

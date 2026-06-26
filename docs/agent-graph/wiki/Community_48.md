@@ -7,10 +7,10 @@
 - **AzureFoundryOptionsValidatorTests.cs** (7 connections)
 - **AzureFoundryOptionsValidatorTests.cs** (7 connections)
 - **AzureFoundryOptionsValidatorTests** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
 - **ValidOptions()** (2 connections)
 
 ## Relationships

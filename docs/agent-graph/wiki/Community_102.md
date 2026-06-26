@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **return()** (2 connections)
-- **if()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **StringContent()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 - **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 55]] (6 shared connections)
+- [[Community 63]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

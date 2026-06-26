@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (11 connections)
-- **DeepSeekService.cs** (11 connections)
+- **PerplexityService.cs** (11 connections)
+- **PerplexityService.cs** (11 connections)
 - **BuildSummaryPayload()** (2 connections)
-- **DeepSeekService()** (2 connections)
 - **BuildImagePromptPayload()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
 - **GetSummaryAsync()** (2 connections)
 - **var()** (2 connections)
+- **if()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
 - **GetChatCompletionsEndpoint()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 

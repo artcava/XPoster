@@ -1,26 +1,26 @@
 # Community 42
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **RSSFeedMissingBranchTests.cs** (8 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **RSSFeedMissingBranchTests** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 51]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -6,14 +6,14 @@
 
 - **XSenderTests.cs** (9 connections)
 - **XSenderTests.cs** (9 connections)
-- **XSender_ImplementsISender()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 - **XSenderTests()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
 
 ## Relationships
 

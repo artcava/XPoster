@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **IFeedService** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **GetReplacements()** (2 connections)
 
 ## Relationships
 

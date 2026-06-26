@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (6 connections)
-- **XFunctionTests.cs** (6 connections)
-- **XPoster.Tests** (2 connections)
-- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **XFunctionTests()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **XPoster** (2 connections)
+- **Run()** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
+- **XFunction()** (2 connections)
 
 ## Relationships
 
