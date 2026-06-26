@@ -179,31 +179,4 @@ public class DeepSeekServiceTests
 
         Assert.Equal(string.Empty, result);
     }
-
-    // ── GenerateImageAsync ───────────────────────────────────────────────────
-
-    /// <summary>
-    /// Regression test for fix #7: GenerateImageAsync must throw NotSupportedException
-    /// instead of silently returning an empty byte array.
-    /// </summary>
-    [Fact]
-    public async Task GenerateImageAsync_AlwaysThrows_NotSupportedException()
-    {
-        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
-        var svc = BuildService(handler.Object, out _);
-
-        await Assert.ThrowsAsync<NotSupportedException>(
-            () => svc.GenerateImageAsync("any prompt"));
-    }
-
-    [Fact]
-    public async Task GenerateImageAsync_ExceptionMessage_MentionsHybridAiService()
-    {
-        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{}").Object, out _);
-
-        var ex = await Assert.ThrowsAsync<NotSupportedException>(
-            () => svc.GenerateImageAsync("any prompt"));
-
-        Assert.Contains(nameof(HybridAiService), ex.Message);
-    }
 }

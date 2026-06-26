@@ -1,22 +1,21 @@
 # Community 91
 
-> 5 nodes · cohesion 0.40
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **catch()** (2 connections)
-- **ReplaceEveryFirstOccurenceOf()** (2 connections)
-- **GenerateMessage()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **AddPerplexityOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,22 @@
 # Community 71
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (12 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **var()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ICryptoService** (2 connections)
+- **GetCryptoValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 56]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

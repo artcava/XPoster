@@ -19,10 +19,6 @@ public class AiServiceHelperImageTests
         return new HttpClient(handler.Object);
     }
 
-    /// <summary>
-    /// Returns an HttpClient whose handler returns <paramref name="downloadBytes"/> on the first SendAsync
-    /// (i.e. the image download request issued inside the extractor).
-    /// </summary>
     private static HttpClient MakeDownloadClient(byte[] downloadBytes)
     {
         var handler = new Mock<HttpMessageHandler>();
@@ -38,9 +34,6 @@ public class AiServiceHelperImageTests
         return new HttpClient(handler.Object);
     }
 
-    /// <summary>
-    /// Returns an HttpClient whose handler throws <see cref="HttpRequestException"/> on the first SendAsync.
-    /// </summary>
     private static (HttpClient Client, Mock<ILogger> Logger) MakeThrowingDownloadClient()
     {
         var handler = new Mock<HttpMessageHandler>();
@@ -64,7 +57,7 @@ public class AiServiceHelperImageTests
     [Theory]
     [InlineData(AiProvider.OpenAi)]
     [InlineData(AiProvider.AzureFoundry)]
-    [InlineData(AiProvider.DeepSeekWithFal)]
+    [InlineData(AiProvider.FalAi)]
     public async Task Parse_Returns429_ReturnsEmpty(AiProvider provider)
     {
         var logger = new Mock<ILogger>();
@@ -79,7 +72,7 @@ public class AiServiceHelperImageTests
     [Theory]
     [InlineData(AiProvider.OpenAi)]
     [InlineData(AiProvider.AzureFoundry)]
-    [InlineData(AiProvider.DeepSeekWithFal)]
+    [InlineData(AiProvider.FalAi)]
     public async Task Parse_Returns429_LogsWarning(AiProvider provider)
     {
         var logger = new Mock<ILogger>();
@@ -102,7 +95,7 @@ public class AiServiceHelperImageTests
     [Theory]
     [InlineData(AiProvider.OpenAi)]
     [InlineData(AiProvider.AzureFoundry)]
-    [InlineData(AiProvider.DeepSeekWithFal)]
+    [InlineData(AiProvider.FalAi)]
     public async Task Parse_NonSuccessStatus_ReturnsEmpty(AiProvider provider)
     {
         var logger = new Mock<ILogger>();
@@ -117,7 +110,7 @@ public class AiServiceHelperImageTests
     [Theory]
     [InlineData(AiProvider.OpenAi)]
     [InlineData(AiProvider.AzureFoundry)]
-    [InlineData(AiProvider.DeepSeekWithFal)]
+    [InlineData(AiProvider.FalAi)]
     public async Task Parse_MalformedJson_ReturnsEmpty(AiProvider provider)
     {
         var logger = new Mock<ILogger>();
@@ -192,7 +185,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse(json), AiProvider.DeepSeekWithFal,
+            JsonResponse(json), AiProvider.FalAi,
             MakeDownloadClient(expected), logger.Object, null, CancellationToken.None);
 
         Assert.Equal(expected, result);
@@ -204,7 +197,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse("{\"other\":\"value\"}"), AiProvider.DeepSeekWithFal,
+            JsonResponse("{\"other\":\"value\"}"), AiProvider.FalAi,
             MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
@@ -216,7 +209,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse("{\"images\":[]}"), AiProvider.DeepSeekWithFal,
+            JsonResponse("{\"images\":[]}"), AiProvider.FalAi,
             MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
@@ -228,7 +221,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse("{\"images\":[{\"width\":512}]}"), AiProvider.DeepSeekWithFal,
+            JsonResponse("{\"images\":[{\"width\":512}]}"), AiProvider.FalAi,
             MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
@@ -240,7 +233,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse("{\"images\":[{\"url\":\"\"}]}"), AiProvider.DeepSeekWithFal,
+            JsonResponse("{\"images\":[{\"url\":\"\"}]}"), AiProvider.FalAi,
             MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
@@ -255,7 +248,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse(json), AiProvider.DeepSeekWithFal,
+            JsonResponse(json), AiProvider.FalAi,
             client, logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
@@ -270,7 +263,7 @@ public class AiServiceHelperImageTests
         var logger = new Mock<ILogger>();
 
         await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse(json), AiProvider.DeepSeekWithFal,
+            JsonResponse(json), AiProvider.FalAi,
             client, logger.Object, null, CancellationToken.None);
 
         logger.Verify(
@@ -320,6 +313,21 @@ public class AiServiceHelperImageTests
     }
 
     [Fact]
+    public async Task Parse_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmpty()
+    {
+        var imageUrl = "https://evil.example.com/img.png";
+        var json = $"{{\"data\":[{{\"url\":\"{imageUrl}\"}}]}}";
+        var logger = new Mock<ILogger>();
+
+        var result = await AiServiceHelper.ParseImageResponseAsync(
+            JsonResponse(json), AiProvider.AzureFoundry,
+            MakeNoOpClient(), logger.Object,
+            allowedOrigin: "https://foundry.azure.com", CancellationToken.None);
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
     public async Task Parse_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()
     {
         var imageUrl = "https://other-cdn.net/img.png";
@@ -342,6 +350,23 @@ public class AiServiceHelperImageTests
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
+    }
+
+    [Fact]
+    public async Task Parse_AzureFoundry_UrlFallback_NullAllowedOrigin_SkipsOriginCheckAndDownloads()
+    {
+        var expected = new byte[] { 77, 88, 99 };
+        var imageUrl = "https://any-origin.example.com/img.png";
+        var json = $"{{\"data\":[{{\"url\":\"{imageUrl}\"}}]}}";
+        var logger = new Mock<ILogger>();
+
+        // allowedOrigin = null must bypass origin validation and proceed to download
+        var result = await AiServiceHelper.ParseImageResponseAsync(
+            JsonResponse(json), AiProvider.AzureFoundry,
+            MakeDownloadClient(expected), logger.Object,
+            allowedOrigin: null, CancellationToken.None);
+
+        Assert.Equal(expected, result);
     }
 
     [Fact]
@@ -410,27 +435,33 @@ public class AiServiceHelperImageTests
             Times.Once);
     }
 
-    // ── Unsupported provider ─────────────────────────────────────────────────
+    // ── Unsupported providers ────────────────────────────────────────────────
 
-    [Fact]
-    public async Task Parse_UnsupportedProvider_ReturnsEmpty()
+    [Theory]
+    [InlineData(AiProvider.Perplexity)]
+    [InlineData(AiProvider.DeepSeek)]
+    [InlineData(AiProvider.None)]
+    public async Task Parse_UnsupportedProvider_ReturnsEmpty(AiProvider provider)
     {
         var logger = new Mock<ILogger>();
 
         var result = await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}"), AiProvider.Perplexity,
+            JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}"), provider,
             MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         Assert.Empty(result);
     }
 
-    [Fact]
-    public async Task Parse_UnsupportedProvider_LogsError()
+    [Theory]
+    [InlineData(AiProvider.Perplexity, "Perplexity")]
+    [InlineData(AiProvider.DeepSeek,   "DeepSeek")]
+    [InlineData(AiProvider.None,       "None")]
+    public async Task Parse_UnsupportedProvider_LogsError(AiProvider provider, string expectedLabel)
     {
         var logger = new Mock<ILogger>();
 
         await AiServiceHelper.ParseImageResponseAsync(
-            JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}"), AiProvider.Perplexity,
+            JsonResponse("{\"data\":[{\"b64_json\":\"dGVzdA==\"}]}"), provider,
             MakeNoOpClient(), logger.Object, null, CancellationToken.None);
 
         logger.Verify(
@@ -438,7 +469,7 @@ public class AiServiceHelperImageTests
                 LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, _) =>
-                    v.ToString()!.Contains("Perplexity") &&
+                    v.ToString()!.Contains(expectedLabel) &&
                     v.ToString()!.Contains("not supported")),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),

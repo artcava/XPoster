@@ -1,8 +1,26 @@
 namespace XPoster.Contracts;
 
 /// <summary>
-/// Identifies the target social platform and content strategy for a scheduled posting slot.
+/// Identifies the target social platform for a scheduled posting slot.
+/// Replaces <see cref="MessageSender"/> which coupled platform identity to orchestrator identity.
 /// </summary>
+public enum SenderPlatform
+{
+    /// <summary>Posts to X (Twitter).</summary>
+    X,
+    /// <summary>Posts to LinkedIn.</summary>
+    LinkedIn,
+    /// <summary>Posts to Instagram.</summary>
+    Instagram,
+    /// <summary>Dry-run sender for local integration testing. Logs post output without publishing.</summary>
+    DryRun,
+}
+
+/// <summary>
+/// Legacy enum kept temporarily for migration safety.
+/// All production code must use <see cref="SenderPlatform"/> instead.
+/// </summary>
+[Obsolete("Use SenderPlatform instead. MessageSender will be removed once all references are migrated.")]
 public enum MessageSender
 {
     /// <summary>No message will be sent during this time slot.</summary>

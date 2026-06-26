@@ -1,20 +1,21 @@
 # Community 24
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **MessageMaxLenght_Returns250()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **XSenderMissingBranchTests** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **foreach()** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 
 ## Relationships
 
@@ -22,7 +23,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

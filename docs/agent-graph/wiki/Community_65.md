@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **Uri()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **if()** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 

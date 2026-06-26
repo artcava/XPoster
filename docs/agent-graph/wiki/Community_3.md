@@ -1,43 +1,43 @@
 # Community 3
 
-> 29 nodes · cohesion 0.14
+> 32 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **OptionsExtensionsTests.cs** (28 connections)
-- **OptionsExtensionsTests.cs** (28 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **BuildProvider()** (2 connections)
-- **AzureFoundryOptionsExtensionsTests** (2 connections)
-- **BuildConfig()** (2 connections)
-- **AddPerplexityOptions_RegistersValidator()** (2 connections)
-- **AddOpenAiOptions_RegistersValidator()** (2 connections)
-- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **register()** (2 connections)
-- **OptionsExtensionsTests** (2 connections)
-- **PerplexityOptionsExtensionsTests** (2 connections)
-- **AddFalAiOptions_RegistersValidator()** (2 connections)
-- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
-- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **SectionName_IsPerplexity()** (2 connections)
-- **SectionName_IsFalAi()** (2 connections)
-- **SectionName_IsOpenAI()** (2 connections)
-- **OpenAiOptionsExtensionsTests** (2 connections)
-- **DeepSeekOptionsExtensionsTests** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
 - **new()** (2 connections)
-- **FalAiOptionsExtensionsTests** (2 connections)
-- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- *... and 4 more nodes in this community*
+- **AiServiceHelperImageTests** (2 connections)
+- **Parse_UnsupportedProvider_ReturnsEmpty()** (2 connections)
+- **return()** (2 connections)
+- **static()** (2 connections)
+- **Parse_Returns429_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_Returns429_LogsWarning()** (2 connections)
+- **Parse_FalAi_MissingUrlProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_EmptyUrl_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_MissingImagesProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_FalAi_DownloadThrows_LogsError()** (2 connections)
+- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
+- **Parse_MalformedJson_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_EmptyB64Value_ReturnsEmpty()** (2 connections)
+- **Parse_NonSuccessStatus_ReturnsEmpty()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_ReturnsBytes()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_LogsWarning()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_ReturnsEmpty()** (2 connections)
+- *... and 7 more nodes in this community*
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 64]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 110 (100%)
+- EXTRACTED: 99 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,23 @@
 # Community 62
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests()** (2 connections)
-- **InSender()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

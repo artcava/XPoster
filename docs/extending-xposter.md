@@ -1,6 +1,6 @@
 # Extending XPoster
 
-XPoster is designed around three extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), and **AI Providers** (model integrations). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
+XPoster is designed around five extension points: **Senders** (platform plugins), **Orchestrators** (content strategies), **AI Providers** (model integrations), **Feed URL Providers** (RSS/Atom feed sources), and **Tag Replacement Providers** (hashtag mapping sources). Each maps to a dedicated abstraction and can be implemented without modifying any existing component.
 
 > For the architectural rationale behind each extension point, see [architecture.md §5](architecture.md#5-extension-points).
 
@@ -89,7 +89,9 @@ public class TikTokSender : ISender
         _logger = logger;
     }
 
-    public int MessageMaxLength => 150;
+    public SenderPlatform Platform => SenderPlatform.TikTok;
+
+    public int MessageMaxLenght => 150;
 
     public async Task<bool> SendAsync(Post post)
     {
@@ -106,7 +108,7 @@ public class TikTokSender : ISender
 }
 ```
 
-> `MessageMaxLength` must reflect the platform's actual character limit. Orchestrators use this value to truncate content before calling `SendAsync`.
+> `MessageMaxLenght` must reflect the platform's actual character limit. `FeedOrchestrator` uses this value as the target length for AI summarisation; an incorrect value leads to content that is too long or wastes character budget.
 
 ### Step 3 — Register in DI
 
@@ -136,48 +138,66 @@ For local development only, set them in `src/local.settings.json` using the doub
 
 > Do not add social-platform credentials to `src/local.settings.json.example`. Use Key Vault for all non-local environments.
 
-### Step 5 — Add Enum Value
+### Step 5 — Add SenderPlatform Enum Value
+
+Add a single value to `SenderPlatform` representing the new platform. Each value maps to exactly one sender class, independent of which orchestrator produces the content:
 
 ```csharp
 // src/Contracts/Enums.cs
-public enum MessageSender
+public enum SenderPlatform
 {
-    // existing values...
-    TikTokSummaryFeed,
-    TikTokPowerLaw,
+    // existing values ...
+    TikTok,
 }
 ```
 
+> `SenderPlatform` represents **where** to publish. It is orthogonal to the orchestrator type (what content strategy to use), so a single `TikTok` value covers all orchestrators that target TikTok.
+
 ### Step 6 — Wire in OrchestratorFactory
 
-`OrchestratorFactory.Resolve()` resolves the concrete sender through a **switch expression** that maps each `MessageSender` enum value to a specific class retrieved from the DI container. The result is cast to `ISender` because `GetService` returns `object?`; the factory then passes the interface reference to `CreateOrchestratorInstance`, keeping orchestrators fully decoupled from sender implementations.
-
-Add two arms to the existing switch expression inside `Resolve()`:
+`OrchestratorFactory.Resolve()` resolves the concrete sender list through a private `ResolveSender` helper that maps each `SenderPlatform` value to the class retrieved from the DI container. Add one arm to the switch expression inside `ResolveSender()`:
 
 ```csharp
-// src/Orchestrators/OrchestratorFactory.cs — sender switch expression
-ISender? sender = profile.SenderType switch
+// src/Orchestrators/OrchestratorFactory.cs — ResolveSender helper
+private ISender? ResolveSender(SenderPlatform platform) => platform switch
 {
     // existing arms ...
-    MessageSender.TikTokSummaryFeed => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
-    MessageSender.TikTokPowerLaw    => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
+    SenderPlatform.TikTok => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
     _ => null
 };
 ```
 
-> Both `TikTokSummaryFeed` and `TikTokPowerLaw` resolve to the same `TikTokSender` class. The two enum values express *what is being posted* (content strategy + platform), not *how* — `TikTokSender` owns the how. This mirrors the existing pattern for `XSender` and `InSender`.
+The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender()` for each entry, and passes the resulting `IReadOnlyList<ISender>` to the orchestrator constructor. One enum value maps to one switch arm and one sender class — independent of how many senders are configured per slot.
+
+> Adding a new orchestrator that posts to TikTok (e.g. `TrendingOrchestrator`) requires **no change** to this switch — only a new `ScheduledOrchestrationProfile` entry referencing `SenderPlatform.TikTok`.
 
 ### Step 7 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`), which implements `ISlotProfileProvider`. Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender type, orchestrator type, and (optionally) the AI provider for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform list, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
-    new ScheduledOrchestrationProfile(20, MessageSender.TikTokSummaryFeed, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(
+        hour: 20,
+        senderPlatforms: new[] { SenderPlatform.TikTok },
+        orchestratorType: typeof(FeedOrchestrator),
+        textProvider: AiProvider.OpenAi,
+        imageProvider: AiProvider.OpenAi),
 ];
+```
+
+To publish to multiple platforms in the same slot, list all target senders in **descending `MessageMaxLength` order** (widest first). `OrchestratorFactory` preserves declaration order and passes it to the orchestrator, which uses index 0 as the primary sender for base summary generation:
+
+```csharp
+new ScheduledOrchestrationProfile(
+    hour: 20,
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (700) → first
+    orchestratorType: typeof(FeedOrchestrator),
+    textProvider: AiProvider.OpenAi,
+    imageProvider: AiProvider.OpenAi),
 ```
 
 > `OrchestratorFactory` no longer owns a static profile list — it receives `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time. Only `DefaultSlotProfileProvider` needs to change when adding a production slot.
@@ -188,40 +208,85 @@ public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 
 ## Adding a New Orchestrator (Content Strategy)
 
-An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It receives its dependencies — sender, AI service, and any data services — via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
+An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce one `Post` per configured sender. It must also implement the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. Dependencies — sender list, AI capability providers, and any data services — are received via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
 
 ### Step 1 — Extend BaseOrchestrator
+
+The constructor now receives `IReadOnlyList<ISender>` instead of a single `ISender`. `OrchestrateAsync()` returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender, keyed by platform. A `null` value for a given key signals that content generation failed for that sender.
 
 ```csharp
 // src/Orchestrators/QuoteOrchestrator.cs
 public class QuoteOrchestrator : BaseOrchestrator
 {
-    public QuoteOrchestrator(ISender sender, ILogger<QuoteOrchestrator> logger, IAiService aiService)
-        : base(sender, logger, aiService) { }
+    public QuoteOrchestrator(
+        IReadOnlyList<ISender> senders,
+        ILogger<QuoteOrchestrator> logger,
+        ITextToTextProvider? textProvider,
+        ITextToImageProvider? imageProvider)
+        : base(senders, logger) { }
 
-    public override async Task<Post>? OrchestrateAsync()
+    public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
+        [SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.DryRun];
+
+    public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(
+        CancellationToken ct = default)
     {
-        // Return null (do not throw) when no content can be produced.
-        // XFunction will skip posting gracefully.
-        var quote = await _aiService.GetCompletionAsync("Generate a motivational tech quote.", 100);
-        if (string.IsNullOrWhiteSpace(quote)) return null;
-        return new Post { Content = quote };
+        if (_textProvider is null)
+        {
+            SendIt = false;
+            return new Dictionary<SenderPlatform, Post?>();
+        }
+
+        var quote = await _textProvider.GetSummaryAsync("Generate a motivational tech quote.", 100, ct);
+        if (string.IsNullOrWhiteSpace(quote))
+        {
+            SendIt = false;
+            return new Dictionary<SenderPlatform, Post?>();
+        }
+
+        byte[]? image = null;
+        if (_imageProvider is not null)
+            image = await _imageProvider.GenerateImageAsync(quote, ct);
+
+        // Broadcast strategy: same post to every configured sender
+        var post = new Post { Content = quote, Image = image };
+        SendIt = true;
+        return _senders.ToDictionary(s => s.Platform, _ => (Post?)post);
     }
 }
 ```
 
-> **Invariant**: `OrchestrateAsync()` must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+#### Broadcast vs. per-sender content adaptation
+
+Choose the strategy that fits the orchestrator's purpose:
+
+| Strategy | When to use | Example |
+|---|---|---|
+| **Broadcast** | Same content works on every target platform | `PowerLawOrchestrator` — deterministic text, no AI, broadcast identical `Post` to all senders |
+| **Per-sender adaptation** | Content must be re-summarised to fit each platform's character limit | `FeedOrchestrator` — AI base summary at primary sender's limit, AI re-summarise for each secondary sender |
+
+For a **per-sender adaptation** pattern, iterate `_senders` and call `_textProvider.GetSummaryAsync` independently per sender when the base summary exceeds the sender's `MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
+
+> **`OrchestrateAsync` invariant**: return an **empty dictionary** with `SendIt = false` — not throw — when content cannot be produced. `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
+
+> **`SupportedPlatforms` invariant**: always include `SenderPlatform.DryRun` so the orchestrator can be exercised locally without live API calls. Declare only the platforms the orchestrator has been validated against.
+
+> **Null capability providers**: `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. When a slot references a text-only provider (e.g. `AiProvider.DeepSeek`), `imageProvider` will be `null` — check before use and degrade gracefully (text-only post). When a slot references an image-only provider (e.g. `AiProvider.FalAi`), `textProvider` will be `null` — return an empty dictionary early if the orchestrator cannot produce content without text generation.
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new orchestrator type in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type and the target `SenderPlatforms` list in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
-    new ScheduledOrchestrationProfile(10, MessageSender.XSummaryFeed, typeof(QuoteOrchestrator), AiProvider.Perplexity),
+    new ScheduledOrchestrationProfile(
+        hour: 10,
+        senderPlatforms: new[] { SenderPlatform.X },
+        orchestratorType: typeof(QuoteOrchestrator),
+        textProvider: AiProvider.Perplexity),
 ];
 ```
 
@@ -231,11 +296,23 @@ No other change to `OrchestratorFactory` is required. The factory receives the u
 
 ## Adding a New AI Provider
 
-The AI layer is abstracted behind `IAiService`. `AiServiceFactory` resolves implementations using the .NET **keyed services** mechanism: each `IAiService` is registered against its `AiProvider` enum value as the key, and `AiServiceFactory.GetByProvider()` calls `GetKeyedService<IAiService>(provider)` to retrieve it. There is no switch inside the factory — adding a new provider requires only registering the implementation under the correct key and declaring that key as supported.
+The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. `OrchestratorFactory` resolves both capabilities independently via `IServiceProvider.GetKeyedService<T>(profile.AiProvider)`. There is no factory class or switch expression to modify — adding a new provider requires only implementing the relevant interface(s) and adding the keyed DI registrations.
+
+### Capability model
+
+A provider can implement one or both capability interfaces:
+
+| Provider type | Implements | Keyed registrations to add |
+|---|---|---|
+| Text + Image | `ITextToTextProvider` and `ITextToImageProvider` | Both interfaces under the same key |
+| Text only | `ITextToTextProvider` | `ITextToTextProvider` only; `GetKeyedService<ITextToImageProvider>` returns `null` |
+| Image only | `ITextToImageProvider` | `ITextToImageProvider` only; `GetKeyedService<ITextToTextProvider>` returns `null` |
+
+`null` resolution is **intentional**: orchestrators check for null providers and degrade gracefully. Misconfiguring a text-only provider for an image-generating slot surfaces explicitly inside `FeedOrchestrator` at the point of use, not silently.
 
 ### Step 1 — Add the Enum Value
 
-Append a new value to `AiProvider`. Assign an explicit integer to avoid accidental renumbering of existing values:
+Append a new value to `AiProvider`. Assign an explicit integer to avoid accidental renumbering of existing values, and add a `[Description]` attribute if the display label differs from the enum name:
 
 ```csharp
 // src/Contracts/AiProvider.cs
@@ -245,53 +322,86 @@ public enum AiProvider
     OpenAi       = 1,
     Perplexity   = 2,
     AzureFoundry = 3,
-    Anthropic    = 4,  // new
+    DeepSeek     = 4,
+    FalAi        = 5,
+    [Description("Anthropic")]
+    Anthropic    = 6,  // new
 }
 ```
 
-### Step 2 — Implement IAiService
+> Also update `DefaultSlotProfileProvider` if the new provider should be active for a production slot. Any slot profile that previously referenced `AiProvider.DeepSeekWithFal` must be migrated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate — `DeepSeekWithFal` has been removed.
+
+### Step 2 — Implement the Capability Interface(s)
+
+**Text + Image provider** (e.g. Anthropic supports both):
 
 ```csharp
-// src/Services/Ai/AnthropicAiService.cs
-public class AnthropicAiService : IAiService
+// src/Services/Ai/AnthropicService.cs
+public class AnthropicService : ITextToTextProvider, ITextToImageProvider
 {
-    // Model names, SDK dependencies, and API keys are internal to this class.
-    public async Task<string> GetCompletionAsync(string prompt, int maxTokens)
+    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default)
     {
-        // Call Anthropic Messages API
+        // Call Anthropic Messages API for summarisation
     }
 
-    public async Task<byte[]> GenerateImageAsync(string prompt)
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default)
     {
-        // Anthropic does not offer a native image model;
-        // delegate to a compatible image provider or throw NotSupportedException.
+        // Call Anthropic Messages API for prompt generation
+    }
+
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default)
+    {
+        // Call Anthropic image generation API
     }
 }
 ```
 
-### Step 3 — Register as a Keyed Service and Declare as Supported
-
-`AiServiceFactory` resolves providers via `GetKeyedService<IAiService>(provider)`, so the implementation must be registered as a **keyed transient** against its `AiProvider` enum value — not as a plain `AddTransient`. A plain registration would be invisible to the factory.
+**Text-only provider** (e.g. a provider that has no image model):
 
 ```csharp
-// src/Program.cs
-builder.Services.AddKeyedTransient<IAiService, AnthropicAiService>(AiProvider.Anthropic);
-builder.Services.AddAnthropicOptions(builder.Configuration);  // see Step 4
+// src/Services/Ai/MyTextOnlyService.cs
+public class MyTextOnlyService : ITextToTextProvider
+{
+    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default) { ... }
+    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default) { ... }
+    // No GenerateImageAsync — ITextToImageProvider is not implemented.
+    // Slots using this provider will receive null for imageProvider — intentional.
+}
 ```
 
-Then add the new value to the `_supportedProviders` set in `AiServiceFactory`. This guard is what `GetByProvider` checks before attempting resolution; without it the factory throws `ArgumentException` even if the service is correctly registered:
+**Image-only provider** (e.g. a specialised diffusion model):
 
 ```csharp
-// src/Orchestrators/AiServiceFactory.cs
-private static readonly HashSet<AiProvider> _supportedProviders =
-[
-    AiProvider.OpenAi,
-    AiProvider.AzureFoundry,
-    AiProvider.Anthropic,  // new
-];
+// src/Services/Ai/MyImageOnlyService.cs
+public class MyImageOnlyService : ITextToImageProvider
+{
+    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default) { ... }
+    // No text methods — ITextToTextProvider is not implemented.
+    // Slots using this provider will receive null for textProvider — intentional.
+}
 ```
 
-No further change to `AiServiceFactory` is needed. The new provider is immediately available for assignment in any `ScheduledOrchestrationProfile` and via the global `AiProvider` configuration key.
+### Step 3 — Register as Keyed Services
+
+Add the keyed registrations to `AddXPosterAiProviders()` in `Program.cs`. Register only the interfaces the service actually implements:
+
+```csharp
+// src/Program.cs — inside AddXPosterAiProviders()
+
+// Text + Image provider
+builder.Services.AddKeyedTransient<ITextToTextProvider,  AnthropicService>(AiProvider.Anthropic);
+builder.Services.AddKeyedTransient<ITextToImageProvider, AnthropicService>(AiProvider.Anthropic);
+
+// Text-only provider
+builder.Services.AddKeyedTransient<ITextToTextProvider, MyTextOnlyService>(AiProvider.MyTextOnly);
+// No ITextToImageProvider registration — GetKeyedService returns null for this key
+
+// Image-only provider
+builder.Services.AddKeyedTransient<ITextToImageProvider, MyImageOnlyService>(AiProvider.MyImageOnly);
+// No ITextToTextProvider registration — GetKeyedService returns null for this key
+```
+
+No switch expression, no factory class, and no `_supportedProviders` set to maintain. The keyed DI registration is the single source of truth for capability availability.
 
 ### Step 4 — Add an `*OptionsExtensions.cs` file
 
@@ -349,16 +459,166 @@ Key rules for this file:
 
 ---
 
+## Adding a New Feed URL Provider
+
+The feed URL provider supplies the list of RSS/Atom URLs that `FeedService` fetches on every timer-trigger execution. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions:Urls` list in app settings. If you need to source URLs from a different store — a database, a remote API, Azure App Configuration, or a feature-flag service — implement `IFeedUrlProvider` and swap the registration in `Program.cs`.
+
+### Contract
+
+```csharp
+// src/Contracts/IFeedUrlProvider.cs
+public interface IFeedUrlProvider
+{
+    IReadOnlyList<string> GetUrls();
+}
+```
+
+`GetUrls()` must:
+- Return an `IReadOnlyList<string>` of absolute RSS/Atom feed URLs.
+- Return an **empty list** — never `null` — when no URLs are configured. `FeedOrchestrator` treats an empty list as a valid no-op and emits a `LogWarning` without calling any AI provider.
+- Be **synchronous and cheap**. `FeedService` calls `GetUrls()` once per execution, before issuing any HTTP request. Load data at construction time or cache it; do not make blocking I/O calls inside `GetUrls()`.
+
+### Step 1 — Implement IFeedUrlProvider
+
+```csharp
+// src/Services/DatabaseFeedUrlProvider.cs
+using XPoster.Contracts;
+
+namespace XPoster.Services;
+
+/// <summary>
+/// Loads RSS/Atom feed URLs from a remote database, refreshed at startup.
+/// </summary>
+public class DatabaseFeedUrlProvider : IFeedUrlProvider
+{
+    private readonly IReadOnlyList<string> _urls;
+
+    public DatabaseFeedUrlProvider(IMyDatabaseClient db)
+    {
+        // Load once at construction time; FeedService calls GetUrls() synchronously.
+        _urls = db.FetchFeedUrls().ToList().AsReadOnly();
+    }
+
+    public IReadOnlyList<string> GetUrls() => _urls;
+}
+```
+
+> If your URL source changes frequently and must be refreshed between executions, wrap the load in a cached background service and inject the cache here rather than fetching inside `GetUrls()`. The synchronous contract of the interface must be respected — `FeedService` does not `await` this call.
+
+### Step 2 — Register in DI
+
+Replace the existing `ConfigurationFeedUrlProvider` registration in `Program.cs` with your implementation. Keep the lifetime as `Singleton` — `FeedService` is resolved per-trigger and `GetUrls()` must be cheap.
+
+```csharp
+// src/Program.cs
+// Remove or comment out:
+// builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
+
+// Add your implementation:
+builder.Services.AddSingleton<IFeedUrlProvider, DatabaseFeedUrlProvider>();
+```
+
+No other change is required. `FeedService` and `FeedOrchestrator` depend only on `IFeedUrlProvider` — they are unaware of the concrete implementation.
+
+### Step 3 — Remove the `FeedOptions__Urls__*` configuration keys (optional)
+
+If your new provider does not use `FeedOptions`, you can remove the `FeedOptions__Urls__*` keys from `local.settings.json` and Azure App Settings. The `ConfigurationFeedUrlProvider` binding will no longer be active.
+
+> The `FeedOptions` resilience keys (`AttemptTimeoutSeconds`, `RetryCount`, etc.) are consumed by the HTTP client pipeline registered in `HttpClientExtensions`, **not** by `ConfigurationFeedUrlProvider`. Removing the URL keys does not affect HTTP resilience configuration.
+
+---
+
+## Adding a New Tag Replacement Provider
+
+The tag replacement provider resolves the word-to-hashtag map consumed by `FeedOrchestrator` at Step 3 of its pipeline. The default implementation, `ConfigurationTagReplacementProvider`, reads the map from `TagReplacementOptions:Replacements` in app settings. If you need to source replacements from a different store — a database, a remote API, Azure App Configuration, or Key Vault — implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
+
+### Contract
+
+```csharp
+// src/Contracts/ITagReplacementProvider.cs
+public interface ITagReplacementProvider
+{
+    IReadOnlyDictionary<string, string> GetReplacements();
+}
+```
+
+`GetReplacements()` must:
+- Return an `IReadOnlyDictionary<string, string>` mapping plain words (keys) to their hashtag replacements (values).
+- Return an **empty dictionary** — never `null` — when no replacements are configured. `FeedOrchestrator` treats an empty map as a valid no-op.
+- Be **synchronous and cheap**. `FeedOrchestrator` calls it twice per execution (once for feed keyword filtering, once for post-summary replacement per sender). Load data at construction time or cache it; do not make blocking HTTP calls inside `GetReplacements()`.
+
+### Step 1 — Implement ITagReplacementProvider
+
+```csharp
+// src/Orchestrators/DatabaseTagReplacementProvider.cs
+using XPoster.Contracts;
+
+namespace XPoster.Orchestrators;
+
+/// <summary>
+/// Loads word-to-hashtag replacements from a remote database, refreshed at startup.
+/// </summary>
+public class DatabaseTagReplacementProvider : ITagReplacementProvider
+{
+    private readonly IReadOnlyDictionary<string, string> _replacements;
+
+    public DatabaseTagReplacementProvider(IMyDatabaseClient db)
+    {
+        // Load once at construction; FeedOrchestrator calls GetReplacements() synchronously.
+        var rows = db.FetchReplacements();
+        _replacements = rows.ToDictionary(
+            r => r.Word,
+            r => r.Hashtag,
+            StringComparer.OrdinalIgnoreCase);
+    }
+
+    public IReadOnlyDictionary<string, string> GetReplacements() => _replacements;
+}
+```
+
+> Use `StringComparer.OrdinalIgnoreCase` on the dictionary to honour the case-insensitive matching contract. `FeedOrchestrator.ReplaceEveryFirstOccurrenceOf()` performs its own case-insensitive scan, but a case-insensitive dictionary prevents duplicate keys with different casing from causing silent overrides.
+
+### Step 2 — Register in DI
+
+Replace the existing `ConfigurationTagReplacementProvider` registration in `Program.cs` with your implementation. The registration must remain `Singleton` — `FeedOrchestrator` is resolved per-trigger and expects the provider to be cheap to call.
+
+```csharp
+// src/Program.cs
+// Remove or comment out:
+// builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
+
+// Add your implementation:
+builder.Services.AddSingleton<ITagReplacementProvider, DatabaseTagReplacementProvider>();
+```
+
+No other change is required. `FeedOrchestrator` depends only on `ITagReplacementProvider` — it is unaware of the concrete implementation.
+
+### Step 3 — Remove the `TagReplacementOptions` configuration keys (optional)
+
+If your new provider does not use `TagReplacementOptions`, you can remove the `TagReplacementOptions__Replacements__*` keys from `local.settings.json` and Azure App Settings. The `ConfigurationTagReplacementProvider` binding will no longer be active.
+
+> If you keep the configuration keys but switch to a different provider, the bound `TagReplacementOptions` values are simply ignored — no error is raised.
+
+---
+
 ## Design Constraints
 
 All extensions must respect the following invariants to integrate correctly with the pipeline:
 
 - **Senders must be stateless.** Do not cache authentication tokens in instance fields; inject them via `IOptions<TCredentials>` (bound at startup from Key Vault via the Configuration Provider). The DI container manages lifetime.
 - **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
-- **`MessageMaxLength` must be accurate.** Orchestrators rely on this value to truncate content before calling `SendAsync`. An incorrect value causes silent data loss at the platform layer.
-- **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
-- **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
-- **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
+- **`MessageMaxLenght` must be accurate.** `FeedOrchestrator` relies on this value to size AI summarisation calls. An incorrect value causes content that is either silently truncated at the platform layer or wastes character budget on secondary re-summarisation.
+- **`OrchestrateAsync` must return an empty dictionary with `SendIt = false`, not throw, when no content can be produced.** `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
+- **`OrchestrateAsync` returns one entry per configured sender.** The dictionary key is `SenderPlatform`; a `null` value signals content generation failure for that specific sender. `BaseOrchestrator.PostAsync` skips null entries with a warning log and returns `false` for the overall slot.
+- **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
+- **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a dictionary of posts. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `BaseOrchestrator.PostAsync`, which dispatches all senders in parallel via `Task.WhenAll`.
+- **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return an empty dictionary early when `textProvider` is null and text generation is required.
+- **Senders in a multi-platform slot must be declared in descending `MessageMaxLength` order.** `OrchestratorFactory` preserves declaration order and passes it to the orchestrator. `FeedOrchestrator` uses index 0 (widest limit) as the primary sender for base summary and image generation.
+- **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
+- **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
+- **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **`IFeedUrlProvider` must return an empty list — never `null`.** `FeedService` iterates the result directly; returning `null` causes a `NullReferenceException` at runtime.
+- **`ITagReplacementProvider` must return an empty dictionary — never `null`.** `FeedOrchestrator` iterates the result directly without a null-guard; returning `null` causes a `NullReferenceException` at runtime.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

@@ -6,7 +6,7 @@ namespace XPoster;
 /// <summary>
 /// Azure Function entry point for XPoster. Triggered on a cron schedule defined by the
 /// <c>CronSchedule</c> app setting; selects the appropriate orchestrator for the current hour
-/// and publishes a post to the configured social-media platform.
+/// and publishes posts to all configured social-media platforms.
 /// </summary>
 public class XFunction
 {
@@ -25,38 +25,54 @@ public class XFunction
     }
 
     /// <summary>
-    /// Timer-triggered function body. Resolves the orchestrator, produces a post, and sends it.
-    /// Exceptions are re-thrown to surface failures in Azure Monitor.
+    /// Timer-triggered function body. Resolves the orchestrator, produces a dictionary of posts keyed by
+    /// <see cref="XPoster.Contracts.SenderPlatform"/>, and dispatches each post to its aligned sender in parallel.
+    /// Cancellation (graceful shutdown or timeout) is handled separately from unexpected errors.
+    /// Unexpected exceptions are re-thrown to surface failures in Azure Monitor.
     /// </summary>
     /// <param name="myTimer">Timer metadata injected by the Azure Functions runtime.</param>
+    /// <param name="cancellationToken">Cancellation token injected by the Azure Functions runtime.
+    /// Signalled on graceful shutdown or function timeout.</param>
     [Function("XPosterFunction")]
-    public async Task Run([TimerTrigger("%CronSchedule%")] TimerInfo myTimer)
+    public async Task Run([TimerTrigger("%CronSchedule%")] TimerInfo myTimer, CancellationToken cancellationToken)
     {
-        _log.LogInformation("XPoster Function started at: {0}", DateTimeOffset.UtcNow);
+        _log.LogInformation("XPoster Function started at: {Time}", DateTimeOffset.UtcNow);
 
         try
         {
             var orchestrator = _orchestratorFactory.Resolve();
 
-            if (!orchestrator.SendIt) { _log.LogInformation("Orchestrator {0} is disabled", orchestrator.Name); return; }
+            if (!orchestrator.SendIt)
+            {
+                _log.LogInformation("Orchestrator {Name} is disabled", orchestrator.Name);
+                return;
+            }
 
-            var post = await orchestrator.OrchestrateAsync();
+            var posts = await orchestrator.OrchestrateAsync(cancellationToken);
 
-            // CS8602: post can be null — guard before use
-            if (post == null) { _log.LogError($"Failed to orchestrate message with {orchestrator.Name}"); return; }
+            if (posts == null || posts.Count == 0)
+            {
+                _log.LogError("Failed to orchestrate messages with {Name}", orchestrator.Name);
+                return;
+            }
 
-            var result = await orchestrator.PostAsync(post);
+            var result = await orchestrator.PostAsync(posts, cancellationToken);
             if (!result)
             {
-                _log.LogError($"Failed to send message with {orchestrator.Name}");
+                _log.LogError("One or more senders failed with {Name}", orchestrator.Name);
             }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // Graceful shutdown or timeout — not an application error.
+            _log.LogWarning("XPoster Function was cancelled gracefully at: {Time}", DateTimeOffset.UtcNow);
         }
         catch (Exception ex)
         {
-            _log.LogError(ex, "XPoster Function causes an error: {0}", ex.Message);
+            _log.LogError(ex, "XPoster Function causes an error: {Message}", ex.Message);
             throw;
         }
 
-        _log.LogInformation($"XPoster Function ended at: {DateTimeOffset.UtcNow}");
+        _log.LogInformation("XPoster Function ended at: {Time}", DateTimeOffset.UtcNow);
     }
 }

@@ -11,6 +11,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.6] - 2026-06-26
+
+### Added
+- **Multi-platform fan-out**: a single `ScheduledOrchestrationProfile` slot can now target multiple senders via a `SenderPlatforms` list; `BaseOrchestrator.PostAsync` dispatches all senders in parallel via `Task.WhenAll`, generating the base summary and image **once** and re-summarising only when a shorter character limit requires it ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`ScheduledOrchestrationProfile.SenderPlatforms`** (`IReadOnlyList<SenderPlatform>`): replaces the previous single `SenderPlatform` field; `OrchestratorFactory` resolves all declared senders from DI and passes the list to the orchestrator ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`BaseOrchestrator.PostAsync` parallel dispatch**: dispatches all senders concurrently via `Task.WhenAll`; logs per-sender outcome (`[PostAsync]`) with structured `customDimensions.platform` and `customDimensions.succeeded`; emits a `Warning` partial-failure log when at least one sender fails; returns `false` if any sender failed ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`ISender.Platform`** property added to `ISender` contract: used by `BaseOrchestrator.PostAsync` to build the per-platform post dictionary and by `OrchestratorFactory` to resolve senders from the declared `SenderPlatforms` list ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`FeedOrchestratorFanOutTests`**: new test class covering multi-sender fan-out paths for `FeedOrchestrator` — one entry per configured sender, correct platform keys, independent truncation per `MessageMaxLenght`, null-post skipping ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`OrchestratorFactoryFanOutTests`**: new test class verifying multi-sender slot resolution, sender ordering (descending `MessageMaxLenght`), and that a single-platform slot is unaffected ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`BaseOrchestratorTests` — fan-out coverage**: new test cases for `PostAsync` parallel dispatch (all succeed), partial failure (one sender returns `false`), and full failure (all senders fail) ([#176](https://github.com/artcava/XPoster/issues/176))
+- `ITagReplacementProvider` abstraction: config-backed keyword replacement contract for orchestrators, decoupling hashtag/tag mapping from code and enabling operator-managed replacements via configuration ([#216](https://github.com/artcava/XPoster/issues/216))
+- `ConfigurationTagReplacementProvider`: `ITagReplacementProvider` implementation bound from `TagReplacementOptions`, returning the configured replacement dictionary with empty-map fallback when the section is absent ([#216](https://github.com/artcava/XPoster/issues/216))
+- `ConfigurationTagReplacementProviderTests`: new test class covering configured replacement-map return, empty-map fallback when the `TagReplacementOptions` section is absent, and `ArgumentNullException` on null options ([#216](https://github.com/artcava/XPoster/issues/216))
+- `FeedOrchestratorTests` — staged-pipeline coverage: `GetFeedUrls()` invocation, early return when the configured URL list is empty, forwarding provider URLs into `IFeedService`, tag replacement execution before image prompt generation, single retrieval of replacement map, and graceful continuation when no replacements are configured ([#216](https://github.com/artcava/XPoster/issues/216))
+- `DiWiringTests`: integration tests verifying correct capability resolution per `AiProvider` key, including null-resolution for text-only and image-only providers ([#211](https://github.com/artcava/XPoster/issues/211))
+- `AddXPosterAiProviders()` DI extension method; registers capability interfaces as keyed services by `AiProvider` ([#211](https://github.com/artcava/XPoster/issues/211))
+- `ITextToImageProvider` interface: capability contract for image generation ([#211](https://github.com/artcava/XPoster/issues/211))
+- `ITextToTextProvider` interface: capability contract for text summarisation and image prompt generation ([#211](https://github.com/artcava/XPoster/issues/211))
+- `OrchestratorFactoryTests` ([#211](https://github.com/artcava/XPoster/issues/211)): all `ScheduledOrchestrationProfile` usages updated to the new two-field constructor signature. Four new tests added: `Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider`, `Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider`, `Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent` (verifies DeepSeek+FalAi split scenario with no cross-contamination), `Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider` (text-only slot).
+- `ScheduledOrchestrationProfileTests` ([#211](https://github.com/artcava/XPoster/issues/211)): new test class (`tests/Abstraction/`) covering all constructor combinations — both providers set, text-only, image-only, neither (PowerLaw pattern), canonical split-provider (DeepSeek+FalAi), and hour boundary values `[0, 6, 23]`.
+- `DefaultSlotProfileProviderTests` ([#211](https://github.com/artcava/XPoster/issues/211)): new test class verifying slot count (4), hour uniqueness, that FeedOrchestrator slots at hours 6 and 8 have both `TextProvider` and `ImageProvider` configured and non-`None`, that PowerLaw slots at hours 14 and 16 have both `null`, that no DryRun slot exists in the production schedule, and that `DryRunSlotProfileProvider` appends a slot with both providers configured.
+- `FeedOrchestratorTests` ([#211](https://github.com/artcava/XPoster/issues/211)): two new tests covering the `GetImagePromptAsync` empty-string and whitespace fallback branch — verifies that when `GetImagePromptAsync` returns an empty or whitespace result, `GenerateImageAsync` is called with the summary as the fallback prompt, and the post is published with the image.
+
+### Changed
+- **`DefaultSlotProfileProvider`**: slot at hour 6 removed; slot at hour 8 updated to target `SenderPlatforms = [LinkedIn, X, Instagram]` as a single fan-out slot — content generated once, dispatched in parallel to all three platforms ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`OrchestratorFactory.Resolve()`**: now resolves a `IReadOnlyList<ISender>` (one per entry in `SenderPlatforms`) instead of a single `ISender`; senders are ordered descending by `MessageMaxLenght` to ensure the base summary is sized for the widest constraint first ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`BaseOrchestrator` and all concrete orchestrators**: `OrchestrateAsync()` return type changed from `Post?` to `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; `PostAsync` signature updated accordingly ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`FeedOrchestrator.OrchestrateAsync()`**: generates base summary sized for `senders[0].MessageMaxLenght` (widest sender); re-summarises for each subsequent sender only when its `MessageMaxLenght` is smaller than the previous sender's ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`docs/architecture.md`**: architecture section, `OrchestratorFactory` description, Mermaid sequence diagram, and `ScheduledOrchestrationProfile` schema updated to reflect fan-out ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`docs/configuration.md`**: `ScheduledOrchestrationProfile` table updated; `SenderPlatforms` list field documented with fan-out example ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`docs/monitoring.md`**: new §6 Fan-Out Dispatch Observability section; per-sender log events table; two new KQL queries (per-sender publish outcome, fan-out slots with partial failures); fan-out partial failure alert rule added ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`README.md`**: architecture ASCII diagram updated with fan-out layer; Time-based Strategy table updated to `SenderPlatforms` column; Multi-Platform Fan-Out feature bullet added; Phase 2 roadmap item added ([#176](https://github.com/artcava/XPoster/issues/176))
+- **`tests/README.md`**: fan-out mocking patterns added (`IReadOnlyList<ISender>`, multi-sender `OrchestrateAsync`, `PostAsync` parallel dispatch and partial failure); test structure tree updated; checklist updated with fan-out-specific items ([#176](https://github.com/artcava/XPoster/issues/176))
+- `FeedOrchestrator` refactored to an explicit staged pipeline (`GetFeedUrls` → `GetFeedsAsync` → `GetSummaryAsync` → tag replacement → `GetImagePromptAsync` → `GenerateImageAsync` → `BuildPost`) with structured logging at each decision point; hashtag replacement is now externalised through `ITagReplacementProvider` instead of inline logic ([#216](https://github.com/artcava/XPoster/issues/216))
+- `DefaultSlotProfileProvider`: any slot previously referencing `AiProvider.DeepSeekWithFal` updated to `AiProvider.DeepSeek` or `AiProvider.FalAi` ([#211](https://github.com/artcava/XPoster/issues/211))
+- `PerplexityService.GenerateImageAsync` previously returned `byte[0]` silently; this silent failure is eliminated — the method is removed; misconfiguration surfaces explicitly at point of use ([#211](https://github.com/artcava/XPoster/issues/211))
+- `FalAiImageService` implements `ITextToImageProvider` only ([#211](https://github.com/artcava/XPoster/issues/211))
+- `DeepSeekService` and `PerplexityService` implement `ITextToTextProvider` only ([#211](https://github.com/artcava/XPoster/issues/211))
+- `OpenAiService` and `AzureFoundryService` implement both capability interfaces ([#211](https://github.com/artcava/XPoster/issues/211))
+- Per-slot AI provider selection preserved: `ScheduledOrchestrationProfile` now carries independent `TextProvider` and `ImageProvider` fields, each resolved separately at runtime ([#211](https://github.com/artcava/XPoster/issues/211))
+- `OrchestratorFactory` resolves two keyed capability services via `GetKeyedService` (nullable); `IAiServiceFactory` dependency removed ([#211](https://github.com/artcava/XPoster/issues/211))
+- `FeedOrchestrator` depends on `ITextToTextProvider?` + `ITextToImageProvider?` instead of `IAiService` ([#211](https://github.com/artcava/XPoster/issues/211))
+- Replaced `MessageSender` enum with `SenderPlatform` enum; platform and orchestrator identity are now independent (ADR-005)
+- `OrchestratorFactory` resolves `ISender` from `SenderPlatform`; adding a new orchestrator no longer requires enum changes
+- `ScheduledOrchestrationProfile` uses `SenderPlatform` instead of `MessageSender`
+
+### Removed
+- `PerplexityService.GenerateImageAsync`: method removed; Perplexity is a text-only provider ([#211](https://github.com/artcava/XPoster/issues/211))
+- `AiServiceFactory` / `IAiServiceFactory` ([#211](https://github.com/artcava/XPoster/issues/211))
+- `IAiService` monolithic interface ([#211](https://github.com/artcava/XPoster/issues/211))
+- `AiProvider.DeepSeekWithFal`: enum value removed; replaced by independent `AiProvider.DeepSeek` and `AiProvider.FalAi` keys ([#211](https://github.com/artcava/XPoster/issues/211))
+- `HybridAiService`: no longer needed; `DeepSeek` and `FalAi` are now independent `AiProvider` keys ([#211](https://github.com/artcava/XPoster/issues/211))
+- `MessageSender` enum
+
+---
+
 ## [0.1.5] - 2026-06-22
 
 ### Added
@@ -52,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `src/Abstraction/` split into `src/Abstraction/` (base classes and shared profile records: `BaseOrchestrator`, `ScheduledOrchestrationProfile`) and `src/Contracts/` (all interfaces, enums, and extension methods: `I*.cs`, `AiProvider`, `AiProviderExtensions`, `Enums`). Namespace `XPoster.Abstraction` → `XPoster.Contracts` for moved files; all consumer `using` directives updated.
   - `src/Implementation/` renamed to `src/Orchestrators/` (concrete orchestrators, `OrchestratorFactory`, `AiServiceFactory`, slot profile providers). Namespace `XPoster.Implementation` → `XPoster.Orchestrators`; all consumer `using` directives updated.
   - `src/Models/` reorganised with provider subfolders (`AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) for discoverability; namespace `XPoster.Models` unchanged across all files.
-  - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
+  - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
   - `tests/Abstraction/` renamed to `tests/Contracts/`; `tests/Implementation/` renamed to `tests/Orchestrators/` to mirror source layout.
   - Documentation updated: `README.md`, `tests/README.md`, `docs/extending-xposter.md` aligned to new folder paths and namespace names.
 - **`docs/architecture.md`** — `PerplexityService` added to the *AI Provider Services* section; supported provider count updated from 4 to 5 ([#91](https://github.com/artcava/XPoster/issues/91)).
@@ -138,7 +194,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions upgraded to Node.js 24 compatible versions ([#122](https://github.com/artcava/XPoster/issues/122), [#137](https://github.com/artcava/XPoster/issues/137))
 
 ### Fixed
-- **Empty `choices[]` guard** across all three chat-based services ([#124](https://github.com/artcava/XPoster/issues/124))
+- Empty `choices[]` guard across all three chat-based services ([#124](https://github.com/artcava/XPoster/issues/124))
 - Azure Functions isolated deployment artifacts: corrected publish path ([#102](https://github.com/artcava/XPoster/issues/102))
 - Keyed DI resolution for AI service in `Program.cs` ([#104](https://github.com/artcava/XPoster/issues/104))
 - Removed unused `System.ServiceModel.Syndication` package dependency ([#85](https://github.com/artcava/XPoster/issues/85))
@@ -193,7 +249,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/artcava/XPoster/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/artcava/XPoster/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/artcava/XPoster/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3

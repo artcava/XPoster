@@ -1,21 +1,22 @@
 # Community 42
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **PerplexityService.cs** (13 connections)
-- **while()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **nameof()** (2 connections)
-- **if()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **InSender.cs** (11 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **catch()** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **SendAsync()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **using()** (2 connections)
+- **Exception()** (2 connections)
+- **InvalidOperationException()** (2 connections)
 
 ## Relationships
 
-- [[Community 60]] (6 shared connections)
+- [[Community 129]] (3 shared connections)
 
 ## Audit Trail
 

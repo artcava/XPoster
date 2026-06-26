@@ -1,20 +1,20 @@
 # Community 53
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **if()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **FalAiImageService()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
 - **XPoster.Services** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 101]] (4 shared connections)
 
 ## Audit Trail
 

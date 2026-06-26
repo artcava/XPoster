@@ -39,7 +39,7 @@
 ### 🤖 Content Generation
 - **AI-Powered Summarization**: Intelligent RSS feed summaries via a configurable AI model of your choice
 - **Image Generation**: Automatic contextual image creation using any supported image generation model
-- **Smart Hashtags**: Automatic keyword conversion to optimized hashtags
+- **Smart Hashtags**: Automatic keyword-to-hashtag conversion driven by a configurable replacement map (`TagReplacementOptions`) — no redeployment required to change the hashtag set
 - **Multi-Strategy**: Support for different content orchestration algorithms
 - **Provider Agnostic**: The AI provider (e.g. OpenAI, Azure AI Foundry) and the specific model are selected by the operator through configuration — no code change required to swap models
 
@@ -47,6 +47,7 @@
 - **Twitter/X**: Automated posting with image support
 - **LinkedIn**: Posts on personal profiles and company pages
 - **Instagram**: Publishing via Graph API (in development)
+- **Multi-Platform Fan-Out**: A single scheduled slot can publish to multiple platforms simultaneously. The base summary and image are generated once; per-platform re-summarisation is applied only when needed, reducing AI token and image credit consumption by up to ~67% compared to separate slots.
 
 ### ⚙️ Automation & Scheduling
 - **Timer-Based Execution**: Configurable automatic execution
@@ -67,27 +68,27 @@
 XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
 
 - **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
-- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and sender for that slot (Strategy + Factory patterns)
-- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; adding a new platform requires zero changes to existing components
+- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
+- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
 
-The AI layer is abstracted behind `IAiService` and resolved at runtime by `AiServiceFactory`, enabling per-slot provider assignment and global override via configuration without touching orchestrator code.
+The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
 
-Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKeyVaultService`), which wraps `Azure.Security.KeyVault.Secrets` and is consumed by sender plugins at runtime to retrieve OAuth credentials from Azure Key Vault.
+Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing.
 
 ```
 ┌────────────────────────────┐
 │   Azure Timer Trigger      │
 │   (configurable schedule)  │
-└───────────┬────────────────┘
+└───────────┬────────────┘
             │
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
 │   (ISlotProfileProvider)   │
-└───────────┬────────────────┘
+└───────────┬────────────┘
             │
-    ┌───────┴────────┬──────────────┐
+    ┌──────┴────────┬────────────┐
     ▼                ▼              ▼
 ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
 │     Feed     │   │  PowerLaw    │   │      No      │
@@ -97,28 +98,30 @@ Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKey
       └──────┬───────────┘
              │
              ▼
-    ┌────────────────────┐
-    │   Services         │
-    ├────────────────────┤
-    │ • AiServiceFactory │ ◄─── Resolves IAiService by AiProvider
-    │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
-    │ • Feed Service     │ ◄─── RSS Parser
-    │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
-    │ • KeyVaultService  │ ◄─── Azure Key Vault secret resolution
-    └────────┬───────────┘
+    ┌────────────────────────────┐
+    │   Services                 │
+    ├────────────────────────────┤
+    │ • ITextToTextProvider      │ ◄─── Keyed by AiProvider (text capability)
+    │ • ITextToImageProvider     │ ◄─── Keyed by AiProvider (image capability)
+    │ • IFeedUrlProvider         │ ◄─── RSS feed URL list (config-backed)
+    │ • ITagReplacementProvider  │ ◄─── Hashtag map resolution (config-backed)
+    │ • FeedService              │ ◄─── RSS/Atom parser + resilient HTTP client
+    │ • CryptoService            │ ◄─── CryptoPrices HTTP client
+    └────────┬───────────────────┘
              │
              ▼
-    ┌────────────────────┐
-    │ Sender Plugins     │
-    ├────────────────────┤
-    │ • XSender          │ ◄─── Twitter/X API
-    │ • InSender         │ ◄─── LinkedIn API
-    │ • IgSender         │ ◄─── Instagram API
-    │ • DryRunSender     │ ◄─── Local testing only (no outbound API calls)
-    └────────────────────┘
+    ┌──────────────────────────────┐
+    │ BaseOrchestrator.PostAsync   │  ◄── Fan-out: Task.WhenAll per sender
+    └──┬──────┬──────┬──────┬──────┘
+       │        │        │        │
+       ▼        ▼        ▼        ▼
+  ┌────────┐ ┌────────┐ ┌─────────┐ ┌────────────┐
+  │XSender │ │InSender│ │IgSender │ │DryRunSend. │
+  │ X/Twit.│ │LinkedIn│ │Instagram│ │(local only)│
+  └────────┘ └────────┘ └─────────┘ └────────────┘
 ```
 
-> 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin, Abstract Factory), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
+> 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
 
 > 🤖 For AI-assisted development, an auto-generated code graph is available at [`docs/agent-graph/`](docs/agent-graph/). See [docs/agent-graph.md](docs/agent-graph.md) for usage.
 
@@ -140,27 +143,24 @@ Secret resolution for platform tokens is handled by **`KeyVaultService`** (`IKey
 
 ### AI & ML
 
-The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abstraction for .NET AI services. Each AI provider is registered as a keyed `IAiService` in the DI container and resolved at runtime by `AiServiceFactory` based on the `AiProvider` enum value set on each `ScheduledOrchestrationProfile`.
+The AI layer uses two capability interfaces — `ITextToTextProvider` (text summarisation + image prompt generation) and `ITextToImageProvider` (image generation) — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. Each `ScheduledOrchestrationProfile` carries independent `TextProvider` and `ImageProvider` fields, allowing different providers per capability within the same slot. `OrchestratorFactory` resolves each independently; a `null` field means the capability is not assigned for that slot and the orchestrator degrades gracefully.
 
 | Package | Version | Role |
 |---------|---------|------|
 | `Microsoft.Extensions.AI` | 10.6.0 | Provider-agnostic AI abstraction (chat + embeddings) |
 | `Microsoft.Extensions.AI.OpenAI` | 10.6.0 | OpenAI/Azure OpenAI bridge for `Microsoft.Extensions.AI` |
-| `Azure.AI.OpenAI` | 2.1.0 | Azure OpenAI REST client (used by `OpenAiService` and `AzureFoundryService`) |
+| `Azure.AI.OpenAI` | 2.1.0 | Azure OpenAI REST client |
 | `Azure.Identity` | 1.13.2 | Managed Identity / `DefaultAzureCredential` support |
 
 **Supported AI providers at runtime:**
 
-| `AiProvider` enum value | Concrete service | Text backend | Image backend |
-|-------------------------|-----------------|--------------|---------------|
-| `OpenAi` | `OpenAiService` | Azure OpenAI / OpenAI-compatible endpoint | Same endpoint (e.g. `dall-e-3`, `gpt-image-1`) |
-| `AzureFoundry` | `AzureFoundryService` | Azure AI Foundry deployment | Azure AI Foundry deployment |
-| `DeepSeekWithFal` | `HybridAiService` | `DeepSeekService` → DeepSeek API | `FalAiImageService` → fal.ai FLUX.2 Turbo |
-| `Perplexity` | `PerplexityService` | Perplexity Sonar Chat Completions API | ❌ Not supported — posts published text-only |
-
-> ℹ️ `DeepSeekService` and `FalAiImageService` are independent services, each with their own registration and test coverage. `HybridAiService` composes the two, delegating text requests to `DeepSeekService` and image requests to `FalAiImageService`. This composition is transparent to orchestrators, which always program to `IAiService`.
->
-> ℹ️ `PerplexityService` implements `IAiService` but does not support image generation. `GenerateImageAsync` always returns an empty byte array and logs a `Warning` — posts are published text-only when this provider is active.
+| `AiProvider` value | `ITextToTextProvider` | `ITextToImageProvider` | Notes |
+|---|---|---|---|
+| `OpenAi` | ✅ `OpenAiService` | ✅ `OpenAiService` | Full text + image |
+| `AzureFoundry` | ✅ `AzureFoundryService` | ✅ `AzureFoundryService` | Full text + image |
+| `DeepSeek` | ✅ `DeepSeekService` | ❌ | Text only — posts published without image |
+| `Perplexity` | ✅ `PerplexityService` | ❌ | Text only — posts published without image |
+| `FalAi` | ❌ | ✅ `FalAiImageService` | Image only — only valid for orchestrators that handle null `textProvider` |
 
 ### Social Media APIs
 
@@ -184,7 +184,7 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 |---------|---------|------|
 | `Microsoft.Extensions.Http.Resilience` | 9.1.0 | Retry / resilience pipelines for outbound HTTP clients (`IHttpClientFactory`) |
 | `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
-| `Azure.Security.KeyVault.Secrets` | 4.7.0 | Azure Key Vault secret retrieval (used by `KeyVaultService`) |
+| `Azure.Extensions.AspNetCore.Configuration.Secrets` | 1.3.2 | Azure Key Vault Configuration Provider (startup secret loading) |
 | `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
 
 > ℹ️ `Microsoft.Extensions.Http` is resolved transitively and is not pinned explicitly in the project file to avoid NU1603 version conflicts.
@@ -205,14 +205,12 @@ The AI layer is built on **Microsoft.Extensions.AI**, the provider-agnostic abst
 
 | Provider | Website | Capabilities | Setup Guide |
 |----------|---------|--------------|-------------|
-| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [docs/integrations/setup-azure-foundry.md](docs/integrations/setup-azure-foundry.md) |
-| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [docs/integrations/setup-openai.md](docs/integrations/setup-openai.md) |
-| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [docs/integrations/setup-deepseek.md](docs/integrations/setup-deepseek.md) |
-| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [docs/integrations/setup-falai.md](docs/integrations/setup-falai.md) |
-| **Perplexity** | [perplexity.ai](https://www.perplexity.ai/) | Text only | [docs/integrations/setup-perplexity.md](docs/integrations/setup-perplexity.md) |
+| **Azure AI Foundry** | [azure.microsoft.com/ai-foundry](https://azure.microsoft.com/en-us/products/ai-foundry/) | Text + Image | [setup-azure-foundry.md](docs/integrations/AiProviders/setup-azure-foundry.md) |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com/) | Text + Image | [setup-openai.md](docs/integrations/AiProviders/setup-openai.md) |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com/) | Text only | [setup-deepseek.md](docs/integrations/AiProviders/setup-deepseek.md) |
+| **fal.ai** | [fal.ai](https://fal.ai/) | Image only | [setup-falai.md](docs/integrations/AiProviders/setup-falai.md) |
+| **Perplexity** | [perplexity.ai](https://www.perplexity.ai/) | Text only | [setup-perplexity.md](docs/integrations/AiProviders/setup-perplexity.md) |
 
-> ℹ️ **DeepSeek** and **fal.ai** are used together as the `HybridAiService` — DeepSeek handles text generation and fal.ai handles image generation. See [docs/architecture.md](docs/architecture.md) for details.
->
 > ⚠️ The setup guides above are present and cover account creation, API key configuration, and troubleshooting. Some validation tasks (model names, key naming, SDK version checks) are tracked in issues [#130](https://github.com/artcava/XPoster/issues/130), [#131](https://github.com/artcava/XPoster/issues/131), and [#132](https://github.com/artcava/XPoster/issues/132) and will be completed before the next stable release.
 
 ### Clone the Repository
@@ -265,9 +263,9 @@ All configuration is driven by environment variables — there is no application
 - **Locally**: copy [`src/local.settings.json.example`](src/local.settings.json.example) to `src/local.settings.json` and fill in your values.
 - **On Azure**: add the same variables as Application Settings (**Azure Portal → Function App → Configuration**).
 
-Platform OAuth credentials (Twitter/X, LinkedIn, Instagram) are **not** stored as environment variables. They are resolved at runtime by `KeyVaultService` directly from **Azure Key Vault**, using `DefaultAzureCredential` — which picks up your `az login` session locally and the Function App's Managed Identity in production.
+Platform OAuth credentials (Twitter/X, LinkedIn, Instagram) are **not** stored as environment variables. They are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing. `DefaultAzureCredential` picks up your `az login` session locally and the Function App's Managed Identity in production.
 
-> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
+> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, `TagReplacementOptions` hashtag map, slot profile fan-out examples, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
@@ -381,14 +379,17 @@ az functionapp config appsettings set \
 
 ### Time-based Strategy (ISlotProfileProvider)
 
-The production schedule is defined in `DefaultSlotProfileProvider`, which returns four fixed profiles:
+The production schedule is defined in `DefaultSlotProfileProvider`, which returns the fixed profiles below. Each slot declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` — `null` means the capability is not assigned for that slot. The `SenderPlatforms` column lists all platforms targeted in a single slot; content is generated once and fanned out in parallel.
 
-| UTC Hour | Sender | Orchestrator | AI Provider |
-|----------|--------|--------------|-------------|
-| 6 | `InSummaryFeed` | `FeedOrchestrator` | OpenAi |
-| 8 | `XSummaryFeed` | `FeedOrchestrator` | OpenAi |
-| 14 | `InPowerLaw` | `PowerLawOrchestrator` | *(default)* |
-| 16 | `XPowerLaw` | `PowerLawOrchestrator` | *(default)* |
+| UTC Hour | `SenderPlatforms` | Orchestrator | `TextProvider` | `ImageProvider` |
+|----------|-------------------|--------------|----------------|-----------------|
+| 8 | `LinkedIn`, `X`, `Instagram` | `FeedOrchestrator` | `OpenAi` | `AzureFoundry` |
+| 14 | `LinkedIn` | `PowerLawOrchestrator` | `null` | `null` |
+| 16 | `X` | `PowerLawOrchestrator` | `null` | `null` |
+
+> ℹ️ The fan-out slot at hour 8 generates the base summary and image **once** (sized for LinkedIn's 700-char limit), then re-summarises only when needed for X (280 chars). Instagram receives the same content as LinkedIn when the base fits. This reduces AI and image credit consumption compared to three separate scheduled slots.
+
+> ℹ️ `PowerLawOrchestrator` slots at 14 and 16 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
 
 `OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
 
@@ -408,10 +409,10 @@ To run the full pipeline locally without publishing to any social platform, acti
 
 | Key | Value | Effect |
 |-----|-------|--------|
-| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRunSend` entry at hour 9 |
+| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRun` entry at hour 9 |
 | `ForceHour` | `9` | Overrides the UTC clock so `OrchestratorFactory` selects the dry-run slot at startup |
 
-`DryRunSender` will probe Key Vault connectivity (reads the `XApiKey` secret), log the generated post content (character count + full text and image presence), and return `true` — without calling any social platform API.
+`DryRunSender` runs the full orchestration pipeline — RSS fetch, AI summarisation, tag replacement, image generation — but **never publishes to any social platform**.
 
 > ⚠️ `EnableDryRunSlot` defaults to `false`. In production this key must be absent or explicitly set to `"false"`. Hour 9 is **never** part of the production schedule.
 
@@ -432,9 +433,11 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add an enum value to `MessageSender`, configure a `ScheduledOrchestrationProfile` | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
-| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()`, register in `OrchestratorFactory` | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
-| **AI Providers** (`IAiService`) | Implement `IAiService`, register as a keyed service in DI, add an `AiProvider` enum value | All orchestrators depend only on `IAiService`, so swapping or adding a provider requires no changes outside the service layer and `Program.cs` |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add a value to `SenderPlatform`, add the platform to a `ScheduledOrchestrationProfile`'s `SenderPlatforms` list | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
+| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()` returning `IReadOnlyDictionary<SenderPlatform, Post?>`, implement `SupportedPlatforms`, add a `ScheduledOrchestrationProfile` entry | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
+| **AI Providers** (`ITextToTextProvider` / `ITextToImageProvider`) | Implement the relevant capability interface(s), register as keyed services in `AddXPosterAiProviders()`, add an `AiProvider` enum value | Providers expose only the capabilities they support; `null` resolution is the canonical signal for "capability not available" — no switch expressions or factory classes to modify |
+| **Feed URL Providers** (`IFeedUrlProvider`) | Implement `IFeedUrlProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationFeedUrlProvider` | Feed URLs are a swappable dependency; sourcing them from a database or remote config requires zero changes to `FeedService` or any orchestrator |
+| **Tag Replacement Providers** (`ITagReplacementProvider`) | Implement `ITagReplacementProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationTagReplacementProvider` | The hashtag map is externalised from orchestrator code; changing, adding, or removing replacements requires only a configuration update — no redeployment |
 | **Scheduling profiles** (`ISlotProfileProvider`) | Implement `ISlotProfileProvider` (or subclass `DryRunSlotProfileProvider` as a decorator) and register it in `Program.cs` | The schedule is a swappable dependency injected into `OrchestratorFactory` — operators can alter or extend the slot list without touching factory or orchestrator code |
 
 > 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
@@ -449,11 +452,11 @@ The test suite uses **xUnit + Moq** with a unit-first approach. Tests are organi
 tests/
 ├── Contracts/        # AiProviderExtensions, BaseOrchestrator abstract contracts
 ├── Helpers/          # shared HTTP mock helpers for resilience tests
-├── Orchestrators/    # FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory, AiServiceFactory…
+├── Orchestrators/    # FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory, ConfigurationTagReplacementProvider…
 ├── Integration/      # Polly resilience pipelines — not run in CI
 ├── Models/           # domain model invariants, options validators
 ├── SenderPlugins/    # XSender, InSender, IgSender, DryRunSender
-└── Services/         # OpenAiService, AzureFoundryService, KeyVaultService…
+└── Services/         # OpenAiService, AzureFoundryService, DeepSeekService, FalAiImageService, PerplexityService…
 ```
 
 ### Running Tests
@@ -480,7 +483,8 @@ Key monitoring capabilities at a glance:
 - **Execution tracking**: every `XPosterFunction` invocation appears as a `request` in Application Insights
 - **Dependency tracing**: outbound HTTP calls to AI providers, social media APIs, and `cryptoprices.cc` are captured as `dependencies`
 - **Structured logging**: all `ILogger<T>` calls flow to the `traces` table with full custom dimensions
-- **Alerting**: recommended rules cover consecutive errors, high latency, token budget, and function downtime
+- **Fan-out observability**: per-sender publish outcomes and partial failures are logged independently by `BaseOrchestrator.PostAsync` with structured `customDimensions.platform` and `customDimensions.succeeded` fields
+- **Alerting**: recommended rules cover consecutive errors, high latency, token budget, function downtime, and fan-out partial failures
 
 > 📖 Full setup (resource creation, connection string, `Program.cs` wiring, KQL queries, alert rules, Bicep IaC, and live debugging): **[docs/monitoring.md](docs/monitoring.md)**.
 
@@ -501,7 +505,8 @@ Key monitoring capabilities at a glance:
 - [x] Configuration externalization
 - [x] AI provider expansion
 - [x] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [ ] Extension-point refactoring — ADR-005 status: **Proposed** — implementation tracked in [Issue #134](https://github.com/artcava/XPoster/issues/134)
+- [x] `FeedOrchestrator` explicit pipeline + tag replacement externalization [Issue #216](https://github.com/artcava/XPoster/issues/216)
+- [x] Multi-platform fan-out: single slot publishes to multiple platforms in parallel, AI generated once [Issue #176](https://github.com/artcava/XPoster/issues/176)
 - [x] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
@@ -568,9 +573,9 @@ If you find this project useful, consider leaving a ⭐ on GitHub!
 
 **Made with ❤️ in Turin, Italy**
 
-[🏠 Homepage](https://xposter.artcava.net/) • 
-[📖 Documentation](docs/index.md) • 
-[🐛 Report Bug](https://github.com/artcava/XPoster/issues) • 
-[💡 Request Feature](https://github.com/artcava/XPoster/issues)
+[&#x1F3E0; Homepage](https://xposter.artcava.net/) • 
+[&#x1F4D6; Documentation](docs/index.md) • 
+[&#x1F41B; Report Bug](https://github.com/artcava/XPoster/issues) • 
+[&#x1F4A1; Request Feature](https://github.com/artcava/XPoster/issues)
 
 </div>

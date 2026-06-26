@@ -1,19 +1,20 @@
 # Community 59
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (12 connections)
-- **PostAsync_ReturnsFalse_When_Sender_IsNull()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **TestOrchestrator()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **new()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 54]] (6 shared connections)
+- [[Community 108]] (4 shared connections)
 
 ## Audit Trail
 

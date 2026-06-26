@@ -14,6 +14,7 @@ public interface IFeedService
     /// <param name="start">The inclusive start of the publication date range.</param>
     /// <param name="end">The inclusive end of the publication date range.</param>
     /// <param name="keywords">A collection of keywords; only items whose title contains at least one are returned.</param>
+    /// <param name="ct">A cancellation token to cancel the operation.</param>
     /// <returns>A collection of <see cref="RSSFeed"/> entries matching the filter criteria.</returns>
-    Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end, IEnumerable<string> keywords);
+    Task<IEnumerable<RSSFeed>> GetFeedsAsync(string url, DateTimeOffset start, DateTimeOffset end, IEnumerable<string> keywords, CancellationToken ct = default);
 }

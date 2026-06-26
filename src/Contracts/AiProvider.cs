@@ -23,7 +23,11 @@ public enum AiProvider
     [Description("Azure Foundry")]
     AzureFoundry = 3,
 
-    /// <summary>DeepSeek provider with Fal.ai integration.</summary>
+    /// <summary>DeepSeek provider (text-to-text only).</summary>
+    [Description("DeepSeek")]
+    DeepSeek = 4,
+
+    /// <summary>Fal.ai provider (text-to-image only).</summary>
     [Description("fal.ai")]
-    DeepSeekWithFal = 4,
+    FalAi = 5,
 }

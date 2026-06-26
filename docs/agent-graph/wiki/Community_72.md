@@ -1,23 +1,22 @@
 # Community 72
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (9 connections)
-- **foreach()** (2 connections)
-- **Resolve()** (2 connections)
-- **ResolveAiProvider()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **return()** (2 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ISlotProfileProvider** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,23 @@
 # Community 15
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **InSenderMissingBranchTests.cs** (12 connections)
-- **InSenderMissingBranchTests.cs** (12 connections)
-- **BuildCreds()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **BuildSender()** (2 connections)
-- **InSenderMissingBranchTests()** (2 connections)
-- **MessageMaxLenght_Returns800()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
+- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

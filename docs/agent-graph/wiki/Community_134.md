@@ -1,16 +1,15 @@
 # Community 134
 
-> 3 nodes · cohesion 1.00
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 116]] (2 shared connections)
 
 ## Audit Trail
 

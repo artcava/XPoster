@@ -1,8 +1,8 @@
 # Azure AI Foundry — Setup Guide
 
-This guide explains how to provision Azure AI Foundry and configure XPoster to use `AzureFoundryService` as the `IAiService` provider.
+This guide explains how to provision Azure AI Foundry and configure XPoster to use `AzureFoundryService` as the AI provider.
 
-> **Provider capabilities:** Text (chat completion) + Image generation  
+> **Provider capabilities:** Text (`ITextToTextProvider`) + Image generation (`ITextToImageProvider`)  
 > **`AiProvider` enum value:** `AzureFoundry`
 
 ---
@@ -25,8 +25,8 @@ This guide explains how to provision Azure AI Foundry and configure XPoster to u
 5. Save both deployment names.
 
 Recommended mapping:
-- `DeploymentName` → chat deployment
-- `ImageDeploymentName` → image deployment
+- `AzureFoundry__DeploymentName` → chat deployment
+- `AzureFoundry__ImageDeploymentName` → image deployment
 
 ## 3. Retrieve Required Parameters
 
@@ -34,10 +34,10 @@ Collect these values from the Portal / Foundry Studio:
 
 | Parameter | Where to find it |
 |-----------|------------------|
-| `Endpoint` | Resource overview blade → Endpoint (use the `/openai/v1` base URL) |
-| `ApiKey` | Resource overview blade → Keys and Endpoint → Key 1 |
-| `DeploymentName` | Foundry Studio → Deployments → chat model name |
-| `ImageDeploymentName` | Foundry Studio → Deployments → image model name |
+| `AzureFoundry__Endpoint` | Resource overview blade → Endpoint (use the `/openai/v1` base URL) |
+| `AzureFoundry__ApiKey` | Resource overview blade → Keys and Endpoint → Key 1 |
+| `AzureFoundry__DeploymentName` | Foundry Studio → Deployments → chat model name |
+| `AzureFoundry__ImageDeploymentName` | Foundry Studio → Deployments → image model name |
 
 ## 4. Configure XPoster
 
@@ -55,33 +55,37 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 }
 ```
 
+All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
+
 ## 5. Store Secrets Safely
 
 For production environments:
 
 - Use **Azure Function App Settings** for non-secret configuration.
-- Store secrets (`ApiKey`) in **Azure Key Vault** and reference them from App Settings.
+- Store secrets (`AzureFoundry__ApiKey`) in **Azure Key Vault** and reference them from App Settings.
 - Never commit secrets to source control. `local.settings.json` is in `.gitignore`.
 
 ## 6. Switch Provider via `AiProvider`
 
-XPoster selects the AI provider per generator slot via the `AiProvider` enum value set in `GeneratorFactory`.
+XPoster selects the AI provider per orchestrator slot via the `AiProvider` setting. Available values:
 
-- `AiProvider=AzureFoundry` → uses `AzureFoundryService`
-- `AiProvider=OpenAi` → uses `OpenAiService`
-- `AiProvider=DeepSeekWithFal` → uses `HybridAiService`
-
-If `AiProvider` is missing or invalid, XPoster falls back to the schedule default configured in `GeneratorFactory`.
+| `AiProvider` value | Text provider | Image provider |
+|--------------------|---------------|----------------|
+| `OpenAi` | `OpenAiService` | `OpenAiService` |
+| `AzureFoundry` | `AzureFoundryService` | `AzureFoundryService` |
+| `DeepSeek` | `DeepSeekService` | ❌ none — posts published text-only |
+| `Perplexity` | `PerplexityService` | ❌ none — posts published text-only |
+| `FalAi` | ❌ none | `FalAiImageService` |
 
 ## 7. Troubleshooting
 
 ### 401 / 403 Unauthorized
 
-- Verify `AzureFoundry__ApiKey` is correct and belongs to the same resource as `Endpoint`.
+- Verify `AzureFoundry__ApiKey` is correct and belongs to the same resource as `AzureFoundry__Endpoint`.
 
 ### 404 Deployment Not Found
 
-- Confirm `DeploymentName` and `ImageDeploymentName` match the exact names in Foundry Studio.
+- Confirm `AzureFoundry__DeploymentName` and `AzureFoundry__ImageDeploymentName` match the exact names in Foundry Studio.
 - Check region and project alignment.
 
 ### 429 Too Many Requests
@@ -92,6 +96,6 @@ If `AiProvider` is missing or invalid, XPoster falls back to the schedule defaul
 ### Empty Summary or Image Output
 
 - Verify that prompt templates include all required placeholders:
-  - `SummarySystemPromptTemplate` must include `{MaxChars}`
-  - `SummaryUserPromptTemplate` must include `{Text}`
-  - `ImagePromptUserTemplate` must include `{Summary}`
+  - `AzureFoundry__SummarySystemPromptTemplate` must include `{MaxChars}`
+  - `AzureFoundry__SummaryUserPromptTemplate` must include `{Text}`
+  - `AzureFoundry__ImagePromptUserTemplate` must include `{Summary}`

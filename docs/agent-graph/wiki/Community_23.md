@@ -1,28 +1,29 @@
 # Community 23
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **GetSummaryAsync_DelegatesToDeepSeek_ReturnsContent()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **HybridAiServiceTests** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **BuildHybrid()** (2 connections)
-- **Constructor_NullDeepSeekService_ThrowsArgumentNullException()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **GetImagePromptAsync_DelegatesToDeepSeek_ReturnsPrompt()** (2 connections)
+- **ScheduledOrchestrationProfileTests.cs** (11 connections)
+- **ScheduledOrchestrationProfileTests.cs** (11 connections)
+- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
+- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
+- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
+- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
+- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
+- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
+- **ScheduledOrchestrationProfileTests** (2 connections)
+- **typeof()** (2 connections)
+- **XPoster.Tests.Abstraction** (2 connections)
+- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
 
 ## Relationships
 
-- [[Community 73]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

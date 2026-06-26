@@ -261,45 +261,4 @@ public class PerplexityServiceTests
 
         Assert.Equal(string.Empty, result);
     }
-
-    // ── GenerateImageAsync ───────────────────────────────────────────────────
-
-    [Fact]
-    public async Task GenerateImageAsync_AlwaysReturnsEmptyByteArray()
-    {
-        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
-        var svc = BuildService(handler.Object, out _);
-
-        var result = await svc.GenerateImageAsync("any prompt");
-
-        Assert.Equal(Array.Empty<byte>(), result);
-    }
-
-    [Fact]
-    public async Task GenerateImageAsync_AlwaysLogsWarning()
-    {
-        var handler = MakeHandlerMock(HttpStatusCode.OK, "{}");
-        var svc = BuildService(handler.Object, out var loggerMock);
-
-        await svc.GenerateImageAsync("any prompt");
-
-        loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(nameof(PerplexityService))),
-                It.IsAny<Exception?>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    [Fact]
-    public async Task GenerateImageAsync_DoesNotThrow()
-    {
-        var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{}").Object, out _);
-
-        var ex = await Record.ExceptionAsync(() => svc.GenerateImageAsync("any prompt"));
-
-        Assert.Null(ex);
-    }
 }

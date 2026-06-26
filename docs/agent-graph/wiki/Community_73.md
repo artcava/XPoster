@@ -1,23 +1,22 @@
 # Community 73
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HybridAiServiceTests.cs** (16 connections)
-- **BuildFalService()** (2 connections)
-- **BuildDeepSeekService()** (2 connections)
-- **HybridAiService()** (2 connections)
-- **Constructor_NullFalAiService_ThrowsArgumentNullException()** (2 connections)
-- **GenerateImageAsync_DelegatesToFalAi_NotToDeepSeek()** (2 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **GetFeedUrls()** (2 connections)
+- **IFeedUrlProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (10 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

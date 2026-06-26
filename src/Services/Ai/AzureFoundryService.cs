@@ -6,9 +6,10 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Implements <see cref="IAiService"/> by calling Azure AI Foundry OpenAI-compatible endpoints.
+/// Implements <see cref="ITextToTextProvider"/> and <see cref="ITextToImageProvider"/>
+/// by calling Azure AI Foundry OpenAI-compatible endpoints.
 /// </summary>
-public sealed class AzureFoundryService : IAiService
+public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvider
 {
     private readonly HttpClient _client;
     private readonly ILogger<AzureFoundryService> _logger;

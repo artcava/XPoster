@@ -1,16 +1,17 @@
 # Community 51
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **IAiService.cs** (6 connections)
-- **IAiService.cs** (6 connections)
-- **IAiService** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

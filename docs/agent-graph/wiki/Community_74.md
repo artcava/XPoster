@@ -1,15 +1,14 @@
 # Community 74
 
-> 6 nodes · cohesion 0.60
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **IOrchestrator** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

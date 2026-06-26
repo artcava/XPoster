@@ -1,18 +1,19 @@
 # Community 32
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **XSenderTests.cs** (9 connections)
+- **XSenderTests.cs** (9 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

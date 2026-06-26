@@ -18,12 +18,20 @@ For a minimal local setup with the default provider (`OpenAi`) you need at minim
 - [ ] `FeedOptions__Urls__0` — at least one RSS feed URL
 - [ ] (Optional) `APPLICATIONINSIGHTS_CONNECTION_STRING` for local telemetry
 
-For the `DeepSeekWithFal` provider (HybridAiService), replace the OpenAI block with:
+For the `DeepSeek` provider (text-only — posts without image), replace the OpenAI block with:
+
+- [ ] `DeepSeek__ApiKey`
+
+For the `FalAi` provider (image-only — requires a slot orchestrator that handles null `textProvider`):
+
+- [ ] `FalAi__ApiKey`
+
+For the `DeepSeek` + `FalAi` combination (text from DeepSeek, image from FalAi), assign each to a separate slot in `DefaultSlotProfileProvider` with the respective `AiProvider` key, and supply both:
 
 - [ ] `DeepSeek__ApiKey`
 - [ ] `FalAi__ApiKey`
 
-For the `Perplexity` provider, replace the OpenAI block with:
+For the `Perplexity` provider (text-only — posts without image), replace the OpenAI block with:
 
 - [ ] `Perplexity__ApiKey`
 
@@ -55,36 +63,44 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
   "IsEncrypted": false,
   "Values": {
 
-    // ── Azure Functions Runtime ─────────────────────────────────────────────
+    // ── Azure Functions Runtime ───────────────────────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
 
-    // ── Scheduler ────────────────────────────────────────────
+    // ── Scheduler ────────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
     "ForceHour": "",
     "EnableDryRunSlot": "false",
 
-    // ── Feed URLs ────────────────────────────────────────────
+    // ── Feed URLs ────────────────────────────────────────────────
     "FeedOptions__Urls__0": "https://example.com/feed/rss",
     "FeedOptions__Urls__1": "https://another.example.com/rss",
     // Add additional entries as FeedOptions__Urls__2, __3, etc.
     // In Azure App Settings use the same flat key convention.
     // At least one URL is required for FeedOrchestrator to produce content.
 
-    // ── Feed HTTP Client (resilience) ─────────────────────────
+    // ── Feed HTTP Client (resilience) ─────────────────────────────────────
     "FeedOptions__AttemptTimeoutSeconds": "10",
     "FeedOptions__RetryCount": "3",
     "FeedOptions__CircuitBreakerFailureThreshold": "0.5",
     "FeedOptions__CircuitBreakerSamplingDurationSeconds": "30",
     "FeedOptions__CircuitBreakerBreakDurationSeconds": "15",
 
-    // ── AI Provider Selector ────────────────────────────────────────
+    // ── Tag Replacements ─────────────────────────────────────────
+    // Optional. Maps plain words in the AI summary to hashtag equivalents.
+    // FeedOrchestrator replaces the first occurrence of each key (case-insensitive).
+    // An absent or empty section is valid — summaries pass through unchanged.
+    "TagReplacementOptions__Replacements__bitcoin": "#Bitcoin",
+    "TagReplacementOptions__Replacements__btc": "#BTC",
+    // Add further entries as TagReplacementOptions__Replacements__<word>.
+
+    // ── AI Provider Selector ──────────────────────────────────────────
     "AiProvider": "OpenAi",
 
-    // ── Key Vault ────────────────────────────────────────────
+    // ── Key Vault ────────────────────────────────────────────────
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
-    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════
+    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════════════
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
     "OpenAI__ChatModel": "gpt-4.1-nano",
@@ -102,7 +118,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "OpenAI__ImagePromptMaxTokens": "60",
     "OpenAI__ImagePromptTemperature": "0.7",
 
-    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ══════════════════════
+    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ════════════════════════════════════
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
@@ -117,7 +133,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "AzureFoundry__ImagePromptMaxTokens": "60",
     "AzureFoundry__ImagePromptTemperature": "0.7",
 
-    // ══ AI — DeepSeek (AiProvider = "DeepSeekWithFal", text half) ══════════════════
+    // ══ AI — DeepSeek (AiProvider = "DeepSeek", text-only) ══════════════════════════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
     "DeepSeek__DeploymentName": "deepseek-chat",
@@ -131,13 +147,13 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "DeepSeek__ImagePromptMaxTokens": "60",
     "DeepSeek__ImagePromptTemperature": "0.7",
 
-    // ══ AI — fal.ai (AiProvider = "DeepSeekWithFal", image half) ═════════════════
+    // ══ AI — fal.ai (AiProvider = "FalAi", image-only) ═══════════════════════════════
     "FalAi__ApiKey": "",
     "FalAi__ModelId": "fal-ai/flux/schnell",
     "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 
-    // ══ AI — Perplexity (AiProvider = "Perplexity") ══════════════════════════════
+    // ══ AI — Perplexity (AiProvider = "Perplexity", text-only) ═══════════════════════════
     "Perplexity__Endpoint": "https://api.perplexity.ai",
     "Perplexity__ApiKey": "",
     "Perplexity__DeploymentName": "sonar",
@@ -151,7 +167,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     "Perplexity__ImagePromptMaxTokens": "60",
     "Perplexity__ImagePromptTemperature": "0.7",
 
-    // ── Observability ────────────────────────────────────────────
+    // ── Observability ────────────────────────────────────────────────
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
@@ -180,6 +196,81 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 ---
 
+## Slot Profiles and Multi-Platform Fan-Out
+
+Slot profiles are defined in `DefaultSlotProfileProvider` (production) and `DryRunSlotProfileProvider` (local dry-run). As of the fan-out feature (#176), each `ScheduledOrchestrationProfile` accepts an `IReadOnlyList<SenderPlatform>` instead of a single `SenderPlatform`.
+
+### Ordering rule — descending `MessageMaxLength`
+
+Senders within a slot **must be declared in descending `MessageMaxLength` order**. The first sender (index 0, widest limit) drives base summary and image generation. Subsequent senders receive an AI re-summarisation only when the base summary exceeds their character limit; otherwise the base summary is reused as-is, skipping the AI call entirely.
+
+| Platform | `MessageMaxLength` | Role in a fan-out slot |
+|---|---|---|
+| LinkedIn | 700 | Primary — widest limit; base summary generated at this length |
+| Instagram | 2 200 | Secondary — but image-first; in practice usually shorter captions |
+| X (Twitter) | 280 | Typically last — always triggers re-summarisation when base > 280 |
+| DryRun | 500 | Local testing only |
+
+> 💡 **Cost implication:** a single fan-out slot with N senders replaces N separate scheduled slots. Base summary and image are generated once; only cheap per-sender re-summarisation AI calls are added when needed. See the [Token / Credit Savings](#token--credit-savings) section below.
+
+### Production slot profile example
+
+The current `DefaultSlotProfileProvider` defines the following slots:
+
+```csharp
+// src/Orchestrators/DefaultSlotProfileProvider.cs
+
+new ScheduledOrchestrationProfile(
+    hour: 8,
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+    orchestratorType: typeof(FeedOrchestrator),
+    textProvider:  AiProvider.OpenAi,
+    imageProvider: AiProvider.OpenAi),
+
+new ScheduledOrchestrationProfile(
+    hour: 14,
+    senderPlatforms: new[] { SenderPlatform.LinkedIn },
+    orchestratorType: typeof(PowerLawOrchestrator)),
+
+new ScheduledOrchestrationProfile(
+    hour: 16,
+    senderPlatforms: new[] { SenderPlatform.X },
+    orchestratorType: typeof(PowerLawOrchestrator)),
+```
+
+At hour 8 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The two PowerLaw slots (hours 14 and 16) each publish deterministic content to a single platform — no AI calls involved.
+
+### DryRun slot profile example
+
+`DryRunSlotProfileProvider` appends a single-sender slot at hour 9 for local testing:
+
+```csharp
+// src/Orchestrators/DryRunSlotProfileProvider.cs
+
+new ScheduledOrchestrationProfile(
+    hour: 9,
+    senderPlatforms: new[] { SenderPlatform.DryRun },
+    orchestratorType: typeof(FeedOrchestrator),
+    textProvider:  AiProvider.OpenAi,
+    imageProvider: AiProvider.OpenAi)
+```
+
+Even single-sender profiles use the list constructor — the fan-out loop iterates over one element and behaves identically to the old single-sender path.
+
+---
+
+## Token / Credit Savings
+
+| Scenario | Full AI text pipelines | Image calls |
+|---|---|---|
+| Former approach (3 separate slots) | 3× full pipeline (feed fetch + summary + image prompt) | 3× |
+| Fan-out slot (3 senders, 1 slot) | 1× full pipeline + up to 2× cheap re-summarisation | 1× |
+| **Saving** | **~67 % fewer full AI pipelines** | **~67 % fewer image credits** |
+
+Re-summarisation of an already-short base summary (e.g. ~700 chars → 280 chars) is significantly cheaper than re-processing the full feed content from scratch. When the base summary already fits within a secondary sender's character limit, the AI call is skipped entirely.
+
+---
+
 ## Feed URLs
 
 Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions` section bound via double-underscore notation.
@@ -191,7 +282,7 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 | `FeedOptions__Urls__0` | string | ✅ Yes (at least one) | — | First RSS/Atom feed URL consumed by `FeedOrchestrator`. |
 | `FeedOptions__Urls__1` | string | No | — | Second feed URL. Add further entries as `__2`, `__3`, etc. |
 
-**Behaviour when the list is empty:** `FeedOrchestrator.OrchestrateAsync()` returns `null` (with `SendIt = false`) and emits a `LogWarning`. No AI call or sender invocation is made.
+**Behaviour when the list is empty:** `FeedOrchestrator.OrchestrateAsync()` returns an empty collection (with `SendIt = false`) and emits a `LogWarning`. No AI call or sender invocation is made.
 
 **Azure App Settings:** use the same flat double-underscore convention — e.g. `FeedOptions__Urls__0` — exactly as shown. The .NET configuration binder maps sequential numeric suffixes to `List<string>` automatically.
 
@@ -221,11 +312,62 @@ All five resilience settings are optional. When omitted the values shown in the 
 
 ---
 
-## AI Provider Selector
+## Tag Replacements
+
+`FeedOrchestrator` applies a word-to-hashtag replacement pass on the AI-generated summary **independently per sender**, after each per-sender summary is finalised. Replacements are resolved at runtime by `ITagReplacementProvider`. The default implementation, `ConfigurationTagReplacementProvider`, reads from the `TagReplacementOptions:Replacements` section bound via double-underscore notation.
+
+**Matching rules:**
+- Only the **first occurrence** of each configured word per post is replaced.
+- Matching is **case-insensitive** — the key `bitcoin` matches `Bitcoin`, `BITCOIN`, etc.
+- The replacement value is used verbatim (e.g. `#Bitcoin` preserves the casing you configure).
+- Keys from this map are also passed as keywords to `FeedService.GetFeedsAsync()` to pre-filter feed items that mention the configured topics.
+- In a fan-out slot, hashtag substitution is applied **independently** on each sender's final raw summary — changes on one sender's content do not affect other senders.
 
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `AiProvider` | string | No | `OpenAi` | Selects the `IAiService` implementation. Supported values: `OpenAi`, `AzureFoundry`, `DeepSeekWithFal`, `Perplexity`. |
+| `TagReplacementOptions__Replacements__<word>` | string | No | — | Maps `<word>` to its hashtag replacement. E.g. `TagReplacementOptions__Replacements__bitcoin` = `#Bitcoin`. |
+
+**Example — Azure App Settings (flat key notation):**
+
+```
+TagReplacementOptions__Replacements__bitcoin   →   #Bitcoin
+TagReplacementOptions__Replacements__btc       →   #BTC
+TagReplacementOptions__Replacements__fed       →   #FED
+```
+
+**Behaviour with an empty or absent section:** `ConfigurationTagReplacementProvider` returns an empty `IReadOnlyDictionary<string, string>`. `FeedOrchestrator` applies no replacements and passes the summary through unchanged. This is a valid configuration — no warning is emitted.
+
+**Extending the provider:** to source replacements from a different store (database, remote config, Key Vault), implement `ITagReplacementProvider` and register the new implementation in `Program.cs` in place of `ConfigurationTagReplacementProvider`.
+
+---
+
+## AI Provider Selector
+
+XPoster uses a **capability-based** AI provider model. Each `AiProvider` value is registered as a keyed service in the DI container, exposing one or both capability interfaces (`ITextToTextProvider`, `ITextToImageProvider`). `OrchestratorFactory` resolves both capabilities independently via `GetKeyedService<T>(profile.AiProvider)` — a `null` result means the capability is not available for that provider and the orchestrator degrades gracefully.
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `AiProvider` | string | No | `OpenAi` | Selects the AI provider for the global override slot. Per-slot provider is set in `DefaultSlotProfileProvider`. |
+
+### Valid `AiProvider` values
+
+| Value | `ITextToTextProvider` | `ITextToImageProvider` | Notes |
+|---|---|---|---|
+| `OpenAi` | ✅ | ✅ | Full text + image capabilities |
+| `AzureFoundry` | ✅ | ✅ | Full text + image capabilities |
+| `DeepSeek` | ✅ | ❌ | Text only — slots using this provider publish without image |
+| `Perplexity` | ✅ | ❌ | Text only — slots using this provider publish without image |
+| `FalAi` | ❌ | ✅ | Image only — only valid for orchestrators that handle null `textProvider` |
+| `None` | ❌ | ❌ | No AI — reserved; do not use in production slots |
+
+> **Removed value:** `DeepSeekWithFal` has been removed. Any slot profile previously referencing `AiProvider.DeepSeekWithFal` must be updated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate.
+
+### Invalid slot combinations
+
+The following combinations will cause `FeedOrchestrator` to surface an explicit error at the point of use (not silently):
+
+- Assigning `AiProvider.FalAi` to a slot whose orchestrator calls `ITextToTextProvider.GetSummaryAsync` — `textProvider` will be `null`
+- Assigning `AiProvider.DeepSeek` or `AiProvider.Perplexity` to a slot that expects image output — `imageProvider` will be `null`; the post will be published without an image
 
 ---
 
@@ -309,6 +451,8 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 }
 ```
 
+The dry-run slot uses `SenderPlatforms: new[] { SenderPlatform.DryRun }` — a single-element list that exercises the same fan-out loop as a production multi-platform slot.
+
 ### Step-by-step dry-run setup
 
 1. **Authenticate with Azure CLI**
@@ -347,6 +491,8 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 
 Configuration bound from the `OpenAI` prefix using double-underscore notation.
 
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ✅
+
 ### Connection
 
 | Setting | Type | Required | Default | Description |
@@ -384,6 +530,8 @@ Configuration bound from the `OpenAI` prefix using double-underscore notation.
 
 Configuration bound from the `AzureFoundry` prefix.
 
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ✅
+
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `AzureFoundry__Endpoint` | string | ✅ Yes | — | Azure AI Foundry resource endpoint. |
@@ -395,9 +543,11 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 
 ---
 
-## AI — DeepSeek + fal.ai (`AiProvider = DeepSeekWithFal`)
+## AI — DeepSeek (`AiProvider = DeepSeek`)
 
-### DeepSeek (text half)
+Configuration bound from the `DeepSeek` prefix using double-underscore notation.
+
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image)
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -407,7 +557,15 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block, using the `DeepSeek__` prefix.
 
-### fal.ai (image half)
+> **Migration note:** `AiProvider.DeepSeekWithFal` has been removed. If you previously used `DeepSeekWithFal` to combine DeepSeek text with fal.ai image generation, assign `AiProvider.DeepSeek` to text slots and `AiProvider.FalAi` to image slots independently in `DefaultSlotProfileProvider`.
+
+---
+
+## AI — fal.ai (`AiProvider = FalAi`)
+
+Configuration bound from the `FalAi` prefix using double-underscore notation.
+
+**Capabilities:** `ITextToTextProvider` ❌ · `ITextToImageProvider` ✅ (image-only — only valid for orchestrators that handle null `textProvider`)
 
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -422,7 +580,7 @@ Summarisation and image prompt tuning settings follow the same structure as the 
 
 Configuration bound from the `Perplexity` prefix using double-underscore notation.
 
-> ⚠️ **Image generation is not supported.** `GenerateImageAsync` always returns an empty byte array and logs a `Warning`. The orchestrator will attach no image when this provider is active.
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image; `GenerateImageAsync` has been removed)
 
 ### Connection
 
