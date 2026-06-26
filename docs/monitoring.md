@@ -30,9 +30,9 @@ XPoster uses **Azure Application Insights** for telemetry, structured logging, a
 
 **Via Azure CLI:**
 ```bash
-az functionapp config appsettings set \
-  --name xposterfunction \
-  --resource-group XPosterRG \
+az functionapp config appsettings set \\
+  --name xposterfunction \\
+  --resource-group XPosterRG \\
   --settings "APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=<key>;IngestionEndpoint=https://<region>.in.applicationinsights.azure.com/"
 ```
 
@@ -88,6 +88,7 @@ No explicit `HostBuilder` or `.Build().Run()` wiring is required — `FunctionsA
 | **AI Token Usage** | Tokens consumed per run (custom dimension `tokenCount`) | > monthly budget |
 | **Failure Count** | Invocations ending in exception | > 3 in 1 hour |
 | **Sender Failures** | `SendAsync` errors broken down by sender plugin | Any spike |
+| **Fan-out Partial Failures** | Slots where at least one sender failed but others succeeded | Any occurrence |
 | **Feed Fetch Failures** | `FeedService` HTTP errors and circuit breaker open events | > 3 in 1 hour |
 
 ---
@@ -126,13 +127,51 @@ dependencies
 | summarize totalTokens = sum(tokenUsage), estimatedCostUSD = sum(tokenUsage) * 0.00006
 ```
 
+### Per-sender publish outcome (last 7 days)
+
+In a fan-out slot each sender's result is logged independently by `BaseOrchestrator.PostAsync`. This query breaks down publish success and failure per platform:
+
+```kql
+traces
+| where timestamp > ago(7d)
+| where message contains "[PostAsync]"
+| extend
+    platform  = tostring(customDimensions.platform),
+    succeeded = tobool(customDimensions.succeeded)
+| summarize
+    successes = countif(succeeded == true),
+    failures  = countif(succeeded == false)
+    by platform
+| order by failures desc
+```
+
+### Fan-out slots with partial failures (last 24 hours)
+
+Identifies executions where at least one sender failed while others succeeded — useful for detecting platform-specific outages that do not cause a full slot failure:
+
+```kql
+traces
+| where timestamp > ago(24h)
+| where message contains "[PostAsync]"
+| extend
+    platform  = tostring(customDimensions.platform),
+    succeeded = tobool(customDimensions.succeeded),
+    invocationId = tostring(operation_Id)
+| summarize
+    total    = count(),
+    failures = countif(succeeded == false)
+    by invocationId
+| where failures > 0 and failures < total
+| order by failures desc
+```
+
 ### Sender failure breakdown
 
 ```kql
 traces
 | where timestamp > ago(7d)
-| where message contains "SendAsync failed"
-| summarize failures = count() by tostring(customDimensions.sender)
+| where message contains "[PostAsync]" and tobool(customDimensions.succeeded) == false
+| summarize failures = count() by tostring(customDimensions.platform)
 | order by failures desc
 ```
 
@@ -162,7 +201,36 @@ traces
 
 ---
 
-## 6. Feed HTTP Client Resilience Observability
+## 6. Fan-Out Dispatch Observability
+
+As of the multi-platform fan-out feature (#176), each slot may target multiple senders. `BaseOrchestrator.PostAsync` dispatches all senders in parallel via `Task.WhenAll` and logs the outcome for each sender independently before returning the aggregate result.
+
+### Fan-out structured log events
+
+| Event | Severity | Message pattern | Key `customDimensions` |
+|---|---|---|---|
+| Sender dispatched | Information | `[PostAsync] Dispatching to {platform}` | `platform`, `hour`, `orchestratorType` |
+| Sender succeeded | Information | `[PostAsync] {platform} published successfully` | `platform`, `hour`, `succeeded: true` |
+| Sender skipped (null post) | Warning | `[PostAsync] {platform} returned null post — skipping` | `platform`, `hour` |
+| Sender failed | Error | `[PostAsync] {platform} SendAsync returned false` | `platform`, `hour`, `succeeded: false` |
+| Slot fully succeeded | Information | `[PostAsync] All senders completed for hour {hour}` | `hour`, `senderCount`, `succeeded: true` |
+| Slot partially failed | Warning | `[PostAsync] Partial failure for hour {hour}: {failureCount}/{total} senders failed` | `hour`, `failureCount`, `total`, `succeeded: false` |
+
+> All fan-out events carry `operation_Id` (the Azure Functions invocation ID), allowing correlation of all sender outcomes for a single slot execution in a single Logs query.
+
+### Diagnosing a partial fan-out failure
+
+When one sender fails while others succeed, the sequence of log events is:
+
+1. `[PostAsync] Dispatching to {platform}` — Information — emitted once per sender before `Task.WhenAll`.
+2. Per-sender outcome: **Sender succeeded** (Information) or **Sender failed** (Error) or **Sender skipped** (Warning).
+3. `[PostAsync] Partial failure for hour {hour}` — Warning — emitted once if any sender returned `false`.
+
+The **Fan-out slots with partial failures** KQL query in §5 surfaces this pattern directly.
+
+---
+
+## 7. Feed HTTP Client Resilience Observability
 
 `FeedService` fetches RSS/Atom feeds via the named HTTP client `"Feed"`, protected by a Polly resilience pipeline (attempt timeout → retry → circuit breaker). Each pipeline event emits a structured `ILogger` trace that flows to Application Insights as a `traces` record with `customDimensions`.
 
@@ -191,7 +259,7 @@ The KQL queries in §5 (**Feed fetch retries** and **Feed circuit breaker open e
 
 ### Alert rule: feed circuit breaker opened
 
-Add this alert alongside the existing rules in §6 to be notified when a feed circuit breaker opens:
+Add this alert alongside the existing rules in §8 to be notified when a feed circuit breaker opens:
 
 | Alert | KQL Signal | Threshold | Severity |
 |---|---|---|---|
@@ -235,7 +303,7 @@ resource feedCircuitBreakerAlert 'Microsoft.Insights/scheduledQueryRules@2022-06
 
 ---
 
-## 7. Setting Up Alerts
+## 8. Setting Up Alerts
 
 ### Step-by-Step: Create an Alert via Azure Portal
 
@@ -267,6 +335,7 @@ The following example creates an alert for **more than 3 consecutive errors with
 | High latency | `requests \| where name == "XPosterFunction" \| summarize avg(duration)` | > 60 000 ms | Sev 3 – Informational |
 | Function downtime | Built-in **Availability** test on the Function App URL | < 100% | Sev 1 – Error |
 | Feed circuit breaker opened | `traces \| where message contains "[FeedService] Circuit breaker opened"` | ≥ 1 in 1 h | Sev 2 – Warning |
+| Fan-out partial failure | `traces \| where message contains "[PostAsync] Partial failure"` | ≥ 1 in 1 h | Sev 2 – Warning |
 
 ### IaC: Bicep Snippet
 
@@ -304,7 +373,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 
 ---
 
-## 8. Live Debugging
+## 9. Live Debugging
 
 ### Live Metrics (Azure Portal)
 
