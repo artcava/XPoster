@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **GetProfiles()** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **ICryptoService** (2 connections)
 
 ## Relationships
 

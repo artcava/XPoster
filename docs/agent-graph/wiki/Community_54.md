@@ -1,20 +1,20 @@
 # Community 54
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **new()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **typeof()** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

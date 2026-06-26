@@ -1,23 +1,23 @@
 # Community 63
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (5 connections)
-- **HttpClientExtensions.cs** (5 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **InSender()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

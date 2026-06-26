@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **FeedService()** (2 connections)
-- **if()** (2 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 73]] (4 shared connections)
+- [[Community 136]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

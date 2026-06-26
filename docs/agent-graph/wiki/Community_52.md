@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
+- **new()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (4 shared connections)
+- [[Community 95]] (4 shared connections)
 
 ## Audit Trail
 

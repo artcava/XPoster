@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **CryptoService()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
