@@ -58,14 +58,14 @@ namespace XPoster.Orchestrators
 
         /// <summary>
         /// Computes the Power Law BTC fair-value for today, fetches the live price,
-        /// and returns an <see cref="IReadOnlyList{T}"/> where the same <see cref="Post"/> is
-        /// broadcast to every configured sender unchanged (deterministic content, no AI).
+        /// and returns an <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> where the same
+        /// <see cref="Post"/> is broadcast to every configured sender unchanged (deterministic content, no AI).
         /// </summary>
         /// <returns>
-        /// A list with one entry per sender, all pointing to the same <see cref="Post"/>.
-        /// Returns an empty list if the current date precedes the Bitcoin genesis block.
+        /// A dictionary with one entry per sender, all mapping to the same <see cref="Post"/> instance.
+        /// Returns an empty dictionary if the current date precedes the Bitcoin genesis block.
         /// </returns>
-        public override async Task<IReadOnlyList<Post?>> OrchestrateAsync()
+        public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync()
         {
             DateTime gemini = new DateTime(2009, 1, 3);
             DateTime date = _timeProvider.GetCurrentTime().Date;
@@ -73,7 +73,7 @@ namespace XPoster.Orchestrators
             {
                 _logger.LogError("Invalid date!");
                 _sendIt = false;
-                return Array.Empty<Post?>();
+                return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
             }
 
             var days = (date - gemini).Days;
@@ -91,8 +91,10 @@ namespace XPoster.Orchestrators
                 post.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}%";
             }
 
-            // Broadcast the same post to all senders — content is deterministic, no per-sender adaptation needed
-            return _senders.Select(_ => (Post?)post).ToList().AsReadOnly();
+            // Broadcast: same post instance to every configured sender
+            return _senders
+                .ToDictionary(s => s.Platform, _ => (Post?)post)
+                .AsReadOnly();
         }
     }
 }
