@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.1.6] - 2026-06-26
+
 ### Added
 - **Multi-platform fan-out**: a single `ScheduledOrchestrationProfile` slot can now target multiple senders via a `SenderPlatforms` list; `BaseOrchestrator.PostAsync` dispatches all senders in parallel via `Task.WhenAll`, generating the base summary and image **once** and re-summarising only when a shorter character limit requires it ([#176](https://github.com/artcava/XPoster/issues/176))
 - **`ScheduledOrchestrationProfile.SenderPlatforms`** (`IReadOnlyList<SenderPlatform>`): replaces the previous single `SenderPlatform` field; `OrchestratorFactory` resolves all declared senders from DI and passes the list to the orchestrator ([#176](https://github.com/artcava/XPoster/issues/176))
@@ -104,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `src/Abstraction/` split into `src/Abstraction/` (base classes and shared profile records: `BaseOrchestrator`, `ScheduledOrchestrationProfile`) and `src/Contracts/` (all interfaces, enums, and extension methods: `I*.cs`, `AiProvider`, `AiProviderExtensions`, `Enums`). Namespace `XPoster.Abstraction` → `XPoster.Contracts` for moved files; all consumer `using` directives updated.
   - `src/Implementation/` renamed to `src/Orchestrators/` (concrete orchestrators, `OrchestratorFactory`, `AiServiceFactory`, slot profile providers). Namespace `XPoster.Implementation` → `XPoster.Orchestrators`; all consumer `using` directives updated.
   - `src/Models/` reorganised with provider subfolders (`AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) for discoverability; namespace `XPoster.Models` unchanged across all files.
-  - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `HybridAiService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
+  - `src/Services/` reorganised with an `Ai/` subfolder for AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, `AiServiceHelper`); namespace `XPoster.Services` unchanged.
   - `tests/Abstraction/` renamed to `tests/Contracts/`; `tests/Implementation/` renamed to `tests/Orchestrators/` to mirror source layout.
   - Documentation updated: `README.md`, `tests/README.md`, `docs/extending-xposter.md` aligned to new folder paths and namespace names.
 - **`docs/architecture.md`** — `PerplexityService` added to the *AI Provider Services* section; supported provider count updated from 4 to 5 ([#91](https://github.com/artcava/XPoster/issues/91)).
@@ -245,7 +249,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/artcava/XPoster/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/artcava/XPoster/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/artcava/XPoster/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/artcava/XPoster/compare/v0.1.2...v0.1.3
