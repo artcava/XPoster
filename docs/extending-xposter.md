@@ -89,7 +89,9 @@ public class TikTokSender : ISender
         _logger = logger;
     }
 
-    public int MessageMaxLength => 150;
+    public SenderPlatform Platform => SenderPlatform.TikTok;
+
+    public int MessageMaxLenght => 150;
 
     public async Task<bool> SendAsync(Post post)
     {
@@ -106,7 +108,7 @@ public class TikTokSender : ISender
 }
 ```
 
-> `MessageMaxLength` must reflect the platform's actual character limit. Orchestrators use this value to truncate content before calling `SendAsync`.
+> `MessageMaxLenght` must reflect the platform's actual character limit. `FeedOrchestrator` uses this value as the target length for AI summarisation; an incorrect value leads to content that is too long or wastes character budget.
 
 ### Step 3 — Register in DI
 
@@ -149,15 +151,15 @@ public enum SenderPlatform
 }
 ```
 
-> `SenderPlatform` represents **where** to publish. It is orthogonal to the orchestrator type (what content strategy to use), so a single `TikTok` value covers all orchestrators that target TikTok. This is the key difference from the legacy `MessageSender` enum, which conflated platform identity with content strategy.
+> `SenderPlatform` represents **where** to publish. It is orthogonal to the orchestrator type (what content strategy to use), so a single `TikTok` value covers all orchestrators that target TikTok.
 
 ### Step 6 — Wire in OrchestratorFactory
 
-`OrchestratorFactory.Resolve()` resolves the concrete sender through a **switch expression** that maps each `SenderPlatform` value to the class retrieved from the DI container. Because `SenderPlatform` is platform-only, there is **one arm per platform** — independent of how many orchestrators target that platform. Add one arm to the existing switch expression inside `Resolve()`:
+`OrchestratorFactory.Resolve()` resolves the concrete sender list through a private `ResolveSender` helper that maps each `SenderPlatform` value to the class retrieved from the DI container. Add one arm to the switch expression inside `ResolveSender()`:
 
 ```csharp
-// src/Orchestrators/OrchestratorFactory.cs — sender switch expression
-ISender? sender = profile.SenderPlatform switch
+// src/Orchestrators/OrchestratorFactory.cs — ResolveSender helper
+private ISender? ResolveSender(SenderPlatform platform) => platform switch
 {
     // existing arms ...
     SenderPlatform.TikTok => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
@@ -165,19 +167,37 @@ ISender? sender = profile.SenderPlatform switch
 };
 ```
 
-> One enum value, one switch arm, one sender class. Adding a new orchestrator that posts to TikTok (e.g. `TrendingOrchestrator`) requires **no change** to this switch — only a new `ScheduledOrchestrationProfile` entry referencing `SenderPlatform.TikTok`.
+The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender()` for each entry, and passes the resulting `IReadOnlyList<ISender>` to the orchestrator constructor. One enum value maps to one switch arm and one sender class — independent of how many senders are configured per slot.
+
+> Adding a new orchestrator that posts to TikTok (e.g. `TrendingOrchestrator`) requires **no change** to this switch — only a new `ScheduledOrchestrationProfile` entry referencing `SenderPlatform.TikTok`.
 
 ### Step 7 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform, orchestrator type, and (optionally) the AI provider for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform list, orchestrator type, and (optionally) the AI provider for that slot:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
-    new ScheduledOrchestrationProfile(20, SenderPlatform.TikTok, typeof(FeedOrchestrator), AiProvider.OpenAi),
+    new ScheduledOrchestrationProfile(
+        hour: 20,
+        senderPlatforms: new[] { SenderPlatform.TikTok },
+        orchestratorType: typeof(FeedOrchestrator),
+        textProvider: AiProvider.OpenAi,
+        imageProvider: AiProvider.OpenAi),
 ];
+```
+
+To publish to multiple platforms in the same slot, list all target senders in **descending `MessageMaxLength` order** (widest first). `OrchestratorFactory` preserves declaration order and passes it to the orchestrator, which uses index 0 as the primary sender for base summary generation:
+
+```csharp
+new ScheduledOrchestrationProfile(
+    hour: 20,
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (700) → first
+    orchestratorType: typeof(FeedOrchestrator),
+    textProvider: AiProvider.OpenAi,
+    imageProvider: AiProvider.OpenAi),
 ```
 
 > `OrchestratorFactory` no longer owns a static profile list — it receives `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time. Only `DefaultSlotProfileProvider` needs to change when adding a production slot.
@@ -188,58 +208,85 @@ public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 
 ## Adding a New Orchestrator (Content Strategy)
 
-An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce a `Post`. It must also implement the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. Dependencies — sender, AI capability providers, and any data services — are received via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
+An orchestrator inherits from `BaseOrchestrator` and overrides `OrchestrateAsync()` to produce one `Post` per configured sender. It must also implement the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. Dependencies — sender list, AI capability providers, and any data services — are received via constructor injection; `OrchestratorFactory` resolves them automatically through reflection.
 
 ### Step 1 — Extend BaseOrchestrator
+
+The constructor now receives `IReadOnlyList<ISender>` instead of a single `ISender`. `OrchestrateAsync()` returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender, keyed by platform. A `null` value for a given key signals that content generation failed for that sender.
 
 ```csharp
 // src/Orchestrators/QuoteOrchestrator.cs
 public class QuoteOrchestrator : BaseOrchestrator
 {
     public QuoteOrchestrator(
-        ISender sender,
+        IReadOnlyList<ISender> senders,
         ILogger<QuoteOrchestrator> logger,
         ITextToTextProvider? textProvider,
         ITextToImageProvider? imageProvider)
-        : base(sender, logger, textProvider, imageProvider) { }
+        : base(senders, logger) { }
 
     public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
         [SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.DryRun];
 
-    public override async Task<Post>? OrchestrateAsync()
+    public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(
+        CancellationToken ct = default)
     {
-        // Return null (do not throw) when no content can be produced.
-        // XFunction will skip posting gracefully.
-        if (_textProvider is null) return null;
+        if (_textProvider is null)
+        {
+            SendIt = false;
+            return new Dictionary<SenderPlatform, Post?>();
+        }
 
-        var quote = await _textProvider.GetSummaryAsync("Generate a motivational tech quote.", 100);
-        if (string.IsNullOrWhiteSpace(quote)) return null;
+        var quote = await _textProvider.GetSummaryAsync("Generate a motivational tech quote.", 100, ct);
+        if (string.IsNullOrWhiteSpace(quote))
+        {
+            SendIt = false;
+            return new Dictionary<SenderPlatform, Post?>();
+        }
 
         byte[]? image = null;
         if (_imageProvider is not null)
-            image = await _imageProvider.GenerateImageAsync(quote);
+            image = await _imageProvider.GenerateImageAsync(quote, ct);
 
-        return new Post { Content = quote, Image = image };
+        // Broadcast strategy: same post to every configured sender
+        var post = new Post { Content = quote, Image = image };
+        SendIt = true;
+        return _senders.ToDictionary(s => s.Platform, _ => (Post?)post);
     }
 }
 ```
 
-> **`SupportedPlatforms` invariant**: always include `SenderPlatform.DryRun` so the orchestrator can be exercised locally without live API calls. Declare only the platforms the orchestrator has been validated against — omitting a platform is a deliberate signal that the content format may not be compatible.
+#### Broadcast vs. per-sender content adaptation
 
-> **`OrchestrateAsync` invariant**: must return `null` — not throw — when content cannot be produced. `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+Choose the strategy that fits the orchestrator's purpose:
 
-> **Null capability providers**: `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. When a slot references a text-only provider (e.g. `AiProvider.DeepSeek`), `imageProvider` will be `null` — check before use and degrade gracefully (text-only post). When a slot references an image-only provider (e.g. `AiProvider.FalAi`), `textProvider` will be `null` — return `null` early if the orchestrator cannot produce content without text generation.
+| Strategy | When to use | Example |
+|---|---|---|
+| **Broadcast** | Same content works on every target platform | `PowerLawOrchestrator` — deterministic text, no AI, broadcast identical `Post` to all senders |
+| **Per-sender adaptation** | Content must be re-summarised to fit each platform's character limit | `FeedOrchestrator` — AI base summary at primary sender's limit, AI re-summarise for each secondary sender |
+
+For a **per-sender adaptation** pattern, iterate `_senders` and call `_textProvider.GetSummaryAsync` independently per sender when the base summary exceeds the sender's `MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
+
+> **`OrchestrateAsync` invariant**: return an **empty dictionary** with `SendIt = false` — not throw — when content cannot be produced. `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
+
+> **`SupportedPlatforms` invariant**: always include `SenderPlatform.DryRun` so the orchestrator can be exercised locally without live API calls. Declare only the platforms the orchestrator has been validated against.
+
+> **Null capability providers**: `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. When a slot references a text-only provider (e.g. `AiProvider.DeepSeek`), `imageProvider` will be `null` — check before use and degrade gracefully (text-only post). When a slot references an image-only provider (e.g. `AiProvider.FalAi`), `textProvider` will be `null` — return an empty dictionary early if the orchestrator cannot produce content without text generation.
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new orchestrator type and the target `SenderPlatform` in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type and the target `SenderPlatforms` list in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 [
     // existing profiles ...
-    new ScheduledOrchestrationProfile(10, SenderPlatform.X, typeof(QuoteOrchestrator), AiProvider.Perplexity),
+    new ScheduledOrchestrationProfile(
+        hour: 10,
+        senderPlatforms: new[] { SenderPlatform.X },
+        orchestratorType: typeof(QuoteOrchestrator),
+        textProvider: AiProvider.Perplexity),
 ];
 ```
 
@@ -498,7 +545,7 @@ public interface ITagReplacementProvider
 `GetReplacements()` must:
 - Return an `IReadOnlyDictionary<string, string>` mapping plain words (keys) to their hashtag replacements (values).
 - Return an **empty dictionary** — never `null` — when no replacements are configured. `FeedOrchestrator` treats an empty map as a valid no-op.
-- Be **synchronous and cheap**. `FeedOrchestrator` calls it twice per execution (once for feed keyword filtering, once for post-summary replacement). Load data at construction time or cache it; do not make blocking HTTP calls inside `GetReplacements()`.
+- Be **synchronous and cheap**. `FeedOrchestrator` calls it twice per execution (once for feed keyword filtering, once for post-summary replacement per sender). Load data at construction time or cache it; do not make blocking HTTP calls inside `GetReplacements()`.
 
 ### Step 1 — Implement ITagReplacementProvider
 
@@ -560,14 +607,16 @@ All extensions must respect the following invariants to integrate correctly with
 
 - **Senders must be stateless.** Do not cache authentication tokens in instance fields; inject them via `IOptions<TCredentials>` (bound at startup from Key Vault via the Configuration Provider). The DI container manages lifetime.
 - **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
-- **`MessageMaxLength` must be accurate.** Orchestrators rely on this value to truncate content before calling `SendAsync`. An incorrect value causes silent data loss at the platform layer.
-- **`OrchestrateAsync` must return `null`, not throw, when no content can be produced.** `XFunction` treats a `null` return as a graceful skip; an exception is treated as a pipeline failure.
+- **`MessageMaxLenght` must be accurate.** `FeedOrchestrator` relies on this value to size AI summarisation calls. An incorrect value causes content that is either silently truncated at the platform layer or wastes character budget on secondary re-summarisation.
+- **`OrchestrateAsync` must return an empty dictionary with `SendIt = false`, not throw, when no content can be produced.** `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
+- **`OrchestrateAsync` returns one entry per configured sender.** The dictionary key is `SenderPlatform`; a `null` value signals content generation failure for that specific sender. `BaseOrchestrator.PostAsync` skips null entries with a warning log and returns `false` for the overall slot.
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
-- **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a `Post`. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `XFunction`.
-- **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return `null` early when `textProvider` is null and text generation is required.
+- **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a dictionary of posts. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `BaseOrchestrator.PostAsync`, which dispatches all senders in parallel via `Task.WhenAll`.
+- **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return an empty dictionary early when `textProvider` is null and text generation is required.
+- **Senders in a multi-platform slot must be declared in descending `MessageMaxLength` order.** `OrchestratorFactory` preserves declaration order and passes it to the orchestrator. `FeedOrchestrator` uses index 0 (widest limit) as the primary sender for base summary and image generation.
 - **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
 - **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
-- **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. All services — including `FeedService` (named client `"Feed"`, registered in `HttpClientExtensions`) — conform to this constraint. Creating `new HttpClient()` inline is prohibited.
+- **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
 - **`IFeedUrlProvider` must return an empty list — never `null`.** `FeedService` iterates the result directly; returning `null` causes a `NullReferenceException` at runtime.

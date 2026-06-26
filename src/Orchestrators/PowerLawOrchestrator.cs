@@ -12,6 +12,8 @@ namespace XPoster.Orchestrators
     /// The Power Law model estimates BTC fair value as:
     /// <c>value = 10^(-17) * days^5.83</c>
     /// where <c>days</c> is the number of days elapsed since the Bitcoin genesis block (2009-01-03).
+    /// Content is fully deterministic (no AI text), so the same <see cref="Post"/> is broadcast
+    /// to all configured senders unchanged.
     /// </remarks>
     public class PowerLawOrchestrator : BaseOrchestrator
     {
@@ -36,12 +38,19 @@ namespace XPoster.Orchestrators
         /// <summary>
         /// Initialises a new instance of <see cref="PowerLawOrchestrator"/>.
         /// </summary>
-        /// <param name="sender">The sender used to publish the post to the target platform.</param>
+        /// <param name="senders">
+        /// Ordered list of senders for this slot, by descending <c>MessageMaxLength</c>.
+        /// The same post is broadcast to all senders unchanged.
+        /// </param>
         /// <param name="logger">The logger for diagnostic output.</param>
         /// <param name="cryptoService">The service used to fetch the current BTC market price.</param>
         /// <param name="timeProvider">The time provider used to obtain the current date.</param>
-        public PowerLawOrchestrator(ISender sender, ILogger<PowerLawOrchestrator> logger, ICryptoService cryptoService, ITimeProvider timeProvider)
-        : base(sender, logger)
+        public PowerLawOrchestrator(
+            IReadOnlyList<ISender> senders,
+            ILogger<PowerLawOrchestrator> logger,
+            ICryptoService cryptoService,
+            ITimeProvider timeProvider)
+            : base(senders, logger)
         {
             _cryptoService = cryptoService;
             _timeProvider = timeProvider;
@@ -49,15 +58,14 @@ namespace XPoster.Orchestrators
 
         /// <summary>
         /// Computes the Power Law BTC fair-value for today, fetches the live price,
-        /// and returns a <see cref="Post"/> containing both values with their percentage deviation.
+        /// and returns an <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> where the same
+        /// <see cref="Post"/> is broadcast to every configured sender unchanged (deterministic content, no AI).
         /// </summary>
         /// <returns>
-        /// A <see cref="Post"/> with the Power Law value and live price deviation,
-        /// or a partial post (without deviation) if the live price cannot be retrieved.
-        /// Returns <c>null</c> if the current date precedes the Bitcoin genesis block.
+        /// A dictionary with one entry per sender, all mapping to the same <see cref="Post"/> instance.
+        /// Returns an empty dictionary if the current date precedes the Bitcoin genesis block.
         /// </returns>
-        // CS8603: return type is Post? because null is a valid sentinel when date <= genesis
-        public override async Task<Post?> OrchestrateAsync()
+        public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default)
         {
             DateTime gemini = new DateTime(2009, 1, 3);
             DateTime date = _timeProvider.GetCurrentTime().Date;
@@ -65,7 +73,7 @@ namespace XPoster.Orchestrators
             {
                 _logger.LogError("Invalid date!");
                 _sendIt = false;
-                return null;
+                return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
             }
 
             var days = (date - gemini).Days;
@@ -77,11 +85,16 @@ namespace XPoster.Orchestrators
             if (actualValue <= 0)
             {
                 _logger.LogError("Unable to get Actual BTC value!");
-                return post;
+            }
+            else
+            {
+                post.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}%";
             }
 
-            post.Content += $"\n{100.00m - (actualValue / (decimal)value * 100):+0.00;-0.00}%";
-            return post;
+            // Broadcast: same post instance to every configured sender
+            return _senders
+                .ToDictionary(s => s.Platform, _ => (Post?)post)
+                .AsReadOnly();
         }
     }
 }

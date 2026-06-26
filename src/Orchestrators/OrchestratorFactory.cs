@@ -11,6 +11,8 @@ namespace XPoster.Orchestrators;
 /// Sender resolution is O(senders) via <see cref="SenderPlatform"/> switch.
 /// Text and image capabilities are resolved independently via keyed DI, allowing a slot to mix
 /// different providers for each capability (e.g. DeepSeek for text, FalAi for image).
+/// Multiple senders per slot are supported: senders are resolved in declaration order
+/// (descending <c>MessageMaxLength</c> convention) and passed as <see cref="IReadOnlyList{ISender}"/>.
 /// </summary>
 public class OrchestratorFactory : IOrchestratorFactory
 {
@@ -41,9 +43,10 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// <summary>
     /// Creates and returns the <see cref="BaseOrchestrator"/> mapped to the current hour.
     /// Falls back to <see cref="NoOrchestrator"/> when no entry exists for the current hour.
+    /// Senders are resolved from <c>profile.SenderPlatforms</c> in declaration order
+    /// (descending <c>MessageMaxLength</c> convention); unresolvable platforms are skipped with a warning.
     /// Text and image capability providers are resolved independently:
-    /// a null result for either interface means the capability is unavailable for this slot,
-    /// and the orchestrator is expected to degrade gracefully.
+    /// a null result for either interface means the capability is unavailable for this slot.
     /// </summary>
     /// <returns>A fully initialised <see cref="BaseOrchestrator"/> instance.</returns>
     public BaseOrchestrator Resolve()
@@ -54,31 +57,29 @@ public class OrchestratorFactory : IOrchestratorFactory
         if (profile == null)
         {
             _log.LogInformation("No slot profile for hour {Hour}, using NoOrchestrator", currentHour);
-            return CreateOrchestratorInstance(typeof(NoOrchestrator), null, null, null);
+            return CreateOrchestratorInstance(typeof(NoOrchestrator), new List<ISender>().AsReadOnly(), null, null);
         }
 
+        var senders = profile.SenderPlatforms
+            .Select(ResolveSender)
+            .Where(s => s != null)
+            .Cast<ISender>()
+            .ToList()
+            .AsReadOnly();
+
         _log.LogInformation(
-            "Creating orchestrator {OrchestratorType} for platform {SenderPlatform} at hour {Hour} " +
+            "Creating orchestrator {OrchestratorType} for platforms [{SenderPlatforms}] at hour {Hour} " +
             "with TextProvider={TextProvider} ImageProvider={ImageProvider}",
             profile.OrchestratorType.Name,
-            profile.SenderPlatform,
+            string.Join(", ", profile.SenderPlatforms),
             profile.Hour,
             profile.TextProvider?.ToString() ?? "none",
             profile.ImageProvider?.ToString() ?? "none");
 
-        ISender? sender = profile.SenderPlatform switch
-        {
-            SenderPlatform.X         => _serviceProvider.GetService(typeof(XSender))      as ISender,
-            SenderPlatform.LinkedIn  => _serviceProvider.GetService(typeof(InSender))     as ISender,
-            SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender))     as ISender,
-            SenderPlatform.DryRun    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
-            _ => null
-        };
-
         // Text and image capabilities are resolved independently from their respective provider keys.
         // A null result is intentional: not every AiProvider implements both interfaces.
         // Misconfiguration surfaces explicitly inside the orchestrator at the point of use, not silently.
-        ITextToTextProvider?  textProvider  = profile.TextProvider.HasValue
+        ITextToTextProvider? textProvider = profile.TextProvider.HasValue
             ? _serviceProvider.GetKeyedService<ITextToTextProvider>(profile.TextProvider.Value)
             : null;
 
@@ -86,12 +87,21 @@ public class OrchestratorFactory : IOrchestratorFactory
             ? _serviceProvider.GetKeyedService<ITextToImageProvider>(profile.ImageProvider.Value)
             : null;
 
-        return CreateOrchestratorInstance(profile.OrchestratorType, sender, textProvider, imageProvider);
+        return CreateOrchestratorInstance(profile.OrchestratorType, senders, textProvider, imageProvider);
     }
+
+    private ISender? ResolveSender(SenderPlatform platform) => platform switch
+    {
+        SenderPlatform.X         => _serviceProvider.GetService(typeof(XSender))      as ISender,
+        SenderPlatform.LinkedIn  => _serviceProvider.GetService(typeof(InSender))     as ISender,
+        SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender))     as ISender,
+        SenderPlatform.DryRun    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
+        _ => null
+    };
 
     private BaseOrchestrator CreateOrchestratorInstance(
         Type orchestratorType,
-        ISender? sender,
+        IReadOnlyList<ISender> senders,
         ITextToTextProvider? textProvider,
         ITextToImageProvider? imageProvider)
     {
@@ -108,8 +118,8 @@ public class OrchestratorFactory : IOrchestratorFactory
         {
             foreach (var param in parameters)
             {
-                if (param.ParameterType == typeof(ISender))
-                    args.Add(sender);
+                if (param.ParameterType == typeof(IReadOnlyList<ISender>))
+                    args.Add(senders);
                 else if (param.ParameterType == typeof(ITextToTextProvider))
                     args.Add(textProvider);
                 else if (param.ParameterType == typeof(ITextToImageProvider))

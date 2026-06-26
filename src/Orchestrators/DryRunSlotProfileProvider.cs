@@ -28,7 +28,7 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
 
     /// <inheritdoc />
     /// <remarks>
-    /// Appends <see cref="SenderPlatform.DryRun"/> at hour 9 to the profiles
+    /// Appends a <see cref="SenderPlatform.DryRun"/> slot at hour 9 to the profiles
     /// returned by the inner provider. Both text and image generation use OpenAi by default.
     /// </remarks>
     public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles()
@@ -37,7 +37,7 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
         {
             new ScheduledOrchestrationProfile(
                 9,
-                SenderPlatform.DryRun,
+                new[] { SenderPlatform.DryRun },
                 typeof(FeedOrchestrator),
                 textProvider:  AiProvider.OpenAi,
                 imageProvider: AiProvider.OpenAi)

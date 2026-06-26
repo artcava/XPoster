@@ -14,34 +14,31 @@ public class ScheduledOrchestrationProfileTests
     [Fact]
     public void Constructor_Should_SetAllFields_WhenBothProvidersSupplied()
     {
-        // ARRANGE + ACT
         var profile = new ScheduledOrchestrationProfile(
             hour: 8,
-            senderPlatform: SenderPlatform.X,
+            senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn, SenderPlatform.X }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry);
 
-        // ASSERT
-        Assert.Equal(8,                       profile.Hour);
-        Assert.Equal(SenderPlatform.X,        profile.SenderPlatform);
-        Assert.Equal(typeof(FeedOrchestrator), profile.OrchestratorType);
-        Assert.Equal(AiProvider.OpenAi,       profile.TextProvider);
-        Assert.Equal(AiProvider.AzureFoundry, profile.ImageProvider);
+        Assert.Equal(8,                        profile.Hour);
+        Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
+        Assert.Equal(typeof(FeedOrchestrator),  profile.OrchestratorType);
+        Assert.Equal(AiProvider.OpenAi,         profile.TextProvider);
+        Assert.Equal(AiProvider.AzureFoundry,   profile.ImageProvider);
     }
 
     [Fact]
     public void Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()
     {
-        // ARRANGE + ACT — text-only slot (e.g. DeepSeek for summarisation, no image)
         var profile = new ScheduledOrchestrationProfile(
             hour: 10,
-            senderPlatform: SenderPlatform.LinkedIn,
+            senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.DeepSeek,
             imageProvider: null);
 
-        // ASSERT
         Assert.Equal(AiProvider.DeepSeek, profile.TextProvider);
         Assert.Null(profile.ImageProvider);
     }
@@ -49,15 +46,13 @@ public class ScheduledOrchestrationProfileTests
     [Fact]
     public void Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()
     {
-        // ARRANGE + ACT — hypothetical image-only slot
         var profile = new ScheduledOrchestrationProfile(
             hour: 12,
-            senderPlatform: SenderPlatform.Instagram,
+            senderPlatforms: new List<SenderPlatform> { SenderPlatform.Instagram }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  null,
             imageProvider: AiProvider.FalAi);
 
-        // ASSERT
         Assert.Null(profile.TextProvider);
         Assert.Equal(AiProvider.FalAi, profile.ImageProvider);
     }
@@ -65,13 +60,11 @@ public class ScheduledOrchestrationProfileTests
     [Fact]
     public void Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()
     {
-        // ARRANGE + ACT — no-AI slot (e.g. PowerLaw which needs no language model)
         var profile = new ScheduledOrchestrationProfile(
             hour: 14,
-            senderPlatform: SenderPlatform.LinkedIn,
+            senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
             orchestratorType: typeof(PowerLawOrchestrator));
 
-        // ASSERT
         Assert.Null(profile.TextProvider);
         Assert.Null(profile.ImageProvider);
     }
@@ -79,15 +72,13 @@ public class ScheduledOrchestrationProfileTests
     [Fact]
     public void Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()
     {
-        // ARRANGE + ACT — canonical split-provider scenario: DeepSeek text + FalAi image
         var profile = new ScheduledOrchestrationProfile(
             hour: 6,
-            senderPlatform: SenderPlatform.X,
+            senderPlatforms: new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.DeepSeek,
             imageProvider: AiProvider.FalAi);
 
-        // ASSERT — providers must be stored independently, no cross-contamination
         Assert.Equal(AiProvider.DeepSeek, profile.TextProvider);
         Assert.Equal(AiProvider.FalAi,    profile.ImageProvider);
         Assert.NotEqual(profile.TextProvider, profile.ImageProvider);
@@ -100,8 +91,29 @@ public class ScheduledOrchestrationProfileTests
     public void Constructor_Should_PreserveHour_ForBoundaryValues(int hour)
     {
         var profile = new ScheduledOrchestrationProfile(
-            hour, SenderPlatform.X, typeof(FeedOrchestrator));
+            hour,
+            new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
+            typeof(FeedOrchestrator));
 
         Assert.Equal(hour, profile.Hour);
+    }
+
+    [Fact]
+    public void Constructor_Should_PreserveOrderOfSenderPlatforms()
+    {
+        var platforms = new List<SenderPlatform>
+        {
+            SenderPlatform.LinkedIn,
+            SenderPlatform.X,
+            SenderPlatform.Instagram
+        }.AsReadOnly();
+
+        var profile = new ScheduledOrchestrationProfile(
+            8, platforms, typeof(FeedOrchestrator),
+            AiProvider.OpenAi, AiProvider.OpenAi);
+
+        Assert.Equal(SenderPlatform.LinkedIn,  profile.SenderPlatforms[0]);
+        Assert.Equal(SenderPlatform.X,         profile.SenderPlatforms[1]);
+        Assert.Equal(SenderPlatform.Instagram, profile.SenderPlatforms[2]);
     }
 }

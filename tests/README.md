@@ -12,11 +12,12 @@ XPoster uses a **unit-first** approach:
 
 | Layer | Test Type | Goal |
 |---|---|---|
-| Orchestrators (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) | Unit | Verify content-production logic in isolation, with all external services mocked |
+| Orchestrators (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) | Unit | Verify content-production logic in isolation, with all external services mocked. Fan-out paths verify that `OrchestrateAsync` returns the correct `IReadOnlyDictionary<SenderPlatform, Post?>` per configured sender list |
 | Providers (`ConfigurationFeedUrlProvider`, `ConfigurationTagReplacementProvider`) | Unit | Verify config-backed provider contract: correct return value from bound `IOptions`, empty-collection on absent/null config, `ArgumentNullException` on null options |
 | Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
 | Sender plugins (`XSender`, `InSender`, `IgSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client. Sender credentials are injected via `IOptions<TCredentials>` and bound from configuration — no `IKeyVaultService` mock required. `DryRunSender` additionally verifies the null-guard path and that no outbound social API call is made |
-| `OrchestratorFactory` | Unit | Verify correct orchestrator and sender selection per hour slot |
+| `OrchestratorFactory` | Unit | Verify correct orchestrator and sender list selection per hour slot; verify fan-out slot resolves multiple senders in declared order |
+| `BaseOrchestrator.PostAsync` | Unit | Verify parallel dispatch to all senders; verify partial failure logging; verify full success / full failure outcomes |
 | Polly resilience pipelines | Integration | Verify retry, circuit-breaker, and attempt-timeout policies end-to-end using a real `IServiceProvider`; innermost `HttpMessageHandler` replaced with a test double — no outbound network calls |
 | End-to-end flow | Integration (optional, not in CI) | Verify full pipeline against a staging environment with real credentials |
 
@@ -46,16 +47,18 @@ tests/
 ├── XFunctionMissingBranchTests.cs
 ├── Contracts/                                    # mirrors src/Contracts/ and src/Abstraction/
 │   ├── AiProviderExtensionsTests.cs              # XPoster.Contracts — AiProviderExtensions enum extension
-│   └── BaseOrchestratorTests.cs                  # XPoster.Abstraction — BaseOrchestrator abstract contracts
+│   └── BaseOrchestratorTests.cs                  # XPoster.Abstraction — BaseOrchestrator abstract contracts (incl. PostAsync fan-out)
 ├── Helpers/
 │   └── ResilienceTestHelpers.cs                  # shared HTTP mock helpers for resilience tests
 ├── Orchestrators/                                # mirrors src/Orchestrators/
 │   ├── AiServiceFactoryTests.cs                  # AiServiceFactory — provider resolution by AiProvider enum (includes Perplexity case)
 │   ├── ConfigurationFeedUrlProviderTests.cs      # ConfigurationFeedUrlProvider — URL list from config
 │   ├── ConfigurationTagReplacementProviderTests.cs  # ConfigurationTagReplacementProvider — replacement map from config (#216)
+│   ├── FeedOrchestratorFanOutTests.cs            # FeedOrchestrator — multi-sender fan-out paths (#176)
 │   ├── FeedOrchestratorFeedUrlProviderTests.cs   # FeedOrchestrator — IFeedUrlProvider integration paths
 │   ├── FeedOrchestratorTests.cs                  # FeedOrchestrator — main happy/failure paths + #216 new scenarios
 │   ├── NoOrchestratorTests.cs                    # NoOrchestrator — null-object contract
+│   ├── OrchestratorFactoryFanOutTests.cs         # OrchestratorFactory — multi-sender slot resolution, ordering rule (#176)
 │   ├── OrchestratorFactoryTests.cs               # OrchestratorFactory + SlotProfileProvider behaviour
 │   └── PowerLawOrchestratorTests.cs              # PowerLawOrchestrator — price/model computation
 ├── Integration/
@@ -106,9 +109,9 @@ tests/
 | Folder | Namespace under test | What is covered |
 |---|---|---|
 | *(root)* | `XPoster` | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Contracts/` | `XPoster.Contracts`, `XPoster.Abstraction` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts |
+| `Contracts/` | `XPoster.Contracts`, `XPoster.Abstraction` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts including `PostAsync` parallel dispatch, partial failure, and full failure paths |
 | `Helpers/` | — | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration + #216 explicit-pipeline scenarios); `PowerLawOrchestrator`; `NoOrchestrator`; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config; `ConfigurationTagReplacementProvider` replacement map from config |
+| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration + #216 explicit-pipeline scenarios + #176 multi-sender fan-out); `PowerLawOrchestrator`; `NoOrchestrator`; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks including multi-sender slots and ordering; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config; `ConfigurationTagReplacementProvider` replacement map from config |
 | `Integration/` | `XPoster.*` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — **not run in CI** |
 | `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, fal.ai, and Perplexity |
 | `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, dry-run success/failure paths — no Key Vault probe) |
@@ -128,9 +131,11 @@ Follow the `MethodName_Condition_ExpectedResult` pattern:
 
 ```csharp
 // ✅ Good
-public async Task OrchestrateAsync_WhenAiServiceReturnsEmptySummary_ReturnsNull()
+public async Task OrchestrateAsync_WhenAiServiceReturnsEmptySummary_ReturnsEmptyDictionary()
+public async Task OrchestrateAsync_WithThreeSenders_ReturnsOneEntryPerSender()
+public async Task PostAsync_WhenOneSenderFails_LogsPartialFailureAndReturnsFalse()
 public async Task SendAsync_WhenTwitterApiThrows_ReturnsFalse()
-public void Resolve_AtHour06_ReturnsInSummaryFeedProfile()
+public void Resolve_AtHour08_ReturnsThreeSenderFanOutProfile()
 public async Task SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()  // DryRunSender
 
 // ❌ Avoid
@@ -157,6 +162,9 @@ dotnet test --filter "Category!=Integration"
 # Only a specific class
 dotnet test --filter "FullyQualifiedName~FeedOrchestrator"
 
+# Only fan-out tests
+dotnet test --filter "FullyQualifiedName~FanOut"
+
 # Only DryRunSender tests
 dotnet test --filter "FullyQualifiedName~DryRunSender"
 
@@ -174,9 +182,9 @@ dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 dotnet tool install -g dotnet-reportgenerator-globaltool
 
 # Generate HTML report
-reportgenerator \
-  -reports:"**/coverage.cobertura.xml" \
-  -targetdir:"coverage-report" \
+reportgenerator \\
+  -reports:"**/coverage.cobertura.xml" \\
+  -targetdir:"coverage-report" \\
   -reporttypes:Html
 
 # Open report
@@ -212,7 +220,10 @@ public async Task OrchestrateAsync_WhenSummaryIsValid_AppliesTagReplacementsOnce
         .Setup(x => x.GetReplacements())
         .Returns(new Dictionary<string, string> { { "btc", "#BTC" } });
 
-    var mockSender      = new Mock<ISender>();
+    var mockSender = new Mock<ISender>();
+    mockSender.Setup(x => x.Platform).Returns(SenderPlatform.LinkedIn);
+    mockSender.Setup(x => x.MessageMaxLenght).Returns(700);
+
     var mockLogger      = new Mock<ILogger<FeedOrchestrator>>();
     var mockFeedService = new Mock<IFeedService>();
     mockFeedService
@@ -223,30 +234,122 @@ public async Task OrchestrateAsync_WhenSummaryIsValid_AppliesTagReplacementsOnce
     mockFeedUrlProvider.Setup(x => x.GetUrls()).Returns(["https://example.com/feed"]);
 
     var orchestrator = new FeedOrchestrator(
-        mockSender.Object, mockLogger.Object,
+        new[] { mockSender.Object },   // IReadOnlyList<ISender>
+        mockLogger.Object,
         mockTextProvider.Object, null,
         mockFeedService.Object, mockFeedUrlProvider.Object,
         mockTagProvider.Object);
 
     // Act
-    var post = await orchestrator.OrchestrateAsync();
+    var result = await orchestrator.OrchestrateAsync();
 
     // Assert
-    Assert.NotNull(post);
+    Assert.NotEmpty(result);
     mockTagProvider.Verify(x => x.GetReplacements(), Times.Once);
 }
 ```
 
-### Pattern — mocking `ISender` to verify call
+### Pattern — fan-out with multiple senders
+
+To test a multi-sender fan-out slot, pass a list of mocked senders with distinct `Platform` and `MessageMaxLenght` values. Declare them in **descending `MessageMaxLenght` order** (widest first), matching the production ordering rule:
+
+```csharp
+[Fact]
+public async Task OrchestrateAsync_WithTwoSenders_ReturnsOneEntryPerPlatform()
+{
+    // Arrange
+    var mockLinkedIn = new Mock<ISender>();
+    mockLinkedIn.Setup(x => x.Platform).Returns(SenderPlatform.LinkedIn);
+    mockLinkedIn.Setup(x => x.MessageMaxLenght).Returns(700);
+
+    var mockX = new Mock<ISender>();
+    mockX.Setup(x => x.Platform).Returns(SenderPlatform.X);
+    mockX.Setup(x => x.MessageMaxLenght).Returns(280);
+
+    // ... build orchestrator with new[] { mockLinkedIn.Object, mockX.Object } ...
+
+    // Act
+    var result = await orchestrator.OrchestrateAsync();
+
+    // Assert
+    Assert.Equal(2, result.Count);
+    Assert.True(result.ContainsKey(SenderPlatform.LinkedIn));
+    Assert.True(result.ContainsKey(SenderPlatform.X));
+}
+```
+
+### Pattern — verifying `PostAsync` parallel dispatch
+
+`BaseOrchestrator.PostAsync` dispatches all senders via `Task.WhenAll`. To verify each sender received its correct post:
+
+```csharp
+[Fact]
+public async Task PostAsync_WithTwoSenders_CallsSendAsyncOnEach()
+{
+    // Arrange
+    var mockLinkedIn = new Mock<ISender>();
+    mockLinkedIn.Setup(x => x.Platform).Returns(SenderPlatform.LinkedIn);
+    mockLinkedIn.Setup(x => x.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+
+    var mockX = new Mock<ISender>();
+    mockX.Setup(x => x.Platform).Returns(SenderPlatform.X);
+    mockX.Setup(x => x.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+
+    var posts = new Dictionary<SenderPlatform, Post?>
+    {
+        [SenderPlatform.LinkedIn] = new Post { Content = "LinkedIn post (700 chars)" },
+        [SenderPlatform.X]        = new Post { Content = "X post (280 chars)" }
+    };
+
+    // Act (call PostAsync on a concrete BaseOrchestrator subclass or testable stub)
+    var success = await orchestrator.PostAsync(posts);
+
+    // Assert
+    Assert.True(success);
+    mockLinkedIn.Verify(x => x.SendAsync(It.IsAny<Post>()), Times.Once);
+    mockX.Verify(x => x.SendAsync(It.IsAny<Post>()), Times.Once);
+}
+
+[Fact]
+public async Task PostAsync_WhenOneSenderFails_ReturnsFalseAndLogsPartialFailure()
+{
+    // Arrange
+    var mockLinkedIn = new Mock<ISender>();
+    mockLinkedIn.Setup(x => x.Platform).Returns(SenderPlatform.LinkedIn);
+    mockLinkedIn.Setup(x => x.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
+
+    var mockX = new Mock<ISender>();
+    mockX.Setup(x => x.Platform).Returns(SenderPlatform.X);
+    mockX.Setup(x => x.SendAsync(It.IsAny<Post>())).ReturnsAsync(false); // <─ failure
+
+    // ... build and act ...
+
+    // Assert
+    Assert.False(success);
+    // Verify Warning log for partial failure
+    mockLogger.Verify(
+        x => x.Log(
+            LogLevel.Warning,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Partial failure")),
+            null,
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+        Times.Once);
+}
+```
+
+### Pattern — mocking `ISender` to verify call (single sender)
 
 ```csharp
 [Fact]
 public async Task OrchestrateAsync_WhenPostIsValid_CallsSendAsync()
 {
     var mockSender = new Mock<ISender>();
+    mockSender.Setup(x => x.Platform).Returns(SenderPlatform.X);
+    mockSender.Setup(x => x.MessageMaxLenght).Returns(280);
     mockSender.Setup(x => x.SendAsync(It.IsAny<Post>())).ReturnsAsync(true);
 
-    // ... build orchestrator with mockSender ...
+    // ... build orchestrator with new[] { mockSender.Object } ...
 
     await orchestrator.OrchestrateAsync();
 
@@ -384,6 +487,9 @@ When adding a new feature or fixing a bug, follow this checklist before opening 
 - [ ] All external dependencies are mocked — no real HTTP calls or API keys in unit tests
 - [ ] Sender credentials supplied via `Options.Create(new TCredentials { ... })` — no `IKeyVaultService` mock
 - [ ] Test method names follow the `MethodName_Condition_ExpectedResult` pattern
+- [ ] **Fan-out**: if the changed class is an orchestrator or `BaseOrchestrator`, add tests for both single-sender and multi-sender paths
+- [ ] **Fan-out**: verify `OrchestrateAsync` returns `IReadOnlyDictionary<SenderPlatform, Post?>` with one key per configured sender
+- [ ] **Fan-out**: mock `ISender.Platform` and `ISender.MessageMaxLenght` in all sender mocks — orchestrators read both properties
 - [ ] Run `dotnet test` locally — all tests pass
 - [ ] Run coverage and confirm the changed class is above the 80% threshold
 - [ ] Link the test file in the PR description

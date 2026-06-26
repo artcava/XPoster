@@ -6,9 +6,9 @@ namespace XPoster.Orchestrators
 {
     /// <summary>
     /// A no-op orchestrator used when the current time slot has no scheduled posting activity.
-    /// It never sends messages and always returns <c>null</c> from <see cref="OrchestrateAsync"/>.
+    /// It never sends messages and always returns an empty list from <see cref="OrchestrateAsync"/>.
     /// </summary>
-    public class NoOrchestrator(ILogger<NoOrchestrator> logger) : BaseOrchestrator(null, logger)
+    public class NoOrchestrator : BaseOrchestrator
     {
         /// <inheritdoc/>
         public override string Name => typeof(NoOrchestrator).Name;
@@ -25,10 +25,18 @@ namespace XPoster.Orchestrators
             new List<SenderPlatform>().AsReadOnly();
 
         /// <summary>
-        /// Returns <c>null</c> unconditionally — no content is orchestrated in a no-send slot.
+        /// Initialises a new instance of <see cref="NoOrchestrator"/> with an empty sender list.
         /// </summary>
-        /// <returns><c>null</c></returns>
-        // CS8609: return type aligned to Task<Post?> (nullable) to match base class contract
-        public override Task<Post?> OrchestrateAsync() => Task.FromResult<Post?>(null);
+        /// <param name="logger">Logger for diagnostic output.</param>
+        public NoOrchestrator(ILogger<NoOrchestrator> logger)
+            : base(new List<ISender>().AsReadOnly(), logger)
+        {
+        }
+
+        /// <summary>
+        /// Returns an empty dictionary unconditionally — no content is orchestrated in a no-send slot.
+        /// </summary>
+        public override Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default) =>
+            Task.FromResult<IReadOnlyDictionary<SenderPlatform, Post?>>(new Dictionary<SenderPlatform, Post?>());
     }
 }

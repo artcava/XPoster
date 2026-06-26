@@ -6,8 +6,7 @@ namespace XPoster.Tests.Orchestrators;
 
 /// <summary>
 /// Tests for <see cref="DefaultSlotProfileProvider"/> slot configuration.
-/// Verifies that FeedOrchestrator slots have both AI capability providers configured
-/// and that PowerLaw slots have neither (they require no language model).
+/// Verifies the fan-out slot structure, AI capability providers, and ordering conventions.
 /// </summary>
 public class DefaultSlotProfileProviderTests
 {
@@ -18,10 +17,10 @@ public class DefaultSlotProfileProviderTests
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void GetProfiles_Should_ReturnFourActiveSlots()
+    public void GetProfiles_Should_ReturnTwoActiveSlots()
     {
         var profiles = _provider.GetProfiles();
-        Assert.Equal(4, profiles.Count);
+        Assert.Equal(2, profiles.Count);
     }
 
     [Fact]
@@ -33,46 +32,76 @@ public class DefaultSlotProfileProviderTests
     }
 
     // ---------------------------------------------------------------------------
-    // FeedOrchestrator slots — must have both TextProvider and ImageProvider
+    // Fan-out slot at hour 8: FeedOrchestrator with LinkedIn + X
     // ---------------------------------------------------------------------------
 
-    [Theory]
-    [InlineData(6,  SenderPlatform.LinkedIn)]
-    [InlineData(8,  SenderPlatform.X)]
-    public void FeedOrchestratorSlot_Should_HaveTextProviderConfigured(int hour, SenderPlatform platform)
+    [Fact]
+    public void FeedOrchestratorSlot_Should_HaveTextProviderConfigured()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == hour);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
 
-        Assert.Equal(platform,               profile.SenderPlatform);
         Assert.Equal(typeof(FeedOrchestrator), profile.OrchestratorType);
         Assert.NotNull(profile.TextProvider);
-        Assert.NotEqual(AiProvider.None,     profile.TextProvider);
+        Assert.NotEqual(AiProvider.None, profile.TextProvider);
     }
 
-    [Theory]
-    [InlineData(6)]
-    [InlineData(8)]
-    public void FeedOrchestratorSlot_Should_HaveImageProviderConfigured(int hour)
+    [Fact]
+    public void FeedOrchestratorSlot_Should_HaveImageProviderConfigured()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == hour);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
 
         Assert.NotNull(profile.ImageProvider);
         Assert.NotEqual(AiProvider.None, profile.ImageProvider);
     }
 
-    // ---------------------------------------------------------------------------
-    // PowerLaw slots — must have no AI provider (they compute, not generate)
-    // ---------------------------------------------------------------------------
-
-    [Theory]
-    [InlineData(14, SenderPlatform.LinkedIn)]
-    [InlineData(16, SenderPlatform.X)]
-    public void PowerLawSlot_Should_HaveNullTextAndImageProvider(int hour, SenderPlatform platform)
+    [Fact]
+    public void FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == hour);
+        // OpenAi for text, AzureFoundry for image — must be stored independently
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
 
-        Assert.Equal(platform,                   profile.SenderPlatform);
+        Assert.NotEqual(profile.TextProvider, profile.ImageProvider);
+        Assert.Equal(AiProvider.OpenAi,       profile.TextProvider);
+        Assert.Equal(AiProvider.AzureFoundry, profile.ImageProvider);
+    }
+
+    [Fact]
+    public void FeedOrchestratorSlot_Should_ContainLinkedInAndX()
+    {
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+
+        Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
+    }
+
+    [Fact]
+    public void FeedOrchestratorSlot_Should_HaveLinkedInAsFirstSender()
+    {
+        // LinkedIn has the widest MessageMaxLength — must be the primary sender (index 0)
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+
+        Assert.Equal(SenderPlatform.LinkedIn, profile.SenderPlatforms[0]);
+    }
+
+    // ---------------------------------------------------------------------------
+    // PowerLaw slot at hour 14 — LinkedIn + X, no AI provider
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public void PowerLawSlot_Should_ContainLinkedInAndX()
+    {
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 14);
+
         Assert.Equal(typeof(PowerLawOrchestrator), profile.OrchestratorType);
+        Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
+    }
+
+    [Fact]
+    public void PowerLawSlot_Should_HaveNullTextAndImageProvider()
+    {
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 14);
+
         Assert.Null(profile.TextProvider);
         Assert.Null(profile.ImageProvider);
     }
@@ -85,11 +114,11 @@ public class DefaultSlotProfileProviderTests
     public void GetProfiles_Should_NotContainDryRunSlot()
     {
         var profiles = _provider.GetProfiles();
-        Assert.DoesNotContain(profiles, p => p.SenderPlatform == SenderPlatform.DryRun);
+        Assert.DoesNotContain(profiles, p => p.SenderPlatforms.Contains(SenderPlatform.DryRun));
     }
 
     // ---------------------------------------------------------------------------
-    // DryRunSlotProfileProvider — decorator correctness
+    // DryRunSlotProfileProvider decorator
     // ---------------------------------------------------------------------------
 
     [Fact]
@@ -97,7 +126,7 @@ public class DefaultSlotProfileProviderTests
     {
         var dryRunProvider = new DryRunSlotProfileProvider(_provider);
         var dryRunSlot = dryRunProvider.GetProfiles()
-            .Single(p => p.SenderPlatform == SenderPlatform.DryRun);
+            .Single(p => p.SenderPlatforms.Contains(SenderPlatform.DryRun));
 
         Assert.Equal(typeof(FeedOrchestrator), dryRunSlot.OrchestratorType);
         Assert.NotNull(dryRunSlot.TextProvider);

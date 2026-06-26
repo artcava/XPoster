@@ -36,7 +36,9 @@ public class FeedOrchestratorFeedUrlProviderTests
     }
 
     private FeedOrchestrator CreateOrchestrator() =>
-        new(_mockSender.Object, _mockLogger.Object, _mockFeedService.Object,
+        new(
+            new List<ISender> { _mockSender.Object }.AsReadOnly(),
+            _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
@@ -46,7 +48,7 @@ public class FeedOrchestratorFeedUrlProviderTests
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(["https://feed1.com/rss"]);
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -58,8 +60,7 @@ public class FeedOrchestratorFeedUrlProviderTests
                 It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
-        var orchestrator = CreateOrchestrator();
-        await orchestrator.OrchestrateAsync();
+        await CreateOrchestrator().OrchestrateAsync();
 
         _mockFeedUrlProvider.Verify(p => p.GetFeedUrls(), Times.Once);
     }
@@ -77,7 +78,7 @@ public class FeedOrchestratorFeedUrlProviderTests
 
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -89,11 +90,10 @@ public class FeedOrchestratorFeedUrlProviderTests
                 It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
-        var orchestrator = CreateOrchestrator();
-        await orchestrator.OrchestrateAsync();
+        await CreateOrchestrator().OrchestrateAsync();
 
         _mockFeedService.Verify(
-            s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Exactly(urls.Count));
     }
 
@@ -102,11 +102,11 @@ public class FeedOrchestratorFeedUrlProviderTests
     {
         var url1 = "https://feed1.com/rss";
         var url2 = "https://feed2.com/rss";
-        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([url1, url2]);
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(new List<string> { url1, url2 }.AsReadOnly());
 
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
         _mockFeedService.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -118,29 +118,28 @@ public class FeedOrchestratorFeedUrlProviderTests
                 It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
-        var orchestrator = CreateOrchestrator();
-        await orchestrator.OrchestrateAsync();
+        await CreateOrchestrator().OrchestrateAsync();
 
         _mockFeedService.Verify(
-            s => s.GetFeedsAsync(url1, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            s => s.GetFeedsAsync(url1, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Once);
         _mockFeedService.Verify(
-            s => s.GetFeedsAsync(url2, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            s => s.GetFeedsAsync(url2, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
     [Fact]
-    public async Task OrchestrateAsync_Should_ReturnNull_And_DisableSendIt_When_ProviderReturnsEmptyList()
+    public async Task OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()
     {
-        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([]);
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(new List<string>().AsReadOnly());
 
         var orchestrator = CreateOrchestrator();
         var result = await orchestrator.OrchestrateAsync();
 
-        Assert.Null(result);
+        Assert.Empty(result);
         Assert.False(orchestrator.SendIt);
         _mockFeedService.Verify(
-            s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()),
+            s => s.GetFeedsAsync(It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()),
             Times.Never);
         _mockTextProvider.Verify(
             s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()),
@@ -152,16 +151,16 @@ public class FeedOrchestratorFeedUrlProviderTests
     {
         var url1 = "https://feed1.com/rss";
         var url2 = "https://feed2.com/rss";
-        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns([url1, url2]);
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(new List<string> { url1, url2 }.AsReadOnly());
 
         var feedsFromUrl1 = new List<RSSFeed> { new() { Title = "Feed1 Item", Content = "Content1", Link = "https://l1.com" } };
         var feedsFromUrl2 = new List<RSSFeed> { new() { Title = "Feed2 Item", Content = "Content2", Link = "https://l2.com" } };
 
         _mockFeedService
-            .Setup(s => s.GetFeedsAsync(url1, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .Setup(s => s.GetFeedsAsync(url1, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(feedsFromUrl1);
         _mockFeedService
-            .Setup(s => s.GetFeedsAsync(url2, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>()))
+            .Setup(s => s.GetFeedsAsync(url2, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(feedsFromUrl2);
 
         string? capturedFeedContent = null;
@@ -176,10 +175,9 @@ public class FeedOrchestratorFeedUrlProviderTests
                 It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
-        var orchestrator = CreateOrchestrator();
-        var result = await orchestrator.OrchestrateAsync();
+        var result = await CreateOrchestrator().OrchestrateAsync();
 
-        Assert.NotNull(result);
+        Assert.NotEmpty(result);
         Assert.NotNull(capturedFeedContent);
         Assert.Contains("Content1", capturedFeedContent);
         Assert.Contains("Content2", capturedFeedContent);

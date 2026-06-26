@@ -10,13 +10,23 @@ namespace XPoster.Orchestrators;
 /// Orchestrates a social-media post by aggregating Bitcoin-related RSS news from the last 24 hours,
 /// summarising the content via AI, and optionally attaching an AI-generated image.
 /// </summary>
+/// <remarks>
+/// Implements a fan-out pattern: the base summary and image are generated once from the primary sender
+/// (widest <c>MessageMaxLength</c>), then each secondary sender receives an AI re-summarisation
+/// from the original feed content only when the previous summary exceeds its limit.
+/// The previous summary is used as the fitness check: if it fits, it is reused; if it does not,
+/// the AI re-summarises from the full feed content to preserve maximum context.
+/// Hashtag substitution is applied independently per sender.
+/// Returns an <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>
+/// for unambiguous nominal routing.
+/// </remarks>
 public class FeedOrchestrator : BaseOrchestrator
 {
-    private readonly IFeedService _feedService;
-    private readonly IFeedUrlProvider _feedUrlProvider;
-    private readonly ITagReplacementProvider _tagReplacementProvider;
-    private readonly ITextToTextProvider? _textProvider;
-    private readonly ITextToImageProvider? _imageProvider;
+    private readonly IFeedService              _feedService;
+    private readonly IFeedUrlProvider          _feedUrlProvider;
+    private readonly ITagReplacementProvider   _tagReplacementProvider;
+    private readonly ITextToTextProvider?      _textProvider;
+    private readonly ITextToImageProvider?     _imageProvider;
     private bool _sendIt = true;
 
     /// <inheritdoc/>
@@ -25,191 +35,211 @@ public class FeedOrchestrator : BaseOrchestrator
     /// <inheritdoc/>
     public override bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
 
-    /// <summary>Always <c>true</c>; this orchestrator always attempts to attach an AI-generated image.</summary>
+    /// <summary>Always <c>true</c>; this orchestrator produces an AI-generated image when possible.</summary>
     public override bool ProduceImage { get => true; set => throw new NotImplementedException(); }
 
     /// <inheritdoc/>
-    /// <remarks>FeedOrchestrator supports X, LinkedIn, and Instagram. DryRun is also supported for testing.</remarks>
     public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
         new List<SenderPlatform> { SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.Instagram, SenderPlatform.DryRun }.AsReadOnly();
 
     /// <summary>
     /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>
+    /// <param name="senders">
+    /// Ordered list of senders for this slot. Internally sorted by descending <c>MessageMaxLength</c>;
+    /// the sender with the widest limit drives base summary generation.
+    /// </param>
+    /// <param name="logger">The logger for diagnostic output.</param>
+    /// <param name="feedService">The service used to fetch RSS feeds.</param>
+    /// <param name="feedUrlProvider">Provides the RSS/Atom feed URLs to poll.</param>
+    /// <param name="tagReplacementProvider">Provides the word-to-hashtag replacement map.</param>
+    /// <param name="textProvider">The AI text provider used to generate summaries and image prompts.</param>
+    /// <param name="imageProvider">The AI image provider used to generate post images. Optional.</param>
     public FeedOrchestrator(
-        ISender sender,
-        ILogger<FeedOrchestrator> logger,
-        IFeedService feedService,
-        IFeedUrlProvider feedUrlProvider,
-        ITagReplacementProvider tagReplacementProvider,
-        ITextToTextProvider? textProvider,
-        ITextToImageProvider? imageProvider)
-        : base(sender, logger)
+        IReadOnlyList<ISender>      senders,
+        ILogger<FeedOrchestrator>   logger,
+        IFeedService                feedService,
+        IFeedUrlProvider            feedUrlProvider,
+        ITagReplacementProvider     tagReplacementProvider,
+        ITextToTextProvider?        textProvider,
+        ITextToImageProvider?       imageProvider = null)
+        : base(senders, logger)
     {
-        _feedService = feedService;
-        _feedUrlProvider = feedUrlProvider;
+        _feedService            = feedService;
+        _feedUrlProvider        = feedUrlProvider;
         _tagReplacementProvider = tagReplacementProvider;
-        _textProvider = textProvider;
-        _imageProvider = imageProvider;
+        _textProvider           = textProvider;
+        _imageProvider          = imageProvider;
     }
 
     /// <summary>
-    /// Executes the five-step content production pipeline:
-    /// <list type="number">
-    ///   <item>Acquire feed content from the configured URLs.</item>
-    ///   <item>Generate a summary via the text provider.</item>
-    ///   <item>Apply word-to-hashtag tag replacements via the tag replacement provider.</item>
-    ///   <item>Generate an image prompt via the text provider.</item>
-    ///   <item>Generate the image via the image provider.</item>
-    /// </list>
-    /// Posting is disabled and <c>null</c> is returned if any mandatory step fails.
+    /// Acquires feed content, generates a base summary at the primary sender's limit,
+    /// optionally re-summarises for secondary senders from the original feed content,
+    /// applies hashtag substitution per sender, generates a shared image, and returns an
+    /// <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>.
     /// </summary>
-    public override async Task<Post?> OrchestrateAsync()
+    /// <param name="ct">Cancellation token propagated from the Azure Functions runtime.</param>
+    /// <returns>
+    /// A dictionary with one entry per configured sender, or an empty dictionary when a
+    /// mandatory pipeline step fails (no feeds, empty summary, no text provider).
+    /// </returns>
+    public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default)
     {
-        if (_textProvider == null)
+        if (_textProvider is null)
         {
-            _logger.LogError("No ITextToTextProvider instance provided to FeedOrchestrator. Cannot orchestrate content.");
-            SendIt = false;
-            return null;
+            _logger.LogError("ITextToTextProvider is not configured.");
+            _sendIt = false;
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
-        // Step 1 – Acquire feed content
-        var feedContent = await AcquireFeedContentAsync();
+        if (_senders.Count == 0)
+        {
+            _logger.LogError("No senders configured for this slot.");
+            _sendIt = false;
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+        }
+
+        // Step 1 — acquire feed content
+        ct.ThrowIfCancellationRequested();
+        var feedContent = await AcquireFeedContentAsync(ct);
         if (string.IsNullOrWhiteSpace(feedContent))
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+
+        // Step 2 — select primary sender (widest limit) and generate base summary
+        ct.ThrowIfCancellationRequested();
+        var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
+        var primarySender  = orderedSenders[0];
+        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, ct);
+        if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
-            return null;
+            _logger.LogError("Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
+            _sendIt = false;
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
-        // Step 2 – Generate summary
-        var summary = await GenerateSummaryAsync(feedContent);
-        if (string.IsNullOrWhiteSpace(summary))
+        // Step 3 — generate image (shared across all senders)
+        ct.ThrowIfCancellationRequested();
+        var imageBytes = await GenerateImageAsync(rawBaseSummary, ct);
+
+        // Step 4 — build per-sender posts
+        // previousSummary tracks the last successfully generated summary.
+        // Each sender reuses it when it fits; otherwise the AI re-summarises
+        // from the full feedContent to preserve maximum context.
+        var result         = new Dictionary<SenderPlatform, Post?>();
+        var previousSummary = rawBaseSummary;
+        foreach (var sender in orderedSenders)
         {
-            return null;
+            ct.ThrowIfCancellationRequested();
+
+            string summaryForSender;
+            if (previousSummary.Length <= sender.MessageMaxLenght)
+            {
+                summaryForSender = previousSummary;
+            }
+            else
+            {
+                var reSummarised = await _textProvider.GetSummaryAsync(
+                    feedContent, sender.MessageMaxLenght, ct);
+
+                if (string.IsNullOrWhiteSpace(reSummarised))
+                {
+                    _logger.LogWarning(
+                        "Re-summarisation failed for sender {Platform} (limit {Limit}). Null entry added.",
+                        sender.Platform, sender.MessageMaxLenght);
+                    result[sender.Platform] = null;
+                    continue;
+                }
+
+                summaryForSender = reSummarised;
+            }
+
+            previousSummary = summaryForSender;
+            var content = ApplyTagReplacements(summaryForSender);
+            result[sender.Platform] = new Post { Content = content, Image = imageBytes };
         }
 
-        // Step 3 – Apply tag replacements
-        summary = ApplyTagReplacements(summary);
-
-        // Step 4 – Generate image prompt
-        // Step 5 – Generate image
-        var image = await GenerateImageAsync(summary);
-
-        return new Post
-        {
-            Content = summary,
-            Image = image
-        };
+        return result.AsReadOnly();
     }
 
-    private async Task<string> AcquireFeedContentAsync()
+    // ---------------------------------------------------------------------------
+    // Private pipeline steps
+    // ---------------------------------------------------------------------------
+
+    private async Task<string> AcquireFeedContentAsync(CancellationToken ct = default)
     {
         var feedUrls = _feedUrlProvider.GetFeedUrls();
-
         if (feedUrls.Count == 0)
         {
             _logger.LogWarning("IFeedUrlProvider returned an empty URL list. No feeds will be fetched.");
-            SendIt = false;
+            _sendIt = false;
             return string.Empty;
         }
 
-        var end = DateTimeOffset.UtcNow;
+        var end   = DateTimeOffset.UtcNow;
         var start = end.AddDays(-1);
-        var keywords = _tagReplacementProvider.GetReplacements().Keys;
+        var replacementKeys = _tagReplacementProvider.GetReplacements().Keys;
 
         var allFeeds = new List<RSSFeed>();
-        foreach (string url in feedUrls)
+        foreach (var url in feedUrls)
         {
-            var feeds = await _feedService.GetFeedsAsync(url, start, end, keywords);
+            ct.ThrowIfCancellationRequested();
+            var feeds = await _feedService.GetFeedsAsync(url, start, end, replacementKeys, ct);
             if (feeds != null && feeds.Any())
-            {
                 allFeeds.AddRange(feeds);
-            }
         }
 
-        if (!allFeeds.Any())
+        if (allFeeds.Count == 0)
         {
-            _logger.LogInformation("No feeds found in the last 24 hours.");
-            SendIt = false;
+            _logger.LogWarning("No feeds found in the last 24 hours.");
+            _sendIt = false;
             return string.Empty;
         }
 
-        return allFeeds
-            .Select(f => f.Content)
-            .Aggregate(string.Empty, (current, next) => current + "\n" + next);
+        var sb = new StringBuilder();
+        foreach (var feed in allFeeds)
+            sb.AppendLine($"{feed.Title}: {feed.Content} ({feed.Link})");
+
+        return sb.ToString();
     }
 
-    private async Task<string> GenerateSummaryAsync(string feedContent)
+    private async Task<byte[]?> GenerateImageAsync(string rawBaseSummary, CancellationToken ct = default)
     {
-        if (_sender == null)
-        {
-            _logger.LogError("No sender configured for FeedOrchestrator.");
-            SendIt = false;
-            return string.Empty;
-        }
+        if (_imageProvider is null)
+            return null;
 
-        var summary = await _textProvider!.GetSummaryAsync(feedContent, _sender.MessageMaxLenght);
-        if (string.IsNullOrWhiteSpace(summary))
+        try
         {
-            _logger.LogError("Unable to get summary from text provider.");
-            SendIt = false;
-            return string.Empty;
-        }
+            var prompt = await _textProvider!.GetImagePromptAsync(rawBaseSummary, ct);
+            if (string.IsNullOrWhiteSpace(prompt))
+                prompt = rawBaseSummary;
 
-        _logger.LogInformation("Generated summary: {Summary}", summary);
-        return summary;
+            var image = await _imageProvider.GenerateImageAsync(prompt, ct);
+            return image is { Length: > 0 } ? image : null;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Image generation failed. Post will be published without image.");
+            return null;
+        }
     }
 
     private string ApplyTagReplacements(string text)
     {
         var replacements = _tagReplacementProvider.GetReplacements();
-        if (replacements.Count == 0)
+        foreach (var (word, hashtag) in replacements)
         {
-            return text;
+            text = Regex.Replace(
+                text,
+                $@"(?<!\#)\b{Regex.Escape(word)}\b",
+                hashtag,
+                RegexOptions.IgnoreCase,
+                TimeSpan.FromSeconds(1));
         }
 
-        var sb = new StringBuilder(text);
-        foreach (var entry in replacements)
-        {
-            string pattern = @"\b" + Regex.Escape(entry.Key) + @"\b";
-            Match match = Regex.Match(sb.ToString(), pattern, RegexOptions.IgnoreCase);
-            if (match.Success)
-            {
-                sb.Remove(match.Index, entry.Key.Length);
-                sb.Insert(match.Index, entry.Value);
-            }
-        }
-        return sb.ToString();
-    }
-
-    private async Task<byte[]?> GenerateImageAsync(string summary)
-    {
-        if (_imageProvider == null)
-        {
-            _logger.LogWarning("No ITextToImageProvider configured for this slot. Post will be published without image.");
-            return null;
-        }
-
-        var prompt = await _textProvider!.GetImagePromptAsync(summary);
-        if (string.IsNullOrWhiteSpace(prompt))
-        {
-            _logger.LogError("Unable to get image prompt from text provider. Falling back to summary as prompt.");
-            prompt = summary;
-        }
-
-        try
-        {
-            var image = await _imageProvider.GenerateImageAsync(prompt);
-            if (image == null || image.Length == 0)
-            {
-                _logger.LogWarning("Image generation returned empty result for prompt: {Prompt}. Post will be published without image.", prompt);
-                return null;
-            }
-            return image;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception occurred while generating image with prompt: {Prompt}. Post will be published without image.", prompt);
-            return null;
-        }
+        return text;
     }
 }

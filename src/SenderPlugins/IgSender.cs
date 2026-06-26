@@ -35,6 +35,9 @@ namespace XPoster.SenderPlugins
             _httpClient = httpClientFactory.CreateClient("Instagram");
         }
 
+        /// <inheritdoc/>
+        public SenderPlatform Platform => SenderPlatform.Instagram;
+
         /// <summary>Gets the maximum caption length allowed by Instagram (2200 characters).</summary>
         public int MessageMaxLenght => 2200;
 
@@ -43,8 +46,9 @@ namespace XPoster.SenderPlugins
         /// create a media container, then publish it. Requires a non-null image.
         /// </summary>
         /// <param name="post">The post to publish. Must include a non-null <see cref="Post.Image"/>.</param>
+        /// <param name="ct">Cancellation token to signal operation cancellation.</param>
         /// <returns><c>true</c> if the post was published successfully; <c>false</c> otherwise.</returns>
-        public async Task<bool> SendAsync(Post post)
+        public async Task<bool> SendAsync(Post post, CancellationToken ct = default)
         {
             try
             {
@@ -57,7 +61,7 @@ namespace XPoster.SenderPlugins
 
                 if (post.Image != null && post.Image.Length > 0)
                 {
-                    string imageUrl = await UploadImageToPublicUrl(post.Image);
+                    string imageUrl = await UploadImageToPublicUrl(post.Image, ct);
                     if (string.IsNullOrEmpty(imageUrl))
                     {
                         _logger.LogError("Impossibile caricare l'immagine per Instagram.");
@@ -122,12 +126,13 @@ namespace XPoster.SenderPlugins
         /// can retrieve it during media container creation.
         /// </summary>
         /// <param name="image">The raw image bytes to upload.</param>
+        /// <param name="ct">Cancellation token to signal operation cancellation.</param>
         /// <returns>The public URL of the uploaded image.</returns>
         /// <exception cref="NotImplementedException">
         /// Always thrown — this method is a placeholder pending integration with a public storage service
         /// such as Azure Blob Storage.
         /// </exception>
-        private Task<string> UploadImageToPublicUrl(byte[] image)
+        private Task<string> UploadImageToPublicUrl(byte[] image, CancellationToken ct = default)
         {
             _logger.LogInformation("Caricamento immagine su URL pubblico (da implementare).");
             return Task.FromException<string>(new NotImplementedException("Caricamento immagine su URL pubblico non implementato."));
