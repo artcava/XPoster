@@ -16,6 +16,7 @@ public class PowerLawOrchestratorTests
     public PowerLawOrchestratorTests()
     {
         _mockSender        = new Mock<ISender>();
+        _mockSender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         _mockLogger        = new Mock<ILogger<PowerLawOrchestrator>>();
         _mockCryptoService = new Mock<ICryptoService>();
         _mockTimeProvider  = new Mock<ITimeProvider>();
@@ -35,7 +36,7 @@ public class PowerLawOrchestratorTests
     [Fact]
     public async Task GenerateAsync_Should_CreateCorrectMessage_WithActualValue()
     {
-        var fixedDate     = new DateTime(2025, 7, 21);
+        var fixedDate        = new DateTime(2025, 7, 21);
         decimal fakeBtcPrice = 65000.00m;
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(fakeBtcPrice);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
@@ -43,17 +44,18 @@ public class PowerLawOrchestratorTests
         var posts = await CreateOrchestrator().OrchestrateAsync();
 
         Assert.Single(posts);
-        Assert.NotNull(posts[0]);
-        Assert.Contains("Value of #BTC for the #powerlaw today would be:", posts[0]!.Content);
-        Assert.Contains("%", posts[0]!.Content);
-        Assert.DoesNotContain(Post.Firm, posts[0]!.Content);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.Contains("Value of #BTC for the #powerlaw today would be:", posts[SenderPlatform.X]!.Content);
+        Assert.Contains("%", posts[SenderPlatform.X]!.Content);
+        Assert.DoesNotContain(Post.Firm, posts[SenderPlatform.X]!.Content);
         _mockCryptoService.Verify(s => s.GetCryptoValue("BTC"), Times.Once);
     }
 
     [Fact]
     public async Task GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()
     {
-        var fixedDate    = new DateTime(2025, 7, 21);
+        var fixedDate     = new DateTime(2025, 7, 21);
         decimal fakePrice = 65000.00m;
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(fakePrice);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
@@ -64,7 +66,8 @@ public class PowerLawOrchestratorTests
         var expectedValue = Math.Pow(10, -17) * Math.Pow(expectedDays, 5.83d);
 
         Assert.Single(posts);
-        Assert.Contains($"would be: {expectedValue:F2} #USD", posts[0]!.Content);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.Contains($"would be: {expectedValue:F2} #USD", posts[SenderPlatform.X]!.Content);
     }
 
     // ---------------------------------------------------------------------------
@@ -75,7 +78,10 @@ public class PowerLawOrchestratorTests
     public async Task OrchestrateAsync_BroadcastsSamePost_ToAllSenders()
     {
         var sender2 = new Mock<ISender>();
+        sender2.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         var sender3 = new Mock<ISender>();
+        sender3.Setup(s => s.Platform).Returns(SenderPlatform.DryRun);
+
         var senders = new List<ISender>
         {
             _mockSender.Object,
@@ -91,9 +97,11 @@ public class PowerLawOrchestratorTests
 
         // One entry per sender, all pointing to the same Post instance
         Assert.Equal(3, posts.Count);
-        Assert.NotNull(posts[0]);
-        Assert.Same(posts[0], posts[1]);
-        Assert.Same(posts[0], posts[2]);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
+        Assert.True(posts.ContainsKey(SenderPlatform.DryRun));
+        Assert.Same(posts[SenderPlatform.X], posts[SenderPlatform.LinkedIn]);
+        Assert.Same(posts[SenderPlatform.X], posts[SenderPlatform.DryRun]);
     }
 
     // ---------------------------------------------------------------------------
@@ -121,8 +129,9 @@ public class PowerLawOrchestratorTests
         var posts = await CreateOrchestrator().OrchestrateAsync();
 
         Assert.Single(posts);
-        Assert.NotNull(posts[0]);
-        Assert.DoesNotContain("%", posts[0]!.Content);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.DoesNotContain("%", posts[SenderPlatform.X]!.Content);
     }
 
     [Theory]
@@ -136,6 +145,7 @@ public class PowerLawOrchestratorTests
         var posts = await CreateOrchestrator().OrchestrateAsync();
 
         Assert.Single(posts);
-        Assert.NotNull(posts[0]);
+        Assert.True(posts.ContainsKey(SenderPlatform.X));
+        Assert.NotNull(posts[SenderPlatform.X]);
     }
 }
