@@ -13,7 +13,10 @@ namespace XPoster.Orchestrators;
 /// <remarks>
 /// Implements a fan-out pattern: the base summary and image are generated once from the primary sender
 /// (widest <c>MessageMaxLength</c>), then each secondary sender receives an AI re-summarisation
-/// only when the base summary exceeds its limit. Hashtag substitution is applied independently per sender.
+/// from the original feed content only when the previous summary exceeds its limit.
+/// The previous summary is used as the fitness check: if it fits, it is reused; if it does not,
+/// the AI re-summarises from the full feed content to preserve maximum context.
+/// Hashtag substitution is applied independently per sender.
 /// Returns an <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>
 /// for unambiguous nominal routing.
 /// </remarks>
@@ -71,8 +74,8 @@ public class FeedOrchestrator : BaseOrchestrator
 
     /// <summary>
     /// Acquires feed content, generates a base summary at the primary sender's limit,
-    /// optionally re-summarises for secondary senders, applies hashtag substitution
-    /// per sender, generates a shared image, and returns an
+    /// optionally re-summarises for secondary senders from the original feed content,
+    /// applies hashtag substitution per sender, generates a shared image, and returns an
     /// <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>.
     /// </summary>
     /// <param name="ct">Cancellation token propagated from the Azure Functions runtime.</param>
@@ -119,20 +122,24 @@ public class FeedOrchestrator : BaseOrchestrator
         var imageBytes = await GenerateImageAsync(rawBaseSummary, ct);
 
         // Step 4 — build per-sender posts
-        var result = new Dictionary<SenderPlatform, Post?>();
+        // previousSummary tracks the last successfully generated summary.
+        // Each sender reuses it when it fits; otherwise the AI re-summarises
+        // from the full feedContent to preserve maximum context.
+        var result         = new Dictionary<SenderPlatform, Post?>();
+        var previousSummary = rawBaseSummary;
         foreach (var sender in orderedSenders)
         {
             ct.ThrowIfCancellationRequested();
 
             string summaryForSender;
-            if (sender == primarySender || rawBaseSummary.Length <= sender.MessageMaxLenght)
+            if (previousSummary.Length <= sender.MessageMaxLenght)
             {
-                summaryForSender = rawBaseSummary;
+                summaryForSender = previousSummary;
             }
             else
             {
                 var reSummarised = await _textProvider.GetSummaryAsync(
-                    rawBaseSummary, sender.MessageMaxLenght, ct);
+                    feedContent, sender.MessageMaxLenght, ct);
 
                 if (string.IsNullOrWhiteSpace(reSummarised))
                 {
@@ -146,6 +153,7 @@ public class FeedOrchestrator : BaseOrchestrator
                 summaryForSender = reSummarised;
             }
 
+            previousSummary = summaryForSender;
             var content = ApplyTagReplacements(summaryForSender);
             result[sender.Platform] = new Post { Content = content, Image = imageBytes };
         }
@@ -210,7 +218,6 @@ public class FeedOrchestrator : BaseOrchestrator
         }
         catch (OperationCanceledException)
         {
-            // Re-throw so the cancellation bubbles up correctly to OrchestrateAsync
             throw;
         }
         catch (Exception ex)
