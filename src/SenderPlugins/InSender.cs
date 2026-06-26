@@ -18,6 +18,9 @@ public class InSender : ISender
     private readonly ILogger<InSender> _logger;
     private readonly LinkedInCredentials _creds;
 
+    /// <inheritdoc/>
+    public SenderPlatform Platform => SenderPlatform.LinkedIn;
+
     /// <summary>Gets the maximum number of characters allowed in a LinkedIn post caption.</summary>
     public int MessageMaxLenght => 800;
 

@@ -35,6 +35,9 @@ namespace XPoster.SenderPlugins
             _httpClient = httpClientFactory.CreateClient("Instagram");
         }
 
+        /// <inheritdoc/>
+        public SenderPlatform Platform => SenderPlatform.Instagram;
+
         /// <summary>Gets the maximum caption length allowed by Instagram (2200 characters).</summary>
         public int MessageMaxLenght => 2200;
 

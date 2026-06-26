@@ -30,6 +30,9 @@ public class XSender : ISender
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <inheritdoc/>
+    public SenderPlatform Platform => SenderPlatform.X;
+
     /// <summary>Gets the maximum number of characters allowed per tweet (250, leaving room for the firm footer).</summary>
     public int MessageMaxLenght => 250;
 

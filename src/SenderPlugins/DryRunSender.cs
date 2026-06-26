@@ -28,6 +28,9 @@ public class DryRunSender : ISender
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <inheritdoc/>
+    public SenderPlatform Platform => SenderPlatform.DryRun;
+
     /// <summary>Gets the maximum number of characters allowed per post (no real limit; returns <see cref="int.MaxValue"/>).</summary>
     public int MessageMaxLenght => int.MaxValue;
 
