@@ -13,17 +13,35 @@ namespace XPoster.Orchestrators;
 /// different AI providers to be used for text generation and image generation within
 /// the same slot (e.g. DeepSeek for text, FalAi for image).
 /// </para>
+/// <para>
+/// Senders within a slot are declared in <b>descending <c>MessageMaxLength</c> order</b>.
+/// The first sender (widest limit) drives base summary generation.
+/// Subsequent senders receive AI re-summarisation only when the base summary exceeds their limit.
+/// </para>
 /// </summary>
 public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
 {
     private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
     {
-        new ScheduledOrchestrationProfile(6,  SenderPlatform.LinkedIn,  typeof(FeedOrchestrator),      textProvider: AiProvider.OpenAi,       imageProvider: AiProvider.OpenAi),
-        new ScheduledOrchestrationProfile(8,  SenderPlatform.X,         typeof(FeedOrchestrator),      textProvider: AiProvider.AzureFoundry, imageProvider: AiProvider.AzureFoundry),
-        //new ScheduledOrchestrationProfile(10, SenderPlatform.Instagram,  typeof(FeedOrchestrator),    textProvider: AiProvider.OpenAi,       imageProvider: AiProvider.OpenAi),
-        new ScheduledOrchestrationProfile(14, SenderPlatform.LinkedIn,  typeof(PowerLawOrchestrator)),
-        new ScheduledOrchestrationProfile(16, SenderPlatform.X,         typeof(PowerLawOrchestrator)),
-        //new ScheduledOrchestrationProfile(18, SenderPlatform.Instagram,  typeof(PowerLawOrchestrator)),
+        // Fan-out slot: LinkedIn (widest) drives base summary and image generation.
+        // X (280 chars) always triggers re-summarisation.
+        // Instagram depends on base summary length.
+        new ScheduledOrchestrationProfile(
+            8,
+            new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+            typeof(FeedOrchestrator),
+            textProvider:  AiProvider.AzureFoundry,
+            imageProvider: AiProvider.AzureFoundry),
+
+        new ScheduledOrchestrationProfile(
+            14,
+            new[] { SenderPlatform.LinkedIn },
+            typeof(PowerLawOrchestrator)),
+
+        new ScheduledOrchestrationProfile(
+            16,
+            new[] { SenderPlatform.X },
+            typeof(PowerLawOrchestrator)),
     }.AsReadOnly();
 
     /// <inheritdoc />
