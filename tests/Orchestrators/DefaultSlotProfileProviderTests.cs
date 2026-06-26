@@ -32,13 +32,13 @@ public class DefaultSlotProfileProviderTests
     }
 
     // ---------------------------------------------------------------------------
-    // Fan-out slot at hour 8: FeedOrchestrator with LinkedIn + X
+    // Fan-out slot at hour 6: FeedOrchestrator with LinkedIn + X
     // ---------------------------------------------------------------------------
 
     [Fact]
     public void FeedOrchestratorSlot_Should_HaveTextProviderConfigured()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.Equal(typeof(FeedOrchestrator), profile.OrchestratorType);
         Assert.NotNull(profile.TextProvider);
@@ -48,7 +48,7 @@ public class DefaultSlotProfileProviderTests
     [Fact]
     public void FeedOrchestratorSlot_Should_HaveImageProviderConfigured()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.NotNull(profile.ImageProvider);
         Assert.NotEqual(AiProvider.None, profile.ImageProvider);
@@ -58,7 +58,7 @@ public class DefaultSlotProfileProviderTests
     public void FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()
     {
         // OpenAi for text, AzureFoundry for image — must be stored independently
-        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.NotEqual(profile.TextProvider, profile.ImageProvider);
         Assert.Equal(AiProvider.OpenAi,       profile.TextProvider);
@@ -68,7 +68,7 @@ public class DefaultSlotProfileProviderTests
     [Fact]
     public void FeedOrchestratorSlot_Should_ContainLinkedInAndX()
     {
-        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
         Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
@@ -78,7 +78,7 @@ public class DefaultSlotProfileProviderTests
     public void FeedOrchestratorSlot_Should_HaveLinkedInAsFirstSender()
     {
         // LinkedIn has the widest MessageMaxLength — must be the primary sender (index 0)
-        var profile = _provider.GetProfiles().Single(p => p.Hour == 8);
+        var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.Equal(SenderPlatform.LinkedIn, profile.SenderPlatforms[0]);
     }
