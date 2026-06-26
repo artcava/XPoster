@@ -152,6 +152,8 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()
     {
         // ARRANGE — primary limit 700, secondary limit 280; base summary 500 chars > 280
+        // The re-summarisation input is feedContent (not baseSummary): the orchestrator
+        // always passes the original feed content to the AI to preserve maximum context.
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
@@ -168,7 +170,8 @@ public class FeedOrchestratorTests
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
-        _mockTextProvider.Setup(s => s.GetSummaryAsync(baseSummary, 280, It.IsAny<CancellationToken>()))
+        // Re-summarisation receives feedContent (It.IsAny) — not baseSummary
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()))
             .ReturnsAsync(shortSummary);
         _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
@@ -189,8 +192,9 @@ public class FeedOrchestratorTests
         Assert.NotNull(posts[SenderPlatform.LinkedIn]);
         Assert.Contains(baseSummary[..10],  posts[SenderPlatform.X]!.Content);        // primary uses base
         Assert.Contains(shortSummary[..10], posts[SenderPlatform.LinkedIn]!.Content); // secondary uses re-summarised
+        // AI called with feedContent (any string), limit 280 — exactly once
         _mockTextProvider.Verify(
-            s => s.GetSummaryAsync(baseSummary, 280, It.IsAny<CancellationToken>()),
+            s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -344,7 +348,8 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_ReturnsNullEntry_WhenReSummarisationFails()
     {
-        // ARRANGE — base 500 > secondary 280; re-summarisation returns empty
+        // ARRANGE — base 500 > secondary 280; re-summarisation returns empty.
+        // The AI receives feedContent (It.IsAny), not baseSummary.
         var primarySender   = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
@@ -360,8 +365,9 @@ public class FeedOrchestratorTests
             .ReturnsAsync(fakeFeeds);
         _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
             .ReturnsAsync(baseSummary);
-        _mockTextProvider.Setup(s => s.GetSummaryAsync(baseSummary, 280, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(string.Empty); // re-summarisation fails
+        // Re-summarisation from feedContent (It.IsAny) with limit 280 returns empty → failure
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(string.Empty);
         _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -379,6 +385,183 @@ public class FeedOrchestratorTests
         Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
         Assert.NotNull(posts[SenderPlatform.X]);       // primary OK
         Assert.Null(posts[SenderPlatform.LinkedIn]);   // secondary failed → null entry
+    }
+
+    // ---------------------------------------------------------------------------
+    // 3-sender cascade — previousSummary propagation
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task OrchestrateAsync_ThirdSender_ChecksAgainstPreviousSummary_AndReSummarisesFromFeedContent()
+    {
+        // ARRANGE
+        // Senders: X=700, LinkedIn=280, Instagram=150
+        // baseSummary = 500 chars  → fits X (700), exceeds LinkedIn (280) → AI re-summarises → 200 chars
+        // previousSummary after LinkedIn = 200 chars
+        // 200 chars > 150 → Instagram also exceeds → AI re-summarises from feedContent → 100 chars
+        // Key assertion: the fitness check for Instagram is on previousSummary (200), NOT rawBaseSummary (500);
+        //                the AI input for Instagram is feedContent (It.IsAny), not baseSummary or previousSummary.
+        var senderX         = new Mock<ISender>();
+        var senderLinkedIn  = new Mock<ISender>();
+        var senderInstagram = new Mock<ISender>();
+        senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
+        senderX.Setup(s => s.MessageMaxLenght).Returns(700);
+        senderLinkedIn.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
+        senderLinkedIn.Setup(s => s.MessageMaxLenght).Returns(280);
+        senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
+        senderInstagram.Setup(s => s.MessageMaxLenght).Returns(150);
+
+        var fakeFeeds        = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary      = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
+        var linkedInSummary  = new string('B', 200); // 200 > 150: Instagram needs re-summary
+        var instagramSummary = new string('C', 100); // fits 150
+
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(baseSummary);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(linkedInSummary);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 150, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(instagramSummary);
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("prompt");
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateMultiSenderOrchestrator(
+            new List<ISender> { senderX.Object, senderLinkedIn.Object, senderInstagram.Object }.AsReadOnly());
+
+        // ACT
+        var posts = await orchestrator.OrchestrateAsync();
+
+        // ASSERT — all three senders produce a non-null post
+        Assert.Equal(3, posts.Count);
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.NotNull(posts[SenderPlatform.LinkedIn]);
+        Assert.NotNull(posts[SenderPlatform.Instagram]);
+
+        // Each sender uses the correct summary
+        Assert.Contains(baseSummary[..10],      posts[SenderPlatform.X]!.Content);
+        Assert.Contains(linkedInSummary[..10],  posts[SenderPlatform.LinkedIn]!.Content);
+        Assert.Contains(instagramSummary[..10], posts[SenderPlatform.Instagram]!.Content);
+
+        // AI called once per limit — from feedContent (It.IsAny) each time
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()), Times.Once);
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()), Times.Once);
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), 150, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_ThirdSender_ReusesSecondSummary_WhenSecondFitsAndThirdDoesNot()
+    {
+        // ARRANGE
+        // Senders: X=700, LinkedIn=280, Instagram=150
+        // baseSummary = 200 chars → fits LinkedIn (280) → LinkedIn reuses base (no AI call)
+        // previousSummary after LinkedIn = 200 chars
+        // 200 > 150 → Instagram must re-summarise from feedContent
+        var senderX         = new Mock<ISender>();
+        var senderLinkedIn  = new Mock<ISender>();
+        var senderInstagram = new Mock<ISender>();
+        senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
+        senderX.Setup(s => s.MessageMaxLenght).Returns(700);
+        senderLinkedIn.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
+        senderLinkedIn.Setup(s => s.MessageMaxLenght).Returns(280);
+        senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
+        senderInstagram.Setup(s => s.MessageMaxLenght).Returns(150);
+
+        var fakeFeeds        = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary      = new string('A', 200); // 200 <= 280: LinkedIn reuses, no AI
+        var instagramSummary = new string('C', 100); // re-summarised for Instagram
+
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(baseSummary);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 150, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(instagramSummary);
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("prompt");
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateMultiSenderOrchestrator(
+            new List<ISender> { senderX.Object, senderLinkedIn.Object, senderInstagram.Object }.AsReadOnly());
+
+        // ACT
+        var posts = await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        Assert.Equal(3, posts.Count);
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.NotNull(posts[SenderPlatform.LinkedIn]);
+        Assert.NotNull(posts[SenderPlatform.Instagram]);
+
+        // LinkedIn reuses baseSummary (no dedicated AI call at limit 280)
+        Assert.Contains(baseSummary[..10],      posts[SenderPlatform.LinkedIn]!.Content);
+        // Instagram gets its own re-summarised content
+        Assert.Contains(instagramSummary[..10], posts[SenderPlatform.Instagram]!.Content);
+
+        // AI called once for primary (700) and once for Instagram (150); NOT for LinkedIn
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()), Times.Never);
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), 150, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_ThirdSender_ReusesUpdatedPreviousSummary_WhenItFitsThirdLimit()
+    {
+        // ARRANGE
+        // Senders: X=700, LinkedIn=280, Instagram=250
+        // baseSummary = 500 chars → exceeds LinkedIn (280) → AI re-summarises → linkedInSummary = 200 chars
+        // previousSummary after LinkedIn = 200 chars
+        // 200 <= 250 → Instagram fits → reuses 200 chars WITHOUT calling AI
+        var senderX         = new Mock<ISender>();
+        var senderLinkedIn  = new Mock<ISender>();
+        var senderInstagram = new Mock<ISender>();
+        senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
+        senderX.Setup(s => s.MessageMaxLenght).Returns(700);
+        senderLinkedIn.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
+        senderLinkedIn.Setup(s => s.MessageMaxLenght).Returns(280);
+        senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
+        senderInstagram.Setup(s => s.MessageMaxLenght).Returns(250);
+
+        var fakeFeeds       = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary     = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
+        var linkedInSummary = new string('B', 200); // 200 <= 250: Instagram reuses this
+
+        _mockFeedService.Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeFeeds);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 700, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(baseSummary);
+        _mockTextProvider.Setup(s => s.GetSummaryAsync(It.IsAny<string>(), 280, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(linkedInSummary);
+        _mockTextProvider.Setup(s => s.GetImagePromptAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("prompt");
+        _mockImageProvider.Setup(s => s.GenerateImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = CreateMultiSenderOrchestrator(
+            new List<ISender> { senderX.Object, senderLinkedIn.Object, senderInstagram.Object }.AsReadOnly());
+
+        // ACT
+        var posts = await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        Assert.Equal(3, posts.Count);
+        Assert.NotNull(posts[SenderPlatform.X]);
+        Assert.NotNull(posts[SenderPlatform.LinkedIn]);
+        Assert.NotNull(posts[SenderPlatform.Instagram]);
+
+        // Instagram reuses the LinkedIn summary (200 chars) — no additional AI call
+        Assert.Contains(linkedInSummary[..10], posts[SenderPlatform.Instagram]!.Content);
+
+        // AI called only twice: once for primary (700), once for LinkedIn (280); NOT for Instagram
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        _mockTextProvider.Verify(s => s.GetSummaryAsync(It.IsAny<string>(), 250, It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ---------------------------------------------------------------------------
