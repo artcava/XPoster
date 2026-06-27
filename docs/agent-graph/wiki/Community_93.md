@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddOpenAiOptions()** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **NoOrchestrator()** (2 connections)
 
 ## Relationships
 

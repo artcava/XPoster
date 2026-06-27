@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **IgSender.cs** (7 connections)
 - **if()** (2 connections)
-- **XSender()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 106]] (3 shared connections)
+- [[Community 71]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

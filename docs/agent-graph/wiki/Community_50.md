@@ -5,17 +5,17 @@
 ## Key Concepts
 
 - **BaseOrchestratorTests.cs** (16 connections)
-- **TestOrchestrator()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
 - **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
+- **TestOrchestrator()** (2 connections)
 - **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
 - **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
 
 ## Relationships
 
-- [[Community 37]] (8 shared connections)
+- [[Community 42]] (8 shared connections)
 
 ## Audit Trail
 

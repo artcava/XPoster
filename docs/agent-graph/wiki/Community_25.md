@@ -1,29 +1,29 @@
 # Community 25
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (11 connections)
-- **IgSenderResilienceTests.cs** (11 connections)
-- **new()** (2 connections)
-- **IgSender()** (2 connections)
-- **PostWithImage()** (2 connections)
-- **BuildSender()** (2 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **PostWithoutImage()** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **BuildService()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **FalImageJson()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 28]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -5,8 +5,8 @@
 ## Key Concepts
 
 - **XPoster.Credentials** (2 connections)
-- **IgCredentials.cs** (2 connections)
-- **IgCredentials.cs** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
 
 ## Relationships
 

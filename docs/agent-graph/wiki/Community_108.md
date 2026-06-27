@@ -1,21 +1,21 @@
 # Community 108
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **AddOpenAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 59]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

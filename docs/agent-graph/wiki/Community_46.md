@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
-- **AzureFoundryOptionsValidatorTests.cs** (7 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptionsValidatorTests** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
 
 ## Relationships
 

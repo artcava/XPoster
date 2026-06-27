@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **typeof()** (2 connections)
-- **XPoster.Tests.Abstraction** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **foreach()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
 
 ## Relationships
 

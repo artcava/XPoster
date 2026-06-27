@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (11 connections)
-- **PowerLawOrchestratorTests.cs** (11 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_BroadcastsSamePost_ToAllSenders()** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **IgSenderResilienceTests.cs** (11 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **BuildSender()** (2 connections)
+- **IgSender()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **PostWithoutImage()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 - **new()** (2 connections)
 
 ## Relationships
