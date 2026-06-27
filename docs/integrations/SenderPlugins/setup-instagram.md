@@ -1,225 +1,249 @@
 # Instagram Account Setup
 
-> This document covers **only** the Instagram and Meta platform configuration required to enable programmatic publishing via the Instagram Graph API. For XPoster integration details, see [issue #72](https://github.com/artcava/XPoster/issues/72).
+> This document covers **only** the Instagram and Meta platform configuration required to enable programmatic publishing via the Instagram Platform API. For XPoster integration details, see [issue #72](https://github.com/artcava/XPoster/issues/72).
+
+---
+
+## Which API to use
+
+Meta currently offers two configurations for Instagram publishing:
+
+| | **Instagram API with Instagram Login** | Instagram API with Facebook Login |
+|---|---|---|
+| Login | Instagram credentials | Facebook credentials |
+| Facebook Page required | ❌ No | ✅ Yes |
+| API host | `graph.instagram.com` | `graph.facebook.com` |
+| Content Publishing | ✅ | ✅ |
+| Recommended | ✅ **Yes** | For legacy integrations only |
+
+XPoster uses the **Instagram API with Instagram Login**, which is the current recommended path by Meta as of 2024 and removes the dependency on a Facebook Page.
+
+> **Reference**: [developers.facebook.com/documentation/instagram-platform](https://developers.facebook.com/documentation/instagram-platform)
 
 ---
 
 ## Prerequisites
 
-Before starting, verify you have:
-
-- A **Facebook personal account** (required to own a Business Page and a Meta Developer App)
-- An **Instagram account** (personal is fine as a starting point — it will be converted to Business/Creator)
-- Access to the **Meta Developer Portal**: [developers.facebook.com](https://developers.facebook.com)
+- An **Instagram account** (personal accounts must be converted — see Step 1)
+- A **Facebook account** (required to access the Meta Developer Portal and create an app)
+- Access to [developers.facebook.com](https://developers.facebook.com)
 
 ---
 
 ## Step 1 — Convert Instagram to a Business or Creator Account
 
-The Instagram Graph API is **not available for personal accounts**. The Instagram Basic Display API, which historically served personal accounts, was **deprecated and shut down in 2024**. As of 2026, the only supported path for programmatic publishing is the Graph API, which requires a **Professional account** (Business or Creator).
+The Instagram Platform API is **not available for personal accounts**. The Instagram Basic Display API, which historically served personal accounts, was **deprecated and shut down in 2024**. Programmatic publishing requires a **Professional account** (Business or Creator).
 
 Conversion is free and reversible:
 
 1. Open the Instagram app.
 2. Go to **Settings → Account → Switch to Professional Account**.
-3. Choose **Business** (recommended for API publishing) or **Creator**.
+3. Choose **Business** (recommended) or **Creator**.
 4. Select a category and complete the optional contact info step.
 
-> ✅ After conversion the account remains fully usable for normal Instagram activity. No content is lost.
+> ✅ No content is lost. The account remains usable for normal Instagram activity after conversion.
 
 ---
 
-## Step 2 — Create a Facebook Page
+## Step 2 — Create a Meta Developer App
 
-The Instagram Graph API routes all requests through a **Facebook Page**. An Instagram Business account must be linked to a Page before the API can be used.
-
-If you don’t have a Page yet:
-
-1. On Facebook, click **Pages → Create new Page**.
-2. Give it a name (it can be a test page — it does not need to be public).
-3. Complete the minimal required fields and publish.
-
----
-
-## Step 3 — Link Instagram to the Facebook Page
-
-1. Go to your Facebook Page.
-2. Open **Settings → Linked Accounts** (or **Professional Dashboard → Settings → Instagram**).
-3. Click **Connect Instagram**.
-4. Log in with your Instagram credentials and confirm the connection.
-
-Alternatively, via **Meta Business Suite** ([business.facebook.com](https://business.facebook.com)):
-
-1. Go to **Settings → Accounts → Instagram accounts**.
-2. Click **Add** and follow the OAuth flow.
-
-> ⚠️ This step is **mandatory**. Without the Page–Instagram link, all Graph API calls return an authorization error regardless of the token scopes.
-
----
-
-## Step 4 — Create a Meta Developer App
-
-1. Go to [developers.facebook.com](https://developers.facebook.com) and log in.
+1. Go to [developers.facebook.com](https://developers.facebook.com) and log in with your Facebook account.
 2. Click **My Apps → Create App**.
-3. Under **Use case**, select **Content Management** → **Manage messaging and content on Instagram**, then click **Next**.
-4. Optionally connect a Business Portfolio, then click **Next**.
-5. Give the app a name, enter a contact email, and click **Create App**.
-
-> The app type must be **Business**. Consumer-type apps cannot add the Instagram Graph API product.
+3. When asked *"What do you want your app to do?"*, select **Other**, then click **Next**.
+4. Select app type **Business**, then click **Next**.
+5. Enter a name, a contact email, and optionally link a Business Portfolio. Click **Create App**.
 
 ---
 
-## Step 5 — Add Instagram Graph API Product
+## Step 3 — Add the Instagram Product (Business Login for Instagram)
 
-1. Inside the app dashboard, go to **Customize** under the *Manage messaging and content on Instagram* use case.
-2. Select **API Setup with Facebook Login**.
-3. Under **Permissions**, add all required scopes:
-   - `instagram_basic`
-   - `instagram_content_publish`
-   - `pages_read_engagement`
-   - `pages_show_list`
+1. In the app dashboard, scroll to **Add Products to Your App**.
+2. Find **Instagram** and click **Set up**.
+3. In the Instagram setup page, choose **API setup with Instagram login**.
+4. Note the **Instagram App ID** and **Instagram App Secret** shown in this section — these are your app credentials.
 
-> In **Development mode** these permissions are available immediately without App Review, but they only work for accounts explicitly added as Testers or Administrators of the app (see Step 6).
+> ⚠️ The Instagram App ID shown here may differ from the Meta App ID displayed in **App Settings → Basic**. Use the one from the Instagram product section.
 
 ---
 
-## Step 6 — Add Your Instagram Account as a Tester
+## Step 4 — Configure Permissions
 
-While the app is in Development mode (the default state), the API only accepts requests on behalf of accounts that have been granted a role in the app.
+In the Instagram product dashboard, under **Permissions**, enable:
+
+| Permission | Purpose |
+|---|---|
+| `instagram_business_basic` | Read profile info and media |
+| `instagram_business_content_publish` | Publish photos and videos |
+
+In **Development mode** these permissions are pre-approved and work immediately for accounts with a role in the app (see Step 5). No App Review is needed for personal use.
+
+> ⚠️ These are the **new permission names** introduced with the Instagram Login flow. The old names (`instagram_basic`, `instagram_content_publish`) belong to the Facebook Login flow and are **not interchangeable**.
+
+---
+
+## Step 5 — Add Your Instagram Account as a Tester
+
+In Development mode, the API only works for accounts explicitly assigned a role in the app.
 
 1. In the app dashboard, go to **App Roles → Roles**.
-2. Under **Testers**, click **Add** and enter the Facebook account linked to your Instagram.
-3. The invited account must **accept the invitation**: open Facebook Notifications → accept the developer role.
-4. On Instagram, also go to **Settings → Apps and Websites** and verify the app appears as authorized.
+2. Under **Testers**, click **Add Testers**.
+3. Search for the Instagram username (not Facebook) of the account you want to publish from.
+4. The invited account must **accept the invitation**: open the Instagram app → **Settings → Apps and Websites → Tester Invites** and accept.
 
-> If you skip this step, token generation will succeed but API calls will return error code `10` (*Not authorized*).
-
----
-
-## Step 7 — Generate a Short-Lived Access Token
-
-1. Open the **Graph API Explorer**: [developers.facebook.com/tools/explorer](https://developers.facebook.com/tools/explorer)
-2. In the top-right dropdown, select the app you just created.
-3. Click **Get Token → Get User Access Token**.
-4. In the permissions dialog, check:
-   - `instagram_basic`
-   - `instagram_content_publish`
-   - `pages_read_engagement`
-   - `pages_show_list`
-5. Click **Generate Access Token** and complete the OAuth consent flow.
-6. Select the Instagram account you want to publish from, click **Save**, then **Got it**.
-
-The token shown in the Explorer is a **short-lived User Access Token** valid for approximately **1–2 hours**.
+> If this step is skipped, all API calls will return error code `10` (*Permission Denied*) even with a valid token.
 
 ---
 
-## Step 8 — Exchange for a Long-Lived Access Token
+## Step 6 — Generate a Short-Lived Access Token
 
-Short-lived tokens are not usable in production. Exchange them for a **long-lived token** (valid 60 days).
+With Instagram Login, token generation uses Instagram's own OAuth flow, not the Graph API Explorer.
 
-Call the following endpoint from a browser or curl:
+### Option A — Via the App Dashboard (quickest for initial setup)
 
-```
-GET https://graph.facebook.com/v20.0/oauth/access_token
-  ?grant_type=fb_exchange_token
-  &client_id={your-app-id}
-  &client_secret={your-app-secret}
-  &fb_exchange_token={short-lived-token}
-```
+1. In the app dashboard, go to the **Instagram → API setup with Instagram login** section.
+2. Click **Generate Token** next to your Instagram account.
+3. Complete the Instagram OAuth consent screen, granting `instagram_business_basic` and `instagram_business_content_publish`.
+4. Copy the **Instagram User Access Token** displayed.
 
-- `{your-app-id}` and `{your-app-secret}` are found in the app dashboard under **App Settings → Basic**.
-- The response contains `access_token` (the long-lived token) and `expires_in` (seconds, approximately 5,184,000 ≈ 60 days).
+### Option B — Via OAuth URL (for automation or re-generation)
 
-Verify the token and confirm its scopes via the **Access Token Debugger**:
+Construct the authorization URL:
 
 ```
-https://developers.facebook.com/tools/debug/accesstoken/
+https://api.instagram.com/oauth/authorize
+  ?client_id={instagram-app-id}
+  &redirect_uri={your-redirect-uri}
+  &scope=instagram_business_basic,instagram_business_content_publish
+  &response_type=code
 ```
 
-Paste the token and click **Debug**. Confirm:
-- **Type**: User
-- **Expires**: ~60 days from now
-- **Scopes**: includes `instagram_basic`, `instagram_content_publish`, `pages_read_engagement`
+After the user authorizes, Instagram redirects to `{redirect_uri}?code={auth-code}`. Exchange the code for a token:
 
-> ⚠️ Long-lived tokens expire after **60 days**. To avoid disruption, renew them **before day 50** by calling the same exchange endpoint with the still-valid long-lived token.
+```
+POST https://api.instagram.com/oauth/access_token
+
+Content-Type: application/x-www-form-urlencoded
+client_id={instagram-app-id}
+client_secret={instagram-app-secret}
+grant_type=authorization_code
+redirect_uri={your-redirect-uri}
+code={auth-code}
+```
+
+The response contains a **short-lived Instagram User Access Token** valid for **1 hour**.
 
 ---
 
-## Step 9 — Retrieve the Instagram Account ID
+## Step 7 — Exchange for a Long-Lived Access Token
 
-The numeric Instagram Account ID (`IG_ACCOUNT_ID`) is needed to form API request URLs.
+Short-lived tokens are not suitable for production. Exchange for a **long-lived token** (valid 60 days):
 
-**Step 9a** — Get your Facebook Pages:
 ```
-GET https://graph.facebook.com/v20.0/me/accounts
-  ?access_token={long-lived-token}
-```
-Note the `id` of the Page connected to your Instagram account.
-
-**Step 9b** — Get the linked Instagram Business Account ID:
-```
-GET https://graph.facebook.com/v20.0/{page-id}
-  ?fields=instagram_business_account
-  &access_token={long-lived-token}
+GET https://graph.instagram.com/access_token
+  ?grant_type=ig_exchange_token
+  &client_secret={instagram-app-secret}
+  &access_token={short-lived-token}
 ```
 
 The response contains:
 ```json
 {
-  "instagram_business_account": {
-    "id": "17841400000000000"
-  },
-  "id": "{page-id}"
+  "access_token": "IGAAx...",
+  "token_type": "bearer",
+  "expires_in": 5183944
 }
 ```
 
-The `instagram_business_account.id` value is your `IG_ACCOUNT_ID`.
+`expires_in` is in seconds — approximately 60 days.
 
-Alternatively, from the **Graph API Explorer**, search the `instagram_business_account.id` field from the debugger output under **Granular Scopes → instagram_basic**.
+### Refresh before expiry
+
+Before the token expires (renew from day 50 onwards), call:
+
+```
+GET https://graph.instagram.com/refresh_access_token
+  ?grant_type=ig_refresh_token
+  &access_token={long-lived-token}
+```
+
+This resets the expiry to a fresh 60 days. The same token value is returned with an updated `expires_in`.
+
+> ⚠️ Note: both exchange and refresh calls target `graph.instagram.com`, **not** `graph.facebook.com`. This is a key difference from the Facebook Login flow.
 
 ---
 
-## Step 10 — App Review (Production Only)
+## Step 8 — Retrieve the Instagram Account ID
 
-In **Development mode**, everything above works only for accounts with a role in the app (Admins, Testers). This is sufficient for a single-owner automation.
+The Instagram Account ID (`IG_ACCOUNT_ID`) is required to construct API request URLs.
 
-If the app needs to act on behalf of **third-party Instagram accounts**, it must pass **Meta App Review**:
+With Instagram Login, the ID is retrieved directly — no Facebook Page lookup is needed:
+
+```
+GET https://graph.instagram.com/v22.0/me
+  ?fields=id,name,username
+  &access_token={long-lived-token}
+```
+
+Example response:
+```json
+{
+  "id": "17841400000000000",
+  "name": "Your Name",
+  "username": "yourusername"
+}
+```
+
+The `id` value is your `IG_ACCOUNT_ID`. Store it in the `IG_ACCOUNT_ID` app setting.
+
+---
+
+## Step 9 — App Review (Production Only)
+
+In **Development mode**, the setup above works only for accounts added as Testers (Step 5). For a private single-account automation like XPoster, **App Review is not required**.
+
+App Review is only needed if the app will publish on behalf of **third-party Instagram accounts** (i.e., other users' accounts via OAuth). In that case:
 
 1. Go to **App Review → Permissions and Features**.
-2. Request each permission used (`instagram_content_publish`, etc.).
-3. Provide screen recordings and a written description of how the app uses each permission.
+2. Request `instagram_business_basic` and `instagram_business_content_publish`.
+3. Provide screen recordings and usage descriptions.
 4. Switch the app to **Live mode** after approval.
 
-> For a private automation (posting to your own account only), App Review is **not required**. Development mode is sufficient indefinitely.
+---
+
+## App Settings Reference
+
+At the end of this setup, you will have the following values to store securely (e.g. Azure Key Vault):
+
+| Setting | Where to find it |
+|---|---|
+| `IG_ACCESS_TOKEN` | Generated in Step 7 (long-lived token) |
+| `IG_ACCOUNT_ID` | Retrieved in Step 8 (`/me?fields=id`) |
+
+> Never commit tokens to source control or expose them in logs.
 
 ---
 
 ## Token Management Summary
 
-| Token type | Validity | Use |
-|---|---|---|
-| Short-lived User Token | ~1–2 hours | Only for generating long-lived tokens |
-| Long-lived User Token | 60 days | Use in production; renew before day 50 |
-| Page Token | Never expires | Not used for Instagram content publishing |
-
-> Tokens must be stored securely (e.g. Azure Key Vault). Never commit tokens to source control or expose them in logs.
+| Token type | Validity | Host | Notes |
+|---|---|---|---|
+| Short-lived Instagram User Token | ~1 hour | `api.instagram.com` | Only used to generate long-lived token |
+| Long-lived Instagram User Token | 60 days | `graph.instagram.com` | Use in production; refresh before day 50 |
 
 ---
 
 ## Image Requirements
 
-The Instagram Graph API enforces strict constraints on images submitted for publishing:
-
 | Constraint | Requirement |
 |---|---|
-| Format | JPEG only (PNG, GIF, MPO, JPS not accepted) |
+| Format | **JPEG only** (PNG, GIF, MPO, JPS not accepted) |
 | Aspect ratio | Between 4:5 (portrait) and 1.91:1 (landscape) |
 | Minimum width | 320 px |
 | Maximum width | 1440 px |
 | Maximum file size | 8 MB |
 | Color space | sRGB recommended |
 
-Images must be hosted at a **publicly accessible URL** (direct JPEG URL, no authentication, no redirects). Sharing links from Google Drive, OneDrive, or similar services are rejected by Meta’s media pipeline.
+Images must be hosted at a **direct, publicly accessible URL** — no authentication, no redirects. Sharing links from Google Drive, OneDrive, or similar services are rejected by Meta's media pipeline.
 
 ---
 
@@ -227,7 +251,7 @@ Images must be hosted at a **publicly accessible URL** (direct JPEG URL, no auth
 
 | Limit | Value |
 |---|---|
-| Content publishing | 25 posts per 24 hours per account |
+| Content publishing | **50 posts per 24 hours** per account |
 | API calls | 200 calls per hour per user token |
 
 Exceeding the publishing limit returns HTTP `429`. The `Retry-After` header indicates when the limit resets.
@@ -236,9 +260,9 @@ Exceeding the publishing limit returns HTTP `429`. The `Retry-After` header indi
 
 ## References
 
+- [Instagram Platform Overview](https://developers.facebook.com/documentation/instagram-platform)
+- [Instagram API with Instagram Login — Content Publishing](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/content-publishing/)
+- [Instagram API with Instagram Login — Overview](https://developers.facebook.com/docs/instagram-platform/overview/)
 - [Meta Developer Portal](https://developers.facebook.com)
-- [Graph API Explorer](https://developers.facebook.com/tools/explorer)
 - [Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken/)
-- [Instagram Graph API — IG User Media endpoint](https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-user/media/)
-- [Instagram Graph API — Content Publishing guide](https://developers.facebook.com/docs/instagram-platform/content-publishing)
-- [Meta Business Suite](https://business.facebook.com)
+- Tracking issue: [#72](https://github.com/artcava/XPoster/issues/72)
