@@ -1,22 +1,22 @@
 # Community 71
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

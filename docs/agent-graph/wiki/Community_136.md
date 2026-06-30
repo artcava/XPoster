@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 114]] (2 shared connections)
+- [[Community 116]] (2 shared connections)
 
 ## Audit Trail
 

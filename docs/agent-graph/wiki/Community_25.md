@@ -1,29 +1,29 @@
 # Community 25
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
-- **BuildService()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageServiceTests** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **FalImageJson()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **DeepSeekService.cs** (11 connections)
+- **DeepSeekService.cs** (11 connections)
+- **var()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **if()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 44 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

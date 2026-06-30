@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships

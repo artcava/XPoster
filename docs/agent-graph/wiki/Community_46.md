@@ -6,12 +6,12 @@
 
 - **AiProviderExtensionsTests.cs** (7 connections)
 - **AiProviderExtensionsTests.cs** (7 connections)
-- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
 - **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
 - **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
 - **XPoster.Tests.Contracts** (2 connections)
-- **AiProviderExtensionsTests** (2 connections)
 - **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
 
 ## Relationships
 

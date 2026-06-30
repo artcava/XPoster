@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
+- **IgSender.cs** (7 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (8 shared connections)
+- [[Community 87]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **NoOrchestrator()** (2 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **AddPerplexityOptions()** (2 connections)
 
 ## Relationships
 

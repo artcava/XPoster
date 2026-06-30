@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **if()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **SendAsync()** (2 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **HttpClientExtensions.cs** (5 connections)
+- **IsTransientHttpFailure()** (2 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
 
 ## Relationships
 
