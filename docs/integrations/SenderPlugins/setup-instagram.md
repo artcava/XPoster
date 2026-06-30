@@ -196,8 +196,6 @@ At the end of this setup, the following secrets must be stored in Azure Key Vaul
 | `IgAccessToken` | Long-lived User Access Token | Step 6 |
 | `IgAccountId` | Instagram Business Account numeric ID | Step 7b (`instagram_business_account.id`) |
 
-> ✅ **Part 1 completed (June 2026)** — Both secrets have been registered in Key Vault with the names above.
-
 > Never commit tokens to source control or expose them in logs.
 
 ---
