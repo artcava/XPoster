@@ -116,7 +116,7 @@ The response will be:
 
 `expires_in` ≈ 5,184,000 seconds ≈ **60 days**.
 
-Store the `access_token` value as `IG_ACCESS_TOKEN` in Azure Key Vault.
+Store the `access_token` value in Azure Key Vault with the secret name **`IgAccessToken`**.
 
 > ⚠️ Tokens expire after 60 days. To renew, repeat Steps 5 and 6 before expiry. Automated refresh is tracked in [#72](https://github.com/artcava/XPoster/issues/72).
 
@@ -124,7 +124,7 @@ Store the `access_token` value as `IG_ACCESS_TOKEN` in Azure Key Vault.
 
 ## Step 7 — Retrieve the Instagram Account ID
 
-The `IG_ACCOUNT_ID` is needed to form API request URLs in XPoster.
+The Instagram Business Account ID is needed to form API request URLs in XPoster.
 
 ### Step 7a — Find your Facebook Page
 
@@ -161,14 +161,14 @@ The response will contain:
 }
 ```
 
-The `instagram_business_account.id` value is your `IG_ACCOUNT_ID`. Store it in Azure Key Vault.
+The `instagram_business_account.id` value is your Instagram Account ID. Store it in Azure Key Vault with the secret name **`IgAccountId`**.
 
 ### Verify the connection
 
 Confirm the account is reachable with the token:
 
 ```
-GET /{IG_ACCOUNT_ID}?fields=id,name,username
+GET /{IgAccountId}?fields=id,name,username
 ```
 
 You should see the Instagram account name and username. If this call succeeds, the configuration is complete.
@@ -187,14 +187,16 @@ App Review is only needed if the app will publish on behalf of **third-party Ins
 
 ---
 
-## App Settings Reference
+## Azure Key Vault Secret Names Reference
 
-At the end of this setup, store the following values securely in Azure Key Vault:
+At the end of this setup, the following secrets must be stored in Azure Key Vault with **these exact names**, which XPoster reads via `IOptions<IgCredentials>`:
 
-| Setting | How to obtain |
-|---|---|
-| `IG_ACCESS_TOKEN` | Long-lived token from Step 6 |
-| `IG_ACCOUNT_ID` | `instagram_business_account.id` from Step 7 |
+| Key Vault Secret Name | Value | How to obtain |
+|---|---|---|
+| `IgAccessToken` | Long-lived User Access Token | Step 6 |
+| `IgAccountId` | Instagram Business Account numeric ID | Step 7b (`instagram_business_account.id`) |
+
+> ✅ **Part 1 completed (June 2026)** — Both secrets have been registered in Key Vault with the names above.
 
 > Never commit tokens to source control or expose them in logs.
 
