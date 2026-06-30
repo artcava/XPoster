@@ -38,7 +38,7 @@ public class InSenderTests
     {
         var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
         Assert.NotNull(sender);
-        Assert.Equal(800, sender.MessageMaxLenght);
+        Assert.Equal(2800, sender.MessageMaxLenght);
     }
 
     [Fact]

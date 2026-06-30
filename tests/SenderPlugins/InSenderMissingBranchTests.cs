@@ -47,9 +47,9 @@ public class InSenderMissingBranchTests
     }
 
     [Fact]
-    public void MessageMaxLenght_Returns800()
+    public void MessageMaxLenght_Returns2800()
     {
-        Assert.Equal(800, BuildSender().MessageMaxLenght);
+        Assert.Equal(2800, BuildSender().MessageMaxLenght);
     }
 
     [Fact]

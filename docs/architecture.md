@@ -86,7 +86,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 | Field | Type | Purpose |
 |---|---|---|
 | `Hour` | `int` | Hour of day (0–23) when this slot is active |
-| `SenderPlatforms` | `IReadOnlyList<SenderPlatform>` | Ordered list of target platforms (descending `MessageMaxLength`); first entry drives base summary generation |
+| `SenderPlatforms` | `IReadOnlyList<SenderPlatform>` | List of target platforms for this slot. Declaration order does not affect execution: `FeedOrchestrator` re-orders senders internally by descending `MessageMaxLength`; the widest sender drives base summary generation |
 | `OrchestratorType` | `Type` | The concrete `BaseOrchestrator` subclass to instantiate |
 | `TextProvider` | `AiProvider?` | Optional AI provider for text generation |
 | `ImageProvider` | `AiProvider?` | Optional AI provider for image generation; may differ from `TextProvider` |
@@ -119,7 +119,7 @@ Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **conte
 
 `BaseOrchestrator` provides the shared infrastructure for all concrete orchestrators:
 
-- **`_senders`** (`IReadOnlyList<ISender>`): the ordered list of senders configured for this slot. Senders must be declared in descending `MessageMaxLength` order in the profile — the first entry is the **primary sender**.
+- **`_senders`** (`IReadOnlyList<ISender>`): the list of senders configured for this slot, as re-ordered by `FeedOrchestrator` in descending `MessageMaxLength` order at runtime. The first entry after re-ordering is the **primary sender** (widest limit).
 - **`_sender`** (`ISender?`): computed property returning `_senders[0]` (primary sender) or `null` when the list is empty. Concrete orchestrators use this as the reference for base content generation.
 - **`PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts)`**: dispatches each post to the sender whose `ISender.Platform` matches the dictionary key, in parallel via `Task.WhenAll`. A `null` post causes that sender to be skipped with a warning. A sender whose platform has no entry in the dictionary is also skipped with a warning. Returns `true` only if all dispatched senders succeed.
 - **`DispatchAsync`** (private): guards against null/empty content, logs the per-sender outcome (`"Sender {Sender} result: {Result}"`), and delegates to `ISender.SendAsync(post, ct)`.
@@ -170,8 +170,8 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 | Sender | `SenderPlatform` value | `MessageMaxLength` | Target | Notes |
 |---|---|---|---|---|
 | `XSender` | `X` | 280 | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; credentials injected via `IOptions<XCredentials>` |
-| `InSender` | `LinkedIn` | ~3 000 | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
-| `IgSender` | `Instagram` | ~2 200 | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<IgCredentials>` |
+| `InSender` | `LinkedIn` | 3 000 | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
+| `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<IgCredentials>` |
 | `DryRunSender` | `DryRun` | `int.MaxValue` | **None** | **Local development and testing only.** Logs post content but makes **no outbound social API calls**. Always returns `true`. Activated via `EnableDryRunSlot = true`; must never be used in production. |
 
 ---

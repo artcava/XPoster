@@ -75,12 +75,13 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveLinkedInAsFirstSender()
+    public void FeedOrchestratorSlot_Should_HaveTwoSenders()
     {
-        // LinkedIn has the widest MessageMaxLength — must be the primary sender (index 0)
+        // Declaration order in SenderPlatforms is not significant:
+        // FeedOrchestrator re-orders senders internally by descending MessageMaxLength at runtime.
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
-        Assert.Equal(SenderPlatform.LinkedIn, profile.SenderPlatforms[0]);
+        Assert.Equal(2, profile.SenderPlatforms.Count);
     }
 
     // ---------------------------------------------------------------------------

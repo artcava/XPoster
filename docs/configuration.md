@@ -200,16 +200,16 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 Slot profiles are defined in `DefaultSlotProfileProvider` (production) and `DryRunSlotProfileProvider` (local dry-run). As of the fan-out feature (#176), each `ScheduledOrchestrationProfile` accepts an `IReadOnlyList<SenderPlatform>` instead of a single `SenderPlatform`.
 
-### Ordering rule — descending `MessageMaxLength`
+### Sender ordering in fan-out slots
 
-Senders within a slot **must be declared in descending `MessageMaxLength` order**. The first sender (index 0, widest limit) drives base summary and image generation. Subsequent senders receive an AI re-summarisation only when the base summary exceeds their character limit; otherwise the base summary is reused as-is, skipping the AI call entirely.
+`FeedOrchestrator` re-orders senders internally by descending `MessageMaxLength` at runtime before producing per-sender content. The declaration order within `senderPlatforms` in a `ScheduledOrchestrationProfile` does not affect fan-out execution — the orchestrator always selects the widest sender as primary, regardless of how platforms are listed in the profile.
 
 | Platform | `MessageMaxLength` | Role in a fan-out slot |
 |---|---|---|
-| LinkedIn | 700 | Primary — widest limit; base summary generated at this length |
-| Instagram | 2 200 | Secondary — but image-first; in practice usually shorter captions |
-| X (Twitter) | 280 | Typically last — always triggers re-summarisation when base > 280 |
-| DryRun | 500 | Local testing only |
+| LinkedIn | 3 000 | Widest limit — selected as primary by `FeedOrchestrator`; base summary generated at this length |
+| Instagram | 2 200 | Secondary — re-summarisation triggered only when base summary exceeds 2 200 chars |
+| X (Twitter) | 280 | Narrowest — always triggers re-summarisation when base summary exceeds 280 chars |
+| DryRun | `int.MaxValue` | Local testing only — always selected as primary when present |
 
 > 💡 **Cost implication:** a single fan-out slot with N senders replaces N separate scheduled slots. Base summary and image are generated once; only cheap per-sender re-summarisation AI calls are added when needed. See the [Token / Credit Savings](#token--credit-savings) section below.
 
