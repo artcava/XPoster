@@ -17,6 +17,9 @@ namespace XPoster.SenderPlugins
         private readonly HttpClient _httpClient;
         private readonly ILogger<IgSender> _logger;
         private readonly InstagramCredentials _creds;
+        private readonly IBlobStorageService _blobStorageService;
+        private readonly IContainerStateStore _containerStateStore;
+
 
         /// <summary>
         /// Initialises a new instance of <see cref="IgSender"/> using an <see cref="IHttpClientFactory"/>-provided
@@ -25,13 +28,21 @@ namespace XPoster.SenderPlugins
         /// <param name="httpClientFactory">The factory used to create the named "Instagram" client.</param>
         /// <param name="credentials">Typed Instagram credentials resolved from configuration.</param>
         /// <param name="logger">The logger for diagnostic output.</param>
+        /// <param name="blobStorageService">The blob storage service for uploading images.</param>
+        /// <param name="containerStateStore">The container state store for managing container states.</param>
         /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-        public IgSender(IHttpClientFactory httpClientFactory, IOptions<InstagramCredentials> credentials, ILogger<IgSender> logger)
+        public IgSender(IHttpClientFactory httpClientFactory, IOptions<InstagramCredentials> credentials, ILogger<IgSender> logger, IBlobStorageService blobStorageService, IContainerStateStore containerStateStore)
         {
             ArgumentNullException.ThrowIfNull(httpClientFactory);
             ArgumentNullException.ThrowIfNull(credentials);
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(blobStorageService);
+            ArgumentNullException.ThrowIfNull(containerStateStore);
+
             _creds = credentials.Value;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = logger;
+            _blobStorageService = blobStorageService;
+            _containerStateStore = containerStateStore;
             _httpClient = httpClientFactory.CreateClient("Instagram");
         }
 
@@ -52,6 +63,18 @@ namespace XPoster.SenderPlugins
         {
             try
             {
+                if (post.Image is null || post.Image.Length == 0)
+                {
+                    _logger.LogWarning("Instagram richiede un'immagine per i post. Pubblicazione non eseguita.");
+                    return false;
+                }
+
+                if (!IsJpeg(post.Image))
+                {
+                    _logger.LogWarning("L'immagine non è un JPEG valido. Pubblicazione non eseguita.");
+                    return false;
+                }
+
                 string caption = $"{post.Content}{Post.Firm}";
                 if (caption.Length > MessageMaxLenght)
                 {
@@ -59,60 +82,51 @@ namespace XPoster.SenderPlugins
                     caption = caption.Substring(0, MessageMaxLenght);
                 }
 
-                if (post.Image != null && post.Image.Length > 0)
+                var imageUrl = await UploadImageToPublicUrl(post.Image, ct);
+                if (imageUrl is null)
                 {
-                    string imageUrl = await UploadImageToPublicUrl(post.Image, ct);
-                    if (string.IsNullOrEmpty(imageUrl))
-                    {
-                        _logger.LogError("Impossibile caricare l'immagine per Instagram.");
-                        return false;
-                    }
-
-                    var mediaPayload = new
-                    {
-                        image_url = imageUrl,
-                        caption = caption,
-                        access_token = _creds.InstagramAccessToken
-                    };
-                    var mediaContent = new StringContent(JsonSerializer.Serialize(mediaPayload), Encoding.UTF8, "application/json");
-                    var mediaResponse = await _httpClient.PostAsync(
-                        $"https://graph.instagram.com/v20.0/{_creds.InstagramAccountId}/media", mediaContent);
-
-                    if (!mediaResponse.IsSuccessStatusCode)
-                    {
-                        _logger.LogError("Errore nella creazione del media: {Response}",
-                            await mediaResponse.Content.ReadAsStringAsync());
-                        return false;
-                    }
-
-                    var mediaData = JsonSerializer.Deserialize<JsonElement>(await mediaResponse.Content.ReadAsStringAsync());
-                    string creationId = mediaData.GetProperty("id").GetString()
-                        ?? throw new InvalidOperationException("id missing in Instagram media response.");
-
-                    var publishPayload = new
-                    {
-                        creation_id = creationId,
-                        access_token = _creds.InstagramAccessToken
-                    };
-                    var publishContent = new StringContent(JsonSerializer.Serialize(publishPayload), Encoding.UTF8, "application/json");
-                    var publishResponse = await _httpClient.PostAsync(
-                        $"https://graph.instagram.com/v20.0/{_creds.InstagramAccountId}/media_publish", publishContent);
-
-                    if (!publishResponse.IsSuccessStatusCode)
-                    {
-                        _logger.LogError("Errore nella pubblicazione: {Response}",
-                            await publishResponse.Content.ReadAsStringAsync());
-                        return false;
-                    }
-
-                    _logger.LogInformation("Post con immagine pubblicato su Instagram con successo.");
-                    return true;
-                }
-                else
-                {
-                    _logger.LogWarning("Instagram richiede un'immagine per i post. Pubblicazione non eseguita.");
+                    _logger.LogError("Impossibile caricare l'immagine per Instagram.");
                     return false;
                 }
+
+                string mediaUrl =
+                    $"https://graph.instagram.com/v20.0/{_creds.InstagramAccountId}/media" +
+                    $"?access_token={Uri.EscapeDataString(_creds.InstagramAccessToken)}";
+
+                var mediaPayload = new
+                {
+                    image_url = imageUrl,
+                    caption
+                };
+                var mediaContent = new StringContent(JsonSerializer.Serialize(mediaPayload), Encoding.UTF8, "application/json");
+                var mediaResponse = await _httpClient.PostAsync(mediaUrl, mediaContent, ct);
+
+                if (!mediaResponse.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Errore nella creazione del media su Instagram. StatusCode: {StatusCode}", mediaResponse.StatusCode);
+                    return false;
+                }
+
+                var mediaJson = await mediaResponse.Content.ReadAsStringAsync(ct);
+                var mediaData = JsonSerializer.Deserialize<JsonElement>(mediaJson);
+
+                if (!mediaData.TryGetProperty("id", out var idProperty))
+                {
+                    _logger.LogError("Risposta Instagram non valida: missing id.");
+                    return false;
+                }
+
+                string creationId = idProperty.GetString();
+                if (string.IsNullOrWhiteSpace(creationId))
+                {
+                    _logger.LogError("Risposta Instagram non valida: empty id.");
+                    return false;
+                }
+
+                await _containerStateStore.SaveAsync(creationId, GetBlobNameFromUri(imageUrl), ct);
+                _logger.LogInformation("Media container creato correttamente su Instagram.");
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -132,10 +146,37 @@ namespace XPoster.SenderPlugins
         /// Always thrown — this method is a placeholder pending integration with a public storage service
         /// such as Azure Blob Storage.
         /// </exception>
-        private Task<string> UploadImageToPublicUrl(byte[] image, CancellationToken ct = default)
+        private async Task<Uri?> UploadImageToPublicUrl(byte[] image, CancellationToken ct = default)
         {
-            _logger.LogInformation("Caricamento immagine su URL pubblico (da implementare).");
-            return Task.FromException<string>(new NotImplementedException("Caricamento immagine su URL pubblico non implementato."));
+            try
+            {
+                return await _blobStorageService.UploadAsync(image, "image/jpeg", ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore durante il caricamento dell'immagine su Blob Storage.");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the provided image bytes represent a valid JPEG image by checking the magic number.
+        /// </summary>
+        /// <param name="image">The image bytes to check.</param>
+        /// <returns>True if the image is a valid JPEG; otherwise, false.</returns>
+        private static bool IsJpeg(byte[] image)
+        {
+            return image.Length >= 2 && image[0] == 0xFF && image[1] == 0xD8;
+        }
+
+        /// <summary>
+        /// Extracts the blob name from the given URI.
+        /// </summary>
+        /// <param name="uri">The URI of the blob.</param>
+        /// <returns>The name of the blob.</returns>
+        private static string GetBlobNameFromUri(Uri uri)
+        {
+            return uri.Segments.Length > 0 ? uri.Segments[^1].Split('?')[0] : string.Empty;
         }
     }
 }
