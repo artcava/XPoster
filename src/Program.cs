@@ -1,6 +1,7 @@
 extern alias AzureIdentity;
 
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -124,5 +125,18 @@ builder.Services.AddAzureFoundryOptions(builder.Configuration);
 builder.Services.AddDeepSeekOptions(builder.Configuration);
 builder.Services.AddFalAiOptions(builder.Configuration);
 builder.Services.AddPerplexityOptions(builder.Configuration);
+
+// Azure Blob Storage — BlobServiceClient registered as singleton per SDK best practice.
+// BlobStorageOptions binds AZURE_STORAGE_CONNECTION_STRING and AZURE_STORAGE_CONTAINER_NAME
+// from the root configuration (flat, no section prefix).
+builder.Services.Configure<BlobStorageOptions>(builder.Configuration);
+builder.Services.AddSingleton(sp =>
+    new BlobServiceClient(builder.Configuration["AZURE_STORAGE_CONNECTION_STRING"]));
+builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
+
+// Instagram async container state — InMemoryContainerStateStore is suitable for
+// single-instance production (one post/day). Replace with Table Storage backing
+// when multi-instance scale is required — no contract changes needed.
+builder.Services.AddSingleton<IContainerStateStore, InMemoryContainerStateStore>();
 
 builder.Build().Run();
