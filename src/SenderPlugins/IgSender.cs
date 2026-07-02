@@ -31,7 +31,12 @@ namespace XPoster.SenderPlugins
         /// <param name="blobStorageService">The blob storage service for uploading images.</param>
         /// <param name="containerStateStore">The container state store for managing container states.</param>
         /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-        public IgSender(IHttpClientFactory httpClientFactory, IOptions<InstagramCredentials> credentials, ILogger<IgSender> logger, IBlobStorageService blobStorageService, IContainerStateStore containerStateStore)
+        public IgSender(
+            IHttpClientFactory httpClientFactory, 
+            IOptions<InstagramCredentials> credentials, 
+            ILogger<IgSender> logger, 
+            IBlobStorageService blobStorageService, 
+            IContainerStateStore containerStateStore)
         {
             ArgumentNullException.ThrowIfNull(httpClientFactory);
             ArgumentNullException.ThrowIfNull(credentials);
@@ -63,12 +68,14 @@ namespace XPoster.SenderPlugins
         {
             try
             {
+                // Guard clauses for null or invalid image
                 if (post.Image is null || post.Image.Length == 0)
                 {
                     _logger.LogWarning("Instagram richiede un'immagine per i post. Pubblicazione non eseguita.");
                     return false;
                 }
 
+                // Check if the image is a valid JPEG
                 if (!IsJpeg(post.Image))
                 {
                     _logger.LogWarning("L'immagine non è un JPEG valido. Pubblicazione non eseguita.");
@@ -98,8 +105,13 @@ namespace XPoster.SenderPlugins
                     image_url = imageUrl,
                     caption
                 };
-                var mediaContent = new StringContent(JsonSerializer.Serialize(mediaPayload), Encoding.UTF8, "application/json");
-                var mediaResponse = await _httpClient.PostAsync(mediaUrl, mediaContent, ct);
+
+                using var mediaContent = new StringContent(
+                    JsonSerializer.Serialize(mediaPayload), 
+                    Encoding.UTF8, 
+                    "application/json");
+
+                using var mediaResponse = await _httpClient.PostAsync(mediaUrl, mediaContent, ct);
 
                 if (!mediaResponse.IsSuccessStatusCode)
                 {
@@ -108,22 +120,29 @@ namespace XPoster.SenderPlugins
                 }
 
                 var mediaJson = await mediaResponse.Content.ReadAsStringAsync(ct);
-                var mediaData = JsonSerializer.Deserialize<JsonElement>(mediaJson);
+                using var mediaDocument = JsonDocument.Parse(mediaJson);
 
-                if (!mediaData.TryGetProperty("id", out var idProperty))
+                if (!mediaDocument.RootElement.TryGetProperty("id", out var idProperty))
                 {
                     _logger.LogError("Risposta Instagram non valida: missing id.");
                     return false;
                 }
 
-                string creationId = idProperty.GetString();
+                var creationId = idProperty.GetString();
                 if (string.IsNullOrWhiteSpace(creationId))
                 {
                     _logger.LogError("Risposta Instagram non valida: empty id.");
                     return false;
                 }
 
-                await _containerStateStore.SaveAsync(creationId, GetBlobNameFromUri(imageUrl), ct);
+                var blobName = GetBlobNameFromSasUri(imageUrl);
+                if (string.IsNullOrWhiteSpace(blobName))
+                {
+                    _logger.LogError("Impossibile determinare il nome del blob caricato.");
+                    return false;
+                }
+
+                await _containerStateStore.SaveAsync(creationId, blobName, ct);
                 _logger.LogInformation("Media container creato correttamente su Instagram.");
 
                 return true;
@@ -174,9 +193,10 @@ namespace XPoster.SenderPlugins
         /// </summary>
         /// <param name="uri">The URI of the blob.</param>
         /// <returns>The name of the blob.</returns>
-        private static string GetBlobNameFromUri(Uri uri)
+        private static string GetBlobNameFromSasUri(Uri uri)
         {
-            return uri.Segments.Length > 0 ? uri.Segments[^1].Split('?')[0] : string.Empty;
+            var lastSegment = uri.Segments.Length > 0 ? uri.Segments[^1] : string.Empty;
+            return lastSegment.Split('?', StringSplitOptions.RemoveEmptyEntries)[0];
         }
     }
 }
