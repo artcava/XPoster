@@ -22,6 +22,8 @@ public class IgSenderTests
     private readonly Mock<ILogger<IgSender>> _mockLogger;
     private readonly Mock<IHttpClientFactory> _mockFactory;
     private readonly IOptions<InstagramCredentials> _credentials;
+    private readonly Mock<IBlobStorageService> _mockStorage;
+    private readonly Mock<IContainerStateStore> _mockContainerState;
 
     public IgSenderTests()
     {
@@ -33,10 +35,13 @@ public class IgSenderTests
             InstagramAccessToken = "fake_token",
             InstagramAccountId = "fake_account_id"
         });
+        _mockStorage = new Mock<IBlobStorageService>();
+        _mockContainerState = new Mock<IContainerStateStore>();
+
     }
 
     private IgSender BuildSender() =>
-        new(_mockFactory.Object, _credentials, _mockLogger.Object);
+        new(_mockFactory.Object, _credentials, _mockLogger.Object, _mockStorage.Object, _mockContainerState.Object);
 
     private static IgSender BuildSenderWithFactory(
         IHttpClientFactory factory,
@@ -47,7 +52,7 @@ public class IgSenderTests
             InstagramAccessToken = "fake_token",
             InstagramAccountId = "fake_account_id"
         });
-        return new IgSender(factory, c, new Mock<ILogger<IgSender>>().Object);
+        return new IgSender(factory, c, new Mock<ILogger<IgSender>>().Object, new Mock<IBlobStorageService>().Object, new Mock<IContainerStateStore>().Object);
     }
 
     #region Constructor Tests
@@ -62,14 +67,14 @@ public class IgSenderTests
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new IgSender(_mockFactory.Object, _credentials, null!));
+            new IgSender(_mockFactory.Object, _credentials, null!, _mockStorage.Object, _mockContainerState.Object));
     }
 
     [Fact]
     public void Constructor_WithNullCredentials_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new IgSender(_mockFactory.Object, null!, _mockLogger.Object));
+            new IgSender(_mockFactory.Object, null!, _mockLogger.Object, _mockStorage.Object, _mockContainerState.Object));
     }
 
     [Fact]
@@ -192,7 +197,9 @@ public class IgSenderTests
         var sender = new IgSender(
             factoryMock.Object,
             Options.Create(new InstagramCredentials { InstagramAccessToken = "fake_token", InstagramAccountId = "fake_account_id" }),
-            loggerMock.Object);
+            loggerMock.Object,
+            _mockStorage.Object,
+            _mockContainerState.Object);
 
         Assert.False(await sender.SendAsync(
             new Post { Content = "caption", Image = new byte[] { 1, 2, 3 } }));
