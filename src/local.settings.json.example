@@ -70,6 +70,13 @@
     // -----------------------------------------------------------------------
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
+    // -----------------------------------------------------------------------
+    // ── Azure Blob Storage & Instagram Polling ──
+    // -----------------------------------------------------------------------
+    "AZURE_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
+    "AZURE_STORAGE_CONTAINER_NAME": "xposter-images"
+
+
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
     "OpenAI__ChatModel": "gpt-4.1-nano",

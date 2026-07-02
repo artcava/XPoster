@@ -10,13 +10,13 @@ namespace XPoster.SenderPlugins
     /// <summary>
     /// Publishes image posts to Instagram using the Instagram Graph API (v20.0).
     /// Requires an image; text-only posts are not supported by the API and will return <c>false</c>.
-    /// Credentials are resolved from <see cref="IgCredentials"/> bound via the Azure Key Vault Configuration Provider.
+    /// Credentials are resolved from <see cref="InstagramCredentials"/> bound via the Azure Key Vault Configuration Provider.
     /// </summary>
     public class IgSender : ISender
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<IgSender> _logger;
-        private readonly IgCredentials _creds;
+        private readonly InstagramCredentials _creds;
 
         /// <summary>
         /// Initialises a new instance of <see cref="IgSender"/> using an <see cref="IHttpClientFactory"/>-provided
@@ -26,7 +26,7 @@ namespace XPoster.SenderPlugins
         /// <param name="credentials">Typed Instagram credentials resolved from configuration.</param>
         /// <param name="logger">The logger for diagnostic output.</param>
         /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-        public IgSender(IHttpClientFactory httpClientFactory, IOptions<IgCredentials> credentials, ILogger<IgSender> logger)
+        public IgSender(IHttpClientFactory httpClientFactory, IOptions<InstagramCredentials> credentials, ILogger<IgSender> logger)
         {
             ArgumentNullException.ThrowIfNull(httpClientFactory);
             ArgumentNullException.ThrowIfNull(credentials);
@@ -72,11 +72,11 @@ namespace XPoster.SenderPlugins
                     {
                         image_url = imageUrl,
                         caption = caption,
-                        access_token = _creds.IgAccessToken
+                        access_token = _creds.InstagramAccessToken
                     };
                     var mediaContent = new StringContent(JsonSerializer.Serialize(mediaPayload), Encoding.UTF8, "application/json");
                     var mediaResponse = await _httpClient.PostAsync(
-                        $"https://graph.instagram.com/v20.0/{_creds.IgAccountId}/media", mediaContent);
+                        $"https://graph.instagram.com/v20.0/{_creds.InstagramAccountId}/media", mediaContent);
 
                     if (!mediaResponse.IsSuccessStatusCode)
                     {
@@ -92,11 +92,11 @@ namespace XPoster.SenderPlugins
                     var publishPayload = new
                     {
                         creation_id = creationId,
-                        access_token = _creds.IgAccessToken
+                        access_token = _creds.InstagramAccessToken
                     };
                     var publishContent = new StringContent(JsonSerializer.Serialize(publishPayload), Encoding.UTF8, "application/json");
                     var publishResponse = await _httpClient.PostAsync(
-                        $"https://graph.instagram.com/v20.0/{_creds.IgAccountId}/media_publish", publishContent);
+                        $"https://graph.instagram.com/v20.0/{_creds.InstagramAccountId}/media_publish", publishContent);
 
                     if (!publishResponse.IsSuccessStatusCode)
                     {

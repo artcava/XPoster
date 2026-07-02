@@ -14,24 +14,24 @@ namespace XPoster.Tests.SenderPlugins;
 /// <summary>
 /// Tests for IgSender.
 /// Only branches that execute before or without real HTTP calls are covered:
-/// constructor guards, MessageMaxLenght, null/empty content guards, no-image branch,
+/// constructor guards, MessageMaxLength, null/empty content guards, no-image branch,
 /// and the image path (which throws on the Instagram API — caught internally).
 /// </summary>
 public class IgSenderTests
 {
     private readonly Mock<ILogger<IgSender>> _mockLogger;
     private readonly Mock<IHttpClientFactory> _mockFactory;
-    private readonly IOptions<IgCredentials> _credentials;
+    private readonly IOptions<InstagramCredentials> _credentials;
 
     public IgSenderTests()
     {
         _mockLogger = new Mock<ILogger<IgSender>>();
         _mockFactory = new Mock<IHttpClientFactory>();
         _mockFactory.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient());
-        _credentials = Options.Create(new IgCredentials
+        _credentials = Options.Create(new InstagramCredentials
         {
-            IgAccessToken = "fake_token",
-            IgAccountId = "fake_account_id"
+            InstagramAccessToken = "fake_token",
+            InstagramAccountId = "fake_account_id"
         });
     }
 
@@ -40,12 +40,12 @@ public class IgSenderTests
 
     private static IgSender BuildSenderWithFactory(
         IHttpClientFactory factory,
-        IOptions<IgCredentials>? creds = null)
+        IOptions<InstagramCredentials>? creds = null)
     {
-        var c = creds ?? Options.Create(new IgCredentials
+        var c = creds ?? Options.Create(new InstagramCredentials
         {
-            IgAccessToken = "fake_token",
-            IgAccountId = "fake_account_id"
+            InstagramAccessToken = "fake_token",
+            InstagramAccountId = "fake_account_id"
         });
         return new IgSender(factory, c, new Mock<ILogger<IgSender>>().Object);
     }
@@ -191,7 +191,7 @@ public class IgSenderTests
         var loggerMock = new Mock<ILogger<IgSender>>();
         var sender = new IgSender(
             factoryMock.Object,
-            Options.Create(new IgCredentials { IgAccessToken = "fake_token", IgAccountId = "fake_account_id" }),
+            Options.Create(new InstagramCredentials { InstagramAccessToken = "fake_token", InstagramAccountId = "fake_account_id" }),
             loggerMock.Object);
 
         Assert.False(await sender.SendAsync(

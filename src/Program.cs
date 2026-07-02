@@ -58,9 +58,12 @@ builder.Services
     .ValidateOnStart();
 
 builder.Services
-    .AddOptions<IgCredentials>()
+    .AddOptions<InstagramCredentials>()
     .BindConfiguration(string.Empty)
     .ValidateOnStart();
+
+// Instagram credentials
+builder.Services.AddInstagramCredentials(builder.Configuration);
 
 builder.Services.AddHttpClients();
 

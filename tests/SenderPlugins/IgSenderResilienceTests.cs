@@ -20,10 +20,10 @@ public class IgSenderResilienceTests
 
     private IgSender BuildSender(IHttpClientFactory factory)
     {
-        var creds = Options.Create(new IgCredentials
+        var creds = Options.Create(new InstagramCredentials
         {
-            IgAccessToken = "fake_ig_token",
-            IgAccountId = "9876543210"
+            InstagramAccessToken = "fake_ig_token",
+            InstagramAccountId = "9876543210"
         });
         return new IgSender(factory, creds, _loggerMock.Object);
     }
