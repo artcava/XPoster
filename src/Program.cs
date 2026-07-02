@@ -1,3 +1,5 @@
+extern alias AzureIdentity;
+
 using Azure.Identity;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
@@ -41,7 +43,7 @@ var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
 
 ((IConfigurationBuilder)builder.Configuration).AddAzureKeyVault(
     new Uri(keyVaultUri),
-    new DefaultAzureCredential());
+    new AzureIdentity::Azure.Identity.DefaultAzureCredential());
 
 // Typed sender credentials — bound flat from IConfiguration (secret names match property names).
 // ValidateOnStart() ensures missing secrets fail at startup rather than at first invocation.
