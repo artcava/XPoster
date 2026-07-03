@@ -131,6 +131,10 @@ builder.Services.AddSingleton(sp =>
     new BlobServiceClient(builder.Configuration["AZURE_STORAGE_CONNECTION_STRING"]));
 builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
 
+// Meta Publishing Service — required by IgSender and XPosterContainerPollingFunction
+// to interact with the Instagram Graph API (container creation, publishing, status polling).
+builder.Services.AddTransient<IMetaPublishingService, MetaPublishingService>();
+
 // Instagram async container state — InMemoryContainerStateStore is suitable for
 // single-instance production (one post/day). Replace with Table Storage backing
 // when multi-instance scale is required — no contract changes needed.
