@@ -58,12 +58,9 @@ builder.Services
     .BindConfiguration(string.Empty)
     .ValidateOnStart();
 
-builder.Services
-    .AddOptions<InstagramCredentials>()
-    .BindConfiguration(string.Empty)
-    .ValidateOnStart();
-
-// Instagram credentials
+// Instagram credentials — bound from the "InstagramCredentials" section to match
+// Key Vault secret prefix (InstagramCredentials:*). AddInstagramCredentials owns
+// both the Configure<T> and the IValidateOptions<T> registration.
 builder.Services.AddInstagramCredentials(builder.Configuration);
 
 builder.Services.AddHttpClients();
