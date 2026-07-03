@@ -87,31 +87,27 @@ public class XPosterContainerPollingFunction
     private async Task ProcessContainerAsync(PendingContainer container, CancellationToken cancellationToken)
     {
         var remoteStatus = await _metaPublishing.GetContainerStatusAsync(container.CreationId, cancellationToken);
-        if (!Enum.TryParse<ContainerStatus>(remoteStatus, ignoreCase: true, out var status))
-        {
-            _log.LogWarning(
-                "Container {CreationId} returned unknown remote status {RemoteStatus}.",
-                container.CreationId,
-                remoteStatus);
-            return;
-        }
 
-        switch (status)
+        switch (remoteStatus.ToUpperInvariant())
         {
-            case ContainerStatus.Pending:
-                _log.LogDebug("Container {CreationId} is still pending — skipping this round.", container.CreationId);
-                break;
-
-            case ContainerStatus.Published:
+            case "FINISHED":
                 await HandleFinishedAsync(container, cancellationToken);
                 break;
 
-            case ContainerStatus.Failed:
-                await HandleTerminalFailureAsync(container, status, cancellationToken);
+            case "IN_PROGRESS":
+                _log.LogDebug("Container {CreationId} is still IN_PROGRESS — skipping this round.", container.CreationId);
+                break;
+
+            case "ERROR":
+            case "EXPIRED":
+                await HandleTerminalFailureAsync(container, remoteStatus, cancellationToken);
                 break;
 
             default:
-                _log.LogWarning("Container {CreationId} returned unrecognised status {Status} — skipping.", container.CreationId, status);
+                _log.LogWarning(
+                    "Container {CreationId} returned unknown remote status {RemoteStatus}.",
+                    container.CreationId,
+                    remoteStatus);
                 break;
         }
     }
@@ -125,9 +121,9 @@ public class XPosterContainerPollingFunction
         await _stateStore.UpdateStatusAsync(container.CreationId, ContainerStatus.Published, cancellationToken);
     }
 
-    private async Task HandleTerminalFailureAsync(PendingContainer container, ContainerStatus status, CancellationToken cancellationToken)
+    private async Task HandleTerminalFailureAsync(PendingContainer container, string remoteStatus, CancellationToken cancellationToken)
     {
-        _log.LogWarning("Container {CreationId} reached terminal status {Status} — marking as Failed.", container.CreationId, status);
+        _log.LogWarning("Container {CreationId} reached terminal status {RemoteStatus} — marking as Failed.", container.CreationId, remoteStatus);
         await TryDeleteBlobAsync(container.BlobName, container.CreationId, cancellationToken);
         await _stateStore.UpdateStatusAsync(container.CreationId, ContainerStatus.Failed, cancellationToken);
     }
