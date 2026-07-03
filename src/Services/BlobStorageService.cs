@@ -2,14 +2,15 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using Microsoft.Extensions.Options;
+using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.Services;
 
 /// <summary>
-/// Uploads image bytes to Azure Blob Storage and returns a time-limited SAS URL
-/// suitable for use as the <c>image_url</c> parameter of the Instagram Graph API
-/// (direct GET, no auth headers, no redirects).
+/// Uploads image bytes to Azure Blob Storage and returns a <see cref="BlobUploadResult"/> containing
+/// a time-limited SAS URL suitable for use as the <c>image_url</c> parameter of the Instagram Graph API
+/// (direct GET, no auth headers, no redirects) and the blob name for subsequent operations.
 /// </summary>
 /// <remarks>
 /// The SAS URL is read-only, starts 5 minutes in the past to absorb clock skew between
@@ -47,10 +48,10 @@ public class BlobStorageService : IBlobStorageService
     /// <inheritdoc />
     /// <remarks>
     /// The blob name is a GUID-based unique identifier with a <c>.jpg</c> extension.
-    /// The returned <see cref="Uri"/> is a SAS URL with <see cref="BlobSasPermissions.Read"/> permission
+    /// The returned <see cref="BlobUploadResult.SasUri"/> is a SAS URL with <see cref="BlobSasPermissions.Read"/> permission
     /// valid for 30 minutes, with start time set 5 minutes in the past to absorb clock skew.
     /// </remarks>
-    public async Task<Uri> UploadAsync(byte[] data, string contentType, CancellationToken cancellationToken = default)
+    public async Task<BlobUploadResult> UploadAsync(byte[] data, string contentType, CancellationToken cancellationToken = default)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.None, cancellationToken: cancellationToken);
@@ -74,7 +75,7 @@ public class BlobStorageService : IBlobStorageService
         sasBuilder.SetPermissions(BlobSasPermissions.Read);
 
         var sasUri = blobClient.GenerateSasUri(sasBuilder);
-        return sasUri;
+        return new BlobUploadResult(sasUri, blobName);
     }
 
     /// <inheritdoc />

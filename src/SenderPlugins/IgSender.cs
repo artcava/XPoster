@@ -89,8 +89,8 @@ namespace XPoster.SenderPlugins
                     caption = caption.Substring(0, MessageMaxLenght);
                 }
 
-                var imageUrl = await UploadImageToPublicUrl(post.Image, ct);
-                if (imageUrl is null)
+                var uploadResult = await UploadImageToPublicUrl(post.Image, ct);
+                if (uploadResult is null)
                 {
                     _logger.LogError("Impossibile caricare l'immagine per Instagram.");
                     return false;
@@ -102,7 +102,7 @@ namespace XPoster.SenderPlugins
 
                 var mediaPayload = new
                 {
-                    image_url = imageUrl,
+                    image_url = uploadResult.SasUri,
                     caption
                 };
 
@@ -135,14 +135,7 @@ namespace XPoster.SenderPlugins
                     return false;
                 }
 
-                var blobName = GetBlobNameFromSasUri(imageUrl);
-                if (string.IsNullOrWhiteSpace(blobName))
-                {
-                    _logger.LogError("Impossibile determinare il nome del blob caricato.");
-                    return false;
-                }
-
-                await _containerStateStore.SaveAsync(creationId, blobName, ct);
+                await _containerStateStore.SaveAsync(creationId, uploadResult.BlobName, ct);
                 _logger.LogInformation("Media container creato correttamente su Instagram.");
 
                 return true;
@@ -155,17 +148,13 @@ namespace XPoster.SenderPlugins
         }
 
         /// <summary>
-        /// Uploads the given image bytes to a publicly accessible URL so that the Instagram API
-        /// can retrieve it during media container creation.
+        /// Uploads the given image bytes to Azure Blob Storage and returns the upload result
+        /// containing the public SAS URI and the blob name.
         /// </summary>
         /// <param name="image">The raw image bytes to upload.</param>
         /// <param name="ct">Cancellation token to signal operation cancellation.</param>
-        /// <returns>The public URL of the uploaded image.</returns>
-        /// <exception cref="NotImplementedException">
-        /// Always thrown — this method is a placeholder pending integration with a public storage service
-        /// such as Azure Blob Storage.
-        /// </exception>
-        private async Task<Uri?> UploadImageToPublicUrl(byte[] image, CancellationToken ct = default)
+        /// <returns>The <see cref="BlobUploadResult"/> or <c>null</c> on failure.</returns>
+        private async Task<BlobUploadResult?> UploadImageToPublicUrl(byte[] image, CancellationToken ct = default)
         {
             try
             {
@@ -186,17 +175,6 @@ namespace XPoster.SenderPlugins
         private static bool IsJpeg(byte[] image)
         {
             return image.Length >= 2 && image[0] == 0xFF && image[1] == 0xD8;
-        }
-
-        /// <summary>
-        /// Extracts the blob name from the given URI.
-        /// </summary>
-        /// <param name="uri">The URI of the blob.</param>
-        /// <returns>The name of the blob.</returns>
-        private static string GetBlobNameFromSasUri(Uri uri)
-        {
-            var lastSegment = uri.Segments.Length > 0 ? uri.Segments[^1] : string.Empty;
-            return lastSegment.Split('?', StringSplitOptions.RemoveEmptyEntries)[0];
         }
     }
 }

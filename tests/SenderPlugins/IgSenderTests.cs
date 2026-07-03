@@ -157,7 +157,9 @@ public class IgSenderTests
         var captured = new List<HttpRequestMessage>();
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
         store.Setup(x => x.SaveAsync("creation-123", "blob1.jpg", It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
@@ -196,7 +198,9 @@ public class IgSenderTests
         string? body = null;
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
         store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
@@ -233,7 +237,9 @@ public class IgSenderTests
         var logger = new Mock<ILogger<IgSender>>();
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
         store.Setup(x => x.SaveAsync("creation-123", "blob1.jpg", It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask)
             .Verifiable();
@@ -258,6 +264,51 @@ public class IgSenderTests
         store.Verify();
     }
 
+    /// <summary>
+    /// Verifies that the blobName passed to SaveAsync comes directly from the BlobUploadResult
+    /// returned by UploadAsync, not from re-extracting it from the SAS URI.
+    /// The blob name in the upload result differs from what would be parsed from the SAS URI path
+    /// to make the distinction explicit.
+    /// </summary>
+    [Fact]
+    public async Task SendAsync_SaveAsync_UsesBlobNameFromUploadResult_NotFromSasUri()
+    {
+        var blob = new Mock<IBlobStorageService>();
+        var store = new Mock<IContainerStateStore>();
+        var logger = new Mock<ILogger<IgSender>>();
+
+        const string expectedBlobName = "direct-blob-name.jpg";
+        // The SAS URI path segment intentionally differs from expectedBlobName
+        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/something-else.jpg?sig=abc"),
+                expectedBlobName));
+
+        string? capturedBlobName = null;
+        store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Callback<string, string, CancellationToken>((_, bn, _) => capturedBlobName = bn)
+            .Returns(Task.CompletedTask);
+
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{\"id\":\"creation-999\"}", Encoding.UTF8, "application/json")
+            });
+
+        var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
+
+        var result = await sut.SendAsync(new Post
+        {
+            Content = "hello",
+            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+        });
+
+        Assert.True(result);
+        Assert.Equal(expectedBlobName, capturedBlobName);
+    }
+
     [Fact]
     public async Task SendAsync_WhenMediaContainerFails_ReturnsFalse()
     {
@@ -266,7 +317,9 @@ public class IgSenderTests
         var logger = new Mock<ILogger<IgSender>>();
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
 
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
@@ -294,7 +347,9 @@ public class IgSenderTests
         string? body = null;
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
         store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
@@ -331,7 +386,9 @@ public class IgSenderTests
         var logger = new Mock<ILogger<IgSender>>();
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
 
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
@@ -357,7 +414,9 @@ public class IgSenderTests
         var logger = new Mock<ILogger<IgSender>>();
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
         store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
@@ -466,7 +525,9 @@ public class IgSenderTests
         var store = new Mock<IContainerStateStore>();
         var logger = new Mock<ILogger<IgSender>>();
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
 
         var handlerMock = new Mock<HttpMessageHandler>();
         handlerMock.Protected()
@@ -501,7 +562,9 @@ public class IgSenderTests
         var store = new Mock<IContainerStateStore>();
         var logger = new Mock<ILogger<IgSender>>();
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+            .ReturnsAsync(new BlobUploadResult(
+                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
+                "blob1.jpg"));
 
         var handlerMock = new Mock<HttpMessageHandler>();
         handlerMock.Protected()
