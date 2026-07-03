@@ -44,7 +44,9 @@ public class BlobStorageServiceTests
         var sut = CreateSut(blobServiceClient, logger);
         var result = await sut.UploadAsync(new byte[] { 1, 2, 3 }, "image/jpeg");
 
-        Assert.Equal("https://storage.example.com/xposter-images/blob1.jpg?sig=abc", result.ToString());
+        Assert.Equal("https://storage.example.com/xposter-images/blob1.jpg?sig=abc", result.SasUri.ToString());
+        Assert.EndsWith(".jpg", result.BlobName);
+        Assert.Matches(@"^[0-9a-fA-F-]{36}\.jpg$", result.BlobName);
         blobClient.Verify(x => x.GenerateSasUri(It.Is<BlobSasBuilder>(b =>
             b.BlobContainerName == "xposter-images" &&
             b.Resource == "b" &&

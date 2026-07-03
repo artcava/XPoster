@@ -1,3 +1,5 @@
+namespace XPoster.Contracts;
+
 /// <summary>
 /// Defines a contract for a blob storage service that can upload and delete blobs.
 /// </summary>
