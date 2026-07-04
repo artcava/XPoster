@@ -45,8 +45,25 @@ public class FeedOrchestratorTests
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(DefaultUrls);
         _mockTagReplacementProvider.Setup(p => p.GetReplacements())
             .Returns(DefaultReplacements);
-        _mockTagReplacementService.Setup(s => s.Apply(It.IsAny<string>()))
-            .Returns<string>(text => text); // default: no-op
+        _mockTagReplacementService
+            .Setup(s => s.Apply(It.IsAny<string>()))
+            .Returns<string>(input =>
+            {
+                var replacements = _mockTagReplacementProvider.Object.GetReplacements();
+                if (replacements.Count == 0)
+                    return input;
+
+                var output = input;
+                foreach (var replacement in replacements)
+                {
+                    output = output.Replace(
+                        replacement.Key,
+                        replacement.Value,
+                        StringComparison.OrdinalIgnoreCase);
+                }
+
+                return output;
+            });
     }
 
     /// <summary>Factory for a single-sender orchestrator (happy-path baseline).</summary>
@@ -658,7 +675,7 @@ public class FeedOrchestratorTests
         await orchestrator.OrchestrateAsync();
 
         // GetReplacements: once in AcquireFeedContentAsync + once in ApplyTagReplacements = 2
-        _mockTagReplacementProvider.Verify(p => p.GetReplacements(), Times.Once);
+        _mockTagReplacementProvider.Verify(p => p.GetReplacements(), Times.Exactly(2));
     }
 
     [Fact]
