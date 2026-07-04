@@ -232,12 +232,12 @@ public class FeedOrchestrator : BaseOrchestrator
         var replacements = _tagReplacementProvider.GetReplacements();
         foreach (var (word, hashtag) in replacements)
         {
-            text = Regex.Replace(
-                text,
-                $@"(?<!\#)\b{Regex.Escape(word)}\b",
-                hashtag,
-                RegexOptions.IgnoreCase,
-                TimeSpan.FromSeconds(1));
+            var regex = new Regex(
+            $@"(?<!\#)\b{Regex.Escape(word)}\b",
+            RegexOptions.IgnoreCase,
+            TimeSpan.FromSeconds(1));
+
+            text = regex.Replace(text, hashtag, 1);
         }
 
         return text;
