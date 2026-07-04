@@ -17,6 +17,7 @@ public class FeedOrchestratorFeedUrlProviderTests
     private readonly Mock<IFeedService>                _mockFeedService;
     private readonly Mock<IFeedUrlProvider>            _mockFeedUrlProvider;
     private readonly Mock<ITagReplacementProvider>     _mockTagReplacementProvider;
+    private readonly Mock<ITagReplacementService>      _mockTagReplacementService;
     private readonly Mock<ITextToTextProvider>         _mockTextProvider;
     private readonly Mock<ITextToImageProvider>        _mockImageProvider;
 
@@ -28,6 +29,7 @@ public class FeedOrchestratorFeedUrlProviderTests
         _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
         _mockTagReplacementProvider = new Mock<ITagReplacementProvider>();
         _mockTextProvider           = new Mock<ITextToTextProvider>();
+        _mockTagReplacementService  = new Mock<ITagReplacementService>();
         _mockImageProvider          = new Mock<ITextToImageProvider>();
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -40,7 +42,7 @@ public class FeedOrchestratorFeedUrlProviderTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
-            _mockTextProvider.Object, _mockImageProvider.Object);
+            _mockTagReplacementService.Object, _mockTextProvider.Object, _mockImageProvider.Object);
 
     [Fact]
     public async Task OrchestrateAsync_Should_CallGetFeedUrls_Once()

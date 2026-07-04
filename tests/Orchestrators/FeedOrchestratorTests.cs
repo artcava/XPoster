@@ -13,6 +13,7 @@ public class FeedOrchestratorTests
     private readonly Mock<IFeedService>                _mockFeedService;
     private readonly Mock<IFeedUrlProvider>            _mockFeedUrlProvider;
     private readonly Mock<ITagReplacementProvider>     _mockTagReplacementProvider;
+    private readonly Mock<ITagReplacementService>      _mockTagReplacementService;
     private readonly Mock<ITextToTextProvider>         _mockTextProvider;
     private readonly Mock<ITextToImageProvider>        _mockImageProvider;
 
@@ -37,6 +38,7 @@ public class FeedOrchestratorTests
         _mockFeedService            = new Mock<IFeedService>();
         _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
         _mockTagReplacementProvider = new Mock<ITagReplacementProvider>();
+        _mockTagReplacementService  = new Mock<ITagReplacementService>();
         _mockTextProvider           = new Mock<ITextToTextProvider>();
         _mockImageProvider          = new Mock<ITextToImageProvider>();
 
@@ -50,7 +52,7 @@ public class FeedOrchestratorTests
         new(
             new List<ISender> { sender ?? _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
-            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object, _mockTagReplacementService.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
     /// <summary>Factory for a multi-sender orchestrator (fan-out tests).</summary>
@@ -58,7 +60,7 @@ public class FeedOrchestratorTests
         new(
             senders,
             _mockLogger.Object, _mockFeedService.Object,
-            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object, _mockTagReplacementService.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
     // ---------------------------------------------------------------------------
@@ -797,6 +799,7 @@ public class FeedOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
             _mockTextProvider.Object, imageProvider: null);
 
         var result = await orchestrator.OrchestrateAsync();
@@ -820,6 +823,7 @@ public class FeedOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
             textProvider: null, imageProvider: null);
 
         var result = await orchestrator.OrchestrateAsync();
@@ -845,6 +849,7 @@ public class FeedOrchestratorTests
             new List<ISender>().AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
         var result = await orchestrator.OrchestrateAsync();

@@ -25,6 +25,7 @@ public class FeedOrchestrator : BaseOrchestrator
     private readonly IFeedService              _feedService;
     private readonly IFeedUrlProvider          _feedUrlProvider;
     private readonly ITagReplacementProvider   _tagReplacementProvider;
+    private readonly ITagReplacementService _tagReplacementService;
     private readonly ITextToTextProvider?      _textProvider;
     private readonly ITextToImageProvider?     _imageProvider;
     private bool _sendIt = true;
@@ -53,6 +54,7 @@ public class FeedOrchestrator : BaseOrchestrator
     /// <param name="feedService">The service used to fetch RSS feeds.</param>
     /// <param name="feedUrlProvider">Provides the RSS/Atom feed URLs to poll.</param>
     /// <param name="tagReplacementProvider">Provides the word-to-hashtag replacement map.</param>
+    /// <param name="tagReplacementService">The service used to apply tag replacements to text.</param>
     /// <param name="textProvider">The AI text provider used to generate summaries and image prompts.</param>
     /// <param name="imageProvider">The AI image provider used to generate post images. Optional.</param>
     public FeedOrchestrator(
@@ -61,6 +63,7 @@ public class FeedOrchestrator : BaseOrchestrator
         IFeedService                feedService,
         IFeedUrlProvider            feedUrlProvider,
         ITagReplacementProvider     tagReplacementProvider,
+        ITagReplacementService      tagReplacementService,
         ITextToTextProvider?        textProvider,
         ITextToImageProvider?       imageProvider = null)
         : base(senders, logger)
@@ -68,6 +71,7 @@ public class FeedOrchestrator : BaseOrchestrator
         _feedService            = feedService;
         _feedUrlProvider        = feedUrlProvider;
         _tagReplacementProvider = tagReplacementProvider;
+        _tagReplacementService  = tagReplacementService;
         _textProvider           = textProvider;
         _imageProvider          = imageProvider;
     }
@@ -154,7 +158,7 @@ public class FeedOrchestrator : BaseOrchestrator
             }
 
             previousSummary = summaryForSender;
-            var content = ApplyTagReplacements(summaryForSender);
+            var content = _tagReplacementService.Apply(summaryForSender);
             result[sender.Platform] = new Post { Content = content, Image = imageBytes };
         }
 
@@ -225,21 +229,5 @@ public class FeedOrchestrator : BaseOrchestrator
             _logger.LogError(ex, "Image generation failed. Post will be published without image.");
             return null;
         }
-    }
-
-    private string ApplyTagReplacements(string text)
-    {
-        var replacements = _tagReplacementProvider.GetReplacements();
-        foreach (var (word, hashtag) in replacements)
-        {
-            var regex = new Regex(
-            $@"(?<!\#)\b{Regex.Escape(word)}\b",
-            RegexOptions.IgnoreCase,
-            TimeSpan.FromSeconds(1));
-
-            text = regex.Replace(text, hashtag, 1);
-        }
-
-        return text;
     }
 }

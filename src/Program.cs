@@ -114,6 +114,7 @@ builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
 // ITagReplacementProvider registration — reads TagReplacementOptions:Replacements from app settings.
 builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSection(TagReplacementOptions.SectionName));
 builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
+builder.Services.AddTransient<ITagReplacementService, TagReplacementService>();
 
 // AI provider options: each extension method owns its SectionName constant
 // and encapsulates Configure<T> + AddSingleton<IValidateOptions<T>> in one call.
