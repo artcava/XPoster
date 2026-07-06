@@ -206,9 +206,9 @@ Slot profiles are defined in `DefaultSlotProfileProvider` (production) and `DryR
 
 | Platform | `MessageMaxLength` | Role in a fan-out slot |
 |---|---|---|
-| LinkedIn | 3 000 | Widest limit — selected as primary by `FeedOrchestrator`; base summary generated at this length |
+| LinkedIn | 2 800 | Widest limit — selected as primary by `FeedOrchestrator`; base summary generated at this length |
 | Instagram | 2 200 | Secondary — re-summarisation triggered only when base summary exceeds 2 200 chars |
-| X (Twitter) | 280 | Narrowest — always triggers re-summarisation when base summary exceeds 280 chars |
+| X (Twitter) | 250 | Narrowest — always triggers re-summarisation when base summary exceeds 250 chars |
 | DryRun | `int.MaxValue` | Local testing only — always selected as primary when present |
 
 > 💡 **Cost implication:** a single fan-out slot with N senders replaces N separate scheduled slots. Base summary and image are generated once; only cheap per-sender re-summarisation AI calls are added when needed. See the [Token / Credit Savings](#token--credit-savings) section below.
@@ -221,24 +221,19 @@ The current `DefaultSlotProfileProvider` defines the following slots:
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 
 new ScheduledOrchestrationProfile(
-    hour: 8,
+    hour: 6,
     senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
     orchestratorType: typeof(FeedOrchestrator),
     textProvider:  AiProvider.OpenAi,
-    imageProvider: AiProvider.OpenAi),
+    imageProvider: AiProvider.AzureFoundry),
 
 new ScheduledOrchestrationProfile(
     hour: 14,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn },
-    orchestratorType: typeof(PowerLawOrchestrator)),
-
-new ScheduledOrchestrationProfile(
-    hour: 16,
-    senderPlatforms: new[] { SenderPlatform.X },
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
     orchestratorType: typeof(PowerLawOrchestrator)),
 ```
 
-At hour 8 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The two PowerLaw slots (hours 14 and 16) each publish deterministic content to a single platform — no AI calls involved.
+At hour 6 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The PowerLaw slot at hour 14 publish deterministic content to platforms — no AI calls involved.
 
 ### DryRun slot profile example
 
@@ -267,7 +262,7 @@ Even single-sender profiles use the list constructor — the fan-out loop iterat
 | Fan-out slot (3 senders, 1 slot) | 1× full pipeline + up to 2× cheap re-summarisation | 1× |
 | **Saving** | **~67 % fewer full AI pipelines** | **~67 % fewer image credits** |
 
-Re-summarisation of an already-short base summary (e.g. ~700 chars → 280 chars) is significantly cheaper than re-processing the full feed content from scratch. When the base summary already fits within a secondary sender's character limit, the AI call is skipped entirely.
+When the base summary already fits within a secondary sender's character limit, the AI call is skipped entirely.
 
 ---
 
@@ -413,12 +408,10 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 
 #### Instagram
 
-> ⚠️ Instagram publishing is **not yet active in production**. See issue [#72](https://github.com/artcava/XPoster/issues/72).
-
 | Secret name | Description |
 |---|---|
-| `IgAccessToken` | Long-lived Instagram Graph API access token. |
-| `IgAccountId` | Numeric Instagram Business Account ID. |
+| `InstagramAccessToken` | Long-lived Instagram Graph API access token. |
+| `InstagramAccountId` | Numeric Instagram Business Account ID. |
 
 ---
 

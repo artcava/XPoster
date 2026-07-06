@@ -170,8 +170,8 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 | Sender | `SenderPlatform` value | `MessageMaxLength` | Target | Notes |
 |---|---|---|---|---|
 | `XSender` | `X` | 280 | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; credentials injected via `IOptions<XCredentials>` |
-| `InSender` | `LinkedIn` | 3 000 | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
-| `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<IgCredentials>` |
+| `InSender` | `LinkedIn` | 2 800 | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
+| `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<InstagramCredentials>` |
 | `DryRunSender` | `DryRun` | `int.MaxValue` | **None** | **Local development and testing only.** Logs post content but makes **no outbound social API calls**. Always returns `true`. Activated via `EnableDryRunSlot = true`; must never be used in production. |
 
 ---

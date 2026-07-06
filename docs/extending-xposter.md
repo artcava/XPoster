@@ -194,7 +194,7 @@ To publish to multiple platforms in the same slot, list all target senders in **
 ```csharp
 new ScheduledOrchestrationProfile(
     hour: 20,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (700) → first
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (2800) → first
     orchestratorType: typeof(FeedOrchestrator),
     textProvider: AiProvider.OpenAi,
     imageProvider: AiProvider.OpenAi),

@@ -10,9 +10,8 @@ namespace XPoster.Orchestrators;
 /// <para>
 /// Slots are defined as follows (UTC hours):
 /// <list type="table">
-///   <item><term>08:00</term><description>Fan-out: FeedOrchestrator → LinkedIn (primary), X, Instagram.</description></item>
-///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn.</description></item>
-///   <item><term>16:00</term><description>PowerLawOrchestrator → X.</description></item>
+///   <item><term>06:00</term><description>Fan-out: FeedOrchestrator → LinkedIn (primary), X, Instagram.</description></item>
+///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn, X.</description></item>
 /// </list>
 /// </para>
 /// <para>
