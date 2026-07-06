@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using Moq;
 using XPoster.Contracts;
 using XPoster.Services;
-using Xunit;
 
 namespace XPoster.Tests.Services;
 

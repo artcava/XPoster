@@ -7,7 +7,6 @@ using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
-using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 

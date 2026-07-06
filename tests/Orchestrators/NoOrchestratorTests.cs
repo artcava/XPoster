@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using Moq;
-using XPoster.Contracts;
 using XPoster.Orchestrators;
 
 namespace XPoster.Tests.Orchestrators;
