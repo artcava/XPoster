@@ -5,6 +5,7 @@ using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
+using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 
@@ -29,7 +30,7 @@ public class IgSenderResilienceTests
     }
 
     private static Post PostWithImage() =>
-        new() { Content = "Caption", Image = new byte[] { 0xFF, 0xD8, 0xFF } };
+        new() { Content = "Caption", Image = ImageTestData.CreateValidJpeg() };
 
     private static Post PostWithoutImage() =>
         new() { Content = "Caption text only" };

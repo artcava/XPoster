@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using SkiaSharp;
 using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.Models;
@@ -75,10 +76,10 @@ namespace XPoster.SenderPlugins
                     return false;
                 }
 
-                // Check if the image is a valid JPEG
-                if (!IsJpeg(post.Image))
+                var normalizedImage = NormalizeImageForInstagram(post.Image);
+                if (normalizedImage is null || normalizedImage.Length == 0)
                 {
-                    _logger.LogWarning("L'immagine non è un JPEG valido. Pubblicazione non eseguita.");
+                    _logger.LogWarning("Immagine non supportata o conversione a JPEG fallita. Pubblicazione non eseguita.");
                     return false;
                 }
 
@@ -147,6 +148,53 @@ namespace XPoster.SenderPlugins
             }
         }
 
+        private byte[]? NormalizeImageForInstagram(byte[] imageBytes)
+        {
+            try
+            {
+                using var codec = SKCodec.Create(new SKMemoryStream(imageBytes));
+                if (codec is null)
+                {
+                    _logger.LogWarning("Formato immagine non rilevabile.");
+                    return null;
+                }
+
+                _logger.LogInformation(
+                    "Formato immagine rilevato per Instagram: {EncodedFormat}",
+                    codec.EncodedFormat);
+
+                if (codec.EncodedFormat == SKEncodedImageFormat.Jpeg)
+                {
+                    return imageBytes;
+                }
+
+                if (codec.EncodedFormat != SKEncodedImageFormat.Png)
+                {
+                    _logger.LogWarning(
+                        "Formato immagine non supportato per Instagram: {EncodedFormat}",
+                        codec.EncodedFormat);
+                    return null;
+                }
+
+                using var bitmap = SKBitmap.Decode(imageBytes);
+                if (bitmap is null)
+                {
+                    _logger.LogWarning("Decodifica PNG fallita.");
+                    return null;
+                }
+
+                using var image = SKImage.FromBitmap(bitmap);
+                using var data = image.Encode(SKEncodedImageFormat.Jpeg, 90);
+
+                return data?.ToArray();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore durante la conversione dell'immagine in JPEG per Instagram.");
+                return null;
+            }
+        }
+
         /// <summary>
         /// Uploads the given image bytes to Azure Blob Storage and returns the upload result
         /// containing the public SAS URI and the blob name.
@@ -165,16 +213,6 @@ namespace XPoster.SenderPlugins
                 _logger.LogError(ex, "Errore durante il caricamento dell'immagine su Blob Storage.");
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Determines whether the provided image bytes represent a valid JPEG image by checking the magic number.
-        /// </summary>
-        /// <param name="image">The image bytes to check.</param>
-        /// <returns>True if the image is a valid JPEG; otherwise, false.</returns>
-        private static bool IsJpeg(byte[] image)
-        {
-            return image.Length >= 2 && image[0] == 0xFF && image[1] == 0xD8;
         }
     }
 }

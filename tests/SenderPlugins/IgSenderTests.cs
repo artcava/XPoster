@@ -7,6 +7,7 @@ using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
+using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 
@@ -132,7 +133,7 @@ public class IgSenderTests
     }
 
     [Fact]
-    public async Task SendAsync_WithNonJpegImage_ReturnsFalse()
+    public async Task SendAsync_WithValidPng_ConvertsAndContinuesFlow()
     {
         var sut = BuildSender(
             new HttpClient(new Mock<HttpMessageHandler>().Object),
@@ -143,8 +144,51 @@ public class IgSenderTests
         Assert.False(await sut.SendAsync(new Post
         {
             Content = "Test caption",
-            Image = Encoding.UTF8.GetBytes("not-jpeg")
+            Image = ImageTestData.CreateValidPng()
         }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WithUnsupportedImageFormat_ReturnsFalse_AndDoesNotUploadOrSave()
+    {
+        var blob = new Mock<IBlobStorageService>(MockBehavior.Strict);
+        var store = new Mock<IContainerStateStore>(MockBehavior.Strict);
+        var logger = new Mock<ILogger<IgSender>>();
+
+        var sut = BuildSender(
+            new HttpClient(new Mock<HttpMessageHandler>().Object),
+            blob,
+            store,
+            logger);
+
+        var unsupportedBytes = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 };
+
+        var result = await sut.SendAsync(new Post
+        {
+            Content = "Test caption",
+            Image = unsupportedBytes
+        });
+
+        Assert.False(result);
+
+        blob.Verify(
+            x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+            Times.Never);
+
+        store.Verify(
+            x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+            Times.Never);
+
+        logger.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains("Formato immagine", StringComparison.OrdinalIgnoreCase) ||
+                    v.ToString()!.Contains("Immagine non supportata", StringComparison.OrdinalIgnoreCase)),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
     }
 
     [Fact]
@@ -177,7 +221,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -220,7 +264,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -256,7 +300,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -301,7 +345,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -330,7 +374,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.False(result);
@@ -369,7 +413,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = new string('a', 5000),
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -399,7 +443,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.False(result);
@@ -432,7 +476,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "hello",
-            Image = new byte[] { 0xFF, 0xD8, 0x00 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -479,7 +523,7 @@ public class IgSenderTests
         Assert.False(await sut.SendAsync(new Post
         {
             Content = "Test caption",
-            Image = new byte[] { 0x89, 0x50, 0x4E, 0x47 }
+            Image = ImageTestData.CreateValidPng()
         }));
     }
 
@@ -503,7 +547,7 @@ public class IgSenderTests
         var result = await sut.SendAsync(new Post
         {
             Content = "caption",
-            Image = new byte[] { 0xFF, 0xD8, 0xFF }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.False(result);
@@ -551,7 +595,7 @@ public class IgSenderTests
             store.Object);
 
         Assert.False(await sender.SendAsync(
-            new Post { Content = "caption", Image = new byte[] { 0xFF, 0xD8, 0x00 } }));
+            new Post { Content = "caption", Image = ImageTestData.CreateValidJpeg() }));
     }
 
     [Fact]
@@ -588,7 +632,7 @@ public class IgSenderTests
             store.Object);
 
         Assert.False(await sender.SendAsync(
-            new Post { Content = "caption", Image = new byte[] { 0xFF, 0xD8, 0x00 } }));
+            new Post { Content = "caption", Image = ImageTestData.CreateValidJpeg() }));
     }
 
     [Fact]
@@ -612,7 +656,7 @@ public class IgSenderTests
             store.Object);
 
         Assert.False(await sender.SendAsync(
-            new Post { Content = "caption", Image = new byte[] { 0xFF, 0xD8, 0x00 } }));
+            new Post { Content = "caption", Image = ImageTestData.CreateValidJpeg() }));
 
         loggerMock.Verify(
             x => x.Log(
