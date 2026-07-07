@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using XPoster.Contracts;
 using XPoster.Credentials;
@@ -133,6 +134,7 @@ namespace XPoster.Services
         private sealed class ContainerStatusResponse
         {
             public StatusField? Status { get; init; }
+            [JsonPropertyName("status_code")]
             public string? StatusCode { get; init; } // some versions use top-level status_code
         }
 

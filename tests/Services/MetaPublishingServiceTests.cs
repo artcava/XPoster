@@ -49,7 +49,7 @@ public sealed class MetaPublishingServiceTests
         var sut = CreateSut(
             new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent("""{\"status_code\":\"FINISHED\",\"id\":\"17889615691921648\"}""", Encoding.UTF8, "application/json")
+                Content = new StringContent("""{"status_code":"FINISHED","id":"17889615691921648"}""", Encoding.UTF8, "application/json")
             },
             HttpMethod.Get,
             requestPredicate: req => req.RequestUri!.AbsoluteUri.Contains("fields=status_code", StringComparison.OrdinalIgnoreCase));
