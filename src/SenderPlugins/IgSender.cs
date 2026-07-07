@@ -98,7 +98,7 @@ namespace XPoster.SenderPlugins
                 }
 
                 string mediaUrl =
-                    $"https://graph.instagram.com/v20.0/{_creds.InstagramAccountId}/media" +
+                    $"https://graph.facebook.com/v23.0/{_creds.InstagramAccountId}/media" +
                     $"?access_token={Uri.EscapeDataString(_creds.InstagramAccessToken)}";
 
                 var mediaPayload = new
