@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 124]] (2 shared connections)
+- [[Community 121]] (2 shared connections)
 
 ## Audit Trail
 

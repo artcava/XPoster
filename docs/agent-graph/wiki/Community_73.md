@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **GetReplacements()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
+- **ISender** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

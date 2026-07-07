@@ -1,24 +1,24 @@
 # Community 54
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
+- **XFunctionTests.cs** (6 connections)
+- **XFunctionTests.cs** (6 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
 
 ## Relationships
 
-- [[Community 68]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **PostAsync()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **IOrchestratorFactory** (2 connections)
+- **IOrchestrator** (2 connections)
 
 ## Relationships
 

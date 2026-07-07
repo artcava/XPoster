@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **if()** (2 connections)
-- **DispatchAsync()** (2 connections)
+- **OpenAiOptionsValidator.cs** (4 connections)
+- **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 102]] (3 shared connections)
+- [[Community 137]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

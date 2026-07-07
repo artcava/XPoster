@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
 - **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 137]] (2 shared connections)
+- [[Community 136]] (2 shared connections)
 
 ## Audit Trail
 

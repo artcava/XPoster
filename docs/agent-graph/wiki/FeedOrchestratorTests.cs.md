@@ -2,31 +2,31 @@
 
 > God node · 31 connections
 
-**Community:** [[Community 3]]
+**Community:** [[Community 2]]
 
 ## Connections by Relation
 
 ### contains
-- [[XPoster.Tests.Orchestrators]]
-- [[FeedOrchestratorTests()]]
-- [[CreateOrchestrator()]]
-- [[new()]]
+- [[FeedOrchestratorTests.cs]]
 - [[CreateMultiSenderOrchestrator()]]
-- [[OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()]]
-- [[OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()]]
-- [[OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()]]
-- [[OrchestrateAsync_SkipsAICall_WhenBaseSummaryFitsSecondaryLimit()]]
+- [[CreateOrchestrator()]]
+- [[FeedOrchestratorTests()]]
+- [[new()]]
 - [[OrchestrateAsync_AppliesHashtagsIndependently_PerSender()]]
 - [[OrchestrateAsync_DerivesImagePromptFromRawBaseSummary_BeforeHashtags()]]
-- [[OrchestrateAsync_SharesImageBytes_AcrossSenders()]]
+- [[OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()]]
+- [[OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()]]
 - [[OrchestrateAsync_ReturnsNullEntry_WhenReSummarisationFails()]]
-- [[OrchestrateAsync_ThirdSender_ChecksAgainstPreviousSummary_AndReSummarisesFromFeedContent()]]
-- [[OrchestrateAsync_ThirdSender_ReusesSecondSummary_WhenSecondFitsAndThirdDoesNot()]]
-- [[OrchestrateAsync_ThirdSender_ReusesUpdatedPreviousSummary_WhenItFitsThirdLimit()]]
-- [[OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()]]
-- [[OrchestrateAsync_Should_ReturnNull_When_FeedUrlProviderReturnsEmptyList()]]
-- [[OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()]]
+- [[OrchestrateAsync_SharesImageBytes_AcrossSenders()]]
+- [[OrchestrateAsync_Should_ApplyHashtagsCorrectly()]]
 - [[OrchestrateAsync_Should_CallTagReplacementProvider_ExactlyOnce_WhenOrchestrationSucceeds()]]
+- [[OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()]]
+- [[OrchestrateAsync_Should_Rethrow_When_ImageGenerationIsCancelled()]]
+- [[OrchestrateAsync_Should_ReturnNull_When_FeedUrlProviderReturnsEmptyList()]]
+- [[OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()]]
+- [[OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()]]
+- [[OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()]]
+- [[OrchestrateAsync_Should_ReturnNull_When_TextProviderIsNull()]]
 
 ---
 
