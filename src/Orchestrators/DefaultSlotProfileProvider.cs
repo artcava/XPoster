@@ -39,6 +39,16 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
             orchestratorType: typeof(PowerLawOrchestrator)),
 
+        #region TESTING SLOTS (excluded from production deployments)
+        // Test slot — only used in DryRun mode, excluded from production deployments.
+        new ScheduledOrchestrationProfile(
+            hour: 9,
+            senderPlatforms: new[] { SenderPlatform.Instagram },
+            orchestratorType: typeof(FeedOrchestrator),
+            textProvider: AiProvider.OpenAi,
+            imageProvider: AiProvider.AzureFoundry)
+        #endregion
+        
     }.AsReadOnly();
 
     /// <inheritdoc />

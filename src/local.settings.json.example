@@ -65,8 +65,8 @@
     //   XApiSecret            — X (Twitter) API secret        → XCredentials.XApiSecret
     //   XAccessToken          — X (Twitter) access token      → XCredentials.XAccessToken
     //   XAccessTokenSecret    — X (Twitter) access token sec  → XCredentials.XAccessTokenSecret
-    //   IgAccessToken         — Instagram Graph API token     → IgCredentials.IgAccessToken
-    //   IgAccountId           — Instagram account ID          → IgCredentials.IgAccountId
+    //   InstagramAccessToken  — Instagram Graph API token     → InstagramCredentials.InstagramAccessToken
+    //   InstagramAccountId    — Instagram account ID          → InstagramCredentials.InstagramAccountId
     // -----------------------------------------------------------------------
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 

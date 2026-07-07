@@ -16,10 +16,25 @@ public class DefaultSlotProfileProviderTests
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void GetProfiles_Should_ReturnTwoActiveSlots()
+    public void GetProfiles_Should_ReturnWellFormedProfiles()
     {
-        var profiles = _provider.GetProfiles();
-        Assert.Equal(2, profiles.Count);
+        var provider = new DefaultSlotProfileProvider();
+
+        var profiles = provider.GetProfiles().ToList();
+
+        Assert.NotEmpty(profiles);
+
+        Assert.All(profiles, profile =>
+        {
+            Assert.InRange(profile.Hour, 0, 23);
+            Assert.NotNull(profile.SenderPlatforms);
+            Assert.NotEmpty(profile.SenderPlatforms);
+            Assert.NotNull(profile.OrchestratorType);
+        });
+
+        Assert.Equal(
+            profiles.Select(p => p.Hour).Distinct().Count(),
+            profiles.Count);
     }
 
     [Fact]

@@ -40,26 +40,13 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     ?? throw new InvalidOperationException("KEYVAULT_URI app setting is not set.");
 
-((IConfigurationBuilder)builder.Configuration).AddAzureKeyVault(
+builder.Configuration.AddAzureKeyVault(
     new Uri(keyVaultUri),
     new AzureIdentity::Azure.Identity.DefaultAzureCredential());
 
-// Typed sender credentials — bound flat from IConfiguration (secret names match property names).
-// ValidateOnStart() ensures missing secrets fail at startup rather than at first invocation.
-builder.Services
-    .AddOptions<XCredentials>()
-    .BindConfiguration(string.Empty)
-    .ValidateOnStart();
-
-builder.Services
-    .AddOptions<LinkedInCredentials>()
-    .BindConfiguration(string.Empty)
-    .ValidateOnStart();
-
-// Instagram credentials — bound from the "InstagramCredentials" section to match
-// Key Vault secret prefix (InstagramCredentials:*). AddInstagramCredentials owns
+// Key Vault secret prefix (ProviderCredentials:*). AddCredentials owns
 // both the Configure<T> and the IValidateOptions<T> registration.
-builder.Services.AddInstagramCredentials(builder.Configuration);
+builder.Services.AddCredentials(builder.Configuration);
 
 builder.Services.AddHttpClients();
 
@@ -139,4 +126,12 @@ builder.Services.AddTransient<IMetaPublishingService, MetaPublishingService>();
 // when multi-instance scale is required — no contract changes needed.
 builder.Services.AddSingleton<IContainerStateStore, InMemoryContainerStateStore>();
 
-builder.Build().Run();
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var startupValidator = scope.ServiceProvider.GetRequiredService<ICredentialsStartupValidator>();
+    startupValidator.Validate();
+}
+
+app.Run();

@@ -11,15 +11,21 @@ public class InstagramCredentialsValidator : IValidateOptions<InstagramCredentia
     /// Validates the specified <see cref="InstagramCredentials"/> instance.
     /// Returns <see cref="ValidateOptionsResult.Fail(string)"/> if any required property is missing or empty; otherwise returns <see cref="ValidateOptionsResult.Success"/>.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="options"></param>
-    /// <returns></returns>
+    /// <param name="name">The name of the options instance being validated.</param>
+    /// <param name="options">The options instance to validate.</param>
+    /// <returns>A <see cref="ValidateOptionsResult"/> indicating the validation result.</returns>
     public ValidateOptionsResult Validate(string? name, InstagramCredentials options)
     {
+        var failures = new List<string>();
+
         if (string.IsNullOrWhiteSpace(options.InstagramAccountId))
-            return ValidateOptionsResult.Fail("InstagramCredentials:InstagramAccountId is required.");
+            failures.Add($"{nameof(InstagramCredentials.InstagramAccountId)} is required.");
+
         if (string.IsNullOrWhiteSpace(options.InstagramAccessToken))
-            return ValidateOptionsResult.Fail("InstagramCredentials:InstagramAccessToken is required.");
-        return ValidateOptionsResult.Success;
+            failures.Add($"{nameof(InstagramCredentials.InstagramAccessToken)} is required.");
+            
+        return failures.Count > 0
+            ? ValidateOptionsResult.Fail(failures)
+            : ValidateOptionsResult.Success;
     }
 }
