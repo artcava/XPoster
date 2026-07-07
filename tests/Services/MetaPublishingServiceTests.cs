@@ -53,6 +53,10 @@ public sealed class MetaPublishingServiceTests
             },
             HttpMethod.Get,
             requestPredicate: req => req.RequestUri!.AbsoluteUri.Contains("fields=status_code", StringComparison.OrdinalIgnoreCase));
+
+        var result = await sut.GetContainerStatusAsync("creation-id-1", CancellationToken.None);
+
+        Assert.Equal("FINISHED", result);
     }
 
     [Fact]
