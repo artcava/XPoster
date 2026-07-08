@@ -1,26 +1,26 @@
 # Community 45
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **CryptoServiceTests** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **CryptoService()** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
-- **MakeService()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 60]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

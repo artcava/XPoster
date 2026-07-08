@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **if()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **Apply()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITagReplacementService** (2 connections)
 
 ## Relationships
 

@@ -6,17 +6,17 @@
 
 - **XPosterContainerPollingFunction.cs** (13 connections)
 - **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPosterContainerPollingFunction()** (2 connections)
-- **TryDeleteBlobAsync()** (2 connections)
-- **if()** (2 connections)
+- **XPoster** (2 connections)
 - **PollPendingContainersAsync()** (2 connections)
 - **switch()** (2 connections)
-- **ProcessContainerAsync()** (2 connections)
 - **Run()** (2 connections)
+- **ProcessContainerAsync()** (2 connections)
+- **TryDeleteBlobAsync()** (2 connections)
+- **XPosterContainerPollingFunction()** (2 connections)
 - **HandleFinishedAsync()** (2 connections)
 - **foreach()** (2 connections)
 - **catch()** (2 connections)
-- **XPoster** (2 connections)
+- **if()** (2 connections)
 - **HandleTerminalFailureAsync()** (2 connections)
 
 ## Relationships

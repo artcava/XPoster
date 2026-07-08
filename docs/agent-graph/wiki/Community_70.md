@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **new()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 129]] (4 shared connections)
+- [[Community 51]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

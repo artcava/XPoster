@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **CreateValidPng()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **CreateValidJpeg()** (2 connections)
 
 ## Relationships
 

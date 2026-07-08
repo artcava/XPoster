@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **AiServiceHelper.cs** (10 connections)
+- **catch()** (2 connections)
 - **return()** (2 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (6 shared connections)
+- [[Community 63]] (6 shared connections)
 
 ## Audit Trail
 

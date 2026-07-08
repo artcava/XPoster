@@ -1,20 +1,20 @@
 # Community 71
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **SaveAsync()** (2 connections)
+- **IContainerStateStore** (2 connections)
+- **UpdateStatusAsync()** (2 connections)
+- **GetPendingAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 127]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

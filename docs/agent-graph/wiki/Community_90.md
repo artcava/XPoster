@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **IOrchestratorFactory** (2 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider** (2 connections)
+- **GetProfiles()** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

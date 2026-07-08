@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **InstagramCredentialsValidator** (2 connections)
-- **if()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
 
 ## Relationships
 

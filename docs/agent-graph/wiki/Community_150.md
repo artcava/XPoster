@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **FalAiOptions.cs** (2 connections)
-- **FalAiOptions.cs** (2 connections)
 - **XPoster.Models** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
 
 ## Relationships
 

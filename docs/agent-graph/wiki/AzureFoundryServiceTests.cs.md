@@ -2,12 +2,11 @@
 
 > God node · 35 connections
 
-**Community:** [[Community 9]]
+**Community:** [[Community 12]]
 
 ## Connections by Relation
 
 ### contains
-- [[AzureFoundryServiceTests.cs]]
 - [[AzureFoundryServiceTests]]
 - [[BuildService()]]
 - [[GenerateImageAsync_RequestBodyContainsModelField()]]
@@ -27,6 +26,7 @@
 - [[MakeHandlerMock()]]
 - [[XPoster.Tests.Services]]
 - [[AzureFoundryService()]]
+- [[ChatCompletionJson()]]
 
 ---
 
