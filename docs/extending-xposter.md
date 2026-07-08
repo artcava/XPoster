@@ -39,37 +39,51 @@ public class TikTokCredentialsValidator : IValidateOptions<TikTokCredentials>
 {
     public ValidateOptionsResult Validate(string? name, TikTokCredentials options)
     {
+        var failures = new List<string>();
+
         if (string.IsNullOrWhiteSpace(options.TikTokAccessToken))
-            return ValidateOptionsResult.Fail("TikTokCredentials:TikTokAccessToken is required.");
+            failures.Add($"{nameof(TikTokCredentials.TikTokAccessToken)} is required.");
+
         if (string.IsNullOrWhiteSpace(options.TikTokClientKey))
-            return ValidateOptionsResult.Fail("TikTokCredentials:TikTokClientKey is required.");
-        return ValidateOptionsResult.Success;
+            failures.Add($"{nameof(TikTokCredentials.TikTokClientKey)} is required.");
+
+        return failures.Count > 0
+            ? ValidateOptionsResult.Fail(failures)
+            : ValidateOptionsResult.Success;
     }
 }
 ```
 
 ```csharp
-// src/Credentials/TikTokCredentialsExtensions.cs
+// src/Credentials/CredentialsExtensions.cs
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace XPoster.Credentials;
 
-public static class TikTokCredentialsExtensions
+public static class CredentialsExtensions
 {
-    public static IServiceCollection AddTikTokCredentials(
+    public static IServiceCollection AddCredentials(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<TikTokCredentials>(configuration.GetSection(TikTokCredentials.SectionName));
+        // ... other Platform credentials
+
+        services
+            .AddOptions<TikTokCredentials>()
+            .Bind(configuration.GetSection(TikTokCredentials.SectionName));
+
         services.AddSingleton<IValidateOptions<TikTokCredentials>, TikTokCredentialsValidator>();
+
+        services.AddSingleton<ICredentialsStartupValidator, CredentialsStartupValidator>();
+
         return services;
     }
 }
 ```
 
-> The Key Vault Configuration Provider maps secret names to `IConfiguration` keys using the Azure SDK default convention: a secret named `TikTokCredentialsTikTokAccessToken` is available as `TikTokCredentials:TikTokAccessToken`. `SectionName` is the prefix that ties secret names to the credentials DTO. This mirrors the convention used by `XCredentials`, `LinkedInCredentials`, and `IgCredentials`.
+> The Key Vault Configuration Provider maps secret names to `IConfiguration` keys using the Azure SDK default convention: a secret named `TikTokCredentialsTikTokAccessToken` is available as `TikTokCredentials--TikTokAccessToken`. `SectionName` is the prefix that ties secret names to the credentials DTO. This mirrors the convention used by `XCredentials`, `LinkedInCredentials`, and `IntagramCredentials`.
 
 ### Step 2 — Implement ISender
 
@@ -85,6 +99,9 @@ public class TikTokSender : ISender
 
     public TikTokSender(IOptions<TikTokCredentials> credentials, ILogger<TikTokSender> logger)
     {
+        ArgumentNullException.ThrowIfNull(credentials);
+        ArgumentNullException.ThrowIfNull(logger);
+        
         _credentials = credentials.Value;
         _logger = logger;
     }
@@ -93,7 +110,7 @@ public class TikTokSender : ISender
 
     public int MessageMaxLenght => 150;
 
-    public async Task<bool> SendAsync(Post post)
+    public async Task<bool> SendAsync(Post post, CancellationToken ct = default)
     {
         if (post is null)
         {
@@ -114,19 +131,16 @@ public class TikTokSender : ISender
 
 ```csharp
 // src/Program.cs
-builder.Services.AddTikTokCredentials(builder.Configuration); // binds IOptions + startup validation
 builder.Services.AddTransient<TikTokSender>();
 ```
 
-> Call only the extension method — never raw `Configure<T>(configuration.GetSection("..."))` literals for sender credentials in `Program.cs`.
-
 ### Step 4 — Add the secrets to Key Vault
 
-Add one secret per credentials property, using the `{SectionName}{PropertyName}` naming convention:
+Add one secret per credentials property, using the `{SectionName}--{PropertyName}` naming convention:
 
 ```bash
-az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentialsTikTokAccessToken --value "<value>"
-az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentialsTikTokClientKey   --value "<value>"
+az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentials--TikTokAccessToken --value "<value>"
+az keyvault secret set --vault-name <your-keyvault-name> --name TikTokCredentials--TikTokClientKey   --value "<value>"
 ```
 
 For local development only, set them in `src/local.settings.json` using the double-underscore separator:
@@ -173,7 +187,7 @@ The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender(
 
 ### Step 7 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform list, orchestrator type, and (optionally) the AI provider for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform list, orchestrator type, and (optionally) the AI providers for that slot:
 
 ```csharp
 // src/Orchestrators/DefaultSlotProfileProvider.cs
@@ -189,18 +203,16 @@ public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
 ];
 ```
 
-To publish to multiple platforms in the same slot, list all target senders in **descending `MessageMaxLength` order** (widest first). `OrchestratorFactory` preserves declaration order and passes it to the orchestrator, which uses index 0 as the primary sender for base summary generation:
+To publish to multiple platforms in the same slot, list all target senders. Each `*Orchestrator` reorder in **descending `MessageMaxLength` order** (widest first).
 
 ```csharp
 new ScheduledOrchestrationProfile(
     hour: 20,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (2800) → first
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (2 800) → first
     orchestratorType: typeof(FeedOrchestrator),
     textProvider: AiProvider.OpenAi,
     imageProvider: AiProvider.OpenAi),
 ```
-
-> `OrchestratorFactory` no longer owns a static profile list — it receives `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time. Only `DefaultSlotProfileProvider` needs to change when adding a production slot.
 
 **Validation**: Write a unit test for the new sender using a mock `Post` to verify serialisation and error-return behaviour before integration.
 
@@ -237,12 +249,24 @@ public class QuoteOrchestrator : BaseOrchestrator
             return new Dictionary<SenderPlatform, Post?>();
         }
 
-        var quote = await _textProvider.GetSummaryAsync("Generate a motivational tech quote.", 100, ct);
-        if (string.IsNullOrWhiteSpace(quote))
-        {
-            SendIt = false;
-            return new Dictionary<SenderPlatform, Post?>();
-        }
+        // // Broadcast strategy: Content must be re-summarised to fit each platform's character limit...
+        // var orderedSenders = senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
+        // var primarySender  = orderedSenders[0];
+        // var quote = await textProvider.GetSummaryAsync("Generate a motivational tech quote.", primarySender.MessageMaxLenght, ct);
+        // if (string.IsNullOrWhiteSpace(rawBaseSummary))
+        // {
+        //     _logger.LogError("Quote generation failed for primary sender {Platform}.", primarySender.Platform);
+        //     _sendIt = false;
+        //     return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+        // }
+
+        // var result         = new Dictionary<SenderPlatform, Post?>();
+        // var previousSummary = rawBaseSummary;
+        // foreach (var sender in orderedSenders)
+        // {
+        //     // ...
+        //     result[sender.Platform] = new Post { Content = content, Image = imageBytes };
+        // }
 
         byte[]? image = null;
         if (_imageProvider is not null)
@@ -251,7 +275,7 @@ public class QuoteOrchestrator : BaseOrchestrator
         // Broadcast strategy: same post to every configured sender
         var post = new Post { Content = quote, Image = image };
         SendIt = true;
-        return _senders.ToDictionary(s => s.Platform, _ => (Post?)post);
+        return senders.ToDictionary(s => s.Platform, _ => (Post?)post);
     }
 }
 ```
@@ -265,7 +289,7 @@ Choose the strategy that fits the orchestrator's purpose:
 | **Broadcast** | Same content works on every target platform | `PowerLawOrchestrator` — deterministic text, no AI, broadcast identical `Post` to all senders |
 | **Per-sender adaptation** | Content must be re-summarised to fit each platform's character limit | `FeedOrchestrator` — AI base summary at primary sender's limit, AI re-summarise for each secondary sender |
 
-For a **per-sender adaptation** pattern, iterate `_senders` and call `_textProvider.GetSummaryAsync` independently per sender when the base summary exceeds the sender's `MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
+For a **per-sender adaptation** pattern, iterate `senders` and call `textProvider.GetSummaryAsync` independently per sender when the base summary exceeds the sender's `MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
 
 > **`OrchestrateAsync` invariant**: return an **empty dictionary** with `SendIt = false` — not throw — when content cannot be produced. `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
 
@@ -328,8 +352,6 @@ public enum AiProvider
     Anthropic    = 6,  // new
 }
 ```
-
-> Also update `DefaultSlotProfileProvider` if the new provider should be active for a production slot. Any slot profile that previously referenced `AiProvider.DeepSeekWithFal` must be migrated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate — `DeepSeekWithFal` has been removed.
 
 ### Step 2 — Implement the Capability Interface(s)
 
