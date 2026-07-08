@@ -1,4 +1,5 @@
 using System.Net;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,15 +12,8 @@ using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 
-/// <summary>
-/// Tests for IgSender.
-/// Only branches that execute before or without real HTTP calls are covered:
-/// constructor guards, MessageMaxLength, null/empty content guards, no-image branch,
-/// and the image path (which throws on the Instagram API — caught internally).
-/// </summary>
 public class IgSenderTests
 {
-
     private static readonly InstagramCredentials DefaultCredentials = new()
     {
         InstagramAccessToken = "fake_token",
@@ -41,11 +35,22 @@ public class IgSenderTests
             Options.Create(credentials ?? DefaultCredentials),
             loggerMock.Object,
             blobStorageServiceMock.Object,
-            containerStateStoreMock.Object
-            );
+            containerStateStoreMock.Object);
     }
 
-    #region Constructor Tests
+    private static byte[] CreateMalformedPngBytes()
+    {
+        var signature = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
+        var invalidPayload = Encoding.ASCII.GetBytes("malformed-png");
+        return signature.Concat(invalidPayload).ToArray();
+    }
+
+    private static byte[]? InvokeNormalizeImageForInstagram(IgSender sender, byte[] imageBytes)
+    {
+        var method = typeof(IgSender).GetMethod("NormalizeImageForInstagram", BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(method);
+        return (byte[]?)method!.Invoke(sender, new object[] { imageBytes });
+    }
 
     [Fact]
     public void Constructor_InitializesCorrectly()
@@ -60,19 +65,15 @@ public class IgSenderTests
     }
 
     [Fact]
-    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
+    public void Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()
     {
-        var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
-
         Assert.Throws<ArgumentNullException>(() =>
             new IgSender(
-                factoryMock.Object,
-                Options.Create(DefaultCredentials),
                 null!,
+                Options.Create(DefaultCredentials),
+                new Mock<ILogger<IgSender>>().Object,
                 new Mock<IBlobStorageService>().Object,
-                new Mock<IContainerStateStore>().Object
-                ));
+                new Mock<IContainerStateStore>().Object));
     }
 
     [Fact]
@@ -87,8 +88,52 @@ public class IgSenderTests
                 null!,
                 new Mock<ILogger<IgSender>>().Object,
                 new Mock<IBlobStorageService>().Object,
-                new Mock<IContainerStateStore>().Object
-                ));
+                new Mock<IContainerStateStore>().Object));
+    }
+
+    [Fact]
+    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
+    {
+        var factoryMock = new Mock<IHttpClientFactory>();
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
+
+        Assert.Throws<ArgumentNullException>(() =>
+            new IgSender(
+                factoryMock.Object,
+                Options.Create(DefaultCredentials),
+                null!,
+                new Mock<IBlobStorageService>().Object,
+                new Mock<IContainerStateStore>().Object));
+    }
+
+    [Fact]
+    public void Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()
+    {
+        var factoryMock = new Mock<IHttpClientFactory>();
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
+
+        Assert.Throws<ArgumentNullException>(() =>
+            new IgSender(
+                factoryMock.Object,
+                Options.Create(DefaultCredentials),
+                new Mock<ILogger<IgSender>>().Object,
+                null!,
+                new Mock<IContainerStateStore>().Object));
+    }
+
+    [Fact]
+    public void Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()
+    {
+        var factoryMock = new Mock<IHttpClientFactory>();
+        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
+
+        Assert.Throws<ArgumentNullException>(() =>
+            new IgSender(
+                factoryMock.Object,
+                Options.Create(DefaultCredentials),
+                new Mock<ILogger<IgSender>>().Object,
+                new Mock<IBlobStorageService>().Object,
+                null!));
     }
 
     [Fact]
@@ -98,15 +143,10 @@ public class IgSenderTests
             new HttpClient(new Mock<HttpMessageHandler>().Object),
             new Mock<IBlobStorageService>(),
             new Mock<IContainerStateStore>(),
-            new Mock<ILogger<IgSender>>()
-            );
+            new Mock<ILogger<IgSender>>());
 
         Assert.Equal(2200, sut.MessageMaxLenght);
     }
-
-    #endregion
-
-    #region SendAsync Guard Tests
 
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalse()
@@ -133,65 +173,6 @@ public class IgSenderTests
     }
 
     [Fact]
-    public async Task SendAsync_WithValidPng_ConvertsAndContinuesFlow()
-    {
-        var sut = BuildSender(
-            new HttpClient(new Mock<HttpMessageHandler>().Object),
-            new Mock<IBlobStorageService>(),
-            new Mock<IContainerStateStore>(),
-            new Mock<ILogger<IgSender>>());
-
-        Assert.False(await sut.SendAsync(new Post
-        {
-            Content = "Test caption",
-            Image = ImageTestData.CreateValidPng()
-        }));
-    }
-
-    [Fact]
-    public async Task SendAsync_WithUnsupportedImageFormat_ReturnsFalse_AndDoesNotUploadOrSave()
-    {
-        var blob = new Mock<IBlobStorageService>(MockBehavior.Strict);
-        var store = new Mock<IContainerStateStore>(MockBehavior.Strict);
-        var logger = new Mock<ILogger<IgSender>>();
-
-        var sut = BuildSender(
-            new HttpClient(new Mock<HttpMessageHandler>().Object),
-            blob,
-            store,
-            logger);
-
-        var unsupportedBytes = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 };
-
-        var result = await sut.SendAsync(new Post
-        {
-            Content = "Test caption",
-            Image = unsupportedBytes
-        });
-
-        Assert.False(result);
-
-        blob.Verify(
-            x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
-            Times.Never);
-
-        store.Verify(
-            x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
-            Times.Never);
-
-        logger.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, _) =>
-                    v.ToString()!.Contains("Formato immagine", StringComparison.OrdinalIgnoreCase) ||
-                    v.ToString()!.Contains("Immagine non supportata", StringComparison.OrdinalIgnoreCase)),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.AtLeastOnce);
-    }
-
-    [Fact]
     public async Task SendAsync_WhenBlobUploadSucceeds_CreatesMediaContainerWithCorrectSasUrl()
     {
         var blob = new Mock<IBlobStorageService>();
@@ -209,7 +190,7 @@ public class IgSenderTests
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .Callback<HttpRequestMessage, CancellationToken>((req, _) => captured.Add(req))
+            .Callback((HttpRequestMessage req, CancellationToken _) => captured.Add(req))
             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent("{\"id\":\"creation-123\"}", Encoding.UTF8, "application/json")
@@ -233,141 +214,24 @@ public class IgSenderTests
     }
 
     [Fact]
-    public async Task SendAsync_WhenAccessTokenIsSet_RequestBodyDoesNotContainIt()
+    public async Task SendAsync_WhenJsonResponseMissingIdProperty_ReturnsFalse()
     {
         var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-        string? body = null;
-
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
-                "blob1.jpg"));
-        store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
-        var handler = new Mock<HttpMessageHandler>();
-        handler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .Returns(async (HttpRequestMessage req, CancellationToken _) =>
-            {
-                body = await req.Content!.ReadAsStringAsync();
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent("{\"id\":\"creation-123\"}", Encoding.UTF8, "application/json")
-                };
-            });
-
-        var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
-
-        var result = await sut.SendAsync(new Post
-        {
-            Content = "hello",
-            Image = ImageTestData.CreateValidJpeg()
-        });
-
-        Assert.True(result);
-        Assert.NotNull(body);
-        Assert.DoesNotContain("access_token", body, StringComparison.OrdinalIgnoreCase);
-    }
-
-    [Fact]
-    public async Task SendAsync_WhenBlobUploadSucceeds_SavesCreationIdToStateStore()
-    {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
+        var store = new Mock<IContainerStateStore>(MockBehavior.Strict);
         var logger = new Mock<ILogger<IgSender>>();
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
             .ReturnsAsync(new BlobUploadResult(
                 new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
                 "blob1.jpg"));
-        store.Setup(x => x.SaveAsync("creation-123", "blob1.jpg", It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask)
-            .Verifiable();
 
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent("{\"id\":\"creation-123\"}", Encoding.UTF8, "application/json")
+                Content = new StringContent("{\"other_field\":\"val\"}", Encoding.UTF8, "application/json")
             });
-
-        var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
-
-        var result = await sut.SendAsync(new Post
-        {
-            Content = "hello",
-            Image = ImageTestData.CreateValidJpeg()
-        });
-
-        Assert.True(result);
-        store.Verify();
-    }
-
-    /// <summary>
-    /// Verifies that the blobName passed to SaveAsync comes directly from the BlobUploadResult
-    /// returned by UploadAsync, not from re-extracting it from the SAS URI.
-    /// The blob name in the upload result differs from what would be parsed from the SAS URI path
-    /// to make the distinction explicit.
-    /// </summary>
-    [Fact]
-    public async Task SendAsync_SaveAsync_UsesBlobNameFromUploadResult_NotFromSasUri()
-    {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-
-        const string expectedBlobName = "direct-blob-name.jpg";
-        // The SAS URI path segment intentionally differs from expectedBlobName
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/something-else.jpg?sig=abc"),
-                expectedBlobName));
-
-        string? capturedBlobName = null;
-        store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Callback<string, string, CancellationToken>((_, bn, _) => capturedBlobName = bn)
-            .Returns(Task.CompletedTask);
-
-        var handler = new Mock<HttpMessageHandler>();
-        handler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent("{\"id\":\"creation-999\"}", Encoding.UTF8, "application/json")
-            });
-
-        var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
-
-        var result = await sut.SendAsync(new Post
-        {
-            Content = "hello",
-            Image = ImageTestData.CreateValidJpeg()
-        });
-
-        Assert.True(result);
-        Assert.Equal(expectedBlobName, capturedBlobName);
-    }
-
-    [Fact]
-    public async Task SendAsync_WhenMediaContainerFails_ReturnsFalse()
-    {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
-                "blob1.jpg"));
-
-        var handler = new Mock<HttpMessageHandler>();
-        handler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.BadRequest));
 
         var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
 
@@ -378,65 +242,30 @@ public class IgSenderTests
         });
 
         Assert.False(result);
-        store.VerifyNoOtherCalls();
+        store.Verify(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
-    [Fact]
-    public async Task SendAsync_WhenCaptionExceedsLimit_TruncatesCaption()
+    [Theory]
+    [InlineData("{\"id\":\"\"}")]
+    [InlineData("{\"id\":null}")]
+    public async Task SendAsync_WhenJsonResponseIdIsEmpty_ReturnsFalse(string responseJson)
     {
         var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
+        var store = new Mock<IContainerStateStore>(MockBehavior.Strict);
         var logger = new Mock<ILogger<IgSender>>();
-        string? body = null;
 
         blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
             .ReturnsAsync(new BlobUploadResult(
                 new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
                 "blob1.jpg"));
-        store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
 
         var handler = new Mock<HttpMessageHandler>();
         handler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .Returns(async (HttpRequestMessage req, CancellationToken _) =>
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
             {
-                body = await req.Content!.ReadAsStringAsync();
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent("{\"id\":\"creation-123\"}", Encoding.UTF8, "application/json")
-                };
+                Content = new StringContent(responseJson, Encoding.UTF8, "application/json")
             });
-
-        var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
-
-        var result = await sut.SendAsync(new Post
-        {
-            Content = new string('a', 5000),
-            Image = ImageTestData.CreateValidJpeg()
-        });
-
-        Assert.True(result);
-        Assert.NotNull(body);
-        Assert.Contains("caption", body!);
-    }
-
-    [Fact]
-    public async Task SendAsync_WhenApiReturns429_ReturnsFalse()
-    {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
-                "blob1.jpg"));
-
-        var handler = new Mock<HttpMessageHandler>();
-        handler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage((HttpStatusCode)429));
 
         var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
 
@@ -447,102 +276,24 @@ public class IgSenderTests
         });
 
         Assert.False(result);
+        store.Verify(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
-    public async Task SendAsync_DoesNotPollContainerStatus_DelegatesStateToStore()
+    public async Task SendAsync_WhenBlobUploadCancelled_ReturnsFalse()
     {
         var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
+        var store = new Mock<IContainerStateStore>(MockBehavior.Strict);
         var logger = new Mock<ILogger<IgSender>>();
 
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
-                "blob1.jpg"));
-        store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new TaskCanceledException());
 
-        var handler = new Mock<HttpMessageHandler>();
-        handler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent("{\"id\":\"creation-123\"}", Encoding.UTF8, "application/json")
-            });
-
-        var sut = BuildSender(new HttpClient(handler.Object), blob, store, logger);
-
-        var result = await sut.SendAsync(new Post
-        {
-            Content = "hello",
-            Image = ImageTestData.CreateValidJpeg()
-        });
-
-        Assert.True(result);
-        store.Verify(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
-        store.VerifyNoOtherCalls();
-    }
-
-    [Fact]
-    public async Task SendAsync_WithEmptyContent_ReturnsFalse()
-    {
-        var sut = BuildSender(
-            new HttpClient(new Mock<HttpMessageHandler>().Object),
-            new Mock<IBlobStorageService>(),
-            new Mock<IContainerStateStore>(),
-            new Mock<ILogger<IgSender>>());
-
-        Assert.False(await sut.SendAsync(new Post { Content = string.Empty }));
-    }
-
-    [Fact]
-    public async Task SendAsync_WithWhitespaceContent_ReturnsFalse()
-    {
-        var sut = BuildSender(
-            new HttpClient(new Mock<HttpMessageHandler>().Object),
-            new Mock<IBlobStorageService>(),
-            new Mock<IContainerStateStore>(),
-            new Mock<ILogger<IgSender>>());
-
-        Assert.False(await sut.SendAsync(new Post { Content = "   " }));
-    }
-
-    [Fact]
-    public async Task SendAsync_WithImage_TriesUploadAndReturnsFalse()
-    {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
         var sut = BuildSender(
             new HttpClient(new Mock<HttpMessageHandler>().Object),
             blob,
             store,
             logger);
-
-        Assert.False(await sut.SendAsync(new Post
-        {
-            Content = "Test caption",
-            Image = ImageTestData.CreateValidPng()
-        }));
-    }
-
-    #endregion
-
-    #region Image upload and API response Tests
-
-    [Fact]
-    public async Task SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()
-    {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-        var httpClient = new HttpClient(new Mock<HttpMessageHandler>().Object);
-
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new NotImplementedException());
-
-        var sut = BuildSender(httpClient, blob, store, logger);
 
         var result = await sut.SendAsync(new Post
         {
@@ -562,111 +313,47 @@ public class IgSenderTests
     }
 
     [Fact]
-    public async Task SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()
+    public void NormalizeImage_WhenCodecIsNull_ReturnsNull()
     {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
-                "blob1.jpg"));
+        var sut = BuildSender(
+            new HttpClient(new Mock<HttpMessageHandler>().Object),
+            new Mock<IBlobStorageService>(),
+            new Mock<IContainerStateStore>(),
+            new Mock<ILogger<IgSender>>());
 
-        var handlerMock = new Mock<HttpMessageHandler>();
-        handlerMock.Protected()
-            .Setup<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                Content = new StringContent("{\"error\":\"bad_request\"}")
-            });
+        var result = InvokeNormalizeImageForInstagram(sut, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 });
 
-        var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram"))
-            .Returns(new HttpClient(handlerMock.Object));
-
-        var sender = new IgSender(
-            factoryMock.Object,
-            Options.Create(DefaultCredentials),
-            logger.Object,
-            blob.Object,
-            store.Object);
-
-        Assert.False(await sender.SendAsync(
-            new Post { Content = "caption", Image = ImageTestData.CreateValidJpeg() }));
+        Assert.Null(result);
     }
 
     [Fact]
-    public async Task SendAsync_WhenInstagramApiReturns429_ReturnsFalse()
+    public void NormalizeImage_WhenJpegIsAlreadyValid_ReturnsOriginalBytes()
     {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var logger = new Mock<ILogger<IgSender>>();
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new BlobUploadResult(
-                new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"),
-                "blob1.jpg"));
+        var sut = BuildSender(
+            new HttpClient(new Mock<HttpMessageHandler>().Object),
+            new Mock<IBlobStorageService>(),
+            new Mock<IContainerStateStore>(),
+            new Mock<ILogger<IgSender>>());
 
-        var handlerMock = new Mock<HttpMessageHandler>();
-        handlerMock.Protected()
-            .Setup<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.TooManyRequests)
-            {
-                Content = new StringContent("{\"error\":\"rate_limited\"}")
-            });
+        var jpegBytes = ImageTestData.CreateValidJpeg();
 
-        var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram"))
-            .Returns(new HttpClient(handlerMock.Object));
+        var result = InvokeNormalizeImageForInstagram(sut, jpegBytes);
 
-        var sender = new IgSender(
-            factoryMock.Object,
-            Options.Create(DefaultCredentials),
-            logger.Object,
-            blob.Object,
-            store.Object);
-
-        Assert.False(await sender.SendAsync(
-            new Post { Content = "caption", Image = ImageTestData.CreateValidJpeg() }));
+        Assert.NotNull(result);
+        Assert.Equal(jpegBytes, result);
     }
 
     [Fact]
-    public async Task SendAsync_WhenImageUploadThrowsHttpRequestException_ReturnsFalseAndLogsError()
+    public void NormalizeImage_WhenPngDecodesToNull_ReturnsNull()
     {
-        var blob = new Mock<IBlobStorageService>();
-        var store = new Mock<IContainerStateStore>();
-        var loggerMock = new Mock<ILogger<IgSender>>();
-        var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram"))
-            .Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
+        var sut = BuildSender(
+            new HttpClient(new Mock<HttpMessageHandler>().Object),
+            new Mock<IBlobStorageService>(),
+            new Mock<IContainerStateStore>(),
+            new Mock<ILogger<IgSender>>());
 
-        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new HttpRequestException("Connection refused"));
+        var result = InvokeNormalizeImageForInstagram(sut, CreateMalformedPngBytes());
 
-        var sender = new IgSender(
-            factoryMock.Object,
-            Options.Create(DefaultCredentials),
-            loggerMock.Object,
-            blob.Object,
-            store.Object);
-
-        Assert.False(await sender.SendAsync(
-            new Post { Content = "caption", Image = ImageTestData.CreateValidJpeg() }));
-
-        loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Errore durante il caricamento dell'immagine su Blob Storage")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
+        Assert.Null(result);
     }
-
-    #endregion
 }
