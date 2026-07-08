@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
+- **AzureFoundryOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 159]] (2 shared connections)
+- [[Community 157]] (2 shared connections)
 
 ## Audit Trail
 

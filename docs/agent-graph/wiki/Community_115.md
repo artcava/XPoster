@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **XPoster.Credentials** (2 connections)
-- **AddCredentials()** (2 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **AddAzureFoundryOptions()** (2 connections)
 
 ## Relationships
 

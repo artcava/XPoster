@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **Apply()** (2 connections)
-- **TagReplacementService()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **typeof()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 

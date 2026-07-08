@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterAiProviders()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **AddDeepSeekOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
