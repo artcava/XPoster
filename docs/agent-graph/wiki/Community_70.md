@@ -1,20 +1,20 @@
 # Community 70
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **new()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **TagReplacementService.cs** (6 connections)
+- **TagReplacementService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **Apply()** (2 connections)
+- **TagReplacementService()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 112]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

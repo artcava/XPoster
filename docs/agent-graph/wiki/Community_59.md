@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **OpenAIResponse.cs** (7 connections)
-- **OpenAIResponse.cs** (7 connections)
-- **Message** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **XPoster.Models** (2 connections)
-- **OpenAIResponse** (2 connections)
-- **Choice** (2 connections)
-- **ImageData** (2 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **AcquireFeedContentAsync()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **foreach()** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AddAzureFoundryOptions()** (2 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **AddFalAiOptions()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **Post.cs** (3 connections)
-- **Post.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **Post** (2 connections)
+- **AiProviderServiceCollectionExtensions.cs** (3 connections)
+- **AiProviderServiceCollectionExtensions.cs** (3 connections)
+- **AddXPosterAiProviders()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 

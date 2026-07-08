@@ -1,26 +1,26 @@
 # Community 48
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 31]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **params()** (2 connections)
-- **BuildFactory()** (2 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
+- **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 120]] (3 shared connections)
+- [[Community 160]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

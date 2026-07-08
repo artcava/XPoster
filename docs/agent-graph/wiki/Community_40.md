@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **MetaPublishingService.cs** (9 connections)
-- **MetaPublishingService.cs** (9 connections)
-- **PublishContainerAsync()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **GetApiVersion()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **XSenderTests.cs** (9 connections)
+- **XSenderTests.cs** (9 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
 
 ## Relationships
 

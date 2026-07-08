@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **GetSummaryAsync()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **TestOrchestrator()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (7 shared connections)
+- [[Community 46]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

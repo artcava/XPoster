@@ -1,21 +1,21 @@
 # Community 125
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 69]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

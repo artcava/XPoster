@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **XPoster.Abstraction** (2 connections)
-- **PostAsync()** (2 connections)
-- **BaseOrchestrator()** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
 
 ## Relationships
 
-- [[Community 134]] (3 shared connections)
+- [[Community 135]] (3 shared connections)
 
 ## Audit Trail
 

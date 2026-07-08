@@ -6,18 +6,17 @@
 
 - **OrchestratorFactoryTests.cs** (29 connections)
 - **OrchestratorFactoryTests.cs** (29 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
+- **CreateFactory()** (2 connections)
 - **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
 - **CreateFactoryWithProfiles()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
 - **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **CreateFactory()** (2 connections)
+- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 - **SetupMocksForOrchestratorFactory()** (2 connections)
 - **typeof()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
 - **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
 - **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
 - **Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()** (2 connections)
@@ -29,6 +28,7 @@
 - **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
 - **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
 - **FeedProfile()** (2 connections)
+- **new()** (2 connections)
 - *... and 5 more nodes in this community*
 
 ## Relationships
