@@ -9,6 +9,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`IBlobStorageService`** contract defined in `XPoster.Contracts`: `UploadAsync` returns a read-only SAS URL (30 min expiry, 5 min clock-skew start) suitable as Meta `media_url`; `DeleteAsync` removes the blob after publish or failure ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`BlobStorageService`** implementation in `XPoster.Services`: reads config via `IOptions<BlobStorageOptions>` bound from `AZURE_STORAGE_*` app settings; `BlobServiceClient` registered as singleton in `Program.cs` ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`IContainerStateStore`** contract defined in `XPoster.Contracts` with `SaveAsync`, `GetPendingAsync`, and `UpdateStatusAsync`; `InMemoryContainerStateStore` initial implementation in `XPoster.Services` ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`IMetaPublishingService`** contract defined in `XPoster.Contracts`: centralises Meta Graph API HTTP calls (`GetContainerStatusAsync`, `PublishContainerAsync`) shared between `IgSender` and `XPosterContainerPollingFunction`; uses the named `"Instagram"` `HttpClient` ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`InstagramCredentials`** typed credentials class (`src/Credentials/InstagramCredentials.cs`): replaces `IgCredentials.cs`; properties `InstagramAccountId` and `InstagramAccessToken`; `SectionName = "InstagramCredentials"` aligned to Key Vault secret naming convention ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`InstagramCredentialsValidator`** (`src/Credentials/InstagramCredentialsValidator.cs`): `IValidateOptions<InstagramCredentials>` startup validator for both required properties ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`InstagramCredentialsExtensions.AddInstagramCredentials()`** (`src/Credentials/InstagramCredentialsExtensions.cs`): encapsulates `Configure<InstagramCredentials>` binding and validator registration; called from `Program.cs` ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`XPosterContainerPollingFunction`** (`src/XPosterContainerPollingFunction.cs`): new `TimerTrigger("%ContainerPollingSchedule%")` function (default: every 2 minutes); polls `IContainerStateStore` for pending containers and drives the Meta two-phase publish flow (`FINISHED` → publish + blob delete, `IN_PROGRESS` → skip, `ERROR`/`EXPIRED` → mark failed + blob delete); fully sender-agnostic ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`BlobStorageServiceTests`** (`tests/Services/BlobStorageServiceTests.cs`): upload success with SAS URI, container auto-create, storage exception propagation, delete success ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`XPosterContainerPollingFunctionTests`** (`tests/Functions/XPosterContainerPollingFunctionTests.cs`): 9 test cases covering no-pending, `IN_PROGRESS` skip, `FINISHED` publish + cleanup, `ERROR`/`EXPIRED` failure + cleanup, publish failure, blob-delete failure with state update, multi-container processing, and graceful cancellation ([#72](https://github.com/artcava/XPoster/issues/72))
+- New app settings documented: `AZURE_STORAGE_CONNECTION_STRING`, `AZURE_STORAGE_CONTAINER_NAME` (default: `xposter-images`), `ContainerPollingSchedule`, `ContainerPollingHttpEnabled` ([#72](https://github.com/artcava/XPoster/issues/72))
+- New Key Vault secrets documented: `InstagramCredentialsInstagramAccessToken`, `InstagramCredentialsInstagramAccountId` ([#72](https://github.com/artcava/XPoster/issues/72))
+
+### Changed
+- **`IgSender`** updated: injects `IBlobStorageService`, `IContainerStateStore`, `IMetaPublishingService`, and `IOptions<InstagramCredentials>` via constructor; `UploadImageToPublicUrl` calls `IBlobStorageService.UploadAsync` and returns SAS `Uri` (no more `NotImplementedException`); `SendAsync` saves `creation_id` to `IContainerStateStore` and returns immediately — no inline polling ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`IgSender`** — `access_token` moved from JSON body to query parameter (`?access_token=...`) per Meta best-practice guidelines ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`IgSender`** — error logging sanitised: raw API response bodies are no longer logged; only HTTP status code and a safe error summary are emitted to prevent token leakage ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`IgSender`** — JPEG validation added before upload: magic-bytes `FF D8` check rejects non-JPEG images with `LogWarning` and `return false` ([#72](https://github.com/artcava/XPoster/issues/72))
+- **Polly pipeline on `"Instagram"` named `HttpClient`** updated to handle HTTP 429 with `Retry-After` header from Meta (50 posts/24h rate limit) ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`DefaultSlotProfileProvider`**: `SenderPlatform.Instagram` added to the hour-6 fan-out slot after staging validation ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`Program.cs`**: `BlobServiceClient` registered as singleton, `IBlobStorageService` → `BlobStorageService`, `IContainerStateStore` → `InMemoryContainerStateStore`, `IMetaPublishingService` → `MetaPublishingService`, and `AddInstagramCredentials()` all registered ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`docs/integrations/SenderPlugins/setup-instagram.md`**: token refresh warning and reference to automated refresh tracked in #72 removed; Step 6 and Token Management table updated to document the long-lived non-expiring token in use in production ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`docs/configuration.md`**: `InstagramCredentials:InstagramAccessToken` and `InstagramCredentials:InstagramAccountId` added to the Key Vault Required Secrets table; `AZURE_STORAGE_*`, `ContainerPollingSchedule`, `ContainerPollingHttpEnabled` added as new configuration entries ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`docs/architecture.md`**: `IgSender` row updated with `IBlobStorageService` and `IContainerStateStore` dependencies; `BlobStorageService`, `InMemoryContainerStateStore`, `MetaPublishingService` added to the Services Layer section; `XPosterContainerPollingFunction` added to the Functions section ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`src/local.settings.json.example`**: commented entries for `AZURE_STORAGE_CONNECTION_STRING`, `AZURE_STORAGE_CONTAINER_NAME`, `ContainerPollingSchedule`, `ContainerPollingHttpEnabled` added under a new `── Azure Blob Storage & Instagram Polling ───` section ([#72](https://github.com/artcava/XPoster/issues/72))
+- **`tests/README.md`**: `BlobStorageServiceTests` and `XPosterContainerPollingFunctionTests` added to the test inventory ([#72](https://github.com/artcava/XPoster/issues/72))
+
+### Removed
+- **`src/Credentials/IgCredentials.cs`**: renamed to `InstagramCredentials.cs`; old file deleted ([#72](https://github.com/artcava/XPoster/issues/72))
+
+### Fixed
+- **`IgSender.UploadImageToPublicUrl`**: `NotImplementedException` removed; method now uploads to Azure Blob Storage and returns a time-limited SAS URL ([#72](https://github.com/artcava/XPoster/issues/72))
+
 ---
 
 ## [0.1.6] - 2026-06-26
