@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **Apply()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **ISlotProfileProvider** (2 connections)
+- **ITagReplacementService** (2 connections)
 
 ## Relationships
 

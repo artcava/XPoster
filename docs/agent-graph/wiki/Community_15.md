@@ -12,13 +12,13 @@
 - **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
 - **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
 - **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
 - **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **BlobStorageService()** (2 connections)
 - **CreateSut()** (2 connections)
 - **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **BlobStorageService()** (2 connections)
+- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **BlobStorageServiceTests** (2 connections)
+- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
 
 ## Relationships
 

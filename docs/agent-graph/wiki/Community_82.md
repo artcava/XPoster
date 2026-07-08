@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TagReplacementServiceTests.cs** (5 connections)
-- **TagReplacementServiceTests.cs** (5 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
-- **Apply_Returns_Input_Unchanged_When_Text_Is_Null_Or_Whitespace()** (2 connections)
-- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **Uri()** (2 connections)
+- **BlobServiceClient()** (2 connections)
+- **if()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

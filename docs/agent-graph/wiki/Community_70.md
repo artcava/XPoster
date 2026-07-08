@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **XPoster** (2 connections)
+- **XFunction()** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
+- **Run()** (2 connections)
 
 ## Relationships
 

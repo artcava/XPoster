@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITimeProvider** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **Exception()** (2 connections)
-- **using()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **catch()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
 
 ## Relationships
 
-- [[Community 145]] (3 shared connections)
+- [[Community 55]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
