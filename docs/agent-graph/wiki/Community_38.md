@@ -1,18 +1,19 @@
 # Community 38
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **XSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **HttpRequestException()** (2 connections)
+- **catch()** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **GetApiVersion()** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **MetaPublishingService()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -99,9 +99,29 @@ All branches must follow this pattern:
 - Use `src/local.settings.json.example` as the starting template. It contains no real values.
 - Never add API keys, tokens, or passwords to any file tracked by Git.
 
+### Credentials architecture
+
+Sender credentials are modelled as typed DTOs in `src/Credentials/` (namespace `XPoster.Credentials`). Each platform has its own class (e.g., `XCredentials`, `LinkedInCredentials`, `InstagramCredentials`) that declares the required properties and exposes a `SectionName` constant used for configuration binding.
+
+All credentials classes are registered centrally via `CredentialsExtensions.AddCredentials(IServiceCollection, IConfiguration)` in `src/Credentials/CredentialsExtensions.cs`. This extension method:
+
+1. Binds each credentials class to its configuration section using `IOptions<T>`.
+2. Registers the corresponding `IValidateOptions<T>` validator so missing or malformed secrets are caught at startup, not at publish time.
+
+Consumers receive credentials through constructor-injected `IOptions<TCredentials>` — no direct `IConfiguration` access is needed outside the credentials layer.
+
 ### How secrets are loaded at runtime
 
-XPoster uses the **Azure Key Vault Configuration Provider** to load secrets at application startup. Secrets stored in Key Vault are mapped automatically to `IConfiguration` keys using the Azure SDK naming convention (e.g., a secret named `XApiKey` becomes `X:ApiKey` in configuration). Each sender and AI provider reads its credentials through `IOptions<TCredentials>`, bound at startup from `IConfiguration` — no runtime Key Vault calls occur during publish.
+XPoster uses the **Azure Key Vault Configuration Provider** to load secrets at application startup. Key Vault secret names follow the double-dash convention to represent configuration hierarchy:
+
+| Key Vault secret name | `IConfiguration` key | Bound to |
+|---|---|---|
+| `XCredentials--XApiKey` | `XCredentials:XApiKey` | `XCredentials.XApiKey` |
+| `XCredentials--XApiSecret` | `XCredentials:XApiSecret` | `XCredentials.XApiSecret` |
+| `XCredentials--XAccessToken` | `XCredentials:XAccessToken` | `XCredentials.XAccessToken` |
+| `XCredentials--XAccessTokenSecret` | `XCredentials:XAccessTokenSecret` | `XCredentials.XAccessTokenSecret` |
+
+The section name (`XCredentials`) is defined as `XCredentials.SectionName` in `src/Credentials/XCredentials.cs` and must match exactly the prefix used in Key Vault secret names. No runtime Key Vault calls occur during publish — all secrets are resolved once at startup via the configuration provider.
 
 For non-local environments (staging, production) all secrets must be stored in Azure Key Vault. See [docs/configuration.md](docs/configuration.md) for the full variable reference and Key Vault secret naming conventions.
 
@@ -115,7 +135,7 @@ cp src/local.settings.json.example src/local.settings.json
 code src/local.settings.json
 ```
 
-For local development the Key Vault Configuration Provider is bypassed and credentials are read directly from `src/local.settings.json`. Use the double-underscore separator to match the `IOptions<T>` binding (e.g., `X__ApiKey` maps to `X:ApiKey`).
+For local development the Key Vault Configuration Provider is bypassed and credentials are read directly from `src/local.settings.json`. Use the double-underscore separator to match the `IOptions<T>` binding (e.g., `XCredentials__XApiKey` maps to `XCredentials:XApiKey`).
 
 > Do not add real credentials to `src/local.settings.json.example`. The example file is tracked by Git and must contain only placeholder values.
 
@@ -128,7 +148,7 @@ For local development you can also use the .NET user-secrets manager instead of 
 dotnet user-secrets init --project src/
 
 # Set a secret (use double-underscore to match IOptions<T> section binding)
-dotnet user-secrets set "X__ApiKey" "your_value" --project src/
+dotnet user-secrets set "XCredentials__XApiKey" "your_value" --project src/
 
 # List stored secrets
 dotnet user-secrets list --project src/

@@ -1,18 +1,19 @@
 # Community 40
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **NoOrchestratorTests** (2 connections)
+- **Build()** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **SupportedPlatforms_IsEmpty()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

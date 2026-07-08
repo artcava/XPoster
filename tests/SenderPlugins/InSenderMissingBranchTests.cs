@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using XPoster.Credentials;
 using XPoster.Models;
@@ -47,9 +46,9 @@ public class InSenderMissingBranchTests
     }
 
     [Fact]
-    public void MessageMaxLenght_Returns800()
+    public void MessageMaxLenght_Returns2800()
     {
-        Assert.Equal(800, BuildSender().MessageMaxLenght);
+        Assert.Equal(2800, BuildSender().MessageMaxLenght);
     }
 
     [Fact]

@@ -1,20 +1,21 @@
 # Community 128
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **OpenAiOptions.cs** (2 connections)
-- **OpenAiOptions.cs** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 134]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

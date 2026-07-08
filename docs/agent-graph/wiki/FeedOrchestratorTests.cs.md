@@ -1,6 +1,6 @@
 # FeedOrchestratorTests.cs
 
-> God node · 31 connections
+> God node · 33 connections
 
 **Community:** [[Community 2]]
 
@@ -9,6 +9,8 @@
 ### contains
 - [[XPoster.Tests.Orchestrators]]
 - [[FeedOrchestratorTests()]]
+- [[if()]]
+- [[foreach()]]
 - [[CreateOrchestrator()]]
 - [[new()]]
 - [[CreateMultiSenderOrchestrator()]]
@@ -25,8 +27,6 @@
 - [[OrchestrateAsync_ThirdSender_ReusesUpdatedPreviousSummary_WhenItFitsThirdLimit()]]
 - [[OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()]]
 - [[OrchestrateAsync_Should_ReturnNull_When_FeedUrlProviderReturnsEmptyList()]]
-- [[OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()]]
-- [[OrchestrateAsync_Should_CallTagReplacementProvider_ExactlyOnce_WhenOrchestrationSucceeds()]]
 
 ---
 

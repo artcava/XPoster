@@ -1,17 +1,18 @@
 # Community 95
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (8 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **if()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **GenerateImageAsync()** (2 connections)
+- **ITextToImageProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 89]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

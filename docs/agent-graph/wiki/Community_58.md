@@ -1,16 +1,17 @@
 # Community 58
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **XPoster** (2 connections)
-- **catch()** (2 connections)
-- **XFunction()** (2 connections)
-- **Run()** (2 connections)
-- **if()** (2 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **OpenAIResponse.cs** (7 connections)
+- **Choice** (2 connections)
+- **OpenAIResponse** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **Message** (2 connections)
+- **ImageData** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,24 @@
 # Community 67
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **BuildImagePromptPayload()** (2 connections)
 - **if()** (2 connections)
-- **Uri()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **var()** (2 connections)
+- **while()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 56]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

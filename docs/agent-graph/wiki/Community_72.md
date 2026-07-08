@@ -1,14 +1,16 @@
 # Community 72
 
-> 5 nodes · cohesion 0.70
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ISlotProfileProvider** (2 connections)
+- **InMemoryContainerStateStore.cs** (6 connections)
+- **InMemoryContainerStateStore.cs** (6 connections)
+- **UpdateStatusAsync()** (2 connections)
+- **InMemoryContainerStateStore** (2 connections)
+- **XPoster.Services** (2 connections)
+- **SaveAsync()** (2 connections)
+- **GetPendingAsync()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

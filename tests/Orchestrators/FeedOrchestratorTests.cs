@@ -13,6 +13,7 @@ public class FeedOrchestratorTests
     private readonly Mock<IFeedService>                _mockFeedService;
     private readonly Mock<IFeedUrlProvider>            _mockFeedUrlProvider;
     private readonly Mock<ITagReplacementProvider>     _mockTagReplacementProvider;
+    private readonly Mock<ITagReplacementService>      _mockTagReplacementService;
     private readonly Mock<ITextToTextProvider>         _mockTextProvider;
     private readonly Mock<ITextToImageProvider>        _mockImageProvider;
 
@@ -37,12 +38,32 @@ public class FeedOrchestratorTests
         _mockFeedService            = new Mock<IFeedService>();
         _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
         _mockTagReplacementProvider = new Mock<ITagReplacementProvider>();
+        _mockTagReplacementService  = new Mock<ITagReplacementService>();
         _mockTextProvider           = new Mock<ITextToTextProvider>();
         _mockImageProvider          = new Mock<ITextToImageProvider>();
 
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(DefaultUrls);
         _mockTagReplacementProvider.Setup(p => p.GetReplacements())
             .Returns(DefaultReplacements);
+        _mockTagReplacementService
+            .Setup(s => s.Apply(It.IsAny<string>()))
+            .Returns<string>(input =>
+            {
+                var replacements = _mockTagReplacementProvider.Object.GetReplacements();
+                if (replacements.Count == 0)
+                    return input;
+
+                var output = input;
+                foreach (var replacement in replacements)
+                {
+                    output = output.Replace(
+                        replacement.Key,
+                        replacement.Value,
+                        StringComparison.OrdinalIgnoreCase);
+                }
+
+                return output;
+            });
     }
 
     /// <summary>Factory for a single-sender orchestrator (happy-path baseline).</summary>
@@ -50,7 +71,7 @@ public class FeedOrchestratorTests
         new(
             new List<ISender> { sender ?? _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
-            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object, _mockTagReplacementService.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
     /// <summary>Factory for a multi-sender orchestrator (fan-out tests).</summary>
@@ -58,7 +79,7 @@ public class FeedOrchestratorTests
         new(
             senders,
             _mockLogger.Object, _mockFeedService.Object,
-            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object, _mockTagReplacementService.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
     // ---------------------------------------------------------------------------
@@ -797,6 +818,7 @@ public class FeedOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
             _mockTextProvider.Object, imageProvider: null);
 
         var result = await orchestrator.OrchestrateAsync();
@@ -820,6 +842,7 @@ public class FeedOrchestratorTests
             new List<ISender> { _mockSender.Object }.AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
             textProvider: null, imageProvider: null);
 
         var result = await orchestrator.OrchestrateAsync();
@@ -845,6 +868,7 @@ public class FeedOrchestratorTests
             new List<ISender>().AsReadOnly(),
             _mockLogger.Object, _mockFeedService.Object,
             _mockFeedUrlProvider.Object, _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
             _mockTextProvider.Object, _mockImageProvider.Object);
 
         var result = await orchestrator.OrchestrateAsync();

@@ -1,24 +1,25 @@
 # Community 55
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **BuildCreds()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **TestOrchestrator()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (6 shared connections)
+- [[Community 42]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

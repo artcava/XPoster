@@ -1,20 +1,21 @@
 # Community 125
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **FeedService()** (2 connections)
-- **if()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (4 shared connections)
+- [[Community 144]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

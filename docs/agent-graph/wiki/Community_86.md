@@ -1,14 +1,15 @@
 # Community 86
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **PowerLawOrchestrator.cs** (4 connections)
-- **PowerLawOrchestrator.cs** (4 connections)
-- **PowerLawOrchestrator()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

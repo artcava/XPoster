@@ -1,18 +1,20 @@
 # Community 34
 
-> 9 nodes · cohesion 0.42
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **params()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **ValidateOptions()** (2 connections)
+- **catch()** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
+- **Validate()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **resolve()** (2 connections)
+- **foreach()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
@@ -20,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

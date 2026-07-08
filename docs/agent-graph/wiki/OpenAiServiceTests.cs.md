@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### contains
+- [[OpenAiServiceTests.cs]]
 - [[XPoster.Tests.Services]]
 - [[OpenAiServiceTests]]
 - [[BuildService()]]
@@ -26,7 +27,6 @@
 - [[GetImagePromptAsync_WhenApiReturnsTooManyRequests_LogsInformation()]]
 - [[GetImagePromptAsync_WhenApiReturnsError_ReturnsEmpty()]]
 - [[GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
-- [[GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmpty()]]
 
 ---
 

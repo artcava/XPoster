@@ -1,32 +1,34 @@
 # Community 13
 
-> 15 nodes · cohesion 0.26
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **DefaultSlotProfileProviderTests.cs** (14 connections)
-- **DefaultSlotProfileProviderTests.cs** (14 connections)
-- **DefaultSlotProfileProviderTests** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
-- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveLinkedInAsFirstSender()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
-- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
-- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
-- **GetProfiles_Should_ReturnTwoActiveSlots()** (2 connections)
-- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **AzureFoundryServiceTests.cs** (35 connections)
+- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
+- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **if()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
+- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 9]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 67 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

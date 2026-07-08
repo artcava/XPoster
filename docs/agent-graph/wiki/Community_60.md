@@ -1,16 +1,17 @@
 # Community 60
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService()** (2 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **foreach()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
+- **AcquireFeedContentAsync()** (2 connections)
 - **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Services** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

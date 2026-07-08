@@ -1,17 +1,18 @@
 # Community 47
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **XSenderSendAsyncTests.cs** (8 connections)
+- **XSenderSendAsyncTests.cs** (8 connections)
+- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **XSenderSendAsyncTests()** (2 connections)
+- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

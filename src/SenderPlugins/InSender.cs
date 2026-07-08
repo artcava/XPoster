@@ -22,7 +22,7 @@ public class InSender : ISender
     public SenderPlatform Platform => SenderPlatform.LinkedIn;
 
     /// <summary>Gets the maximum number of characters allowed in a LinkedIn post caption.</summary>
-    public int MessageMaxLenght => 800;
+    public int MessageMaxLenght => 2800;
 
     /// <summary>
     /// Initialises a new instance of <see cref="InSender"/> using an <see cref="IHttpClientFactory"/>-provided

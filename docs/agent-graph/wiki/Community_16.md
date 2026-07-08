@@ -1,22 +1,24 @@
 # Community 16
 
-> 13 nodes · cohesion 0.29
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
-- **Validate_DefaultOptions_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,24 @@
 # Community 15
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
+- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
+- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
+- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
+- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
+- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
+- **BlobStorageService()** (2 connections)
+- **CreateSut()** (2 connections)
+- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
+- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **BlobStorageServiceTests** (2 connections)
+- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

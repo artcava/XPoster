@@ -1,20 +1,21 @@
 # Community 126
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
+- **OrchestratorFactory.cs** (8 connections)
+- **if()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 88]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

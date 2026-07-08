@@ -69,6 +69,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
     // ── Scheduler ────────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
+    "ContainerPollingSchedule": "0 */2 * * * *",
     "ForceHour": "",
     "EnableDryRunSlot": "false",
 
@@ -78,13 +79,6 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // Add additional entries as FeedOptions__Urls__2, __3, etc.
     // In Azure App Settings use the same flat key convention.
     // At least one URL is required for FeedOrchestrator to produce content.
-
-    // ── Feed HTTP Client (resilience) ─────────────────────────────────────
-    "FeedOptions__AttemptTimeoutSeconds": "10",
-    "FeedOptions__RetryCount": "3",
-    "FeedOptions__CircuitBreakerFailureThreshold": "0.5",
-    "FeedOptions__CircuitBreakerSamplingDurationSeconds": "30",
-    "FeedOptions__CircuitBreakerBreakDurationSeconds": "15",
 
     // ── Tag Replacements ─────────────────────────────────────────
     // Optional. Maps plain words in the AI summary to hashtag equivalents.
@@ -200,16 +194,16 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
 Slot profiles are defined in `DefaultSlotProfileProvider` (production) and `DryRunSlotProfileProvider` (local dry-run). As of the fan-out feature (#176), each `ScheduledOrchestrationProfile` accepts an `IReadOnlyList<SenderPlatform>` instead of a single `SenderPlatform`.
 
-### Ordering rule — descending `MessageMaxLength`
+### Sender ordering in fan-out slots
 
-Senders within a slot **must be declared in descending `MessageMaxLength` order**. The first sender (index 0, widest limit) drives base summary and image generation. Subsequent senders receive an AI re-summarisation only when the base summary exceeds their character limit; otherwise the base summary is reused as-is, skipping the AI call entirely.
+`FeedOrchestrator` re-orders senders internally by descending `MessageMaxLength` at runtime before producing per-sender content. The declaration order within `senderPlatforms` in a `ScheduledOrchestrationProfile` does not affect fan-out execution — the orchestrator always selects the widest sender as primary, regardless of how platforms are listed in the profile.
 
 | Platform | `MessageMaxLength` | Role in a fan-out slot |
 |---|---|---|
-| LinkedIn | 700 | Primary — widest limit; base summary generated at this length |
-| Instagram | 2 200 | Secondary — but image-first; in practice usually shorter captions |
-| X (Twitter) | 280 | Typically last — always triggers re-summarisation when base > 280 |
-| DryRun | 500 | Local testing only |
+| LinkedIn | 2 800 | Widest limit — selected as primary by `FeedOrchestrator`; base summary generated at this length |
+| Instagram | 2 200 | Secondary — re-summarisation triggered only when base summary exceeds 2 200 chars |
+| X (Twitter) | 250 | Narrowest — always triggers re-summarisation when base summary exceeds 250 chars |
+| DryRun | `int.MaxValue` | Local testing only — always selected as primary when present |
 
 > 💡 **Cost implication:** a single fan-out slot with N senders replaces N separate scheduled slots. Base summary and image are generated once; only cheap per-sender re-summarisation AI calls are added when needed. See the [Token / Credit Savings](#token--credit-savings) section below.
 
@@ -221,24 +215,19 @@ The current `DefaultSlotProfileProvider` defines the following slots:
 // src/Orchestrators/DefaultSlotProfileProvider.cs
 
 new ScheduledOrchestrationProfile(
-    hour: 8,
+    hour: 6,
     senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
     orchestratorType: typeof(FeedOrchestrator),
     textProvider:  AiProvider.OpenAi,
-    imageProvider: AiProvider.OpenAi),
+    imageProvider: AiProvider.AzureFoundry),
 
 new ScheduledOrchestrationProfile(
     hour: 14,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn },
-    orchestratorType: typeof(PowerLawOrchestrator)),
-
-new ScheduledOrchestrationProfile(
-    hour: 16,
-    senderPlatforms: new[] { SenderPlatform.X },
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
     orchestratorType: typeof(PowerLawOrchestrator)),
 ```
 
-At hour 8 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The two PowerLaw slots (hours 14 and 16) each publish deterministic content to a single platform — no AI calls involved.
+At hour 6 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The PowerLaw slot at hour 14 publish deterministic content to platforms — no AI calls involved.
 
 ### DryRun slot profile example
 
@@ -267,7 +256,7 @@ Even single-sender profiles use the list constructor — the fan-out loop iterat
 | Fan-out slot (3 senders, 1 slot) | 1× full pipeline + up to 2× cheap re-summarisation | 1× |
 | **Saving** | **~67 % fewer full AI pipelines** | **~67 % fewer image credits** |
 
-Re-summarisation of an already-short base summary (e.g. ~700 chars → 280 chars) is significantly cheaper than re-processing the full feed content from scratch. When the base summary already fits within a secondary sender's character limit, the AI call is skipped entirely.
+When the base summary already fits within a secondary sender's character limit, the AI call is skipped entirely.
 
 ---
 
@@ -297,18 +286,6 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 1. **Attempt timeout** — cancels a single HTTP attempt if it exceeds `AttemptTimeoutSeconds`.
 2. **Retry** — retries up to `RetryCount` times with exponential back-off on transient failures (network errors, 5xx, 429).
 3. **Circuit breaker** — opens the circuit when the failure ratio over `CircuitBreakerSamplingDurationSeconds` exceeds `CircuitBreakerFailureThreshold`, and keeps it open for `CircuitBreakerBreakDurationSeconds` before allowing a probe request.
-
-All five resilience settings are optional. When omitted the values shown in the **Default** column are used.
-
-| Variable | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `FeedOptions__AttemptTimeoutSeconds` | int | No | `10` | Per-attempt HTTP timeout in seconds. Applied before the retry layer. |
-| `FeedOptions__RetryCount` | int | No | `3` | Maximum number of retry attempts on transient failures. Set to `0` to disable retries. |
-| `FeedOptions__CircuitBreakerFailureThreshold` | double | No | `0.5` | Failure ratio (0.0–1.0) that triggers the circuit breaker within the sampling window. |
-| `FeedOptions__CircuitBreakerSamplingDurationSeconds` | int | No | `30` | Sliding window duration in seconds over which the failure ratio is measured. |
-| `FeedOptions__CircuitBreakerBreakDurationSeconds` | int | No | `15` | Duration in seconds the circuit stays open before allowing a single probe request. |
-
-> **Tuning guidance:** For feeds served by CDNs or well-maintained public endpoints the defaults are appropriate. For slow or unreliable internal feeds, increase `AttemptTimeoutSeconds` and reduce `RetryCount` to avoid long tail latencies. For high-frequency schedules where a broken feed should not block the pipeline, lower `CircuitBreakerFailureThreshold` to trip the breaker faster.
 
 ---
 
@@ -360,8 +337,6 @@ XPoster uses a **capability-based** AI provider model. Each `AiProvider` value i
 | `FalAi` | ❌ | ✅ | Image only — only valid for orchestrators that handle null `textProvider` |
 | `None` | ❌ | ❌ | No AI — reserved; do not use in production slots |
 
-> **Removed value:** `DeepSeekWithFal` has been removed. Any slot profile previously referencing `AiProvider.DeepSeekWithFal` must be updated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate.
-
 ### Invalid slot combinations
 
 The following combinations will cause `FeedOrchestrator` to surface an explicit error at the point of use (not silently):
@@ -398,27 +373,25 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 
 | Secret name | Description |
 |---|---|
-| `XApiKey` | Twitter App API Key (Consumer Key). |
-| `XApiSecret` | Twitter App API Secret (Consumer Secret). |
-| `XAccessToken` | User Access Token (OAuth 1.0a). |
-| `XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
+| `XCredentials--XApiKey` | Twitter App API Key (Consumer Key). |
+| `XCredentials--XApiSecret` | Twitter App API Secret (Consumer Secret). |
+| `XCredentials--XAccessToken` | User Access Token (OAuth 1.0a). |
+| `XCredentials--XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
 
 #### LinkedIn
 
 | Secret name | Required | Description |
 |---|---|---|
-| `LinkedInAccessToken` | ✅ Yes | LinkedIn OAuth 2.0 access token. **Expires every 60 days** — manual rotation currently required. |
-| `LinkedInOwnerCode` | ⚠️ One of these | Numeric LinkedIn person ID. |
-| `LinkedInOrgId` | ⚠️ One of these | Numeric LinkedIn organization ID. Takes precedence over `LinkedInOwnerCode` when set. |
+| `LinkedInCredentials--LinkedInAccessToken` | ✅ Yes | LinkedIn OAuth 2.0 access token. **Expires every 60 days** — manual rotation currently required. |
+| `LinkedInCredentials--LinkedInOwnerCode` | ⚠️ One of these | Numeric LinkedIn person ID. |
+| `LinkedInCredentials--LinkedInOrgId` | ⚠️ One of these | Numeric LinkedIn organization ID. Takes precedence over `LinkedInOwnerCode` when set. |
 
 #### Instagram
 
-> ⚠️ Instagram publishing is **not yet active in production**. See issue [#72](https://github.com/artcava/XPoster/issues/72).
-
 | Secret name | Description |
 |---|---|
-| `IgAccessToken` | Long-lived Instagram Graph API access token. |
-| `IgAccountId` | Numeric Instagram Business Account ID. |
+| `InstagramCredentials--InstagramAccessToken` | Long-lived Instagram Graph API access token. |
+| `InstagramCredentials--InstagramAccountId` | Numeric Instagram Business Account ID. |
 
 ---
 
@@ -435,6 +408,7 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "CronSchedule": "*/30 * * * * *",
+    "ContainerPollingSchedule": "0 */2 * * * *",
     "EnableDryRunSlot": "true",
     "ForceHour": "9",
     "FeedOptions__Urls__0": "https://example.com/feed/rss",
@@ -524,6 +498,8 @@ Configuration bound from the `OpenAI` prefix using double-underscore notation.
 | `OpenAI__ImagePromptMaxTokens` | int | `60` | Max tokens for image prompt generation. |
 | `OpenAI__ImagePromptTemperature` | double | `0.7` | Temperature for image prompt generation. |
 
+> See [docs/integrations/setup-openai.md](integrations/setup-openai.md) for the full setup guide.
+
 ---
 
 ## AI — Azure AI Foundry (`AiProvider = AzureFoundry`)
@@ -541,6 +517,8 @@ Configuration bound from the `AzureFoundry` prefix.
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block above, using the `AzureFoundry__` prefix.
 
+> See [docs/integrations/setup-azure-foundry.md](integrations/setup-azure-foundry.md) for the full setup guide.
+
 ---
 
 ## AI — DeepSeek (`AiProvider = DeepSeek`)
@@ -557,7 +535,7 @@ Configuration bound from the `DeepSeek` prefix using double-underscore notation.
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block, using the `DeepSeek__` prefix.
 
-> **Migration note:** `AiProvider.DeepSeekWithFal` has been removed. If you previously used `DeepSeekWithFal` to combine DeepSeek text with fal.ai image generation, assign `AiProvider.DeepSeek` to text slots and `AiProvider.FalAi` to image slots independently in `DefaultSlotProfileProvider`.
+> See [docs/integrations/setup-deepseek.md](integrations/setup-deepseek.md) for the full setup guide.
 
 ---
 
@@ -574,13 +552,15 @@ Configuration bound from the `FalAi` prefix using double-underscore notation.
 | `FalAi__ImageSize` | string | No | `landscape_4_3` | Image output size preset. |
 | `FalAi__NumInferenceSteps` | int | No | `4` | Number of diffusion steps. |
 
+> See [docs/integrations/setup-falai.md](integrations/setup-falai.md) for the full setup guide.
+
 ---
 
 ## AI — Perplexity (`AiProvider = Perplexity`)
 
 Configuration bound from the `Perplexity` prefix using double-underscore notation.
 
-**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image; `GenerateImageAsync` has been removed)
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image)
 
 ### Connection
 

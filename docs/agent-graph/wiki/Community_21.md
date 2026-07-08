@@ -1,29 +1,30 @@
 # Community 21
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **FalImageJson()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **FalAiImageServiceTests** (2 connections)
-- **BuildService()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 44 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

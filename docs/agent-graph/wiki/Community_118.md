@@ -1,20 +1,21 @@
 # Community 118
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **if()** (2 connections)
-- **CryptoService()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **CreateOrchestrator()** (2 connections)
+- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 94]] (3 shared connections)
+- [[Community 61]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

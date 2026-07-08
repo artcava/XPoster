@@ -1,0 +1,98 @@
+name: Instagram Token Expiry Reminder
+
+# Runs every Monday at 09:00 UTC
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  check-token-expiry:
+    name: Check Instagram Token Expiry
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check expiry and open reminder issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const expiryDateStr = process.env.INSTAGRAM_TOKEN_EXPIRY;
+
+            if (!expiryDateStr) {
+              core.warning('INSTAGRAM_TOKEN_EXPIRY variable is not set. Skipping check.');
+              return;
+            }
+
+            const expiry = new Date(expiryDateStr);
+            const now = new Date();
+            const daysLeft = Math.floor((expiry - now) / (1000 * 60 * 60 * 24));
+
+            console.log(`Token expiry: ${expiry.toDateString()}`);
+            console.log(`Days left: ${daysLeft}`);
+
+            if (daysLeft > 14) {
+              console.log('Token is healthy. No action needed.');
+              return;
+            }
+
+            // Check if a reminder issue is already open to avoid duplicates
+            const { data: openIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'token-rotation'
+            });
+
+            const alreadyOpen = openIssues.some(issue =>
+              issue.title.includes('Instagram Access Token')
+            );
+
+            if (alreadyOpen) {
+              console.log('A reminder issue is already open. Skipping.');
+              return;
+            }
+
+            const urgency = daysLeft <= 0
+              ? '🔴 EXPIRED'
+              : daysLeft <= 7
+                ? '🔴 CRITICAL'
+                : '⚠️ WARNING';
+
+            const body = daysLeft <= 0
+              ? `## 🔴 Instagram Access Token EXPIRED\n\nThe Instagram Access Token has **expired** on ${expiry.toDateString()}.\nXPoster is no longer able to post on Instagram until the token is renewed.`
+              : `## ⚠️ Instagram Access Token expiring soon\n\nThe Instagram Access Token will expire on **${expiry.toDateString()}** (in **${daysLeft} days**).`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `${urgency} - Instagram Access Token expires on ${expiry.toDateString()}`,
+              body: body + `\n\n## Steps to renew\n\n` +
+                `> The Instagram token uses the **Facebook Login flow** and does not support automatic refresh.\n` +
+                `> Manual renewal is required every ~60 days.\n\n` +
+                `1. Open the [Graph API Explorer](https://developers.facebook.com/tools/explorer/)\n` +
+                `2. Select the **XPoster** app from the top-right dropdown\n` +
+                `3. Click **Generate Access Token** and check all four permissions:\n` +
+                `   - \`instagram_basic\`\n` +
+                `   - \`instagram_content_publish\`\n` +
+                `   - \`pages_show_list\`\n` +
+                `   - \`pages_read_engagement\`\n` +
+                `4. Exchange the short-lived token for a long-lived one (valid 60 days):\n` +
+                `\`\`\`\n` +
+                `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id={APP_ID}&client_secret={APP_SECRET}&fb_exchange_token={SHORT_LIVED_TOKEN}\n` +
+                `\`\`\`\n` +
+                `5. Update the secret in Azure Key Vault:\n` +
+                `\`\`\`bash\n` +
+                `az keyvault secret set --vault-name kv-xposter --name IgAccessToken --value "<new_token>"\n` +
+                `\`\`\`\n` +
+                `6. Update the \`INSTAGRAM_TOKEN_EXPIRY\` variable in GitHub repository settings to the new expiry date (+60 days from today)\n` +
+                `7. Close this issue\n\n` +
+                `## Reference\n\n` +
+                `- [Instagram setup guide](../docs/integrations/SenderPlugins/setup-instagram.md) — Steps 5 and 6`,
+              labels: ['infrastructure', 'token-rotation']
+            });
+
+            console.log(`Reminder issue created. Days left: ${daysLeft}`);
+        env:
+          INSTAGRAM_TOKEN_EXPIRY: ${{ vars.INSTAGRAM_TOKEN_EXPIRY }}

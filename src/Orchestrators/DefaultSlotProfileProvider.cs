@@ -10,9 +10,8 @@ namespace XPoster.Orchestrators;
 /// <para>
 /// Slots are defined as follows (UTC hours):
 /// <list type="table">
-///   <item><term>08:00</term><description>Fan-out: FeedOrchestrator → LinkedIn (primary), X, Instagram.</description></item>
-///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn.</description></item>
-///   <item><term>16:00</term><description>PowerLawOrchestrator → X.</description></item>
+///   <item><term>06:00</term><description>Fan-out: FeedOrchestrator → LinkedIn (primary), X, Instagram.</description></item>
+///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn, X.</description></item>
 /// </list>
 /// </para>
 /// <para>
@@ -29,7 +28,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
         // X (280 chars) always trigger re-summarisation.
         new ScheduledOrchestrationProfile(
             hour: 6,
-            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
+            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry),
@@ -40,6 +39,15 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
             orchestratorType: typeof(PowerLawOrchestrator)),
 
+        #region TESTING SLOTS (excluded from production deployments)
+        // new ScheduledOrchestrationProfile(
+        //     hour: 9,
+        //     senderPlatforms: new[] { SenderPlatform.Instagram },
+        //     orchestratorType: typeof(FeedOrchestrator),
+        //     textProvider: AiProvider.OpenAi,
+        //     imageProvider: AiProvider.AzureFoundry)
+        #endregion
+        
     }.AsReadOnly();
 
     /// <inheritdoc />

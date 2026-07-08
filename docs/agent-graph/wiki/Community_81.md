@@ -1,22 +1,23 @@
 # Community 81
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **catch()** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 131]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
