@@ -1,11 +1,10 @@
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Azure.Identity;
+extern alias AzureIdentity;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.Extensions;
@@ -41,26 +40,13 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
     ?? throw new InvalidOperationException("KEYVAULT_URI app setting is not set.");
 
-((IConfigurationBuilder)builder.Configuration).AddAzureKeyVault(
+builder.Configuration.AddAzureKeyVault(
     new Uri(keyVaultUri),
-    new DefaultAzureCredential());
+    new AzureIdentity::Azure.Identity.DefaultAzureCredential());
 
-// Typed sender credentials — bound flat from IConfiguration (secret names match property names).
-// ValidateOnStart() ensures missing secrets fail at startup rather than at first invocation.
-builder.Services
-    .AddOptions<XCredentials>()
-    .BindConfiguration(string.Empty)
-    .ValidateOnStart();
-
-builder.Services
-    .AddOptions<LinkedInCredentials>()
-    .BindConfiguration(string.Empty)
-    .ValidateOnStart();
-
-builder.Services
-    .AddOptions<IgCredentials>()
-    .BindConfiguration(string.Empty)
-    .ValidateOnStart();
+// Key Vault secret prefix (ProviderCredentials:*). AddCredentials owns
+// both the Configure<T> and the IValidateOptions<T> registration.
+builder.Services.AddCredentials(builder.Configuration);
 
 builder.Services.AddHttpClients();
 
@@ -113,6 +99,7 @@ builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
 // ITagReplacementProvider registration — reads TagReplacementOptions:Replacements from app settings.
 builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSection(TagReplacementOptions.SectionName));
 builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
+builder.Services.AddTransient<ITagReplacementService, TagReplacementService>();
 
 // AI provider options: each extension method owns its SectionName constant
 // and encapsulates Configure<T> + AddSingleton<IValidateOptions<T>> in one call.
@@ -122,4 +109,29 @@ builder.Services.AddDeepSeekOptions(builder.Configuration);
 builder.Services.AddFalAiOptions(builder.Configuration);
 builder.Services.AddPerplexityOptions(builder.Configuration);
 
-builder.Build().Run();
+// Azure Blob Storage — BlobServiceClient registered as singleton per SDK best practice.
+// BlobStorageOptions binds AZURE_STORAGE_CONNECTION_STRING and AZURE_STORAGE_CONTAINER_NAME
+// from the root configuration (flat, no section prefix).
+builder.Services.Configure<BlobStorageOptions>(builder.Configuration);
+builder.Services.AddSingleton(sp =>
+    new BlobServiceClient(builder.Configuration["AZURE_STORAGE_CONNECTION_STRING"]));
+builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
+
+// Meta Publishing Service — required by IgSender and XPosterContainerPollingFunction
+// to interact with the Instagram Graph API (container creation, publishing, status polling).
+builder.Services.AddTransient<IMetaPublishingService, MetaPublishingService>();
+
+// Instagram async container state — InMemoryContainerStateStore is suitable for
+// single-instance production (one post/day). Replace with Table Storage backing
+// when multi-instance scale is required — no contract changes needed.
+builder.Services.AddSingleton<IContainerStateStore, InMemoryContainerStateStore>();
+
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var startupValidator = scope.ServiceProvider.GetRequiredService<ICredentialsStartupValidator>();
+    startupValidator.Validate();
+}
+
+app.Run();

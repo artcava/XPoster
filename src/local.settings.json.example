@@ -4,6 +4,7 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "CronSchedule": "0 0 6,8,14,16 * * *",
+    "ContainerPollingSchedule": "0 */2 * * * *",
     "AiProvider": "OpenAi",
 
     // -----------------------------------------------------------------------
@@ -65,10 +66,17 @@
     //   XApiSecret            — X (Twitter) API secret        → XCredentials.XApiSecret
     //   XAccessToken          — X (Twitter) access token      → XCredentials.XAccessToken
     //   XAccessTokenSecret    — X (Twitter) access token sec  → XCredentials.XAccessTokenSecret
-    //   IgAccessToken         — Instagram Graph API token     → IgCredentials.IgAccessToken
-    //   IgAccountId           — Instagram account ID          → IgCredentials.IgAccountId
+    //   InstagramAccessToken  — Instagram Graph API token     → InstagramCredentials.InstagramAccessToken
+    //   InstagramAccountId    — Instagram account ID          → InstagramCredentials.InstagramAccountId
     // -----------------------------------------------------------------------
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
+
+    // -----------------------------------------------------------------------
+    // ── Azure Blob Storage & Instagram Polling ──
+    // -----------------------------------------------------------------------
+    "AZURE_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
+    "AZURE_STORAGE_CONTAINER_NAME": "xposter-images"
+
 
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",

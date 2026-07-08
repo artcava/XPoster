@@ -1,7 +1,5 @@
 # Instagram Account Setup
 
-> This document covers **only** the Instagram and Meta platform configuration required to enable programmatic publishing via the Instagram Platform API. For XPoster integration details, see [issue #72](https://github.com/artcava/XPoster/issues/72).
-
 > ⚠️ This guide uses the **Instagram API with Facebook Login** flow, which requires an Instagram Business account linked to a Facebook Page. This is the recommended path if you already have a Facebook Page connected to your Instagram account.
 
 ---
@@ -116,9 +114,7 @@ The response will be:
 
 `expires_in` ≈ 5,184,000 seconds ≈ **60 days**.
 
-Store the `access_token` value in Azure Key Vault with the secret name **`IgAccessToken`**.
-
-> ⚠️ Tokens expire after 60 days. To renew, repeat Steps 5 and 6 before expiry. Automated refresh is tracked in [#72](https://github.com/artcava/XPoster/issues/72).
+Store the `access_token` value in Azure Key Vault with the secret name **`InstagramAccessToken`**.
 
 ---
 
@@ -161,14 +157,14 @@ The response will contain:
 }
 ```
 
-The `instagram_business_account.id` value is your Instagram Account ID. Store it in Azure Key Vault with the secret name **`IgAccountId`**.
+The `instagram_business_account.id` value is your Instagram Account ID. Store it in Azure Key Vault with the secret name **`InstagramAccountId`**.
 
 ### Verify the connection
 
 Confirm the account is reachable with the token:
 
 ```
-GET /{IgAccountId}?fields=id,name,username
+GET /{InstagramAccountId}?fields=id,name,username
 ```
 
 You should see the Instagram account name and username. If this call succeeds, the configuration is complete.
@@ -189,12 +185,12 @@ App Review is only needed if the app will publish on behalf of **third-party Ins
 
 ## Azure Key Vault Secret Names Reference
 
-At the end of this setup, the following secrets must be stored in Azure Key Vault with **these exact names**, which XPoster reads via `IOptions<IgCredentials>`:
+At the end of this setup, the following secrets must be stored in Azure Key Vault with **these exact names**, which XPoster reads via `IOptions<InstagramCredentials>`:
 
 | Key Vault Secret Name | Value | How to obtain |
 |---|---|---|
-| `IgAccessToken` | Long-lived User Access Token | Step 6 |
-| `IgAccountId` | Instagram Business Account numeric ID | Step 7b (`instagram_business_account.id`) |
+| `InstagramAccessToken` | Long-lived User Access Token | Step 6 |
+| `InstagramAccountId` | Instagram Business Account numeric ID | Step 7b (`instagram_business_account.id`) |
 
 > Never commit tokens to source control or expose them in logs.
 
@@ -242,4 +238,3 @@ Exceeding the publishing limit returns HTTP `429`. The `Retry-After` header indi
 - [Graph API Explorer](https://developers.facebook.com/tools/explorer/)
 - [Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken/)
 - [Meta App Dashboard](https://developers.facebook.com/apps/)
-- Tracking issue: [#72](https://github.com/artcava/XPoster/issues/72)

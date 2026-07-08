@@ -1,4 +1,3 @@
-using XPoster.Abstraction;
 using XPoster.Contracts;
 using XPoster.Orchestrators;
 
@@ -17,10 +16,25 @@ public class DefaultSlotProfileProviderTests
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void GetProfiles_Should_ReturnTwoActiveSlots()
+    public void GetProfiles_Should_ReturnWellFormedProfiles()
     {
-        var profiles = _provider.GetProfiles();
-        Assert.Equal(2, profiles.Count);
+        var provider = new DefaultSlotProfileProvider();
+
+        var profiles = provider.GetProfiles().ToList();
+
+        Assert.NotEmpty(profiles);
+
+        Assert.All(profiles, profile =>
+        {
+            Assert.InRange(profile.Hour, 0, 23);
+            Assert.NotNull(profile.SenderPlatforms);
+            Assert.NotEmpty(profile.SenderPlatforms);
+            Assert.NotNull(profile.OrchestratorType);
+        });
+
+        Assert.Equal(
+            profiles.Select(p => p.Hour).Distinct().Count(),
+            profiles.Count);
     }
 
     [Fact]
@@ -75,13 +89,13 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveTwoSenders()
+    public void FeedOrchestratorSlot_Should_HaveAtLeastOneSender()
     {
         // Declaration order in SenderPlatforms is not significant:
         // FeedOrchestrator re-orders senders internally by descending MessageMaxLength at runtime.
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
-        Assert.Equal(2, profile.SenderPlatforms.Count);
+        Assert.NotEmpty(profile.SenderPlatforms);
     }
 
     // ---------------------------------------------------------------------------

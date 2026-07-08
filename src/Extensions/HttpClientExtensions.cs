@@ -76,6 +76,26 @@ public static class HttpClientExtensions
 
                 options.Retry.MaxRetryAttempts          = 3;
                 options.Retry.Delay                     = TimeSpan.FromSeconds(2);
+                options.Retry.DelayGenerator = args =>
+                {
+                    var retryAfter = args.Outcome.Result?.Headers.RetryAfter;
+
+                    if (retryAfter?.Delta is TimeSpan delta && delta > TimeSpan.Zero)
+                    {
+                        return ValueTask.FromResult<TimeSpan?>(delta);
+                    }
+
+                    if (retryAfter?.Date is DateTimeOffset retryDate)
+                    {
+                        var computedDelay = retryDate - DateTimeOffset.UtcNow;
+                        if (computedDelay > TimeSpan.Zero)
+                        {
+                            return ValueTask.FromResult<TimeSpan?>(computedDelay);
+                        }
+                    }
+
+                    return ValueTask.FromResult<TimeSpan?>(null);
+                };
                 options.AttemptTimeout.Timeout          = TimeSpan.FromSeconds(attemptTimeoutSeconds);
                 options.TotalRequestTimeout.Timeout     = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
                 options.CircuitBreaker.BreakDuration    = TimeSpan.FromSeconds(30);
