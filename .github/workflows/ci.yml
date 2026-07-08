@@ -28,6 +28,7 @@ jobs:
   # ============================================
   build:
     name: Build
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[agent-graph-sync]') }}
     runs-on: ubuntu-latest
 
     steps:
@@ -68,6 +69,7 @@ jobs:
   # ============================================
   test-unit:
     name: Unit Tests
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[agent-graph-sync]') }}
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -142,6 +144,7 @@ jobs:
   # ============================================
   test-integration:
     name: Integration Tests
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[agent-graph-sync]') }}
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -171,6 +174,7 @@ jobs:
   # ============================================
   quality:
     name: Quality
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[agent-graph-sync]') }}
     needs: build
     runs-on: ubuntu-latest
 
@@ -209,8 +213,8 @@ jobs:
   # ============================================
   deploy:
     name: Deploy
+    if: ${{ (github.event_name != 'push' || !contains(github.event.head_commit.message, '[agent-graph-sync]')) && github.ref == 'refs/heads/master' && github.event_name == 'push' }}    
     needs: [build, test-unit, test-integration, quality]
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: windows-latest
     permissions:
       id-token: write
@@ -284,8 +288,8 @@ jobs:
   # ============================================
   release:
     name: Release
+    if: ${{ (github.event_name != 'push' || !contains(github.event.head_commit.message, '[agent-graph-sync]')) && startsWith(github.ref, 'refs/tags/v') }}
     needs: [build, test-unit, test-integration, quality]
-    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write

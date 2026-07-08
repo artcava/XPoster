@@ -121,7 +121,9 @@ jobs:
       # =========================
       # COMMIT AND PUSH
       # Commits only if the graph actually changed.
-      # [skip ci] prevents ci.yml from running on this docs-only push.
+      # Loop prevention is handled by paths-ignore above.
+      # We intentionally avoid [skip ci] because GitHub would skip
+      # all push/pull_request workflows for that commit, not only ci.yml.
       # git push uses the BOT_PAT credential set at checkout.
       # =========================
       - name: Commit updated graph to develop
@@ -132,7 +134,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "✅ No changes to the agent graph — nothing to commit."
           else
-            git commit -m "docs(graph): regenerate agent graph [skip ci]"
+            git commit -m "docs(graph): regenerate agent graph [agent-graph-sync]"
             git push
             echo "✅ Agent graph updated and pushed to develop."
           fi
