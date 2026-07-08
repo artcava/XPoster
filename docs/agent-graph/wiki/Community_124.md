@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **XPoster.Abstraction** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 

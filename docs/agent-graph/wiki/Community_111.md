@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **AddCredentials()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

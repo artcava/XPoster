@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_DefaultOptions_Succeeds()** (2 connections)
-- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
+- **InSenderMissingBranchTests.cs** (12 connections)
+- **InSenderMissingBranchTests.cs** (12 connections)
+- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
+- **MessageMaxLenght_Returns2800()** (2 connections)
+- **BuildSender()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **InSenderMissingBranchTests()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 

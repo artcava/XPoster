@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **AddFalAiOptions()** (2 connections)
 
 ## Relationships
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **IOrchestratorFactory** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetFeedUrls()** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
 
 ## Relationships
 

@@ -1,23 +1,23 @@
 # Community 83
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **UploadAsync()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **IBlobStorageService** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **InSender()** (2 connections)
+- **InSenderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 66]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
