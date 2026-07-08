@@ -7,10 +7,10 @@ namespace XPoster.Tests.Integration;
 public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
 {
     [Theory]
-    [InlineData("OpenAI",       "https://api.openai.com",                "/v1/chat/completions",                                             30, 180)]
-    [InlineData("AzureFoundry", "https://xposter.openai.azure.com",      "/openai/deployments/gpt-4/chat/completions?api-version=2024-02-01", 30, 180)]
-    [InlineData("DeepSeek",     "https://api.deepseek.com",              "/v1/chat/completions",                                             30, 180)]
-    [InlineData("FalAi",        "https://fal.run",                       "/fal-ai/flux/dev",                                                 60, 300)]
+    [InlineData("OpenAI", "https://api.openai.com", "/v1/chat/completions", 30, 180)]
+    [InlineData("AzureFoundry", "https://xposter.openai.azure.com", "/openai/deployments/gpt-4/chat/completions?api-version=2024-02-01", 30, 180)]
+    [InlineData("DeepSeek", "https://api.deepseek.com", "/v1/chat/completions", 30, 180)]
+    [InlineData("FalAi", "https://fal.run", "/fal-ai/flux/dev", 60, 300)]
     public async Task Polly_AiClient_RetriesOn429_AndEventuallySucceeds(
         string clientName, string baseUrl, string path,
         int attemptTimeoutSeconds, int totalRequestTimeoutSeconds)
@@ -24,7 +24,7 @@ public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
         var provider = BuildProviderWithHandler(
             clientName,
             handler,
-            attemptTimeoutSeconds:      attemptTimeoutSeconds,
+            attemptTimeoutSeconds: attemptTimeoutSeconds,
             totalRequestTimeoutSeconds: totalRequestTimeoutSeconds);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient(clientName);
         client.BaseAddress = new Uri(baseUrl);
@@ -37,10 +37,10 @@ public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
     }
 
     [Theory]
-    [InlineData("OpenAI",       "https://api.openai.com",           "/v1/chat/completions", 180)]
+    [InlineData("OpenAI", "https://api.openai.com", "/v1/chat/completions", 180)]
     [InlineData("AzureFoundry", "https://xposter.openai.azure.com", "/openai/deployments/gpt-4", 180)]
-    [InlineData("DeepSeek",     "https://api.deepseek.com",         "/v1/chat/completions", 180)]
-    [InlineData("FalAi",        "https://fal.run",                  "/fal-ai/flux/dev",    300)]
+    [InlineData("DeepSeek", "https://api.deepseek.com", "/v1/chat/completions", 180)]
+    [InlineData("FalAi", "https://fal.run", "/fal-ai/flux/dev", 300)]
     public async Task Polly_AiClient_AttemptTimeout_CancelsSlowRequest(
         string clientName, string baseUrl, string path,
         int totalRequestTimeoutSeconds)
@@ -49,7 +49,7 @@ public sealed class AiClientsResiliencePipelineTests : PollyIntegrationTestBase
         var provider = BuildProviderWithHandler(
             clientName,
             handler,
-            attemptTimeoutSeconds:      1,
+            attemptTimeoutSeconds: 1,
             totalRequestTimeoutSeconds: totalRequestTimeoutSeconds);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient(clientName);
         client.BaseAddress = new Uri(baseUrl);

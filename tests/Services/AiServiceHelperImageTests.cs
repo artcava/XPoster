@@ -454,8 +454,8 @@ public class AiServiceHelperImageTests
 
     [Theory]
     [InlineData(AiProvider.Perplexity, "Perplexity")]
-    [InlineData(AiProvider.DeepSeek,   "DeepSeek")]
-    [InlineData(AiProvider.None,       "None")]
+    [InlineData(AiProvider.DeepSeek, "DeepSeek")]
+    [InlineData(AiProvider.None, "None")]
     public async Task Parse_UnsupportedProvider_LogsError(AiProvider provider, string expectedLabel)
     {
         var logger = new Mock<ILogger>();

@@ -8,14 +8,14 @@ namespace XPoster.Tests.Orchestrators;
 
 public class FeedOrchestratorTests
 {
-    private readonly Mock<ISender>                     _mockSender;
-    private readonly Mock<ILogger<FeedOrchestrator>>   _mockLogger;
-    private readonly Mock<IFeedService>                _mockFeedService;
-    private readonly Mock<IFeedUrlProvider>            _mockFeedUrlProvider;
-    private readonly Mock<ITagReplacementProvider>     _mockTagReplacementProvider;
-    private readonly Mock<ITagReplacementService>      _mockTagReplacementService;
-    private readonly Mock<ITextToTextProvider>         _mockTextProvider;
-    private readonly Mock<ITextToImageProvider>        _mockImageProvider;
+    private readonly Mock<ISender> _mockSender;
+    private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
+    private readonly Mock<IFeedService> _mockFeedService;
+    private readonly Mock<IFeedUrlProvider> _mockFeedUrlProvider;
+    private readonly Mock<ITagReplacementProvider> _mockTagReplacementProvider;
+    private readonly Mock<ITagReplacementService> _mockTagReplacementService;
+    private readonly Mock<ITextToTextProvider> _mockTextProvider;
+    private readonly Mock<ITextToImageProvider> _mockImageProvider;
 
     private static readonly List<string> DefaultUrls =
     [
@@ -32,15 +32,15 @@ public class FeedOrchestratorTests
 
     public FeedOrchestratorTests()
     {
-        _mockSender                 = new Mock<ISender>();
+        _mockSender = new Mock<ISender>();
         _mockSender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        _mockLogger                 = new Mock<ILogger<FeedOrchestrator>>();
-        _mockFeedService            = new Mock<IFeedService>();
-        _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
+        _mockLogger = new Mock<ILogger<FeedOrchestrator>>();
+        _mockFeedService = new Mock<IFeedService>();
+        _mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
         _mockTagReplacementProvider = new Mock<ITagReplacementProvider>();
-        _mockTagReplacementService  = new Mock<ITagReplacementService>();
-        _mockTextProvider           = new Mock<ITextToTextProvider>();
-        _mockImageProvider          = new Mock<ITextToImageProvider>();
+        _mockTagReplacementService = new Mock<ITagReplacementService>();
+        _mockTextProvider = new Mock<ITextToTextProvider>();
+        _mockImageProvider = new Mock<ITextToImageProvider>();
 
         _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(DefaultUrls);
         _mockTagReplacementProvider.Setup(p => p.GetReplacements())
@@ -90,10 +90,10 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()
     {
         // ARRANGE
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Notizia su Bitcoin", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Notizia su Bitcoin", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Questo è un riassunto";
-        var fakePrompt  = "Prompt per immagine";
-        var fakeImage   = new byte[] { 1, 2, 3 };
+        var fakePrompt = "Prompt per immagine";
+        var fakeImage = new byte[] { 1, 2, 3 };
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -136,14 +136,14 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()
     {
         // ARRANGE — primary sender has limit 700, secondary 280
-        var primarySender   = new Mock<ISender>();
+        var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 300); // fits both limits
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -175,15 +175,15 @@ public class FeedOrchestratorTests
         // ARRANGE — primary limit 700, secondary limit 280; base summary 500 chars > 280
         // The re-summarisation input is feedContent (not baseSummary): the orchestrator
         // always passes the original feed content to the AI to preserve maximum context.
-        var primarySender   = new Mock<ISender>();
+        var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds    = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
-        var baseSummary  = new string('A', 500); // 500 > 280: re-summarisation needed
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary = new string('A', 500); // 500 > 280: re-summarisation needed
         var shortSummary = new string('B', 200);
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -211,7 +211,7 @@ public class FeedOrchestratorTests
         Assert.True(posts.ContainsKey(SenderPlatform.LinkedIn));
         Assert.NotNull(posts[SenderPlatform.X]);
         Assert.NotNull(posts[SenderPlatform.LinkedIn]);
-        Assert.Contains(baseSummary[..10],  posts[SenderPlatform.X]!.Content);        // primary uses base
+        Assert.Contains(baseSummary[..10], posts[SenderPlatform.X]!.Content);        // primary uses base
         Assert.Contains(shortSummary[..10], posts[SenderPlatform.LinkedIn]!.Content); // secondary uses re-summarised
         // AI called with feedContent (any string), limit 280 — exactly once
         _mockTextProvider.Verify(
@@ -223,14 +223,14 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_SkipsAICall_WhenBaseSummaryFitsSecondaryLimit()
     {
         // ARRANGE — base summary 200 chars <= secondary limit 280: AI call must be skipped
-        var primarySender   = new Mock<ISender>();
+        var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 200); // 200 <= 280: no re-summarisation
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -260,14 +260,14 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_AppliesHashtagsIndependently_PerSender()
     {
         // ARRANGE — base summary contains "bitcoin"; both senders get "#Bitcoin" applied independently
-        var primarySender   = new Mock<ISender>();
+        var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "bitcoin news", Link = "x", Title = "t" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "bitcoin news", Link = "x", Title = "t" } };
         var baseSummary = "bitcoin is rising fast and we are all excited"; // fits both limits
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -298,8 +298,8 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_DerivesImagePromptFromRawBaseSummary_BeforeHashtags()
     {
         // ARRANGE — raw base summary is clean prose; GetImagePromptAsync must receive it WITHOUT hashtags
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "bitcoin", Link = "x", Title = "t" } };
-        var rawBase     = "bitcoin analysis"; // no hashtag yet
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "bitcoin", Link = "x", Title = "t" } };
+        var rawBase = "bitcoin analysis"; // no hashtag yet
         string? promptInput = null;
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(700);
@@ -329,14 +329,14 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_SharesImageBytes_AcrossSenders()
     {
         // ARRANGE
-        var primarySender   = new Mock<ISender>();
+        var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 200);
         var sharedImage = new byte[] { 9, 8, 7 };
 
@@ -371,14 +371,14 @@ public class FeedOrchestratorTests
     {
         // ARRANGE — base 500 > secondary 280; re-summarisation returns empty.
         // The AI receives feedContent (It.IsAny), not baseSummary.
-        var primarySender   = new Mock<ISender>();
+        var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
         primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
         secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 500);
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -422,8 +422,8 @@ public class FeedOrchestratorTests
         // 200 chars > 150 → Instagram also exceeds → AI re-summarises from feedContent → 100 chars
         // Key assertion: the fitness check for Instagram is on previousSummary (200), NOT rawBaseSummary (500);
         //                the AI input for Instagram is feedContent (It.IsAny), not baseSummary or previousSummary.
-        var senderX         = new Mock<ISender>();
-        var senderLinkedIn  = new Mock<ISender>();
+        var senderX = new Mock<ISender>();
+        var senderLinkedIn = new Mock<ISender>();
         var senderInstagram = new Mock<ISender>();
         senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
         senderX.Setup(s => s.MessageMaxLenght).Returns(700);
@@ -432,9 +432,9 @@ public class FeedOrchestratorTests
         senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
         senderInstagram.Setup(s => s.MessageMaxLenght).Returns(150);
 
-        var fakeFeeds        = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
-        var baseSummary      = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
-        var linkedInSummary  = new string('B', 200); // 200 > 150: Instagram needs re-summary
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
+        var linkedInSummary = new string('B', 200); // 200 > 150: Instagram needs re-summary
         var instagramSummary = new string('C', 100); // fits 150
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -464,8 +464,8 @@ public class FeedOrchestratorTests
         Assert.NotNull(posts[SenderPlatform.Instagram]);
 
         // Each sender uses the correct summary
-        Assert.Contains(baseSummary[..10],      posts[SenderPlatform.X]!.Content);
-        Assert.Contains(linkedInSummary[..10],  posts[SenderPlatform.LinkedIn]!.Content);
+        Assert.Contains(baseSummary[..10], posts[SenderPlatform.X]!.Content);
+        Assert.Contains(linkedInSummary[..10], posts[SenderPlatform.LinkedIn]!.Content);
         Assert.Contains(instagramSummary[..10], posts[SenderPlatform.Instagram]!.Content);
 
         // AI called once per limit — from feedContent (It.IsAny) each time
@@ -482,8 +482,8 @@ public class FeedOrchestratorTests
         // baseSummary = 200 chars → fits LinkedIn (280) → LinkedIn reuses base (no AI call)
         // previousSummary after LinkedIn = 200 chars
         // 200 > 150 → Instagram must re-summarise from feedContent
-        var senderX         = new Mock<ISender>();
-        var senderLinkedIn  = new Mock<ISender>();
+        var senderX = new Mock<ISender>();
+        var senderLinkedIn = new Mock<ISender>();
         var senderInstagram = new Mock<ISender>();
         senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
         senderX.Setup(s => s.MessageMaxLenght).Returns(700);
@@ -492,8 +492,8 @@ public class FeedOrchestratorTests
         senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
         senderInstagram.Setup(s => s.MessageMaxLenght).Returns(150);
 
-        var fakeFeeds        = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
-        var baseSummary      = new string('A', 200); // 200 <= 280: LinkedIn reuses, no AI
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary = new string('A', 200); // 200 <= 280: LinkedIn reuses, no AI
         var instagramSummary = new string('C', 100); // re-summarised for Instagram
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -521,7 +521,7 @@ public class FeedOrchestratorTests
         Assert.NotNull(posts[SenderPlatform.Instagram]);
 
         // LinkedIn reuses baseSummary (no dedicated AI call at limit 280)
-        Assert.Contains(baseSummary[..10],      posts[SenderPlatform.LinkedIn]!.Content);
+        Assert.Contains(baseSummary[..10], posts[SenderPlatform.LinkedIn]!.Content);
         // Instagram gets its own re-summarised content
         Assert.Contains(instagramSummary[..10], posts[SenderPlatform.Instagram]!.Content);
 
@@ -539,8 +539,8 @@ public class FeedOrchestratorTests
         // baseSummary = 500 chars → exceeds LinkedIn (280) → AI re-summarises → linkedInSummary = 200 chars
         // previousSummary after LinkedIn = 200 chars
         // 200 <= 250 → Instagram fits → reuses 200 chars WITHOUT calling AI
-        var senderX         = new Mock<ISender>();
-        var senderLinkedIn  = new Mock<ISender>();
+        var senderX = new Mock<ISender>();
+        var senderLinkedIn = new Mock<ISender>();
         var senderInstagram = new Mock<ISender>();
         senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
         senderX.Setup(s => s.MessageMaxLenght).Returns(700);
@@ -549,8 +549,8 @@ public class FeedOrchestratorTests
         senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
         senderInstagram.Setup(s => s.MessageMaxLenght).Returns(250);
 
-        var fakeFeeds       = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
-        var baseSummary     = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
+        var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
+        var baseSummary = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
         var linkedInSummary = new string('B', 200); // 200 <= 250: Instagram reuses this
 
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -654,7 +654,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_CallTagReplacementProvider_ExactlyOnce_WhenOrchestrationSucceeds()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary text";
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -681,7 +681,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ApplyHashtagsCorrectly()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "News about bitcoin and BTC and fed policy", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "News about bitcoin and BTC and fed policy", Link = "https://bitcoin.org/" } };
         var fakeSummary = "News about bitcoin and btc. The fed decided...";
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -704,8 +704,8 @@ public class FeedOrchestratorTests
         Assert.NotEmpty(result);
         Assert.True(result.ContainsKey(SenderPlatform.X));
         Assert.Contains("#Bitcoin", result[SenderPlatform.X]!.Content);
-        Assert.Contains("#BTC",     result[SenderPlatform.X]!.Content);
-        Assert.Contains("#FED",     result[SenderPlatform.X]!.Content);
+        Assert.Contains("#BTC", result[SenderPlatform.X]!.Content);
+        Assert.Contains("#FED", result[SenderPlatform.X]!.Content);
         Assert.Single(System.Text.RegularExpressions.Regex.Matches(result[SenderPlatform.X]!.Content, "#Bitcoin"));
     }
 
@@ -715,7 +715,7 @@ public class FeedOrchestratorTests
         _mockTagReplacementProvider.Setup(p => p.GetReplacements())
             .Returns(new Dictionary<string, string>());
 
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "bitcoin news", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "bitcoin news", Link = "https://bitcoin.org/" } };
         var fakeSummary = "bitcoin summary";
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -747,7 +747,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsEmpty()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -775,7 +775,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -803,7 +803,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageProviderIsNull()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
@@ -886,9 +886,9 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsEmpty()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Fallback summary used as prompt";
-        var fakeImage   = new byte[] { 9, 8, 7 };
+        var fakeImage = new byte[] { 9, 8, 7 };
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -918,9 +918,9 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsWhitespace()
     {
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Fallback summary";
-        var fakeImage   = new byte[] { 1 };
+        var fakeImage = new byte[] { 1 };
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
@@ -955,9 +955,9 @@ public class FeedOrchestratorTests
     public async Task OrchestrateAsync_Should_Rethrow_When_ImageGenerationIsCancelled()
     {
         // ARRANGE — image provider throws OperationCanceledException (e.g. HTTP timeout on AI call)
-        var fakeFeeds   = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
+        var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
-        using var cts   = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);

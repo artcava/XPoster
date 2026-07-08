@@ -21,13 +21,13 @@ public class PerplexityServiceTests
 
         var options = Options.Create(opts ?? new PerplexityOptions
         {
-            Endpoint                     = "https://api.perplexity.ai",
-            ApiKey                       = "fake-key",
-            DeploymentName               = "sonar",
-            SummarySystemPromptTemplate  = "Keep under {MaxChars} chars.",
-            SummaryUserPromptTemplate    = "Summarize: {Text}",
-            ImagePromptSystemTemplate    = "You generate image prompts.",
-            ImagePromptUserTemplate      = "Image for: {Summary}"
+            Endpoint = "https://api.perplexity.ai",
+            ApiKey = "fake-key",
+            DeploymentName = "sonar",
+            SummarySystemPromptTemplate = "Keep under {MaxChars} chars.",
+            SummaryUserPromptTemplate = "Summarize: {Text}",
+            ImagePromptSystemTemplate = "You generate image prompts.",
+            ImagePromptUserTemplate = "Image for: {Summary}"
         });
 
         return new PerplexityService(factory.Object, options, loggerMock.Object);
@@ -55,8 +55,8 @@ public class PerplexityServiceTests
     private static Mock<HttpMessageHandler> MakeSequentialHandlerMock(
         IEnumerable<(HttpStatusCode code, string json)> responses)
     {
-        var mock    = new Mock<HttpMessageHandler>();
-        var setup   = mock.Protected()
+        var mock = new Mock<HttpMessageHandler>();
+        var setup = mock.Protected()
             .SetupSequence<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
@@ -157,9 +157,9 @@ public class PerplexityServiceTests
     {
         // Arrange: first call returns a string still longer than the limit (200 chars),
         // second call returns a short string that satisfies the while condition.
-        const int limit       = 100;
-        var firstResponse     = new string('b', 200);  // still > 100 → triggers second iteration
-        var secondResponse    = "final short summary";  // < 100 → loop exits
+        const int limit = 100;
+        var firstResponse = new string('b', 200);  // still > 100 → triggers second iteration
+        var secondResponse = "final short summary";  // < 100 → loop exits
 
         var handler = MakeSequentialHandlerMock(new[]
         {
@@ -185,8 +185,8 @@ public class PerplexityServiceTests
     {
         // Arrange: all three API responses return text that is still longer than the limit.
         // After tries > 2 the while exits and the last assigned value of `text` is returned.
-        const int limit    = 10;
-        var longResponse   = new string('c', 50); // always > 10
+        const int limit = 10;
+        var longResponse = new string('c', 50); // always > 10
 
         var handler = MakeSequentialHandlerMock(new[]
         {

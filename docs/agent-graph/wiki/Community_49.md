@@ -1,26 +1,26 @@
 # Community 49
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
-- **CryptoService()** (2 connections)
-- **CryptoServiceTests** (2 connections)
-- **MakeService()** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 31]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

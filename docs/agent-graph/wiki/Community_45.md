@@ -1,26 +1,26 @@
 # Community 45
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 60]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **XPoster.Abstraction** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

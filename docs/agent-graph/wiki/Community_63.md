@@ -1,20 +1,20 @@
 # Community 63
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **IgSender()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 127]] (4 shared connections)
 
 ## Audit Trail
 

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.1.7] - 2026-07-08
+
 ### Added
 - **`IBlobStorageService`** contract defined in `XPoster.Contracts`: `UploadAsync` returns a read-only SAS URL (30 min expiry, 5 min clock-skew start) suitable as Meta `media_url`; `DeleteAsync` removes the blob after publish or failure ([#72](https://github.com/artcava/XPoster/issues/72))
 - **`BlobStorageService`** implementation in `XPoster.Services`: reads config via `IOptions<BlobStorageOptions>` bound from `AZURE_STORAGE_*` app settings; `BlobServiceClient` registered as singleton in `Program.cs` ([#72](https://github.com/artcava/XPoster/issues/72))
@@ -283,7 +287,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/artcava/XPoster/compare/v0.1.6...v0.1.7
 [0.1.6]: https://github.com/artcava/XPoster/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/artcava/XPoster/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/artcava/XPoster/compare/v0.1.3...v0.1.4

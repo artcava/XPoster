@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider** (2 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **Validate()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **ICredentialsStartupValidator** (2 connections)
 
 ## Relationships
 

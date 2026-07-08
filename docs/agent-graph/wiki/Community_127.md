@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
 - **catch()** (2 connections)
+- **return()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 145]] (3 shared connections)
+- [[Community 63]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,24 +1,24 @@
 # Community 65
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **FalAiImageService.cs** (6 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

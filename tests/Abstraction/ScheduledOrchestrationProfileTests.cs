@@ -18,15 +18,15 @@ public class ScheduledOrchestrationProfileTests
             hour: 8,
             senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn, SenderPlatform.X }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
-            textProvider:  AiProvider.OpenAi,
+            textProvider: AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry);
 
-        Assert.Equal(8,                        profile.Hour);
+        Assert.Equal(8, profile.Hour);
         Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
-        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
-        Assert.Equal(typeof(FeedOrchestrator),  profile.OrchestratorType);
-        Assert.Equal(AiProvider.OpenAi,         profile.TextProvider);
-        Assert.Equal(AiProvider.AzureFoundry,   profile.ImageProvider);
+        Assert.Contains(SenderPlatform.X, profile.SenderPlatforms);
+        Assert.Equal(typeof(FeedOrchestrator), profile.OrchestratorType);
+        Assert.Equal(AiProvider.OpenAi, profile.TextProvider);
+        Assert.Equal(AiProvider.AzureFoundry, profile.ImageProvider);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class ScheduledOrchestrationProfileTests
             hour: 10,
             senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
-            textProvider:  AiProvider.DeepSeek,
+            textProvider: AiProvider.DeepSeek,
             imageProvider: null);
 
         Assert.Equal(AiProvider.DeepSeek, profile.TextProvider);
@@ -50,7 +50,7 @@ public class ScheduledOrchestrationProfileTests
             hour: 12,
             senderPlatforms: new List<SenderPlatform> { SenderPlatform.Instagram }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
-            textProvider:  null,
+            textProvider: null,
             imageProvider: AiProvider.FalAi);
 
         Assert.Null(profile.TextProvider);
@@ -76,11 +76,11 @@ public class ScheduledOrchestrationProfileTests
             hour: 6,
             senderPlatforms: new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             orchestratorType: typeof(FeedOrchestrator),
-            textProvider:  AiProvider.DeepSeek,
+            textProvider: AiProvider.DeepSeek,
             imageProvider: AiProvider.FalAi);
 
         Assert.Equal(AiProvider.DeepSeek, profile.TextProvider);
-        Assert.Equal(AiProvider.FalAi,    profile.ImageProvider);
+        Assert.Equal(AiProvider.FalAi, profile.ImageProvider);
         Assert.NotEqual(profile.TextProvider, profile.ImageProvider);
     }
 
@@ -112,8 +112,8 @@ public class ScheduledOrchestrationProfileTests
             8, platforms, typeof(FeedOrchestrator),
             AiProvider.OpenAi, AiProvider.OpenAi);
 
-        Assert.Equal(SenderPlatform.LinkedIn,  profile.SenderPlatforms[0]);
-        Assert.Equal(SenderPlatform.X,         profile.SenderPlatforms[1]);
+        Assert.Equal(SenderPlatform.LinkedIn, profile.SenderPlatforms[0]);
+        Assert.Equal(SenderPlatform.X, profile.SenderPlatforms[1]);
         Assert.Equal(SenderPlatform.Instagram, profile.SenderPlatforms[2]);
     }
 }

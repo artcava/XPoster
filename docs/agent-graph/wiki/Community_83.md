@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **UploadAsync()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **IBlobStorageService** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **Uri()** (2 connections)
+- **if()** (2 connections)
+- **BlobServiceClient()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

@@ -40,7 +40,7 @@ public static class CredentialsExtensions
         services.AddSingleton<IValidateOptions<InstagramCredentials>, InstagramCredentialsValidator>();
 
         services.AddSingleton<ICredentialsStartupValidator, CredentialsStartupValidator>();
-        
+
         return services;
     }
 }

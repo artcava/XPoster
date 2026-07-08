@@ -12,25 +12,25 @@ namespace XPoster.Tests.Orchestrators;
 /// </summary>
 public class FeedOrchestratorFeedUrlProviderTests
 {
-    private readonly Mock<ISender>                     _mockSender;
-    private readonly Mock<ILogger<FeedOrchestrator>>   _mockLogger;
-    private readonly Mock<IFeedService>                _mockFeedService;
-    private readonly Mock<IFeedUrlProvider>            _mockFeedUrlProvider;
-    private readonly Mock<ITagReplacementProvider>     _mockTagReplacementProvider;
-    private readonly Mock<ITagReplacementService>      _mockTagReplacementService;
-    private readonly Mock<ITextToTextProvider>         _mockTextProvider;
-    private readonly Mock<ITextToImageProvider>        _mockImageProvider;
+    private readonly Mock<ISender> _mockSender;
+    private readonly Mock<ILogger<FeedOrchestrator>> _mockLogger;
+    private readonly Mock<IFeedService> _mockFeedService;
+    private readonly Mock<IFeedUrlProvider> _mockFeedUrlProvider;
+    private readonly Mock<ITagReplacementProvider> _mockTagReplacementProvider;
+    private readonly Mock<ITagReplacementService> _mockTagReplacementService;
+    private readonly Mock<ITextToTextProvider> _mockTextProvider;
+    private readonly Mock<ITextToImageProvider> _mockImageProvider;
 
     public FeedOrchestratorFeedUrlProviderTests()
     {
-        _mockSender                 = new Mock<ISender>();
-        _mockLogger                 = new Mock<ILogger<FeedOrchestrator>>();
-        _mockFeedService            = new Mock<IFeedService>();
-        _mockFeedUrlProvider        = new Mock<IFeedUrlProvider>();
+        _mockSender = new Mock<ISender>();
+        _mockLogger = new Mock<ILogger<FeedOrchestrator>>();
+        _mockFeedService = new Mock<IFeedService>();
+        _mockFeedUrlProvider = new Mock<IFeedUrlProvider>();
         _mockTagReplacementProvider = new Mock<ITagReplacementProvider>();
-        _mockTextProvider           = new Mock<ITextToTextProvider>();
-        _mockTagReplacementService  = new Mock<ITagReplacementService>();
-        _mockImageProvider          = new Mock<ITextToImageProvider>();
+        _mockTextProvider = new Mock<ITextToTextProvider>();
+        _mockTagReplacementService = new Mock<ITagReplacementService>();
+        _mockImageProvider = new Mock<ITextToImageProvider>();
 
         _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
         _mockTagReplacementProvider.Setup(p => p.GetReplacements())

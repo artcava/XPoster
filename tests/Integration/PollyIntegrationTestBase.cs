@@ -13,12 +13,12 @@ namespace XPoster.Tests.Integration;
 /// </summary>
 public abstract class PollyIntegrationTestBase
 {
-    private const int DefaultAttemptTimeoutSeconds      = 30;
+    private const int DefaultAttemptTimeoutSeconds = 30;
     private const int DefaultTotalRequestTimeoutSeconds = 180;
-    private const int DefaultBreakDurationSeconds       = 30;
-    private const int DefaultMaxRetryAttempts           = 3;
-    private const int DefaultRetryDelaySeconds          = 2;
-    private const int DefaultMinimumThroughput          = 100;
+    private const int DefaultBreakDurationSeconds = 30;
+    private const int DefaultMaxRetryAttempts = 3;
+    private const int DefaultRetryDelaySeconds = 2;
+    private const int DefaultMinimumThroughput = 100;
 
     /// <summary>
     /// Builds an <see cref="IServiceProvider" /> with the named HTTP client wired through
@@ -34,13 +34,13 @@ public abstract class PollyIntegrationTestBase
     protected static IServiceProvider BuildProviderWithHandler(
         string clientName,
         HttpMessageHandler innerHandler,
-        int  maxRetryAttempts           = DefaultMaxRetryAttempts,
-        int  retryDelaySeconds          = DefaultRetryDelaySeconds,
-        int  attemptTimeoutSeconds      = DefaultAttemptTimeoutSeconds,
-        int  totalRequestTimeoutSeconds = DefaultTotalRequestTimeoutSeconds,
-        int  breakDurationSeconds       = DefaultBreakDurationSeconds,
-        int  minimumThroughput          = DefaultMinimumThroughput,
-        bool retryEnabled               = true)
+        int maxRetryAttempts = DefaultMaxRetryAttempts,
+        int retryDelaySeconds = DefaultRetryDelaySeconds,
+        int attemptTimeoutSeconds = DefaultAttemptTimeoutSeconds,
+        int totalRequestTimeoutSeconds = DefaultTotalRequestTimeoutSeconds,
+        int breakDurationSeconds = DefaultBreakDurationSeconds,
+        int minimumThroughput = DefaultMinimumThroughput,
+        bool retryEnabled = true)
     {
         var samplingDurationSeconds = attemptTimeoutSeconds * 2 + 10;
 
@@ -70,12 +70,12 @@ public abstract class PollyIntegrationTestBase
                     HttpStatusCode.GatewayTimeout
                 || args.Outcome.Exception is not null);
 
-            options.Retry.MaxRetryAttempts           = maxRetryAttempts;
-            options.Retry.Delay                      = TimeSpan.FromSeconds(retryDelaySeconds);
-            options.AttemptTimeout.Timeout           = TimeSpan.FromSeconds(attemptTimeoutSeconds);
-            options.TotalRequestTimeout.Timeout      = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
-            options.CircuitBreaker.BreakDuration     = TimeSpan.FromSeconds(breakDurationSeconds);
-            options.CircuitBreaker.SamplingDuration  = TimeSpan.FromSeconds(samplingDurationSeconds);
+            options.Retry.MaxRetryAttempts = maxRetryAttempts;
+            options.Retry.Delay = TimeSpan.FromSeconds(retryDelaySeconds);
+            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(attemptTimeoutSeconds);
+            options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(totalRequestTimeoutSeconds);
+            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(breakDurationSeconds);
+            options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(samplingDurationSeconds);
             options.CircuitBreaker.MinimumThroughput = minimumThroughput;
         });
         builder.ConfigurePrimaryHttpMessageHandler(() => innerHandler);

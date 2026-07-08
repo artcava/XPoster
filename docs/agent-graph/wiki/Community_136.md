@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **IsTransientHttpFailure()** (2 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 48]] (8 shared connections)
+- [[Community 128]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

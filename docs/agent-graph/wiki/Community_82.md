@@ -1,23 +1,23 @@
 # Community 82
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **Uri()** (2 connections)
-- **BlobServiceClient()** (2 connections)
-- **if()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **var()** (2 connections)
+- **HttpClient()** (2 connections)
+- **JsonResponse()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 3]] (31 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

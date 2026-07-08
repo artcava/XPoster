@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetFeedUrls()** (2 connections)
 
 ## Relationships
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **GenerateImageAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
+- **XFunctionTests.cs** (6 connections)
+- **XFunctionTests.cs** (6 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
 
 ## Relationships
 

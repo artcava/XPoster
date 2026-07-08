@@ -8,8 +8,8 @@
 - **InstagramCredentialsValidator.cs** (5 connections)
 - **InstagramCredentialsValidator** (2 connections)
 - **Validate()** (2 connections)
-- **if()** (2 connections)
 - **XPoster.Credentials** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

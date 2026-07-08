@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 

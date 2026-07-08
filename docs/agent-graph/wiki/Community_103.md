@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedUrlProvider.cs** (4 connections)
-- **IFeedUrlProvider.cs** (4 connections)
-- **IFeedUrlProvider** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetFeedUrls()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 

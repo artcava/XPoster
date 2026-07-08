@@ -13,13 +13,13 @@ namespace XPoster.Tests;
 public class XFunctionMissingBranchTests
 {
     private readonly Mock<IOrchestratorFactory> _mockFactory;
-    private readonly Mock<ILogger<XFunction>>   _mockLogger;
-    private readonly Mock<BaseOrchestrator>     _mockOrchestrator;
+    private readonly Mock<ILogger<XFunction>> _mockLogger;
+    private readonly Mock<BaseOrchestrator> _mockOrchestrator;
 
     public XFunctionMissingBranchTests()
     {
-        _mockFactory      = new Mock<IOrchestratorFactory>();
-        _mockLogger       = new Mock<ILogger<XFunction>>();
+        _mockFactory = new Mock<IOrchestratorFactory>();
+        _mockLogger = new Mock<ILogger<XFunction>>();
         _mockOrchestrator = new Mock<BaseOrchestrator>(
             MockBehavior.Strict,
             new object[] { new List<ISender>().AsReadOnly(), Mock.Of<ILogger>() });

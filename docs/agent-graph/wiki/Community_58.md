@@ -6,12 +6,12 @@
 
 - **OpenAIResponse.cs** (7 connections)
 - **OpenAIResponse.cs** (7 connections)
-- **Choice** (2 connections)
 - **OpenAIResponse** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **Message** (2 connections)
-- **ImageData** (2 connections)
 - **XPoster.Models** (2 connections)
+- **Message** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **ImageData** (2 connections)
+- **Choice** (2 connections)
 
 ## Relationships
 

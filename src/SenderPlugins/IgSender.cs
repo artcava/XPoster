@@ -33,10 +33,10 @@ namespace XPoster.SenderPlugins
         /// <param name="containerStateStore">The container state store for managing container states.</param>
         /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
         public IgSender(
-            IHttpClientFactory httpClientFactory, 
-            IOptions<InstagramCredentials> credentials, 
-            ILogger<IgSender> logger, 
-            IBlobStorageService blobStorageService, 
+            IHttpClientFactory httpClientFactory,
+            IOptions<InstagramCredentials> credentials,
+            ILogger<IgSender> logger,
+            IBlobStorageService blobStorageService,
             IContainerStateStore containerStateStore)
         {
             ArgumentNullException.ThrowIfNull(httpClientFactory);
@@ -108,8 +108,8 @@ namespace XPoster.SenderPlugins
                 };
 
                 using var mediaContent = new StringContent(
-                    JsonSerializer.Serialize(mediaPayload), 
-                    Encoding.UTF8, 
+                    JsonSerializer.Serialize(mediaPayload),
+                    Encoding.UTF8,
                     "application/json");
 
                 using var mediaResponse = await _httpClient.PostAsync(mediaUrl, mediaContent, ct);

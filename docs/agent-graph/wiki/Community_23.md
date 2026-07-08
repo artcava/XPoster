@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (12 connections)
-- **IgSenderResilienceTests.cs** (12 connections)
-- **PostWithoutImage()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **Uri()** (2 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **new()** (2 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **BuildSender()** (2 connections)
-- **IgSender()** (2 connections)
-- **PostWithImage()** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
 
 ## Relationships
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
+- **XSender.cs** (6 connections)
+- **XSender()** (2 connections)
 - **if()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 
-- [[Community 128]] (3 shared connections)
+- [[Community 130]] (3 shared connections)
 
 ## Audit Trail
 
