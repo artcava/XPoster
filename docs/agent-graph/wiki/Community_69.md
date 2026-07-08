@@ -1,15 +1,16 @@
 # Community 69
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (5 connections)
-- **ITextToTextProvider.cs** (5 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITextToTextProvider** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **if()** (2 connections)
+- **XFunction()** (2 connections)
+- **XPoster** (2 connections)
+- **catch()** (2 connections)
+- **Run()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

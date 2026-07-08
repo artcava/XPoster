@@ -1,15 +1,16 @@
 # Community 138
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (4 connections)
-- **if()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **SenderPlatform.cs** (2 connections)
+- **SenderPlatform.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

@@ -1,21 +1,22 @@
 # Community 23
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (11 connections)
-- **DeepSeekService.cs** (11 connections)
-- **GetSummaryAsync()** (2 connections)
-- **if()** (2 connections)
-- **while()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **BuildProvider()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

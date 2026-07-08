@@ -1,24 +1,25 @@
 # Community 28
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **PerplexityService.cs** (11 connections)
+- **PerplexityService.cs** (11 connections)
+- **PerplexityService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **if()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

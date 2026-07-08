@@ -1,20 +1,21 @@
 # Community 130
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **CryptoService()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
 - **if()** (2 connections)
+- **return()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 95]] (3 shared connections)
+- [[Community 73]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

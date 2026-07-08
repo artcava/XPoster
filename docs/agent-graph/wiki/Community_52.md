@@ -1,24 +1,25 @@
 # Community 52
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetSummaryAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 - **XPoster.Services** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 91]] (4 shared connections)
+- [[Community 66]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

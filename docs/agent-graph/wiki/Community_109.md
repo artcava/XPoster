@@ -1,13 +1,14 @@
 # Community 109
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddAzureFoundryOptions()** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **XPoster.Services** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

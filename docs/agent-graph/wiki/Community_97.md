@@ -1,21 +1,22 @@
 # Community 97
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed** (2 connections)
-- **XPoster.Models** (2 connections)
+- **OrchestratorFactory.cs** (8 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **return()** (2 connections)
+- **Resolve()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 111]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

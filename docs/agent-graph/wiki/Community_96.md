@@ -1,17 +1,18 @@
 # Community 96
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (8 connections)
-- **if()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **CreateOrchestratorInstance()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **GetProfiles()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 76]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

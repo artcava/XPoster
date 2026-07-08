@@ -1,22 +1,23 @@
 # Community 17
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
-- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
-- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_DefaultOptions_Succeeds()** (2 connections)
-- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **HandleFinishedAsync()** (2 connections)
+- **foreach()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster** (2 connections)
+- **PollPendingContainersAsync()** (2 connections)
+- **switch()** (2 connections)
+- **Run()** (2 connections)
+- **ProcessContainerAsync()** (2 connections)
+- **TryDeleteBlobAsync()** (2 connections)
+- **XPosterContainerPollingFunction()** (2 connections)
+- **HandleTerminalFailureAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

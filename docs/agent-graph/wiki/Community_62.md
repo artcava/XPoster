@@ -1,19 +1,20 @@
 # Community 62
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **InSender()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **InSenderTests()** (2 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **SaveAsync()** (2 connections)
+- **GetPendingAsync()** (2 connections)
+- **IContainerStateStore** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **UpdateStatusAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 59]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

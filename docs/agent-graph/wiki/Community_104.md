@@ -1,21 +1,22 @@
 # Community 104
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **var()** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Services** (2 connections)
+- **TimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 122]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

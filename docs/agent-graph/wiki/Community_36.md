@@ -1,18 +1,20 @@
 # Community 36
 
-> 9 nodes · cohesion 0.42
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **XSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
+- **InSender()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **ValidPost()** (2 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

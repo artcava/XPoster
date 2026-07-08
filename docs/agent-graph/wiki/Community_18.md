@@ -1,22 +1,23 @@
 # Community 18
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService.cs** (12 connections)
-- **if()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **OpenAiService()** (2 connections)
-- **var()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
+- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
+- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
+- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

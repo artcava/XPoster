@@ -1,20 +1,21 @@
 # Community 126
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (4 shared connections)
+- [[Community 153]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

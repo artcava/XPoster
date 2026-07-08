@@ -1,14 +1,16 @@
 # Community 72
 
-> 5 nodes · cohesion 0.70
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **Resolve()** (2 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests.cs** (6 connections)
+- **XFunctionMissingBranchTests()** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

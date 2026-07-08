@@ -1,25 +1,26 @@
 # Community 44
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests.cs** (7 connections)
-- **PostMissingBranchTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 26]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

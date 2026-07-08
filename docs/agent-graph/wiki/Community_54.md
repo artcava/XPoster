@@ -1,16 +1,17 @@
 # Community 54
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (6 connections)
-- **XFunctionTests.cs** (6 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **Dispose()** (2 connections)
+- **IsEnabled()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **CreateLogger()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

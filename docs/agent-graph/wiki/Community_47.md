@@ -1,17 +1,18 @@
 # Community 47
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
-- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
-- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
-- **AiProviderExtensionsTests** (2 connections)
-- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoService()** (2 connections)
+- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
+- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
+- **MakeService()** (2 connections)
+- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **CryptoServiceTests** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,26 +1,28 @@
 # Community 34
 
-> 9 nodes · cohesion 0.22
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 49]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

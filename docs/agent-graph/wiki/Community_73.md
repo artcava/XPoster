@@ -1,22 +1,24 @@
 # Community 73
 
-> 5 nodes · cohesion 0.70
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 130]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

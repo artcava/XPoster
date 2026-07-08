@@ -1,19 +1,21 @@
 # Community 32
 
-> 10 nodes · cohesion 0.38
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **SupportedPlatforms_IsEmpty()** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **foreach()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
 - **XPoster.Tests.Orchestrators** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
-- **NoOrchestratorTests** (2 connections)
-- **Build()** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +23,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

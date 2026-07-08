@@ -1,21 +1,22 @@
 # Community 95
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
 - **catch()** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (3 shared connections)
+- [[Community 117]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

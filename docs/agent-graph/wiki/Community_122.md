@@ -1,16 +1,17 @@
 # Community 122
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **AddPerplexityOptions()** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

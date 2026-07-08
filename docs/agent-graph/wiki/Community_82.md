@@ -1,14 +1,15 @@
 # Community 82
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **IFeedUrlProvider.cs** (4 connections)
-- **IFeedUrlProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **IFeedUrlProvider** (2 connections)
-- **GetFeedUrls()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **StringContent()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

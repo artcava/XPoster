@@ -1,14 +1,16 @@
 # Community 71
 
-> 5 nodes · cohesion 0.70
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **IFeedService** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **InMemoryContainerStateStore.cs** (6 connections)
+- **InMemoryContainerStateStore.cs** (6 connections)
+- **SaveAsync()** (2 connections)
+- **InMemoryContainerStateStore** (2 connections)
+- **UpdateStatusAsync()** (2 connections)
+- **GetPendingAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
@@ -16,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

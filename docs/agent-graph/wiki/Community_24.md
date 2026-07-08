@@ -1,21 +1,22 @@
 # Community 24
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
-- **foreach()** (2 connections)
-- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
-- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
+- **Validate_DefaultOptions_Succeeds()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
+- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

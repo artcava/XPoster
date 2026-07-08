@@ -1,21 +1,22 @@
 # Community 93
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
 - **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ISender** (2 connections)
 
 ## Relationships
 
-- [[Community 127]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

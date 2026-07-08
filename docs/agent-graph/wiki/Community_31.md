@@ -1,20 +1,21 @@
 # Community 31
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **XSenderMissingBranchTests.cs** (10 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderMissingBranchTests** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **MessageMaxLenght_Returns250()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **DeepSeekService.cs** (11 connections)
+- **DeepSeekService.cs** (11 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **if()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
@@ -22,7 +23,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

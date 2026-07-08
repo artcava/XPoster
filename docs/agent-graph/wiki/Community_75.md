@@ -1,22 +1,23 @@
 # Community 75
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **DefaultSlotProfileProvider.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **GetProfiles()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **InSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **InSenderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 63]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

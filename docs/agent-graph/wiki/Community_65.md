@@ -1,23 +1,24 @@
 # Community 65
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **MakeDownloadClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **HttpClient()** (2 connections)
-- **var()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
+- **IgSender.cs** (6 connections)
+- **IgSender.cs** (6 connections)
+- **IgSender()** (2 connections)
+- **if()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 3]] (31 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

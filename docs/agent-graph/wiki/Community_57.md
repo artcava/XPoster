@@ -1,24 +1,25 @@
 # Community 57
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **new()** (2 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,23 @@
 # Community 77
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
-- **UploadImageToPublicUrl()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 126]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

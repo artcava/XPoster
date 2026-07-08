@@ -1,14 +1,15 @@
 # Community 74
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **ICryptoService** (2 connections)
+- **TagReplacementServiceTests.cs** (5 connections)
+- **TagReplacementServiceTests.cs** (5 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
+- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
+- **Apply_Returns_Input_Unchanged_When_Text_Is_Null_Or_Whitespace()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

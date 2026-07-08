@@ -1,23 +1,24 @@
 # Community 63
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **for()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **InSenderTests.cs** (12 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 107]] (4 shared connections)
+- [[Community 75]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

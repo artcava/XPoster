@@ -1,20 +1,21 @@
 # Community 123
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **if()** (2 connections)
-- **InSender()** (2 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **AddFalAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 37]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
