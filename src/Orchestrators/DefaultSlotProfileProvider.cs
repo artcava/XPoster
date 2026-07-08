@@ -28,7 +28,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
         // X (280 chars) always trigger re-summarisation.
         new ScheduledOrchestrationProfile(
             hour: 6,
-            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
+            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry),
@@ -40,13 +40,12 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
             orchestratorType: typeof(PowerLawOrchestrator)),
 
         #region TESTING SLOTS (excluded from production deployments)
-        // Test slot — only used in DryRun mode, excluded from production deployments.
-        new ScheduledOrchestrationProfile(
-            hour: 9,
-            senderPlatforms: new[] { SenderPlatform.Instagram },
-            orchestratorType: typeof(FeedOrchestrator),
-            textProvider: AiProvider.OpenAi,
-            imageProvider: AiProvider.AzureFoundry)
+        // new ScheduledOrchestrationProfile(
+        //     hour: 9,
+        //     senderPlatforms: new[] { SenderPlatform.Instagram },
+        //     orchestratorType: typeof(FeedOrchestrator),
+        //     textProvider: AiProvider.OpenAi,
+        //     imageProvider: AiProvider.AzureFoundry)
         #endregion
         
     }.AsReadOnly();

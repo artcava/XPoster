@@ -46,7 +46,8 @@
 ### 🌐 Multi-Platform Publishing
 - **Twitter/X**: Automated posting with image support
 - **LinkedIn**: Posts on personal profiles and company pages
-- **Instagram**: Publishing via Graph API (in development)
+- **Instagram**: Publishing via Graph API
+- **Facebook**: Publishing via Graph API in development (see Issue [#224](https://github.com/artcava/XPoster/issues/224))
 - **Multi-Platform Fan-Out**: A single scheduled slot can publish to multiple platforms simultaneously. The base summary and image are generated once; per-platform re-summarisation is applied only when needed, reducing AI token and image credit consumption by up to ~67% compared to separate slots.
 
 ### ⚙️ Automation & Scheduling
@@ -80,16 +81,16 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
 ┌────────────────────────────┐
 │   Azure Timer Trigger      │
 │   (configurable schedule)  │
-└───────────┬────────────┘
+└───────────┬────────────────┘
             │
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
 │   (ISlotProfileProvider)   │
-└───────────┬────────────┘
+└───────────┬────────────────┘
             │
-    ┌──────┴────────┬────────────┐
-    ▼                ▼              ▼
+    ┌───────┴────────┬─────────────────┐
+    ▼                ▼                 ▼
 ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
 │     Feed     │   │  PowerLaw    │   │      No      │
 │ Orchestrator │   │ Orchestrator │   │ Orchestrator │
@@ -110,11 +111,11 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
     └────────┬───────────────────┘
              │
              ▼
-    ┌──────────────────────────────┐
-    │ BaseOrchestrator.PostAsync   │  ◄── Fan-out: Task.WhenAll per sender
-    └──┬──────┬──────┬──────┬──────┘
-       │        │        │        │
-       ▼        ▼        ▼        ▼
+    ┌──────────────────────────────────────┐
+    │        BaseOrchestrator.PostAsync    │  ◄── Fan-out: Task.WhenAll per sender
+    └──┬────────┬────────┬──────────┬──────┘
+       │        │        │          │
+       ▼        ▼        ▼          ▼
   ┌────────┐ ┌────────┐ ┌─────────┐ ┌────────────┐
   │XSender │ │InSender│ │IgSender │ │DryRunSend. │
   │ X/Twit.│ │LinkedIn│ │Instagram│ │(local only)│
@@ -186,6 +187,7 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 | `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
 | `Azure.Extensions.AspNetCore.Configuration.Secrets` | 1.3.2 | Azure Key Vault Configuration Provider (startup secret loading) |
 | `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
+| `SkiaSharp` | 4.148.0 | cross-platform 2D graphics API for .NET |
 
 > ℹ️ `Microsoft.Extensions.Http` is resolved transitively and is not pinned explicitly in the project file to avoid NU1603 version conflicts.
 
@@ -384,12 +386,11 @@ The production schedule is defined in `DefaultSlotProfileProvider`, which return
 | UTC Hour | `SenderPlatforms` | Orchestrator | `TextProvider` | `ImageProvider` |
 |----------|-------------------|--------------|----------------|-----------------|
 | 8 | `LinkedIn`, `X`, `Instagram` | `FeedOrchestrator` | `OpenAi` | `AzureFoundry` |
-| 14 | `LinkedIn` | `PowerLawOrchestrator` | `null` | `null` |
-| 16 | `X` | `PowerLawOrchestrator` | `null` | `null` |
+| 14 | `LinkedIn`, `X` | `PowerLawOrchestrator` | `null` | `null` |
 
-> ℹ️ The fan-out slot at hour 8 generates the base summary and image **once** (sized for LinkedIn's 700-char limit), then re-summarises only when needed for X (280 chars). Instagram receives the same content as LinkedIn when the base fits. This reduces AI and image credit consumption compared to three separate scheduled slots.
+> ℹ️ The fan-out slot at hour 8 generates the base summary and image **once** (sized for LinkedIn's 2 800-char limit), then re-summarises only when needed for Instagram (2 200) and X (280 chars). Instagram receives the same content as LinkedIn when the base fits. This reduces AI and image credit consumption compared to three separate scheduled slots.
 
-> ℹ️ `PowerLawOrchestrator` slots at 14 and 16 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
+> ℹ️ `PowerLawOrchestrator` slot at 14 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
 
 `OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
 
@@ -504,9 +505,10 @@ Key monitoring capabilities at a glance:
 ### 🚧 Phase 2: Stabilization (In Progress)
 - [x] Configuration externalization
 - [x] AI provider expansion
-- [x] Retry & resilience for external HTTP calls [Issue #133](https://github.com/artcava/XPoster/issues/133)
-- [x] `FeedOrchestrator` explicit pipeline + tag replacement externalization [Issue #216](https://github.com/artcava/XPoster/issues/216)
-- [x] Multi-platform fan-out: single slot publishes to multiple platforms in parallel, AI generated once [Issue #176](https://github.com/artcava/XPoster/issues/176)
+- [x] Retry & resilience for external HTTP calls 
+- [x] `FeedOrchestrator` explicit pipeline + tag replacement externalization 
+- [x] Multi-platform fan-out: single slot publishes to multiple platforms in parallel, AI generated once 
+- [x] Instagram publishing
 - [x] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
@@ -548,6 +550,7 @@ Key monitoring capabilities at a glance:
 - [fal.ai](https://fal.ai/) - FLUX.2 Turbo image generation
 - [Perplexity](https://www.perplexity.ai/) - Sonar text generation
 - [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
+- [SkiaSharp](https://github.com/mono/skiasharp) - Cross-platform 2D graphics API for .NET
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
 ---
