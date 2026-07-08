@@ -1,3 +1,4 @@
+using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
@@ -13,12 +14,12 @@ public class BlobStorageServiceTests
     private static BlobStorageService CreateSut(
         Mock<BlobServiceClient> blobServiceClientMock,
         Mock<ILogger<BlobStorageService>> loggerMock,
-        string containerName = "xposter-images")
+        string? containerName = "xposter-images")
     {
         var options = Options.Create(new BlobStorageOptions
         {
             AzureStorageConnectionString = "UseDevelopmentStorage=true",
-            AzureStorageContainerName = containerName
+            AzureStorageContainerName = containerName!
         });
 
         return new BlobStorageService(blobServiceClientMock.Object, options, loggerMock.Object);
@@ -33,11 +34,11 @@ public class BlobStorageServiceTests
         var logger = new Mock<ILogger<BlobStorageService>>();
 
         containerClient.Setup(x => x.CreateIfNotExistsAsync(PublicAccessType.None, null, null, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Mock.Of<Azure.Response<BlobContainerInfo>>());
+            .ReturnsAsync(Mock.Of<Response<BlobContainerInfo>>());
         containerClient.Setup(x => x.GetBlobClient(It.IsAny<string>())).Returns(blobClient.Object);
         blobServiceClient.Setup(x => x.GetBlobContainerClient("xposter-images")).Returns(containerClient.Object);
-        blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Mock.Of<Azure.Response<BlobContentInfo>>());
+        blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), It.IsAny<BlobHttpHeaders>(), null, null, null, null, It.IsAny<Azure.Storage.StorageTransferOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Mock.Of<Response<BlobContentInfo>>());
         blobClient.Setup(x => x.GenerateSasUri(It.IsAny<BlobSasBuilder>()))
             .Returns(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
 
@@ -62,11 +63,11 @@ public class BlobStorageServiceTests
         var logger = new Mock<ILogger<BlobStorageService>>();
 
         containerClient.Setup(x => x.CreateIfNotExistsAsync(PublicAccessType.None, null, null, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Mock.Of<Azure.Response<BlobContainerInfo>>());
+            .ReturnsAsync(Mock.Of<Response<BlobContainerInfo>>());
         containerClient.Setup(x => x.GetBlobClient(It.IsAny<string>())).Returns(blobClient.Object);
         blobServiceClient.Setup(x => x.GetBlobContainerClient("xposter-images")).Returns(containerClient.Object);
-        blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Mock.Of<Azure.Response<BlobContentInfo>>());
+        blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), It.IsAny<BlobHttpHeaders>(), null, null, null, null, It.IsAny<Azure.Storage.StorageTransferOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Mock.Of<Response<BlobContentInfo>>());
         blobClient.Setup(x => x.GenerateSasUri(It.IsAny<BlobSasBuilder>()))
             .Returns(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
 
@@ -83,6 +84,63 @@ public class BlobStorageServiceTests
             null,
             It.IsAny<Azure.Storage.StorageTransferOptions>(),
             It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task Constructor_WhenContainerNameIsEmpty_UsesDefaultName(string? containerName)
+    {
+        var blobServiceClient = new Mock<BlobServiceClient>();
+        var containerClient = new Mock<BlobContainerClient>();
+        var blobClient = new Mock<BlobClient>();
+        var logger = new Mock<ILogger<BlobStorageService>>();
+
+        containerClient.Setup(x => x.CreateIfNotExistsAsync(PublicAccessType.None, null, null, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Mock.Of<Response<BlobContainerInfo>>());
+        containerClient.Setup(x => x.GetBlobClient(It.IsAny<string>())).Returns(blobClient.Object);
+        blobServiceClient.Setup(x => x.GetBlobContainerClient("xposter-images")).Returns(containerClient.Object);
+        blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), It.IsAny<BlobHttpHeaders>(), null, null, null, null, It.IsAny<Azure.Storage.StorageTransferOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Mock.Of<Response<BlobContentInfo>>());
+        blobClient.Setup(x => x.GenerateSasUri(It.IsAny<BlobSasBuilder>()))
+            .Returns(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+
+        var sut = CreateSut(blobServiceClient, logger, containerName);
+        await sut.UploadAsync(new byte[] { 1, 2, 3 }, "image/jpeg");
+
+        blobServiceClient.Verify(x => x.GetBlobContainerClient("xposter-images"), Times.Once);
+    }
+
+    [Fact]
+    public async Task UploadAsync_SasUriExpiry_IsApproximately30Minutes()
+    {
+        var blobServiceClient = new Mock<BlobServiceClient>();
+        var containerClient = new Mock<BlobContainerClient>();
+        var blobClient = new Mock<BlobClient>();
+        var logger = new Mock<ILogger<BlobStorageService>>();
+        BlobSasBuilder? capturedBuilder = null;
+        var before = DateTimeOffset.UtcNow;
+
+        containerClient.Setup(x => x.CreateIfNotExistsAsync(PublicAccessType.None, null, null, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Mock.Of<Response<BlobContainerInfo>>());
+        containerClient.Setup(x => x.GetBlobClient(It.IsAny<string>())).Returns(blobClient.Object);
+        blobServiceClient.Setup(x => x.GetBlobContainerClient("xposter-images")).Returns(containerClient.Object);
+        blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), It.IsAny<BlobHttpHeaders>(), null, null, null, null, It.IsAny<Azure.Storage.StorageTransferOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Mock.Of<Response<BlobContentInfo>>());
+        blobClient.Setup(x => x.GenerateSasUri(It.IsAny<BlobSasBuilder>()))
+            .Callback<BlobSasBuilder>(b => capturedBuilder = b)
+            .Returns(new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"));
+
+        var sut = CreateSut(blobServiceClient, logger);
+        await sut.UploadAsync(new byte[] { 1, 2, 3 }, "image/jpeg");
+        var after = DateTimeOffset.UtcNow;
+
+        Assert.NotNull(capturedBuilder);
+        Assert.True(capturedBuilder!.StartsOn >= before.AddMinutes(-6));
+        Assert.True(capturedBuilder.StartsOn <= after.AddMinutes(-4));
+        Assert.True(capturedBuilder.ExpiresOn >= before.AddMinutes(29));
+        Assert.True(capturedBuilder.ExpiresOn <= after.AddMinutes(31));
     }
 
     [Fact]
@@ -112,11 +170,55 @@ public class BlobStorageServiceTests
         blobServiceClient.Setup(x => x.GetBlobContainerClient("xposter-images")).Returns(containerClient.Object);
         containerClient.Setup(x => x.GetBlobClient("blob1.jpg")).Returns(blobClient.Object);
         blobClient.Setup(x => x.DeleteIfExistsAsync(DeleteSnapshotsOption.None, null, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Mock.Of<Azure.Response<bool>>());
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
 
         var sut = CreateSut(blobServiceClient, logger);
         await sut.DeleteAsync("blob1.jpg");
 
         blobClient.Verify(x => x.DeleteIfExistsAsync(DeleteSnapshotsOption.None, null, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()
+    {
+        var blobServiceClient = new Mock<BlobServiceClient>();
+        var containerClient = new Mock<BlobContainerClient>();
+        var blobClient = new Mock<BlobClient>();
+        var logger = new Mock<ILogger<BlobStorageService>>();
+
+        blobServiceClient.Setup(x => x.GetBlobContainerClient("xposter-images")).Returns(containerClient.Object);
+        containerClient.Setup(x => x.GetBlobClient("blob1.jpg")).Returns(blobClient.Object);
+        blobClient.Setup(x => x.DeleteIfExistsAsync(DeleteSnapshotsOption.None, null, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(false, Mock.Of<Response>()));
+
+        var sut = CreateSut(blobServiceClient, logger);
+        await sut.DeleteAsync("blob1.jpg");
+
+        logger.Verify(
+            x => x.Log(
+                LogLevel.Debug,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Blob not found during delete", StringComparison.Ordinal)),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WithNullBlobName_ThrowsArgumentException()
+    {
+        var sut = CreateSut(new Mock<BlobServiceClient>(), new Mock<ILogger<BlobStorageService>>());
+
+        await Assert.ThrowsAsync<ArgumentNullException>(() => sut.DeleteAsync(null!));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task DeleteAsync_WithEmptyBlobName_ThrowsArgumentException(string blobName)
+    {
+        var sut = CreateSut(new Mock<BlobServiceClient>(), new Mock<ILogger<BlobStorageService>>());
+
+        await Assert.ThrowsAsync<ArgumentException>(() => sut.DeleteAsync(blobName));
     }
 }
