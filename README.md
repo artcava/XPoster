@@ -30,8 +30,6 @@
 - [Roadmap](#roadmap)
 - [Author](#author)
 
-> 📐 For a deep-dive into architectural decisions, design patterns, ADRs, and extension contracts, see [docs/architecture.md](docs/architecture.md).
-
 ---
 
 ## Features
@@ -66,61 +64,7 @@
 
 ## Architecture
 
-XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
-
-- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
-- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
-- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
-
-The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
-
-Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing.
-
-```
-┌────────────────────────────┐
-│   Azure Timer Trigger      │
-│   (configurable schedule)  │
-└───────────┬────────────────┘
-            │
-            ▼
-┌────────────────────────────┐
-│   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ISlotProfileProvider)   │
-└───────────┬────────────────┘
-            │
-    ┌───────┴────────┬─────────────────┐
-    ▼                ▼                 ▼
-┌──────────────┐   ┌──────────────┐   ┌──────────────┐
-│     Feed     │   │  PowerLaw    │   │      No      │
-│ Orchestrator │   │ Orchestrator │   │ Orchestrator │
-└─────┬────────┘   └─────┬────────┘   └──────────────┘
-      │                  │
-      └──────┬───────────┘
-             │
-             ▼
-    ┌────────────────────────────┐
-    │   Services                 │
-    ├────────────────────────────┤
-    │ • ITextToTextProvider      │ ◄─── Keyed by AiProvider (text capability)
-    │ • ITextToImageProvider     │ ◄─── Keyed by AiProvider (image capability)
-    │ • IFeedUrlProvider         │ ◄─── RSS feed URL list (config-backed)
-    │ • ITagReplacementProvider  │ ◄─── Hashtag map resolution (config-backed)
-    │ • FeedService              │ ◄─── RSS/Atom parser + resilient HTTP client
-    │ • CryptoService            │ ◄─── CryptoPrices HTTP client
-    └────────┬───────────────────┘
-             │
-             ▼
-    ┌──────────────────────────────────────┐
-    │        BaseOrchestrator.PostAsync    │  ◄── Fan-out: Task.WhenAll per sender
-    └──┬────────┬────────┬──────────┬──────┘
-       │        │        │          │
-       ▼        ▼        ▼          ▼
-  ┌────────┐ ┌────────┐ ┌─────────┐ ┌────────────┐
-  │XSender │ │InSender│ │IgSender │ │DryRunSend. │
-  │ X/Twit.│ │LinkedIn│ │Instagram│ │(local only)│
-  └────────┘ └────────┘ └─────────┘ └────────────┘
-```
+XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects a content strategy based on the current time, generates a social media post (optionally using AI), and publishes it to one or more platforms via pluggable sender components.
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
 

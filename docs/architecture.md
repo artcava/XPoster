@@ -19,7 +19,16 @@ This document explains the architectural decisions, component responsibilities, 
 
 ## 1. System Overview
 
-XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects a content strategy based on the current time, generates a social media post (optionally using AI), and publishes it to one or more platforms via pluggable sender components.
+XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
+
+- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
+- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
+- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
+
+The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
+
+Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing.
 
 ```
 ┌────────────────────────────┐
@@ -30,11 +39,11 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
             ▼
 ┌────────────────────────────┐
 │   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ISlotProfileProvider)   │ ◄─── Injected schedule profiles
+│   (ISlotProfileProvider)   │
 └───────────┬────────────────┘
             │
-    ┌───────┴────────┬──────────────┐
-    ▼                ▼              ▼
+    ┌───────┴────────┬─────────────────┐
+    ▼                ▼                 ▼
 ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
 │     Feed     │   │  PowerLaw    │   │      No      │
 │ Orchestrator │   │ Orchestrator │   │ Orchestrator │
@@ -42,33 +51,36 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
       │                  │
       └──────┬───────────┘
              │
-             ▼ IReadOnlyDictionary<SenderPlatform, Post?>
-    ┌────────────────────┐
-    │   Services         │
-    ├────────────────────┤
-    │ • AiServiceHelper  │ ◄─── HTTP response parsing / 429 handling
-    │ • Feed Service     │ ◄─── RSS Parser (IHttpClientFactory + Polly)
-    │ • Crypto Service   │ ◄─── CryptoPrices HTTP client
-    │ • FeedUrlProvider  │ ◄─── Feed URL resolution (IFeedUrlProvider)
-    │ • TagReplacement   │ ◄─── Hashtag map resolution (ITagReplacementProvider)
-    └────────┬───────────┘
+             ▼
+    ┌────────────────────────────┐
+    │   Services                 │
+    ├────────────────────────────┤
+    │ • ITextToTextProvider      │ ◄─── Keyed by AiProvider (text capability)
+    │ • ITextToImageProvider     │ ◄─── Keyed by AiProvider (image capability)
+    │ • IFeedUrlProvider         │ ◄─── RSS feed URL list (config-backed)
+    │ • ITagReplacementProvider  │ ◄─── Hashtag map resolution (config-backed)
+    │ • FeedService              │ ◄─── RSS/Atom parser + resilient HTTP client
+    │ • CryptoService            │ ◄─── CryptoPrices HTTP client
+    └────────┬───────────────────┘
              │
-             ▼ Task.WhenAll (parallel fan-out)
-    ┌────────────────────┐
-    │ Sender Plugins     │
-    ├────────────────────┤
-    │ • XSender          │ ◄─── Twitter/X API
-    │ • InSender         │ ◄─── LinkedIn API
-    │ • IgSender         │ ◄─── Instagram API
-    │ • DryRunSender     │ ◄─── Local testing only (no outbound API calls)
-    └────────────────────┘
+             ▼
+    ┌───────────────────────────────────────────┐
+    │        BaseOrchestrator.PostAsync         │  ◄── Fan-out: Task.WhenAll per sender
+    └──┬────────┬───────────┬────────────┬──────┘
+       │        │           │            │
+       ▼        ▼           ▼            ▼
+  ┌─────────┐ ┌──────────┐ ┌──────────┐ ┌────────────┐
+  │ XSender │ │ InSender │ │ IgSender │ │ DryRunSend │
+  │ X/Twit. │ │ LinkedIn │ │Instagram │ │(local only)│
+  └─────────┘ └──────────┘ └──────────┘ └────────────┘
 ```
 
-**Key Vault credentials** are loaded into `IConfiguration` at application startup via the Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`). Senders receive their credentials through standard `IOptions` binding — no Key Vault calls occur at post-publish time.
+**Key Vault credentials** are loaded into `IConfiguration` at application startup via the Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`). 
+Senders receive their credentials through standard `IOptions` binding — no Key Vault calls occur at post-publish time.
 
 **System boundaries:**
 - **Inbound**: Azure Timer Trigger (no external HTTP surface in production)
-- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram Graph API, RSS feeds, Azure Key Vault (startup only)
+- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram Graph API, RSS feeds, Azure Blob Storage, Azure Key Vault (startup only)
 - **Observability**: Azure Application Insights
 
 ---
@@ -132,6 +144,11 @@ Services are registered as singletons or transients in the DI container and are 
 - **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
 - **ConfigurationFeedUrlProvider** (`IFeedUrlProvider`): resolves the list of RSS feed URLs consumed by `FeedOrchestrator` from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
 - **ConfigurationTagReplacementProvider** (`ITagReplacementProvider`): resolves the word-to-hashtag replacement map consumed by `FeedOrchestrator` from the `TagReplacementOptions:Replacements` configuration section (bound via `TagReplacementOptions__Replacements__<word>` double-underscore notation). Registered as `Singleton`. Matching is case-insensitive; only the first occurrence of each word per post is replaced. An empty or absent section is valid — the summary passes through unchanged. To source replacements from a different store (database, remote config), implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
+- **TagReplacementService**: Applies tag replacements to the specified text using the replacements provided by the `ITagReplacementProvider`.
+- **LocalOverrideTimeProvider** (`ITimeProvider`): Development-only that returns a fixed UTC hour read from the `ForceHour` app setting.
+- **BlobStorageService**: Uploads image bytes to Azure Blob Storage and returns a `BlobUploadResult` containing a time-limited SAS URL suitable for use as the `image_url` parameter of the Instagram Graph API (direct GET, no auth headers, no redirects) and the blob name for subsequent operations.
+The SAS URL is read-only, starts 5 minutes in the past to absorb clock skew between Azure and Meta servers, and expires 30 minutes from the time of upload.
+The blob container is created automatically on first use if it does not exist.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
 
 **AI Provider Services** — registered as **keyed services** by `AiProvider` via `AddXPosterAiProviders()` in `Program.cs`:
@@ -149,6 +166,7 @@ Providers that do not implement a capability have no keyed registration for the 
 ### HttpClientFactory — Named Clients
 
 All outbound HTTP integrations in XPoster use named clients registered via `IHttpClientFactory` in `HttpClientExtensions`. Each client is backed by a Polly standard resilience pipeline (retry on transient failures, circuit breaker, attempt timeout) configured with service-appropriate timeout values.
+Only `XSender` uses an OAuth library (`LinqToTwitter`) and is out of this pipeline.
 
 | Named Client | Consumer | Attempt Timeout | Total Timeout |
 |---|---|---|---|
@@ -242,7 +260,7 @@ Each ADR is maintained as a standalone document in [`docs/analysis/`](analysis/)
 | [ADR-002](analysis/ADR-002-strategy-pattern-generators.md) | Strategy Pattern for Content Orchestrators | Accepted |
 | [ADR-003](analysis/ADR-003-plugin-pattern-senders.md) | Plugin Pattern for Senders | Accepted |
 | [ADR-004](analysis/ADR-004-provider-agnostic-ai.md) | Provider-Agnostic AI Integration | Accepted |
-| [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | **Accepted** — implemented in [Issue #211](https://github.com/artcava/XPoster/issues/211) |
+| [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | Accepted |
 
 ---
 
