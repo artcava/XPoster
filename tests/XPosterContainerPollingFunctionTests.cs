@@ -128,6 +128,27 @@ public class XPosterContainerPollingFunctionTests
     }
 
     [Fact]
+    public async Task RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()
+    {
+        var sut = CreateSut();
+        var pending = new PendingContainer("c1", "blob1");
+        _stateStore.Setup(x => x.GetPendingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { pending });
+        _metaPublishing.Setup(x => x.GetContainerStatusAsync("c1", It.IsAny<CancellationToken>())).ReturnsAsync("FINISHED");
+        _metaPublishing.Setup(x => x.PublishContainerAsync("c1", It.IsAny<CancellationToken>())).ThrowsAsync(new InvalidOperationException("publish failed"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => sut.Run(CreateTimerInfo(), CancellationToken.None));
+
+        _logger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("XPosterContainerPollingFunction encountered an unexpected error", StringComparison.Ordinal)),
+                It.Is<InvalidOperationException>(ex => ex.Message == "publish failed"),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
     public async Task RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()
     {
         var sut = CreateSut();
@@ -141,6 +162,47 @@ public class XPosterContainerPollingFunctionTests
         await sut.Run(CreateTimerInfo(), CancellationToken.None);
 
         _stateStore.Verify(x => x.UpdateStatusAsync("c1", ContainerStatus.Published, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task RunAsync_WhenBlobDeleteFails_LogsError()
+    {
+        var sut = CreateSut();
+        var pending = new PendingContainer("c1", "blob1");
+        _stateStore.Setup(x => x.GetPendingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { pending });
+        _metaPublishing.Setup(x => x.GetContainerStatusAsync("c1", It.IsAny<CancellationToken>())).ReturnsAsync("FINISHED");
+        _metaPublishing.Setup(x => x.PublishContainerAsync("c1", It.IsAny<CancellationToken>())).ReturnsAsync("published_media_id");
+        _blobStorage.Setup(x => x.DeleteAsync("blob1", It.IsAny<CancellationToken>())).ThrowsAsync(new Exception("delete failed"));
+        _stateStore.Setup(x => x.UpdateStatusAsync("c1", ContainerStatus.Published, It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+        await sut.Run(CreateTimerInfo(), CancellationToken.None);
+
+        _logger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Failed to delete blob", StringComparison.Ordinal)),
+                It.Is<Exception>(ex => ex.Message == "delete failed"),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task RunAsync_WhenUpdateStatusThrows_PropagatesException()
+    {
+        var sut = CreateSut();
+        var pending = new PendingContainer("c1", "blob1");
+        _stateStore.Setup(x => x.GetPendingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { pending });
+        _metaPublishing.Setup(x => x.GetContainerStatusAsync("c1", It.IsAny<CancellationToken>())).ReturnsAsync("FINISHED");
+        _metaPublishing.Setup(x => x.PublishContainerAsync("c1", It.IsAny<CancellationToken>())).ReturnsAsync("published_media_id");
+        _blobStorage.Setup(x => x.DeleteAsync("blob1", It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        _stateStore.Setup(x => x.UpdateStatusAsync("c1", ContainerStatus.Published, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("update failed"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => sut.Run(CreateTimerInfo(), CancellationToken.None));
+
+        _metaPublishing.Verify(x => x.PublishContainerAsync("c1", It.IsAny<CancellationToken>()), Times.Once);
+        _blobStorage.Verify(x => x.DeleteAsync("blob1", It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -180,5 +242,29 @@ public class XPosterContainerPollingFunctionTests
         _metaPublishing.VerifyNoOtherCalls();
     }
 
-    private static TimerInfo CreateTimerInfo() => null!; // TimerInfo is not used in the function logic, so we can return null for testing purposes.
+    [Fact]
+    public async Task RunAsync_WhenCancelledDuringForEach_StopsGracefully()
+    {
+        var sut = CreateSut();
+        var cts = new CancellationTokenSource();
+        var pending = new[]
+        {
+            new PendingContainer("c1", "b1"),
+            new PendingContainer("c2", "b2")
+        };
+
+        _stateStore.Setup(x => x.GetPendingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(pending);
+        _metaPublishing.Setup(x => x.GetContainerStatusAsync("c1", It.IsAny<CancellationToken>())).ReturnsAsync("IN_PROGRESS");
+        _metaPublishing.Setup(x => x.GetContainerStatusAsync("c2", It.IsAny<CancellationToken>()))
+            .Callback(() => cts.Cancel())
+            .ReturnsAsync("IN_PROGRESS");
+
+        await sut.Run(CreateTimerInfo(), cts.Token);
+
+        _metaPublishing.Verify(x => x.GetContainerStatusAsync("c1", It.IsAny<CancellationToken>()), Times.Once);
+        _metaPublishing.Verify(x => x.GetContainerStatusAsync("c2", It.IsAny<CancellationToken>()), Times.Once);
+        _metaPublishing.Verify(x => x.PublishContainerAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    private static TimerInfo CreateTimerInfo() => null!;
 }
