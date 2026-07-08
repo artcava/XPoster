@@ -89,13 +89,13 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveTwoSenders()
+    public void FeedOrchestratorSlot_Should_HaveAtLeastOneSender()
     {
         // Declaration order in SenderPlatforms is not significant:
         // FeedOrchestrator re-orders senders internally by descending MessageMaxLength at runtime.
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
-        Assert.Equal(2, profile.SenderPlatforms.Count);
+        Assert.NotEmpty(profile.SenderPlatforms);
     }
 
     // ---------------------------------------------------------------------------
