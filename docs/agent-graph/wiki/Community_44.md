@@ -9,8 +9,8 @@
 - **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
 - **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
 - **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
 - **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 - **XSenderSendAsyncTests()** (2 connections)
 - **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
 

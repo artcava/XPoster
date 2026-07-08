@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **DeepSeekOptions.cs** (2 connections)
+- **FeedOptions.cs** (2 connections)
 - **XPoster.Models** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
+- **FeedOptions.cs** (2 connections)
 
 ## Relationships
 

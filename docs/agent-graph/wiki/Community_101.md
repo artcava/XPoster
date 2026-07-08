@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider** (2 connections)
-- **GetReplacements()** (2 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
+- **SendAsync()** (2 connections)
+- **ISender** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

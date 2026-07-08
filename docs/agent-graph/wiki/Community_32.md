@@ -1,25 +1,25 @@
 # Community 32
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **XPoster.Tests.Abstraction** (2 connections)
-- **typeof()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
+- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
+- **CreateSut()** (2 connections)
+- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XPosterContainerPollingFunctionTests** (2 connections)
+- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
+- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 41]] (9 shared connections)
 
 ## Audit Trail
 

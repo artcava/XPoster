@@ -6,12 +6,12 @@
 
 - **BaseOrchestrator.cs** (6 connections)
 - **BaseOrchestrator()** (2 connections)
-- **XPoster.Abstraction** (2 connections)
 - **PostAsync()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 
-- [[Community 134]] (3 shared connections)
+- [[Community 135]] (3 shared connections)
 
 ## Audit Trail
 

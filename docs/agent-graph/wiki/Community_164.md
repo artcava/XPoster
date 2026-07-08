@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 158]] (2 shared connections)
+- [[Community 139]] (2 shared connections)
 
 ## Audit Trail
 

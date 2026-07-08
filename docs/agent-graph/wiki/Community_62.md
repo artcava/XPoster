@@ -1,24 +1,24 @@
 # Community 62
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **while()** (2 connections)
+- **if()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **catch()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 55]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **AddPerplexityOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

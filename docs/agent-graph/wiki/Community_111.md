@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed** (2 connections)
-- **XPoster.Models** (2 connections)
+- **PendingContainer.cs** (3 connections)
+- **PendingContainer.cs** (3 connections)
+- **PendingContainer()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

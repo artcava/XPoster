@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
+- **XSender.cs** (6 connections)
+- **XSender()** (2 connections)
 - **if()** (2 connections)
-- **FeedService()** (2 connections)
 
 ## Relationships
 
-- [[Community 88]] (4 shared connections)
+- [[Community 132]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

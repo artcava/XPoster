@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Credentials** (2 connections)
-- **InstagramCredentials.cs** (2 connections)
-- **InstagramCredentials.cs** (2 connections)
+- **XPoster.Models** (2 connections)
+- **TagReplacementOptions.cs** (2 connections)
+- **TagReplacementOptions.cs** (2 connections)
 
 ## Relationships
 

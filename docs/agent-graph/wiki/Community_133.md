@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **OrchestratorFactory.cs** (8 connections)
+- **OrchestratorFactory()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 135]] (3 shared connections)
+- [[Community 105]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -6,10 +6,10 @@
 
 - **IgSender.cs** (6 connections)
 - **IgSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
 - **catch()** (2 connections)
-- **if()** (2 connections)
 - **IgSender()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 - **SendAsync()** (2 connections)
 
 ## Relationships

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **if()** (2 connections)
-- **Uri()** (2 connections)
-- **BlobServiceClient()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 

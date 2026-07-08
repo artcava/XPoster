@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService.cs** (12 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **catch()** (2 connections)
-- **OpenAiService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
+- **IgSenderResilienceTests.cs** (12 connections)
+- **IgSenderResilienceTests.cs** (12 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Uri()** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **new()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **PostWithoutImage()** (2 connections)
 
 ## Relationships
 
