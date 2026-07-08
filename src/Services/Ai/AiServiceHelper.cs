@@ -97,10 +97,10 @@ internal static class AiServiceHelper
 
         return provider switch
         {
-            AiProvider.OpenAi       => ExtractOpenAiBytes(root, provider, logger),
+            AiProvider.OpenAi => ExtractOpenAiBytes(root, provider, logger),
             AiProvider.AzureFoundry => await ExtractAzureFoundryBytesAsync(root, provider, allowedOrigin, httpClient, logger, cancellationToken),
-            AiProvider.FalAi        => await ExtractFalAiBytesAsync(root, provider, httpClient, logger, cancellationToken),
-            _                       => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
+            AiProvider.FalAi => await ExtractFalAiBytesAsync(root, provider, httpClient, logger, cancellationToken),
+            _ => LogAndReturnEmpty(logger, provider, "Image byte extraction is not supported for this provider.")
         };
     }
 

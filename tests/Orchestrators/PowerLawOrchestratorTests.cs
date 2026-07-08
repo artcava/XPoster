@@ -8,18 +8,18 @@ namespace XPoster.Tests.Orchestrators;
 
 public class PowerLawOrchestratorTests
 {
-    private readonly Mock<ISender>                        _mockSender;
-    private readonly Mock<ILogger<PowerLawOrchestrator>>  _mockLogger;
-    private readonly Mock<ICryptoService>                 _mockCryptoService;
-    private readonly Mock<ITimeProvider>                  _mockTimeProvider;
+    private readonly Mock<ISender> _mockSender;
+    private readonly Mock<ILogger<PowerLawOrchestrator>> _mockLogger;
+    private readonly Mock<ICryptoService> _mockCryptoService;
+    private readonly Mock<ITimeProvider> _mockTimeProvider;
 
     public PowerLawOrchestratorTests()
     {
-        _mockSender        = new Mock<ISender>();
+        _mockSender = new Mock<ISender>();
         _mockSender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        _mockLogger        = new Mock<ILogger<PowerLawOrchestrator>>();
+        _mockLogger = new Mock<ILogger<PowerLawOrchestrator>>();
         _mockCryptoService = new Mock<ICryptoService>();
-        _mockTimeProvider  = new Mock<ITimeProvider>();
+        _mockTimeProvider = new Mock<ITimeProvider>();
     }
 
     private PowerLawOrchestrator CreateOrchestrator(IReadOnlyList<ISender>? senders = null) =>
@@ -36,7 +36,7 @@ public class PowerLawOrchestratorTests
     [Fact]
     public async Task GenerateAsync_Should_CreateCorrectMessage_WithActualValue()
     {
-        var fixedDate        = new DateTime(2025, 7, 21);
+        var fixedDate = new DateTime(2025, 7, 21);
         decimal fakeBtcPrice = 65000.00m;
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(fakeBtcPrice);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
@@ -55,14 +55,14 @@ public class PowerLawOrchestratorTests
     [Fact]
     public async Task GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()
     {
-        var fixedDate     = new DateTime(2025, 7, 21);
+        var fixedDate = new DateTime(2025, 7, 21);
         decimal fakePrice = 65000.00m;
         _mockCryptoService.Setup(s => s.GetCryptoValue("BTC")).ReturnsAsync(fakePrice);
         _mockTimeProvider.Setup(t => t.GetCurrentTime()).Returns(fixedDate);
 
         var posts = await CreateOrchestrator().OrchestrateAsync();
 
-        var expectedDays  = (fixedDate.Date - new DateTime(2009, 1, 3)).Days;
+        var expectedDays = (fixedDate.Date - new DateTime(2009, 1, 3)).Days;
         var expectedValue = Math.Pow(10, -17) * Math.Pow(expectedDays, 5.83d);
 
         Assert.Single(posts);

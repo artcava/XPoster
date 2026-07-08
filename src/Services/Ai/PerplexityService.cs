@@ -23,9 +23,9 @@ public class PerplexityService : ITextToTextProvider
         IOptions<PerplexityOptions> options,
         ILogger<PerplexityService> logger)
     {
-        _logger  = logger;
+        _logger = logger;
         _options = options.Value;
-        _client  = httpClientFactory.CreateClient("Perplexity");
+        _client = httpClientFactory.CreateClient("Perplexity");
         _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_options.ApiKey}");
     }
 
@@ -69,8 +69,8 @@ public class PerplexityService : ITextToTextProvider
 
     private object BuildSummaryPayload(string text, int messageMaxLength)
     {
-        var tokenDivisor    = Math.Max(1, _options.SummaryMaxTokensPerChar);
-        var maxTokens       = Math.Max(1, messageMaxLength / tokenDivisor);
+        var tokenDivisor = Math.Max(1, _options.SummaryMaxTokensPerChar);
+        var maxTokens = Math.Max(1, messageMaxLength / tokenDivisor);
         var underCharacters = Math.Max(1, messageMaxLength - _options.SummarySafetyMarginChars);
 
         var systemContent = _options.SummarySystemPromptTemplate
@@ -80,13 +80,13 @@ public class PerplexityService : ITextToTextProvider
 
         return new
         {
-            model       = _options.DeploymentName,
-            messages    = new[]
+            model = _options.DeploymentName,
+            messages = new[]
             {
                 new { role = "system", content = systemContent },
                 new { role = "user",   content = userContent   }
             },
-            max_tokens  = maxTokens,
+            max_tokens = maxTokens,
             temperature = _options.SummaryTemperature
         };
     }
@@ -98,13 +98,13 @@ public class PerplexityService : ITextToTextProvider
 
         return new
         {
-            model       = _options.DeploymentName,
-            messages    = new[]
+            model = _options.DeploymentName,
+            messages = new[]
             {
                 new { role = "system", content = _options.ImagePromptSystemTemplate },
                 new { role = "user",   content = userContent                         }
             },
-            max_tokens  = _options.ImagePromptMaxTokens,
+            max_tokens = _options.ImagePromptMaxTokens,
             temperature = _options.ImagePromptTemperature
         };
     }

@@ -18,9 +18,9 @@ namespace XPoster.Tests.Orchestrators;
 /// </summary>
 public class OrchestratorFactoryTests
 {
-    private readonly Mock<IServiceProvider>                _mockServiceProvider;
-    private readonly Mock<ILogger<OrchestratorFactory>>    _mockLogger;
-    private readonly Mock<ITimeProvider>                   _mockTimeProvider;
+    private readonly Mock<IServiceProvider> _mockServiceProvider;
+    private readonly Mock<ILogger<OrchestratorFactory>> _mockLogger;
+    private readonly Mock<ITimeProvider> _mockTimeProvider;
 
     // ---------------------------------------------------------------------------
     // Helpers: profile builders
@@ -47,8 +47,8 @@ public class OrchestratorFactoryTests
     public OrchestratorFactoryTests()
     {
         _mockServiceProvider = new Mock<IServiceProvider>();
-        _mockLogger          = new Mock<ILogger<OrchestratorFactory>>();
-        _mockTimeProvider    = new Mock<ITimeProvider>();
+        _mockLogger = new Mock<ILogger<OrchestratorFactory>>();
+        _mockTimeProvider = new Mock<ITimeProvider>();
     }
 
     // ---------------------------------------------------------------------------
@@ -56,9 +56,9 @@ public class OrchestratorFactoryTests
     // ---------------------------------------------------------------------------
 
     [Theory]
-    [InlineData(typeof(FeedOrchestrator),     SenderPlatform.LinkedIn)]
-    [InlineData(typeof(FeedOrchestrator),     SenderPlatform.X)]
-    [InlineData(typeof(FeedOrchestrator),     SenderPlatform.DryRun)]
+    [InlineData(typeof(FeedOrchestrator), SenderPlatform.LinkedIn)]
+    [InlineData(typeof(FeedOrchestrator), SenderPlatform.X)]
+    [InlineData(typeof(FeedOrchestrator), SenderPlatform.DryRun)]
     [InlineData(typeof(PowerLawOrchestrator), SenderPlatform.LinkedIn)]
     [InlineData(typeof(PowerLawOrchestrator), SenderPlatform.X)]
     public void Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile(
@@ -187,9 +187,9 @@ public class OrchestratorFactoryTests
         var factory = CreateFactoryWithProfiles(hour, profile);
         factory.Resolve();
 
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)),  Times.Once);
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)),   Times.Once);
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(IgSender)),  Times.Once);
+        _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
+        _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
+        _mockServiceProvider.Verify(sp => sp.GetService(typeof(IgSender)), Times.Once);
     }
 
     // ---------------------------------------------------------------------------
@@ -318,10 +318,10 @@ public class OrchestratorFactoryTests
         var factory = CreateFactoryWithProfiles(10, FeedProfile(10));
         var orchestrator = Assert.IsType<FeedOrchestrator>(factory.Resolve());
 
-        Assert.Contains(SenderPlatform.X,         orchestrator.SupportedPlatforms);
-        Assert.Contains(SenderPlatform.LinkedIn,  orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
-        Assert.Contains(SenderPlatform.DryRun,    orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
     }
 
     [Fact]
@@ -330,9 +330,9 @@ public class OrchestratorFactoryTests
         var factory = CreateFactoryWithProfiles(14, PowerLawProfile(14));
         var orchestrator = Assert.IsType<PowerLawOrchestrator>(factory.Resolve());
 
-        Assert.Contains(SenderPlatform.X,        orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
-        Assert.Contains(SenderPlatform.DryRun,   orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
         Assert.DoesNotContain(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
     }
 
@@ -375,20 +375,20 @@ public class OrchestratorFactoryTests
 
     private void SetupMocksForOrchestratorFactory()
     {
-        var mockXSender      = new Mock<ISender>();
-        var mockInSender     = new Mock<ISender>();
-        var mockIgSender     = new Mock<ISender>();
+        var mockXSender = new Mock<ISender>();
+        var mockInSender = new Mock<ISender>();
+        var mockIgSender = new Mock<ISender>();
         var mockDryRunSender = new Mock<ISender>();
 
         var mockCryptoService = new Mock<ICryptoService>();
-        var mockTimeProvider  = new Mock<ITimeProvider>();
-        var mockFeedService   = new Mock<IFeedService>();
-        var mockTextProvider  = new Mock<ITextToTextProvider>();
+        var mockTimeProvider = new Mock<ITimeProvider>();
+        var mockFeedService = new Mock<IFeedService>();
+        var mockTextProvider = new Mock<ITextToTextProvider>();
         var mockImageProvider = new Mock<ITextToImageProvider>();
 
         var mockLoggerPowerLaw = new Mock<ILogger<PowerLawOrchestrator>>();
-        var mockLoggerFeed     = new Mock<ILogger<FeedOrchestrator>>();
-        var mockLoggerNo       = new Mock<ILogger<NoOrchestrator>>();
+        var mockLoggerFeed = new Mock<ILogger<FeedOrchestrator>>();
+        var mockLoggerNo = new Mock<ILogger<NoOrchestrator>>();
 
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(XSender))).Returns(mockXSender.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(InSender))).Returns(mockInSender.Object);

@@ -92,10 +92,10 @@ public class OrchestratorFactory : IOrchestratorFactory
 
     private ISender? ResolveSender(SenderPlatform platform) => platform switch
     {
-        SenderPlatform.X         => _serviceProvider.GetService(typeof(XSender))      as ISender,
-        SenderPlatform.LinkedIn  => _serviceProvider.GetService(typeof(InSender))     as ISender,
-        SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender))     as ISender,
-        SenderPlatform.DryRun    => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
+        SenderPlatform.X => _serviceProvider.GetService(typeof(XSender)) as ISender,
+        SenderPlatform.LinkedIn => _serviceProvider.GetService(typeof(InSender)) as ISender,
+        SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender)) as ISender,
+        SenderPlatform.DryRun => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
         _ => null
     };
 

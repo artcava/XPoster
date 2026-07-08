@@ -21,12 +21,12 @@ namespace XPoster.Orchestrators;
 /// </remarks>
 public class FeedOrchestrator : BaseOrchestrator
 {
-    private readonly IFeedService              _feedService;
-    private readonly IFeedUrlProvider          _feedUrlProvider;
-    private readonly ITagReplacementProvider   _tagReplacementProvider;
+    private readonly IFeedService _feedService;
+    private readonly IFeedUrlProvider _feedUrlProvider;
+    private readonly ITagReplacementProvider _tagReplacementProvider;
     private readonly ITagReplacementService _tagReplacementService;
-    private readonly ITextToTextProvider?      _textProvider;
-    private readonly ITextToImageProvider?     _imageProvider;
+    private readonly ITextToTextProvider? _textProvider;
+    private readonly ITextToImageProvider? _imageProvider;
     private bool _sendIt = true;
 
     /// <inheritdoc/>
@@ -57,22 +57,22 @@ public class FeedOrchestrator : BaseOrchestrator
     /// <param name="textProvider">The AI text provider used to generate summaries and image prompts.</param>
     /// <param name="imageProvider">The AI image provider used to generate post images. Optional.</param>
     public FeedOrchestrator(
-        IReadOnlyList<ISender>      senders,
-        ILogger<FeedOrchestrator>   logger,
-        IFeedService                feedService,
-        IFeedUrlProvider            feedUrlProvider,
-        ITagReplacementProvider     tagReplacementProvider,
-        ITagReplacementService      tagReplacementService,
-        ITextToTextProvider?        textProvider,
-        ITextToImageProvider?       imageProvider = null)
+        IReadOnlyList<ISender> senders,
+        ILogger<FeedOrchestrator> logger,
+        IFeedService feedService,
+        IFeedUrlProvider feedUrlProvider,
+        ITagReplacementProvider tagReplacementProvider,
+        ITagReplacementService tagReplacementService,
+        ITextToTextProvider? textProvider,
+        ITextToImageProvider? imageProvider = null)
         : base(senders, logger)
     {
-        _feedService            = feedService;
-        _feedUrlProvider        = feedUrlProvider;
+        _feedService = feedService;
+        _feedUrlProvider = feedUrlProvider;
         _tagReplacementProvider = tagReplacementProvider;
-        _tagReplacementService  = tagReplacementService;
-        _textProvider           = textProvider;
-        _imageProvider          = imageProvider;
+        _tagReplacementService = tagReplacementService;
+        _textProvider = textProvider;
+        _imageProvider = imageProvider;
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public class FeedOrchestrator : BaseOrchestrator
         // Step 2 — select primary sender (widest limit) and generate base summary
         ct.ThrowIfCancellationRequested();
         var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
-        var primarySender  = orderedSenders[0];
+        var primarySender = orderedSenders[0];
         var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, ct);
         if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
@@ -128,7 +128,7 @@ public class FeedOrchestrator : BaseOrchestrator
         // previousSummary tracks the last successfully generated summary.
         // Each sender reuses it when it fits; otherwise the AI re-summarises
         // from the full feedContent to preserve maximum context.
-        var result         = new Dictionary<SenderPlatform, Post?>();
+        var result = new Dictionary<SenderPlatform, Post?>();
         var previousSummary = rawBaseSummary;
         foreach (var sender in orderedSenders)
         {
@@ -178,7 +178,7 @@ public class FeedOrchestrator : BaseOrchestrator
             return string.Empty;
         }
 
-        var end   = DateTimeOffset.UtcNow;
+        var end = DateTimeOffset.UtcNow;
         var start = end.AddDays(-1);
         var replacementKeys = _tagReplacementProvider.GetReplacements().Keys;
 

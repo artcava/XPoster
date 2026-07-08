@@ -89,10 +89,10 @@ public class OptionsExtensionsTests
             // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
             var config = BuildConfig(AzureFoundryOptionsExtensions.SectionName, new()
             {
-                ["Endpoint"]           = "https://myfoundry.openai.azure.com",
-                ["ApiKey"]             = "az-key",
-                ["DeploymentName"]     = "gpt-4.1-nano",
-                ["ImageDeploymentName"]= "gpt-image-1",
+                ["Endpoint"] = "https://myfoundry.openai.azure.com",
+                ["ApiKey"] = "az-key",
+                ["DeploymentName"] = "gpt-4.1-nano",
+                ["ImageDeploymentName"] = "gpt-image-1",
             });
 
             using var provider = BuildProvider(config,
@@ -133,8 +133,8 @@ public class OptionsExtensionsTests
             // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
             var config = BuildConfig(DeepSeekOptionsExtensions.SectionName, new()
             {
-                ["Endpoint"]       = "https://api.deepseek.com",
-                ["ApiKey"]         = "ds-key",
+                ["Endpoint"] = "https://api.deepseek.com",
+                ["ApiKey"] = "ds-key",
                 ["DeploymentName"] = "deepseek-chat",
             });
 
@@ -176,7 +176,7 @@ public class OptionsExtensionsTests
             // Validator requires ApiKey and ModelId to be non-empty.
             var config = BuildConfig(FalAiOptionsExtensions.SectionName, new()
             {
-                ["ApiKey"]  = "fal-key",
+                ["ApiKey"] = "fal-key",
                 ["ModelId"] = "fal-ai/flux/schnell",
             });
 
@@ -218,8 +218,8 @@ public class OptionsExtensionsTests
             // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
             var config = BuildConfig(PerplexityOptionsExtensions.SectionName, new()
             {
-                ["Endpoint"]       = "https://api.perplexity.ai",
-                ["ApiKey"]         = "px-key",
+                ["Endpoint"] = "https://api.perplexity.ai",
+                ["ApiKey"] = "px-key",
                 ["DeploymentName"] = "sonar",
             });
 

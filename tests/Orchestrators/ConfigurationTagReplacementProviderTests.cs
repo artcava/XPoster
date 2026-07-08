@@ -16,7 +16,7 @@ public class ConfigurationTagReplacementProviderTests
             { "bitcoin", "#Bitcoin" },
             { "btc",     "#BTC" }
         };
-        var options  = Options.Create(new TagReplacementOptions { Replacements = expected });
+        var options = Options.Create(new TagReplacementOptions { Replacements = expected });
         var provider = new ConfigurationTagReplacementProvider(options);
 
         // ACT
@@ -25,7 +25,7 @@ public class ConfigurationTagReplacementProviderTests
         // ASSERT
         Assert.Equal(2, result.Count);
         Assert.Equal("#Bitcoin", result["bitcoin"]);
-        Assert.Equal("#BTC",     result["btc"]);
+        Assert.Equal("#BTC", result["btc"]);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class ConfigurationTagReplacementProviderTests
             { "blockchain", "#Blockchain" },
             { "fed",        "#FED"        }
         };
-        var options  = Options.Create(new TagReplacementOptions { Replacements = replacements });
+        var options = Options.Create(new TagReplacementOptions { Replacements = replacements });
         var provider = new ConfigurationTagReplacementProvider(options);
 
         // ACT
@@ -57,7 +57,7 @@ public class ConfigurationTagReplacementProviderTests
     public void GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()
     {
         // ARRANGE
-        var options  = Options.Create(new TagReplacementOptions { Replacements = null! });
+        var options = Options.Create(new TagReplacementOptions { Replacements = null! });
         var provider = new ConfigurationTagReplacementProvider(options);
 
         // ACT
@@ -72,7 +72,7 @@ public class ConfigurationTagReplacementProviderTests
     public void GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()
     {
         // ARRANGE
-        var options  = Options.Create(new TagReplacementOptions { Replacements = new Dictionary<string, string>() });
+        var options = Options.Create(new TagReplacementOptions { Replacements = new Dictionary<string, string>() });
         var provider = new ConfigurationTagReplacementProvider(options);
 
         // ACT
@@ -94,7 +94,7 @@ public class ConfigurationTagReplacementProviderTests
     public void GetReplacements_Should_ReturnReadOnlyDictionary()
     {
         // ARRANGE
-        var options  = Options.Create(new TagReplacementOptions { Replacements = new Dictionary<string, string> { { "bitcoin", "#Bitcoin" } } });
+        var options = Options.Create(new TagReplacementOptions { Replacements = new Dictionary<string, string> { { "bitcoin", "#Bitcoin" } } });
         var provider = new ConfigurationTagReplacementProvider(options);
 
         // ACT

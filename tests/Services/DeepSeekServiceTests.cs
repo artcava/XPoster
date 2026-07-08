@@ -21,13 +21,13 @@ public class DeepSeekServiceTests
 
         var options = Options.Create(opts ?? new DeepSeekOptions
         {
-            Endpoint       = "https://api.deepseek.com",
-            ApiKey         = "fake-key",
+            Endpoint = "https://api.deepseek.com",
+            ApiKey = "fake-key",
             DeploymentName = "deepseek-chat",
-            SummarySystemPromptTemplate  = "Keep under {MaxChars} chars.",
-            SummaryUserPromptTemplate    = "Summarize: {Text}",
-            ImagePromptSystemTemplate    = "You generate image prompts.",
-            ImagePromptUserTemplate      = "Image for: {Summary}"
+            SummarySystemPromptTemplate = "Keep under {MaxChars} chars.",
+            SummaryUserPromptTemplate = "Summarize: {Text}",
+            ImagePromptSystemTemplate = "You generate image prompts.",
+            ImagePromptUserTemplate = "Image for: {Summary}"
         });
 
         return new DeepSeekService(factory.Object, options, loggerMock.Object);

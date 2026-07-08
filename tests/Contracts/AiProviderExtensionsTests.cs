@@ -5,12 +5,12 @@ namespace XPoster.Tests.Contracts;
 public class AiProviderExtensionsTests
 {
     [Theory]
-    [InlineData(AiProvider.None,         "None")]
-    [InlineData(AiProvider.OpenAi,       "OpenAI")]
-    [InlineData(AiProvider.Perplexity,   "Perplexity")]
+    [InlineData(AiProvider.None, "None")]
+    [InlineData(AiProvider.OpenAi, "OpenAI")]
+    [InlineData(AiProvider.Perplexity, "Perplexity")]
     [InlineData(AiProvider.AzureFoundry, "Azure Foundry")]
-    [InlineData(AiProvider.DeepSeek,     "DeepSeek")]
-    [InlineData(AiProvider.FalAi,        "fal.ai")]
+    [InlineData(AiProvider.DeepSeek, "DeepSeek")]
+    [InlineData(AiProvider.FalAi, "fal.ai")]
     public void GetLabel_KnownProvider_ReturnsDescriptionAttributeValue(AiProvider provider, string expected)
     {
         Assert.Equal(expected, provider.GetLabel());
@@ -25,9 +25,9 @@ public class AiProviderExtensionsTests
     }
 
     [Theory]
-    [InlineData(AiProvider.OpenAi,       "OpenAI")]
+    [InlineData(AiProvider.OpenAi, "OpenAI")]
     [InlineData(AiProvider.AzureFoundry, "Azure Foundry")]
-    [InlineData(AiProvider.FalAi,        "fal.ai")]
+    [InlineData(AiProvider.FalAi, "fal.ai")]
     public void GetLabel_DescriptionDiffersFromEnumName(AiProvider provider, string label)
     {
         // Ensures Description attribute is read, not Enum.ToString()

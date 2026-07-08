@@ -6,13 +6,13 @@ public class PerplexityOptionsValidatorTests
 {
     private static PerplexityOptions ValidOptions() => new()
     {
-        Endpoint                    = "https://api.perplexity.ai",
-        ApiKey                      = "my-key",
-        DeploymentName              = "sonar",
+        Endpoint = "https://api.perplexity.ai",
+        ApiKey = "my-key",
+        DeploymentName = "sonar",
         SummarySystemPromptTemplate = "Keep under {MaxChars} chars.",
-        SummaryUserPromptTemplate   = "Summarize: {Text}",
-        ImagePromptSystemTemplate   = "You generate image prompts.",
-        ImagePromptUserTemplate     = "Image for: {Summary}"
+        SummaryUserPromptTemplate = "Summarize: {Text}",
+        ImagePromptSystemTemplate = "You generate image prompts.",
+        ImagePromptUserTemplate = "Image for: {Summary}"
     };
 
     private static readonly PerplexityOptionsValidator Validator = new();
@@ -113,8 +113,8 @@ public class PerplexityOptionsValidatorTests
     public void Validate_WithMultipleInvalidFields_ReturnsAllFailures()
     {
         var opts = ValidOptions();
-        opts.Endpoint       = string.Empty;
-        opts.ApiKey         = string.Empty;
+        opts.Endpoint = string.Empty;
+        opts.ApiKey = string.Empty;
         opts.DeploymentName = string.Empty;
 
         var result = Validator.Validate(null, opts);

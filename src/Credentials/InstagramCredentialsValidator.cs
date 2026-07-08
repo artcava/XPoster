@@ -23,7 +23,7 @@ public class InstagramCredentialsValidator : IValidateOptions<InstagramCredentia
 
         if (string.IsNullOrWhiteSpace(options.InstagramAccessToken))
             failures.Add($"{nameof(InstagramCredentials.InstagramAccessToken)} is required.");
-            
+
         return failures.Count > 0
             ? ValidateOptionsResult.Fail(failures)
             : ValidateOptionsResult.Success;

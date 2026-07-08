@@ -75,7 +75,7 @@ public class DefaultSlotProfileProviderTests
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.NotEqual(profile.TextProvider, profile.ImageProvider);
-        Assert.Equal(AiProvider.OpenAi,       profile.TextProvider);
+        Assert.Equal(AiProvider.OpenAi, profile.TextProvider);
         Assert.Equal(AiProvider.AzureFoundry, profile.ImageProvider);
     }
 
@@ -85,7 +85,7 @@ public class DefaultSlotProfileProviderTests
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
-        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X, profile.SenderPlatforms);
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class DefaultSlotProfileProviderTests
 
         Assert.Equal(typeof(PowerLawOrchestrator), profile.OrchestratorType);
         Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
-        Assert.Contains(SenderPlatform.X,        profile.SenderPlatforms);
+        Assert.Contains(SenderPlatform.X, profile.SenderPlatforms);
     }
 
     [Fact]

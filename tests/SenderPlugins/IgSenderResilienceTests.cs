@@ -88,7 +88,7 @@ public class IgSenderResilienceTests
 
         _blobStorageMock
             .Setup(x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult(new BlobUploadResult( 
+            .Returns(Task.FromResult(new BlobUploadResult(
                 new Uri("https://storage.example.com/xposter-images/blob1.jpg?sig=abc"), "blob1.jpg")));
 
         Assert.False(await BuildSender(factoryMock.Object).SendAsync(PostWithImage()));

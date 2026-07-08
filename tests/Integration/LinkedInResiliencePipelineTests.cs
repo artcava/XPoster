@@ -45,10 +45,10 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
         var provider = BuildProviderWithHandler(
             "LinkedIn",
             handler,
-            maxRetryAttempts:    1,
-            retryEnabled:        false,
+            maxRetryAttempts: 1,
+            retryEnabled: false,
             breakDurationSeconds: 3600,
-            minimumThroughput:   2);
+            minimumThroughput: 2);
         var client = provider.GetRequiredService<IHttpClientFactory>().CreateClient("LinkedIn");
         client.BaseAddress = new Uri("https://api.linkedin.com");
 
@@ -103,11 +103,11 @@ public sealed class LinkedInResiliencePipelineTests : PollyIntegrationTestBase
             options.Retry.ShouldHandle = args => ValueTask.FromResult(
                 args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests
                 || args.Outcome.Exception is not null);
-            options.Retry.MaxRetryAttempts          = 3;
-            options.Retry.Delay                     = TimeSpan.FromSeconds(2);
-            options.AttemptTimeout.Timeout          = TimeSpan.FromSeconds(30);
-            options.TotalRequestTimeout.Timeout     = TimeSpan.FromSeconds(180);
-            options.CircuitBreaker.BreakDuration    = TimeSpan.FromSeconds(30);
+            options.Retry.MaxRetryAttempts = 3;
+            options.Retry.Delay = TimeSpan.FromSeconds(2);
+            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
+            options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(180);
+            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
             options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(70);
         });
         httpClientBuilder.ConfigurePrimaryHttpMessageHandler(() => handler);
