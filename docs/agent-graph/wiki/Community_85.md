@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **PublishContainerAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

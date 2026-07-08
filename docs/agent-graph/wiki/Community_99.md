@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **PostAsync()** (2 connections)
+- **IOrchestrator** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

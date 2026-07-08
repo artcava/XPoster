@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **Post.cs** (3 connections)
-- **Post.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **Post** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **XPoster.Contracts** (2 connections)
+- **BlobUploadResult()** (2 connections)
 
 ## Relationships
 

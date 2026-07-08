@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **Uri()** (2 connections)
-- **BlobServiceClient()** (2 connections)
-- **if()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **ITextToTextProvider** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 

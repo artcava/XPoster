@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITextToImageProvider.cs** (4 connections)
-- **ITextToImageProvider.cs** (4 connections)
-- **GenerateImageAsync()** (2 connections)
-- **ITextToImageProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **CreateValidJpeg()** (2 connections)
+- **CreateValidPng()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 

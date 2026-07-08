@@ -1,26 +1,26 @@
 # Community 50
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **params()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **CreateTimerInfo()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **PendingContainer()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 28]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
