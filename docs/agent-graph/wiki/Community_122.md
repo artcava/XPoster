@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (7 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **BuildFactory()** (2 connections)
+- **params()** (2 connections)
 
 ## Relationships
 
-- [[Community 87]] (4 shared connections)
+- [[Community 104]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

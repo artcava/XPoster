@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **BaseOrchestrator()** (2 connections)
+- **PostAsync()** (2 connections)
+- **XPoster.Abstraction** (2 connections)
 
 ## Relationships
 
-- [[Community 60]] (6 shared connections)
+- [[Community 132]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

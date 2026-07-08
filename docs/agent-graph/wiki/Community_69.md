@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (5 connections)
-- **FalAiOptionsValidator.cs** (5 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITextToTextProvider** (2 connections)
 
 ## Relationships
 

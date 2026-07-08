@@ -1,20 +1,20 @@
 # Community 52
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **XPoster** (2 connections)
-- **XFunction()** (2 connections)
-- **catch()** (2 connections)
-- **Run()** (2 connections)
-- **if()** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 91]] (4 shared connections)
 
 ## Audit Trail
 

@@ -1,20 +1,20 @@
 # Community 57
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **XFunctionMissingBranchTests.cs** (6 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionMissingBranchTests()** (2 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **new()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 92]] (4 shared connections)
 
 ## Audit Trail
 

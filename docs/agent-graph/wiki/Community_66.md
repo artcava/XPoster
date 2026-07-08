@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (5 connections)
-- **ITextToTextProvider.cs** (5 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITextToTextProvider** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **Uri()** (2 connections)
+- **if()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
-- **catch()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 53]] (6 shared connections)
+- [[Community 122]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
