@@ -69,6 +69,7 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 
     // ── Scheduler ────────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
+    "ContainerPollingSchedule": "0 */2 * * * *",
     "ForceHour": "",
     "EnableDryRunSlot": "false",
 
@@ -78,13 +79,6 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // Add additional entries as FeedOptions__Urls__2, __3, etc.
     // In Azure App Settings use the same flat key convention.
     // At least one URL is required for FeedOrchestrator to produce content.
-
-    // ── Feed HTTP Client (resilience) ─────────────────────────────────────
-    "FeedOptions__AttemptTimeoutSeconds": "10",
-    "FeedOptions__RetryCount": "3",
-    "FeedOptions__CircuitBreakerFailureThreshold": "0.5",
-    "FeedOptions__CircuitBreakerSamplingDurationSeconds": "30",
-    "FeedOptions__CircuitBreakerBreakDurationSeconds": "15",
 
     // ── Tag Replacements ─────────────────────────────────────────
     // Optional. Maps plain words in the AI summary to hashtag equivalents.
@@ -293,18 +287,6 @@ Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementat
 2. **Retry** — retries up to `RetryCount` times with exponential back-off on transient failures (network errors, 5xx, 429).
 3. **Circuit breaker** — opens the circuit when the failure ratio over `CircuitBreakerSamplingDurationSeconds` exceeds `CircuitBreakerFailureThreshold`, and keeps it open for `CircuitBreakerBreakDurationSeconds` before allowing a probe request.
 
-All five resilience settings are optional. When omitted the values shown in the **Default** column are used.
-
-| Variable | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `FeedOptions__AttemptTimeoutSeconds` | int | No | `10` | Per-attempt HTTP timeout in seconds. Applied before the retry layer. |
-| `FeedOptions__RetryCount` | int | No | `3` | Maximum number of retry attempts on transient failures. Set to `0` to disable retries. |
-| `FeedOptions__CircuitBreakerFailureThreshold` | double | No | `0.5` | Failure ratio (0.0–1.0) that triggers the circuit breaker within the sampling window. |
-| `FeedOptions__CircuitBreakerSamplingDurationSeconds` | int | No | `30` | Sliding window duration in seconds over which the failure ratio is measured. |
-| `FeedOptions__CircuitBreakerBreakDurationSeconds` | int | No | `15` | Duration in seconds the circuit stays open before allowing a single probe request. |
-
-> **Tuning guidance:** For feeds served by CDNs or well-maintained public endpoints the defaults are appropriate. For slow or unreliable internal feeds, increase `AttemptTimeoutSeconds` and reduce `RetryCount` to avoid long tail latencies. For high-frequency schedules where a broken feed should not block the pipeline, lower `CircuitBreakerFailureThreshold` to trip the breaker faster.
-
 ---
 
 ## Tag Replacements
@@ -355,8 +337,6 @@ XPoster uses a **capability-based** AI provider model. Each `AiProvider` value i
 | `FalAi` | ❌ | ✅ | Image only — only valid for orchestrators that handle null `textProvider` |
 | `None` | ❌ | ❌ | No AI — reserved; do not use in production slots |
 
-> **Removed value:** `DeepSeekWithFal` has been removed. Any slot profile previously referencing `AiProvider.DeepSeekWithFal` must be updated to `AiProvider.DeepSeek` (text) or `AiProvider.FalAi` (image) as appropriate.
-
 ### Invalid slot combinations
 
 The following combinations will cause `FeedOrchestrator` to surface an explicit error at the point of use (not silently):
@@ -393,25 +373,25 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 
 | Secret name | Description |
 |---|---|
-| `XApiKey` | Twitter App API Key (Consumer Key). |
-| `XApiSecret` | Twitter App API Secret (Consumer Secret). |
-| `XAccessToken` | User Access Token (OAuth 1.0a). |
-| `XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
+| `XCredentials--XApiKey` | Twitter App API Key (Consumer Key). |
+| `XCredentials--XApiSecret` | Twitter App API Secret (Consumer Secret). |
+| `XCredentials--XAccessToken` | User Access Token (OAuth 1.0a). |
+| `XCredentials--XAccessTokenSecret` | User Access Token Secret (OAuth 1.0a). |
 
 #### LinkedIn
 
 | Secret name | Required | Description |
 |---|---|---|
-| `LinkedInAccessToken` | ✅ Yes | LinkedIn OAuth 2.0 access token. **Expires every 60 days** — manual rotation currently required. |
-| `LinkedInOwnerCode` | ⚠️ One of these | Numeric LinkedIn person ID. |
-| `LinkedInOrgId` | ⚠️ One of these | Numeric LinkedIn organization ID. Takes precedence over `LinkedInOwnerCode` when set. |
+| `LinkedInCredentials--LinkedInAccessToken` | ✅ Yes | LinkedIn OAuth 2.0 access token. **Expires every 60 days** — manual rotation currently required. |
+| `LinkedInCredentials--LinkedInOwnerCode` | ⚠️ One of these | Numeric LinkedIn person ID. |
+| `LinkedInCredentials--LinkedInOrgId` | ⚠️ One of these | Numeric LinkedIn organization ID. Takes precedence over `LinkedInOwnerCode` when set. |
 
 #### Instagram
 
 | Secret name | Description |
 |---|---|
-| `InstagramAccessToken` | Long-lived Instagram Graph API access token. |
-| `InstagramAccountId` | Numeric Instagram Business Account ID. |
+| `InstagramCredentials--InstagramAccessToken` | Long-lived Instagram Graph API access token. |
+| `InstagramCredentials--InstagramAccountId` | Numeric Instagram Business Account ID. |
 
 ---
 
@@ -428,6 +408,7 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "CronSchedule": "*/30 * * * * *",
+    "ContainerPollingSchedule": "0 */2 * * * *",
     "EnableDryRunSlot": "true",
     "ForceHour": "9",
     "FeedOptions__Urls__0": "https://example.com/feed/rss",
@@ -517,6 +498,8 @@ Configuration bound from the `OpenAI` prefix using double-underscore notation.
 | `OpenAI__ImagePromptMaxTokens` | int | `60` | Max tokens for image prompt generation. |
 | `OpenAI__ImagePromptTemperature` | double | `0.7` | Temperature for image prompt generation. |
 
+> See [docs/integrations/setup-openai.md](integrations/setup-openai.md) for the full setup guide.
+
 ---
 
 ## AI — Azure AI Foundry (`AiProvider = AzureFoundry`)
@@ -534,6 +517,8 @@ Configuration bound from the `AzureFoundry` prefix.
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block above, using the `AzureFoundry__` prefix.
 
+> See [docs/integrations/setup-azure-foundry.md](integrations/setup-azure-foundry.md) for the full setup guide.
+
 ---
 
 ## AI — DeepSeek (`AiProvider = DeepSeek`)
@@ -550,7 +535,7 @@ Configuration bound from the `DeepSeek` prefix using double-underscore notation.
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block, using the `DeepSeek__` prefix.
 
-> **Migration note:** `AiProvider.DeepSeekWithFal` has been removed. If you previously used `DeepSeekWithFal` to combine DeepSeek text with fal.ai image generation, assign `AiProvider.DeepSeek` to text slots and `AiProvider.FalAi` to image slots independently in `DefaultSlotProfileProvider`.
+> See [docs/integrations/setup-deepseek.md](integrations/setup-deepseek.md) for the full setup guide.
 
 ---
 
@@ -567,13 +552,15 @@ Configuration bound from the `FalAi` prefix using double-underscore notation.
 | `FalAi__ImageSize` | string | No | `landscape_4_3` | Image output size preset. |
 | `FalAi__NumInferenceSteps` | int | No | `4` | Number of diffusion steps. |
 
+> See [docs/integrations/setup-falai.md](integrations/setup-falai.md) for the full setup guide.
+
 ---
 
 ## AI — Perplexity (`AiProvider = Perplexity`)
 
 Configuration bound from the `Perplexity` prefix using double-underscore notation.
 
-**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image; `GenerateImageAsync` has been removed)
+**Capabilities:** `ITextToTextProvider` ✅ · `ITextToImageProvider` ❌ (text-only — slots using this provider publish without image)
 
 ### Connection
 
