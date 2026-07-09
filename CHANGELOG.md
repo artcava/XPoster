@@ -11,6 +11,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.8] - 2026-07-09
+
+### Added
+- **`SenderPlatform.Facebook`** added to `src/Contracts/Enums.cs`: enum value enabling `OrchestratorFactory` and slot profiles to reference the Facebook platform ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`FacebookCredentials`** typed credentials class (`src/Credentials/FacebookCredentials.cs`): properties `FacebookPageId` and `FacebookAccessToken`; `SectionName = "FacebookCredentials"` aligned to Key Vault secret naming convention ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`FacebookCredentialsValidator`** (`src/Credentials/FacebookCredentialsValidator.cs`): `IValidateOptions<FacebookCredentials>` startup validator for both required properties ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`FacebookCredentialsExtensions.AddFacebookCredentials()`** (`src/Credentials/FacebookCredentialsExtensions.cs`): encapsulates `Configure<FacebookCredentials>` binding and validator registration; called from `Program.cs` ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`FbSender`** (`src/SenderPlugins/FbSender.cs`): new `ISender` implementation publishing posts to a Facebook Page via the Meta Graph API; text-only posts use `/{page_id}/feed`, image posts use `/{page_id}/photos`; `Platform` returns `SenderPlatform.Facebook`; `MessageMaxLenght` returns `60000` ([#224](https://github.com/artcava/XPoster/issues/224))
+- **Image format validation in `FbSender`**: rejects SVG and unsupported MIME types before calling the API; emits `LogWarning` and returns `false` — prevents Meta error `1366046` ([#224](https://github.com/artcava/XPoster/issues/224))
+- **Named HTTP client `"Facebook"`** registered in `HttpClientExtensions.AddHttpClients()` via `AddResilientHttpClient`: standard Polly resilience pipeline (per-attempt timeout, retry, circuit breaker) active — handles HTTP 429 and transient errors ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`FbSenderTests`** (`tests/SenderPlugins/FbSenderTests.cs`): 11 test cases covering null-post guard, text-only and image post paths, SVG and unsupported image format rejection, API 200/400 response handling, 429 rate-limit handling without raw response logging, `access_token` never in request body, and missing `PageId` guard ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`docs/integrations/SenderPlugins/setup-facebook.md`** (new file): complete integration guide covering prerequisites, `FacebookPageId` retrieval, permanent Page Access Token generation (`pages_manage_posts`, `pages_read_engagement`), Token Debugger verification, Key Vault secret storage, `curl` verification steps, Token Management table, and Troubleshooting table ([#224](https://github.com/artcava/XPoster/issues/224))
+- New Key Vault secrets documented: `FacebookCredentialsFacebookPageId`, `FacebookCredentialsFacebookAccessToken` ([#224](https://github.com/artcava/XPoster/issues/224))
+
+### Changed
+- **`OrchestratorFactory.ResolveSender`** (`src/Orchestrators/OrchestratorFactory.cs`): `SenderPlatform.Facebook` arm added to the platform switch, resolving `FbSender` from DI ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`DefaultSlotProfileProvider`**: `SenderPlatform.Facebook` added to the hour-6 fan-out slot after staging validation ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`Program.cs`**: `AddFacebookCredentials(builder.Configuration)` and `AddTransient<FbSender>()` registered ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`docs/integrations/SenderPlugins/setup-instagram.md`**: placeholder content replaced with the full Instagram setup guide; Facebook Page-specific steps delegated to `setup-facebook.md`; token refresh warning removed (long-lived non-expiring token in use) ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`docs/configuration.md`**: `FacebookCredentials:FacebookPageId` and `FacebookCredentials:FacebookAccessToken` added to the Key Vault Required Secrets table ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`docs/architecture.md`**: `FbSender` added to the Sender Plugins table with dependencies (`IHttpClientFactory`, `IOptions<FacebookCredentials>`); noted that `FbSender` does not depend on `IBlobStorageService` or `IContainerStateStore` ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`README.md`**: sender status table updated with Facebook row ([#224](https://github.com/artcava/XPoster/issues/224))
+- **`tests/README.md`**: `FbSenderTests` added to the test inventory ([#224](https://github.com/artcava/XPoster/issues/224))
+
+---
+
 ## [0.1.7] - 2026-07-08
 
 ### Added
@@ -287,7 +313,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.7...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.8...HEAD
+[0.1.8]: https://github.com/artcava/XPoster/compare/v0.1.7...v0.1.8
 [0.1.7]: https://github.com/artcava/XPoster/compare/v0.1.6...v0.1.7
 [0.1.6]: https://github.com/artcava/XPoster/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/artcava/XPoster/compare/v0.1.4...v0.1.5
