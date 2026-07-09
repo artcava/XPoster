@@ -15,7 +15,7 @@ XPoster uses a **unit-first** approach:
 | Orchestrators (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) | Unit | Verify content-production logic in isolation, with all external services mocked. Fan-out paths verify that `OrchestrateAsync` returns the correct `IReadOnlyDictionary<SenderPlatform, Post?>` per configured sender list |
 | Providers (`ConfigurationFeedUrlProvider`, `ConfigurationTagReplacementProvider`) | Unit | Verify config-backed provider contract: correct return value from bound `IOptions`, empty-collection on absent/null config, `ArgumentNullException` on null options |
 | Services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `FeedService`, `CryptoService`, `AiServiceHelper`) | Unit | Verify transformation and parsing logic; mock HTTP calls |
-| Sender plugins (`XSender`, `InSender`, `IgSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client. Sender credentials are injected via `IOptions<TCredentials>` and bound from configuration — no `IKeyVaultService` mock required. `DryRunSender` additionally verifies the null-guard path and that no outbound social API call is made |
+| Sender plugins (`XSender`, `InSender`, `IgSender`, `FbSender`, `DryRunSender`) | Unit | Verify request construction and error handling; mock the underlying API client. Sender credentials are injected via `IOptions<TCredentials>` and bound from configuration — no `IKeyVaultService` mock required. `DryRunSender` additionally verifies the null-guard path and that no outbound social API call is made |
 | `OrchestratorFactory` | Unit | Verify correct orchestrator and sender list selection per hour slot; verify fan-out slot resolves multiple senders in declared order |
 | `BaseOrchestrator.PostAsync` | Unit | Verify parallel dispatch to all senders; verify partial failure logging; verify full success / full failure outcomes |
 | Polly resilience pipelines | Integration | Verify retry, circuit-breaker, and attempt-timeout policies end-to-end using a real `IServiceProvider`; innermost `HttpMessageHandler` replaced with a test double — no outbound network calls |
@@ -38,83 +38,93 @@ XPoster uses a **unit-first** approach:
 
 ## 3. Test Structure
 
-One test file per production class, mirroring the `src/` directory structure. The folders below reflect the layout after the [issue #186](https://github.com/artcava/XPoster/issues/186) restructure.
+One test file per production class, mirroring the `src/` directory structure. The folders below reflect the layout after the [issue #224](https://github.com/artcava/XPoster/issues/224) restructure.
 
 ```
 tests/
 ├── XPoster.Tests.csproj
 ├── XFunctionTests.cs
 ├── XFunctionMissingBranchTests.cs
-├── Contracts/                                    # mirrors src/Contracts/ and src/Abstraction/
-│   ├── AiProviderExtensionsTests.cs              # XPoster.Contracts — AiProviderExtensions enum extension
-│   └── BaseOrchestratorTests.cs                  # XPoster.Abstraction — BaseOrchestrator abstract contracts (incl. PostAsync fan-out)
+├── XPosterContainerPollingFunctionTests.cs
+├── Abstraction/
+│   ├── ScheduledOrchestrationProfileTests.cs
+├── Contracts/
+│   ├── AiProviderExtensionsTests.cs
+│   └── BaseOrchestratorTests.cs
 ├── Helpers/
-│   └── ResilienceTestHelpers.cs                  # shared HTTP mock helpers for resilience tests
-├── Orchestrators/                                # mirrors src/Orchestrators/
-│   ├── AiServiceFactoryTests.cs                  # AiServiceFactory — provider resolution by AiProvider enum (includes Perplexity case)
-│   ├── ConfigurationFeedUrlProviderTests.cs      # ConfigurationFeedUrlProvider — URL list from config
-│   ├── ConfigurationTagReplacementProviderTests.cs  # ConfigurationTagReplacementProvider — replacement map from config (#216)
-│   ├── FeedOrchestratorFanOutTests.cs            # FeedOrchestrator — multi-sender fan-out paths (#176)
-│   ├── FeedOrchestratorFeedUrlProviderTests.cs   # FeedOrchestrator — IFeedUrlProvider integration paths
-│   ├── FeedOrchestratorTests.cs                  # FeedOrchestrator — main happy/failure paths + #216 new scenarios
-│   ├── NoOrchestratorTests.cs                    # NoOrchestrator — null-object contract
-│   ├── OrchestratorFactoryFanOutTests.cs         # OrchestratorFactory — multi-sender slot resolution, ordering rule (#176)
-│   ├── OrchestratorFactoryTests.cs               # OrchestratorFactory + SlotProfileProvider behaviour
-│   └── PowerLawOrchestratorTests.cs              # PowerLawOrchestrator — price/model computation
+│   ├── ImageTestData.cs
+│   └── ResilienceTestHelpers.cs
 ├── Integration/
-│   ├── PollyIntegrationTestBase.cs
-│   ├── LinkedInResiliencePipelineTests.cs
-│   ├── InstagramResiliencePipelineTests.cs
 │   ├── AiClientsResiliencePipelineTests.cs
-│   └── CaptureLoggerProvider.cs
+│   ├── CaptureLoggerProvider.cs
+│   ├── InstagramResiliencePipelineTests.cs
+│   ├── LinkedInResiliencePipelineTests.cs
+│   └── PollyIntegrationTestBase.cs
 ├── Models/
+│   ├── AzureFoundryOptionsTests.cs
 │   ├── AzureFoundryOptionsValidatorTests.cs
 │   ├── DeepSeekOptionsTests.cs
 │   ├── DeepSeekOptionsValidatorTests.cs
 │   ├── FalAiOptionsValidatorTests.cs
 │   ├── ModelsTests.cs
 │   ├── OpenAiOptionsValidatorTests.cs
-│   ├── PerplexityOptionsValidatorTests.cs        # PerplexityOptions — required fields, placeholder validation
+│   ├── OptionsExtensionsTests.cs
+│   ├── PerplexityOptionsValidatorTests.cs
 │   ├── PostMissingBranchTests.cs
 │   └── RSSFeedMissingBranchTests.cs
+├── Orchestrators/
+│   ├── ConfigurationFeedUrlProviderTests.cs
+│   ├── ConfigurationTagReplacementProviderTests.cs
+│   ├── DefaultSlotProfileProviderTests.cs
+│   ├── FeedOrchestratorFeedUrlProviderTests.cs
+│   ├── FeedOrchestratorTests.cs
+│   ├── NoOrchestratorTests.cs
+│   ├── OrchestratorFactoryTests.cs
+│   └── PowerLawOrchestratorTests.cs
 ├── SenderPlugins/
 │   ├── DryRunSenderTests.cs
+│   ├── FbSenderImageFlowTests.cs
+│   ├── FbSenderResilienceTests.cs
+│   ├── FbSenderSendAsyncTests.cs
+│   ├── FbSenderTests.cs
 │   ├── IgSenderResilienceTests.cs
 │   ├── IgSenderTests.cs
-│   ├── InSenderMissingBranchTests.cs
 │   ├── InSenderResilienceTests.cs
 │   ├── InSenderSendAsyncTests.cs
 │   ├── InSenderTests.cs
-│   ├── XSenderMissingBranchTests.cs
 │   ├── XSenderSendAsyncTests.cs
 │   └── XSenderTests.cs
 └── Services/
+    ├── AiServiceHelperImageTests.cs
     ├── AiServiceHelperTests.cs
     ├── AzureFoundryServiceTests.cs
+    ├── BlobStorageServiceTests.cs
     ├── CryptoServiceTests.cs
     ├── DeepSeekServiceTests.cs
     ├── FalAiImageServiceTests.cs
     ├── FeedServiceTests.cs
+    ├── InMemoryContainerStateStoreTests.cs
+    ├── LocalOverrideTimeProviderTests.cs
+    ├── MaskUrlTelemetryInitializerTests.cs
+    ├── MetaPublishingServiceTests.cs
     ├── OpenAiServiceTests.cs
-    ├── PerplexityServiceTests.cs                 # PerplexityService — summary, image prompt, GenerateImageAsync graceful degradation
+    ├── PerplexityServiceTests.cs
+    ├── TagReplacementServiceTests.cs
     └── TimeProviderTests.cs
 ```
-
-> `KeyVaultServiceTests.cs` has been removed. `KeyVaultService` / `IKeyVaultService` are no longer part of the production codebase — secrets are loaded at startup via the Azure Key Vault Configuration Provider and consumed through `IOptions<TCredentials>` in each sender.
-
-> `HybridAiServiceTests.cs` has been removed. `HybridAiService` / `DeepSeekWithFal` have been removed from the production codebase. `DeepSeekService` and `FalAiImageService` are tested independently in `Services/`.
 
 ### Folder responsibilities
 
 | Folder | Namespace under test | What is covered |
 |---|---|---|
 | *(root)* | `XPoster` | `XFunction` entry point — happy path and missing-branch edge cases |
-| `Contracts/` | `XPoster.Contracts`, `XPoster.Abstraction` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts including `PostAsync` parallel dispatch, partial failure, and full failure paths |
+| `Abstraction/` | `XPoster.Abstraction` | `ScheduledOrchestrationProfile` |
+| `Contracts/` | `XPoster.Contracts` | `AiProviderExtensions` enum extension method contracts; `BaseOrchestrator` abstract class contracts including `PostAsync` parallel dispatch, partial failure, and full failure paths |
 | `Helpers/` | — | Shared test utilities for resilience and HTTP mock setup (`ResilienceTestHelpers`) |
-| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration + #216 explicit-pipeline scenarios + #176 multi-sender fan-out); `PowerLawOrchestrator`; `NoOrchestrator`; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks including multi-sender slots and ordering; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config; `ConfigurationTagReplacementProvider` replacement map from config |
 | `Integration/` | `XPoster.*` | Polly resilience pipeline integration tests (retry, circuit-breaker, attempt-timeout) — **not run in CI** |
 | `Models/` | `XPoster.Models` | Domain model invariants, `Post` and `RSSFeed` missing-branch cases, options validators for OpenAI, Azure Foundry, DeepSeek, fal.ai, and Perplexity |
-| `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender` and `InSender` (happy path, `SendAsync`, missing-branch, resilience); `IgSender` (happy path, resilience); `DryRunSender` (null guard, dry-run success/failure paths — no Key Vault probe) |
+| `Orchestrators/` | `XPoster.Orchestrators` | `FeedOrchestrator` (main paths + `IFeedUrlProvider` integration + #216 explicit-pipeline scenarios + #176 multi-sender fan-out); `PowerLawOrchestrator`; `NoOrchestrator`; `OrchestratorFactory` slot selection with synthetic `ISlotProfileProvider` mocks including multi-sender slots and ordering; `DefaultSlotProfileProvider` and `DryRunSlotProfileProvider` behaviour; `ConfigurationFeedUrlProvider` URL binding from config; `ConfigurationTagReplacementProvider` replacement map from config |
+| `SenderPlugins/` | `XPoster.SenderPlugins` | `XSender`, `InSender`, `IgSender`, `FbSender` (happy path, `SendAsync`, resilience); `DryRunSender` (null guard, dry-run success/failure paths — no Key Vault probe) |
 | `Services/` | `XPoster.Services` | `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `AiServiceHelper`, `CryptoService`, `FeedService`, `TimeProvider` unit tests |
 
 ---
