@@ -1,14 +1,15 @@
 # Community 93
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ICredentialsStartupValidator** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **SendAsync()** (2 connections)
+- **if()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -45,7 +45,7 @@
 - **Twitter/X**: Automated posting with image support
 - **LinkedIn**: Posts on personal profiles and company pages
 - **Instagram**: Publishing via Graph API
-- **Facebook**: Publishing via Graph API in development (see Issue [#224](https://github.com/artcava/XPoster/issues/224))
+- **Facebook**: Publishing via Graph API
 - **Multi-Platform Fan-Out**: A single scheduled slot can publish to multiple platforms simultaneously. The base summary and image are generated once; per-platform re-summarisation is applied only when needed, reducing AI token and image credit consumption by up to ~67% compared to separate slots.
 
 ### ⚙️ Automation & Scheduling
@@ -329,10 +329,10 @@ The production schedule is defined in `DefaultSlotProfileProvider`, which return
 
 | UTC Hour | `SenderPlatforms` | Orchestrator | `TextProvider` | `ImageProvider` |
 |----------|-------------------|--------------|----------------|-----------------|
-| 8 | `LinkedIn`, `X`, `Instagram` | `FeedOrchestrator` | `OpenAi` | `AzureFoundry` |
-| 14 | `LinkedIn`, `X` | `PowerLawOrchestrator` | `null` | `null` |
+| 6 | `LinkedIn`, `X`, `Instagram`, `Facebook` | `FeedOrchestrator` | `OpenAi` | `AzureFoundry` |
+| 14 | `LinkedIn`, `X`, `Facebook` | `PowerLawOrchestrator` | `null` | `null` |
 
-> ℹ️ The fan-out slot at hour 8 generates the base summary and image **once** (sized for LinkedIn's 2 800-char limit), then re-summarises only when needed for Instagram (2 200) and X (280 chars). Instagram receives the same content as LinkedIn when the base fits. This reduces AI and image credit consumption compared to three separate scheduled slots.
+> ℹ️ The fan-out slot at hour 6 generates the base summary and image **once** (sized for Facebook's 3 000-char limit), then re-summarises only when needed for LinkedIn (2 800), Instagram (2 200) and X (280 chars). LinkedIn receives the same content as Facebook when the base fits, and so on. This reduces AI and image credit consumption compared to four separate scheduled slots.
 
 > ℹ️ `PowerLawOrchestrator` slot at 14 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
 
@@ -453,6 +453,7 @@ Key monitoring capabilities at a glance:
 - [x] `FeedOrchestrator` explicit pipeline + tag replacement externalization 
 - [x] Multi-platform fan-out: single slot publishes to multiple platforms in parallel, AI generated once 
 - [x] Instagram publishing
+- [x] Facebook publishing
 - [x] Test coverage gate at 80%
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)

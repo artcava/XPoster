@@ -1,43 +1,43 @@
 # Community 3
 
-> 32 nodes · cohesion 0.06
+> 34 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **Parse_UnsupportedProvider_LogsError()** (2 connections)
-- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
-- **Parse_Returns429_LogsWarning()** (2 connections)
-- **Parse_Returns429_ReturnsEmpty()** (2 connections)
-- **static()** (2 connections)
-- **Parse_UnsupportedProvider_ReturnsEmpty()** (2 connections)
-- **return()** (2 connections)
-- **Parse_FalAi_MissingUrlProperty_ReturnsEmpty()** (2 connections)
-- **Parse_MalformedJson_ReturnsEmpty()** (2 connections)
-- **Parse_FalAi_ValidUrl_ReturnsBytes()** (2 connections)
-- **Parse_OpenAi_MissingDataProperty_ReturnsEmpty()** (2 connections)
-- **Parse_OpenAi_EmptyB64Value_ReturnsEmpty()** (2 connections)
-- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()** (2 connections)
-- **AiServiceHelperImageTests** (2 connections)
-- **new()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_NullAllowedOrigin_SkipsOriginCheckAndDownloads()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_DownloadThrows_ReturnsEmpty()** (2 connections)
-- **Parse_FalAi_EmptyImagesArray_ReturnsEmpty()** (2 connections)
-- **Parse_FalAi_DownloadThrows_LogsError()** (2 connections)
-- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_ReturnsBytes()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmpty()** (2 connections)
-- *... and 7 more nodes in this community*
+- **FeedOrchestratorTests.cs** (33 connections)
+- **FeedOrchestratorTests.cs** (33 connections)
+- **OrchestrateAsync_ThirdSender_ReusesSecondSummary_WhenSecondFitsAndThirdDoesNot()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_ThirdSender_ReusesUpdatedPreviousSummary_WhenItFitsThirdLimit()** (2 connections)
+- **OrchestrateAsync_ThirdSender_ChecksAgainstPreviousSummary_AndReSummarisesFromFeedContent()** (2 connections)
+- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsEmpty()** (2 connections)
+- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_GetImagePromptAsyncReturnsWhitespace()** (2 connections)
+- **OrchestrateAsync_SkipsAICall_WhenBaseSummaryFitsSecondaryLimit()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageProviderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationReturnsEmpty()** (2 connections)
+- **OrchestrateAsync_Should_ReturnPostWithoutImage_When_ImageGenerationThrowsException()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
+- **OrchestrateAsync_Should_ReturnNull_When_FeedUrlProviderReturnsEmptyList()** (2 connections)
+- **OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()** (2 connections)
+- **OrchestrateAsync_Should_Rethrow_When_ImageGenerationIsCancelled()** (2 connections)
+- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
+- **OrchestrateAsync_ReturnsNullEntry_WhenReSummarisationFails()** (2 connections)
+- **OrchestrateAsync_SharesImageBytes_AcrossSenders()** (2 connections)
+- **OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()** (2 connections)
+- **OrchestrateAsync_AppliesHashtagsIndependently_PerSender()** (2 connections)
+- **OrchestrateAsync_DerivesImagePromptFromRawBaseSummary_BeforeHashtags()** (2 connections)
+- **if()** (2 connections)
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
-- [[Community 82]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 99 (100%)
+- EXTRACTED: 130 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

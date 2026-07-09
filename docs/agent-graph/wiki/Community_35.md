@@ -1,28 +1,29 @@
 # Community 35
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **CredentialsStartupValidator.cs** (10 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **resolve()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **catch()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **foreach()** (2 connections)
-- **ValidateOptions()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
+- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XPosterContainerPollingFunctionTests** (2 connections)
+- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
+- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
+- **CreateSut()** (2 connections)
+- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
+- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 53]] (9 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

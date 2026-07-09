@@ -1,21 +1,22 @@
 # Community 26
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (11 connections)
-- **DeepSeekService.cs** (11 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **if()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **OpenAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
+- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
+- **Validate_DefaultOptions_Succeeds()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
+- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
+- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

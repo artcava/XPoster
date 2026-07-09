@@ -1,9 +1,12 @@
+using System.Net;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.Protected;
 using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
+using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 
@@ -20,22 +23,29 @@ public class InSenderTests
     }
 
     private static IOptions<LinkedInCredentials> BuildCreds(
-        string accessToken = "test_token_12345",
-        string ownerCode = "123456789",
+        string? accessToken = "fake_token",
+        string? ownerCode = "fake_owner",
         string? orgId = null)
         => Options.Create(new LinkedInCredentials
         {
-            LinkedInAccessToken = accessToken,
-            LinkedInOwnerCode = ownerCode,
+            LinkedInAccessToken = accessToken ?? string.Empty,
+            LinkedInOwnerCode = ownerCode ?? string.Empty,
             LinkedInOrgId = orgId ?? string.Empty
         });
+
+
+    private static InSender BuildSender(
+        IHttpClientFactory factory,
+        IOptions<LinkedInCredentials>? creds = null,
+        Mock<ILogger<InSender>>? log = null)
+        => new InSender(factory, creds ?? BuildCreds(), (log ?? new Mock<ILogger<InSender>>()).Object);
 
     #region Constructor and Properties Tests
 
     [Fact]
     public void Constructor_InitializesCorrectly()
     {
-        var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
+        var sender = BuildSender(_mockFactory.Object, BuildCreds(), _mockLogger);
         Assert.NotNull(sender);
         Assert.Equal(2800, sender.MessageMaxLenght);
     }
@@ -55,9 +65,22 @@ public class InSenderTests
     }
 
     [Fact]
+    public void Platform_ReturnsLinkedIn()
+    {
+        var factory = ResilienceTestHelpers.BuildFactory("LinkedIn", HttpStatusCode.OK, "{}");
+        Assert.Equal(SenderPlatform.LinkedIn, BuildSender(factory).Platform);
+    }
+
+    [Fact]
     public void InSender_ImplementsISender()
     {
         Assert.IsAssignableFrom<ISender>(new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object));
+    }
+
+    [Fact]
+    public void MessageMaxLenght_Returns2800()
+    {
+        Assert.Equal(2800, BuildSender(_mockFactory.Object).MessageMaxLenght);
     }
 
     #endregion
@@ -67,8 +90,7 @@ public class InSenderTests
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()
     {
-        var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
-        var result = await sender.SendAsync(null!);
+        var result = await BuildSender(_mockFactory.Object, BuildCreds(), _mockLogger).SendAsync(null!);
         Assert.False(result);
         _mockLogger.Verify(
             x => x.Log(
@@ -83,8 +105,7 @@ public class InSenderTests
     [Fact]
     public async Task SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()
     {
-        var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
-        var result = await sender.SendAsync(new Post { Content = string.Empty });
+        var result = await BuildSender(_mockFactory.Object, BuildCreds(), _mockLogger).SendAsync(new Post { Content = string.Empty });
         Assert.False(result);
         _mockLogger.Verify(
             x => x.Log(
@@ -97,6 +118,110 @@ public class InSenderTests
     }
 
     [Fact]
+    public async Task SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()
+    {
+        var creds = BuildCreds(ownerCode: "fake_owner", orgId: "98765432");
+        var sender = BuildSender(_mockFactory.Object, creds, _mockLogger);
+        Assert.False(await sender.SendAsync(new Post { Content = "org post" }));
+    }
+
+    [Fact]
+    public async Task SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()
+    {
+        HttpRequestMessage? capturedRequest = null;
+
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Callback((HttpRequestMessage req, CancellationToken _) => capturedRequest = req)
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Created));
+
+        var mockFactory = new Mock<IHttpClientFactory>();
+        mockFactory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient(handler.Object));
+
+        var sut = BuildSender(mockFactory.Object, BuildCreds(orgId: "org456"));
+
+        var result = await sut.SendAsync(new Post { Content = "text only" });
+
+        Assert.True(result);
+        Assert.NotNull(capturedRequest);
+        Assert.NotNull(capturedRequest!.Content);
+
+        var body = await capturedRequest.Content!.ReadAsStringAsync();
+        Assert.Contains("urn:li:organization:org456", body);
+    }
+
+    [Fact]
+    public async Task SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()
+    {
+        HttpRequestMessage? capturedRequest = null;
+
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Callback((HttpRequestMessage req, CancellationToken _) => capturedRequest = req)
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Created));
+
+        var mockFactory = new Mock<IHttpClientFactory>();
+        mockFactory.Setup(f => f.CreateClient("LinkedIn")).Returns(new HttpClient(handler.Object));
+
+        var sut = BuildSender(mockFactory.Object, BuildCreds(orgId: null, ownerCode: "person789"));
+
+        var result = await sut.SendAsync(new Post { Content = "text only" });
+
+        Assert.True(result);
+        Assert.NotNull(capturedRequest);
+        Assert.NotNull(capturedRequest!.Content);
+
+        var body = await capturedRequest.Content!.ReadAsStringAsync();
+        Assert.Contains("urn:li:person:person789", body);
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()
+    {
+        var factory = ResilienceTestHelpers.BuildFactory("LinkedIn", HttpStatusCode.OK, "{}");
+        var sut = BuildSender(factory, BuildCreds(orgId: null, ownerCode: null));
+
+        var result = await sut.SendAsync(new Post { Content = "test" });
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()
+    {
+        var creds = BuildCreds(ownerCode: "123456789", orgId: null);
+        var sender = BuildSender(_mockFactory.Object, creds, _mockLogger);
+        Assert.False(await sender.SendAsync(new Post { Content = "person post" }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()
+    {
+        var creds = BuildCreds(ownerCode: null, orgId: null);
+        var sender = BuildSender(_mockFactory.Object, creds, _mockLogger);
+        Assert.False(await sender.SendAsync(new Post { Content = "no author" }));
+    }
+
+    [Fact]
+    public async Task SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()
+    {
+        var factory = ResilienceTestHelpers.BuildFactory("LinkedIn", HttpStatusCode.Forbidden, "{\"error\":\"forbidden\"}");
+        var sut = BuildSender(factory);
+
+        var result = await sut.SendAsync(new Post { Content = "test" });
+
+        Assert.False(result);
+    }
+
+    [Fact]
     public async Task SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()
     {
         var sender = new InSender(_mockFactory.Object, BuildCreds(), _mockLogger.Object);
@@ -105,4 +230,31 @@ public class InSenderTests
     }
 
     #endregion
+
+    [Fact]
+    public async Task SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()
+    {
+        var factory = ResilienceTestHelpers.BuildFactory("LinkedIn", HttpStatusCode.BadRequest, "{\"error\":\"bad\"}");
+        var sut = BuildSender(factory);
+
+        var result = await sut.SendAsync(new Post
+        {
+            Content = "test",
+            Image = new byte[] { 1, 2, 3 }
+        });
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()
+    {
+        var result = await BuildSender(_mockFactory.Object).SendAsync(new Post
+        {
+            Content = "Post with image",
+            Image = new byte[] { 0xFF, 0xD8, 0xFF }
+        });
+        Assert.False(result);
+    }
+
 }

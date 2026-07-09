@@ -1,33 +1,34 @@
 # Community 14
 
-> 16 nodes · cohesion 0.24
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
-- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
-- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
-- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
-- **SaveAsync_WithEmptyOrWhitespaceBlobName_ThrowsArgumentException()** (2 connections)
-- **SaveAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **SaveAsync_WithNullBlobName_ThrowsArgumentNullException()** (2 connections)
-- **SaveAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
-- **GetPendingAsync_ReturnsOnlyPendingEntries()** (2 connections)
-- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
-- **InMemoryContainerStateStoreTests** (2 connections)
-- **GetPendingAsync_WhenStoreIsEmpty_ReturnsEmptyList()** (2 connections)
+- **AzureFoundryServiceTests.cs** (35 connections)
+- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
+- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
+- **if()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
+- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
+- **AzureFoundryService()** (2 connections)
+- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 11]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 58 (100%)
+- EXTRACTED: 67 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

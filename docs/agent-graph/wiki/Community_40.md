@@ -1,19 +1,20 @@
 # Community 40
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **SupportedPlatforms_IsEmpty()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **NoOrchestratorTests** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **Build()** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **CredentialsStartupValidator()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
+- **foreach()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **resolve()** (2 connections)
+- **ValidateOptions()** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

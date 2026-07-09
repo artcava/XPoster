@@ -1,23 +1,23 @@
 # Community 84
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **InSender()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **Uri()** (2 connections)
+- **if()** (2 connections)
+- **BlobServiceClient()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

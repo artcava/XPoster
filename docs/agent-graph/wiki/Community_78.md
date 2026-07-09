@@ -1,15 +1,16 @@
 # Community 78
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **GetProfiles()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **typeof()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,16 +1,17 @@
 # Community 62
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **Run()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster** (2 connections)
-- **XFunction()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **IsEnabled()** (2 connections)
+- **Dispose()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

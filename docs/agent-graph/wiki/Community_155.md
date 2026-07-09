@@ -5,8 +5,8 @@
 ## Key Concepts
 
 - **XPoster.Models** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
 
 ## Relationships
 

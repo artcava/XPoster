@@ -28,7 +28,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
         // X (280 chars) always trigger re-summarisation.
         new ScheduledOrchestrationProfile(
             hour: 6,
-            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram, SenderPlatform.Facebook },
             orchestratorType: typeof(FeedOrchestrator),
             textProvider:  AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry),
@@ -36,7 +36,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
         // PowerLaw slots — no AI provider required.
         new ScheduledOrchestrationProfile(
             hour: 14,
-            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X },
+            senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Facebook },
             orchestratorType: typeof(PowerLawOrchestrator)),
 
         #region TESTING SLOTS (excluded from production deployments)

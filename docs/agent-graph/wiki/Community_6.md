@@ -1,35 +1,35 @@
 # Community 6
 
-> 26 nodes · cohesion 0.15
+> 29 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (25 connections)
-- **IgSenderTests.cs** (25 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **Uri()** (2 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
-- **BuildSender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **NormalizeImage_WhenCodecIsNull_ReturnsNull()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderTests** (2 connections)
-- **MessageMaxLenght_Returns2200()** (2 connections)
-- **SendAsync_WhenBlobUploadSucceeds_CreatesMediaContainerWithCorrectSasUrl()** (2 connections)
-- **NormalizeImage_WhenPngDecodesToNull_ReturnsNull()** (2 connections)
-- **return()** (2 connections)
-- **SendAsync_WhenBlobUploadCancelled_ReturnsFalse()** (2 connections)
-- **CreateMalformedPngBytes()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WhenJsonResponseMissingIdProperty_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
-- **NormalizeImage_WhenJpegIsAlreadyValid_ReturnsOriginalBytes()** (2 connections)
-- **SendAsync_WhenJsonResponseIdIsEmpty_ReturnsFalse()** (2 connections)
-- *... and 1 more nodes in this community*
+- **OptionsExtensionsTests.cs** (28 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddAzureFoundryOptions_RegistersValidator()** (2 connections)
+- **AddDeepSeekOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
+- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddFalAiOptions_RegistersValidator()** (2 connections)
+- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddOpenAiOptions_RegistersValidator()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **AzureFoundryOptionsExtensionsTests** (2 connections)
+- **BuildConfig()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **OptionsExtensionsTests** (2 connections)
+- **FalAiOptionsExtensionsTests** (2 connections)
+- **OpenAiOptionsExtensionsTests** (2 connections)
+- **new()** (2 connections)
+- **SectionName_IsFalAi()** (2 connections)
+- **register()** (2 connections)
+- **SectionName_IsDeepSeek()** (2 connections)
+- **SectionName_IsAzureFoundry()** (2 connections)
+- **SectionName_IsPerplexity()** (2 connections)
+- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- *... and 4 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 98 (100%)
+- EXTRACTED: 110 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

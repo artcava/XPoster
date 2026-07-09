@@ -1,20 +1,21 @@
 # Community 136
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **if()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **var()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 
-- [[Community 128]] (3 shared connections)
+- [[Community 156]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

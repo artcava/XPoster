@@ -1,5 +1,6 @@
 extern alias AzureIdentity;
 using Azure.Storage.Blobs;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,8 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
     }
 });
 
+builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
+
 // Azure Key Vault Configuration Provider.
 // Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.
 // DefaultAzureCredential is the same credential chain used by the former KeyVaultService.
@@ -56,6 +59,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
 builder.Services.AddTransient<IgSender>();
+builder.Services.AddTransient<FbSender>();
 builder.Services.AddTransient<DryRunSender>();
 
 // ITimeProvider registration:

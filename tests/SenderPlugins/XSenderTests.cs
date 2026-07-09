@@ -24,7 +24,15 @@ public class XSenderTests
         });
     }
 
+    private XSender BuildSender() => new(_credentials, _mockLogger.Object);
+
     #region Constructor and Properties Tests
+
+    [Fact]
+    public void Platform_ReturnsX()
+    {
+        Assert.Equal(SenderPlatform.X, BuildSender().Platform);
+    }
 
     [Fact]
     public void Constructor_InitializesCorrectly()
@@ -52,9 +60,80 @@ public class XSenderTests
         Assert.IsAssignableFrom<ISender>(new XSender(_credentials, _mockLogger.Object));
     }
 
+    [Fact]
+    public void MessageMaxLenght_Returns250()
+    {
+        Assert.Equal(250, BuildSender().MessageMaxLenght);
+    }
+
     #endregion
 
     #region SendAsync Guard Tests
+
+    [Fact]
+    public async Task SendAsync_WhenTwitterContextThrows_ReturnsFalse()
+    {
+        var sut = BuildSender();
+        var result = await sut.SendAsync(new Post { Content = "hello" });
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithImageAndTwitterContextThrows_ReturnsFalse()
+    {
+        var sut = BuildSender();
+        var result = await sut.SendAsync(new Post
+        {
+            Content = "hello",
+            Image = new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 }
+        });
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_NullPost_ReturnsFalse()
+    {
+        Assert.False(await BuildSender().SendAsync(null!));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("\t\n")]
+    public async Task SendAsync_WithBlankContent_ReturnsFalseAndLogsWarning(string content)
+    {
+        var sut = BuildSender();
+        var result = await sut.SendAsync(new Post { Content = content });
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_EmptyContent_ReturnsFalse()
+    {
+        Assert.False(await BuildSender().SendAsync(new Post { Content = string.Empty }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WhitespaceContent_ReturnsFalse()
+    {
+        Assert.False(await BuildSender().SendAsync(new Post { Content = "   " }));
+    }
+
+    [Fact]
+    public async Task SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()
+    {
+        Assert.False(await BuildSender().SendAsync(new Post { Content = "Hello world" }));
+    }
+
+    [Fact]
+    public async Task SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()
+    {
+        Assert.False(await BuildSender().SendAsync(new Post
+        {
+            Content = "Hello with image",
+            Image = new byte[] { 1, 2, 3 }
+        }));
+    }
 
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()

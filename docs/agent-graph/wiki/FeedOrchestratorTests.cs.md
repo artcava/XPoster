@@ -2,7 +2,7 @@
 
 > God node · 33 connections
 
-**Community:** [[Community 1]]
+**Community:** [[Community 3]]
 
 ## Connections by Relation
 

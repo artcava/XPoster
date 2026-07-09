@@ -1,22 +1,23 @@
 # Community 21
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService.cs** (12 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetSummary()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **catch()** (2 connections)
-- **OpenAiService()** (2 connections)
-- **while()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **ModelsTests** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **OpenAIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
