@@ -1,24 +1,25 @@
 # Community 66
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **InSenderTests.cs** (12 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **AcquireFeedContentAsync()** (2 connections)
+- **foreach()** (2 connections)
+- **FeedOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

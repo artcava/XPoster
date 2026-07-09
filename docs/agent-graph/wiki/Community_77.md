@@ -1,15 +1,16 @@
 # Community 77
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **FalAiImageService.cs** (6 connections)
 - **if()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

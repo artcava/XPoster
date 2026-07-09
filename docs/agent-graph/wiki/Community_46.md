@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **params()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
 
 ## Relationships
 

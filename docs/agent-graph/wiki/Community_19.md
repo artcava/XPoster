@@ -1,31 +1,32 @@
 # Community 19
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
+- **new()** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
+- **ValidPost()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 34]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

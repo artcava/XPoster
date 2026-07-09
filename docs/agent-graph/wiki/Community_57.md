@@ -1,17 +1,18 @@
 # Community 57
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **Dispose()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **IsEnabled()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

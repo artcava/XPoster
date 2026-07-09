@@ -1,36 +1,38 @@
 # Community 9
 
-> 19 nodes · cohesion 0.11
+> 21 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
-- **GenerateImageAsync_RequestBodyContainsModelField()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
-- **AzureFoundryServiceTests** (2 connections)
-- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
-- **BuildService()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
+- **XSenderTests.cs** (20 connections)
+- **XSenderTests.cs** (20 connections)
+- **XSenderTests()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithBlankContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithImageAndTwitterContextThrows_ReturnsFalse()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **Platform_ReturnsX()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **MessageMaxLenght_Returns250()** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **SendAsync_WhenTwitterContextThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 12]] (17 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 71 (100%)
+- EXTRACTED: 78 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

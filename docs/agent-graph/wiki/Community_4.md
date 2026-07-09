@@ -1,43 +1,43 @@
 # Community 4
 
-> 30 nodes · cohesion 0.13
+> 32 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (29 connections)
-- **OrchestratorFactoryTests.cs** (29 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
-- **PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()** (2 connections)
-- **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
-- **PowerLawProfile()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()** (2 connections)
-- **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **FeedProfile()** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_EmptyB64Value_ReturnsEmpty()** (2 connections)
+- **Parse_OpenAi_MissingDataProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_MissingUrlProperty_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_ValidUrl_ReturnsBytes()** (2 connections)
+- **Parse_MalformedJson_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_EmptyUrl_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_EmptyImagesArray_ReturnsEmpty()** (2 connections)
+- **Parse_FalAi_DownloadThrows_LogsError()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_WrongOrigin_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_ValidB64_ReturnsBytes()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_NullAllowedOrigin_SkipsOriginCheckAndDownloads()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()** (2 connections)
+- **Parse_AzureFoundry_UrlFallback_DownloadThrows_ReturnsEmpty()** (2 connections)
+- **Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()** (2 connections)
 - **new()** (2 connections)
-- **Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()** (2 connections)
-- **Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()** (2 connections)
-- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **typeof()** (2 connections)
-- *... and 5 more nodes in this community*
+- **Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()** (2 connections)
+- **AiServiceHelperImageTests** (2 connections)
+- **Parse_UnsupportedProvider_LogsError()** (2 connections)
+- **Parse_Returns429_LogsWarning()** (2 connections)
+- **Parse_Returns429_ReturnsEmpty()** (2 connections)
+- **static()** (2 connections)
+- *... and 7 more nodes in this community*
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 92]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 114 (100%)
+- EXTRACTED: 99 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

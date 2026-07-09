@@ -1,21 +1,22 @@
 # Community 28
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **PerplexityService.cs** (11 connections)
-- **PerplexityService.cs** (11 connections)
-- **PerplexityService()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **if()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **OpenAiService.cs** (12 connections)
 - **while()** (2 connections)
 - **XPoster.Services** (2 connections)
 - **var()** (2 connections)
+- **if()** (2 connections)
+- **GetSummary()** (2 connections)
+- **GetPromptForImage()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **catch()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **OpenAiService()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

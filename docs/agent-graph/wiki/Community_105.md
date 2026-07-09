@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ImageTestData.cs** (4 connections)
-- **ImageTestData.cs** (4 connections)
-- **CreateValidPng()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **CreateValidJpeg()** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetCryptoValue()** (2 connections)
 
 ## Relationships
 

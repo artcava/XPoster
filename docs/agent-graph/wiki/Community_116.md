@@ -1,13 +1,14 @@
 # Community 116
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddOpenAiOptions()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **if()** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

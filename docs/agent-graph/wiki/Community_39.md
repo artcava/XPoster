@@ -1,19 +1,20 @@
 # Community 39
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **XSenderTests.cs** (9 connections)
-- **XSenderTests.cs** (9 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **XSenderTests()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSender_ImplementsISender()** (2 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

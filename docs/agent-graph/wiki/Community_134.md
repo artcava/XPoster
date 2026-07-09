@@ -1,16 +1,17 @@
 # Community 134
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XSender()** (2 connections)
-- **if()** (2 connections)
+- **AiProviderServiceCollectionExtensions.cs** (3 connections)
+- **AiProviderServiceCollectionExtensions.cs** (3 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddXPosterAiProviders()** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

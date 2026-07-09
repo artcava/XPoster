@@ -1,32 +1,32 @@
 # IgSenderTests.cs
 
-> God node · 23 connections
+> God node · 33 connections
 
-**Community:** [[Community 3]]
+**Community:** [[Community 2]]
 
 ## Connections by Relation
 
 ### contains
 - [[XPoster.Tests.SenderPlugins]]
-- [[IgSenderTests()]]
+- [[IgSenderTests]]
 - [[BuildSender()]]
-- [[new()]]
-- [[BuildSenderWithFactory()]]
 - [[IgSender()]]
+- [[CreateMalformedPngBytes()]]
+- [[return()]]
+- [[Platform_ReturnsInstagram()]]
+- [[NormalizeImage_WithValidJpeg_ReturnsSameBytes()]]
+- [[NormalizeImage_WithValidPng_ReturnsJpegBytes()]]
+- [[NormalizeImage_WithInvalidBytes_ReturnsNull()]]
+- [[SendAsync_WithCaptionExceedingMaxLength_TruncatesCaption()]]
+- [[SendAsync_WhenBlobUploadFails_ReturnsFalse()]]
+- [[SendAsync_WhenHttpClientThrows_ReturnsFalse()]]
+- [[SendAsync_WithEmptyImageArray_ReturnsFalse()]]
 - [[Constructor_InitializesCorrectly()]]
+- [[HttpClient()]]
+- [[Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()]]
+- [[Constructor_WithNullCredentials_ThrowsArgumentNullException()]]
 - [[Constructor_WithNullLogger_ThrowsArgumentNullException()]]
-- [[Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()]]
-- [[MessageMaxLenght_Returns2200()]]
-- [[SendAsync_WithNullPost_ReturnsFalse()]]
-- [[SendAsync_WithEmptyContent_ReturnsFalse()]]
-- [[SendAsync_WithWhitespaceContent_ReturnsFalse()]]
-- [[SendAsync_WithNoImage_ReturnsFalse()]]
-- [[SendAsync_WithImage_TriesUploadAndReturnsFalse()]]
-- [[SendAsync_WithImage_ReadsIgAccessTokenFromKv()]]
-- [[SendAsync_WithImage_ReadsIgAccountIdFromKv()]]
-- [[SendAsync_WithoutImage_DoesNotQueryKv()]]
-- [[SendAsync_WhenImageUploadThrowsNotImplemented_ReturnsFalseAndLogsError()]]
-- [[SendAsync_WhenInstagramApiReturnsNonSuccess_ReturnsFalse()]]
+- [[Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()]]
 
 ---
 

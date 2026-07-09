@@ -1,23 +1,24 @@
 # Community 75
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **for()** (2 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **while()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **if()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **var()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 129]] (4 shared connections)
+- [[Community 63]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
