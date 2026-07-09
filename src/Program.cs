@@ -59,6 +59,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddTransient<XSender>();
 builder.Services.AddTransient<InSender>();
 builder.Services.AddTransient<IgSender>();
+builder.Services.AddTransient<FbSender>();
 builder.Services.AddTransient<DryRunSender>();
 
 // ITimeProvider registration:
