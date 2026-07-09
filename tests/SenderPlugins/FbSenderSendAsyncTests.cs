@@ -112,7 +112,7 @@ public class FbSenderSendAsyncTests
 
         var sender = new FbSender(factory.Object, BuildCreds(), _logger.Object, _blobStorage.Object);
 
-        var content = new string('a', 7000);
+        var content = new string('a', 3100);
         var result = await sender.SendAsync(new Post { Content = content });
 
         Assert.True(result);

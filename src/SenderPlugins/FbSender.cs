@@ -48,8 +48,8 @@ namespace XPoster.SenderPlugins
         /// <inheritdoc/>
         public SenderPlatform Platform => SenderPlatform.Facebook;
 
-        /// <summary>Gets the maximum caption length allowed by Facebook (6000 characters).</summary>
-        public int MessageMaxLenght => 6000;
+        /// <summary>Gets the maximum caption length allowed by Facebook (3000 characters).</summary>
+        public int MessageMaxLenght => 3000;
 
         /// <summary>
         /// Publishes <paramref name="post"/> to Facebook via a two-step Graph API flow:

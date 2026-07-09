@@ -21,21 +21,20 @@ public class IgSenderTests
     };
 
     private static IgSender BuildSender(
-        HttpClient httpClient,
-        Mock<IBlobStorageService> blobStorageServiceMock,
-        Mock<IContainerStateStore> containerStateStoreMock,
-        Mock<ILogger<IgSender>> loggerMock,
+        HttpClient client,
+        Mock<IBlobStorageService>? blob = null,
+        Mock<IContainerStateStore>? store = null,
+        Mock<ILogger<IgSender>>? log = null,
         InstagramCredentials? credentials = null)
     {
-        var factoryMock = new Mock<IHttpClientFactory>();
-        factoryMock.Setup(f => f.CreateClient("Instagram")).Returns(httpClient);
-
+        var factory = new Mock<IHttpClientFactory>();
+        factory.Setup(f => f.CreateClient("Instagram")).Returns(client);
         return new IgSender(
-            factoryMock.Object,
+            factory.Object,
             Options.Create(credentials ?? DefaultCredentials),
-            loggerMock.Object,
-            blobStorageServiceMock.Object,
-            containerStateStoreMock.Object);
+            (log ?? new Mock<ILogger<IgSender>>()).Object,
+            (blob ?? new Mock<IBlobStorageService>()).Object,
+            (store ?? new Mock<IContainerStateStore>()).Object);
     }
 
     private static byte[] CreateMalformedPngBytes()
@@ -45,11 +44,102 @@ public class IgSenderTests
         return signature.Concat(invalidPayload).ToArray();
     }
 
-    private static byte[]? InvokeNormalizeImageForInstagram(IgSender sender, byte[] imageBytes)
+    private static byte[]? InvokeNormalizeImage(IgSender sender, byte[] imageBytes)
     {
         var method = typeof(IgSender).GetMethod("NormalizeImageForInstagram", BindingFlags.Instance | BindingFlags.NonPublic);
         Assert.NotNull(method);
         return (byte[]?)method!.Invoke(sender, new object[] { imageBytes });
+    }
+
+    [Fact]
+    public void Platform_ReturnsInstagram()
+    {
+        var sut = BuildSender(new HttpClient(new Mock<HttpMessageHandler>().Object));
+        Assert.Equal(SenderPlatform.Instagram, sut.Platform);
+    }
+
+    [Fact]
+    public void NormalizeImage_WithValidJpeg_ReturnsSameBytes()
+    {
+        var sut = BuildSender(new HttpClient(new Mock<HttpMessageHandler>().Object));
+        var jpeg = ImageTestData.CreateValidJpeg();
+        var result = InvokeNormalizeImage(sut, jpeg);
+        Assert.Equal(jpeg, result);
+    }
+
+    [Fact]
+    public void NormalizeImage_WithValidPng_ReturnsJpegBytes()
+    {
+        var sut = BuildSender(new HttpClient(new Mock<HttpMessageHandler>().Object));
+        var png = ImageTestData.CreateValidPng();
+        var result = InvokeNormalizeImage(sut, png);
+        Assert.NotNull(result);
+        Assert.Equal(0xFF, result![0]);
+        Assert.Equal(0xD8, result[1]);
+    }
+
+    [Fact]
+    public void NormalizeImage_WithInvalidBytes_ReturnsNull()
+    {
+        var sut = BuildSender(new HttpClient(new Mock<HttpMessageHandler>().Object));
+        var result = InvokeNormalizeImage(sut, new byte[] { 0x00, 0x01, 0x02 });
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithCaptionExceedingMaxLength_TruncatesCaption()
+    {
+        var blob = new Mock<IBlobStorageService>();
+        var store = new Mock<IContainerStateStore>();
+        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new BlobUploadResult(new Uri("https://example.com/b.jpg"), "b"));
+        store.Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{\"id\":\"cont-1\"}", System.Text.Encoding.UTF8, "application/json")
+            });
+
+        var sut = BuildSender(new HttpClient(handler.Object), blob, store);
+        Assert.True(await sut.SendAsync(new Post { Content = new string('X', 2500), Image = ImageTestData.CreateValidJpeg() }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenBlobUploadFails_ReturnsFalse()
+    {
+        var blob = new Mock<IBlobStorageService>();
+        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception("storage unavailable"));
+
+        var sut = BuildSender(new HttpClient(new Mock<HttpMessageHandler>().Object), blob);
+        Assert.False(await sut.SendAsync(new Post { Content = "test", Image = ImageTestData.CreateValidJpeg() }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenHttpClientThrows_ReturnsFalse()
+    {
+        var blob = new Mock<IBlobStorageService>();
+        blob.Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new BlobUploadResult(new Uri("https://example.com/b.jpg"), "b"));
+
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new Exception("http error"));
+
+        var sut = BuildSender(new HttpClient(handler.Object), blob);
+        Assert.False(await sut.SendAsync(new Post { Content = "test", Image = ImageTestData.CreateValidJpeg() }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WithEmptyImageArray_ReturnsFalse()
+    {
+        var sut = BuildSender(new HttpClient(new Mock<HttpMessageHandler>().Object));
+        Assert.False(await sut.SendAsync(new Post { Content = "test", Image = Array.Empty<byte>() }));
     }
 
     [Fact]
@@ -321,7 +411,7 @@ public class IgSenderTests
             new Mock<IContainerStateStore>(),
             new Mock<ILogger<IgSender>>());
 
-        var result = InvokeNormalizeImageForInstagram(sut, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 });
+        var result = InvokeNormalizeImage(sut, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 });
 
         Assert.Null(result);
     }
@@ -337,7 +427,7 @@ public class IgSenderTests
 
         var jpegBytes = ImageTestData.CreateValidJpeg();
 
-        var result = InvokeNormalizeImageForInstagram(sut, jpegBytes);
+        var result = InvokeNormalizeImage(sut, jpegBytes);
 
         Assert.NotNull(result);
         Assert.Equal(jpegBytes, result);
@@ -352,7 +442,7 @@ public class IgSenderTests
             new Mock<IContainerStateStore>(),
             new Mock<ILogger<IgSender>>());
 
-        var result = InvokeNormalizeImageForInstagram(sut, CreateMalformedPngBytes());
+        var result = InvokeNormalizeImage(sut, CreateMalformedPngBytes());
 
         Assert.Null(result);
     }
