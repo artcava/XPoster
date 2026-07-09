@@ -24,7 +24,7 @@ XPoster is a **serverless, event-driven pipeline** built on four structural pill
 - **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
 - **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
 - **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
+- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `FbSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
 
 The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
 
@@ -64,15 +64,15 @@ Sender OAuth credentials are loaded from **Azure Key Vault** at application star
     └────────┬───────────────────┘
              │
              ▼
-    ┌───────────────────────────────────────────┐
-    │        BaseOrchestrator.PostAsync         │  ◄── Fan-out: Task.WhenAll per sender
-    └──┬────────┬───────────┬────────────┬──────┘
-       │        │           │            │
-       ▼        ▼           ▼            ▼
-  ┌─────────┐ ┌──────────┐ ┌──────────┐ ┌────────────┐
-  │ XSender │ │ InSender │ │ IgSender │ │ DryRunSend │
-  │ X/Twit. │ │ LinkedIn │ │Instagram │ │(local only)│
-  └─────────┘ └──────────┘ └──────────┘ └────────────┘
+    ┌───────────────────────────────────────────────────────────────────┐
+    │        BaseOrchestrator.PostAsync                                 │  ◄── Fan-out: Task.WhenAll per sender
+    └──┬────────┬───────────┬────────────┬──────────────┬───────────────┘
+       │        │           │            │              │
+       ▼        ▼           ▼            ▼              ▼
+  ┌─────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  ┌────────────┐
+  │ XSender │ │ InSender │ │ IgSender │ │ FbSender │  │ DryRunSend │
+  │ X/Twit. │ │ LinkedIn │ │Instagram │ │ Facebook │  │(local only)│
+  └─────────┘ └──────────┘ └──────────┘ └──────────┘  └────────────┘
 ```
 
 **Key Vault credentials** are loaded into `IConfiguration` at application startup via the Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`). 
@@ -173,6 +173,7 @@ Only `XSender` uses an OAuth library (`LinqToTwitter`) and is out of this pipeli
 | `"Feed"` | `FeedService` | 15 s | 60 s |
 | `"LinkedIn"` | `InSender` | *(per registration)* | *(per registration)* |
 | `"Instagram"` | `IgSender` | *(per registration)* | *(per registration)* |
+| `"Facebook"` | `FbSender` | *(per registration)* | *(per registration)* |
 | *(AI provider clients)* | `DeepSeekService`, `FalAiImageService`, `PerplexityService` | *(per registration)* | *(per registration)* |
 
 > **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline is prohibited — it bypasses the resilience pipeline and risks socket exhaustion on Azure Functions.
@@ -190,6 +191,7 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 | `XSender` | `X` | 280 | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; credentials injected via `IOptions<XCredentials>` |
 | `InSender` | `LinkedIn` | 2 800 | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
 | `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<InstagramCredentials>` |
+| `FbSender` | `Facebook` | 3 000 | Facebook Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<FacebookCredentials>` |
 | `DryRunSender` | `DryRun` | `int.MaxValue` | **None** | **Local development and testing only.** Logs post content but makes **no outbound social API calls**. Always returns `true`. Activated via `EnableDryRunSlot = true`; must never be used in production. |
 
 ---

@@ -200,8 +200,9 @@ Slot profiles are defined in `DefaultSlotProfileProvider` (production) and `DryR
 
 | Platform | `MessageMaxLength` | Role in a fan-out slot |
 |---|---|---|
-| LinkedIn | 2 800 | Widest limit — selected as primary by `FeedOrchestrator`; base summary generated at this length |
-| Instagram | 2 200 | Secondary — re-summarisation triggered only when base summary exceeds 2 200 chars |
+| Facebook | 3 000 | Widest limit — selected as primary by `FeedOrchestrator`; base summary generated at this length |
+| LinkedIn | 2 800 | Secondary — re-summarisation triggered only when base summary exceeds 2 800 chars |
+| Instagram | 2 200 | Tertiary — re-summarisation triggered only when base summary exceeds 2 200 chars |
 | X (Twitter) | 250 | Narrowest — always triggers re-summarisation when base summary exceeds 250 chars |
 | DryRun | `int.MaxValue` | Local testing only — always selected as primary when present |
 
@@ -216,7 +217,7 @@ The current `DefaultSlotProfileProvider` defines the following slots:
 
 new ScheduledOrchestrationProfile(
     hour: 6,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram },
+    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram, SenderPlatform.Facebook },
     orchestratorType: typeof(FeedOrchestrator),
     textProvider:  AiProvider.OpenAi,
     imageProvider: AiProvider.AzureFoundry),
@@ -227,7 +228,7 @@ new ScheduledOrchestrationProfile(
     orchestratorType: typeof(PowerLawOrchestrator)),
 ```
 
-At hour 6 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, and Instagram in parallel. The PowerLaw slot at hour 14 publish deterministic content to platforms — no AI calls involved.
+At hour 6 the orchestrator runs once, generates the base summary and image, then fans out to LinkedIn, X, Instagram, and Facebook in parallel. The PowerLaw slot at hour 14 publish deterministic content to platforms — no AI calls involved.
 
 ### DryRun slot profile example
 
@@ -392,6 +393,13 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
 |---|---|
 | `InstagramCredentials--InstagramAccessToken` | Long-lived Instagram Graph API access token. |
 | `InstagramCredentials--InstagramAccountId` | Numeric Instagram Business Account ID. |
+
+#### Facebook
+
+| Secret name | Description |
+|---|---|
+| `FacebookCredentials--FacebookAccessToken` | Long-lived Facebook Graph API access token. |
+| `FacebookCredentials--FacebookPageId` | Numeric Facebook Page ID. |
 
 ---
 

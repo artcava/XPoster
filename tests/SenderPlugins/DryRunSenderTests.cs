@@ -9,27 +9,82 @@ namespace XPoster.Tests.SenderPlugins;
 
 public class DryRunSenderTests
 {
-    private readonly Mock<ILogger<DryRunSender>> _mockLogger;
+    private readonly Mock<ILogger<DryRunSender>> _mockLogger = new();
 
     public DryRunSenderTests()
     {
         _mockLogger = new Mock<ILogger<DryRunSender>>();
     }
 
-    private static IConfiguration BuildConfig(string? xApiKey = "fake-api-key")
-        => new ConfigurationBuilder()
-            .AddInMemoryCollection(xApiKey is null
-                ? new Dictionary<string, string?>()
-                : new Dictionary<string, string?> { ["XApiKey"] = xApiKey })
+    private static IConfiguration BuildConfig(string? apiKeyValue = "some-key")
+    {
+        return new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["XApiKey"] = apiKeyValue
+            })
             .Build();
+    }
 
-    private DryRunSender BuildSender(IConfiguration? config = null)
-        => new(config ?? BuildConfig(), _mockLogger.Object);
+    private DryRunSender BuildSender(
+        string? apiKeyValue = "some-key",
+        IConfiguration? config = null,
+        ILogger<DryRunSender>? logger = null)
+    {
+        return new DryRunSender(
+            config ?? BuildConfig(apiKeyValue),
+            logger ?? _mockLogger.Object);
+    }
 
     private static Post ValidPost(string content = "Test dry-run content") =>
         new() { Content = content };
 
     #region Constructor Tests
+
+    [Fact]
+    public void Platform_ReturnsDryRun()
+    {
+        Assert.Equal(SenderPlatform.DryRun, BuildSender().Platform);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()
+    {
+        var logMock = new Mock<ILogger<DryRunSender>>();
+        var config = new Mock<IConfiguration>();
+        config.Setup(c => c["XApiKey"]).Returns("present-key");
+        var sut = new DryRunSender(config.Object, logMock.Object);
+
+        var result = await sut.SendAsync(new Post
+        {
+            Content = "Hello world",
+            Image = new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 }
+        });
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()
+    {
+        var sut = BuildSender("present");
+        var result = await sut.SendAsync(new Post { Content = string.Empty, Image = null });
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenKeyMissing_ReturnsFalse()
+    {
+        var sut = BuildSender(null);
+        Assert.False(await sut.SendAsync(new Post { Content = "test" }));
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenKeyWhitespace_ReturnsFalse()
+    {
+        var sut = BuildSender("   ");
+        Assert.False(await sut.SendAsync(new Post { Content = "test" }));
+    }
 
     [Fact]
     public void Constructor_WithNullConfiguration_ThrowsArgumentNullException()
@@ -62,7 +117,8 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalse()
     {
-        Assert.False(await BuildSender().SendAsync(null!));
+        var sut = BuildSender("present");
+        Assert.False(await sut.SendAsync(null!));
     }
 
     [Fact]
@@ -87,7 +143,7 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WhenProbeKeyPresent_ReturnsTrue()
     {
-        Assert.True(await BuildSender(BuildConfig("fake-api-key")).SendAsync(ValidPost()));
+        Assert.True(await BuildSender("fake-api-key").SendAsync(ValidPost()));
     }
 
     [Fact]
@@ -128,13 +184,13 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WhenProbeKeyMissing_ReturnsFalse()
     {
-        Assert.False(await BuildSender(BuildConfig(null)).SendAsync(ValidPost()));
+        Assert.False(await BuildSender(null).SendAsync(ValidPost()));
     }
 
     [Fact]
     public async Task SendAsync_WhenProbeKeyMissing_LogsError()
     {
-        await BuildSender(BuildConfig(null)).SendAsync(ValidPost());
+        await BuildSender(null).SendAsync(ValidPost());
 
         _mockLogger.Verify(
             x => x.Log(

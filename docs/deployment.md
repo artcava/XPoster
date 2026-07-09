@@ -87,7 +87,7 @@ cd src
 func azure functionapp publish xposterfunction
 ```
 
-> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram) are **not** set via App Settings — they are loaded from Azure Key Vault at application startup via the **Azure Key Vault Configuration Provider** (`AddAzureKeyVault` registered in `Program.cs`) and injected into senders through standard `IOptions` binding. See [Configuration Reference — Key Vault](configuration.md#key-vault) for the required secret names and role assignment.
+> ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram, Facebook) are **not** set via App Settings — they are loaded from Azure Key Vault at application startup via the **Azure Key Vault Configuration Provider** (`AddAzureKeyVault` registered in `Program.cs`) and injected into senders through standard `IOptions` binding. See [Configuration Reference — Key Vault](configuration.md#key-vault) for the required secret names and role assignment.
 
 > ⚠️ **Never set `EnableDryRunSlot = true` or `ForceHour` in production App Settings.** These are local-development-only keys; see [Configuration Reference — Scheduler](configuration.md#scheduler) for details.
 

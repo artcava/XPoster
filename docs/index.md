@@ -28,6 +28,7 @@ Setup guides for each external service XPoster integrates with.
 | Twitter / X | [setup-x.md](integrations/SenderPlugins/setup-x.md) | OAuth 1.0a, API v2 |
 | LinkedIn | [setup-linkedin.md](integrations/SenderPlugins/setup-linkedin.md) | OAuth 2.0, 60-day token rotation |
 | Instagram | [setup-instagram.md](integrations/SenderPlugins/setup-instagram.md) | OAuth 2.0, Graph API management |
+| Facebook | [setup-facebook.md](integrations/SenderPlugins/setup-facebook.md) | OAuth 2.0, Graph API management |
 | fal.ai | [setup-falai.md](integrations/AiProviders/setup-falai.md) | Image-only provider; text generation not supported |
 | Perplexity | [setup-perplexity.md](integrations/AiProviders/setup-perplexity.md) | Text-only provider; image generation not supported |
 | Open AI | [setup-openai.md](integrations/AiProviders/setup-openai.md) | AI provider for summarisation + image generation |

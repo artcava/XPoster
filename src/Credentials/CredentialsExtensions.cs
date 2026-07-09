@@ -39,6 +39,12 @@ public static class CredentialsExtensions
 
         services.AddSingleton<IValidateOptions<InstagramCredentials>, InstagramCredentialsValidator>();
 
+        services
+            .AddOptions<FacebookCredentials>()
+            .Bind(configuration.GetSection(FacebookCredentials.SectionName));
+
+        services.AddSingleton<IValidateOptions<FacebookCredentials>, FacebookCredentialsValidator>();
+        
         services.AddSingleton<ICredentialsStartupValidator, CredentialsStartupValidator>();
 
         return services;
