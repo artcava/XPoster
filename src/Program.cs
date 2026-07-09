@@ -1,5 +1,6 @@
 extern alias AzureIdentity;
 using Azure.Storage.Blobs;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,8 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
         options.Rules.Remove(defaultRule);
     }
 });
+
+builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
 
 // Azure Key Vault Configuration Provider.
 // Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.

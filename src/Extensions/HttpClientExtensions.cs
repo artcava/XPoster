@@ -32,6 +32,7 @@ public static class HttpClientExtensions
         services.AddResilientHttpClient("Perplexity", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("LinkedIn", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("Instagram", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
+        services.AddResilientHttpClient("Facebook", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
 
         // FalAi image generation is slower: wider timeouts to match.
         services.AddResilientHttpClient("FalAi", attemptTimeoutSeconds: 60, totalRequestTimeoutSeconds: 300, samplingDurationSeconds: 130);

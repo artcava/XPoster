@@ -11,6 +11,8 @@ public enum SenderPlatform
     LinkedIn,
     /// <summary>Posts to Instagram.</summary>
     Instagram,
+    /// <summary>Posts to Facebook.</summary>
+    Facebook,
     /// <summary>Dry-run sender for local integration testing. Logs post output without publishing.</summary>
     DryRun,
 }

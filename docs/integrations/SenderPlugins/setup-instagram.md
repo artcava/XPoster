@@ -44,40 +44,16 @@ Alternatively via Meta Business Suite ([business.facebook.com](https://business.
 
 ---
 
-## Step 3 — Create a Meta Developer App
-
-1. Go to [developers.facebook.com](https://developers.facebook.com) and log in with your Facebook account.
-2. Click **My Apps → Create App**.
-3. Select app type **Business**, then click **Next**.
-4. Enter a name, a contact email, and click **Create App**.
-5. In the app dashboard, go to **Facebook Login → Settings** and add the following **Valid OAuth Redirect URI**:
-   ```
-   https://developers.facebook.com/tools/explorer/
-   ```
-   This allows using the Graph API Explorer to generate tokens without setting up a real redirect endpoint.
-
----
-
-## Step 4 — Add Your Account as Administrator or Tester
-
-In Development mode, the API only works for accounts with an explicit role in the app.
-
-1. In the app dashboard, go to **App Roles → Roles**.
-2. Under **Administrators** or **Testers**, add the Facebook account that owns the Page.
-3. Accept the invitation if prompted.
-
----
-
-## Step 5 — Generate a Short-Lived Access Token via Graph API Explorer
+## Step 3 — Extend Access Token via Graph API Explorer
 
 1. Open the [Graph API Explorer](https://developers.facebook.com/tools/explorer/).
 2. In the top-right dropdown **Meta App**, select your app.
 3. Click **Generate Access Token**.
-4. In the permissions dialog, check all four of the following:
+4. In the permissions dialog, add the following:
    - `instagram_basic`
    - `instagram_content_publish`
-   - `pages_show_list`
-   - `pages_read_engagement`
+   - `instagram_manage_comments`
+
 5. Click **Generate Access Token** and complete the Facebook login consent screen.
 
 The token displayed is a **short-lived User Access Token**, valid for approximately **1–2 hours**.
@@ -91,9 +67,9 @@ Open the [Access Token Debugger](https://developers.facebook.com/tools/debug/acc
 
 ---
 
-## Step 6 — Exchange for a Long-Lived Access Token
+## Step 4 — Exchange for a Long-Lived Access Token
 
-Short-lived tokens are not suitable for production. Exchange for a **long-lived token** valid for 60 days.
+Short-lived tokens are not suitable for production. Exchange for a **long-lived token**.
 
 Open the following URL in your browser (replace the three placeholders):
 
@@ -107,22 +83,19 @@ The response will be:
 ```json
 {
   "access_token": "EAABsbCS...",
-  "token_type": "bearer",
-  "expires_in": 5183999
+  "token_type": "bearer"
 }
 ```
-
-`expires_in` ≈ 5,184,000 seconds ≈ **60 days**.
 
 Store the `access_token` value in Azure Key Vault with the secret name **`InstagramAccessToken`**.
 
 ---
 
-## Step 7 — Retrieve the Instagram Account ID
+## Step 5 — Retrieve the Instagram Account ID
 
 The Instagram Business Account ID is needed to form API request URLs in XPoster.
 
-### Step 7a — Find your Facebook Page
+### Step 5a — Find your Facebook Page
 
 In the Graph API Explorer, paste the **long-lived token** and run:
 
@@ -132,13 +105,13 @@ GET /me/accounts
 
 > ⚠️ If this returns only your personal user ID and no Pages, it means the `pages_show_list` permission was not granted. Regenerate the token (Step 5) making sure all four permissions are checked.
 
-If you know your Page's vanity name (e.g. `ArtCavaProjects`), you can query it directly and skip Step 7b:
+If you know your Page's vanity name (e.g. `ArtCavaProjects`), you can query it directly and skip Step 5b:
 
 ```
 GET /ArtCavaProjects?fields=id,instagram_business_account
 ```
 
-### Step 7b — Get the Instagram Business Account ID
+### Step 5b — Get the Instagram Business Account ID
 
 Using the Page ID from the previous step:
 
@@ -171,63 +144,25 @@ You should see the Instagram account name and username. If this call succeeds, t
 
 ---
 
-## Step 8 — App Review (Production Only)
-
-In **Development mode**, everything above works only for accounts with a role in the app. For a private single-account automation like XPoster, **App Review is not required**.
-
-App Review is only needed if the app will publish on behalf of **third-party Instagram accounts**. In that case, request the following permissions via **App Review → Permissions and Features**:
-- `instagram_basic`
-- `instagram_content_publish`
-- `pages_show_list`
-- `pages_read_engagement`
-
----
-
 ## Azure Key Vault Secret Names Reference
 
 At the end of this setup, the following secrets must be stored in Azure Key Vault with **these exact names**, which XPoster reads via `IOptions<InstagramCredentials>`:
 
 | Key Vault Secret Name | Value | How to obtain |
 |---|---|---|
-| `InstagramAccessToken` | Long-lived User Access Token | Step 6 |
-| `InstagramAccountId` | Instagram Business Account numeric ID | Step 7b (`instagram_business_account.id`) |
+| `InstagramAccessToken` | Long-lived User Access Token | Step 4 |
+| `InstagramAccountId` | Instagram Business Account numeric ID | Step 5b (`instagram_business_account.id`) |
 
-> Never commit tokens to source control or expose them in logs.
+> Never commit tokens to source control or expose them in logs. XPoster mask http calls with `ITelemetryInitializer`
 
 ---
 
 ## Token Management
 
-| Token type | Validity | Exchange endpoint |
+| Token type | Expiration | Exchange endpoint |
 |---|---|---|
 | Short-lived User Token | ~1–2 hours | — |
-| Long-lived User Token | 60 days | `graph.facebook.com/v20.0/oauth/access_token` with `grant_type=fb_exchange_token` |
-
----
-
-## Image Requirements
-
-| Constraint | Requirement |
-|---|---|
-| Format | **JPEG only** (PNG, GIF, MPO, JPS not accepted) |
-| Aspect ratio | Between 4:5 (portrait) and 1.91:1 (landscape) |
-| Minimum width | 320 px |
-| Maximum width | 1440 px |
-| Maximum file size | 8 MB |
-| Color space | sRGB recommended |
-
-Images must be hosted at a **direct, publicly accessible URL** — no authentication, no redirects. Sharing links from Google Drive, OneDrive, or similar services are rejected by Meta's media pipeline.
-
----
-
-## Rate Limits
-
-| Limit | Value |
-|---|---|
-| Content publishing | **50 posts per 24 hours** per account |
-| API calls | 200 calls per hour per user token |
-
-Exceeding the publishing limit returns HTTP `429`. The `Retry-After` header indicates when the limit resets.
+| Long-lived User Token | never | `graph.facebook.com/v23.0/oauth/access_token` with `grant_type=fb_exchange_token` |
 
 ---
 

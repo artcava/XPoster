@@ -95,6 +95,7 @@ public class OrchestratorFactory : IOrchestratorFactory
         SenderPlatform.X => _serviceProvider.GetService(typeof(XSender)) as ISender,
         SenderPlatform.LinkedIn => _serviceProvider.GetService(typeof(InSender)) as ISender,
         SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender)) as ISender,
+        SenderPlatform.Facebook => _serviceProvider.GetService(typeof(FbSender)) as ISender,
         SenderPlatform.DryRun => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
         _ => null
     };
