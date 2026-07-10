@@ -76,7 +76,41 @@ public class IgSenderResilienceTests
     }
 
     [Fact]
-    public async Task SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()
+    public async Task SendAsync_WhenBlobUploadFails_ReturnsFalse()
+    {
+        var factory = new Mock<IHttpClientFactory>();
+        factory.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
+
+        _blobStorageMock
+            .Setup(x => x.UploadAsync(It.IsAny<byte[]>(), "image/jpeg", It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception("storage unavailable"));
+
+        Assert.False(await BuildSender(factory.Object).SendAsync(PostWithImage()));
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()
+    {
+        var factory = new Mock<IHttpClientFactory>();
+        factory.Setup(f => f.CreateClient("Instagram")).Returns(new HttpClient(new Mock<HttpMessageHandler>().Object));
+
+        _blobStorageMock
+            .Setup(x => x.UploadAsync(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new TaskCanceledException());
+
+        Assert.False(await BuildSender(factory.Object).SendAsync(PostWithImage()));
+        _loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("[IgSender] Error uploading image to Blob Storage.")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenHttpClientThrows_ReturnsFalse()
     {
         var mock = new Mock<HttpMessageHandler>();
         mock.Protected()
