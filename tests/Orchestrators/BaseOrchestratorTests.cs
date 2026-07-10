@@ -4,7 +4,7 @@ using XPoster.Contracts;
 using XPoster.Models;
 using XPoster.Orchestrators;
 
-namespace XPoster.Tests.Contracts;
+namespace XPoster.Tests.Orchestrators;
 
 /// <summary>
 /// Tests for the shared PostAsync logic in BaseOrchestrator.

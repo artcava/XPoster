@@ -5,7 +5,7 @@ namespace XPoster.Tests.Models;
 /// <summary>
 /// Covers the missing branches of <see cref="Post"/> to reach 100% line coverage.
 /// </summary>
-public class PostMissingBranchTests
+public class PostTests
 {
     [Fact]
     public void Firm_IsNotNullOrEmpty()

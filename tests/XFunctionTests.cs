@@ -91,4 +91,76 @@ public class XFunctionTests
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }
+
+    [Fact]
+    public async Task Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()
+    {
+        // posts.Count == 0 branch: LogError("Failed to orchestrate messages...") then return
+        _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
+        _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
+        _mockOrchestrator.Setup(g => g.OrchestrateAsync(CancellationToken.None))
+            .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)
+                new Dictionary<SenderPlatform, Post?>().AsReadOnly());
+        _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
+
+        var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
+        await function.Run(null!, CancellationToken.None);
+
+        _mockOrchestrator.Verify(
+            g => g.PostAsync(It.IsAny<IReadOnlyDictionary<SenderPlatform, Post?>>(), It.IsAny<CancellationToken>()), Times.Never);
+        _mockLogger.Verify(
+            l => l.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Failed to orchestrate")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task Run_Should_LogError_When_PostAsync_ReturnsFalse()
+    {
+        var testPosts = new Dictionary<SenderPlatform, Post?>
+        {
+            { SenderPlatform.X, new Post { Content = "Test" } }
+        }.AsReadOnly();
+
+        _mockOrchestrator.Setup(g => g.SendIt).Returns(true);
+        _mockOrchestrator.Setup(g => g.Name).Returns("TestOrchestrator");
+        _mockOrchestrator.Setup(g => g.OrchestrateAsync(CancellationToken.None))
+            .ReturnsAsync((IReadOnlyDictionary<SenderPlatform, Post?>)testPosts);
+        _mockOrchestrator.Setup(g => g.PostAsync(testPosts, CancellationToken.None)).ReturnsAsync(false);
+        _mockFactory.Setup(f => f.Resolve()).Returns(_mockOrchestrator.Object);
+
+        var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
+        await function.Run(null!, CancellationToken.None);
+
+        _mockLogger.Verify(
+            l => l.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("One or more senders failed")),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task Run_Should_Rethrow_When_Factory_Throws()
+    {
+        _mockFactory.Setup(f => f.Resolve()).Throws(new InvalidOperationException("factory error"));
+
+        var function = new XFunction(_mockFactory.Object, _mockLogger.Object);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => function.Run(null!, CancellationToken.None));
+        _mockLogger.Verify(
+            l => l.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<InvalidOperationException>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
 }

@@ -6,7 +6,7 @@ namespace XPoster.Tests.Models;
 /// Covers <see cref="RSSFeed"/> record properties to reach 100% line coverage.
 /// RSSFeed is a record with required Title, Content, Link and optional PublishDate.
 /// </summary>
-public class RSSFeedMissingBranchTests
+public class RSSFeedTests
 {
     [Fact]
     public void RSSFeed_CanCreateWithRequiredProperties()
