@@ -1,7 +1,8 @@
 using XPoster.Orchestrators;
 using XPoster.Models;
+using XPoster.Providers;
 
-namespace XPoster.Tests.Orchestrators;
+namespace XPoster.Tests.Providers;
 
 public class ConfigurationTagReplacementProviderTests
 {

@@ -1,4 +1,4 @@
-namespace XPoster.Contracts;
+namespace XPoster.Models;
 
 /// <summary>
 /// Represents the result of a blob upload operation.

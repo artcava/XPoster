@@ -1,6 +1,6 @@
 using XPoster.Contracts;
 
-namespace XPoster.Services;
+namespace XPoster.Providers;
 
 /// <summary>
 /// Concrete implementation of <see cref="ITimeProvider"/> that delegates to the system clock.

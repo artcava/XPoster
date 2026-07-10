@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using XPoster.Contracts;
 
-namespace XPoster.Services;
+namespace XPoster.Providers;
 
 /// <summary>
 /// Development-only <see cref="ITimeProvider"/> that returns a fixed UTC hour

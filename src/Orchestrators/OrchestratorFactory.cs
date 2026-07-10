@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using XPoster.Abstraction;
 using XPoster.Contracts;
 using XPoster.SenderPlugins;
 

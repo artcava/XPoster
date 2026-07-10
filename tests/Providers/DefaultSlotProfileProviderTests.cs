@@ -1,7 +1,8 @@
 using XPoster.Contracts;
 using XPoster.Orchestrators;
+using XPoster.Providers;
 
-namespace XPoster.Tests.Orchestrators;
+namespace XPoster.Tests.Providers;
 
 /// <summary>
 /// Tests for <see cref="DefaultSlotProfileProvider"/> slot configuration.

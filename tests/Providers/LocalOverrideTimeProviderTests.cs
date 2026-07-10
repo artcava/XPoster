@@ -2,9 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using XPoster.Services;
+using XPoster.Providers;
 
-namespace XPoster.Tests.Services;
+namespace XPoster.Tests.Providers;
 
 /// <summary>
 /// Tests for <see cref="LocalOverrideTimeProvider"/>.

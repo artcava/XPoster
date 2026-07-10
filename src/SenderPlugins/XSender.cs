@@ -34,7 +34,7 @@ public class XSender : ISender
     public SenderPlatform Platform => SenderPlatform.X;
 
     /// <summary>Gets the maximum number of characters allowed per tweet (250, leaving room for the firm footer).</summary>
-    public int MessageMaxLenght => 250;
+    public int MessageMaxLength => 250;
 
     /// <summary>
     /// Publishes <paramref name="post"/> as a tweet. If an image is attached, it is uploaded
@@ -47,13 +47,13 @@ public class XSender : ISender
     {
         if (post == null)
         {
-            _logger.LogWarning("Post cannot be null");
+                    _logger.LogWarning("[XSender] Post is null. Skipping.");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(post.Content))
         {
-            _logger.LogWarning("Post content cannot be empty");
+            _logger.LogWarning("[XSender] Post content cannot be empty. Skipping.");
             return false;
         }
 
@@ -78,14 +78,14 @@ public class XSender : ISender
             {
                 var media = await twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image", cancelToken: ct);
 
-                if (media == null) throw new Exception("Error uploading media");
+                if (media == null) throw new Exception("[XSender] Error uploading media");
 
                 var imageTweet = await twitterContext.TweetMediaAsync(
                     text: postText,
                     mediaIds: new List<string> { media.MediaID.ToString() },
                     cancelToken: ct
                 );
-                if (imageTweet == null) throw new Exception("Error tweeting");
+                if (imageTweet == null) throw new Exception("[XSender] Error tweeting");
 
                 tweetId = imageTweet.ID;
             }
@@ -93,17 +93,17 @@ public class XSender : ISender
             {
                 var tweet = await twitterContext.TweetAsync(postText, cancelToken: ct);
 
-                if (tweet == null) throw new Exception("Error tweeting");
+                if (tweet == null) throw new Exception("[XSender] Error tweeting");
 
                 tweetId = tweet.ID;
             }
 
-            _logger.LogInformation("Published tweet: (ID: {0})", tweetId);
+            _logger.LogInformation("[XSender] Published tweet: (ID: {0})", tweetId);
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.LogError(ex, "[XSender] {Message}", ex.Message);
             return false;
         }
     }

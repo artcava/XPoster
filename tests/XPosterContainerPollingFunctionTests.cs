@@ -2,6 +2,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XPoster.Contracts;
+using XPoster.Models;
 
 namespace XPoster.Tests;
 

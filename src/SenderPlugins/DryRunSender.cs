@@ -32,7 +32,7 @@ public class DryRunSender : ISender
     public SenderPlatform Platform => SenderPlatform.DryRun;
 
     /// <summary>Gets the maximum number of characters allowed per post (no real limit; returns <see cref="int.MaxValue"/>).</summary>
-    public int MessageMaxLenght => int.MaxValue;
+    public int MessageMaxLength => int.MaxValue;
 
     /// <summary>
     /// Probes configuration for a known credential, logs the post content and image presence,

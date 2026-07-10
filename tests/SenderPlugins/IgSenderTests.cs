@@ -227,7 +227,7 @@ public class IgSenderTests
     }
 
     [Fact]
-    public void MessageMaxLenght_Returns2200()
+    public void MessageMaxLength_Returns2200()
     {
         var sut = BuildSender(
             new HttpClient(new Mock<HttpMessageHandler>().Object),
@@ -235,7 +235,7 @@ public class IgSenderTests
             new Mock<IContainerStateStore>(),
             new Mock<ILogger<IgSender>>());
 
-        Assert.Equal(2200, sut.MessageMaxLenght);
+        Assert.Equal(2200, sut.MessageMaxLength);
     }
 
     [Fact]
@@ -396,7 +396,7 @@ public class IgSenderTests
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Errore durante il caricamento dell'immagine su Blob Storage")),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("[IgSender] Error uploading image to Blob Storage.")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);

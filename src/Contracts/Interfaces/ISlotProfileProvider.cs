@@ -1,4 +1,4 @@
-using XPoster.Abstraction;
+using XPoster.Models;
 
 namespace XPoster.Contracts;
 

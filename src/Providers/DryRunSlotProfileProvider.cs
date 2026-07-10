@@ -1,7 +1,8 @@
-using XPoster.Abstraction;
 using XPoster.Contracts;
+using XPoster.Models;
+using XPoster.Orchestrators;
 
-namespace XPoster.Orchestrators;
+namespace XPoster.Providers;
 
 /// <summary>
 /// Decorator over <see cref="ISlotProfileProvider"/> that appends the DryRun slot

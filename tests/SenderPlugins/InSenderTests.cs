@@ -47,7 +47,7 @@ public class InSenderTests
     {
         var sender = BuildSender(_mockFactory.Object, BuildCreds(), _mockLogger);
         Assert.NotNull(sender);
-        Assert.Equal(2800, sender.MessageMaxLenght);
+        Assert.Equal(2800, sender.MessageMaxLength);
     }
 
     [Fact]
@@ -78,9 +78,9 @@ public class InSenderTests
     }
 
     [Fact]
-    public void MessageMaxLenght_Returns2800()
+    public void MessageMaxLength_Returns2800()
     {
-        Assert.Equal(2800, BuildSender(_mockFactory.Object).MessageMaxLenght);
+        Assert.Equal(2800, BuildSender(_mockFactory.Object).MessageMaxLength);
     }
 
     #endregion

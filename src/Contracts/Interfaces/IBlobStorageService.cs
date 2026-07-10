@@ -1,3 +1,5 @@
+using XPoster.Models;
+
 namespace XPoster.Contracts;
 
 /// <summary>

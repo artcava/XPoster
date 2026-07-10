@@ -60,10 +60,10 @@ public class FbSenderTests
     }
 
     [Fact]
-    public void MessageMaxLenght_Returns3000()
+    public void MessageMaxLength_Returns3000()
     {
         var sut = BuildSender(BuildFactory(HttpStatusCode.OK, "{}"));
-        Assert.Equal(3000, sut.MessageMaxLenght);
+        Assert.Equal(3000, sut.MessageMaxLength);
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public class FbSenderTests
 
         Assert.NotNull(sender);
         Assert.Equal(SenderPlatform.Facebook, sender.Platform);
-        Assert.Equal(3000, sender.MessageMaxLenght);
+        Assert.Equal(3000, sender.MessageMaxLength);
     }
 
     [Fact]

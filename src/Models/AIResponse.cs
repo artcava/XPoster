@@ -3,14 +3,14 @@ namespace XPoster.Models;
 /// <summary>
 /// Root response object returned by the OpenAI Chat Completions API.
 /// </summary>
-public class OpenAIResponse
+public class AIResponse
 {
     /// <summary>Gets or sets the array of completion choices returned by the model.</summary>
     public required Choice[] choices { get; set; }
 }
 
 /// <summary>
-/// Represents a single completion choice within an <see cref="OpenAIResponse"/>.
+/// Represents a single completion choice within an <see cref="AIResponse"/>.
 /// </summary>
 public class Choice
 {

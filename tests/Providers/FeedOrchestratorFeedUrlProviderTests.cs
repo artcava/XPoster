@@ -4,7 +4,7 @@ using XPoster.Contracts;
 using XPoster.Orchestrators;
 using XPoster.Models;
 
-namespace XPoster.Tests.Orchestrators;
+namespace XPoster.Tests.Providers;
 
 /// <summary>
 /// Tests focused on <see cref="FeedOrchestrator"/> interactions with <see cref="IFeedUrlProvider"/>.
@@ -32,7 +32,7 @@ public class FeedOrchestratorFeedUrlProviderTests
         _mockTagReplacementService = new Mock<ITagReplacementService>();
         _mockImageProvider = new Mock<ITextToImageProvider>();
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockTagReplacementProvider.Setup(p => p.GetReplacements())
             .Returns(new Dictionary<string, string>());
     }
@@ -47,7 +47,7 @@ public class FeedOrchestratorFeedUrlProviderTests
     [Fact]
     public async Task OrchestrateAsync_Should_CallGetFeedUrls_Once()
     {
-        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(["https://feed1.com/rss"]);
+        _mockFeedUrlProvider.Setup(p => p.GetFeedUrls()).Returns(new List<string> { "https://feed1.com/rss" });
         var fakeFeeds = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "https://l.com" } };
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))

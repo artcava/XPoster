@@ -1,6 +1,6 @@
 using XPoster.Contracts;
 
-namespace XPoster.Abstraction;
+namespace XPoster.Models;
 
 /// <summary>
 /// Describes the full execution profile for a scheduled posting slot.

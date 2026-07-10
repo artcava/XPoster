@@ -69,7 +69,7 @@ public class IgSenderResilienceTests
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Errore durante il caricamento dell'immagine su Blob Storage")),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("[IgSender] Error uploading image to Blob Storage.")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);

@@ -39,7 +39,7 @@ public class XSenderTests
     {
         var sender = new XSender(_credentials, _mockLogger.Object);
         Assert.NotNull(sender);
-        Assert.Equal(250, sender.MessageMaxLenght);
+        Assert.Equal(250, sender.MessageMaxLength);
     }
 
     [Fact]
@@ -61,9 +61,9 @@ public class XSenderTests
     }
 
     [Fact]
-    public void MessageMaxLenght_Returns250()
+    public void MessageMaxLength_Returns250()
     {
-        Assert.Equal(250, BuildSender().MessageMaxLenght);
+        Assert.Equal(250, BuildSender().MessageMaxLength);
     }
 
     #endregion

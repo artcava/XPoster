@@ -1,8 +1,8 @@
-using XPoster.Abstraction;
 using XPoster.Contracts;
+using XPoster.Models;
 using XPoster.Orchestrators;
 
-namespace XPoster.Tests.Abstraction;
+namespace XPoster.Tests.Models;
 
 /// <summary>
 /// Tests for <see cref="ScheduledOrchestrationProfile"/> field initialisation.

@@ -11,7 +11,7 @@ namespace XPoster.Contracts
         SenderPlatform Platform { get; }
 
         /// <summary>Gets the maximum number of characters allowed in a single post on this platform.</summary>
-        int MessageMaxLenght { get; }
+        int MessageMaxLength { get; }
 
         /// <summary>
         /// Asynchronously sends the given <see cref="Post"/> to the target social-media platform.

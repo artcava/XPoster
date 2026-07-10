@@ -49,7 +49,7 @@ namespace XPoster.SenderPlugins
         public SenderPlatform Platform => SenderPlatform.Facebook;
 
         /// <summary>Gets the maximum caption length allowed by Facebook (3000 characters).</summary>
-        public int MessageMaxLenght => 3000;
+        public int MessageMaxLength => 3000;
 
         /// <summary>
         /// Publishes <paramref name="post"/> to Facebook via a two-step Graph API flow:
@@ -65,16 +65,16 @@ namespace XPoster.SenderPlugins
                 // Guard clauses for null Post
                 if (post is null)
                 {
-                    _logger.LogWarning("[FbSender] Received null post — skipping.");
+                    _logger.LogWarning("[FbSender] Post is null. Skipping.");
                     return false;
                 }
 
                 // Guard clause for length of caption
                 string caption = $"{post.Content}{Post.Firm}";
-                if (caption.Length > MessageMaxLenght)
+                if (caption.Length > MessageMaxLength)
                 {
-                    _logger.LogWarning("[FbSender] Caption exceeds {MaxLength} characters and will be truncated.", MessageMaxLenght);
-                    caption = caption[..MessageMaxLenght];
+                    _logger.LogWarning("[FbSender] Caption exceeds {MaxLength} characters and will be truncated.", MessageMaxLength);
+                    caption = caption[..MessageMaxLength];
                 }
 
                 // Guard clause for null or empty image
@@ -116,14 +116,14 @@ namespace XPoster.SenderPlugins
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogWarning(ex, "[FbSender] Failed to delete blob {BlobName} after Facebook publish flow.", uploadResult.BlobName);
+                            _logger.LogWarning(ex, "[FbSender] Failed to delete blob {BlobName} after publish flow.", uploadResult.BlobName);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[FbSender] Error while sending post to Facebook.");
+                _logger.LogError(ex, "[FbSender] Error while sending post.");
                 return false;
             }
         }
@@ -146,7 +146,7 @@ namespace XPoster.SenderPlugins
                 }
 
                 _logger.LogInformation(
-                    "[FbSender] Detected image format for Facebook: {EncodedFormat}",
+                    "[FbSender] Detected image format: {EncodedFormat}",
                     codec.EncodedFormat);
 
                 return codec.EncodedFormat switch
@@ -168,7 +168,7 @@ namespace XPoster.SenderPlugins
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[FbSender] Error while validating Facebook image format.");
+                _logger.LogError(ex, "[FbSender] Error while validating image format.");
                 return null;
             }
         }
@@ -196,7 +196,7 @@ namespace XPoster.SenderPlugins
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[FbSender] Error while converting image to JPEG for Facebook.");
+                _logger.LogError(ex, "[FbSender] Error while converting image to JPEG.");
                 return null;
             }
         }
@@ -254,7 +254,7 @@ namespace XPoster.SenderPlugins
                 string? retryAfter = response.Headers.RetryAfter?.Delta?.TotalSeconds.ToString();
 
                 _logger.LogError(
-                    "[FbSender] Facebook API call to /{Endpoint} failed with status code {StatusCode}. RetryAfterSeconds: {RetryAfterSeconds}",
+                    "[FbSender] API call to /{Endpoint} failed with status code {StatusCode}. RetryAfterSeconds: {RetryAfterSeconds}",
                     endpoint,
                     (int)response.StatusCode,
                     retryAfter ?? "n/a");
@@ -267,19 +267,19 @@ namespace XPoster.SenderPlugins
 
             if (!document.RootElement.TryGetProperty("id", out var idProperty))
             {
-                _logger.LogError("[FbSender] Facebook API response for /{Endpoint} did not contain an id.", endpoint);
+                _logger.LogError("[FbSender] API response for /{Endpoint} did not contain an id.", endpoint);
                 return false;
             }
 
             var postId = idProperty.GetString();
             if (string.IsNullOrWhiteSpace(postId))
             {
-                _logger.LogError("[FbSender] Facebook API response for /{Endpoint} contained an empty id.", endpoint);
+                _logger.LogError("[FbSender] API response for /{Endpoint} contained an empty id.", endpoint);
                 return false;
             }
 
             _logger.LogInformation(
-                "[FbSender] Facebook publish completed successfully via /{Endpoint}. PostId: {PostId}",
+                "[FbSender] Publish completed successfully via /{Endpoint}. PostId: {PostId}",
                 endpoint,
                 postId);
 

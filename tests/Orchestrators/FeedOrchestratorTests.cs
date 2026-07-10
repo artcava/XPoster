@@ -95,7 +95,7 @@ public class FeedOrchestratorTests
         var fakePrompt = "Prompt per immagine";
         var fakeImage = new byte[] { 1, 2, 3 };
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -139,9 +139,9 @@ public class FeedOrchestratorTests
         var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        primarySender.Setup(s => s.MessageMaxLength).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
+        secondarySender.Setup(s => s.MessageMaxLength).Returns(280);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 300); // fits both limits
@@ -178,9 +178,9 @@ public class FeedOrchestratorTests
         var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        primarySender.Setup(s => s.MessageMaxLength).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
+        secondarySender.Setup(s => s.MessageMaxLength).Returns(280);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 500); // 500 > 280: re-summarisation needed
@@ -226,9 +226,9 @@ public class FeedOrchestratorTests
         var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        primarySender.Setup(s => s.MessageMaxLength).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
+        secondarySender.Setup(s => s.MessageMaxLength).Returns(280);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 200); // 200 <= 280: no re-summarisation
@@ -263,9 +263,9 @@ public class FeedOrchestratorTests
         var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        primarySender.Setup(s => s.MessageMaxLength).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
+        secondarySender.Setup(s => s.MessageMaxLength).Returns(280);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "bitcoin news", Link = "x", Title = "t" } };
         var baseSummary = "bitcoin is rising fast and we are all excited"; // fits both limits
@@ -302,7 +302,7 @@ public class FeedOrchestratorTests
         var rawBase = "bitcoin analysis"; // no hashtag yet
         string? promptInput = null;
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(700);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(700);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -332,9 +332,9 @@ public class FeedOrchestratorTests
         var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        primarySender.Setup(s => s.MessageMaxLength).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
+        secondarySender.Setup(s => s.MessageMaxLength).Returns(280);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 200);
@@ -374,9 +374,9 @@ public class FeedOrchestratorTests
         var primarySender = new Mock<ISender>();
         var secondarySender = new Mock<ISender>();
         primarySender.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        primarySender.Setup(s => s.MessageMaxLenght).Returns(700);
+        primarySender.Setup(s => s.MessageMaxLength).Returns(700);
         secondarySender.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        secondarySender.Setup(s => s.MessageMaxLenght).Returns(280);
+        secondarySender.Setup(s => s.MessageMaxLength).Returns(280);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 500);
@@ -426,11 +426,11 @@ public class FeedOrchestratorTests
         var senderLinkedIn = new Mock<ISender>();
         var senderInstagram = new Mock<ISender>();
         senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        senderX.Setup(s => s.MessageMaxLenght).Returns(700);
+        senderX.Setup(s => s.MessageMaxLength).Returns(700);
         senderLinkedIn.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        senderLinkedIn.Setup(s => s.MessageMaxLenght).Returns(280);
+        senderLinkedIn.Setup(s => s.MessageMaxLength).Returns(280);
         senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
-        senderInstagram.Setup(s => s.MessageMaxLenght).Returns(150);
+        senderInstagram.Setup(s => s.MessageMaxLength).Returns(150);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
@@ -486,11 +486,11 @@ public class FeedOrchestratorTests
         var senderLinkedIn = new Mock<ISender>();
         var senderInstagram = new Mock<ISender>();
         senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        senderX.Setup(s => s.MessageMaxLenght).Returns(700);
+        senderX.Setup(s => s.MessageMaxLength).Returns(700);
         senderLinkedIn.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        senderLinkedIn.Setup(s => s.MessageMaxLenght).Returns(280);
+        senderLinkedIn.Setup(s => s.MessageMaxLength).Returns(280);
         senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
-        senderInstagram.Setup(s => s.MessageMaxLenght).Returns(150);
+        senderInstagram.Setup(s => s.MessageMaxLength).Returns(150);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 200); // 200 <= 280: LinkedIn reuses, no AI
@@ -543,11 +543,11 @@ public class FeedOrchestratorTests
         var senderLinkedIn = new Mock<ISender>();
         var senderInstagram = new Mock<ISender>();
         senderX.Setup(s => s.Platform).Returns(SenderPlatform.X);
-        senderX.Setup(s => s.MessageMaxLenght).Returns(700);
+        senderX.Setup(s => s.MessageMaxLength).Returns(700);
         senderLinkedIn.Setup(s => s.Platform).Returns(SenderPlatform.LinkedIn);
-        senderLinkedIn.Setup(s => s.MessageMaxLenght).Returns(280);
+        senderLinkedIn.Setup(s => s.MessageMaxLength).Returns(280);
         senderInstagram.Setup(s => s.Platform).Returns(SenderPlatform.Instagram);
-        senderInstagram.Setup(s => s.MessageMaxLenght).Returns(250);
+        senderInstagram.Setup(s => s.MessageMaxLength).Returns(250);
 
         var fakeFeeds = new List<RSSFeed> { new() { Content = "feed content", Link = "x", Title = "t" } };
         var baseSummary = new string('A', 500); // 500 > 280: LinkedIn needs re-summary
@@ -592,7 +592,7 @@ public class FeedOrchestratorTests
     [Fact]
     public async Task OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()
     {
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed>());
@@ -630,7 +630,7 @@ public class FeedOrchestratorTests
     {
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test content", Link = "https://bitcoin.org/" } };
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -657,7 +657,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary text";
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -684,7 +684,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "News about bitcoin and BTC and fed policy", Link = "https://bitcoin.org/" } };
         var fakeSummary = "News about bitcoin and btc. The fed decided...";
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -718,7 +718,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Bitcoin", Content = "bitcoin news", Link = "https://bitcoin.org/" } };
         var fakeSummary = "bitcoin summary";
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -750,7 +750,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -778,7 +778,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -806,7 +806,7 @@ public class FeedOrchestratorTests
         var fakeFeeds = new List<RSSFeed> { new() { Title = "Il Bitcoin", Content = "Test", Link = "https://bitcoin.org/" } };
         var fakeSummary = "Summary";
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -890,7 +890,7 @@ public class FeedOrchestratorTests
         var fakeSummary = "Fallback summary used as prompt";
         var fakeImage = new byte[] { 9, 8, 7 };
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -922,7 +922,7 @@ public class FeedOrchestratorTests
         var fakeSummary = "Fallback summary";
         var fakeImage = new byte[] { 1 };
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeFeeds);
@@ -960,7 +960,7 @@ public class FeedOrchestratorTests
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
-        _mockSender.Setup(s => s.MessageMaxLenght).Returns(280);
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
         _mockFeedService.Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(),
                 It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))

@@ -1,7 +1,8 @@
-using XPoster.Abstraction;
 using XPoster.Contracts;
+using XPoster.Models;
+using XPoster.Orchestrators;
 
-namespace XPoster.Orchestrators;
+namespace XPoster.Providers;
 
 /// <summary>
 /// Production implementation of <see cref="ISlotProfileProvider"/>.

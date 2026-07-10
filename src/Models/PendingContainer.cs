@@ -1,4 +1,4 @@
-namespace XPoster.Contracts;
+namespace XPoster.Models;
 
 /// <summary>
 /// Represents a pending container with its creation ID and associated blob name.

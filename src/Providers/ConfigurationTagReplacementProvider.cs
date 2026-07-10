@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 using XPoster.Contracts;
 using XPoster.Models;
 
-namespace XPoster.Orchestrators;
+namespace XPoster.Providers;
 
 /// <summary>
 /// Returns the word-to-hashtag replacement map from the static app-settings

@@ -1,3 +1,5 @@
+using XPoster.Models;
+
 namespace XPoster.Contracts;
 /// <summary>
 /// Defines a contract for a container state store that can save, retrieve, and update the status of containers.

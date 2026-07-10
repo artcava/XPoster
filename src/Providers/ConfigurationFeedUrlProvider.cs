@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 using XPoster.Contracts;
 using XPoster.Models;
 
-namespace XPoster.Orchestrators;
+namespace XPoster.Providers;
 
 /// <summary>
 /// Returns feed URLs from the static app-settings section <c>FeedOptions:Urls</c>.

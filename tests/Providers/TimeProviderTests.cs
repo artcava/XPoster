@@ -1,10 +1,10 @@
-// CS0104: disambiguate between XPoster.Services.TimeProvider and System.TimeProvider
-using XPosterTimeProvider = XPoster.Services.TimeProvider;
+// CS0104: disambiguate between XPoster.Providers.TimeProvider and System.TimeProvider
+using XPosterTimeProvider = XPoster.Providers.TimeProvider;
 
-namespace XPoster.Tests.Services;
+namespace XPoster.Tests.Providers;
 
 /// <summary>
-/// Tests for the concrete <see cref="XPoster.Services.TimeProvider"/> implementation.
+/// Tests for the concrete <see cref="XPoster.Providers.TimeProvider"/> implementation.
 /// After issue #171, GetCurrentTime() returns DateTime.UtcNow.
 /// </summary>
 public class TimeProviderTests

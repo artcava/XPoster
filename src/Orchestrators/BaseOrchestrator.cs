@@ -1,7 +1,7 @@
 using XPoster.Contracts;
 using XPoster.Models;
 
-namespace XPoster.Abstraction;
+namespace XPoster.Orchestrators;
 
 /// <summary>
 /// Provides the shared scaffolding for all content orchestrators: sender list, logger,
