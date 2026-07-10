@@ -46,71 +46,42 @@ tests/
 ├── XFunctionTests.cs
 ├── XFunctionMissingBranchTests.cs
 ├── XPosterContainerPollingFunctionTests.cs
-├── Abstraction/
-│   ├── ScheduledOrchestrationProfileTests.cs
 ├── Contracts/
-│   ├── AiProviderExtensionsTests.cs
-│   └── BaseOrchestratorTests.cs
+│   └── AiProviderExtensionsTests.cs
+├── Extensions/
+│   └── *ExtensionsTests.cs
 ├── Helpers/
 │   ├── ImageTestData.cs
 │   └── ResilienceTestHelpers.cs
 ├── Integration/
-│   ├── AiClientsResiliencePipelineTests.cs
+│   ├── *ResiliencePipelineTests.cs
 │   ├── CaptureLoggerProvider.cs
-│   ├── InstagramResiliencePipelineTests.cs
-│   ├── LinkedInResiliencePipelineTests.cs
 │   └── PollyIntegrationTestBase.cs
 ├── Models/
-│   ├── AzureFoundryOptionsTests.cs
-│   ├── AzureFoundryOptionsValidatorTests.cs
-│   ├── DeepSeekOptionsTests.cs
-│   ├── DeepSeekOptionsValidatorTests.cs
-│   ├── FalAiOptionsValidatorTests.cs
+│   ├── *OptionsTests.cs
+│   ├── *OptionsValidatorTests.cs
 │   ├── ModelsTests.cs
-│   ├── OpenAiOptionsValidatorTests.cs
 │   ├── OptionsExtensionsTests.cs
-│   ├── PerplexityOptionsValidatorTests.cs
-│   ├── PostMissingBranchTests.cs
-│   └── RSSFeedMissingBranchTests.cs
+│   ├── PostTests.cs
+│   └── RSSFeedTests.cs
 ├── Orchestrators/
-│   ├── ConfigurationFeedUrlProviderTests.cs
-│   ├── ConfigurationTagReplacementProviderTests.cs
-│   ├── DefaultSlotProfileProviderTests.cs
-│   ├── FeedOrchestratorFeedUrlProviderTests.cs
-│   ├── FeedOrchestratorTests.cs
-│   ├── NoOrchestratorTests.cs
-│   ├── OrchestratorFactoryTests.cs
-│   └── PowerLawOrchestratorTests.cs
+│   └── *OrchestratorTests.cs
+├── Providers/
+│   ├── *ProviderTests.cs
 ├── SenderPlugins/
-│   ├── DryRunSenderTests.cs
-│   ├── FbSenderImageFlowTests.cs
-│   ├── FbSenderResilienceTests.cs
-│   ├── FbSenderSendAsyncTests.cs
-│   ├── FbSenderTests.cs
-│   ├── IgSenderResilienceTests.cs
-│   ├── IgSenderTests.cs
-│   ├── InSenderResilienceTests.cs
-│   ├── InSenderSendAsyncTests.cs
-│   ├── InSenderTests.cs
-│   ├── XSenderSendAsyncTests.cs
-│   └── XSenderTests.cs
+│   ├── Facebook/
+│   │   └── Fb*Tests.cs
+│   ├── Instagram/
+│   │   └── Ig*Tests.cs
+│   ├── Linkedin/
+│   │   └── In*Tests.cs
+│   ├── X/
+│   │   └── X*Tests.cs
+│   └── DryRunSenderTests.cs
 └── Services/
-    ├── AiServiceHelperImageTests.cs
-    ├── AiServiceHelperTests.cs
-    ├── AzureFoundryServiceTests.cs
-    ├── BlobStorageServiceTests.cs
-    ├── CryptoServiceTests.cs
-    ├── DeepSeekServiceTests.cs
-    ├── FalAiImageServiceTests.cs
-    ├── FeedServiceTests.cs
-    ├── InMemoryContainerStateStoreTests.cs
-    ├── LocalOverrideTimeProviderTests.cs
-    ├── MaskUrlTelemetryInitializerTests.cs
-    ├── MetaPublishingServiceTests.cs
-    ├── OpenAiServiceTests.cs
-    ├── PerplexityServiceTests.cs
-    ├── TagReplacementServiceTests.cs
-    └── TimeProviderTests.cs
+    ├── AI/
+    │   └── *Tests.cs
+    └── *Tests.cs
 ```
 
 ### Folder responsibilities

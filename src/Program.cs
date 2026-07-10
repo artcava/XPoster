@@ -11,6 +11,7 @@ using XPoster.Credentials;
 using XPoster.Extensions;
 using XPoster.Models;
 using XPoster.Orchestrators;
+using XPoster.Providers;
 using XPoster.SenderPlugins;
 using XPoster.Services;
 
@@ -71,7 +72,7 @@ var forceHour = builder.Configuration["ForceHour"];
 if (isDevelopment && !string.IsNullOrWhiteSpace(forceHour))
     builder.Services.AddSingleton<ITimeProvider, LocalOverrideTimeProvider>();
 else
-    builder.Services.AddSingleton<ITimeProvider, XPoster.Services.TimeProvider>();
+    builder.Services.AddSingleton<ITimeProvider, XPoster.Providers.TimeProvider>();
 
 // Register AI capability interfaces as keyed services by AiProvider.
 // Each key activates only the capabilities the provider actually supports.

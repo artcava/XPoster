@@ -19,20 +19,20 @@ This document explains the architectural decisions, component responsibilities, 
 
 ## 1. System Overview
 
-XPoster is a **serverless, event-driven pipeline** built on four structural pillars:
+XPoster is a **serverless, event-driven pipeline** built on five structural pillars:
 
-- **`XFunction`** — the Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
-- **`OrchestratorFactory`** — maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
-- **Orchestrators** (`FeedOrchestrator`, `PowerLawOrchestrator`, `NoOrchestrator`) — each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
-- **Sender Plugins** (`XSender`, `InSender`, `IgSender`, `FbSender`, `DryRunSender`) — implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
-
-The AI layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
+- **`XFunction`** — The Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
+- **`OrchestratorFactory`** — Maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
+- **Orchestrators** — Each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
+- **Sender Plugins** — Each implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
+- **AI Providers** — This layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
 
 Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing.
 
 ```
 ┌────────────────────────────┐
 │   Azure Timer Trigger      │
+│        XFunction           │
 │   (configurable schedule)  │
 └───────────┬────────────────┘
             │
@@ -80,7 +80,7 @@ Senders receive their credentials through standard `IOptions` binding — no Key
 
 **System boundaries:**
 - **Inbound**: Azure Timer Trigger (no external HTTP surface in production)
-- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram Graph API, RSS feeds, Azure Blob Storage, Azure Key Vault (startup only)
+- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram & Facebook Graph API, RSS feeds, Azure Blob Storage, Azure Key Vault (startup only)
 - **Observability**: Azure Application Insights
 
 ---
@@ -115,17 +115,7 @@ The factory enforces the invariant that every unscheduled hour resolves to `NoOr
 
 Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**. `OrchestrateAsync()` returns an `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender, keyed by `SenderPlatform` for unambiguous nominal routing. A `null` value for a given key signals that content generation failed for that platform.
 
-- **FeedOrchestrator**: executes a fan-out pipeline to produce per-sender posts from RSS news:
-  1. **Acquire feed content** — resolves URLs via `IFeedUrlProvider`, fetches RSS entries via `FeedService`, aggregates content from the last 24 hours.
-  2. **Generate base summary** — re-orders senders by descending `MessageMaxLength`, selects the primary sender (index 0, widest limit), and calls `ITextToTextProvider.GetSummaryAsync(feedContent, primary.MessageMaxLength)`. This produces `rawBaseSummary` — the widest possible summary, used as the source for image prompt derivation.
-  3. **Generate image** — calls `ITextToTextProvider.GetImagePromptAsync(rawBaseSummary)` (falls back to `rawBaseSummary` if empty), then `ITextToImageProvider.GenerateImageAsync(prompt)`. The resulting `byte[]?` is **shared across all senders** — generated once, referenced by every `Post`.
-  4. **Build per-sender posts (fan-out loop)** — iterates over all senders in descending `MessageMaxLength` order. For each sender, checks whether `previousSummary` (initially `rawBaseSummary`) fits within `sender.MessageMaxLength`. If it fits, `previousSummary` is reused directly. If it does not, the AI re-summarises from the **full `feedContent`** (not from `previousSummary`) to preserve maximum context; the result becomes the new `previousSummary`. Hashtag substitution (`ApplyTagReplacements`) is applied independently to each sender's final raw summary.
-  5. **Partial failure semantics** — if re-summarisation returns empty for a sender, a `null` entry is stored in the result dictionary for that platform and iteration continues. The primary summary failure (step 2) is fatal: the dictionary is returned empty.
-
-  Both `IFeedUrlProvider` and `ITagReplacementProvider` follow the same provider pattern: registered as `Singleton`, bound from app settings, swappable via DI without touching orchestrator logic. If `IFeedUrlProvider` returns an empty list, `OrchestrateAsync()` returns an empty dictionary immediately with no AI or sender invocation. Both AI capability providers are injected as nullable — `FeedOrchestrator` handles `null` text or image providers explicitly at the point of use.
-
-- **PowerLawOrchestrator**: constructs posts based on the Bitcoin Power Law model (`value = 10⁻¹⁷ × days^5.83`, where `days` is elapsed since the Bitcoin genesis block on 2009-01-03). It consumes `CryptoService` to fetch the live BTC price and compares it against the model's fair-value estimate. The same `Post` is broadcast to all senders unchanged. It has no dependency on AI providers.
-- **NoOrchestrator**: a null-object implementation that returns an empty dictionary immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.
+> Complete list of Orchestrators can be found [here](/docs/Orchestrators/)
 
 ### BaseOrchestrator — Shared Scaffolding
 
@@ -141,15 +131,22 @@ Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **conte
 Services are registered as singletons or transients in the DI container and are consumed by orchestrators and sender plugins:
 
 - **AiServiceHelper**: a shared utility class used internally by AI service implementations. It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
-- **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
-- **ConfigurationFeedUrlProvider** (`IFeedUrlProvider`): resolves the list of RSS feed URLs consumed by `FeedOrchestrator` from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
-- **ConfigurationTagReplacementProvider** (`ITagReplacementProvider`): resolves the word-to-hashtag replacement map consumed by `FeedOrchestrator` from the `TagReplacementOptions:Replacements` configuration section (bound via `TagReplacementOptions__Replacements__<word>` double-underscore notation). Registered as `Singleton`. Matching is case-insensitive; only the first occurrence of each word per post is replaced. An empty or absent section is valid — the summary passes through unchanged. To source replacements from a different store (database, remote config), implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
-- **TagReplacementService**: Applies tag replacements to the specified text using the replacements provided by the `ITagReplacementProvider`.
-- **LocalOverrideTimeProvider** (`ITimeProvider`): Development-only that returns a fixed UTC hour read from the `ForceHour` app setting.
 - **BlobStorageService**: Uploads image bytes to Azure Blob Storage and returns a `BlobUploadResult` containing a time-limited SAS URL suitable for use as the `image_url` parameter of the Instagram Graph API (direct GET, no auth headers, no redirects) and the blob name for subsequent operations.
 The SAS URL is read-only, starts 5 minutes in the past to absorb clock skew between Azure and Meta servers, and expires 30 minutes from the time of upload.
 The blob container is created automatically on first use if it does not exist.
 - **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
+- **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
+- **TagReplacementService**: Applies tag replacements to the specified text using the replacements provided by the `ITagReplacementProvider`.
+
+List of Providers
+
+- **ConfigurationFeedUrlProvider**: (`IFeedUrlProvider`): provides the list of RSS feed URLs consumed by `FeedOrchestrator` resolved from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
+- **ConfigurationTagReplacementProvider**: (`ITagReplacementProvider`): provides the word-to-hashtag replacement map consumed by `FeedOrchestrator` resolved from the `TagReplacementOptions:Replacements` configuration section (bound via `TagReplacementOptions__Replacements__<word>` double-underscore notation). Registered as `Singleton`. Matching is case-insensitive; only the first occurrence of each word per post is replaced. An empty or absent section is valid — the summary passes through unchanged. To source replacements from a different store (database, remote config), implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
+- **DefaultSlotProfileProvider**: (`ISlotProfileProvider`): provides the list of SlotProfiles resolved by `OrchestratorFactory.Resolve()` matching SlotProfile Hour with `ITimeProvider.GetCurrentTime().Hour`.
+- **DryRunSlotProfileProvider**: (`ISlotProfileProvider`): provides the SlotProfile DryRun.
+- **LocalOverrideTimeProvider** (`ITimeProvider`): Development-only that returns a fixed UTC hour read from the `ForceHour` app setting.
+- **TimeProvider** (`ITimeProvider`): Returns real UTC hour.
+
 
 **AI Provider Services** — registered as **keyed services** by `AiProvider` via `AddXPosterAiProviders()` in `Program.cs`:
 
@@ -161,7 +158,7 @@ The blob container is created automatically on first use if it does not exist.
 | `Perplexity` | `PerplexityService` | ✅ | ❌ — method removed; misconfiguration surfaces at point of use |
 | `FalAi` | `FalAiImageService` | ❌ | ✅ |
 
-Providers that do not implement a capability have no keyed registration for the missing interface. `GetKeyedService` returns `null` for that capability — this is intentional. Attempting to use a text-only provider in an image-generating slot (or vice versa) surfaces explicitly inside `FeedOrchestrator`, not silently.
+AI Providers that do not implement a capability have no keyed registration for the missing interface. `GetKeyedService` returns `null` for that capability — this is intentional. Attempting to use a text-only provider in an image-generating slot (or vice versa) surfaces explicitly inside `FeedOrchestrator`, not silently.
 
 ### HttpClientFactory — Named Clients
 
@@ -247,8 +244,6 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 | `DeepSeek` | ✅ `DeepSeekService` | ❌ `null` |
 | `Perplexity` | ✅ `PerplexityService` | ❌ `null` |
 | `FalAi` | ❌ `null` | ✅ `FalAiImageService` |
-
-**Trade-off**: Two separate interface registrations per provider (where applicable) replace the single `IAiService` registration. For the expected number of providers (< 10), this is negligible.
 
 ---
 

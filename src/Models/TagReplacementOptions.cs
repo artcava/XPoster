@@ -2,7 +2,7 @@ namespace XPoster.Models;
 
 /// <summary>
 /// Configuration model for the word-to-hashtag replacement map consumed by
-/// <see cref="XPoster.Orchestrators.ConfigurationTagReplacementProvider"/>.
+/// <see cref="XPoster.Providers.ConfigurationTagReplacementProvider"/>.
 /// Bind from the <c>TagReplacementOptions</c> section in app settings.
 /// </summary>
 public sealed class TagReplacementOptions

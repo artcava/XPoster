@@ -1,4 +1,3 @@
-using XPoster.Abstraction;
 using XPoster.Contracts;
 using XPoster.Models;
 
@@ -71,7 +70,7 @@ namespace XPoster.Orchestrators
             DateTime date = _timeProvider.GetCurrentTime().Date;
             if (date <= gemini)
             {
-                _logger.LogError("Invalid date!");
+                _logger.LogError("[PowerLawOrchestrator] Invalid date!");
                 _sendIt = false;
                 return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
             }
@@ -84,7 +83,7 @@ namespace XPoster.Orchestrators
             var actualValue = await _cryptoService.GetCryptoValue("BTC");
             if (actualValue <= 0)
             {
-                _logger.LogError("Unable to get Actual BTC value!");
+                _logger.LogError("[PowerLawOrchestrator] Unable to get Actual BTC value!");
             }
             else
             {

@@ -1,9 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using XPoster.Abstraction;
 using XPoster.Contracts;
+using XPoster.Models;
 using XPoster.Orchestrators;
+using XPoster.Providers;
 using XPoster.SenderPlugins;
 
 namespace XPoster.Tests.Orchestrators;

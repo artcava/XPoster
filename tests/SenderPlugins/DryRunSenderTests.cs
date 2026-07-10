@@ -105,9 +105,9 @@ public class DryRunSenderTests
     }
 
     [Fact]
-    public void MessageMaxLenght_ReturnsIntMaxValue()
+    public void MessageMaxLength_ReturnsIntMaxValue()
     {
-        Assert.Equal(int.MaxValue, BuildSender().MessageMaxLenght);
+        Assert.Equal(int.MaxValue, BuildSender().MessageMaxLength);
     }
 
     #endregion

@@ -1,5 +1,4 @@
 using System.Text;
-using XPoster.Abstraction;
 using XPoster.Contracts;
 using XPoster.Models;
 
@@ -90,14 +89,14 @@ public class FeedOrchestrator : BaseOrchestrator
     {
         if (_textProvider is null)
         {
-            _logger.LogError("ITextToTextProvider is not configured.");
+            _logger.LogError("[FeedOrchestrator] ITextToTextProvider is not configured.");
             _sendIt = false;
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
         if (_senders.Count == 0)
         {
-            _logger.LogError("No senders configured for this slot.");
+            _logger.LogError("[FeedOrchestrator] No senders configured for this slot.");
             _sendIt = false;
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
@@ -110,12 +109,14 @@ public class FeedOrchestrator : BaseOrchestrator
 
         // Step 2 — select primary sender (widest limit) and generate base summary
         ct.ThrowIfCancellationRequested();
-        var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
+        var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLength).ToList();
         var primarySender = orderedSenders[0];
-        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLenght, ct);
+                _logger.LogInformation("[FeedOrchestrator] Generating base summary via text provider for primary sender {Platform} (limit {Limit}).",
+                    primarySender.Platform, primarySender.MessageMaxLength);
+        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLength, ct);
         if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
-            _logger.LogError("Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
+            _logger.LogError("[FeedOrchestrator] Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
             _sendIt = false;
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
@@ -135,20 +136,21 @@ public class FeedOrchestrator : BaseOrchestrator
             ct.ThrowIfCancellationRequested();
 
             string summaryForSender;
-            if (previousSummary.Length <= sender.MessageMaxLenght)
+            if (previousSummary.Length <= sender.MessageMaxLength)
             {
                 summaryForSender = previousSummary;
             }
             else
             {
+                _logger.LogInformation("[FeedOrchestrator] Re-summarising via text provider for sender {Platform} (limit {Limit}).",
+                    sender.Platform, sender.MessageMaxLength);
                 var reSummarised = await _textProvider.GetSummaryAsync(
-                    feedContent, sender.MessageMaxLenght, ct);
+                    feedContent, sender.MessageMaxLength, ct);
 
                 if (string.IsNullOrWhiteSpace(reSummarised))
                 {
-                    _logger.LogWarning(
-                        "Re-summarisation failed for sender {Platform} (limit {Limit}). Null entry added.",
-                        sender.Platform, sender.MessageMaxLenght);
+                    _logger.LogWarning("[FeedOrchestrator] Re-summarisation failed for sender {Platform} (limit {Limit}). Null entry added.",
+                        sender.Platform, sender.MessageMaxLength);
                     result[sender.Platform] = null;
                     continue;
                 }
@@ -173,7 +175,7 @@ public class FeedOrchestrator : BaseOrchestrator
         var feedUrls = _feedUrlProvider.GetFeedUrls();
         if (feedUrls.Count == 0)
         {
-            _logger.LogWarning("IFeedUrlProvider returned an empty URL list. No feeds will be fetched.");
+            _logger.LogWarning("[FeedOrchestrator] IFeedUrlProvider returned an empty URL list. No feeds will be fetched.");
             _sendIt = false;
             return string.Empty;
         }
@@ -193,7 +195,7 @@ public class FeedOrchestrator : BaseOrchestrator
 
         if (allFeeds.Count == 0)
         {
-            _logger.LogWarning("No feeds found in the last 24 hours.");
+            _logger.LogWarning("[FeedOrchestrator] No feeds found in the last 24 hours.");
             _sendIt = false;
             return string.Empty;
         }
@@ -212,10 +214,12 @@ public class FeedOrchestrator : BaseOrchestrator
 
         try
         {
+            _logger.LogInformation("[FeedOrchestrator] Deriving image prompt via text provider from base summary.");
             var prompt = await _textProvider!.GetImagePromptAsync(rawBaseSummary, ct);
             if (string.IsNullOrWhiteSpace(prompt))
                 prompt = rawBaseSummary;
 
+            _logger.LogInformation("[FeedOrchestrator] Generating image from prompt.");
             var image = await _imageProvider.GenerateImageAsync(prompt, ct);
             return image is { Length: > 0 } ? image : null;
         }
@@ -225,7 +229,7 @@ public class FeedOrchestrator : BaseOrchestrator
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Image generation failed. Post will be published without image.");
+            _logger.LogError(ex, "[FeedOrchestrator] Image generation failed. Post will be published without image.");
             return null;
         }
     }

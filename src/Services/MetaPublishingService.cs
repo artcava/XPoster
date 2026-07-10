@@ -42,7 +42,7 @@ namespace XPoster.Services
         /// </summary>
         public async Task<string> GetContainerStatusAsync(string creationId, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrWhiteSpace(creationId)) throw new ArgumentException("creationId is required", nameof(creationId));
+            if (string.IsNullOrWhiteSpace(creationId)) throw new ArgumentException("[MetaPublishingService] creationId is required", nameof(creationId));
 
             var uri = $"{GraphBase}/v{GetApiVersion()}/{creationId}?fields=status_code&access_token={Uri.EscapeDataString(_credentials.InstagramAccessToken)}";
 
@@ -54,29 +54,29 @@ namespace XPoster.Services
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
-                _logger.LogWarning("GetContainerStatusAsync cancelled for creationId {CreationId}", creationId);
+                _logger.LogWarning("[MetaPublishingService] GetContainerStatusAsync cancelled for creationId {CreationId}", creationId);
                 throw;
             }
 
             if (resp.StatusCode == HttpStatusCode.NotFound)
             {
-                _logger.LogWarning("Container {CreationId} not found (404).", creationId);
-                throw new HttpRequestException($"Container {creationId} not found", null, resp.StatusCode);
+                _logger.LogWarning("[MetaPublishingService] Container {CreationId} not found (404).", creationId);
+                throw new HttpRequestException($"[MetaPublishingService] Container {creationId} not found", null, resp.StatusCode);
             }
 
             if (!resp.IsSuccessStatusCode)
             {
-                _logger.LogError("GetContainerStatusAsync returned {StatusCode} for creationId {CreationId}", (int)resp.StatusCode, creationId);
-                throw new HttpRequestException($"Unexpected response from Meta: {(int)resp.StatusCode}", null, resp.StatusCode);
+                _logger.LogError("[MetaPublishingService] GetContainerStatusAsync returned {StatusCode} for creationId {CreationId}", (int)resp.StatusCode, creationId);
+                throw new HttpRequestException($"[MetaPublishingService] Unexpected response from Meta: {(int)resp.StatusCode}", null, resp.StatusCode);
             }
 
             var payload = await resp.Content.ReadFromJsonAsync<ContainerStatusResponse>(cancellationToken: cancellationToken).ConfigureAwait(false)
-                          ?? throw new HttpRequestException("Empty response from Meta");
+                          ?? throw new HttpRequestException("[MetaPublishingService] Empty response from Meta");
 
             // payload.status.code or status_code depending on API; map safely
             var status = payload.StatusCode ?? payload.Status?.Code ?? string.Empty;
 
-            _logger.LogDebug("GetContainerStatusAsync for {CreationId} -> {Status}", creationId, status);
+            _logger.LogDebug("[MetaPublishingService] GetContainerStatusAsync for {CreationId} -> {Status}", creationId, status);
 
             return status;
         }
@@ -87,7 +87,7 @@ namespace XPoster.Services
         /// </summary>
         public async Task<string> PublishContainerAsync(string creationId, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrWhiteSpace(creationId)) throw new ArgumentException("creationId is required", nameof(creationId));
+            if (string.IsNullOrWhiteSpace(creationId)) throw new ArgumentException("[MetaPublishingService] creationId is required", nameof(creationId));
 
             var uri = $"{GraphBase}/v{GetApiVersion()}/{_credentials.InstagramAccountId}/media_publish?creation_id={Uri.EscapeDataString(creationId)}&access_token={Uri.EscapeDataString(_credentials.InstagramAccessToken)}";
 
@@ -99,27 +99,27 @@ namespace XPoster.Services
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
-                _logger.LogWarning("PublishContainerAsync cancelled for creationId {CreationId}", creationId);
+                _logger.LogWarning("[MetaPublishingService] PublishContainerAsync cancelled for creationId {CreationId}", creationId);
                 throw;
             }
 
             if (resp.StatusCode == (HttpStatusCode)429)
             {
                 // Let caller's resilience/polly handle retries; log minimal info
-                _logger.LogWarning("PublishContainerAsync received 429 for creationId {CreationId}", creationId);
-                throw new HttpRequestException("Rate limited by Meta (429)", null, resp.StatusCode);
+                _logger.LogWarning("[MetaPublishingService] PublishContainerAsync received 429 for creationId {CreationId}", creationId);
+                throw new HttpRequestException("[MetaPublishingService] Rate limited by Meta (429)", null, resp.StatusCode);
             }
 
             if (!resp.IsSuccessStatusCode)
             {
-                _logger.LogError("PublishContainerAsync returned {StatusCode} for creationId {CreationId}", (int)resp.StatusCode, creationId);
-                throw new HttpRequestException($"Unexpected response from Meta: {(int)resp.StatusCode}", null, resp.StatusCode);
+                _logger.LogError("[MetaPublishingService] PublishContainerAsync returned {StatusCode} for creationId {CreationId}", (int)resp.StatusCode, creationId);
+                throw new HttpRequestException($"[MetaPublishingService] Unexpected response from Meta: {(int)resp.StatusCode}", null, resp.StatusCode);
             }
 
             var payload = await resp.Content.ReadFromJsonAsync<PublishResponse>(cancellationToken: cancellationToken).ConfigureAwait(false)
-                          ?? throw new HttpRequestException("Empty publish response from Meta");
+                          ?? throw new HttpRequestException("[MetaPublishingService] Empty publish response from Meta");
 
-            _logger.LogInformation("Published container {CreationId} -> publish id {PublishId}", creationId, payload.Id);
+            _logger.LogInformation("[MetaPublishingService] Published container {CreationId} -> publish id {PublishId}", creationId, payload.Id);
 
             return payload.Id ?? string.Empty;
         }

@@ -45,7 +45,7 @@ public class CryptoService : ICryptoService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to get crypto value for {Symbol}", symbol);
+            _logger.LogError(ex, "[CryptoService] Failed to get crypto value for {Symbol}", symbol);
         }
         return 0m;
     }

@@ -22,7 +22,7 @@ public class InSender : ISender
     public SenderPlatform Platform => SenderPlatform.LinkedIn;
 
     /// <summary>Gets the maximum number of characters allowed in a LinkedIn post caption.</summary>
-    public int MessageMaxLenght => 2800;
+    public int MessageMaxLength => 2800;
 
     /// <summary>
     /// Initialises a new instance of <see cref="InSender"/> using an <see cref="IHttpClientFactory"/>-provided
@@ -52,13 +52,13 @@ public class InSender : ISender
     {
         if (post == null)
         {
-            _logger.LogWarning("Post cannot be null");
+                    _logger.LogWarning("[InSender] Post is null. Skipping.");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(post.Content))
         {
-            _logger.LogWarning("Post content cannot be empty");
+            _logger.LogWarning("[InSender] Post content cannot be empty. Skipping.");
             return false;
         }
 
@@ -92,21 +92,21 @@ public class InSender : ISender
 
                 if (!initResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogError("Failed to initialize image upload: {Response}",
+                    _logger.LogError("[InSender] Failed to initialize image upload: {Response}",
                         await initResponse.Content.ReadAsStringAsync());
                     return false;
                 }
 
                 var initData = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(await initResponse.Content.ReadAsStringAsync());
-                var valueElement = initData?["value"] as JsonElement? ?? throw new InvalidOperationException("Value element missing");
+                var valueElement = initData?["value"] as JsonElement? ?? throw new InvalidOperationException("[InSender] Value element missing");
 
                 var uploadMechanism = valueElement.GetProperty("uploadMechanism");
                 var mediaUploadRequest = uploadMechanism.GetProperty("com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest");
 
                 string uploadUrl = mediaUploadRequest.GetProperty("uploadUrl").GetString()
-                    ?? throw new InvalidOperationException("uploadUrl missing in LinkedIn response.");
+                    ?? throw new InvalidOperationException("[InSender] uploadUrl missing in response.");
                 string asset = valueElement.GetProperty("asset").GetString()
-                    ?? throw new InvalidOperationException("asset missing in LinkedIn response.");
+                    ?? throw new InvalidOperationException("[InSender] asset missing in response.");
 
                 using (var memoryStream = new MemoryStream(post.Image))
                 {
@@ -116,7 +116,7 @@ public class InSender : ISender
 
                     if (!uploadResponse.IsSuccessStatusCode)
                     {
-                        _logger.LogError("Failed to upload image: {Response}",
+                        _logger.LogError("[InSender] Failed to upload image: {Response}",
                             await uploadResponse.Content.ReadAsStringAsync());
                         return false;
                     }
@@ -133,14 +133,14 @@ public class InSender : ISender
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("https://api.linkedin.com/v2/ugcPosts", content);
             if (!response.IsSuccessStatusCode)
-                throw new Exception($"Failed to post to LinkedIn: {await response.Content.ReadAsStringAsync()}");
+                throw new Exception($"[InSender] Failed to post: {await response.Content.ReadAsStringAsync()}");
 
-            _logger.LogInformation("Post published: {Response}.", await response.Content.ReadAsStringAsync());
+            _logger.LogInformation("[InSender] Post published: {Response}.", await response.Content.ReadAsStringAsync());
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.LogError(ex, "[InSender] {Message}", ex.Message);
             return false;
         }
     }
