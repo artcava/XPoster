@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Structured log context in `FeedOrchestrator`** ([#221](https://github.com/artcava/XPoster/issues/221)): three explicit `LogInformation` entries added at the AI provider call points in `FeedOrchestrator.cs`:
+  - Before `GetSummaryAsync` for the primary sender — includes structured fields `{Platform}` and `{Limit}`
+  - Before `GetImagePromptAsync` inside `GenerateImageAsync` — makes explicit that the text provider is called for image prompt derivation
+  - Before `GetSummaryAsync` in the re-summarisation branch — includes `{Platform}` and `{Limit}`, complementing the existing `LogWarning` on failure
+- Log fields use consistent naming (`Platform`, `Limit`) for Application Insights / KQL query compatibility ([#221](https://github.com/artcava/XPoster/issues/221))
+
+### Changed
+- **`IgSender` test suite split into four focused files** — mirrors the `FbSender` test structure for consistency:
+  - `IgSenderTests.cs` → constructor guard clauses, `Platform`, `MessageMaxLength`, `ISender` contract
+  - `IgSenderImageFlowTests.cs` → `NormalizeImage` variants and full image upload/publish flow
+  - `IgSenderSendAsyncTests.cs` → `SendAsync` edge cases (null post, no image, empty image, caption truncation)
+  - `IgSenderResilienceTests.cs` → transient failure scenarios (blob upload fail/cancel/`NotImplementedException`, `HttpRequestException`, no-image guard)
+
 ---
 
 ## [0.1.8] - 2026-07-09
