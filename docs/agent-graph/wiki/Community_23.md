@@ -1,30 +1,31 @@
 # Community 23
 
-> 13 nodes · cohesion 0.15
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **BuildSender()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **AIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **ModelsTests** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

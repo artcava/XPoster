@@ -1,36 +1,35 @@
 # Community 11
 
-> 19 nodes · cohesion 0.11
+> 18 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **BuildService()** (2 connections)
-- **AzureFoundryServiceTests** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
-- **GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_RequestBodyContainsModelField()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **IgSenderImageFlowTests.cs** (17 connections)
+- **IgSenderImageFlowTests.cs** (17 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenBlobUploadSucceeds_CreatesMediaContainerWithCorrectSasUrl()** (2 connections)
+- **SendAsync_WhenJsonResponseIdIsEmpty_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenJsonResponseMissingIdProperty_ReturnsFalse()** (2 connections)
+- **Uri()** (2 connections)
+- **IgSender()** (2 connections)
+- **BuildSender()** (2 connections)
+- **CreateMalformedPngBytes()** (2 connections)
+- **NormalizeImage_WithValidPng_ReturnsJpegBytes()** (2 connections)
+- **NormalizeImage_WhenJpegIsAlreadyValid_ReturnsOriginalBytes()** (2 connections)
+- **NormalizeImage_WithValidJpeg_ReturnsSameBytes()** (2 connections)
+- **NormalizeImage_WhenPngDecodesToNull_ReturnsNull()** (2 connections)
+- **NormalizeImage_WithInvalidBytes_ReturnsNull()** (2 connections)
+- **NormalizeImage_WhenCodecIsNull_ReturnsNull()** (2 connections)
+- **return()** (2 connections)
+- **IgSenderImageFlowTests** (2 connections)
 
 ## Relationships
 
-- [[Community 14]] (17 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 71 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,35 +1,35 @@
 # Community 6
 
-> 29 nodes · cohesion 0.14
+> 26 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **OptionsExtensionsTests.cs** (28 connections)
-- **OptionsExtensionsTests.cs** (28 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddAzureFoundryOptions_RegistersValidator()** (2 connections)
-- **AddDeepSeekOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
-- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddFalAiOptions_RegistersValidator()** (2 connections)
-- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddOpenAiOptions_RegistersValidator()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **AzureFoundryOptionsExtensionsTests** (2 connections)
-- **BuildConfig()** (2 connections)
-- **BuildProvider()** (2 connections)
-- **OptionsExtensionsTests** (2 connections)
-- **FalAiOptionsExtensionsTests** (2 connections)
-- **OpenAiOptionsExtensionsTests** (2 connections)
-- **new()** (2 connections)
-- **SectionName_IsFalAi()** (2 connections)
-- **register()** (2 connections)
-- **SectionName_IsDeepSeek()** (2 connections)
-- **SectionName_IsAzureFoundry()** (2 connections)
-- **SectionName_IsPerplexity()** (2 connections)
-- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- *... and 4 more nodes in this community*
+- **FbSenderTests.cs** (25 connections)
+- **FbSenderTests.cs** (25 connections)
+- **Constructor_WithNullBlobStorage_ThrowsArgumentNullException()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **SendAsync_WithCaptionExceedingMaxLength_TruncatesAndPublishes()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_TextOnly_WhenResponseMissingId_ReturnsFalse()** (2 connections)
+- **return()** (2 connections)
+- **SendAsync_TextOnly_WhenResponseHasEmptyId_ReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WhenResponseHasNullId_ReturnsFalse()** (2 connections)
+- **Platform_ReturnsFacebook()** (2 connections)
+- **NormalizeImage_WithInvalidBytes_ReturnsNull()** (2 connections)
+- **NormalizeImage_WithValidPng_ReturnsOriginalBytes()** (2 connections)
+- **NormalizeImage_WithValidJpeg_ReturnsSameBytes()** (2 connections)
+- **Constructor_WithNullFactory_ThrowsArgumentNullException()** (2 connections)
+- **FbSender()** (2 connections)
+- **FbSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenPhotoEndpointReturns503_ReturnsFalseAndDeletesBlob()** (2 connections)
+- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
+- **MessageMaxLength_Returns3000()** (2 connections)
+- **FbSenderTests()** (2 connections)
+- *... and 1 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 110 (100%)
+- EXTRACTED: 98 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,14 +1,15 @@
 # Community 95
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **ITagReplacementService.cs** (4 connections)
-- **ITagReplacementService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITagReplacementService** (2 connections)
-- **Apply()** (2 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **XPoster.Credentials** (2 connections)
+- **InstagramCredentialsValidator** (2 connections)
+- **Validate()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,29 +1,29 @@
 # Community 36
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **InSenderTests()** (2 connections)
-- **InSender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Platform_ReturnsLinkedIn()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **MessageMaxLenght_Returns2800()** (2 connections)
+- **PerplexityService.cs** (11 connections)
+- **PerplexityService.cs** (11 connections)
+- **PerplexityService()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **if()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

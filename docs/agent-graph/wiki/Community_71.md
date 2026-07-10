@@ -1,24 +1,25 @@
 # Community 71
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **Apply()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
+- **TestOrchestrator()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 58]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

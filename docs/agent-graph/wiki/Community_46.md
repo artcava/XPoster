@@ -1,18 +1,19 @@
 # Community 46
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **XFunctionTests.cs** (9 connections)
+- **XFunctionTests.cs** (9 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

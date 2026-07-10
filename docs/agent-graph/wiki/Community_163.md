@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
+- **XCredentialsValidator.cs** (4 connections)
 - **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 172]] (2 shared connections)
+- [[Community 177]] (2 shared connections)
 
 ## Audit Trail
 

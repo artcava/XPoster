@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **Validate()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **Resolve()** (2 connections)
-- **IOrchestratorFactory** (2 connections)
+- **ICredentialsStartupValidator** (2 connections)
 
 ## Relationships
 

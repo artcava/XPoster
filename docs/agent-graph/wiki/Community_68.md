@@ -1,16 +1,17 @@
 # Community 68
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **GetPendingAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **SaveAsync()** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse.cs** (7 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **ImageData** (2 connections)
+- **Choice** (2 connections)
+- **AIResponse** (2 connections)
+- **Message** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

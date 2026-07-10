@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **XPoster.Credentials** (2 connections)
-- **if()** (2 connections)
-- **Validate()** (2 connections)
-- **FacebookCredentialsValidator** (2 connections)
+- **TagReplacementServiceTests.cs** (5 connections)
+- **TagReplacementServiceTests.cs** (5 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **Apply_Returns_Input_Unchanged_When_Text_Is_Null_Or_Whitespace()** (2 connections)
+- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
+- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
 
 ## Relationships
 

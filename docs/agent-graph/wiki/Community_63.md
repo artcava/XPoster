@@ -1,25 +1,26 @@
 # Community 63
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **AzureFoundryService()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **HttpClientExtensionsTests.cs** (8 connections)
+- **HttpClientExtensionsTests.cs** (8 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **HttpClientExtensionsTests** (2 connections)
+- **foreach()** (2 connections)
+- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
+- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
+- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

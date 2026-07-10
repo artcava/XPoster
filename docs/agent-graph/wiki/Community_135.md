@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderExtensions.cs** (3 connections)
-- **AiProviderExtensions.cs** (3 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetLabel()** (2 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **AddOpenAiOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

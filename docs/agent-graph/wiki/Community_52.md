@@ -1,26 +1,26 @@
 # Community 52
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **FbSenderImageFlowTests** (2 connections)
-- **BuildCreds()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **InvalidImageBytes()** (2 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **HttpRequestException()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 70]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

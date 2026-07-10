@@ -1,20 +1,21 @@
 # Community 144
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **StringContent()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 170]] (2 shared connections)
+- [[Community 91]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,18 +1,19 @@
 # Community 47
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **RSSFeedMissingBranchTests.cs** (8 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
-- **RSSFeedMissingBranchTests** (2 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **MetaPublishingService()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
+- **GetApiVersion()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

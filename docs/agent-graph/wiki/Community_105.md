@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetCryptoValue()** (2 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

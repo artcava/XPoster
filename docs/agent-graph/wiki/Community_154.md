@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **if()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
+- **MaskUrlTelemetryInitializer.cs** (4 connections)
+- **MaskUrlTelemetryInitializer** (2 connections)
+- **Initialize()** (2 connections)
 
 ## Relationships
 
-- [[Community 118]] (3 shared connections)
+- [[Community 179]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

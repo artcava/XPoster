@@ -1,25 +1,25 @@
 # Community 65
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
-- **UploadAsync()** (2 connections)
-- **BlobUploadResult()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **DeleteAsync()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **AzureFoundryService()** (2 connections)
 - **XPoster.Services** (2 connections)
-- **if()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 76]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

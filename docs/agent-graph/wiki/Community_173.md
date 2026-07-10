@@ -1,15 +1,16 @@
 # Community 173
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **MaskUrlTelemetryInitializer.cs** (4 connections)
-- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 158]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

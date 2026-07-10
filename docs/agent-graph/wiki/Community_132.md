@@ -1,21 +1,21 @@
 # Community 132
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddDeepSeekOptions()** (2 connections)
+- **XSender.cs** (6 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 152]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

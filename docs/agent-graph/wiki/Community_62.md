@@ -1,25 +1,26 @@
 # Community 62
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CaptureLogger()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
+- **InvalidImageBytes()** (2 connections)
+- **FbSenderImageFlowTests** (2 connections)
+- **BuildCreds()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 78]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

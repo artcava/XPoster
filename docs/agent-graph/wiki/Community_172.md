@@ -1,15 +1,16 @@
 # Community 172
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
-- **if()** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 163]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **FacebookCredentials.cs** (2 connections)
-- **FacebookCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **FalAiOptions.cs** (2 connections)
+- **FalAiOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

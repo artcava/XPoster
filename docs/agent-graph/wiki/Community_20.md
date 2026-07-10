@@ -1,31 +1,32 @@
 # Community 20
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **switch()** (2 connections)
-- **XPosterContainerPollingFunction()** (2 connections)
-- **TryDeleteBlobAsync()** (2 connections)
-- **XPoster** (2 connections)
-- **PollPendingContainersAsync()** (2 connections)
-- **if()** (2 connections)
-- **HandleFinishedAsync()** (2 connections)
-- **HandleTerminalFailureAsync()** (2 connections)
-- **catch()** (2 connections)
-- **foreach()** (2 connections)
-- **Run()** (2 connections)
-- **ProcessContainerAsync()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **ValidPost()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **new()** (2 connections)
+- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
+- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 32]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

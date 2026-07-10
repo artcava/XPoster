@@ -1,11 +1,12 @@
 # Community 142
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **TagReplacementOptions.cs** (2 connections)
-- **TagReplacementOptions.cs** (2 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

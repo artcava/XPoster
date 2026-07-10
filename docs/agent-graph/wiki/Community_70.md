@@ -1,24 +1,25 @@
 # Community 70
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **if()** (2 connections)
-- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
-- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
-- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
-- **CreateValidJpegBytes()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **PostTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
 
 ## Relationships
 
-- [[Community 52]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

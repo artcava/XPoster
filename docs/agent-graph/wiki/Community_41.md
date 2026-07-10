@@ -6,19 +6,19 @@
 
 - **FalAiImageServiceTests.cs** (22 connections)
 - **MakeHandlerMock()** (2 connections)
-- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
 - **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
 - **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
 - **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageService()** (2 connections)
 
 ## Relationships
 
-- [[Community 33]] (11 shared connections)
+- [[Community 30]] (11 shared connections)
 
 ## Audit Trail
 

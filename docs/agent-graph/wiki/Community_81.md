@@ -1,23 +1,24 @@
 # Community 81
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
+- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **new()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 141]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
