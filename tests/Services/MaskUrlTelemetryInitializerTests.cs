@@ -49,7 +49,7 @@ public class MaskUrlTelemetryInitializerTests
     public void Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()
     {
         const string url = "https://graph.facebook.com/v20.0/me/photos?limit=10";
-        var dep = new DependencyTelemetry { Type = "Http", Data = url };
+        var dep = new DependencyTelemetry { Type = "Http", Target = url, Data = url };
         _sut.Initialize(dep);
         Assert.Equal(url, dep.Data);
     }
@@ -58,7 +58,7 @@ public class MaskUrlTelemetryInitializerTests
     public void Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()
     {
         const string url = "https://graph.facebook.com/v20.0/123/photos?access_token=EAABsecrettoken&limit=10";
-        var dep = new DependencyTelemetry { Type = "Http", Data = url };
+        var dep = new DependencyTelemetry { Type = "Http", Target = url, Data = url };
         _sut.Initialize(dep);
 
         Assert.DoesNotContain("EAABsecrettoken", dep.Data);
@@ -71,7 +71,7 @@ public class MaskUrlTelemetryInitializerTests
     public void Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()
     {
         const string url = "https://graph.facebook.com/v20.0/me/feed?access_token=supersecret";
-        var dep = new DependencyTelemetry { Type = "Http", Data = url };
+        var dep = new DependencyTelemetry { Type = "Http", Target = url, Data = url };
         _sut.Initialize(dep);
 
         Assert.DoesNotContain("supersecret", dep.Data);
@@ -81,7 +81,7 @@ public class MaskUrlTelemetryInitializerTests
     [Fact]
     public void Initialize_WhenDataIsEmpty_DoesNotThrow()
     {
-        var dep = new DependencyTelemetry { Type = "Http", Data = string.Empty };
+        var dep = new DependencyTelemetry { Type = "Http", Target = string.Empty, Data = string.Empty };
         var ex = Record.Exception(() => _sut.Initialize(dep));
         Assert.Null(ex);
         Assert.Equal(string.Empty, dep.Data);
@@ -90,7 +90,7 @@ public class MaskUrlTelemetryInitializerTests
     [Fact]
     public void Initialize_WhenDataIsNull_DoesNotThrow()
     {
-        var dep = new DependencyTelemetry { Type = "Http", Data = null! };
+        var dep = new DependencyTelemetry { Type = "Http", Target = null!, Data = null! };
         var ex = Record.Exception(() => _sut.Initialize(dep));
         Assert.Null(ex);
     }
@@ -115,7 +115,7 @@ public class MaskUrlTelemetryInitializerTests
     public void Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()
     {
         const string url = "https://graph.facebook.com/v20.0/me";
-        var dep = new DependencyTelemetry { Type = "Http", Data = url };
+        var dep = new DependencyTelemetry { Type = "Http", Target = url, Data = url };
         _sut.Initialize(dep);
         Assert.Equal(url, dep.Data);
     }
@@ -124,7 +124,7 @@ public class MaskUrlTelemetryInitializerTests
     public void Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()
     {
         const string url = "https://graph.facebook.com/v20.0/me/feed?access_token=%5BMASKED%5D";
-        var dep = new DependencyTelemetry { Type = "Http", Data = url };
+        var dep = new DependencyTelemetry { Type = "Http", Target = url, Data = url };
         _sut.Initialize(dep);
         Assert.Contains("MASKED", dep.Data);
         Assert.DoesNotContain("MASKEDMASKED", dep.Data);
