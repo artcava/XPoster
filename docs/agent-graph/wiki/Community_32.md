@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **typeof()** (2 connections)
-- **XPoster.Tests.Abstraction** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
+- **PerplexityService.cs** (11 connections)
+- **PerplexityService.cs** (11 connections)
+- **BuildImagePromptPayload()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **var()** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
+- **while()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **if()** (2 connections)
+- **BuildSummaryPayload()** (2 connections)
 
 ## Relationships
 

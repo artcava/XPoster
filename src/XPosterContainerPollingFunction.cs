@@ -1,5 +1,6 @@
 using Microsoft.Azure.Functions.Worker;
 using XPoster.Contracts;
+using XPoster.Models;
 
 namespace XPoster;
 

@@ -1,23 +1,24 @@
 # Community 20
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **switch()** (2 connections)
-- **XPosterContainerPollingFunction()** (2 connections)
-- **TryDeleteBlobAsync()** (2 connections)
-- **XPoster** (2 connections)
-- **PollPendingContainersAsync()** (2 connections)
-- **if()** (2 connections)
-- **HandleFinishedAsync()** (2 connections)
-- **HandleTerminalFailureAsync()** (2 connections)
-- **catch()** (2 connections)
-- **foreach()** (2 connections)
-- **Run()** (2 connections)
-- **ProcessContainerAsync()** (2 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **BlobStorageService()** (2 connections)
+- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
+- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
+- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
+- **BlobStorageServiceTests** (2 connections)
+- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **CreateSut()** (2 connections)
+- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
+- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
+- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
+- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

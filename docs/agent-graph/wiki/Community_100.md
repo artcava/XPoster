@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **ISlotProfileProvider** (2 connections)
-- **GetProfiles()** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 

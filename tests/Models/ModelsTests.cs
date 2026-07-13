@@ -79,9 +79,9 @@ public class ModelsTests
     // ── OpenAIResponse / Choice / Message ────────────────────────────────────
 
     [Fact]
-    public void OpenAIResponse_CanBeCreated_WithChoices()
+    public void AIResponse_CanBeCreated_WithChoices()
     {
-        var response = new OpenAIResponse
+        var response = new AIResponse
         {
             choices = new[]
             {

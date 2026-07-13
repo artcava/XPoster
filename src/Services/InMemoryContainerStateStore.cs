@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using XPoster.Contracts;
+using XPoster.Models;
 
 namespace XPoster.Services;
 

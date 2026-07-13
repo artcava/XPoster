@@ -1,32 +1,30 @@
 # Community 8
 
-> 23 nodes · cohesion 0.17
+> 21 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **PerplexityServiceTests.cs** (22 connections)
-- **PerplexityServiceTests.cs** (22 connections)
-- **MakeHandlerMock()** (2 connections)
-- **MakeSequentialHandlerMock()** (2 connections)
-- **PerplexityService()** (2 connections)
-- **PerplexityServiceTests** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenFirstResponseStillTooLong_RetriesAndReturnsSecondResponse()** (2 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsContent()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **BuildService()** (2 connections)
-- **foreach()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GetSummaryAsync_WhenTextWithinLimit_DoesNotCallApi()** (2 connections)
-- **GetSummaryAsync_WhenTextRemainsLongAfterMaxRetries_ReturnsLastApiContent()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **XSenderTests.cs** (20 connections)
+- **XSenderTests.cs** (20 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
+- **BuildSender()** (2 connections)
+- **MessageMaxLength_Returns250()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WithImageAndTwitterContextThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenTwitterContextThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithBlankContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **Platform_ReturnsX()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
 
 ## Relationships
 
@@ -34,7 +32,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 86 (100%)
+- EXTRACTED: 78 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

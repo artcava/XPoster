@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **if()** (2 connections)
-- **InSender()** (2 connections)
+- **MaskUrlTelemetryInitializer.cs** (4 connections)
+- **Initialize()** (2 connections)
+- **MaskUrlTelemetryInitializer** (2 connections)
 
 ## Relationships
 
-- [[Community 48]] (8 shared connections)
+- [[Community 181]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

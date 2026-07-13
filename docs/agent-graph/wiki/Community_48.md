@@ -1,26 +1,27 @@
 # Community 48
 
-> 9 nodes · cohesion 0.22
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **generatePayLoad()** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **SendAsync()** (2 connections)
-- **using()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **catch()** (2 connections)
-- **Exception()** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **SupportedPlatforms_IsEmpty()** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **Build()** (2 connections)
+- **NoOrchestratorTests** (2 connections)
 
 ## Relationships
 
-- [[Community 159]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

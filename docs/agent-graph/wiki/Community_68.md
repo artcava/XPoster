@@ -1,16 +1,17 @@
 # Community 68
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **GetPendingAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **SaveAsync()** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **IsEnabled()** (2 connections)
+- **Dispose()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **CaptureLogger()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

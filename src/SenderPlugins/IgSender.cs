@@ -56,7 +56,7 @@ namespace XPoster.SenderPlugins
         public SenderPlatform Platform => SenderPlatform.Instagram;
 
         /// <summary>Gets the maximum caption length allowed by Instagram (2200 characters).</summary>
-        public int MessageMaxLenght => 2200;
+        public int MessageMaxLength => 2200;
 
         /// <summary>
         /// Publishes <paramref name="post"/> to Instagram via a two-step Graph API flow:
@@ -69,31 +69,38 @@ namespace XPoster.SenderPlugins
         {
             try
             {
+                // Guard clauses for null Post
+                if (post is null)
+                {
+                    _logger.LogWarning("[IgSender] Post is null. Skipping.");
+                    return false;
+                }
+
                 // Guard clauses for null or invalid image
                 if (post.Image is null || post.Image.Length == 0)
                 {
-                    _logger.LogWarning("Instagram richiede un'immagine per i post. Pubblicazione non eseguita.");
+                    _logger.LogWarning("[IgSender] Image is required. Skipping.");
                     return false;
                 }
 
                 var normalizedImage = NormalizeImageForInstagram(post.Image);
                 if (normalizedImage is null || normalizedImage.Length == 0)
                 {
-                    _logger.LogWarning("Immagine non supportata o conversione a JPEG fallita. Pubblicazione non eseguita.");
+                    _logger.LogWarning("[IgSender] Unsupported image or JPEG conversion failed. Skipping.");
                     return false;
                 }
 
                 string caption = $"{post.Content}{Post.Firm}";
-                if (caption.Length > MessageMaxLenght)
+                if (caption.Length > MessageMaxLength)
                 {
-                    _logger.LogWarning("Il messaggio supera il limite di {MaxLength} caratteri. Verrà troncato.", MessageMaxLenght);
-                    caption = caption.Substring(0, MessageMaxLenght);
+                    _logger.LogWarning("[IgSender] Message exceeds the maximum length of {MaxLength} characters. It will be truncated.", MessageMaxLength);
+                    caption = caption.Substring(0, MessageMaxLength);
                 }
 
                 var uploadResult = await UploadImageToPublicUrl(post.Image, ct);
                 if (uploadResult is null)
                 {
-                    _logger.LogError("Impossibile caricare l'immagine per Instagram.");
+                    _logger.LogError("[IgSender] Unable to upload image.");
                     return false;
                 }
 
@@ -116,7 +123,7 @@ namespace XPoster.SenderPlugins
 
                 if (!mediaResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogError("Errore nella creazione del media su Instagram. StatusCode: {StatusCode}", mediaResponse.StatusCode);
+                    _logger.LogError("[IgSender] Error creating media. StatusCode: {StatusCode}", mediaResponse.StatusCode);
                     return false;
                 }
 
@@ -125,25 +132,25 @@ namespace XPoster.SenderPlugins
 
                 if (!mediaDocument.RootElement.TryGetProperty("id", out var idProperty))
                 {
-                    _logger.LogError("Risposta Instagram non valida: missing id.");
+                    _logger.LogError("[IgSender] Invalid response: missing id.");
                     return false;
                 }
 
                 var creationId = idProperty.GetString();
                 if (string.IsNullOrWhiteSpace(creationId))
                 {
-                    _logger.LogError("Risposta Instagram non valida: empty id.");
+                    _logger.LogError("[IgSender] Invalid response: empty id.");
                     return false;
                 }
 
                 await _containerStateStore.SaveAsync(creationId, uploadResult.BlobName, ct);
-                _logger.LogInformation("Media container creato correttamente su Instagram.");
+                _logger.LogInformation("[IgSender] Media container created successfully.");
 
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore durante l'invio a Instagram.");
+                _logger.LogError(ex, "[IgSender] Error sending.");
                 return false;
             }
         }
@@ -155,12 +162,12 @@ namespace XPoster.SenderPlugins
                 using var codec = SKCodec.Create(new SKMemoryStream(imageBytes));
                 if (codec is null)
                 {
-                    _logger.LogWarning("Formato immagine non rilevabile.");
+                    _logger.LogWarning("[IgSender] Unable to detect image format.");
                     return null;
                 }
 
                 _logger.LogInformation(
-                    "Formato immagine rilevato per Instagram: {EncodedFormat}",
+                    "[IgSender] Detected image format: {EncodedFormat}",
                     codec.EncodedFormat);
 
                 if (codec.EncodedFormat == SKEncodedImageFormat.Jpeg)
@@ -171,7 +178,7 @@ namespace XPoster.SenderPlugins
                 if (codec.EncodedFormat != SKEncodedImageFormat.Png)
                 {
                     _logger.LogWarning(
-                        "Formato immagine non supportato per Instagram: {EncodedFormat}",
+                        "[IgSender] Unsupported image format: {EncodedFormat}",
                         codec.EncodedFormat);
                     return null;
                 }
@@ -179,7 +186,7 @@ namespace XPoster.SenderPlugins
                 using var bitmap = SKBitmap.Decode(imageBytes);
                 if (bitmap is null)
                 {
-                    _logger.LogWarning("Decodifica PNG fallita.");
+                    _logger.LogWarning("[IgSender] PNG decoding failed.");
                     return null;
                 }
 
@@ -190,7 +197,7 @@ namespace XPoster.SenderPlugins
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore durante la conversione dell'immagine in JPEG per Instagram.");
+                _logger.LogError(ex, "[IgSender] Error converting image to JPEG.");
                 return null;
             }
         }
@@ -210,7 +217,7 @@ namespace XPoster.SenderPlugins
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore durante il caricamento dell'immagine su Blob Storage.");
+                _logger.LogError(ex, "[IgSender] Error uploading image to Blob Storage.");
                 return null;
             }
         }

@@ -54,7 +54,7 @@ public class FeedService : IFeedService
 
         if (_cache.TryGetValue(cacheKey, out IEnumerable<RSSFeed>? cachedFeeds) && cachedFeeds != null)
         {
-            _logger.LogInformation("Feed served from cache for {Url}", url);
+            _logger.LogInformation("[FeedService] Feed served from cache for {Url}", url);
             return cachedFeeds;
         }
 
@@ -79,7 +79,7 @@ public class FeedService : IFeedService
 
             if (channel == null)
             {
-                _logger.LogWarning("RSS feed channel element not found for URL {Url}. Possible invalid feed format.", url);
+                _logger.LogWarning("[FeedService] RSS feed channel element not found for URL {Url}. Possible invalid feed format.", url);
                 throw new Exception("Invalid RSS feed format");
             }
 
@@ -121,7 +121,7 @@ public class FeedService : IFeedService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch or parse RSS feed from {Url}", url);
+            _logger.LogError(ex, "[FeedService] Failed to fetch or parse RSS feed from {Url}", url);
             return Enumerable.Empty<RSSFeed>();
         }
 

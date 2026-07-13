@@ -1,35 +1,35 @@
 # Community 5
 
-> 30 nodes · cohesion 0.13
+> 29 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (29 connections)
-- **OrchestratorFactoryTests.cs** (29 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **typeof()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
-- **Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent()** (2 connections)
-- **PowerLawProfile()** (2 connections)
-- **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
-- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
-- **Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()** (2 connections)
-- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **OptionsExtensionsTests.cs** (28 connections)
+- **OpenAiOptionsExtensionsTests** (2 connections)
+- **DeepSeekOptionsExtensionsTests** (2 connections)
+- **FalAiOptionsExtensionsTests** (2 connections)
 - **new()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- *... and 5 more nodes in this community*
+- **SectionName_IsDeepSeek()** (2 connections)
+- **PerplexityOptionsExtensionsTests** (2 connections)
+- **SectionName_IsAzureFoundry()** (2 connections)
+- **register()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **AzureFoundryOptionsExtensionsTests** (2 connections)
+- **BuildConfig()** (2 connections)
+- **AddAzureFoundryOptions_RegistersValidator()** (2 connections)
+- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **SectionName_IsPerplexity()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddDeepSeekOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
+- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
+- **AddOpenAiOptions_RegistersValidator()** (2 connections)
+- **OptionsExtensionsTests** (2 connections)
+- **SectionName_IsFalAi()** (2 connections)
+- *... and 4 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 114 (100%)
+- EXTRACTED: 110 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
