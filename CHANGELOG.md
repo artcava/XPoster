@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `IgSenderSendAsyncTests.cs` → `SendAsync` edge cases (null post, no image, empty image, caption truncation)
   - `IgSenderResilienceTests.cs` → transient failure scenarios (blob upload fail/cancel/`NotImplementedException`, `HttpRequestException`, no-image guard)
 
+### Fixed
+- Updated `MaskUrlTelemetryInitializer` to mask `access_token` in Facebook Graph API HTTP dependencies using a case-insensitive `Http` check and `DependencyTelemetry.Target`.
+- Kept querystring sanitization consistent while preserving the rest of the URL.
+
 ---
 
 ## [0.1.8] - 2026-07-09
