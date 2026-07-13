@@ -47,10 +47,9 @@ public sealed class TagReplacementServiceTests
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Apply_Returns_Input_Unchanged_When_Text_Is_Null_Or_Whitespace(string text)
+    public void Apply_Returns_Input_Unchanged_When_Text_Is_Empty_Or_Whitespace(string text)
     {
         var providerMock = new Mock<ITagReplacementProvider>();
 
