@@ -1,4 +1,4 @@
-extern alias AzureIdentity;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.Functions.Worker;
@@ -46,7 +46,7 @@ var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
 
 builder.Configuration.AddAzureKeyVault(
     new Uri(keyVaultUri),
-    new AzureIdentity::Azure.Identity.DefaultAzureCredential());
+    new DefaultAzureCredential());
 
 // Key Vault secret prefix (ProviderCredentials:*). AddCredentials owns
 // both the Configure<T> and the IValidateOptions<T> registration.

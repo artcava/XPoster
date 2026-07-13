@@ -1,6 +1,6 @@
 # Deployment Guide
 
-XPoster runs as an Azure Functions v4 app on the .NET 8 isolated worker model.
+XPoster runs as an Azure Functions v4 app on the .NET 10 isolated worker model.
 Three deployment methods are supported; **Option 1 (GitHub Actions)** is recommended for production.
 
 ## Option 1: GitHub Actions (Recommended)
@@ -10,7 +10,7 @@ The repository ships with `.github/workflows/ci.yml` that builds, tests, and dep
 ### Setup Steps
 
 1. **Create a Function App** in Azure Portal:
-   - Runtime: `.NET 8 (Isolated)`
+   - Runtime: `.NET 10 (Isolated)`
    - OS: Windows
    - Hosting plan: Consumption (Serverless)
 
