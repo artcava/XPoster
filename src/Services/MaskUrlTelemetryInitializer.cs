@@ -1,61 +1,81 @@
-using System.Web; // Richiede .NET Core / .NET 5+ (incluso nativamente)
+using System.Web;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
 /// <summary>
-/// Un <see cref="ITelemetryInitializer"/> personalizzato per mascherare o rimuovere i token di accesso dalle chiamate HTTP verso l'API Graph di Facebook.
-/// Questo aiuta a proteggere le informazioni sensibili nei log di telemetria.
+/// Custom <see cref="ITelemetryInitializer"/> that masks access tokens in outbound HTTP dependency
+/// telemetry targeting the Facebook Graph API.
 /// </summary>
 public class MaskUrlTelemetryInitializer : ITelemetryInitializer
 {
+    private const string FacebookGraphHost = "graph.facebook.com";
+    private const string AccessTokenParam   = "access_token";
+    private const string MaskedValue        = "[MASKED]";
     /// <summary>
-    /// Inizializza la telemetria, mascherando o rimuovendo i token di accesso dalle chiamate HTTP verso l'API Graph di Facebook.
+    /// Initializes the telemetry item, masking sensitive query string parameters
+    /// for calls directed at the Facebook Graph API.
     /// </summary>
-    /// <param name="telemetry">L'oggetto di telemetria da inizializzare.</param>
+    /// <param name="telemetry">The telemetry item to initialize.</param>
     public void Initialize(ITelemetry telemetry)
     {
-        // 1. Intercettiamo solo le chiamate HttpClient (Dependency) di tipo Http
-        if (telemetry is DependencyTelemetry dependency && dependency.Type == "Http")
+        // 1. Intercept only Http dependency calls (case-insensitive to handle "HTTP", "http", "Http", …)
+        if (telemetry is not DependencyTelemetry dependency ||
+            !string.Equals(dependency.Type, "Http", StringComparison.OrdinalIgnoreCase))
         {
-            if (string.IsNullOrEmpty(dependency.Data)) return;
+            return;
+        }
 
-            // 2. Filtriamo in modo mirato solo per le chiamate verso Graph API di Facebook
-            if (dependency.Data.Contains("graph.facebook.com"))
+        // 2. Filter by Target (populated by the SDK as the remote host).
+        //    Target is a stable, host-only field: "graph.facebook.com" or "graph.facebook.com:443".
+        if (string.IsNullOrEmpty(dependency.Target) ||
+            !dependency.Target.Contains(FacebookGraphHost, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(dependency.Data))
+        {
+            return;
+        }
+
+        try
+        {
+            if (!Uri.TryCreate(dependency.Data, UriKind.Absolute, out var uri))
             {
-                try
-                {
-                    if (Uri.TryCreate(dependency.Data, UriKind.Absolute, out var uri))
-                    {
-                        // 3. Verifichiamo se la query string contiene parametri
-                        if (!string.IsNullOrEmpty(uri.Query))
-                        {
-                            // Effettua il parsing dei parametri (es. ?limit=10&access_token=xyz)
-                            var queryParameters = HttpUtility.ParseQueryString(uri.Query);
-
-                            // 4. Se il parametro access_token è presente, lo mascheriamo o rimuoviamo
-                            if (queryParameters["access_token"] != null)
-                            {
-                                // Sostituisci con un valore segnaposto (scelta consigliata per sapere che c'era)
-                                queryParameters["access_token"] = "[MASKED]"; 
-                                
-                                // Oppure usa: queryParameters.Remove("access_token"); se vuoi eliminarlo del tutto
-
-                                // 5. Ricostruiamo l'URL pulito mantenendo gli altri parametri
-                                string cleanQuery = queryParameters.ToString() ?? string.Empty; // Genera "limit=10&access_token=%5bMASKED%5d"
-                                string cleanUrl = $"{uri.Scheme}://{uri.Authority}{uri.AbsolutePath}?{cleanQuery}";
-
-                                // Aggiorna la telemetria
-                                dependency.Data = cleanUrl;
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    dependency.Data = "https://graph.facebook.com"; // In caso di errore, mantieni l'URL originale per evitare di perdere informazioni critiche
-                }
+                return;
             }
+
+            // 3. Nothing to sanitize when there is no query string.
+            if (string.IsNullOrEmpty(uri.Query))
+            {
+                return;
+            }
+
+            // 4. Parse and inspect query parameters.
+            var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+
+            if (queryParameters[AccessTokenParam] is null)
+            {
+                return;
+            }
+
+            // 5. Replace the sensitive parameter value.
+            queryParameters[AccessTokenParam] = MaskedValue;
+
+            // 6. Rebuild the URL.
+            //    UrlEncode round-trips through HttpUtility, which encodes brackets as %5B%5D.
+            //    We decode them back so the stored URL stays human-readable while still being valid.
+            string cleanQuery = Uri.UnescapeDataString(queryParameters.ToString() ?? string.Empty);
+            string cleanUrl   = $"{uri.Scheme}://{uri.Authority}{uri.AbsolutePath}?{cleanQuery}";
+
+            dependency.Data = cleanUrl;
+        }
+        catch
+        {
+            // On any parsing failure fall back to the bare host URL so we never
+            // accidentally persist a token-bearing URL in telemetry.
+            dependency.Data = $"https://{FacebookGraphHost}";
         }
     }
 }

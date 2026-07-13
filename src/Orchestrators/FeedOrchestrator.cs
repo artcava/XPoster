@@ -202,7 +202,7 @@ public class FeedOrchestrator : BaseOrchestrator
 
         var sb = new StringBuilder();
         foreach (var feed in allFeeds)
-            sb.AppendLine($"{feed.Title}: {feed.Content} ({feed.Link})");
+            sb.AppendLine($"{feed.Title}: {feed.Content}");
 
         return sb.ToString();
     }

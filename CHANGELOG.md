@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.1.9] - 2026-07-13
+
 ### Added
 - **Structured log context in `FeedOrchestrator`** ([#221](https://github.com/artcava/XPoster/issues/221)): three explicit `LogInformation` entries added at the AI provider call points in `FeedOrchestrator.cs`:
   - Before `GetSummaryAsync` for the primary sender — includes structured fields `{Platform}` and `{Limit}`
@@ -22,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `IgSenderImageFlowTests.cs` → `NormalizeImage` variants and full image upload/publish flow
   - `IgSenderSendAsyncTests.cs` → `SendAsync` edge cases (null post, no image, empty image, caption truncation)
   - `IgSenderResilienceTests.cs` → transient failure scenarios (blob upload fail/cancel/`NotImplementedException`, `HttpRequestException`, no-image guard)
+
+### Fixed
+- Updated `MaskUrlTelemetryInitializer` to mask `access_token` in Facebook Graph API HTTP dependencies using a case-insensitive `Http` check and `DependencyTelemetry.Target`.
+- Kept querystring sanitization consistent while preserving the rest of the URL.
 
 ---
 
@@ -327,7 +335,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.8...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.1.9...HEAD
+[0.1.9]: https://github.com/artcava/XPoster/compare/v0.1.8...v0.1.9
 [0.1.8]: https://github.com/artcava/XPoster/compare/v0.1.7...v0.1.8
 [0.1.7]: https://github.com/artcava/XPoster/compare/v0.1.6...v0.1.7
 [0.1.6]: https://github.com/artcava/XPoster/compare/v0.1.5...v0.1.6
