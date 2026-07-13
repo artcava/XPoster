@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoService()** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **MakeService()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
-- **CryptoServiceTests** (2 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **for()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 

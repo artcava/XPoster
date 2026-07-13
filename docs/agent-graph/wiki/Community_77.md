@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **InMemoryContainerStateStore.cs** (6 connections)
-- **InMemoryContainerStateStore.cs** (6 connections)
-- **SaveAsync()** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **InMemoryContainerStateStore** (2 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **typeof()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

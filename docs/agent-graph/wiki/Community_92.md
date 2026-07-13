@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (5 connections)
-- **ITextToTextProvider.cs** (5 connections)
-- **ITextToTextProvider** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
 
 ## Relationships
 

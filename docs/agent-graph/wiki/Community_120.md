@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ISlotProfileProvider** (2 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
+- **GetFeedUrls()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 

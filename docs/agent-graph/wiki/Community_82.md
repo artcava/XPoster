@@ -1,24 +1,24 @@
 # Community 82
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (6 connections)
-- **DryRunSlotProfileProvider.cs** (6 connections)
-- **typeof()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Providers** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **if()** (2 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 57]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **if()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **Uri()** (2 connections)
-- **BlobServiceClient()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
 
 ## Relationships
 

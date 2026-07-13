@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **if()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider** (2 connections)
+- **GetFeedUrls()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
