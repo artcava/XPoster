@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **using()** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **catch()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **Exception()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **SendAsync()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **InvalidImageBytes()** (2 connections)
+- **FbSenderImageFlowTests** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
 
 ## Relationships
 
-- [[Community 168]] (3 shared connections)
+- [[Community 82]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

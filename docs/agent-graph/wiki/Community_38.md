@@ -1,28 +1,28 @@
 # Community 38
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests** (2 connections)
+- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
+- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
+- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 30]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

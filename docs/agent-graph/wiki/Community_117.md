@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetProfiles()** (2 connections)
-- **ISlotProfileProvider** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **TimeProvider** (2 connections)
 
 ## Relationships
 

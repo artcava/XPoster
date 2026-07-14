@@ -1,28 +1,28 @@
 # Community 18
 
-> 15 nodes · cohesion 0.26
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **BlobStorageServiceTests.cs** (14 connections)
-- **BlobStorageServiceTests.cs** (14 connections)
-- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
-- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
-- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
-- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
-- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
-- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **CreateSut()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
+- **new()** (2 connections)
+- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
+- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **ValidPost()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 37]] (12 shared connections)
 
 ## Audit Trail
 

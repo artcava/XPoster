@@ -1,22 +1,22 @@
 # Community 103
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **Validate()** (2 connections)
+- **OrchestratorFactory.cs** (8 connections)
+- **Resolve()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 132]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

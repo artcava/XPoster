@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (4 connections)
+- **MaskUrlTelemetryInitializer.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 175]] (2 shared connections)
+- [[Community 149]] (2 shared connections)
 
 ## Audit Trail
 
