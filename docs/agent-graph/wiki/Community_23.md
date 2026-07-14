@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
+- **ModelsTests** (2 connections)
+- **AIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
 
 ## Relationships
 

@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (9 connections)
-- **XSenderResilienceTests.cs** (9 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
-- **XSender()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderResilienceTests** (2 connections)
-- **BuildSender()** (2 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **MetaPublishingService()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
+- **GetApiVersion()** (2 connections)
 
 ## Relationships
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
+- **ITextToTextProvider.cs** (5 connections)
 - **XPoster.Contracts** (2 connections)
-- **IMetaPublishingService** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
+- **GetSummaryAsync()** (2 connections)
+- **ITextToTextProvider** (2 connections)
+- **GetImagePromptAsync()** (2 connections)
 
 ## Relationships
 

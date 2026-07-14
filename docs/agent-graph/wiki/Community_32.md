@@ -1,29 +1,29 @@
 # Community 32
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (11 connections)
-- **PowerLawOrchestratorTests.cs** (11 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
-- **OrchestrateAsync_BroadcastsSamePost_ToAllSenders()** (2 connections)
-- **new()** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **BuildSender()** (2 connections)
+- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
+- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
+- **Platform_ReturnsDryRun()** (2 connections)
+- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
+- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
+- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
+- **DryRunSenderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 20]] (14 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

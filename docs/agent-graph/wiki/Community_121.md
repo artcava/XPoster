@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **XPoster.Providers** (2 connections)
-- **GetReplacements()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **CreateValidPng()** (2 connections)
+- **CreateValidJpeg()** (2 connections)
 
 ## Relationships
 

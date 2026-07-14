@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **for()** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSenderTests()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 123]] (4 shared connections)
+- [[Community 43]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

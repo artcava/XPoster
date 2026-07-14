@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **IsTransientHttpFailure()** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **CryptoService()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 140]] (3 shared connections)
+- [[Community 131]] (3 shared connections)
 
 ## Audit Trail
 
