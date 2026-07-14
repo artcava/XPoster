@@ -19,9 +19,8 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
-
-builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
+    .ConfigureFunctionsApplicationInsights()
+    .AddApplicationInsightsTelemetryProcessor<MaskUrlTelemetryProcessor>();
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {

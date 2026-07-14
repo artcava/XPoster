@@ -39,15 +39,6 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
             hour: 14,
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Facebook },
             orchestratorType: typeof(PowerLawOrchestrator)),
-
-        #region TESTING SLOTS (excluded from production deployments)
-        // new ScheduledOrchestrationProfile(
-        //     hour: 9,
-        //     senderPlatforms: new[] { SenderPlatform.Instagram },
-        //     orchestratorType: typeof(FeedOrchestrator),
-        //     textProvider: AiProvider.OpenAi,
-        //     imageProvider: AiProvider.AzureFoundry)
-        #endregion
         
     }.AsReadOnly();
 
