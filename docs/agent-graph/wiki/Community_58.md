@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests.cs** (8 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
-- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
-- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **for()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 

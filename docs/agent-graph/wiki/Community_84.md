@@ -1,24 +1,24 @@
 # Community 84
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **TagReplacementService()** (2 connections)
-- **foreach()** (2 connections)
-- **Apply()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **while()** (2 connections)
+- **var()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 - **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 74]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

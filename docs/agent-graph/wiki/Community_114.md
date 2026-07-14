@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ICryptoService** (2 connections)
-- **GetCryptoValue()** (2 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **Process()** (2 connections)
+- **MaskUrlTelemetryProcessor()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

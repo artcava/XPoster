@@ -1,21 +1,21 @@
 # Community 145
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed** (2 connections)
-- **XPoster.Models** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **catch()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetCryptoValue()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 148]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

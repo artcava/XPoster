@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Contracts** (2 connections)
-- **SenderPlatform.cs** (2 connections)
-- **SenderPlatform.cs** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
+- **LinkedInCredentials.cs** (2 connections)
 
 ## Relationships
 

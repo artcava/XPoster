@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AddAzureFoundryOptions()** (2 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
+- **PerplexityOptionsExtensions.cs** (3 connections)
 - **XPoster.Models** (2 connections)
+- **AddPerplexityOptions()** (2 connections)
 
 ## Relationships
 

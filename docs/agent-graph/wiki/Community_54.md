@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **catch()** (2 connections)
-- **for()** (2 connections)
-- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **DeepSeekOptionsValidatorTests.cs** (8 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 

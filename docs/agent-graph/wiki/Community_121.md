@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ImageTestData.cs** (4 connections)
-- **ImageTestData.cs** (4 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **CreateValidPng()** (2 connections)
-- **CreateValidJpeg()** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **IFeedService** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 

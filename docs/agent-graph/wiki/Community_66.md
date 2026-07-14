@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLogger()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
+- **BlobStorageService.cs** (7 connections)
+- **BlobStorageService.cs** (7 connections)
+- **UploadAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **BlobStorageService()** (2 connections)
+- **BlobUploadResult()** (2 connections)
+- **DeleteAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **if()** (2 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
-- **Process()** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

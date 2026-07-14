@@ -1,21 +1,21 @@
 # Community 129
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **CreateOrchestrator()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
+- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 82]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

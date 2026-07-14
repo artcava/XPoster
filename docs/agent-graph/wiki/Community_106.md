@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementService.cs** (4 connections)
-- **ITagReplacementService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **Apply()** (2 connections)
-- **ITagReplacementService** (2 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **ConfigurationFeedUrlProvider.cs** (4 connections)
+- **GetFeedUrls()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
 
 ## Relationships
 

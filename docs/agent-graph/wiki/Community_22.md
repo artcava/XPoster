@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPoster** (2 connections)
-- **if()** (2 connections)
-- **TryDeleteBlobAsync()** (2 connections)
-- **ProcessContainerAsync()** (2 connections)
-- **PollPendingContainersAsync()** (2 connections)
-- **switch()** (2 connections)
-- **Run()** (2 connections)
-- **HandleFinishedAsync()** (2 connections)
-- **foreach()** (2 connections)
-- **catch()** (2 connections)
-- **HandleTerminalFailureAsync()** (2 connections)
-- **XPosterContainerPollingFunction()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **PerplexityOptionsValidatorTests.cs** (13 connections)
+- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
+- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
 
 ## Relationships
 

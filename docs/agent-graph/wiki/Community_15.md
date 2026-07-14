@@ -6,12 +6,6 @@
 
 - **InMemoryContainerStateStoreTests.cs** (15 connections)
 - **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
-- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
-- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
-- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
-- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
-- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
 - **SaveAsync_WithNullBlobName_ThrowsArgumentNullException()** (2 connections)
 - **GetPendingAsync_ReturnsOnlyPendingEntries()** (2 connections)
 - **InMemoryContainerStateStoreTests** (2 connections)
@@ -19,7 +13,13 @@
 - **SaveAsync_WithEmptyOrWhitespaceBlobName_ThrowsArgumentException()** (2 connections)
 - **SaveAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
+- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
+- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
+- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
+- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
 - **SaveAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
 
 ## Relationships
 
