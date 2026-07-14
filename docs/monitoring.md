@@ -60,7 +60,8 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
+    .ConfigureFunctionsApplicationInsights()
+    .AddApplicationInsightsTelemetryProcessor<MaskUrlTelemetryProcessor>();
 
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
@@ -71,7 +72,7 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
         options.Rules.Remove(defaultRule);
 });
 ```
-
+The **`MaskUrlTelemetryProcessor`** is used to mask `access_token` over calls to Facebook Graph APIs, they require to pass it in QueryString.
 **Why the `LoggerFilterOptions` block?** By default, the Functions host injects a filter rule that suppresses `Information`-level logs from reaching Application Insights. Removing that rule lets every `ILogger<T>` call (Debug, Information, Warning, Error) flow through to the telemetry pipeline without additional configuration.
 
 No explicit `HostBuilder` or `.Build().Run()` wiring is required — `FunctionsApplication.CreateBuilder` manages the host lifecycle internally.
