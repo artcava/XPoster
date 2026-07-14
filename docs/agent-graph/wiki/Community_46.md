@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **IgSenderSendAsyncTests.cs** (9 connections)
-- **IgSenderSendAsyncTests.cs** (9 connections)
-- **BuildSender()** (2 connections)
-- **IgSenderSendAsyncTests** (2 connections)
-- **SendAsync_WithEmptyImageArray_ReturnsFalse()** (2 connections)
-- **SendAsync_WithCaptionExceedingMaxLength_TruncatesCaption()** (2 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **XSenderResilienceTests** (2 connections)
+- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **IgSender()** (2 connections)
+- **XSender()** (2 connections)
+- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **BuildSender()** (2 connections)
 
 ## Relationships
 

@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **FbSenderImageFlowTests** (2 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **InvalidImageBytes()** (2 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **PendingContainer()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
 
 ## Relationships
 
-- [[Community 78]] (7 shared connections)
+- [[Community 33]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

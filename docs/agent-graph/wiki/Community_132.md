@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **XSender.cs** (6 connections)
 - **catch()** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 91]] (5 shared connections)
+- [[Community 173]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

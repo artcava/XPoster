@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService()** (2 connections)
-- **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **Program.cs** (6 connections)
+- **Program.cs** (6 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **BlobServiceClient()** (2 connections)
+- **Uri()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
 
 ## Relationships
 

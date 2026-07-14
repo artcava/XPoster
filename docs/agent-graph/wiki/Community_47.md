@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **FbSender.cs** (9 connections)
-- **FbSender.cs** (9 connections)
-- **HandleResponseAsync()** (2 connections)
-- **catch()** (2 connections)
-- **FbSender()** (2 connections)
-- **PublishPhotoAsync()** (2 connections)
-- **PublishTextOnlyAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **if()** (2 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **FbSenderSendAsyncTests** (2 connections)
+- **BuildCreds()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **SendAsync_WithEmptyImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **SendAsync_WithNullImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithCaptionLongerThanMax_StillPublishes_ReturnsTrue()** (2 connections)
 
 ## Relationships
 

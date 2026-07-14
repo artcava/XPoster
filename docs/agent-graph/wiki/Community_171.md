@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
+- **XCredentialsValidator.cs** (4 connections)
 - **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 180]] (2 shared connections)
+- [[Community 176]] (2 shared connections)
 
 ## Audit Trail
 

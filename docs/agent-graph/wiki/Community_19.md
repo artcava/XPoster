@@ -1,28 +1,28 @@
 # Community 19
 
-> 15 nodes · cohesion 0.13
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **ValidPost()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **new()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

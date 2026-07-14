@@ -4,26 +4,26 @@
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **InSender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Platform_ReturnsLinkedIn()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
-- **InSenderTests()** (2 connections)
-- **MessageMaxLength_Returns2800()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **FalImageJson()** (2 connections)
+- **BuildService()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (12 shared connections)
+- [[Community 38]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

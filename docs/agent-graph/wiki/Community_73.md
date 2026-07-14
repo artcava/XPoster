@@ -1,25 +1,25 @@
 # Community 73
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
-- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
-- **AiProviderExtensionsTests** (2 connections)
-- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
-- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **TestOrchestrator()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 53]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,24 +1,24 @@
 # Community 79
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
+- **IgSender.cs** (6 connections)
+- **IgSender.cs** (6 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **IgSender()** (2 connections)
 - **catch()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

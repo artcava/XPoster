@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetReplacements()** (2 connections)
-- **ITagReplacementProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **ITimeProvider** (2 connections)
 
 ## Relationships
 

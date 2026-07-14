@@ -1,23 +1,23 @@
 # Community 98
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (5 connections)
-- **ITextToTextProvider.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **ITextToTextProvider** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSender()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSenderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 41]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

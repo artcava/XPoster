@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **FeedService.cs** (7 connections)
+- **FeedService()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 176]] (2 shared connections)
+- [[Community 101]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

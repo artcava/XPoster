@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **Process()** (2 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **PowerLawOrchestrator()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships

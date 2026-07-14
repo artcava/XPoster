@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
+- **FacebookCredentialsValidator** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

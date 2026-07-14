@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **BlobStorageServiceTests.cs** (14 connections)
-- **BlobStorageServiceTests.cs** (14 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
-- **CreateSut()** (2 connections)
-- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
-- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
-- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
+- **Initialize_WhenDependencyTypeIsNotHttp_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenDataIsEmpty_DoesNotThrow()** (2 connections)
+- **Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()** (2 connections)
+- **Initialize_WhenDataIsNull_DoesThrow()** (2 connections)
+- **Initialize_WhenHttpDependencyNotFacebook_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenFacebookDataIsMalformedUrl_DataRemainsUnchanged()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()** (2 connections)
+- **Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenTelemetryIsNotDependency_DoesNothing()** (2 connections)
 
 ## Relationships
 

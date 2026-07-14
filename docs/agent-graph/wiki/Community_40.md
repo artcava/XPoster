@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **CredentialsStartupValidator.cs** (10 connections)
-- **foreach()** (2 connections)
-- **catch()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **resolve()** (2 connections)
-- **Validate()** (2 connections)
-- **ValidateOptions()** (2 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
 
 ## Relationships
 

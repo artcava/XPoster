@@ -4,25 +4,25 @@
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
-- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **BuildCreds()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **new()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Platform_ReturnsInstagram()** (2 connections)
+- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **MessageMaxLength_Returns2200()** (2 connections)
+- **BuildSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 33]] (11 shared connections)
+- [[Community 98]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

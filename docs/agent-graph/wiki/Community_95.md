@@ -5,11 +5,11 @@
 ## Key Concepts
 
 - **AiServiceHelperImageTests.cs** (37 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
-- **JsonResponse()** (2 connections)
 - **var()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **JsonResponse()** (2 connections)
+- **HttpClient()** (2 connections)
 
 ## Relationships
 

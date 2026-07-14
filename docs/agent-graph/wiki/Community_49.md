@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **SupportedPlatforms_IsEmpty()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
-- **NoOrchestratorTests** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **Build()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
+- **XFunctionTests.cs** (9 connections)
+- **XFunctionTests.cs** (9 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
 
 ## Relationships
 

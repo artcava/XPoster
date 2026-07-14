@@ -1,29 +1,29 @@
 # Community 31
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
-- **foreach()** (2 connections)
-- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **ConfigurationTagReplacementProviderTests** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
-- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
+- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
+- **Platform_ReturnsDryRun()** (2 connections)
+- **DryRunSenderTests()** (2 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
+- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
+- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
+- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 16]] (14 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
