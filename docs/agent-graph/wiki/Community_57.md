@@ -1,26 +1,26 @@
 # Community 57
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunctionTests.cs** (20 connections)
-- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
-- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
-- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
-- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
-- **PendingContainer()** (2 connections)
-- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
-- **CreateTimerInfo()** (2 connections)
-- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **for()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 
-- [[Community 34]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

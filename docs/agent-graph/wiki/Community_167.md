@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **BuildCreds()** (2 connections)
-- **BuildFactory()** (2 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 62]] (8 shared connections)
+- [[Community 181]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

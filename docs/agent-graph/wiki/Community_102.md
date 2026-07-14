@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **IFeedUrlProvider.cs** (4 connections)
+- **GetFeedUrls()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **ICryptoService** (2 connections)
+- **IFeedUrlProvider** (2 connections)
 
 ## Relationships
 

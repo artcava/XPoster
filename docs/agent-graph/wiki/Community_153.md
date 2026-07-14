@@ -1,20 +1,20 @@
 # Community 153
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **if()** (2 connections)
-- **FeedService()** (2 connections)
+- **InstagramCredentials.cs** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **InstagramCredentials.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 113]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

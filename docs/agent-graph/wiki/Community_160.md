@@ -1,20 +1,20 @@
 # Community 160
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **InstagramCredentials.cs** (2 connections)
-- **InstagramCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **XSender.cs** (6 connections)
+- **if()** (2 connections)
+- **XSender()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 143]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

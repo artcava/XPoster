@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **catch()** (2 connections)
-- **SendAsync()** (2 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **typeof()** (2 connections)
 
 ## Relationships
 

@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **FeedOptions.cs** (2 connections)
-- **FeedOptions.cs** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

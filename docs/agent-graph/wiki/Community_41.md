@@ -6,14 +6,14 @@
 
 - **CredentialsStartupValidator.cs** (10 connections)
 - **CredentialsStartupValidator.cs** (10 connections)
-- **foreach()** (2 connections)
 - **if()** (2 connections)
 - **XPoster.Credentials** (2 connections)
-- **resolve()** (2 connections)
-- **ValidateOptions()** (2 connections)
-- **Validate()** (2 connections)
 - **InvalidOperationException()** (2 connections)
+- **resolve()** (2 connections)
+- **Validate()** (2 connections)
+- **ValidateOptions()** (2 connections)
 - **catch()** (2 connections)
+- **foreach()** (2 connections)
 - **CredentialsStartupValidator()** (2 connections)
 
 ## Relationships

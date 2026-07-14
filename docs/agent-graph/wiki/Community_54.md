@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **InvalidImageBytes()** (2 connections)
-- **FbSenderImageFlowTests** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 82]] (7 shared connections)
+- [[Community 69]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

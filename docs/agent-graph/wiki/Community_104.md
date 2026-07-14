@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **SendAsync()** (2 connections)
-- **ISender** (2 connections)
+- **ITextToImageProvider** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 

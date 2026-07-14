@@ -1,21 +1,21 @@
 # Community 141
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **AddAzureFoundryOptions()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

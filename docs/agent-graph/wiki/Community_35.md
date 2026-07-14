@@ -1,29 +1,29 @@
 # Community 35
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **ScheduledOrchestrationProfileTests.cs** (11 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **typeof()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
+- **FalAiImageServiceTests.cs** (22 connections)
+- **FalImageJson()** (2 connections)
+- **BuildService()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 38]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

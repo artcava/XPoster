@@ -1,30 +1,30 @@
 # Community 27
 
-> 13 nodes · cohesion 0.29
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
-- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_DefaultOptions_Succeeds()** (2 connections)
-- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **ValidOptions()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **BuildSender()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
+- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 30]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

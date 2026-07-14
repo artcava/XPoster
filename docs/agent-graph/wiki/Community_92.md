@@ -1,23 +1,23 @@
 # Community 92
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **if()** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **var()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
+- **HttpClient()** (2 connections)
+- **JsonResponse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 3]] (31 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator.cs** (4 connections)
+- **ISender.cs** (4 connections)
+- **ISender.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **IOrchestrator** (2 connections)
-- **PostAsync()** (2 connections)
+- **ISender** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 

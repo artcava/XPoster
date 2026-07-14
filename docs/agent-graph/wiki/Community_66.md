@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLogger()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse** (2 connections)
+- **Message** (2 connections)
+- **ImageData** (2 connections)
+- **Choice** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
