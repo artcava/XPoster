@@ -21,6 +21,8 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 
+builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
+
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
     LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
@@ -30,8 +32,6 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
         options.Rules.Remove(defaultRule);
     }
 });
-
-builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
 
 // Azure Key Vault Configuration Provider.
 // Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.

@@ -1,7 +1,7 @@
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Moq;
-
+using Microsoft.Extensions.Logging;
 namespace XPoster.Tests.Services;
 
 /// <summary>
@@ -12,7 +12,7 @@ namespace XPoster.Tests.Services;
 /// </summary>
 public class MaskUrlTelemetryInitializerTests
 {
-    private readonly MaskUrlTelemetryInitializer _sut = new();
+    private readonly MaskUrlTelemetryInitializer _sut = new(new Mock<ILogger<MaskUrlTelemetryInitializer>>().Object);
 
     [Fact]
     public void Initialize_WhenTelemetryIsNotDependency_DoesNothing()
