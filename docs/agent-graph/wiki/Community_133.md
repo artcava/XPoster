@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AzureFoundryOptionsExtensions.cs** (3 connections)
-- **AddAzureFoundryOptions()** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

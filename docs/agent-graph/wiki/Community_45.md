@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **FbSender.cs** (9 connections)
-- **FbSender.cs** (9 connections)
-- **FbSender()** (2 connections)
-- **SendAsync()** (2 connections)
-- **HandleResponseAsync()** (2 connections)
-- **PublishPhotoAsync()** (2 connections)
-- **PublishTextOnlyAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **BuildSender()** (2 connections)
+- **XSender()** (2 connections)
+- **XSenderResilienceTests** (2 connections)
+- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
 
 ## Relationships
 

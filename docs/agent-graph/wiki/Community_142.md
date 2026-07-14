@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **AddHttpClients()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- [[Community 152]] (3 shared connections)
+- [[Community 159]] (3 shared connections)
 
 ## Audit Trail
 

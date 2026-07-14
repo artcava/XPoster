@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (11 connections)
-- **PerplexityService.cs** (11 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **var()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **while()** (2 connections)
-- **PerplexityService()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **if()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 

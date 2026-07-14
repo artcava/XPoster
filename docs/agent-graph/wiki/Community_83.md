@@ -1,24 +1,24 @@
 # Community 83
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **Run()** (2 connections)
-- **XFunction()** (2 connections)
+- **AzureFoundryService.cs** (14 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **var()** (2 connections)
+- **while()** (2 connections)
 - **catch()** (2 connections)
-- **XPoster** (2 connections)
+- **BuildImagePromptPayload()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 73]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
