@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryInitializer.cs** (4 connections)
+- **PerplexityOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 159]] (2 shared connections)
+- [[Community 167]] (2 shared connections)
 
 ## Audit Trail
 

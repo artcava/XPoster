@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **FeedService.cs** (7 connections)
+- **if()** (2 connections)
+- **FeedService()** (2 connections)
 
 ## Relationships
 
-- [[Community 64]] (8 shared connections)
+- [[Community 119]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

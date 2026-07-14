@@ -6,15 +6,15 @@
 
 - **AiServiceHelper.cs** (10 connections)
 - **XPoster.Services** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
 - **ExtractOpenAiBytes()** (2 connections)
 - **ParseImageResponseAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 140]] (4 shared connections)
+- [[Community 145]] (4 shared connections)
 
 ## Audit Trail
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **IgSender()** (2 connections)
-- **catch()** (2 connections)
+- **TagReplacementService.cs** (6 connections)
+- **TagReplacementService.cs** (6 connections)
 - **if()** (2 connections)
+- **Apply()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **TagReplacementService()** (2 connections)
 
 ## Relationships
 

@@ -1,26 +1,26 @@
 # Community 51
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **BuildCreds()** (2 connections)
-- **InvalidImageBytes()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **FbSenderImageFlowTests** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptionsTests.cs** (8 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()** (2 connections)
+- **AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()** (2 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
 
 ## Relationships
 
-- [[Community 79]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

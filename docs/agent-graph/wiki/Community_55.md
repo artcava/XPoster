@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **foreach()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
-- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
-- **HttpClientExtensionsTests** (2 connections)
-- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
-- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **RSSFeedTests** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
 
 ## Relationships
 

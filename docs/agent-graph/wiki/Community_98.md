@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **XPoster.Models** (2 connections)
 - **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **foreach()** (2 connections)
 - **if()** (2 connections)
-- **FacebookCredentialsValidator** (2 connections)
 
 ## Relationships
 

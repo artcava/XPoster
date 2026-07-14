@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
-- **DeleteAsync()** (2 connections)
-- **UploadAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **BlobUploadResult()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PostTests** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
 
 ## Relationships
 

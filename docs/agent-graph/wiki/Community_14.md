@@ -1,34 +1,34 @@
 # Community 14
 
-> 17 nodes · cohesion 0.12
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **if()** (2 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
-- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **MetaPublishingServiceTests.cs** (16 connections)
+- **MetaPublishingServiceTests.cs** (16 connections)
+- **PublishContainerAsync_WhenOk_ReturnsPublishId()** (2 connections)
+- **GetContainerStatusAsync_WithEmptyCreationId_ThrowsArgumentException()** (2 connections)
+- **PublishContainerAsync_WhenIdIsNull_ReturnsEmptyString()** (2 connections)
+- **MetaPublishingService()** (2 connections)
+- **PublishContainerAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
+- **PublishContainerAsync_WhenRateLimited_Throws()** (2 connections)
+- **PublishContainerAsync_WhenResponseBodyIsNull_ThrowsJsonException()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **PublishContainerAsync_WithWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
+- **CreateSut()** (2 connections)
+- **GetContainerStatusAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
+- **GetContainerStatusAsync_WhenOk_ReturnsStatusCode()** (2 connections)
+- **GetContainerStatusAsync_WhenNotFound_ThrowsHttpRequestException()** (2 connections)
+- **GetContainerStatusAsync_WhenStatusInNestedField_ReturnsCode()** (2 connections)
+- **GetContainerStatusAsync_WhenResponseBodyIsEmpty_ThrowsJsonException()** (2 connections)
 
 ## Relationships
 
-- [[Community 9]] (18 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 67 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

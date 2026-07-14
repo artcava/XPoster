@@ -6,13 +6,13 @@
 
 - **FacebookResiliencePipelineTests.cs** (8 connections)
 - **FacebookResiliencePipelineTests.cs** (8 connections)
-- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **catch()** (2 connections)
-- **for()** (2 connections)
-- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
 - **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
 - **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **for()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 

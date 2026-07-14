@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **CredentialsStartupValidator.cs** (10 connections)
-- **InvalidOperationException()** (2 connections)
-- **Validate()** (2 connections)
-- **ValidateOptions()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **resolve()** (2 connections)
-- **if()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **foreach()** (2 connections)
-- **catch()** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests** (2 connections)
+- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
+- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
+- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
 
 ## Relationships
 

@@ -6,11 +6,11 @@
 
 - **IContainerStateStore.cs** (6 connections)
 - **IContainerStateStore.cs** (6 connections)
+- **XPoster.Contracts** (2 connections)
+- **UpdateStatusAsync()** (2 connections)
 - **SaveAsync()** (2 connections)
 - **GetPendingAsync()** (2 connections)
 - **IContainerStateStore** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
 
 ## Relationships
 

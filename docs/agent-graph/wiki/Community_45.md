@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (9 connections)
-- **XSenderResilienceTests.cs** (9 connections)
-- **BuildSender()** (2 connections)
-- **XSender()** (2 connections)
-- **XSenderResilienceTests** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **BuildCreds()** (2 connections)
+- **FbSenderSendAsyncTests** (2 connections)
+- **SendAsync_WithEmptyImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **SendAsync_WithCaptionLongerThanMax_StillPublishes_ReturnsTrue()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithNullImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **BuildFactory()** (2 connections)
 
 ## Relationships
 

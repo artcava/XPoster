@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests** (2 connections)
-- **MakeService()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
-- **CryptoService()** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **var()** (2 connections)
+- **params()** (2 connections)
 
 ## Relationships
 

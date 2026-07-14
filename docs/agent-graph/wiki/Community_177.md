@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 153]] (2 shared connections)
+- [[Community 152]] (2 shared connections)
 
 ## Audit Trail
 

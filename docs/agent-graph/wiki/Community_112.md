@@ -1,22 +1,22 @@
 # Community 112
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **MaskUrlTelemetryInitializer.cs** (4 connections)
-- **MaskUrlTelemetryInitializer.cs** (4 connections)
-- **MaskUrlTelemetryInitializer()** (2 connections)
-- **Initialize()** (2 connections)
-- **if()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 129]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

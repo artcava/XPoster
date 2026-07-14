@@ -9,19 +9,9 @@ using Microsoft.ApplicationInsights.Extensibility;
 /// </summary>
 public class MaskUrlTelemetryInitializer : ITelemetryInitializer
 {
-    private readonly ILogger<MaskUrlTelemetryInitializer> _logger;
     private const string FacebookGraphHost = "graph.facebook.com";
     private const string AccessTokenParam   = "access_token";
     private const string MaskedValue        = "[MASKED]";
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MaskUrlTelemetryInitializer"/> class.
-    /// </summary>
-    /// <param name="logger">The logger instance.</param>
-    public MaskUrlTelemetryInitializer(ILogger<MaskUrlTelemetryInitializer> logger)
-    {
-        _logger = logger;
-    }
 
     /// <summary>
     /// Initializes the telemetry item, masking sensitive query string parameters
@@ -30,14 +20,10 @@ public class MaskUrlTelemetryInitializer : ITelemetryInitializer
     /// <param name="telemetry">The telemetry item to initialize.</param>
     public void Initialize(ITelemetry telemetry)
     {
-        // 0. Log the telemetry type for debugging purposes.
-        _logger.LogDebug("[MaskUrlTelemetryInitializer] Processing telemetry of type {TelemetryType}", telemetry.GetType().Name);
-
         // 1. Intercept only Http dependency calls (case-insensitive to handle "HTTP", "http", "Http", …)
         if (telemetry is not DependencyTelemetry dependency ||
             !string.Equals(dependency.Type, "Http", StringComparison.OrdinalIgnoreCase))
         {
-            _logger.LogDebug("[MaskUrlTelemetryInitializer] Skipping telemetry of type {TelemetryType}", telemetry.GetType().Name);
             return;
         }
 
@@ -46,13 +32,11 @@ public class MaskUrlTelemetryInitializer : ITelemetryInitializer
         if (string.IsNullOrEmpty(dependency.Target) ||
             !dependency.Target.Contains(FacebookGraphHost, StringComparison.OrdinalIgnoreCase))
         {
-            _logger.LogDebug("[MaskUrlTelemetryInitializer] Skipping telemetry for target {Target} and Type {TelemetryType}", dependency.Target, dependency.Type);
             return;
         }
 
         if (string.IsNullOrEmpty(dependency.Data))
         {
-            _logger.LogDebug("[MaskUrlTelemetryInitializer] Skipping telemetry with empty data for target {Target} and Type {TelemetryType}", dependency.Target, dependency.Type);
             return;
         }
 
@@ -60,7 +44,6 @@ public class MaskUrlTelemetryInitializer : ITelemetryInitializer
         {
             if (!Uri.TryCreate(dependency.Data, UriKind.Absolute, out var uri))
             {
-                _logger.LogDebug("[MaskUrlTelemetryInitializer] Failed to create URI from data for target {Target} and Type {TelemetryType}", dependency.Target, dependency.Type);
                 return;
             }
 
