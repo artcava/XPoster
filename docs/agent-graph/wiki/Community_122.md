@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator.cs** (4 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **ITagReplacementService.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **Validate()** (2 connections)
-- **ICredentialsStartupValidator** (2 connections)
+- **ITagReplacementService** (2 connections)
+- **Apply()** (2 connections)
 
 ## Relationships
 

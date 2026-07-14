@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult()** (2 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **AddDeepSeekOptions()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

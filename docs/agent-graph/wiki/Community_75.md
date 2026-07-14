@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **Program.cs** (6 connections)
-- **Program.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
+- **DryRunSlotProfileProvider.cs** (6 connections)
 - **DryRunSlotProfileProvider()** (2 connections)
-- **BlobServiceClient()** (2 connections)
-- **Uri()** (2 connections)
-- **if()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **typeof()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 

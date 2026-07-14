@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **XSenderSendAsyncTests.cs** (8 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **XSenderSendAsyncTests()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **FacebookResiliencePipelineTests.cs** (8 connections)
+- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **for()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
