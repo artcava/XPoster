@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **OpenAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_MissingMaxCharsPlaceholder_Fails()** (2 connections)
-- **Validate_DefaultOptions_Succeeds()** (2 connections)
-- **Validate_MissingMaxCharsPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_AllPlaceholdersMissing_ReportsThreeFailures()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingTextPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingTextPlaceholder_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_MissingSummaryPlaceholder_ErrorNamesProperty()** (2 connections)
-- **Validate_MissingSummaryPlaceholder_Fails()** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
 
 ## Relationships
 

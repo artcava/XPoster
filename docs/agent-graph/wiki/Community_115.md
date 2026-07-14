@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **GetFeedsAsync()** (2 connections)
-- **IFeedService** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

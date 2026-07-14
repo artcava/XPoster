@@ -1,20 +1,20 @@
 # Community 82
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **XPoster.Contracts** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **SaveAsync()** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
+- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **new()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 129]] (4 shared connections)
 
 ## Audit Trail
 

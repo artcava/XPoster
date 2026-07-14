@@ -6,14 +6,14 @@
 
 - **MetaPublishingService.cs** (9 connections)
 - **MetaPublishingService.cs** (9 connections)
-- **HttpRequestException()** (2 connections)
+- **if()** (2 connections)
+- **MetaPublishingService()** (2 connections)
 - **XPoster.Services** (2 connections)
 - **PublishContainerAsync()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **if()** (2 connections)
 - **GetContainerStatusAsync()** (2 connections)
-- **GetApiVersion()** (2 connections)
 - **catch()** (2 connections)
+- **GetApiVersion()** (2 connections)
+- **HttpRequestException()** (2 connections)
 
 ## Relationships
 

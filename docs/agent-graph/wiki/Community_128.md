@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (8 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **if()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **StringContent()** (2 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **for()** (2 connections)
 
 ## Relationships
 
-- [[Community 110]] (4 shared connections)
+- [[Community 117]] (4 shared connections)
 
 ## Audit Trail
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
+- **XSender.cs** (6 connections)
+- **XSender()** (2 connections)
 - **if()** (2 connections)
-- **DispatchAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 142]] (3 shared connections)
+- [[Community 131]] (3 shared connections)
 
 ## Audit Trail
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedUrlProvider.cs** (4 connections)
-- **IFeedUrlProvider.cs** (4 connections)
-- **GetFeedUrls()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IFeedUrlProvider** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **TimeProvider** (2 connections)
 
 ## Relationships
 

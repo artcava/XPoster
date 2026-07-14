@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider.cs** (4 connections)
-- **GetReplacements()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITagReplacementProvider** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **CreateValidJpeg()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **CreateValidPng()** (2 connections)
 
 ## Relationships
 

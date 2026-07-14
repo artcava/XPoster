@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationFeedUrlProvider.cs** (4 connections)
-- **ConfigurationFeedUrlProvider.cs** (4 connections)
-- **ConfigurationFeedUrlProvider()** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **GetFeedUrls()** (2 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **Validate()** (2 connections)
+- **ICredentialsStartupValidator** (2 connections)
 
 ## Relationships
 

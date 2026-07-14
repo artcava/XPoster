@@ -1,28 +1,28 @@
 # Community 17
 
-> 15 nodes · cohesion 0.13
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **ValidPost()** (2 connections)
+- **IgSenderResilienceTests.cs** (14 connections)
+- **IgSenderResilienceTests.cs** (14 connections)
 - **new()** (2 connections)
+- **BuildSender()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **IgSender()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **SendAsync_WhenBlobUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
+- **PostWithoutImage()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **Uri()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

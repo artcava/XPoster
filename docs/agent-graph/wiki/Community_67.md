@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CaptureLogger()** (2 connections)
-- **Dispose()** (2 connections)
-- **IsEnabled()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **FeedOrchestrator.cs** (7 connections)
+- **catch()** (2 connections)
+- **AcquireFeedContentAsync()** (2 connections)
+- **foreach()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **FeedOrchestrator()** (2 connections)
 
 ## Relationships
 
