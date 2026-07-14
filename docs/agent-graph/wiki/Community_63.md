@@ -1,26 +1,26 @@
 # Community 63
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **FbSenderImageFlowTests** (2 connections)
-- **InvalidImageBytes()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
-- **BuildFactory()** (2 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **MakeService()** (2 connections)
+- **CryptoService()** (2 connections)
+- **CryptoServiceTests** (2 connections)
+- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
+- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
 
 ## Relationships
 
-- [[Community 83]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

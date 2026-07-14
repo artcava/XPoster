@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITextToImageProvider.cs** (4 connections)
-- **ITextToImageProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
 - **XPoster.Contracts** (2 connections)
-- **ITextToImageProvider** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **ISlotProfileProvider** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

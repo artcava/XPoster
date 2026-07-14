@@ -6,14 +6,14 @@
 
 - **ConfigurationFeedUrlProviderTests.cs** (10 connections)
 - **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **ConfigurationFeedUrlProviderTests** (2 connections)
-- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
 - **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
 - **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
 - **ConfigurationFeedUrlProvider()** (2 connections)
 
 ## Relationships

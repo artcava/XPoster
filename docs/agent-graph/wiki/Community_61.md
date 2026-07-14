@@ -1,26 +1,26 @@
 # Community 61
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 73]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

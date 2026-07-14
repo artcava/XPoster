@@ -6,11 +6,11 @@
 
 - **DryRunSlotProfileProvider.cs** (6 connections)
 - **DryRunSlotProfileProvider.cs** (6 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **GetProfiles()** (2 connections)
 - **XPoster.Providers** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
 - **typeof()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
 
 ## Relationships
 

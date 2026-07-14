@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **GetFeedsAsync()** (2 connections)
-- **IFeedService** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **if()** (2 connections)
+- **MaskUrlTelemetryProcessor()** (2 connections)
+- **Process()** (2 connections)
 
 ## Relationships
 

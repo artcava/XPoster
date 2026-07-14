@@ -1,24 +1,24 @@
 # Community 75
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **catch()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 51]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

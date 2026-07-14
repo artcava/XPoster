@@ -1,21 +1,21 @@
 # Community 133
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **OpenAiOptionsExtensions.cs** (3 connections)
-- **AddOpenAiOptions()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **StringContent()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 93]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

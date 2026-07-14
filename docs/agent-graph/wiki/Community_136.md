@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **AddPerplexityOptions()** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

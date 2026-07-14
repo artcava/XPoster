@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddXPosterAiProviders()** (2 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **AzureFoundryOptionsExtensions.cs** (3 connections)
+- **AddAzureFoundryOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

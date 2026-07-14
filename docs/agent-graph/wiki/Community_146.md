@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **AddDeepSeekOptions()** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
 - **XPoster.Models** (2 connections)
+- **Post** (2 connections)
 
 ## Relationships
 

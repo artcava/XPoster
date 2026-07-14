@@ -1,21 +1,21 @@
 # Community 127
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **OrchestratorFactory.cs** (8 connections)
+- **OrchestratorFactory()** (2 connections)
+- **if()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 110]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

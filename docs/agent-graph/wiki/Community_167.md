@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **IsTransientHttpFailure()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 181]] (2 shared connections)
+- [[Community 143]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

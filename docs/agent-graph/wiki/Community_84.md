@@ -1,20 +1,20 @@
 # Community 84
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
+- **TagReplacementService.cs** (6 connections)
+- **TagReplacementService.cs** (6 connections)
 - **XPoster.Services** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
+- **TagReplacementService()** (2 connections)
+- **foreach()** (2 connections)
+- **Apply()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 145]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
