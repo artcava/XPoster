@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **MetaPublishingService.cs** (9 connections)
-- **MetaPublishingService.cs** (9 connections)
-- **if()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GetApiVersion()** (2 connections)
-- **HttpRequestException()** (2 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **SendAsync_WithCaptionLongerThanMax_StillPublishes_ReturnsTrue()** (2 connections)
+- **FbSenderSendAsyncTests** (2 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **SendAsync_WithEmptyImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **SendAsync_WithNullImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
 
 ## Relationships
 
