@@ -1,23 +1,23 @@
 # Community 89
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSenderTests()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 42]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

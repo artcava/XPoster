@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **XPoster.Providers** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **ITextToImageProvider** (2 connections)
 
 ## Relationships
 

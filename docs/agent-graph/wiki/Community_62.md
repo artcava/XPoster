@@ -1,26 +1,26 @@
 # Community 62
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **var()** (2 connections)
-- **params()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **FbSenderResilienceTests** (2 connections)
 - **HttpResponseMessage()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 167]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

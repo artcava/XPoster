@@ -1,29 +1,29 @@
 # Community 35
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **InSenderTests()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **InSender()** (2 connections)
-- **Platform_ReturnsLinkedIn()** (2 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **MessageMaxLength_Returns2800()** (2 connections)
+- **ScheduledOrchestrationProfileTests.cs** (11 connections)
+- **ScheduledOrchestrationProfileTests.cs** (11 connections)
+- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
+- **typeof()** (2 connections)
+- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
+- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
+- **ScheduledOrchestrationProfileTests** (2 connections)
+- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
+- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
+- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
 
 ## Relationships
 
-- [[Community 25]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

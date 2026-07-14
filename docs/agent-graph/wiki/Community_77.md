@@ -7,10 +7,10 @@
 - **FalAiImageService.cs** (6 connections)
 - **FalAiImageService.cs** (6 connections)
 - **XPoster.Services** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
 - **FalAiImageService()** (2 connections)
 - **GenerateImageAsync()** (2 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
