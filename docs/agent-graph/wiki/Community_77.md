@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (6 connections)
-- **DryRunSlotProfileProvider.cs** (6 connections)
-- **typeof()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **GetProfiles()** (2 connections)
+- **FalAiImageService.cs** (6 connections)
+- **FalAiImageService.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 

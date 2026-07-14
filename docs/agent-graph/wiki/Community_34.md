@@ -1,25 +1,25 @@
 # Community 34
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **foreach()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **ConfigurationTagReplacementProviderTests** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
-- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
-- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
+- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
+- **XPosterContainerPollingFunctionTests** (2 connections)
+- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
+- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
+- **CreateSut()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
+- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
+- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 53]] (9 shared connections)
 
 ## Audit Trail
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **UploadAsync()** (2 connections)
+- **IBlobStorageService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **DeleteAsync()** (2 connections)
 
 ## Relationships
 

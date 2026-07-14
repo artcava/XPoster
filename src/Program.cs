@@ -1,4 +1,4 @@
-extern alias AzureIdentity;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.Functions.Worker;
@@ -21,6 +21,8 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 
+builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
+
 builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
 {
     LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
@@ -30,8 +32,6 @@ builder.Logging.Services.Configure<LoggerFilterOptions>(options =>
         options.Rules.Remove(defaultRule);
     }
 });
-
-builder.Services.AddSingleton<ITelemetryInitializer, MaskUrlTelemetryInitializer>();
 
 // Azure Key Vault Configuration Provider.
 // Secrets are loaded into IConfiguration and bound to typed IOptions<T> classes.
@@ -46,7 +46,7 @@ var keyVaultUri = builder.Configuration["KEYVAULT_URI"]
 
 builder.Configuration.AddAzureKeyVault(
     new Uri(keyVaultUri),
-    new AzureIdentity::Azure.Identity.DefaultAzureCredential());
+    new DefaultAzureCredential());
 
 // Key Vault secret prefix (ProviderCredentials:*). AddCredentials owns
 // both the Configure<T> and the IValidateOptions<T> registration.

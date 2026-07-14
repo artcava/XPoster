@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementService.cs** (4 connections)
-- **ITagReplacementService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITagReplacementService** (2 connections)
-- **Apply()** (2 connections)
+- **MaskUrlTelemetryInitializer.cs** (4 connections)
+- **MaskUrlTelemetryInitializer.cs** (4 connections)
+- **MaskUrlTelemetryInitializer()** (2 connections)
+- **Initialize()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

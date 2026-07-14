@@ -1,20 +1,20 @@
 # Community 155
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **FacebookCredentials.cs** (2 connections)
+- **FacebookCredentials.cs** (2 connections)
 
 ## Relationships
 
-- [[Community 51]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

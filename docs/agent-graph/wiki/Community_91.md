@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService.cs** (5 connections)
-- **DeleteAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **UploadAsync()** (2 connections)
-- **IBlobStorageService** (2 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
+- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 

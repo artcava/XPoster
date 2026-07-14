@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **IMetaPublishingService** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **StringContent()** (2 connections)
 
 ## Relationships
 

@@ -1,16 +1,17 @@
 # Community 147
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **if()** (2 connections)
-- **DispatchAsync()** (2 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 
-- [[Community 139]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

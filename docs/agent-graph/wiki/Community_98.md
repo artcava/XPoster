@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **Uri()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 - **if()** (2 connections)
-- **BlobServiceClient()** (2 connections)
+- **FacebookCredentialsValidator** (2 connections)
 
 ## Relationships
 

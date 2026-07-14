@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **XSender.cs** (6 connections)
+- **XSender()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 176]] (2 shared connections)
+- [[Community 145]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

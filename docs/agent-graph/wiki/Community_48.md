@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **NoOrchestratorTests.cs** (9 connections)
-- **NoOrchestratorTests.cs** (9 connections)
-- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
-- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
-- **SendIt_IsAlwaysFalse()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **SupportedPlatforms_IsEmpty()** (2 connections)
-- **Name_IsNoOrchestrator()** (2 connections)
-- **Build()** (2 connections)
-- **NoOrchestratorTests** (2 connections)
+- **FbSender.cs** (9 connections)
+- **FbSender.cs** (9 connections)
+- **PublishPhotoAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **PublishTextOnlyAsync()** (2 connections)
+- **if()** (2 connections)
+- **FbSender()** (2 connections)
+- **HandleResponseAsync()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 

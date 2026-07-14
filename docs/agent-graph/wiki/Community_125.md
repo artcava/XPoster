@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
 - **XPoster.Models** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
+- **AddDeepSeekOptions()** (2 connections)
 
 ## Relationships
 

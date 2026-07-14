@@ -42,7 +42,7 @@ Push to develop (post-merge)
             git commit + push to develop [skip ci]
 ```
 
-**Loop prevention:** the workflow ignores pushes that only touch `docs/agent-graph/**`, so the commit it produces does not re-trigger it. The commit message also includes `[skip ci]` to suppress `ci.yml` on that docs-only push.
+**Loop prevention:** the workflow ignores pushes that only touch `docs/agent-graph/**`, so the commit it produces does not re-trigger it. The commit message also includes `[agent-graph-sync]` to suppress `ci.yml` on that docs-only push.
 
 **Authentication:** the workflow uses a `BOT_PAT` fine-grained personal access token (Contents: Read & Write) stored as a repository secret. `GITHUB_TOKEN` is rejected with 403 on the protected `develop` branch.
 
@@ -58,13 +58,8 @@ The tool is installed as a .NET global tool at workflow runtime — no local ins
 
 ```yaml
 - name: Install graphify-dotnet
-  run: |
-    mkdir -p /tmp/dotnet-tool-install
-    cd /tmp/dotnet-tool-install
-    dotnet tool install --global graphify-dotnet
+  run: dotnet tool install --global graphify-dotnet
 ```
-
-> The install runs from `/tmp` to avoid `global.json` in the repository root, which pins the SDK to .NET 8 and would prevent `graphify-dotnet` (which targets .NET 10) from installing correctly.
 
 > **Package name**: [`graphify-dotnet`](https://www.nuget.org/packages/graphify-dotnet) on NuGet.
 
@@ -100,7 +95,7 @@ docs/agent-graph/
 
 **`NOTICE.md`** annotates each node type (source code, documentation, infrastructure, generated) so that AI agents consuming the graph can correctly interpret the nature of each node without reading every file.
 
-The commit is made by the `github-actions[bot]` user (authenticated via `BOT_PAT`) with the message `docs(graph): regenerate agent graph [skip ci]`. If the graph has not changed since the last run, no commit is produced.
+The commit is made by the `github-actions[bot]` user (authenticated via `BOT_PAT`) with the message `docs(graph): regenerate agent graph [agent-graph-sync]`. If the graph has not changed since the last run, no commit is produced.
 
 ---
 

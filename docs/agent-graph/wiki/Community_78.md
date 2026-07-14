@@ -1,24 +1,24 @@
 # Community 78
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
+- **InMemoryContainerStateStore.cs** (6 connections)
+- **InMemoryContainerStateStore.cs** (6 connections)
+- **InMemoryContainerStateStore** (2 connections)
+- **GetPendingAsync()** (2 connections)
+- **UpdateStatusAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **SaveAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

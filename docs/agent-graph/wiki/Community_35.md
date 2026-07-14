@@ -5,21 +5,21 @@
 ## Key Concepts
 
 - **InSenderTests.cs** (24 connections)
-- **InSender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
 - **InSenderTests()** (2 connections)
-- **MessageMaxLength_Returns2800()** (2 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **InSender()** (2 connections)
 - **Platform_ReturnsLinkedIn()** (2 connections)
+- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
 - **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **MessageMaxLength_Returns2800()** (2 connections)
 
 ## Relationships
 
-- [[Community 24]] (12 shared connections)
+- [[Community 25]] (12 shared connections)
 
 ## Audit Trail
 

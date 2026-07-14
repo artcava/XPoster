@@ -1,24 +1,24 @@
 # Community 79
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **IgSender()** (2 connections)
-- **SendAsync()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 51]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

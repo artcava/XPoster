@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **upgraded .net version to 10 LTS from 8 LTS** ([[#169](https://github.com/artcava/XPoster/issues/169)]): also upgraded some library and revised all documentation
+
 ---
 
 ## [0.1.9] - 2026-07-13

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CaptureLogger()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **PostTests** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
 
 ## Relationships
 

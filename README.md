@@ -1,7 +1,7 @@
 # XPoster 🚀
 
 [![Azure Functions](https://img.shields.io/badge/Azure%20Functions-v4-0062AD?logo=azurefunctions&logoColor=white)](https://azure.microsoft.com/en-us/services/functions/)
-[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![C#](https://img.shields.io/badge/C%23-12.0-239120?logo=csharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-412991?logo=openai&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-services/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -78,13 +78,13 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 | Package | Version | Role |
 |---------|---------|------|
-| **.NET** | 8.0 | Target framework (isolated worker model) |
+| **.NET** | 10.0 | Target framework (isolated worker model) |
 | **Azure Functions** | v4 | Serverless compute host |
 | **C#** | 12 | Programming language |
-| `Microsoft.Azure.Functions.Worker` | 2.2.0 | Isolated worker SDK |
-| `Microsoft.Azure.Functions.Worker.Sdk` | 2.0.6 | Build-time analyzer |
+| `Microsoft.Azure.Functions.Worker` | 2.52.0 | Isolated worker SDK |
+| `Microsoft.Azure.Functions.Worker.Sdk` | 2.0.7 | Build-time analyzer |
 | `Microsoft.Azure.Functions.Worker.Extensions.Timer` | 4.3.1 | Timer trigger support |
-| `Microsoft.Azure.Functions.Worker.Extensions.Storage.Blobs` | 6.8.0 | Blob storage bindings |
+| `Microsoft.Azure.Functions.Worker.Extensions.Storage.Blobs` | 6.8.1 | Blob storage bindings |
 
 ### AI & ML
 
@@ -92,10 +92,10 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 
 | Package | Version | Role |
 |---------|---------|------|
-| `Microsoft.Extensions.AI` | 10.6.0 | Provider-agnostic AI abstraction (chat + embeddings) |
-| `Microsoft.Extensions.AI.OpenAI` | 10.6.0 | OpenAI/Azure OpenAI bridge for `Microsoft.Extensions.AI` |
+| `Microsoft.Extensions.AI` | 10.7.0 | Provider-agnostic AI abstraction (chat + embeddings) |
+| `Microsoft.Extensions.AI.OpenAI` | 10.7.0 | OpenAI/Azure OpenAI bridge for `Microsoft.Extensions.AI` |
 | `Azure.AI.OpenAI` | 2.1.0 | Azure OpenAI REST client |
-| `Azure.Identity` | 1.13.2 | Managed Identity / `DefaultAzureCredential` support |
+| `Azure.Identity` | 1.21.0 | Managed Identity / `DefaultAzureCredential` support |
 
 **Supported AI providers at runtime:**
 
@@ -119,7 +119,7 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 
 | Package | Version | Role |
 |---------|---------|------|
-| `Microsoft.Azure.Functions.Worker.ApplicationInsights` | 2.0.0 | Auto-wires Application Insights for the isolated worker |
+| `Microsoft.Azure.Functions.Worker.ApplicationInsights` | 2.51.0 | Auto-wires Application Insights for the isolated worker |
 | `Microsoft.ApplicationInsights.WorkerService` | 2.23.0 | Telemetry pipeline for background services |
 | `ILogger<T>` | (built-in) | Structured logging via `Microsoft.Extensions.Logging` |
 
@@ -127,11 +127,10 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 
 | Package | Version | Role |
 |---------|---------|------|
-| `Microsoft.Extensions.Http.Resilience` | 9.1.0 | Retry / resilience pipelines for outbound HTTP clients (`IHttpClientFactory`) |
-| `System.Text.Json` | 10.0.8 | JSON serialization / deserialization |
-| `Azure.Extensions.AspNetCore.Configuration.Secrets` | 1.3.2 | Azure Key Vault Configuration Provider (startup secret loading) |
-| `Microsoft.AspNetCore.App` (framework ref) | 8.0 | ASP.NET Core primitives used by the Functions host |
-| `SkiaSharp` | 4.148.0 | cross-platform 2D graphics API for .NET |
+| `Microsoft.Extensions.Http.Resilience` | 10.7.0 | Retry / resilience pipelines for outbound HTTP clients (`IHttpClientFactory`) |
+| `Azure.Extensions.AspNetCore.Configuration.Secrets` | 1.5.1 | Azure Key Vault Configuration Provider (startup secret loading) |
+| `Microsoft.AspNetCore.App` (framework ref) | 10.0 | ASP.NET Core primitives used by the Functions host |
+| `SkiaSharp` | 4.150.0 | cross-platform 2D graphics API for .NET |
 
 > ℹ️ `Microsoft.Extensions.Http` is resolved transitively and is not pinned explicitly in the project file to avoid NU1603 version conflicts.
 
@@ -141,7 +140,7 @@ The AI layer uses two capability interfaces — `ITextToTextProvider` (text summ
 
 ### Prerequisites
 
-- **.NET 8.0 SDK** ([Download](https://dotnet.microsoft.com/download/dotnet/8.0))
+- **.NET 10.0 SDK** ([Download](https://dotnet.microsoft.com/download/dotnet/10.0))
 - **Visual Studio Code** ([Download](https://code.visualstudio.com/download))
 - **Azure Functions Core Tools** ([Install](https://docs.microsoft.com/azure/azure-functions/functions-run-local))
 - **Azure Account** (with active subscription)
@@ -236,7 +235,7 @@ Work is developed on `develop` (or short-lived feature branches off it) and prom
 
 ### Quick Start: GitHub Actions
 
-1. Create a **Function App** in Azure Portal (Runtime: `.NET 8 Isolated`, Plan: Consumption)
+1. Create a **Function App** in Azure Portal (Runtime: `.NET 10 Isolated`, Plan: Consumption)
 2. In Azure Portal, register an **App Registration** and configure federated credentials for GitHub Actions
 3. Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
    - `AZUREAPPSERVICE_CLIENTID` — App Registration client ID
