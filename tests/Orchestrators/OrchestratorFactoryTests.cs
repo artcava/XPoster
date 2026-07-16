@@ -28,11 +28,14 @@ public class OrchestratorFactoryTests
     // ---------------------------------------------------------------------------
 
     private static ScheduledOrchestrationProfile FeedProfile(
+        string context,
         int hour,
         IReadOnlyList<SenderPlatform>? platforms = null,
         AiProvider? text = AiProvider.OpenAi,
         AiProvider? image = AiProvider.OpenAi) =>
-        new(hour,
+        new(
+            context,
+            hour,
             platforms ?? new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             typeof(FeedOrchestrator),
             textProvider: text,
@@ -41,7 +44,7 @@ public class OrchestratorFactoryTests
     private static ScheduledOrchestrationProfile PowerLawProfile(
         int hour,
         SenderPlatform platform = SenderPlatform.LinkedIn) =>
-        new(hour,
+        new(null, hour,
             new List<SenderPlatform> { platform }.AsReadOnly(),
             typeof(PowerLawOrchestrator));
 
@@ -67,6 +70,7 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             arbitraryHour,
             new List<SenderPlatform> { platform }.AsReadOnly(),
             expectedType,
@@ -102,7 +106,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()
     {
-        var factory = CreateFactoryWithProfiles(10, FeedProfile(10,
+        var factory = CreateFactoryWithProfiles(10, FeedProfile("Bitcoin", 10,
             new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly()));
 
         factory.Resolve();
@@ -113,7 +117,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveXSender_WhenProfileUsesX()
     {
-        var factory = CreateFactoryWithProfiles(11, FeedProfile(11,
+        var factory = CreateFactoryWithProfiles(11, FeedProfile("Bitcoin", 11,
             new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly()));
 
         factory.Resolve();
@@ -124,7 +128,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()
     {
-        var factory = CreateFactoryWithProfiles(12, FeedProfile(12,
+        var factory = CreateFactoryWithProfiles(12, FeedProfile("Bitcoin", 12,
             new List<SenderPlatform> { SenderPlatform.Instagram }.AsReadOnly()));
 
         factory.Resolve();
@@ -135,7 +139,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()
     {
-        var factory = CreateFactoryWithProfiles(10, FeedProfile(10,
+        var factory = CreateFactoryWithProfiles(10, FeedProfile("Bitcoin", 10,
             new List<SenderPlatform> { SenderPlatform.DryRun }.AsReadOnly()));
 
         factory.Resolve();
@@ -174,6 +178,7 @@ public class OrchestratorFactoryTests
     {
         const int hour = 8;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             hour,
             new List<SenderPlatform>
             {
@@ -201,7 +206,7 @@ public class OrchestratorFactoryTests
     public void Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()
     {
         const int arbitraryHour = 10;
-        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile(arbitraryHour));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile("Bitcoin", arbitraryHour));
         factory.Resolve();
 
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
@@ -214,7 +219,7 @@ public class OrchestratorFactoryTests
     public void Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()
     {
         const int arbitraryHour = 10;
-        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile(arbitraryHour));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile("Bitcoin", arbitraryHour));
         factory.Resolve();
 
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
@@ -228,6 +233,7 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             arbitraryHour,
             new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             typeof(FeedOrchestrator),
@@ -263,6 +269,7 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             arbitraryHour,
             new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             typeof(FeedOrchestrator),
@@ -284,6 +291,7 @@ public class OrchestratorFactoryTests
     public void DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()
     {
         var innerProfile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             6,
             new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
             typeof(FeedOrchestrator),
@@ -316,7 +324,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()
     {
-        var factory = CreateFactoryWithProfiles(10, FeedProfile(10));
+        var factory = CreateFactoryWithProfiles(10, FeedProfile("Bitcoin", 10));
         var orchestrator = Assert.IsType<FeedOrchestrator>(factory.Resolve());
 
         Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);

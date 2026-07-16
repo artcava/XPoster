@@ -177,7 +177,7 @@ public class FeedOrchestratorTests
             .ReturnsAsync(fakePrompt);
 
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(
+            .Setup(s => s.GenerateImageAsync(
                 It.Is<ImagePromptRequest>(r => r.InputText == fakePrompt),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
@@ -208,7 +208,7 @@ public class FeedOrchestratorTests
             It.Is<PromptRequest>(r => r.SystemPromptTemplate == ImageDerivationStep().SystemPromptTemplate),
             It.IsAny<CancellationToken>()), Times.Once);
 
-        _mockImageProvider.Verify(s => s.GenerateImagesAsync(
+        _mockImageProvider.Verify(s => s.GenerateImageAsync(
             It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -235,7 +235,7 @@ public class FeedOrchestratorTests
             .Setup(s => s.GenerateTextAsync(It.IsAny<PromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("summary");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator(context: context);
@@ -318,7 +318,7 @@ public class FeedOrchestratorTests
             .ReturnsAsync("summary08");
 
         var imgProvider = new Mock<ITextToImageProvider>();
-        imgProvider.Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+        imgProvider.Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator06 = new FeedOrchestrator(
@@ -381,7 +381,7 @@ public class FeedOrchestratorTests
             .ReturnsAsync("prompt");
 
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -445,7 +445,7 @@ public class FeedOrchestratorTests
             .ReturnsAsync("prompt");
 
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -504,7 +504,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -551,7 +551,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -591,7 +591,7 @@ public class FeedOrchestratorTests
             .Callback<PromptRequest, CancellationToken>((r, _) => promptInput = r.InputText)
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
@@ -634,7 +634,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(sharedImage);
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -647,7 +647,7 @@ public class FeedOrchestratorTests
         Assert.Equal(2, posts.Count);
         Assert.Same(posts[SenderPlatform.X]!.Image, posts[SenderPlatform.LinkedIn]!.Image);
         _mockImageProvider.Verify(
-            s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()),
+            s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -689,7 +689,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -758,7 +758,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -832,7 +832,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -905,7 +905,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateMultiSenderOrchestrator(
@@ -990,7 +990,7 @@ public class FeedOrchestratorTests
 
         Assert.Empty(result);
         Assert.False(orchestrator.SendIt);
-        _mockImageProvider.Verify(s => s.GenerateImagesAsync(
+        _mockImageProvider.Verify(s => s.GenerateImageAsync(
             It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
@@ -1020,7 +1020,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
@@ -1052,8 +1052,8 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new byte[] { 1, 2, 3 });
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
         var result       = await orchestrator.OrchestrateAsync();
@@ -1091,7 +1091,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator = CreateOrchestrator();
@@ -1128,7 +1128,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("Prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Array.Empty<byte>());
 
         var orchestrator = CreateOrchestrator();
@@ -1163,7 +1163,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("Prompt");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Image generation failed"));
 
         var orchestrator = CreateOrchestrator();
@@ -1295,7 +1295,7 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(string.Empty);
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(
+            .Setup(s => s.GenerateImageAsync(
                 It.Is<ImagePromptRequest>(r => r.InputText == fakeSummary),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
@@ -1306,7 +1306,7 @@ public class FeedOrchestratorTests
         Assert.NotEmpty(result);
         Assert.Equal(fakeImage, result[SenderPlatform.X]!.Image);
         _mockImageProvider.Verify(
-            s => s.GenerateImagesAsync(
+            s => s.GenerateImageAsync(
                 It.Is<ImagePromptRequest>(r => r.InputText == fakeSummary),
                 It.IsAny<CancellationToken>()),
             Times.Once);
@@ -1335,18 +1335,17 @@ public class FeedOrchestratorTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync("   ");
         _mockImageProvider
-            .Setup(s => s.GenerateImagesAsync(
+            .Setup(s => s.GenerateImageAsync(
                 It.Is<ImagePromptRequest>(r => r.InputText == fakeSummary),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeImage);
-
         var orchestrator = CreateOrchestrator();
         var result       = await orchestrator.OrchestrateAsync();
 
         Assert.NotEmpty(result);
         Assert.Equal(fakeImage, result[SenderPlatform.X]!.Image);
         _mockImageProvider.Verify(
-            s => s.GenerateImagesAsync(
+            s => s.GenerateImageAsync(
                 It.Is<ImagePromptRequest>(r => r.InputText == fakeSummary),
                 It.IsAny<CancellationToken>()),
             Times.Once);

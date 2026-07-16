@@ -239,7 +239,7 @@ public class DeepSeekServiceTests
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(async (HttpRequestMessage req, CancellationToken _) =>
+            .Returns(async (HttpRequestMessage req, CancellationToken _) =>
             {
                 capturedBody = await req.Content!.ReadAsStringAsync();
                 return new HttpResponseMessage(HttpStatusCode.OK)
@@ -277,7 +277,7 @@ public class DeepSeekServiceTests
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(async (HttpRequestMessage req, CancellationToken _) =>
+            .Returns(async (HttpRequestMessage req, CancellationToken _) =>
             {
                 capturedBody = await req.Content!.ReadAsStringAsync();
                 return new HttpResponseMessage(HttpStatusCode.OK)
