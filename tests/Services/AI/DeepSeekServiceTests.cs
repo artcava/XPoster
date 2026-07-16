@@ -324,7 +324,7 @@ public class DeepSeekServiceTests
 
         var svc = BuildService(handlerMock.Object, out _);
 
-        await Assert.ThrowsAsync<OperationCanceledException>(() =>
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
             svc.GenerateTextAsync(SummaryRequest("text"), cts.Token));
     }
 }

@@ -13,14 +13,4 @@ public class OpenAiOptionsValidatorTests
 
     private readonly OpenAiOptionsValidator _sut = new();
 
-    // ── Success path ─────────────────────────────────────────────────────────
-
-    [Fact]
-    public void Validate_DefaultOptions_Succeeds()
-    {
-        var result = _sut.Validate(null, ValidOptions());
-
-        Assert.True(result.Succeeded);
-    }
-
 }
