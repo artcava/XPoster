@@ -419,5 +419,11 @@ public class OrchestratorFactoryTests
         keyedProvider
             .Setup(sp => sp.GetKeyedService(typeof(ITextToImageProvider), It.IsAny<object>()))
             .Returns(mockImageProvider.Object);
+
+        // *** FIX: registrazione del FeedOrchestratorContext keyed ***
+        var mockFeedContext = new Mock<FeedOrchestratorContext>();
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(FeedOrchestratorContext), It.IsAny<object>()))
+            .Returns(mockFeedContext.Object);
     }
 }
