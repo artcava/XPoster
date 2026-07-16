@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 namespace XPoster.Models;
 
 /// <summary>
-/// Validates that <see cref="OpenAiOptions"/> prompt templates contain their required runtime placeholders.
+/// Validates <see cref="OpenAiOptions"/> connectivity settings.
 /// </summary>
 public sealed class OpenAiOptionsValidator : IValidateOptions<OpenAiOptions>
 {
@@ -12,14 +12,14 @@ public sealed class OpenAiOptionsValidator : IValidateOptions<OpenAiOptions>
     {
         var failures = new List<string>();
 
-        if (!options.SummarySystemPromptTemplate.Contains("{MaxChars}", StringComparison.Ordinal))
-            failures.Add($"{nameof(OpenAiOptions.SummarySystemPromptTemplate)} must contain the {{MaxChars}} placeholder.");
+        if (string.IsNullOrWhiteSpace(options.ApiKey))
+            failures.Add($"{nameof(OpenAiOptions.ApiKey)} must not be empty.");
 
-        if (!options.SummaryUserPromptTemplate.Contains("{Text}", StringComparison.Ordinal))
-            failures.Add($"{nameof(OpenAiOptions.SummaryUserPromptTemplate)} must contain the {{Text}} placeholder.");
+        if (string.IsNullOrWhiteSpace(options.ChatEndpoint))
+            failures.Add($"{nameof(OpenAiOptions.ChatEndpoint)} must not be empty.");
 
-        if (!options.ImagePromptUserTemplate.Contains("{Summary}", StringComparison.Ordinal))
-            failures.Add($"{nameof(OpenAiOptions.ImagePromptUserTemplate)} must contain the {{Summary}} placeholder.");
+        if (string.IsNullOrWhiteSpace(options.ImageEndpoint))
+            failures.Add($"{nameof(OpenAiOptions.ImageEndpoint)} must not be empty.");
 
         return failures.Count > 0
             ? ValidateOptionsResult.Fail(failures)

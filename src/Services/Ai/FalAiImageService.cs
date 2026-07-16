@@ -32,14 +32,25 @@ public sealed class FalAiImageService : ITextToImageProvider
     }
 
     /// <inheritdoc/>
-    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
+    public async Task<byte[]> GenerateImageAsync(ImagePromptRequest request, CancellationToken cancellationToken = default)
     {
+        var prompt = request.InputText;
         if (string.IsNullOrWhiteSpace(prompt))
         {
             _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
             return Array.Empty<byte>();
         }
-        var requestBody = new { prompt, image_size = _options.ImageSize, num_inference_steps = _options.NumInferenceSteps, num_images = 1, enable_safety_checker = true, output_format = "png" };
+        var imageSize = request.ImageSize ?? _options.ImageSize;
+        var requestBody = new
+        {
+            prompt,
+            image_size = imageSize,
+            num_inference_steps = _options.NumInferenceSteps,
+            num_images = request.ImageQuantity ?? 1,
+            enable_safety_checker = true,
+            output_format = "png"
+        };
+
         var encodedModelPath = string.Join("/", _options.ModelId.Split('/').Select(Uri.EscapeDataString));
         var endpoint = $"{FalApiBaseUrl}/{encodedModelPath}";
         HttpResponseMessage response;
