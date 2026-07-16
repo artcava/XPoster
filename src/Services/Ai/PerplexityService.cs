@@ -55,8 +55,9 @@ public class PerplexityService : ITextToTextProvider
 
     private object BuildChatPayload(string text, PromptRequest request)
     {
+        var systemContent = request.SystemPromptTemplate
+            .Replace("{MaxChars}", request.MaxOutputLength.ToString(), StringComparison.Ordinal);
         var label = request.InputTextLabel ?? "{Text}";
-        var systemContent = request.SystemPromptTemplate;
         var userContent = request.UserPromptTemplate
             .Replace(label, text, StringComparison.Ordinal);
         return new

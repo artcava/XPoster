@@ -77,65 +77,34 @@
     // ── Azure Blob Storage & Instagram Polling ──
     // -----------------------------------------------------------------------
     "AZURE_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
-    "AZURE_STORAGE_CONTAINER_NAME": "xposter-images"
+    "AZURE_STORAGE_CONTAINER_NAME": "xposter-images",
 
+    // -----------------------------------------------------------------------
+    // AI Provider — connectivity and model capability settings only.
+    // Prompt templates and intent are now owned by each orchestrator slot
+    // via FeedSlotContexts (see below). Only keep here what the provider
+    // needs to make the HTTP call: endpoint, credentials, model name,
+    // and token-budget helpers that are provider-specific.
+    // -----------------------------------------------------------------------
 
     "OpenAI__ApiKey": "",
     "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
     "OpenAI__ChatModel": "gpt-4.1-nano",
-    "OpenAI__SummaryTemperature": "0.5",
-    "OpenAI__SummaryMaxTokensPerChar": "5",
-    "OpenAI__SummarySafetyMarginChars": "50",
-    "OpenAI__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "OpenAI__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
     "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
     "OpenAI__ImageModel": "gpt-image-1.5",
-    "OpenAI__ImageSize": "1024x1024",
-    "OpenAI__ImageCount": "1",
-    "OpenAI__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "OpenAI__ImagePromptMaxTokens": "60",
-    "OpenAI__ImagePromptTemperature": "0.7",
 
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
     "AzureFoundry__DeploymentName": "",
     "AzureFoundry__ImageDeploymentName": "",
-    "AzureFoundry__SummaryTemperature": "0.5",
-    "AzureFoundry__SummaryMaxTokensPerChar": "5",
-    "AzureFoundry__SummarySafetyMarginChars": "50",
-    "AzureFoundry__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "AzureFoundry__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "AzureFoundry__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "AzureFoundry__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "AzureFoundry__ImagePromptMaxTokens": "60",
-    "AzureFoundry__ImagePromptTemperature": "0.7",
 
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
     "DeepSeek__DeploymentName": "deepseek-chat",
-    "DeepSeek__SummaryTemperature": "0.5",
-    "DeepSeek__SummaryMaxTokensPerChar": "5",
-    "DeepSeek__SummarySafetyMarginChars": "50",
-    "DeepSeek__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "DeepSeek__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "DeepSeek__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "DeepSeek__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "DeepSeek__ImagePromptMaxTokens": "60",
-    "DeepSeek__ImagePromptTemperature": "0.7",
 
     "Perplexity__Endpoint": "https://api.perplexity.ai",
     "Perplexity__ApiKey": "",
     "Perplexity__DeploymentName": "sonar",
-    "Perplexity__SummaryTemperature": "0.5",
-    "Perplexity__SummaryMaxTokensPerChar": "5",
-    "Perplexity__SummarySafetyMarginChars": "50",
-    "Perplexity__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "Perplexity__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "Perplexity__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "Perplexity__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "Perplexity__ImagePromptMaxTokens": "60",
-    "Perplexity__ImagePromptTemperature": "0.7",
 
     "FalAi__ApiKey": "",
     "FalAi__ModelId": "fal-ai/flux/schnell",
@@ -143,12 +112,71 @@
     "FalAi__NumInferenceSteps": "4",
 
     // -----------------------------------------------------------------------
-    // Feed URL provider — RSS/Atom sources polled by FeedOrchestrator.
-    // Uses flat Azure Functions naming convention: FeedOptions__Urls__0, etc.
-    // Add as many entries as needed; the list is processed in order.
+    // Feed slot contexts — per-slot configuration for FeedOrchestrator.
+    //
+    // Each named key (Feed06, Feed08, …) maps to a FeedOrchestratorContext
+    // carrying the feed URLs and the ordered prompt steps for that slot.
+    // The key is referenced via OrchestratorContextKey in the corresponding
+    // ScheduledOrchestrationProfile entry.
+    //
+    // Steps array maps each PromptRole to its own settings block:
+    //   Steps__0  → Role = Summary               (text-to-text)
+    //   Steps__1  → Role = ImagePromptDerivation  (text-to-text)
+    //   Steps__2  → Role = ImageGeneration        (text-to-image)
+    //
+    // Note: MaxOutputLength for the Summary role is NOT set here — it is
+    // resolved at runtime from ISender.MessageMaxLength of the target sender.
     // -----------------------------------------------------------------------
-    "FeedOptions__Urls__0": "https://cointelegraph.com/rss/tag/bitcoin",
-    "FeedOptions__Urls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
+    // -- Slot Feed06 (06:00 UTC) -------------------------------------------
+    "FeedSlotContexts__Feed06__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
+    "FeedSlotContexts__Feed06__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__Role": "Summary",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__Temperature": "0.5",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__MaxTokenBudget": "600",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__Temperature": "0.7",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__MaxTokenBudget": "300",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__Role": "ImageGeneration",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__SystemPromptTemplate": "",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageQuantity": "1",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageSize": "1024x1024",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__InputTextLabel": "{Text}",
+
+    // -- Slot Feed08 (08:00 UTC) -------------------------------------------
+    "FeedSlotContexts__Feed08__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
+    "FeedSlotContexts__Feed08__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__Role": "Summary",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__Temperature": "0.5",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__MaxTokenBudget": "600",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__Temperature": "0.7",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__MaxTokenBudget": "300",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__Role": "ImageGeneration",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__SystemPromptTemplate": "",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__ImageQuantity": "1",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__ImageSize": "1024x1024",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__InputTextLabel": "{Text}",
 
     // -----------------------------------------------------------------------
     // Tag replacement provider — word-to-hashtag map applied to generated summaries.
