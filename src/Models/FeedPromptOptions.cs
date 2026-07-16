@@ -1,4 +1,4 @@
-namespace XPoster.Core.Models;
+namespace XPoster.Models;
 
 /// <summary>
 /// Holds an ordered, role-keyed collection of prompt step configurations

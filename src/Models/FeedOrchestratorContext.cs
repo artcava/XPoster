@@ -1,4 +1,4 @@
-namespace XPoster.Core.Models;
+namespace XPoster.Models;
 
 /// <summary>
 /// Slot-scoped runtime context injected into <c>FeedOrchestrator</c>.
@@ -8,7 +8,7 @@ namespace XPoster.Core.Models;
 /// <remarks>
 /// Registered as a keyed singleton in <c>Program.cs</c> using the slot's
 /// logical key (e.g. <c>"Feed06"</c>) and resolved by <c>OrchestratorFactory</c>
-/// via <see cref="Models.ScheduledOrchestrationProfile.OrchestratorContextKey"/>.
+/// via <see cref="ScheduledOrchestrationProfile.OrchestratorContextKey"/>.
 /// </remarks>
 public sealed record FeedOrchestratorContext
 {

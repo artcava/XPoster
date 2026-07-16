@@ -1,4 +1,4 @@
-namespace XPoster.Core.Models;
+namespace XPoster.Models;
 
 /// <summary>
 /// Identifies the role of a prompt step within the orchestration flow.
