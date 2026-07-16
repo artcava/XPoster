@@ -91,34 +91,43 @@ public class FeedOrchestrator : BaseOrchestrator
         {
             _logger.LogError("[FeedOrchestrator] ITextToTextProvider is not configured.");
             _sendIt = false;
-            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+            return new Dictionary().AsReadOnly();
         }
 
         if (_senders.Count == 0)
         {
             _logger.LogError("[FeedOrchestrator] No senders configured for this slot.");
             _sendIt = false;
-            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+            return new Dictionary().AsReadOnly();
         }
 
         // Step 1 — acquire feed content
         ct.ThrowIfCancellationRequested();
         var feedContent = await AcquireFeedContentAsync(ct);
         if (string.IsNullOrWhiteSpace(feedContent))
-            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+            return new Dictionary().AsReadOnly();
 
         // Step 2 — select primary sender (widest limit) and generate base summary
         ct.ThrowIfCancellationRequested();
         var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLength).ToList();
         var primarySender = orderedSenders[0];
-                _logger.LogInformation("[FeedOrchestrator] Generating base summary via text provider for primary sender {Platform} (limit {Limit}).",
-                    primarySender.Platform, primarySender.MessageMaxLength);
-        var rawBaseSummary = await _textProvider.GetSummaryAsync(feedContent, primarySender.MessageMaxLength, ct);
+        _logger.LogInformation(
+            "[FeedOrchestrator] Generating base summary via text provider for primary sender {Platform} (limit {Limit}).",
+            primarySender.Platform, primarySender.MessageMaxLength);
+
+        var summaryStep = _context.PromptOptions.GetStep(PromptRole.Summary);
+
+        var summaryRequest = BuildPromptRequest(
+        feedContent,
+        summaryStep,
+        primarySender.MessageMaxLength);
+
+        var rawBaseSummary = await _textProvider.GenerateTextAsync(summaryRequest, ct);
         if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
             _logger.LogError("[FeedOrchestrator] Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
             _sendIt = false;
-            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
+            return new Dictionary().AsReadOnly();
         }
 
         // Step 3 — generate image (shared across all senders)
@@ -129,7 +138,8 @@ public class FeedOrchestrator : BaseOrchestrator
         // previousSummary tracks the last successfully generated summary.
         // Each sender reuses it when it fits; otherwise the AI re-summarises
         // from the full feedContent to preserve maximum context.
-        var result = new Dictionary<SenderPlatform, Post?>();
+        // Re-summarisation reuses the Summary role step with the sender's MessageMaxLength.
+        var result = new Dictionary();
         var previousSummary = rawBaseSummary;
         foreach (var sender in orderedSenders)
         {
@@ -142,14 +152,21 @@ public class FeedOrchestrator : BaseOrchestrator
             }
             else
             {
-                _logger.LogInformation("[FeedOrchestrator] Re-summarising via text provider for sender {Platform} (limit {Limit}).",
+                _logger.LogInformation(
+                    "[FeedOrchestrator] Re-summarising via text provider for sender {Platform} (limit {Limit}).",
                     sender.Platform, sender.MessageMaxLength);
-                var reSummarised = await _textProvider.GetSummaryAsync(
-                    feedContent, sender.MessageMaxLength, ct);
+
+                var reSummaryRequest = BuildPromptRequest(
+                    feedContent,
+                    summaryStep,
+                    sender.MessageMaxLength);
+
+                var reSummarised = await _textProvider.GenerateTextAsync(reSummaryRequest, ct);
 
                 if (string.IsNullOrWhiteSpace(reSummarised))
                 {
-                    _logger.LogWarning("[FeedOrchestrator] Re-summarisation failed for sender {Platform} (limit {Limit}). Null entry added.",
+                    _logger.LogWarning(
+                        "[FeedOrchestrator] Re-summarisation failed for sender {Platform} (limit {Limit}). Null entry added.",
                         sender.Platform, sender.MessageMaxLength);
                     result[sender.Platform] = null;
                     continue;
@@ -165,7 +182,6 @@ public class FeedOrchestrator : BaseOrchestrator
 
         return result.AsReadOnly();
     }
-
     // ---------------------------------------------------------------------------
     // Private pipeline steps
     // ---------------------------------------------------------------------------
@@ -232,5 +248,25 @@ public class FeedOrchestrator : BaseOrchestrator
             _logger.LogError(ex, "[FeedOrchestrator] Image generation failed. Post will be published without image.");
             return null;
         }
+    }
+    
+    /// <summary>
+    /// Builds a <see cref="PromptRequest"/> from the given input text, prompt step, and maximum output length.
+    /// </summary>
+    private static PromptRequest BuildPromptRequest(
+        string inputText,
+        PromptStepOptions step,
+        int maxOutputLength)
+    {
+        return new PromptRequest
+        {
+            InputText = inputText,
+            SystemPromptTemplate = step.SystemPromptTemplate,
+            UserPromptTemplate = step.UserPromptTemplate,
+            Temperature = step.Temperature,
+            MaxOutputLength = maxOutputLength,
+            MaxTokenBudget = step.MaxTokenBudget,
+            InputTextLabel = step.InputTextLabel
+        };
     }
 }
