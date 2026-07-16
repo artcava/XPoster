@@ -10,7 +10,7 @@ namespace XPoster.Models;
 /// logical key (e.g. <c>"Feed06"</c>) and resolved by <c>OrchestratorFactory</c>
 /// via <see cref="ScheduledOrchestrationProfile.OrchestratorContextKey"/>.
 /// </remarks>
-public sealed record FeedOrchestratorContext
+public record FeedOrchestratorContext
 {
     /// <summary>Feed URLs consumed by this slot.</summary>
     public required IReadOnlyList<string> FeedUrls { get; init; }
