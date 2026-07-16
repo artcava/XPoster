@@ -9,6 +9,8 @@ namespace XPoster.Tests.Services;
 
 public class PerplexityServiceTests
 {
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
     private static PerplexityService BuildService(
         HttpMessageHandler handler,
         out Mock<ILogger<PerplexityService>> loggerMock,
@@ -23,11 +25,7 @@ public class PerplexityServiceTests
         {
             Endpoint = "https://api.perplexity.ai",
             ApiKey = "fake-key",
-            DeploymentName = "sonar",
-            SummarySystemPromptTemplate = "Keep under {MaxChars} chars.",
-            SummaryUserPromptTemplate = "Summarize: {Text}",
-            ImagePromptSystemTemplate = "You generate image prompts.",
-            ImagePromptUserTemplate = "Image for: {Summary}"
+            DeploymentName = "sonar"
         });
 
         return new PerplexityService(factory.Object, options, loggerMock.Object);
@@ -50,7 +48,7 @@ public class PerplexityServiceTests
 
     /// <summary>
     /// Returns a handler mock that replies with <paramref name="responses"/> in sequence,
-    /// one per SendAsync call. Useful to exercise the retry loop in GetSummaryAsync.
+    /// one per SendAsync call. Useful to exercise the retry loop in GenerateTextAsync.
     /// </summary>
     private static Mock<HttpMessageHandler> MakeSequentialHandlerMock(
         IEnumerable<(HttpStatusCode code, string json)> responses)
@@ -76,15 +74,43 @@ public class PerplexityServiceTests
     private static string ChatCompletionJson(string content) =>
         "{\"choices\":[{\"message\":{\"content\":\"" + content + "\"}}]}";
 
-    // ── GetSummaryAsync ──────────────────────────────────────────────────────
+    /// <summary>
+    /// Builds a minimal <see cref="PromptRequest"/> for summary-style calls.
+    /// </summary>
+    private static PromptRequest BuildSummaryRequest(
+        string inputText,
+        int? maxOutputLength = null) =>
+        new()
+        {
+            InputText = inputText,
+            SystemPromptTemplate = "Keep under {MaxChars} chars.",
+            UserPromptTemplate = "Summarize: {Text}",
+            InputTextLabel = "{Text}",
+            MaxOutputLength = maxOutputLength
+        };
+
+    /// <summary>
+    /// Builds a minimal <see cref="PromptRequest"/> for image-prompt-derivation calls.
+    /// </summary>
+    private static PromptRequest BuildImagePromptRequest(string inputText) =>
+        new()
+        {
+            InputText = inputText,
+            SystemPromptTemplate = "You generate image prompts.",
+            UserPromptTemplate = "Image for: {Summary}",
+            InputTextLabel = "{Summary}"
+        };
+
+    // ── GenerateTextAsync — summary role ─────────────────────────────────────
 
     [Fact]
-    public async Task GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsContent()
+    public async Task GenerateTextAsync_WhenTextExceedsMaxOutputLength_CallsApiAndReturnsContent()
     {
         var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("short summary"));
         var svc = BuildService(handler.Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: 100);
 
-        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal("short summary", result);
         handler.Protected().Verify(
@@ -97,68 +123,74 @@ public class PerplexityServiceTests
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenTextWithinLimit_DoesNotCallApi()
+    public async Task GenerateTextAsync_WhenMaxOutputLengthIsNull_CallsApiOnce()
     {
-        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("never returned"));
+        // No retry loop when MaxOutputLength is not specified.
+        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("any content"));
         var svc = BuildService(handler.Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: null);
 
-        var result = await svc.GetSummaryAsync("short", 100);
+        var result = await svc.GenerateTextAsync(request);
 
-        Assert.Equal("short", result);
+        Assert.Equal("any content", result);
         handler.Protected().Verify(
             "SendAsync",
-            Times.Never(),
+            Times.Once(),
             ItExpr.IsAny<HttpRequestMessage>(),
             ItExpr.IsAny<CancellationToken>());
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()
+    public async Task GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: 100);
 
-        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()
+    public async Task GenerateTextAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.InternalServerError, "{}").Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: 100);
 
-        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
+    public async Task GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":[]}").Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: 100);
 
-        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()
+    public async Task GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":null}").Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: 100);
 
-        var result = await svc.GetSummaryAsync(new string('a', 300), 100);
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenFirstResponseStillTooLong_RetriesAndReturnsSecondResponse()
+    public async Task GenerateTextAsync_WhenFirstResponseStillTooLong_RetriesAndReturnsSecondResponse()
     {
-        // Arrange: first call returns a string still longer than the limit (200 chars),
+        // Arrange: first call returns text still longer than MaxOutputLength (200 chars),
         // second call returns a short string that satisfies the while condition.
         const int limit = 100;
-        var firstResponse = new string('b', 200);  // still > 100 → triggers second iteration
+        var firstResponse = new string('b', 200);   // still > 100 → triggers second iteration
         var secondResponse = "final short summary";  // < 100 → loop exits
 
         var handler = MakeSequentialHandlerMock(new[]
@@ -167,11 +199,10 @@ public class PerplexityServiceTests
             (HttpStatusCode.OK, ChatCompletionJson(secondResponse))
         });
         var svc = BuildService(handler.Object, out _);
+        var request = BuildSummaryRequest(new string('a', 300), maxOutputLength: limit);
 
-        // Act
-        var result = await svc.GetSummaryAsync(new string('a', 300), limit);
+        var result = await svc.GenerateTextAsync(request);
 
-        // Assert: two HTTP calls were made and the last returned content is propagated
         Assert.Equal(secondResponse, result);
         handler.Protected().Verify(
             "SendAsync",
@@ -181,9 +212,9 @@ public class PerplexityServiceTests
     }
 
     [Fact]
-    public async Task GetSummaryAsync_WhenTextRemainsLongAfterMaxRetries_ReturnsLastApiContent()
+    public async Task GenerateTextAsync_WhenTextRemainsLongAfterMaxRetries_ReturnsLastApiContent()
     {
-        // Arrange: all three API responses return text that is still longer than the limit.
+        // Arrange: all three API responses return text still longer than MaxOutputLength.
         // After tries > 2 the while exits and the last assigned value of `text` is returned.
         const int limit = 10;
         var longResponse = new string('c', 50); // always > 10
@@ -195,11 +226,11 @@ public class PerplexityServiceTests
             (HttpStatusCode.OK, ChatCompletionJson(longResponse))
         });
         var svc = BuildService(handler.Object, out _);
+        var request = BuildSummaryRequest(new string('a', 100), maxOutputLength: limit);
 
-        // Act
-        var result = await svc.GetSummaryAsync(new string('a', 100), limit);
+        var result = await svc.GenerateTextAsync(request);
 
-        // Assert: the loop ran exactly 3 times (tries 1, 2, 3 where tries <= 2 means max index 2)
+        // The loop ran exactly 3 times (tries 1, 2, 3 where tries <= 2 exits the loop after the third)
         // and the last content from the API is returned as-is.
         Assert.Equal(longResponse, result);
         handler.Protected().Verify(
@@ -209,55 +240,100 @@ public class PerplexityServiceTests
             ItExpr.IsAny<CancellationToken>());
     }
 
-    // ── GetImagePromptAsync ──────────────────────────────────────────────────
+    // ── GenerateTextAsync — image prompt derivation role ─────────────────────
 
     [Fact]
-    public async Task GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()
+    public async Task GenerateTextAsync_ImagePromptRole_WhenApiReturnsValidResponse_ReturnsPrompt()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("a vivid prompt")).Object, out _);
+        var request = BuildImagePromptRequest("summary text");
 
-        var result = await svc.GetImagePromptAsync("summary text");
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal("a vivid prompt", result);
     }
 
     [Fact]
-    public async Task GetImagePromptAsync_WhenApiReturns429_ReturnsEmptyString()
+    public async Task GenerateTextAsync_ImagePromptRole_WhenApiReturns429_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out _);
+        var request = BuildImagePromptRequest("summary");
 
-        var result = await svc.GetImagePromptAsync("summary");
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetImagePromptAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()
+    public async Task GenerateTextAsync_ImagePromptRole_WhenApiReturnsNonSuccess_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.BadGateway, "{}").Object, out _);
+        var request = BuildImagePromptRequest("summary");
 
-        var result = await svc.GetImagePromptAsync("summary");
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
+    public async Task GenerateTextAsync_ImagePromptRole_WhenChoicesArrayIsEmpty_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":[]}").Object, out _);
+        var request = BuildImagePromptRequest("summary text");
 
-        var result = await svc.GetImagePromptAsync("summary text");
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public async Task GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()
+    public async Task GenerateTextAsync_ImagePromptRole_WhenChoicesIsNull_ReturnsEmptyString()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"choices\":null}").Object, out _);
+        var request = BuildImagePromptRequest("summary text");
 
-        var result = await svc.GetImagePromptAsync("summary text");
+        var result = await svc.GenerateTextAsync(request);
 
         Assert.Equal(string.Empty, result);
+    }
+
+    // ── PromptRequest field mapping ───────────────────────────────────────────
+
+    [Fact]
+    public async Task GenerateTextAsync_UsesCustomInputTextLabel_InUserPromptSubstitution()
+    {
+        // Arrange: verify that InputTextLabel controls the substitution token.
+        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("result"));
+        var svc = BuildService(handler.Object, out _);
+        var request = new PromptRequest
+        {
+            InputText = "my input",
+            SystemPromptTemplate = "system",
+            UserPromptTemplate = "Summarize: [INPUT]",
+            InputTextLabel = "[INPUT]"
+        };
+
+        var result = await svc.GenerateTextAsync(request);
+
+        Assert.Equal("result", result);
+    }
+
+    [Fact]
+    public async Task GenerateTextAsync_WhenInputTextLabelIsNull_FallsBackToDefaultLabel()
+    {
+        // Arrange: InputTextLabel not set → implementation falls back to "{Text}".
+        var handler = MakeHandlerMock(HttpStatusCode.OK, ChatCompletionJson("result"));
+        var svc = BuildService(handler.Object, out _);
+        var request = new PromptRequest
+        {
+            InputText = "my input",
+            SystemPromptTemplate = "system",
+            UserPromptTemplate = "Summarize: {Text}",
+            InputTextLabel = null
+        };
+
+        var result = await svc.GenerateTextAsync(request);
+
+        Assert.Equal("result", result);
     }
 }
