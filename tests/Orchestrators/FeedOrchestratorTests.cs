@@ -266,6 +266,7 @@ public class FeedOrchestratorTests
                 ImageGenerationStep()
             }.AsReadOnly()
         };
+
         var promptFeed08 = new FeedPromptOptions
         {
             Steps = new List<PromptStepOptions>
@@ -276,8 +277,17 @@ public class FeedOrchestratorTests
             }.AsReadOnly()
         };
 
-        var contextFeed06 = new FeedOrchestratorContext { FeedUrls = urlsFeed06, PromptOptions = promptFeed06 };
-        var contextFeed08 = new FeedOrchestratorContext { FeedUrls = urlsFeed08, PromptOptions = promptFeed08 };
+        var contextFeed06 = new FeedOrchestratorContext
+        {
+            FeedUrls = urlsFeed06,
+            PromptOptions = promptFeed06
+        };
+
+        var contextFeed08 = new FeedOrchestratorContext
+        {
+            FeedUrls = urlsFeed08,
+            PromptOptions = promptFeed08
+        };
 
         var senderA = new Mock<ISender>();
         senderA.Setup(s => s.Platform).Returns(SenderPlatform.X);
@@ -287,61 +297,87 @@ public class FeedOrchestratorTests
         var feedService08 = new Mock<IFeedService>();
 
         feedService06.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(),
-                It.Is<IEnumerable<string>>(u => u.Contains("slot06")), It.IsAny<CancellationToken>()))
+                It.IsAny<string>(),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>(),
+                It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed06)),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed> { new() { Title = "T", Content = "C06", Link = "L" } });
 
         feedService08.Setup(s => s.GetFeedsAsync(
-                It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(),
-                It.Is<IEnumerable<string>>(u => u.Contains("slot08")), It.IsAny<CancellationToken>()))
+                It.IsAny<string>(),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>(),
+                It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed08)),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed> { new() { Title = "T", Content = "C08", Link = "L" } });
-
-        string? capturedSystem06 = null;
-        string? capturedSystem08 = null;
 
         var textProvider06 = new Mock<ITextToTextProvider>();
         textProvider06
             .Setup(s => s.GenerateTextAsync(It.IsAny<PromptRequest>(), It.IsAny<CancellationToken>()))
-            .Callback<PromptRequest, CancellationToken>((r, _) =>
-            {
-                capturedSystem06 = r.SystemPromptTemplate;
-            })
-            .ReturnsAsync("summary06");
+            .ReturnsAsync((PromptRequest request, CancellationToken _) =>
+                request.SystemPromptTemplate == "System06" ? "summary06" : "image-prompt-06");
 
         var textProvider08 = new Mock<ITextToTextProvider>();
         textProvider08
             .Setup(s => s.GenerateTextAsync(It.IsAny<PromptRequest>(), It.IsAny<CancellationToken>()))
-            .Callback<PromptRequest, CancellationToken>((r, _) =>
-            {
-                capturedSystem08 = r.SystemPromptTemplate;
-            })
-            .ReturnsAsync("summary08");
+            .ReturnsAsync((PromptRequest request, CancellationToken _) =>
+                request.SystemPromptTemplate == "System08" ? "summary08" : "image-prompt-08");
 
         var imgProvider = new Mock<ITextToImageProvider>();
-        imgProvider.Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
+        imgProvider
+            .Setup(s => s.GenerateImageAsync(It.IsAny<ImagePromptRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new byte[] { 1 });
 
         var orchestrator06 = new FeedOrchestrator(
             new List<ISender> { senderA.Object }.AsReadOnly(),
-            _mockLogger.Object, feedService06.Object, contextFeed06,
-            _mockTagReplacementProvider.Object, _mockTagReplacementService.Object,
-            textProvider06.Object, imgProvider.Object);
+            _mockLogger.Object,
+            feedService06.Object,
+            contextFeed06,
+            _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
+            textProvider06.Object,
+            imgProvider.Object);
 
         var orchestrator08 = new FeedOrchestrator(
             new List<ISender> { senderA.Object }.AsReadOnly(),
-            _mockLogger.Object, feedService08.Object, contextFeed08,
-            _mockTagReplacementProvider.Object, _mockTagReplacementService.Object,
-            textProvider08.Object, imgProvider.Object);
+            _mockLogger.Object,
+            feedService08.Object,
+            contextFeed08,
+            _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
+            textProvider08.Object,
+            imgProvider.Object);
 
         // ACT
         await orchestrator06.OrchestrateAsync();
         await orchestrator08.OrchestrateAsync();
 
-        // ASSERT — each slot used its own prompt template
-        Assert.Equal("System06", capturedSystem06);
-        Assert.Equal("System08", capturedSystem08);
-    }
+        // ASSERT — each slot used its own feed URLs
+        feedService06.Verify(s => s.GetFeedsAsync(
+            It.IsAny<string>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<DateTimeOffset>(),
+            It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed06)),
+            It.IsAny<CancellationToken>()), Times.AtLeastOnce);
 
+        feedService08.Verify(s => s.GetFeedsAsync(
+            It.IsAny<string>(),
+            It.IsAny<DateTimeOffset>(),
+            It.IsAny<DateTimeOffset>(),
+            It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed08)),
+            It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+
+        // ASSERT — each slot used its own summary prompt template
+        textProvider06.Verify(s => s.GenerateTextAsync(
+            It.Is<PromptRequest>(r => r.SystemPromptTemplate == "System06"),
+            It.IsAny<CancellationToken>()), Times.Once);
+
+        textProvider08.Verify(s => s.GenerateTextAsync(
+            It.Is<PromptRequest>(r => r.SystemPromptTemplate == "System08"),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+    
     // ---------------------------------------------------------------------------
     // Fan-out: base summary generated at primary sender's limit
     // ---------------------------------------------------------------------------
