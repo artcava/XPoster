@@ -304,7 +304,7 @@ public class FeedOrchestratorTests
             .Setup(s => s.GenerateTextAsync(It.IsAny<PromptRequest>(), It.IsAny<CancellationToken>()))
             .Callback<PromptRequest, CancellationToken>((r, _) =>
             {
-                if (r.SystemPromptTemplate == "System06") capturedSystem06 = r.SystemPromptTemplate;
+                capturedSystem06 = r.SystemPromptTemplate;
             })
             .ReturnsAsync("summary06");
 
@@ -313,7 +313,7 @@ public class FeedOrchestratorTests
             .Setup(s => s.GenerateTextAsync(It.IsAny<PromptRequest>(), It.IsAny<CancellationToken>()))
             .Callback<PromptRequest, CancellationToken>((r, _) =>
             {
-                if (r.SystemPromptTemplate == "System08") capturedSystem08 = r.SystemPromptTemplate;
+                capturedSystem08 = r.SystemPromptTemplate;
             })
             .ReturnsAsync("summary08");
 
