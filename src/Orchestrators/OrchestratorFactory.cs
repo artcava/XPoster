@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using XPoster.Contracts;
+using XPoster.Models;
 using XPoster.SenderPlugins;
 
 namespace XPoster.Orchestrators;
@@ -56,7 +57,12 @@ public class OrchestratorFactory : IOrchestratorFactory
         if (profile == null)
         {
             _log.LogInformation("No slot profile for hour {Hour}, using NoOrchestrator", currentHour);
-            return CreateOrchestratorInstance(typeof(NoOrchestrator), new List<ISender>().AsReadOnly(), null, null);
+            return CreateOrchestratorInstance(
+                typeof(NoOrchestrator),
+                new List<ISender>().AsReadOnly(),
+                null,
+                null,
+                null);
         }
 
         var senders = profile.SenderPlatforms
@@ -67,17 +73,14 @@ public class OrchestratorFactory : IOrchestratorFactory
             .AsReadOnly();
 
         _log.LogInformation(
-            "Creating orchestrator {OrchestratorType} for platforms [{SenderPlatforms}] at hour {Hour} " +
-            "with TextProvider={TextProvider} ImageProvider={ImageProvider}",
+            "Creating orchestrator {OrchestratorType} for platforms [{SenderPlatforms}] at hour {Hour} with TextProvider={TextProvider} ImageProvider={ImageProvider} ContextKey={ContextKey}",
             profile.OrchestratorType.Name,
             string.Join(", ", profile.SenderPlatforms),
             profile.Hour,
             profile.TextProvider?.ToString() ?? "none",
-            profile.ImageProvider?.ToString() ?? "none");
+            profile.ImageProvider?.ToString() ?? "none",
+            profile.OrchestratorContextKey ?? "none");
 
-        // Text and image capabilities are resolved independently from their respective provider keys.
-        // A null result is intentional: not every AiProvider implements both interfaces.
-        // Misconfiguration surfaces explicitly inside the orchestrator at the point of use, not silently.
         ITextToTextProvider? textProvider = profile.TextProvider.HasValue
             ? _serviceProvider.GetKeyedService<ITextToTextProvider>(profile.TextProvider.Value)
             : null;
@@ -86,7 +89,35 @@ public class OrchestratorFactory : IOrchestratorFactory
             ? _serviceProvider.GetKeyedService<ITextToImageProvider>(profile.ImageProvider.Value)
             : null;
 
-        return CreateOrchestratorInstance(profile.OrchestratorType, senders, textProvider, imageProvider);
+        FeedOrchestratorContext? feedOrchestratorContext = ResolveFeedOrchestratorContext(profile);
+
+        return CreateOrchestratorInstance(
+            profile.OrchestratorType,
+            senders,
+            textProvider,
+            imageProvider,
+            feedOrchestratorContext);
+    }
+
+    private FeedOrchestratorContext? ResolveFeedOrchestratorContext(ScheduledOrchestrationProfile profile)
+    {
+        if (profile.OrchestratorType != typeof(FeedOrchestrator))
+            return null;
+
+        if (string.IsNullOrWhiteSpace(profile.OrchestratorContextKey))
+        {
+            throw new InvalidOperationException(
+                $"Slot at hour {profile.Hour} uses {nameof(FeedOrchestrator)} but does not define {nameof(ScheduledOrchestrationProfile.OrchestratorContextKey)}.");
+        }
+
+        var context = _serviceProvider.GetKeyedService<FeedOrchestratorContext>(profile.OrchestratorContextKey);
+        if (context is null)
+        {
+            throw new InvalidOperationException(
+                $"No {nameof(FeedOrchestratorContext)} is registered for key '{profile.OrchestratorContextKey}'.");
+        }
+
+        return context;
     }
 
     private ISender? ResolveSender(SenderPlatform platform) => platform switch
@@ -103,7 +134,8 @@ public class OrchestratorFactory : IOrchestratorFactory
         Type orchestratorType,
         IReadOnlyList<ISender> senders,
         ITextToTextProvider? textProvider,
-        ITextToImageProvider? imageProvider)
+        ITextToImageProvider? imageProvider,
+        FeedOrchestratorContext? feedOrchestratorContext)
     {
         var loggerType = typeof(ILogger<>).MakeGenericType(orchestratorType);
         var logger = _serviceProvider.GetRequiredService(loggerType);
@@ -111,9 +143,10 @@ public class OrchestratorFactory : IOrchestratorFactory
         var ctor = orchestratorType.GetConstructors()
             .OrderByDescending(c => c.GetParameters().Length)
             .FirstOrDefault();
-        var parameters = ctor?.GetParameters();
 
+        var parameters = ctor?.GetParameters();
         var args = new List<object?>();
+
         if (parameters != null)
         {
             foreach (var param in parameters)
@@ -124,12 +157,16 @@ public class OrchestratorFactory : IOrchestratorFactory
                     args.Add(textProvider);
                 else if (param.ParameterType == typeof(ITextToImageProvider))
                     args.Add(imageProvider);
-                else if (param.ParameterType.IsGenericType && param.ParameterType.GetGenericTypeDefinition() == typeof(ILogger<>))
+                else if (param.ParameterType == typeof(FeedOrchestratorContext))
+                    args.Add(feedOrchestratorContext);
+                else if (param.ParameterType.IsGenericType &&
+                         param.ParameterType.GetGenericTypeDefinition() == typeof(ILogger<>))
                     args.Add(logger);
                 else
                     args.Add(_serviceProvider.GetService(param.ParameterType));
             }
         }
+
         return (BaseOrchestrator)Activator.CreateInstance(orchestratorType, args.ToArray())!;
     }
 }

@@ -91,21 +91,21 @@ public class FeedOrchestrator : BaseOrchestrator
         {
             _logger.LogError("[FeedOrchestrator] ITextToTextProvider is not configured.");
             _sendIt = false;
-            return new Dictionary().AsReadOnly();
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
         if (_senders.Count == 0)
         {
             _logger.LogError("[FeedOrchestrator] No senders configured for this slot.");
             _sendIt = false;
-            return new Dictionary().AsReadOnly();
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
         // Step 1 — acquire feed content
         ct.ThrowIfCancellationRequested();
         var feedContent = await AcquireFeedContentAsync(ct);
         if (string.IsNullOrWhiteSpace(feedContent))
-            return new Dictionary().AsReadOnly();
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
 
         // Step 2 — select primary sender (widest limit) and generate base summary
         ct.ThrowIfCancellationRequested();
@@ -127,7 +127,7 @@ public class FeedOrchestrator : BaseOrchestrator
         {
             _logger.LogError("[FeedOrchestrator] Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
             _sendIt = false;
-            return new Dictionary().AsReadOnly();
+            return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
         // Step 3 — generate image (shared across all senders)
@@ -139,7 +139,7 @@ public class FeedOrchestrator : BaseOrchestrator
         // Each sender reuses it when it fits; otherwise the AI re-summarises
         // from the full feedContent to preserve maximum context.
         // Re-summarisation reuses the Summary role step with the sender's MessageMaxLength.
-        var result = new Dictionary();
+        var result = new Dictionary<SenderPlatform, Post?>();
         var previousSummary = rawBaseSummary;
         foreach (var sender in orderedSenders)
         {

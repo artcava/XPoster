@@ -25,21 +25,19 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
 {
     private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
     {
-        // Fan-out slot — LinkedIn (widest limit) drives base summary and image generation.
-        // X (280 chars) always trigger re-summarisation.
         new ScheduledOrchestrationProfile(
+            orchestratorContextKey: "Bitcoin",
             hour: 6,
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram, SenderPlatform.Facebook },
             orchestratorType: typeof(FeedOrchestrator),
-            textProvider:  AiProvider.OpenAi,
+            textProvider: AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry),
 
-        // PowerLaw slots — no AI provider required.
         new ScheduledOrchestrationProfile(
+            orchestratorContextKey: null,
             hour: 14,
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Facebook },
-            orchestratorType: typeof(PowerLawOrchestrator)),
-        
+            orchestratorType: typeof(PowerLawOrchestrator))
     }.AsReadOnly();
 
     /// <inheritdoc />

@@ -44,7 +44,7 @@ public class PerplexityService : ITextToTextProvider
                 BuildChatPayload(text, request),
                 cancellationToken);
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
-                response, "Azure Foundry", "text generation", _logger, cancellationToken);
+                response, "Perplexity", "text generation", _logger, cancellationToken);
             if (!success) return string.Empty;
             text = content;
             tries++;

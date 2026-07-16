@@ -16,7 +16,12 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
     private readonly HttpClient _client;
     private readonly ILogger<OpenAiService> _logger;
     private readonly OpenAiOptions _options;
-
+    /// <summary>
+    /// Initialises a new instance of <see cref="OpenAiService"/>.
+    /// </summary>
+    /// <param name="httpClientFactory">The HTTP client factory used to create the OpenAI HTTP client.</param>
+    /// <param name="options">The OpenAI options containing API key and endpoints.</param>
+    /// <param name="logger">The logger instance.</param>
     public OpenAiService(
         IHttpClientFactory httpClientFactory,
         IOptions<OpenAiOptions> options,
@@ -93,7 +98,12 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
             response, AiProvider.OpenAi, _client, _logger,
             allowedOrigin: null, cancellationToken);
     }
-
+    /// <summary>
+    /// Builds the payload for the OpenAI Chat Completions API request.
+    /// </summary>
+    /// <param name="text">The input text to include in the chat payload.</param>
+    /// <param name="request">The prompt request containing templates and settings.</param>
+    /// <returns>An object representing the payload for the OpenAI Chat Completions API request.</returns>
     private object BuildChatPayload(string text, PromptRequest request)
     {
         var label = request.InputTextLabel ?? "{Text}";
