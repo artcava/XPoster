@@ -1,23 +1,18 @@
 using System.Text;
+using Microsoft.Extensions.Logging;
 using XPoster.Contracts;
 using XPoster.Models;
 
 namespace XPoster.Orchestrators;
 
 /// <summary>
-/// Orchestrates a social-media post by aggregating Bitcoin-related RSS news from the last 24 hours,
+/// Orchestrates a social-media post by aggregating RSS news from the last 24 hours,
 /// summarising the content via AI, and optionally attaching an AI-generated image.
+/// Implements a fan-out pattern: the base summary and image are generated once from
+/// the primary sender (widest MessageMaxLength), then each secondary sender receives
+/// an AI re-summarisation from the original feed content only when the previous summary
+/// exceeds its limit.
 /// </summary>
-/// <remarks>
-/// Implements a fan-out pattern: the base summary and image are generated once from the primary sender
-/// (widest <c>MessageMaxLength</c>), then each secondary sender receives an AI re-summarisation
-/// from the original feed content only when the previous summary exceeds its limit.
-/// The previous summary is used as the fitness check: if it fits, it is reused; if it does not,
-/// the AI re-summarises from the full feed content to preserve maximum context.
-/// Hashtag substitution is applied independently per sender.
-/// Returns an <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>
-/// for unambiguous nominal routing.
-/// </remarks>
 public class FeedOrchestrator : BaseOrchestrator
 {
     private readonly IFeedService _feedService;
@@ -32,29 +27,32 @@ public class FeedOrchestrator : BaseOrchestrator
     public override string Name => typeof(FeedOrchestrator).Name;
 
     /// <inheritdoc/>
-    public override bool SendIt { get { return _sendIt; } set { _sendIt = value; } }
+    public override bool SendIt
+    {
+        get => _sendIt;
+        set => _sendIt = value;
+    }
 
-    /// <summary>Always <c>true</c>; this orchestrator produces an AI-generated image when possible.</summary>
-    public override bool ProduceImage { get => true; set => throw new NotImplementedException(); }
+    /// <inheritdoc/>
+    public override bool ProduceImage
+    {
+        get => true;
+        set => throw new NotImplementedException();
+    }
 
     /// <inheritdoc/>
     public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
-        new List<SenderPlatform> { SenderPlatform.X, SenderPlatform.LinkedIn, SenderPlatform.Instagram, SenderPlatform.DryRun }.AsReadOnly();
+        new List<SenderPlatform>
+        {
+            SenderPlatform.X,
+            SenderPlatform.LinkedIn,
+            SenderPlatform.Instagram,
+            SenderPlatform.DryRun
+        }.AsReadOnly();
 
     /// <summary>
     /// Initialises a new instance of <see cref="FeedOrchestrator"/>.
     /// </summary>
-    /// <param name="senders">
-    /// Ordered list of senders for this slot. Internally sorted by descending <c>MessageMaxLength</c>;
-    /// the sender with the widest limit drives base summary generation.
-    /// </param>
-    /// <param name="logger">The logger for diagnostic output.</param>
-    /// <param name="feedService">The service used to fetch RSS feeds.</param>
-    /// <param name="context">The context for the feed orchestrator.</param>
-    /// <param name="tagReplacementProvider">Provides the word-to-hashtag replacement map.</param>
-    /// <param name="tagReplacementService">The service used to apply tag replacements to text.</param>
-    /// <param name="textProvider">The AI text provider used to generate summaries and image prompts.</param>
-    /// <param name="imageProvider">The AI image provider used to generate post images. Optional.</param>
     public FeedOrchestrator(
         IReadOnlyList<ISender> senders,
         ILogger<FeedOrchestrator> logger,
@@ -73,18 +71,12 @@ public class FeedOrchestrator : BaseOrchestrator
         _context = context;
         _imageProvider = imageProvider;
     }
-
     /// <summary>
-    /// Acquires feed content, generates a base summary at the primary sender's limit,
-    /// optionally re-summarises for secondary senders from the original feed content,
-    /// applies hashtag substitution per sender, generates a shared image, and returns an
-    /// <see cref="IReadOnlyDictionary{SenderPlatform, Post}"/> keyed by <see cref="ISender.Platform"/>.
+    /// Orchestrates a social-media post by aggregating RSS news from the last 24 hours,
+    /// summarising the content via AI, and optionally attaching an AI-generated image.
     /// </summary>
-    /// <param name="ct">Cancellation token propagated from the Azure Functions runtime.</param>
-    /// <returns>
-    /// A dictionary with one entry per configured sender, or an empty dictionary when a
-    /// mandatory pipeline step fails (no feeds, empty summary, no text provider).
-    /// </returns>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     public override async Task<IReadOnlyDictionary<SenderPlatform, Post?>> OrchestrateAsync(CancellationToken ct = default)
     {
         if (_textProvider is null)
@@ -101,46 +93,42 @@ public class FeedOrchestrator : BaseOrchestrator
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
-        // Step 1 — acquire feed content
         ct.ThrowIfCancellationRequested();
         var feedContent = await AcquireFeedContentAsync(ct);
         if (string.IsNullOrWhiteSpace(feedContent))
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
 
-        // Step 2 — select primary sender (widest limit) and generate base summary
         ct.ThrowIfCancellationRequested();
         var orderedSenders = _senders.OrderByDescending(s => s.MessageMaxLength).ToList();
         var primarySender = orderedSenders[0];
+
         _logger.LogInformation(
             "[FeedOrchestrator] Generating base summary via text provider for primary sender {Platform} (limit {Limit}).",
-            primarySender.Platform, primarySender.MessageMaxLength);
+            primarySender.Platform,
+            primarySender.MessageMaxLength);
 
         var summaryStep = _context.PromptOptions.GetStep(PromptRole.Summary);
-
         var summaryRequest = BuildPromptRequest(
-        feedContent,
-        summaryStep,
-        primarySender.MessageMaxLength);
+            feedContent,
+            summaryStep,
+            primarySender.MessageMaxLength);
 
         var rawBaseSummary = await _textProvider.GenerateTextAsync(summaryRequest, ct);
         if (string.IsNullOrWhiteSpace(rawBaseSummary))
         {
-            _logger.LogError("[FeedOrchestrator] Base summary generation failed for primary sender {Platform}.", primarySender.Platform);
+            _logger.LogError(
+                "[FeedOrchestrator] Base summary generation failed for primary sender {Platform}.",
+                primarySender.Platform);
             _sendIt = false;
             return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
         }
 
-        // Step 3 — generate image (shared across all senders)
         ct.ThrowIfCancellationRequested();
         var imageBytes = await GenerateImageAsync(rawBaseSummary, ct);
 
-        // Step 4 — build per-sender posts
-        // previousSummary tracks the last successfully generated summary.
-        // Each sender reuses it when it fits; otherwise the AI re-summarises
-        // from the full feedContent to preserve maximum context.
-        // Re-summarisation reuses the Summary role step with the sender's MessageMaxLength.
         var result = new Dictionary<SenderPlatform, Post?>();
         var previousSummary = rawBaseSummary;
+
         foreach (var sender in orderedSenders)
         {
             ct.ThrowIfCancellationRequested();
@@ -154,7 +142,8 @@ public class FeedOrchestrator : BaseOrchestrator
             {
                 _logger.LogInformation(
                     "[FeedOrchestrator] Re-summarising via text provider for sender {Platform} (limit {Limit}).",
-                    sender.Platform, sender.MessageMaxLength);
+                    sender.Platform,
+                    sender.MessageMaxLength);
 
                 var reSummaryRequest = BuildPromptRequest(
                     feedContent,
@@ -167,7 +156,9 @@ public class FeedOrchestrator : BaseOrchestrator
                 {
                     _logger.LogWarning(
                         "[FeedOrchestrator] Re-summarisation failed for sender {Platform} (limit {Limit}). Null entry added.",
-                        sender.Platform, sender.MessageMaxLength);
+                        sender.Platform,
+                        sender.MessageMaxLength);
+
                     result[sender.Platform] = null;
                     continue;
                 }
@@ -177,14 +168,15 @@ public class FeedOrchestrator : BaseOrchestrator
 
             previousSummary = summaryForSender;
             var content = _tagReplacementService.Apply(summaryForSender);
-            result[sender.Platform] = new Post { Content = content, Image = imageBytes };
+            result[sender.Platform] = new Post
+            {
+                Content = content,
+                Image = imageBytes
+            };
         }
 
         return result.AsReadOnly();
     }
-    // ---------------------------------------------------------------------------
-    // Private pipeline steps
-    // ---------------------------------------------------------------------------
 
     private async Task<string> AcquireFeedContentAsync(CancellationToken ct = default)
     {
@@ -198,14 +190,22 @@ public class FeedOrchestrator : BaseOrchestrator
 
         var end = DateTimeOffset.UtcNow;
         var start = end.AddDays(-1);
-        var replacementKeys = _tagReplacementProvider.GetReplacements().Keys;
 
+        var replacementKeys = _tagReplacementProvider.GetReplacements().Keys;
         var allFeeds = new List<RSSFeed>();
+
         foreach (var url in feedUrls)
         {
             ct.ThrowIfCancellationRequested();
-            var feeds = await _feedService.GetFeedsAsync(url, start, end, replacementKeys, ct);
-            if (feeds != null && feeds.Any())
+
+            var feeds = await _feedService.GetFeedsAsync(
+                url,
+                start,
+                end,
+                feedUrls,
+                ct);
+
+            if (feeds is not null && feeds.Any())
                 allFeeds.AddRange(feeds);
         }
 
@@ -232,25 +232,29 @@ public class FeedOrchestrator : BaseOrchestrator
         {
             _logger.LogInformation("[FeedOrchestrator] Deriving image prompt via text provider from base summary.");
             var imagePromptStep = _context.PromptOptions.GetStep(PromptRole.ImagePromptDerivation);
-            var imagePromptReq = BuildPromptRequest(rawBaseSummary, imagePromptStep, imagePromptStep.MaxOutputLength ?? 500);
+            var imagePromptReq = BuildPromptRequest(
+                rawBaseSummary,
+                imagePromptStep,
+                imagePromptStep.MaxOutputLength ?? 500);
+
             var derivedPrompt = await _textProvider!.GenerateTextAsync(imagePromptReq, ct);
-
-
             if (string.IsNullOrWhiteSpace(derivedPrompt))
                 derivedPrompt = rawBaseSummary;
 
             _logger.LogInformation("[FeedOrchestrator] Generating image from prompt.");
             var imageGenStep = _context.PromptOptions.GetStep(PromptRole.ImageGeneration);
+
             var imageRequest = new ImagePromptRequest
             {
-                InputText        = derivedPrompt,
+                InputText = derivedPrompt,
                 SystemPromptTemplate = imageGenStep.SystemPromptTemplate,
-                UserPromptTemplate   = imageGenStep.UserPromptTemplate,
-                Temperature      = imageGenStep.Temperature,
-                ImageQuantity    = imageGenStep.ImageQuantity,
-                ImageSize        = imageGenStep.ImageSize,
-                InputTextLabel   = imageGenStep.InputTextLabel
+                UserPromptTemplate = imageGenStep.UserPromptTemplate,
+                Temperature = imageGenStep.Temperature,
+                ImageQuantity = imageGenStep.ImageQuantity,
+                ImageSize = imageGenStep.ImageSize,
+                InputTextLabel = imageGenStep.InputTextLabel
             };
+
             var image = await _imageProvider.GenerateImageAsync(imageRequest, ct);
             return image is { Length: > 0 } ? image : null;
         }
@@ -264,10 +268,7 @@ public class FeedOrchestrator : BaseOrchestrator
             return null;
         }
     }
-    
-    /// <summary>
-    /// Builds a <see cref="PromptRequest"/> from the given input text, prompt step, and maximum output length.
-    /// </summary>
+
     private static PromptRequest BuildPromptRequest(
         string inputText,
         PromptStepOptions step,

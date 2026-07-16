@@ -7,13 +7,15 @@ namespace XPoster.Models;
 /// </summary>
 public sealed class OpenAiOptionsValidator : IValidateOptions<OpenAiOptions>
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Validates the specified <see cref="OpenAiOptions"/> instance.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public ValidateOptionsResult Validate(string? name, OpenAiOptions options)
     {
         var failures = new List<string>();
-
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(OpenAiOptions.ApiKey)} must not be empty.");
 
         if (string.IsNullOrWhiteSpace(options.ChatEndpoint))
             failures.Add($"{nameof(OpenAiOptions.ChatEndpoint)} must not be empty.");
