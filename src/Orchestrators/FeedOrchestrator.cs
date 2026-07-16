@@ -21,11 +21,11 @@ namespace XPoster.Orchestrators;
 public class FeedOrchestrator : BaseOrchestrator
 {
     private readonly IFeedService _feedService;
-    private readonly IFeedUrlProvider _feedUrlProvider;
     private readonly ITagReplacementProvider _tagReplacementProvider;
     private readonly ITagReplacementService _tagReplacementService;
     private readonly ITextToTextProvider? _textProvider;
     private readonly ITextToImageProvider? _imageProvider;
+    private readonly FeedOrchestratorContext _context;
     private bool _sendIt = true;
 
     /// <inheritdoc/>
@@ -50,7 +50,7 @@ public class FeedOrchestrator : BaseOrchestrator
     /// </param>
     /// <param name="logger">The logger for diagnostic output.</param>
     /// <param name="feedService">The service used to fetch RSS feeds.</param>
-    /// <param name="feedUrlProvider">Provides the RSS/Atom feed URLs to poll.</param>
+    /// <param name="context">The context for the feed orchestrator.</param>
     /// <param name="tagReplacementProvider">Provides the word-to-hashtag replacement map.</param>
     /// <param name="tagReplacementService">The service used to apply tag replacements to text.</param>
     /// <param name="textProvider">The AI text provider used to generate summaries and image prompts.</param>
@@ -59,7 +59,7 @@ public class FeedOrchestrator : BaseOrchestrator
         IReadOnlyList<ISender> senders,
         ILogger<FeedOrchestrator> logger,
         IFeedService feedService,
-        IFeedUrlProvider feedUrlProvider,
+        FeedOrchestratorContext context,
         ITagReplacementProvider tagReplacementProvider,
         ITagReplacementService tagReplacementService,
         ITextToTextProvider? textProvider,
@@ -67,10 +67,10 @@ public class FeedOrchestrator : BaseOrchestrator
         : base(senders, logger)
     {
         _feedService = feedService;
-        _feedUrlProvider = feedUrlProvider;
         _tagReplacementProvider = tagReplacementProvider;
         _tagReplacementService = tagReplacementService;
         _textProvider = textProvider;
+        _context = context;
         _imageProvider = imageProvider;
     }
 
@@ -188,10 +188,10 @@ public class FeedOrchestrator : BaseOrchestrator
 
     private async Task<string> AcquireFeedContentAsync(CancellationToken ct = default)
     {
-        var feedUrls = _feedUrlProvider.GetFeedUrls();
+        var feedUrls = _context.FeedUrls;
         if (feedUrls.Count == 0)
         {
-            _logger.LogWarning("[FeedOrchestrator] IFeedUrlProvider returned an empty URL list. No feeds will be fetched.");
+            _logger.LogWarning("[FeedOrchestrator] FeedOrchestratorContext has no feed URLs configured.");
             _sendIt = false;
             return string.Empty;
         }
@@ -231,12 +231,27 @@ public class FeedOrchestrator : BaseOrchestrator
         try
         {
             _logger.LogInformation("[FeedOrchestrator] Deriving image prompt via text provider from base summary.");
-            var prompt = await _textProvider!.GetImagePromptAsync(rawBaseSummary, ct);
-            if (string.IsNullOrWhiteSpace(prompt))
-                prompt = rawBaseSummary;
+            var imagePromptStep = _context.PromptOptions.GetStep(PromptRole.ImagePromptDerivation);
+            var imagePromptReq = BuildPromptRequest(rawBaseSummary, imagePromptStep, imagePromptStep.MaxOutputLength ?? 500);
+            var derivedPrompt = await _textProvider!.GenerateTextAsync(imagePromptReq, ct);
+
+
+            if (string.IsNullOrWhiteSpace(derivedPrompt))
+                derivedPrompt = rawBaseSummary;
 
             _logger.LogInformation("[FeedOrchestrator] Generating image from prompt.");
-            var image = await _imageProvider.GenerateImageAsync(prompt, ct);
+            var imageGenStep = _context.PromptOptions.GetStep(PromptRole.ImageGeneration);
+            var imageRequest = new ImagePromptRequest
+            {
+                InputText        = derivedPrompt,
+                SystemPromptTemplate = imageGenStep.SystemPromptTemplate,
+                UserPromptTemplate   = imageGenStep.UserPromptTemplate,
+                Temperature      = imageGenStep.Temperature,
+                ImageQuantity    = imageGenStep.ImageQuantity,
+                ImageSize        = imageGenStep.ImageSize,
+                InputTextLabel   = imageGenStep.InputTextLabel
+            };
+            var image = await _imageProvider.GenerateImageAsync(imageRequest, ct);
             return image is { Length: > 0 } ? image : null;
         }
         catch (OperationCanceledException)

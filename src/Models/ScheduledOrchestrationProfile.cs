@@ -7,6 +7,9 @@ namespace XPoster.Models;
 /// </summary>
 public sealed class ScheduledOrchestrationProfile
 {
+    /// <summary>Orchestrator context key for this slot.</summary>
+    public string? OrchestratorContextKey { get; init; }
+
     /// <summary>Hour of day (0-23) when this slot is active.</summary>
     public int Hour { get; init; }
 
@@ -38,6 +41,7 @@ public sealed class ScheduledOrchestrationProfile
     /// Initialises a new instance of <see cref="ScheduledOrchestrationProfile"/> with an ordered
     /// list of target platforms and independent text and image provider selections.
     /// </summary>
+    /// <param name="orchestratorContextKey"></param>
     /// <param name="hour">Hour of day (0-23) when this slot is active.</param>
     /// <param name="senderPlatforms">
     /// Ordered list of target platforms for this slot, by descending MessageMaxLength.
@@ -47,12 +51,14 @@ public sealed class ScheduledOrchestrationProfile
     /// <param name="textProvider">Optional AI provider for text generation. Null means no text capability for this slot.</param>
     /// <param name="imageProvider">Optional AI provider for image generation. Null means no image capability for this slot.</param>
     public ScheduledOrchestrationProfile(
+        string? orchestratorContextKey,
         int hour,
         IReadOnlyList<SenderPlatform> senderPlatforms,
         Type orchestratorType,
         AiProvider? textProvider = null,
         AiProvider? imageProvider = null)
     {
+        OrchestratorContextKey = orchestratorContextKey;
         Hour = hour;
         SenderPlatforms = senderPlatforms;
         OrchestratorType = orchestratorType;
