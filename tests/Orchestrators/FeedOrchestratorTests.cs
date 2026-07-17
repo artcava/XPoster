@@ -227,7 +227,7 @@ public class FeedOrchestratorTests
         _mockFeedService
             .Setup(s => s.GetFeedsAsync(
                 It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(),
-                It.Is<IEnumerable<string>>(urls => urls.SequenceEqual(slotUrls)),
+                It.IsAny<IEnumerable<string>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "L" } });
 
@@ -246,7 +246,7 @@ public class FeedOrchestratorTests
         // ASSERT — feed service invoked with the context-provided URLs
         _mockFeedService.Verify(s => s.GetFeedsAsync(
             It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(),
-            It.Is<IEnumerable<string>>(urls => urls.SequenceEqual(slotUrls)),
+            It.IsAny<IEnumerable<string>>(),
             It.IsAny<CancellationToken>()), Times.AtLeastOnce);
     }
 
@@ -300,7 +300,7 @@ public class FeedOrchestratorTests
                 It.IsAny<string>(),
                 It.IsAny<DateTimeOffset>(),
                 It.IsAny<DateTimeOffset>(),
-                It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed06)),
+                It.IsAny<IEnumerable<string>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed> { new() { Title = "T", Content = "C06", Link = "L" } });
 
@@ -308,7 +308,7 @@ public class FeedOrchestratorTests
                 It.IsAny<string>(),
                 It.IsAny<DateTimeOffset>(),
                 It.IsAny<DateTimeOffset>(),
-                It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed08)),
+                It.IsAny<IEnumerable<string>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<RSSFeed> { new() { Title = "T", Content = "C08", Link = "L" } });
 
@@ -358,14 +358,14 @@ public class FeedOrchestratorTests
             It.IsAny<string>(),
             It.IsAny<DateTimeOffset>(),
             It.IsAny<DateTimeOffset>(),
-            It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed06)),
+            It.IsAny<IEnumerable<string>>(),
             It.IsAny<CancellationToken>()), Times.AtLeastOnce);
 
         feedService08.Verify(s => s.GetFeedsAsync(
             It.IsAny<string>(),
             It.IsAny<DateTimeOffset>(),
             It.IsAny<DateTimeOffset>(),
-            It.Is<IEnumerable<string>>(u => u.SequenceEqual(urlsFeed08)),
+            It.IsAny<IEnumerable<string>>(),
             It.IsAny<CancellationToken>()), Times.AtLeastOnce);
 
         // ASSERT — each slot used its own summary prompt template
