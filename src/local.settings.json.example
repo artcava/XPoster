@@ -109,7 +109,6 @@
     "FalAi__Endpoint": "https://fal.run",
     "FalAi__ApiKey": "",
     "FalAi__ImageModelName": "fal-ai/flux/schnell",
-    "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 
     // -----------------------------------------------------------------------
