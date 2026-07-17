@@ -23,7 +23,7 @@ XPoster is a **serverless, event-driven pipeline** built on five structural pill
 
 - **`XFunction`** — The Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
 - **`OrchestratorFactory`** — Maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
-- **Orchestrators** — Each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms
+- **Orchestrators** — Each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms; prompt intent is encapsulated in PromptRequest / ImagePromptRequest value objects constructed by the orchestrator and passed to AI providers — providers never own prompt construction logic.
 - **Sender Plugins** — Each implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
 - **AI Providers** — This layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
 
@@ -147,6 +147,24 @@ List of Providers
 - **LocalOverrideTimeProvider** (`ITimeProvider`): Development-only that returns a fixed UTC hour read from the `ForceHour` app setting.
 - **TimeProvider** (`ITimeProvider`): Returns real UTC hour.
 
+### Prompt Value Objects — `PromptRequest` and `ImagePromptRequest`
+
+Prompt intent is owned by the orchestrator and transported to AI providers via two immutable value objects:
+
+- **`PromptRequest`** — carries all data required for a text-to-text step: `InputText`, `SystemPromptTemplate`, `UserPromptTemplate`, and optional tuning parameters (`Temperature`, `MaxOutputLength`, `MaxTokenBudget`, `InputTextLabel`). Constructed by the orchestrator and passed directly to `ITextToTextProvider.GenerateTextAsync`.
+- **`ImagePromptRequest`** — extends `PromptRequest` with image-generation parameters (`ImageQuantity`, `ImageSize`). Constructed by the orchestrator and passed to `ITextToImageProvider.GenerateImageAsync`.
+
+This design keeps providers free from prompt-construction logic; they receive a fully-formed request and are responsible only for invoking the external API. Neither value object is provider-specific — the same `PromptRequest` instance is valid for any registered `ITextToTextProvider`.
+
+### Prompt Configuration — `FeedPromptOptions`, `PromptStepOptions`, `PromptRole`
+
+`FeedOrchestrator` slots are configured with an ordered, role-keyed collection of prompt step configurations via `FeedPromptOptions`:
+
+- **`PromptRole`** — discriminator enum with three values: `Summary`, `ImagePromptDerivation`, `ImageGeneration`.
+- **`PromptStepOptions`** — configuration record for a single step: `SystemPromptTemplate`, `UserPromptTemplate`, `Temperature`, `MaxOutputLength`, `MaxTokenBudget`, `InputTextLabel`, `ImageQuantity`, `ImageSize`. For the `Summary` step, `MaxOutputLength` is **not** set in configuration — it is resolved at runtime from `ISender.MessageMaxLength` of the target sender.
+- **`FeedPromptOptions`** — holds the ordered `IReadOnlyList<PromptStepOptions>` and exposes `GetStep(PromptRole)` for single-step lookup (throws `InvalidOperationException` if the role is absent or duplicated).
+
+Prompt content (templates, temperature, token budgets) is fully externalised to configuration — changing a prompt requires no code change.
 
 **AI Provider Services** — registered as **keyed services** by `AiProvider` via `AddXPosterAiProviders()` in `Program.cs`:
 
@@ -235,6 +253,17 @@ Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at 
 - Silent failures are eliminated: misconfiguring a text-only provider in an image-generating slot surfaces explicitly at the point of use inside `FeedOrchestrator`
 - `TextProvider` and `ImageProvider` can now be **different providers within the same slot** (e.g. DeepSeek for text + FalAi for image)
 
+### Value Object Pattern — Prompt Requests
+
+**What**: `PromptRequest` and `ImagePromptRequest` are immutable `record` value objects that bundle all prompt-related data (input text, system/user prompt templates, tuning parameters) into a single parameter passed to `ITextToTextProvider.GenerateTextAsync` and `ITextToImageProvider.GenerateImageAsync`.
+
+**Why**: Prior to this change, AI providers received individual string/int parameters, creating coupling between provider method signatures and prompt-construction decisions that belong exclusively to the orchestrator. Moving to value objects means:
+- Provider interfaces are stable regardless of how many prompt parameters are needed
+- Orchestrators own prompt intent entirely; providers are pure translation layers
+- Adding a new prompt parameter (e.g. `TopP`, `FrequencyPenalty`) requires changing only `PromptRequest` and the orchestrator that builds it — no provider interface changes
+
+**Trade-off**: Callers must construct a `PromptRequest` before each provider call. For the current usage pattern (one call per prompt step), this is negligible overhead compared to the interface stability gained.
+
 **Capability map**:
 
 | `AiProvider` | `ITextToTextProvider` | `ITextToImageProvider` |
@@ -282,7 +311,7 @@ Because orchestrators receive their dependencies (sender list, AI capability pro
 The AI layer is abstracted behind two capability interfaces: `ITextToTextProvider` (text summarisation and image prompt generation) and `ITextToImageProvider` (image generation from a text prompt). Both are registered as keyed services by `AiProvider` enum value.
 
 A provider can implement one or both interfaces depending on its capabilities. Adding a new provider requires:
-1. Implement `ITextToTextProvider`, `ITextToImageProvider`, or both
+1. Implement ITextToTextProvider, ITextToImageProvider, or both. Provider methods accept PromptRequest / ImagePromptRequest — providers must not inspect or re-interpret prompt template fields beyond forwarding them to the external API; prompt intent is set by the orchestrator.
 2. Add the corresponding keyed registrations in `AddXPosterAiProviders()` in `Program.cs`
 3. Add the new `AiProvider` enum value
 4. Update `DefaultSlotProfileProvider` if the new provider should be active for a production slot (via `textProvider:` or `imageProvider:` named parameters)
@@ -347,19 +376,19 @@ sequenceDiagram
         Orch->>Feed: GetFeedsAsync(url, start, end, keywords, ct)
         Feed-->>Orch: List<RSSFeed>
         Note over Orch,T2T: Step 2 — Generate base summary (primary sender's limit)
-        Orch->>T2T: GetSummaryAsync(feedContent, primary.MessageMaxLength, ct)
+        Orch->>T2T: GenerateTextAsync(PromptRequest{InputText, Templates, MaxOutputLength=primary.MessageMaxLength}, ct)
         T2T-->>Orch: rawBaseSummary
         Note over Orch,T2I: Step 3 — Generate shared image (once for all senders)
-        Orch->>T2T: GetImagePromptAsync(rawBaseSummary, ct)
+        Orch->>T2T: GenerateTextAsync(PromptRequest{InputText=rawBaseSummary, Templates=ImagePromptDerivation step}, ct)
         T2T-->>Orch: imagePrompt (falls back to rawBaseSummary if empty)
-        Orch->>T2I: GenerateImageAsync(imagePrompt, ct)
+        Orch->>T2I: GenerateImageAsync(ImagePromptRequest{InputText=imagePrompt, ImageQuantity, ImageSize}, ct)
         T2I-->>Orch: image bytes (null if provider absent or error)
         Note over Orch,TagRepl: Step 4 — Fan-out loop (per sender, descending MaxLength)
         loop For each sender in orderedSenders
             alt previousSummary.Length <= sender.MessageMaxLength
                 Orch->>Orch: reuse previousSummary (no AI call)
             else previousSummary exceeds sender limit
-                Orch->>T2T: GetSummaryAsync(feedContent, sender.MessageMaxLength, ct)
+                Orch->>T2T: GenerateTextAsync(PromptRequest{InputText, Templates, MaxOutputLength=sender.MessageMaxLength}, ct)
                 T2T-->>Orch: reSummarised (or empty → null entry)
             end
             Orch->>TagRepl: GetReplacements()
