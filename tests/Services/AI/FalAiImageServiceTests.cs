@@ -23,7 +23,7 @@ public class FalAiImageServiceTests
         var options = Options.Create(opts ?? new FalAiOptions
         {
             ApiKey = "fake-api-key",
-            ModelId = "fal-ai/flux/schnell"
+            ImageModelName = "fal-ai/flux/schnell"
         });
 
         return new FalAiImageService(factory.Object, options, loggerMock.Object);
@@ -291,7 +291,7 @@ public class FalAiImageServiceTests
     [Fact]
     public async Task GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()
     {
-        var opts = new FalAiOptions { ApiKey = "key", ModelId = "fal-ai/model with space" };
+        var opts = new FalAiOptions { ApiKey = "key", ImageModelName = "fal-ai/model with space" };
 
         HttpRequestMessage? capturedRequest = null;
         var handlerMock = new Mock<HttpMessageHandler>();

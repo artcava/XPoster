@@ -8,11 +8,7 @@ public class PerplexityOptionsValidatorTests
     {
         Endpoint = "https://api.perplexity.ai",
         ApiKey = "my-key",
-        DeploymentName = "sonar",
-        SummarySystemPromptTemplate = "Keep under {MaxChars} chars.",
-        SummaryUserPromptTemplate = "Summarize: {Text}",
-        ImagePromptSystemTemplate = "You generate image prompts.",
-        ImagePromptUserTemplate = "Image for: {Summary}"
+        TextModelName = "sonar",
     };
 
     private static readonly PerplexityOptionsValidator Validator = new();
@@ -50,63 +46,15 @@ public class PerplexityOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()
+    public void Validate_WhenTextModelNameIsEmpty_ReturnsFailed()
     {
         var opts = ValidOptions();
-        opts.DeploymentName = string.Empty;
+        opts.TextModelName = string.Empty;
 
         var result = Validator.Validate(null, opts);
 
         Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(PerplexityOptions.DeploymentName)));
-    }
-
-    [Fact]
-    public void Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()
-    {
-        var opts = ValidOptions();
-        opts.SummarySystemPromptTemplate = "No placeholder here.";
-
-        var result = Validator.Validate(null, opts);
-
-        Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(PerplexityOptions.SummarySystemPromptTemplate)));
-    }
-
-    [Fact]
-    public void Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()
-    {
-        var opts = ValidOptions();
-        opts.SummaryUserPromptTemplate = "No placeholder here.";
-
-        var result = Validator.Validate(null, opts);
-
-        Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(PerplexityOptions.SummaryUserPromptTemplate)));
-    }
-
-    [Fact]
-    public void Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()
-    {
-        var opts = ValidOptions();
-        opts.ImagePromptUserTemplate = "No placeholder here.";
-
-        var result = Validator.Validate(null, opts);
-
-        Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(PerplexityOptions.ImagePromptUserTemplate)));
-    }
-
-    [Fact]
-    public void Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()
-    {
-        // ImagePromptSystemTemplate has no required placeholder — intentional design.
-        var opts = ValidOptions();
-        opts.ImagePromptSystemTemplate = "No placeholder required here.";
-
-        var result = Validator.Validate(null, opts);
-
-        Assert.True(result.Succeeded);
+        Assert.Contains(result.Failures!, f => f.Contains(nameof(PerplexityOptions.TextModelName)));
     }
 
     [Fact]
@@ -115,7 +63,7 @@ public class PerplexityOptionsValidatorTests
         var opts = ValidOptions();
         opts.Endpoint = string.Empty;
         opts.ApiKey = string.Empty;
-        opts.DeploymentName = string.Empty;
+        opts.TextModelName = string.Empty;
 
         var result = Validator.Validate(null, opts);
 

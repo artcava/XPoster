@@ -87,27 +87,28 @@
     // and token-budget helpers that are provider-specific.
     // -----------------------------------------------------------------------
 
+    "OpenAI__Endpoint": "https://api.openai.com/v1/chat/completions",
     "OpenAI__ApiKey": "",
-    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
-    "OpenAI__ChatModel": "gpt-4.1-nano",
+    "OpenAI__TextModelName": "gpt-4.1-nano",
     "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
-    "OpenAI__ImageModel": "gpt-image-1.5",
+    "OpenAI__ImageModelName": "gpt-image-1.5",
 
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
-    "AzureFoundry__DeploymentName": "",
-    "AzureFoundry__ImageDeploymentName": "",
+    "AzureFoundry__TextModelName": "",
+    "AzureFoundry__ImageModelName": "",
 
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
-    "DeepSeek__DeploymentName": "deepseek-chat",
+    "DeepSeek__TextModelName": "deepseek-chat",
 
     "Perplexity__Endpoint": "https://api.perplexity.ai",
     "Perplexity__ApiKey": "",
-    "Perplexity__DeploymentName": "sonar",
+    "Perplexity__TextModelName": "sonar",
 
+    "FalAi__Endpoint": "https://fal.run",
     "FalAi__ApiKey": "",
-    "FalAi__ModelId": "fal-ai/flux/schnell",
+    "FalAi__ImageModelName": "fal-ai/flux/schnell",
     "FalAi__ImageSize": "landscape_4_3",
     "FalAi__NumInferenceSteps": "4",
 

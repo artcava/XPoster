@@ -66,7 +66,7 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
         }
         var size = request.ImageSize ?? "1024x1024";
         var quantity = request.ImageQuantity ?? 1;
-        var requestBody = new { model = _options.ImageDeploymentName, prompt, n = quantity, size };
+        var requestBody = new { model = _options.ImageModelName, prompt, n = quantity, size };
         HttpResponseMessage response;
         try { response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken); }
         catch (HttpRequestException ex)
@@ -88,7 +88,7 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
             .Replace(label, text, StringComparison.Ordinal);
         return new
         {
-            model = _options.DeploymentName,
+            model = _options.TextModelName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },

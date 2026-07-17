@@ -62,7 +62,7 @@ public class PerplexityService : ITextToTextProvider
             .Replace(label, text, StringComparison.Ordinal);
         return new
         {
-            model = _options.DeploymentName,
+            model = _options.TextModelName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },

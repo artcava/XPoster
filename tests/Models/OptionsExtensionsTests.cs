@@ -91,8 +91,8 @@ public class OptionsExtensionsTests
             {
                 ["Endpoint"] = "https://myfoundry.openai.azure.com",
                 ["ApiKey"] = "az-key",
-                ["DeploymentName"] = "gpt-4.1-nano",
-                ["ImageDeploymentName"] = "gpt-image-1",
+                ["TextModelName"] = "gpt-4.1-nano",
+                ["ImageModelName"] = "gpt-image-1",
             });
 
             using var provider = BuildProvider(config,
@@ -177,7 +177,7 @@ public class OptionsExtensionsTests
             var config = BuildConfig(FalAiOptionsExtensions.SectionName, new()
             {
                 ["ApiKey"] = "fal-key",
-                ["ModelId"] = "fal-ai/flux/schnell",
+                ["ImageModelName"] = "fal-ai/flux/schnell",
             });
 
             using var provider = BuildProvider(config,
@@ -185,7 +185,7 @@ public class OptionsExtensionsTests
 
             var options = provider.GetRequiredService<IOptions<FalAiOptions>>().Value;
             Assert.Equal("fal-key", options.ApiKey);
-            Assert.Equal("fal-ai/flux/schnell", options.ModelId);
+            Assert.Equal("fal-ai/flux/schnell", options.ImageModelName);
         }
 
         [Fact]

@@ -25,7 +25,7 @@ public class PerplexityServiceTests
         {
             Endpoint = "https://api.perplexity.ai",
             ApiKey = "fake-key",
-            DeploymentName = "sonar"
+            TextModelName = "sonar"
         });
 
         return new PerplexityService(factory.Object, options, loggerMock.Object);

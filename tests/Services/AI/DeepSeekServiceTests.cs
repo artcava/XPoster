@@ -28,7 +28,7 @@ public class DeepSeekServiceTests
         {
             Endpoint = "https://api.deepseek.com",
             ApiKey = "fake-key",
-            DeploymentName = "deepseek-chat"
+            TextModelName = "deepseek-chat"
         });
 
         return new DeepSeekService(factory.Object, options, loggerMock.Object);

@@ -9,7 +9,7 @@ public class FalAiOptionsValidatorTests
     private static FalAiOptions ValidOptions() => new()
     {
         ApiKey = "fake-api-key",
-        ModelId = "fal-ai/flux/schnell"
+        ImageModelName = "fal-ai/flux/schnell"
     };
 
     [Fact]
@@ -48,24 +48,24 @@ public class FalAiOptionsValidatorTests
     public void Validate_MissingModelId_Fails()
     {
         var options = ValidOptions();
-        options.ModelId = string.Empty;
+        options.ImageModelName = string.Empty;
 
         var result = _sut.Validate(null, options);
 
         Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ModelId)));
+        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ImageModelName)));
     }
 
     [Fact]
     public void Validate_WhitespaceModelId_Fails()
     {
         var options = ValidOptions();
-        options.ModelId = "   ";
+        options.ImageModelName = "   ";
 
         var result = _sut.Validate(null, options);
 
         Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ModelId)));
+        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ImageModelName)));
     }
 
     [Theory]
@@ -73,15 +73,15 @@ public class FalAiOptionsValidatorTests
     [InlineData("fal-ai/flux schnell")]     // space
     [InlineData("fal-ai/flux#anchor")]      // fragment delimiter
     [InlineData("fal-ai/flux[turbo]")]      // square bracket
-    public void Validate_ModelIdWithUnsafeCharacters_Fails(string modelId)
+    public void Validate_ImageModelNameWithUnsafeCharacters_Fails(string modelId)
     {
         var options = ValidOptions();
-        options.ModelId = modelId;
+        options.ImageModelName = modelId;
 
         var result = _sut.Validate(null, options);
 
         Assert.True(result.Failed);
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ModelId)));
+        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ImageModelName)));
     }
 
     [Theory]
@@ -89,10 +89,10 @@ public class FalAiOptionsValidatorTests
     [InlineData("fal-ai/stable-diffusion-v3")]   // hyphens
     [InlineData("fal-ai/model_v2.0")]            // underscores and dot
     [InlineData("provider/org/model123")]         // multi-segment alphanumeric
-    public void Validate_ModelIdWithAllowedSpecialChars_Succeeds(string modelId)
+    public void Validate_ImageModelNameWithAllowedSpecialChars_Succeeds(string modelId)
     {
         var options = ValidOptions();
-        options.ModelId = modelId;
+        options.ImageModelName = modelId;
 
         var result = _sut.Validate(null, options);
 
@@ -104,12 +104,12 @@ public class FalAiOptionsValidatorTests
     {
         var options = ValidOptions();
         options.ApiKey = string.Empty;
-        options.ModelId = string.Empty;
+        options.ImageModelName = string.Empty;
 
         var result = _sut.Validate(null, options);
 
         Assert.True(result.Failed);
         Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ApiKey)));
-        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ModelId)));
+        Assert.Contains(result.Failures!, f => f.Contains(nameof(FalAiOptions.ImageModelName)));
     }
 }

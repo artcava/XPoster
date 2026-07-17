@@ -40,21 +40,19 @@ public sealed class FalAiImageService : ITextToImageProvider
             _logger.LogWarning("GenerateImageAsync called with an empty prompt.");
             return Array.Empty<byte>();
         }
-        var imageSize = request.ImageSize ?? _options.ImageSize;
+
         var requestBody = new
         {
             prompt,
-            image_size = imageSize,
+            image_size = request.ImageSize,
             num_inference_steps = _options.NumInferenceSteps,
             num_images = request.ImageQuantity ?? 1,
             enable_safety_checker = true,
             output_format = "png"
         };
 
-        var encodedModelPath = string.Join("/", _options.ModelId.Split('/').Select(Uri.EscapeDataString));
-        var endpoint = $"{FalApiBaseUrl}/{encodedModelPath}";
         HttpResponseMessage response;
-        try { response = await _client.PostAsJsonAsync(endpoint, requestBody, cancellationToken); }
+        try { response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken); }
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "HTTP request to fal.ai failed.");
@@ -63,4 +61,5 @@ public sealed class FalAiImageService : ITextToImageProvider
         return await AiServiceHelper.ParseImageResponseAsync(
             response, AiProvider.FalAi, _client, _logger, allowedOrigin: null, cancellationToken);
     }
+    private string GetImageGenerationEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/{string.Join("/", _options.ImageModelName.Split('/').Select(Uri.EscapeDataString))}";
 }

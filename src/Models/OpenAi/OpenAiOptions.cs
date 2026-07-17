@@ -13,10 +13,10 @@ public sealed class OpenAiOptions
     // ── Chat / Completions ────────────────────────────────────────────────────
 
     /// <summary>Gets or sets the Chat Completions API endpoint.</summary>
-    public string ChatEndpoint { get; set; } = "https://api.openai.com/v1/chat/completions";
+    public string Endpoint { get; set; } = "https://api.openai.com/v1/chat/completions";
 
     /// <summary>Gets or sets the model used for chat/completion requests.</summary>
-    public string ChatModel { get; set; } = "gpt-4.1-nano";
+    public string TextModelName { get; set; } = "gpt-4.1-nano";
 
     // ── Image Generation ──────────────────────────────────────────────────────
 
@@ -24,5 +24,5 @@ public sealed class OpenAiOptions
     public string ImageEndpoint { get; set; } = "https://api.openai.com/v1/images/generations";
 
     /// <summary>Gets or sets the model used for image generation requests.</summary>
-    public string ImageModel { get; set; } = "gpt-image-1.5";
+    public string ImageModelName { get; set; } = "gpt-image-1.5";
 }

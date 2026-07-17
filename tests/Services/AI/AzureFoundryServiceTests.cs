@@ -22,8 +22,8 @@ public class AzureFoundryServiceTests
         {
             Endpoint = "https://myfoundry.openai.azure.com",
             ApiKey = "fake-key",
-            DeploymentName = "gpt-4.1-nano",
-            ImageDeploymentName = "gpt-image-1.5"
+            TextModelName = "gpt-4.1-nano",
+            ImageModelName = "gpt-image-1.5"
         });
 
         return new AzureFoundryService(factory.Object, options, loggerMock.Object);

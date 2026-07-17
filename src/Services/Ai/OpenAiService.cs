@@ -46,7 +46,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
         {
             var payload = BuildChatPayload(text, request);
             var response = await _client.PostAsJsonAsync(
-                _options.ChatEndpoint, payload, cancellationToken);
+                _options.Endpoint, payload, cancellationToken);
 
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
                 response, "OpenAI", "text generation", _logger, cancellationToken);
@@ -72,7 +72,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
             return Array.Empty<byte>();
         }
 
-        var imageModel = _options.ImageModel;
+        var imageModel = _options.ImageModelName;
         var quantity = request.ImageQuantity ?? 1;
         var size = request.ImageSize ?? "1024x1024";
 
@@ -114,7 +114,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
 
         return new
         {
-            model = _options.ChatModel,
+            model = _options.TextModelName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },
