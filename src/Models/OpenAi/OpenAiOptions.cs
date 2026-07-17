@@ -10,18 +10,11 @@ public sealed class OpenAiOptions
     /// <summary>Gets or sets the OpenAI API key used for authentication.</summary>
     public string ApiKey { get; set; } = string.Empty;
 
-    // ── Chat / Completions ────────────────────────────────────────────────────
-
     /// <summary>Gets or sets the Chat Completions API endpoint.</summary>
-    public string Endpoint { get; set; } = "https://api.openai.com/v1/chat/completions";
+    public string Endpoint { get; set; } = "https://api.openai.com/v1/";
 
     /// <summary>Gets or sets the model used for chat/completion requests.</summary>
     public string TextModelName { get; set; } = "gpt-4.1-nano";
-
-    // ── Image Generation ──────────────────────────────────────────────────────
-
-    /// <summary>Gets or sets the Image Generations API endpoint.</summary>
-    public string ImageEndpoint { get; set; } = "https://api.openai.com/v1/images/generations";
 
     /// <summary>Gets or sets the model used for image generation requests.</summary>
     public string ImageModelName { get; set; } = "gpt-image-1.5";

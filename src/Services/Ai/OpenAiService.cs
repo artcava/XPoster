@@ -46,7 +46,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
         {
             var payload = BuildChatPayload(text, request);
             var response = await _client.PostAsJsonAsync(
-                _options.Endpoint, payload, cancellationToken);
+                GetChatCompletionsEndpoint(), payload, cancellationToken);
 
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
                 response, "OpenAI", "text generation", _logger, cancellationToken);
@@ -86,7 +86,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
         try
         {
             response = await _client.PostAsJsonAsync(
-                _options.ImageEndpoint, body, cancellationToken);
+                GetImageGenerationEndpoint(), body, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
@@ -124,4 +124,6 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
             temperature = request.Temperature
         };
     }
+    private string GetChatCompletionsEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
+    private string GetImageGenerationEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/images/generations";
 }
