@@ -187,26 +187,32 @@ The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender(
 
 ### Step 7 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform list, orchestrator type, and (optionally) the AI providers for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Providers/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the orchestrator context key, UTC hour, sender platform list, orchestrator type, and (optionally) the AI providers for that slot:
 
 ```csharp
-// src/Orchestrators/DefaultSlotProfileProvider.cs
-public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
-[
+// src/Providers/DefaultSlotProfileProvider.cs
+private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
+{
     // existing profiles ...
     new ScheduledOrchestrationProfile(
+        orchestratorContextKey: "TikTok Topic",
         hour: 20,
         senderPlatforms: new[] { SenderPlatform.TikTok },
         orchestratorType: typeof(FeedOrchestrator),
         textProvider: AiProvider.OpenAi,
         imageProvider: AiProvider.OpenAi),
-];
+}.AsReadOnly();
 ```
 
-To publish to multiple platforms in the same slot, list all target senders. Each `*Orchestrator` reorder in **descending `MessageMaxLength` order** (widest first).
+#### `orchestratorContextKey`
+
+`orchestratorContextKey` is a nullable `string?` that carries an optional semantic label for the slot — typically the topic or feed theme used by the orchestrator to scope content retrieval or prompt generation (e.g. `"Bitcoin"`, `"PowerLaw"`). When `null`, the orchestrator applies no topic scoping. The value is passed through to the orchestrator at runtime and is not interpreted by `OrchestratorFactory`.
+
+To publish to multiple platforms in the same slot, list all target senders in **descending `MessageMaxLength` order** (widest first):
 
 ```csharp
 new ScheduledOrchestrationProfile(
+    orchestratorContextKey: "TikTok Topic",
     hour: 20,
     senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (2 800) → first
     orchestratorType: typeof(FeedOrchestrator),
@@ -326,19 +332,20 @@ For a **per-sender adaptation** pattern, iterate `senders` and call `_textProvid
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new orchestrator type and the target `SenderPlatforms` list in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type and the target `SenderPlatforms` list in `DefaultSlotProfileProvider`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
-// src/Orchestrators/DefaultSlotProfileProvider.cs
-public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
-[
+// src/Providers/DefaultSlotProfileProvider.cs
+private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
+{
     // existing profiles ...
     new ScheduledOrchestrationProfile(
+        orchestratorContextKey: null,
         hour: 10,
         senderPlatforms: new[] { SenderPlatform.X },
         orchestratorType: typeof(QuoteOrchestrator),
         textProvider: AiProvider.Perplexity),
-];
+}.AsReadOnly();
 ```
 
 No other change to `OrchestratorFactory` is required. The factory receives the updated profile list via `ISlotProfileProvider` at runtime without any code modification.
@@ -534,4 +541,5 @@ All extensions must respect the following invariants to integrate correctly with
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **`ScheduledOrchestrationProfile` always requires `orchestratorContextKey` as the first constructor argument.** Pass `null` when no topic scoping is needed. Never omit the parameter — it is positional and the compiler will reject a call that skips it.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.
