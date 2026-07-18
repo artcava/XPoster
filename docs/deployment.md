@@ -76,7 +76,6 @@ az functionapp config appsettings set \
     "OpenAI__ApiKey=<value>" \
     "OpenAI__Endpoint=https://api.openai.com/v1/" \
     "OpenAI__TextModelName=gpt-4.1-nano" \
-    "OpenAI__ImageEndpoint=https://api.openai.com/v1/" \
     "OpenAI__ImageModelName=gpt-image-1.5" \
     "OpenAI__ImageCount=1" \
     "CronSchedule=0 0 6,8,14,16 * * *"
