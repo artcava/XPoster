@@ -249,36 +249,63 @@ public class QuoteOrchestrator : BaseOrchestrator
             return new Dictionary<SenderPlatform, Post?>();
         }
 
-        // // Broadcast strategy: Content must be re-summarised to fit each platform's character limit...
-        // var orderedSenders = senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
-        // var primarySender  = orderedSenders[0];
-        // var quote = await textProvider.GetSummaryAsync("Generate a motivational tech quote.", primarySender.MessageMaxLenght, ct);
-        // if (string.IsNullOrWhiteSpace(rawBaseSummary))
-        // {
-        //     _logger.LogError("Quote generation failed for primary sender {Platform}.", primarySender.Platform);
-        //     _sendIt = false;
-        //     return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
-        // }
+        // Build the PromptRequest value object — the orchestrator owns prompt intent.
+        var request = new PromptRequest
+        {
+            InputText           = "Generate a motivational tech quote.",
+            SystemPromptTemplate = "<your system prompt template>",
+            UserPromptTemplate   = "<your user prompt template>",
+            MaxOutputLength      = _senders.Max(s => s.MessageMaxLenght),
+        };
 
-        // var result         = new Dictionary<SenderPlatform, Post?>();
-        // var previousSummary = rawBaseSummary;
-        // foreach (var sender in orderedSenders)
-        // {
-        //     // ...
-        //     result[sender.Platform] = new Post { Content = content, Image = imageBytes };
-        // }
+        var quote = await _textProvider.GenerateTextAsync(request, ct);
+
+        if (string.IsNullOrWhiteSpace(quote))
+        {
+            SendIt = false;
+            return new Dictionary<SenderPlatform, Post?>();
+        }
 
         byte[]? image = null;
         if (_imageProvider is not null)
-            image = await _imageProvider.GenerateImageAsync(quote, ct);
+        {
+            var imageRequest = new ImagePromptRequest
+            {
+                InputText            = quote,
+                SystemPromptTemplate = "<your image system prompt>",
+                UserPromptTemplate   = "<your image user prompt>",
+            };
+            image = await _imageProvider.GenerateImageAsync(imageRequest, ct);
+        }
 
         // Broadcast strategy: same post to every configured sender
         var post = new Post { Content = quote, Image = image };
         SendIt = true;
-        return senders.ToDictionary(s => s.Platform, _ => (Post?)post);
+        return _senders.ToDictionary(s => s.Platform, _ => (Post?)post);
     }
 }
 ```
+
+#### Prompt value objects
+
+All prompt data is transported via **value objects** constructed by the orchestrator and passed to the provider interfaces:
+
+| Type | Used by | Purpose |
+|---|---|---|
+| `PromptRequest` | `ITextToTextProvider.GenerateTextAsync` | Carries input text, system/user prompt templates, temperature, max output length, max token budget, and optional input text label |
+| `ImagePromptRequest` | `ITextToImageProvider.GenerateImageAsync` | Extends `PromptRequest` with `ImageQuantity` and `ImageSize` for image generation parameters |
+
+The orchestrator is responsible for constructing these objects; the provider is responsible only for executing them. This ensures that **prompt intent stays in the orchestration layer** and never leaks into provider implementations.
+
+`PromptStepOptions` (from `FeedPromptOptions` configuration) maps to `PromptRequest`/`ImagePromptRequest` at runtime: for the `Summary` role, `MaxOutputLength` is resolved from `ISender.MessageMaxLenght` rather than from configuration — all other fields are read directly from the corresponding `PromptStepOptions` entry.
+
+The `PromptRole` enum identifies each step in the orchestration flow:
+
+| Value | Step |
+|---|---|
+| `Summary` | Generates the primary text summary from raw feed content |
+| `ImagePromptDerivation` | Derives the image-generation prompt from the summary text |
+| `ImageGeneration` | Generates the image from the derived prompt |
 
 #### Broadcast vs. per-sender content adaptation
 
@@ -289,7 +316,7 @@ Choose the strategy that fits the orchestrator's purpose:
 | **Broadcast** | Same content works on every target platform | `PowerLawOrchestrator` — deterministic text, no AI, broadcast identical `Post` to all senders |
 | **Per-sender adaptation** | Content must be re-summarised to fit each platform's character limit | `FeedOrchestrator` — AI base summary at primary sender's limit, AI re-summarise for each secondary sender |
 
-For a **per-sender adaptation** pattern, iterate `senders` and call `textProvider.GetSummaryAsync` independently per sender when the base summary exceeds the sender's `MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
+For a **per-sender adaptation** pattern, iterate `senders` and call `_textProvider.GenerateTextAsync` independently per sender with a new `PromptRequest` whose `MaxOutputLength` is set to `sender.MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
 
 > **`OrchestrateAsync` invariant**: return an **empty dictionary** with `SendIt = false` — not throw — when content cannot be produced. `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
 
@@ -355,25 +382,28 @@ public enum AiProvider
 
 ### Step 2 — Implement the Capability Interface(s)
 
+Provider methods receive typed value objects (`PromptRequest` / `ImagePromptRequest`) constructed by the orchestrator. Providers must not impose any prompt-shaping logic; they must execute the request as supplied.
+
 **Text + Image provider** (e.g. Anthropic supports both):
 
 ```csharp
 // src/Services/Ai/AnthropicService.cs
 public class AnthropicService : ITextToTextProvider, ITextToImageProvider
 {
-    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default)
+    public async Task<string> GenerateTextAsync(PromptRequest request, CancellationToken cancellationToken = default)
     {
-        // Call Anthropic Messages API for summarisation
+        // Use request.SystemPromptTemplate, request.UserPromptTemplate,
+        // request.InputText, request.Temperature, request.MaxOutputLength, etc.
+        // Call Anthropic Messages API for text generation.
+        return generatedText;
     }
 
-    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default)
+    public async Task<byte[]> GenerateImageAsync(ImagePromptRequest request, CancellationToken cancellationToken = default)
     {
-        // Call Anthropic Messages API for prompt generation
-    }
-
-    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default)
-    {
-        // Call Anthropic image generation API
+        // Use request.SystemPromptTemplate, request.UserPromptTemplate,
+        // request.InputText, request.ImageQuantity, request.ImageSize, etc.
+        // Call Anthropic image generation API.
+        return imageBytes;
     }
 }
 ```
@@ -384,8 +414,10 @@ public class AnthropicService : ITextToTextProvider, ITextToImageProvider
 // src/Services/Ai/MyTextOnlyService.cs
 public class MyTextOnlyService : ITextToTextProvider
 {
-    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default) { ... }
-    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default) { ... }
+    public async Task<string> GenerateTextAsync(PromptRequest request, CancellationToken cancellationToken = default)
+    {
+        // Execute the text-to-text step using request fields.
+    }
     // No GenerateImageAsync — ITextToImageProvider is not implemented.
     // Slots using this provider will receive null for imageProvider — intentional.
 }
@@ -397,8 +429,11 @@ public class MyTextOnlyService : ITextToTextProvider
 // src/Services/Ai/MyImageOnlyService.cs
 public class MyImageOnlyService : ITextToImageProvider
 {
-    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default) { ... }
-    // No text methods — ITextToTextProvider is not implemented.
+    public async Task<byte[]> GenerateImageAsync(ImagePromptRequest request, CancellationToken cancellationToken = default)
+    {
+        // Execute the image generation step using request fields.
+    }
+    // No GenerateTextAsync — ITextToTextProvider is not implemented.
     // Slots using this provider will receive null for textProvider — intentional.
 }
 ```
@@ -493,6 +528,7 @@ All extensions must respect the following invariants to integrate correctly with
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a dictionary of posts. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `BaseOrchestrator.PostAsync`, which dispatches all senders in parallel via `Task.WhenAll`.
 - **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return an empty dictionary early when `textProvider` is null and text generation is required.
+- **Orchestrators own prompt intent.** Construct `PromptRequest` and `ImagePromptRequest` value objects in the orchestrator and pass them to the provider interfaces. Do not embed raw prompt strings or generation parameters inside provider implementations.
 - **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
 - **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. Creating `new HttpClient()` inline is prohibited.
