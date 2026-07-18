@@ -125,7 +125,7 @@ public class TikTokSender : ISender
 }
 ```
 
-> `MessageMaxLenght` must reflect the platform's actual character limit. `FeedOrchestrator` uses this value as the target length for AI summarisation; an incorrect value leads to content that is too long or wastes character budget.
+> `MessageMaxLenght` must reflect the platform's actual character limit. The orchestrator reads this value from each resolved sender at runtime to determine the target length for AI summarisation. An incorrect value leads to content that is too long or wastes character budget.
 
 ### Step 3 — Register in DI
 
@@ -208,13 +208,13 @@ private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles =
 
 `orchestratorContextKey` is a nullable `string?` that carries an optional semantic label for the slot — typically the topic or feed theme used by the orchestrator to scope content retrieval or prompt generation (e.g. `"Bitcoin"`, `"PowerLaw"`). When `null`, the orchestrator applies no topic scoping. The value is passed through to the orchestrator at runtime and is not interpreted by `OrchestratorFactory`.
 
-To publish to multiple platforms in the same slot, list all target senders in **descending `MessageMaxLength` order** (widest first):
+To publish to multiple platforms in the same slot, list all target senders in any order — **the orchestrator sorts them internally by `MessageMaxLength` (descending) at runtime**:
 
 ```csharp
 new ScheduledOrchestrationProfile(
     orchestratorContextKey: "TikTok Topic",
     hour: 20,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (2 800) → first
+    senderPlatforms: new[] { SenderPlatform.TikTok, SenderPlatform.LinkedIn },  // order is irrelevant
     orchestratorType: typeof(FeedOrchestrator),
     textProvider: AiProvider.OpenAi,
     imageProvider: AiProvider.OpenAi),
@@ -322,7 +322,7 @@ Choose the strategy that fits the orchestrator's purpose:
 | **Broadcast** | Same content works on every target platform | `PowerLawOrchestrator` — deterministic text, no AI, broadcast identical `Post` to all senders |
 | **Per-sender adaptation** | Content must be re-summarised to fit each platform's character limit | `FeedOrchestrator` — AI base summary at primary sender's limit, AI re-summarise for each secondary sender |
 
-For a **per-sender adaptation** pattern, iterate `senders` and call `_textProvider.GenerateTextAsync` independently per sender with a new `PromptRequest` whose `MaxOutputLength` is set to `sender.MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
+For a **per-sender adaptation** pattern, the orchestrator sorts senders internally by `MessageMaxLength` descending (widest limit first) and iterates them in that order. For each sender, call `_textProvider.GenerateTextAsync` with a new `PromptRequest` whose `MaxOutputLength` is set to `sender.MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
 
 > **`OrchestrateAsync` invariant**: return an **empty dictionary** with `SendIt = false` — not throw — when content cannot be produced. `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
 
@@ -529,7 +529,7 @@ All extensions must respect the following invariants to integrate correctly with
 
 - **Senders must be stateless.** Do not cache authentication tokens in instance fields; inject them via `IOptions<TCredentials>` (bound at startup from Key Vault via the Configuration Provider). The DI container manages lifetime.
 - **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
-- **`MessageMaxLenght` must be accurate.** `FeedOrchestrator` relies on this value to size AI summarisation calls. An incorrect value causes content that is either silently truncated at the platform layer or wastes character budget on secondary re-summarisation.
+- **`MessageMaxLenght` must be accurate.** The orchestrator reads this value from each resolved sender to size AI summarisation calls and to determine the processing order of senders (widest limit first). An incorrect value causes content that is either silently truncated at the platform layer or wastes character budget on secondary re-summarisation.
 - **`OrchestrateAsync` must return an empty dictionary with `SendIt = false`, not throw, when no content can be produced.** `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
 - **`OrchestrateAsync` returns one entry per configured sender.** The dictionary key is `SenderPlatform`; a `null` value signals content generation failure for that specific sender. `BaseOrchestrator.PostAsync` skips null entries with a warning log and returns `false` for the overall slot.
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
@@ -542,4 +542,5 @@ All extensions must respect the following invariants to integrate correctly with
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
 - **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
 - **`ScheduledOrchestrationProfile` always requires `orchestratorContextKey` as the first constructor argument.** Pass `null` when no topic scoping is needed. Never omit the parameter — it is positional and the compiler will reject a call that skips it.
+- **The order of `senderPlatforms` in `ScheduledOrchestrationProfile` does not matter.** The orchestrator sorts senders internally by `MessageMaxLength` descending at runtime — no manual ordering is required or expected at the profile level.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.
