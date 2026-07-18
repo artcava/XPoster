@@ -1139,6 +1139,164 @@ public class FeedOrchestratorTests
     }
 
     // ---------------------------------------------------------------------------
+    // BuildPromptRequest — field mapping edge cases
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_PassNullInputTextLabel_ToPromptRequest()
+    {
+        // ARRANGE
+        var fakeFeeds   = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "L" } };
+        var fakeSummary = "summary";
+
+        // Step Summary senza InputTextLabel
+        var promptOptions = new FeedPromptOptions
+        {
+            Steps = new List<PromptStepOptions>
+            {
+                SummaryStep() with { InputTextLabel = null },
+                ImageDerivationStep(),
+                ImageGenerationStep()
+            }.AsReadOnly()
+        };
+
+        var context = new FeedOrchestratorContext
+        {
+            FeedUrls      = DefaultUrls.AsReadOnly(),
+            PromptOptions = promptOptions
+        };
+
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
+
+        _mockFeedService
+            .Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<IEnumerable<string>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeFeeds);
+
+        PromptRequest? capturedRequest = null;
+
+        _mockTextProvider
+            .Setup(s => s.GenerateTextAsync(
+                It.Is<PromptRequest>(r =>
+                    r.SystemPromptTemplate == SummaryStep().SystemPromptTemplate),
+                It.IsAny<CancellationToken>()))
+            .Callback<PromptRequest, CancellationToken>((req, _) => capturedRequest = req)
+            .ReturnsAsync(fakeSummary);
+
+        _mockTextProvider
+            .Setup(s => s.GenerateTextAsync(
+                It.Is<PromptRequest>(r =>
+                    r.SystemPromptTemplate == ImageDerivationStep().SystemPromptTemplate),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync("prompt");
+
+        _mockImageProvider
+            .Setup(s => s.GenerateImageAsync(
+                It.IsAny<ImagePromptRequest>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = new FeedOrchestrator(
+            new List<ISender> { _mockSender.Object }.AsReadOnly(),
+            _mockLogger.Object,
+            _mockFeedService.Object,
+            context,
+            _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
+            _mockTextProvider.Object,
+            _mockImageProvider.Object);
+
+        // ACT
+        var posts = await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        Assert.NotEmpty(posts);
+        Assert.NotNull(capturedRequest);
+        Assert.Null(capturedRequest!.InputTextLabel);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_Should_PassNullMaxTokenBudget_ToPromptRequest()
+    {
+        // ARRANGE
+        var fakeFeeds   = new List<RSSFeed> { new() { Title = "T", Content = "C", Link = "L" } };
+        var fakeSummary = "summary";
+
+        // Step Summary senza MaxTokenBudget
+        var promptOptions = new FeedPromptOptions
+        {
+            Steps = new List<PromptStepOptions>
+            {
+                SummaryStep() with { MaxTokenBudget = null },
+                ImageDerivationStep(),
+                ImageGenerationStep()
+            }.AsReadOnly()
+        };
+
+        var context = new FeedOrchestratorContext
+        {
+            FeedUrls      = DefaultUrls.AsReadOnly(),
+            PromptOptions = promptOptions
+        };
+
+        _mockSender.Setup(s => s.MessageMaxLength).Returns(280);
+
+        _mockFeedService
+            .Setup(s => s.GetFeedsAsync(
+                It.IsAny<string>(),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<IEnumerable<string>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(fakeFeeds);
+
+        PromptRequest? capturedRequest = null;
+
+        _mockTextProvider
+            .Setup(s => s.GenerateTextAsync(
+                It.Is<PromptRequest>(r =>
+                    r.SystemPromptTemplate == SummaryStep().SystemPromptTemplate),
+                It.IsAny<CancellationToken>()))
+            .Callback<PromptRequest, CancellationToken>((req, _) => capturedRequest = req)
+            .ReturnsAsync(fakeSummary);
+
+        _mockTextProvider
+            .Setup(s => s.GenerateTextAsync(
+                It.Is<PromptRequest>(r =>
+                    r.SystemPromptTemplate == ImageDerivationStep().SystemPromptTemplate),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync("prompt");
+
+        _mockImageProvider
+            .Setup(s => s.GenerateImageAsync(
+                It.IsAny<ImagePromptRequest>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new byte[] { 1 });
+
+        var orchestrator = new FeedOrchestrator(
+            new List<ISender> { _mockSender.Object }.AsReadOnly(),
+            _mockLogger.Object,
+            _mockFeedService.Object,
+            context,
+            _mockTagReplacementProvider.Object,
+            _mockTagReplacementService.Object,
+            _mockTextProvider.Object,
+            _mockImageProvider.Object);
+
+        // ACT
+        var posts = await orchestrator.OrchestrateAsync();
+
+        // ASSERT
+        Assert.NotEmpty(posts);
+        Assert.NotNull(capturedRequest);
+        Assert.Null(capturedRequest!.MaxTokenBudget);
+    }
+
+    // ---------------------------------------------------------------------------
     // Image paths
     // ---------------------------------------------------------------------------
 
