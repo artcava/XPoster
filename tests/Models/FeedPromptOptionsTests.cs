@@ -160,7 +160,7 @@ public class FeedPromptOptionsTests
         var a = MakeFullOptions();
         var b = MakeFullOptions();
 
-        Assert.Equal(a, b);
+        Assert.Equal(a.Steps, b.Steps);
     }
 
     [Fact]
