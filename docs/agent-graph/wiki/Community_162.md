@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
-- **XPoster.Models** (2 connections)
+- **XCredentialsValidator.cs** (4 connections)
+- **XPoster.Credentials** (2 connections)
 - **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 180]] (2 shared connections)
+- [[Community 190]] (2 shared connections)
 
 ## Audit Trail
 

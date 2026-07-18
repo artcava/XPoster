@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests** (2 connections)
-- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
-- **BuildProvider()** (2 connections)
+- **AzureFoundryService.cs** (12 connections)
+- **AzureFoundryService.cs** (12 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **if()** (2 connections)
+- **while()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **catch()** (2 connections)
+- **BuildChatPayload()** (2 connections)
+- **AzureFoundryService()** (2 connections)
 
 ## Relationships
 

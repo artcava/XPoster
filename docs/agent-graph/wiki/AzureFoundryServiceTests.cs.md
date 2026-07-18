@@ -1,32 +1,32 @@
 # AzureFoundryServiceTests.cs
 
-> God node · 35 connections
+> God node · 40 connections
 
-**Community:** [[Community 14]]
+**Community:** [[Community 2]]
 
 ## Connections by Relation
 
 ### contains
+- [[AzureFoundryServiceTests.cs]]
+- [[AzureFoundryService()]]
 - [[AzureFoundryServiceTests]]
+- [[BuildImagePromptRequest()]]
+- [[BuildPromptRequest()]]
 - [[BuildService()]]
-- [[GenerateImageAsync_RequestBodyContainsModelField()]]
+- [[ChatCompletionJson()]]
+- [[GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()]]
+- [[GenerateImageAsync_RequestBodyContainsModelFromOptions()]]
+- [[GenerateImageAsync_RequestBodyContainsSizeAndQuantityFromRequest()]]
 - [[GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()]]
 - [[GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()]]
+- [[GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()]]
+- [[GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()]]
 - [[GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()]]
+- [[GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()]]
 - [[GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()]]
 - [[GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()]]
+- [[GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()]]
 - [[GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()]]
-- [[GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()]]
-- [[GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()]]
-- [[GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()]]
-- [[GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()]]
-- [[GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()]]
-- [[GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()]]
-- [[GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()]]
-- [[MakeHandlerMock()]]
-- [[XPoster.Tests.Services]]
-- [[AzureFoundryService()]]
-- [[ChatCompletionJson()]]
 
 ---
 

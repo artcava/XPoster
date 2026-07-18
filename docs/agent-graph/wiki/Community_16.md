@@ -1,32 +1,34 @@
 # Community 16
 
-> 15 nodes · cohesion 0.13
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
-- **new()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
-- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
-- **ValidPost()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **PromptStepOptionsTests.cs** (16 connections)
+- **PromptStepOptionsTests.cs** (16 connections)
+- **PromptStepOptions_NonImageSteps_ImageProperties_AreNull()** (2 connections)
+- **PromptStepOptions_AllRoles_CanBeConstructed()** (2 connections)
+- **PromptStepOptions_IsImmutable_AfterConstruction()** (2 connections)
+- **PromptStepOptions_ImageGenerationStep_ImageProperties_AreIndependent()** (2 connections)
+- **PromptStepOptions_ValueEquality_SameValues_AreEqual()** (2 connections)
+- **PromptStepOptions_WithExpression_PreservesUnchangedProperties()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PromptStepOptionsTests** (2 connections)
+- **PromptStepOptions_ValueEquality_DifferentOptionals_AreNotEqual()** (2 connections)
+- **PromptStepOptions_OptionalProperties_DefaultToNull()** (2 connections)
+- **PromptStepOptions_SummaryStep_MaxOutputLength_IsNullByConvention()** (2 connections)
+- **PromptStepOptions_Temperature_AcceptsZeroAndOne()** (2 connections)
+- **PromptStepOptions_RequiredProperties_AreSetCorrectly()** (2 connections)
+- **PromptStepOptions_OptionalProperties_AreSetCorrectly()** (2 connections)
+- **PromptStepOptions_ValueEquality_DifferentRole_AreNotEqual()** (2 connections)
 
 ## Relationships
 
-- [[Community 31]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

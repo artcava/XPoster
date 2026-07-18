@@ -1,30 +1,32 @@
 # Community 24
 
-> 13 nodes · cohesion 0.15
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **new()** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
+- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **ValidPost()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
-- [[Community 35]] (12 shared connections)
+- [[Community 32]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,17 +1,18 @@
 # Community 124
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (8 connections)
-- **if()** (2 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **Validate()** (2 connections)
+- **ICredentialsStartupValidator** (2 connections)
 
 ## Relationships
 
-- [[Community 111]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

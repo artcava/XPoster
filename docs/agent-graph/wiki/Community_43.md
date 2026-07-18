@@ -1,20 +1,19 @@
 # Community 43
 
-> 11 nodes · cohesion 0.35
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **CredentialsStartupValidator.cs** (10 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **Validate()** (2 connections)
-- **resolve()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **ValidateOptions()** (2 connections)
-- **catch()** (2 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XSender()** (2 connections)
+- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSenderResilienceTests** (2 connections)
+- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
+- **BuildSender()** (2 connections)
 
 ## Relationships
 
@@ -22,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

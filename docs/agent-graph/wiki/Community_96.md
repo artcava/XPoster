@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **IMetaPublishingService** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **SendAsync()** (2 connections)
+- **if()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 

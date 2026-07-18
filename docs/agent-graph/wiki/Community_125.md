@@ -1,13 +1,14 @@
 # Community 125
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **NoOrchestrator()** (2 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

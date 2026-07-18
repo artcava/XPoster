@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **GetPendingAsync()** (2 connections)
-- **SaveAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

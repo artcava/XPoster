@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **InSenderSendAsyncTests()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **BlobStorageService.cs** (7 connections)
+- **BlobStorageService.cs** (7 connections)
+- **BlobStorageService()** (2 connections)
+- **BlobUploadResult()** (2 connections)
+- **UploadAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **DeleteAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

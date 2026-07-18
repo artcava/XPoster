@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **if()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **DryRunSender()** (2 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **DryRunSlotProfileProvider.cs** (5 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 

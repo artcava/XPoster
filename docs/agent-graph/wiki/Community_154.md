@@ -1,16 +1,17 @@
 # Community 154
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **GetLabel()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 139]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

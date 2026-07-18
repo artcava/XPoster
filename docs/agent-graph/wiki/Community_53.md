@@ -1,26 +1,26 @@
 # Community 53
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **HttpClientExtensionsTests.cs** (8 connections)
+- **HttpClientExtensionsTests.cs** (8 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **foreach()** (2 connections)
+- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
+- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
+- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
+- **HttpClientExtensionsTests** (2 connections)
 
 ## Relationships
 
-- [[Community 73]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

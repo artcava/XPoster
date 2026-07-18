@@ -1,13 +1,14 @@
 # Community 127
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **DeepSeekOptionsExtensions.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **AddDeepSeekOptions()** (2 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **GenerateTextAsync()** (2 connections)
+- **ITextToTextProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

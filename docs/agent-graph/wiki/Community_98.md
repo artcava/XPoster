@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **IgSender_ImplementsISender()** (2 connections)
-- **IgSender()** (2 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **IgSenderTests()** (2 connections)
+- **DeepSeekService.cs** (9 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **if()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (10 shared connections)
+- [[Community 144]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **if()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
+- **DeepSeekOptionsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 142]] (3 shared connections)
+- [[Community 191]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

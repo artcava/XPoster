@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (9 connections)
-- **XSenderResilienceTests.cs** (9 connections)
-- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
-- **XSenderResilienceTests** (2 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSender()** (2 connections)
-- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
-- **BuildSender()** (2 connections)
+- **XFunctionTests.cs** (9 connections)
+- **XFunctionTests.cs** (9 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
 
 ## Relationships
 

@@ -1,27 +1,28 @@
 # Community 11
 
-> 18 nodes · cohesion 0.22
+> 19 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **IgSenderImageFlowTests.cs** (17 connections)
-- **IgSenderImageFlowTests.cs** (17 connections)
-- **IgSenderImageFlowTests** (2 connections)
-- **BuildSender()** (2 connections)
-- **CreateMalformedPngBytes()** (2 connections)
-- **IgSender()** (2 connections)
-- **NormalizeImage_WhenCodecIsNull_ReturnsNull()** (2 connections)
-- **NormalizeImage_WhenJpegIsAlreadyValid_ReturnsOriginalBytes()** (2 connections)
-- **NormalizeImage_WhenPngDecodesToNull_ReturnsNull()** (2 connections)
-- **NormalizeImage_WithValidJpeg_ReturnsSameBytes()** (2 connections)
-- **NormalizeImage_WithInvalidBytes_ReturnsNull()** (2 connections)
-- **Uri()** (2 connections)
-- **return()** (2 connections)
-- **SendAsync_WhenJsonResponseIdIsEmpty_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenJsonResponseMissingIdProperty_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenBlobUploadSucceeds_CreatesMediaContainerWithCorrectSasUrl()** (2 connections)
-- **NormalizeImage_WithValidPng_ReturnsJpegBytes()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **FeedPromptOptionsTests.cs** (18 connections)
+- **FeedPromptOptionsTests.cs** (18 connections)
+- **FeedPromptOptions_ValueEquality_DifferentStepCount_AreNotEqual()** (2 connections)
+- **FeedPromptOptions_Steps_AreSetCorrectly()** (2 connections)
+- **FeedPromptOptions_IsImmutable_AfterConstruction()** (2 connections)
+- **FeedPromptOptions_Steps_PreservesOrder()** (2 connections)
+- **FeedPromptOptions_Steps_CanBeASingleStep()** (2 connections)
+- **FeedPromptOptions_ValueEquality_SameSteps_AreEqual()** (2 connections)
+- **GetStep_EmptySteps_ThrowsInvalidOperationException()** (2 connections)
+- **FeedPromptOptionsTests** (2 connections)
+- **GetStep_DuplicateRole_ThrowsInvalidOperationException()** (2 connections)
+- **FeedPromptOptions_WithExpression_PreservesStepsReference()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **GetStep_MissingRole_ThrowsInvalidOperationException()** (2 connections)
+- **GetStep_ReturnsStepWithExpectedTemplates()** (2 connections)
+- **MakeStep()** (2 connections)
+- **MakeFullOptions()** (2 connections)
+- **FeedPromptOptions_ValueEquality_DifferentSteps_AreNotEqual()** (2 connections)
+- **GetStep_ExistingRole_ReturnsCorrectStep()** (2 connections)
 
 ## Relationships
 
@@ -29,7 +30,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 70 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

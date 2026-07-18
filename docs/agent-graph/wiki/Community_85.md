@@ -1,24 +1,23 @@
 # Community 85
 
-> 7 nodes · cohesion 0.29
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **new()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedUrls_Once()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ProviderReturnsEmptyList()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 134]] (4 shared connections)
+- [[Community 40]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

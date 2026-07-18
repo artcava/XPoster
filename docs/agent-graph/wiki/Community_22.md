@@ -1,23 +1,24 @@
 # Community 22
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **ModelsTests.cs** (13 connections)
-- **ModelsTests.cs** (13 connections)
-- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
-- **ModelsTests** (2 connections)
-- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
-- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
-- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
-- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
-- **Post_CanHold_ImageBytes()** (2 connections)
-- **ImageData_CanBeCreated_WithUrl()** (2 connections)
-- **AIResponse_CanBeCreated_WithChoices()** (2 connections)
-- **Choice_CanBeCreated_WithMessage()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Message_CanBeCreated_WithContent()** (2 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **Initialize_WhenDependencyTypeIsNotHttp_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenDataIsNull_DoesThrow()** (2 connections)
+- **Initialize_WhenDataIsEmpty_DoesNotThrow()** (2 connections)
+- **Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()** (2 connections)
+- **MaskUrlTelemetryProcessorTests** (2 connections)
+- **Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenTelemetryIsNotDependency_DoesNothing()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()** (2 connections)
+- **Initialize_WhenHttpDependencyNotFacebook_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **Initialize_WhenFacebookDataIsMalformedUrl_DataRemainsUnchanged()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

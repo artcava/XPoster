@@ -1,36 +1,42 @@
 # Community 9
 
-> 19 nodes · cohesion 0.11
+> 25 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **AzureFoundryServiceTests** (2 connections)
-- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
-- **GenerateImageAsync_RequestBodyContainsModelField()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenCancellationRequested_ThrowsOperationCanceledException()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ForImagePromptRole_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsBadGateway_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_AppliesCustomInputTextLabel_InUserTemplate()** (2 connections)
+- **GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_UsesSystemAndUserTemplatesFromRequest_NotFromOptions()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **GenerateTextAsync_WhenNoMaxOutputLength_DoesNotRetryRegardlessOfLength()** (2 connections)
+- **GenerateTextAsync_WhenResponseFitsWithinMaxOutputLength_ReturnsSingleCallResult()** (2 connections)
+- **GenerateTextAsync_WhenUsedForImagePromptDerivation_ReturnsPrompt()** (2 connections)
+- **DeepSeekService()** (2 connections)
 - **BuildService()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 - **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
+- **new()** (2 connections)
+- **SummaryRequest()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsValidResponse_ReturnsContent()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmptyString()** (2 connections)
+- **ImagePromptDerivationRequest()** (2 connections)
+- **DeepSeekServiceTests** (2 connections)
 
 ## Relationships
 
-- [[Community 14]] (17 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 71 (100%)
+- EXTRACTED: 94 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,24 +1,23 @@
 # Community 86
 
-> 7 nodes · cohesion 0.52
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
+- **PerplexityService.cs** (9 connections)
 - **if()** (2 connections)
-- **Apply()** (2 connections)
-- **foreach()** (2 connections)
-- **TagReplacementService()** (2 connections)
+- **while()** (2 connections)
 - **XPoster.Services** (2 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 141]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

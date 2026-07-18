@@ -1,23 +1,23 @@
 # Community 95
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **var()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **HttpClient()** (2 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
 
 ## Relationships
 
-- [[Community 3]] (31 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

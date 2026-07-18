@@ -1,25 +1,25 @@
 # Community 69
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **PostTests.cs** (7 connections)
-- **PostTests.cs** (7 connections)
-- **Firm_IsNotNullOrEmpty()** (2 connections)
-- **Post_CanSetAndGetAllProperties()** (2 connections)
-- **PostTests** (2 connections)
-- **Post_EmptyContent_IsAllowed()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Post_DefaultImageIsNull()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (13 connections)
+- **OrchestrateAsync_TwoSlots_Should_UseDifferentFeedUrls_Independently()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **OrchestrateAsync_Should_PassSenderMessageMaxLength_As_MaxOutputLength_In_SummaryRequest()** (2 connections)
+- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ContextHasNoFeedUrls()** (2 connections)
+- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
+- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 99]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

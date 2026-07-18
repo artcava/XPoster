@@ -1,21 +1,21 @@
 # Community 68
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
+- **OpenAiService.cs** (12 connections)
+- **BuildChatPayload()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **var()** (2 connections)
+- **while()** (2 connections)
+- **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 111]] (5 shared connections)
 
 ## Audit Trail
 

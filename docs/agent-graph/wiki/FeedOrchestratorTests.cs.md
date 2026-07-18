@@ -1,32 +1,32 @@
 # FeedOrchestratorTests.cs
 
-> God node · 33 connections
+> God node · 42 connections
 
 **Community:** [[Community 1]]
 
 ## Connections by Relation
 
 ### contains
-- [[XPoster.Tests.Orchestrators]]
-- [[FeedOrchestratorTests()]]
-- [[if()]]
-- [[foreach()]]
-- [[CreateOrchestrator()]]
-- [[new()]]
+- [[FeedOrchestratorTests.cs]]
+- [[BuildContext()]]
 - [[CreateMultiSenderOrchestrator()]]
-- [[OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()]]
-- [[OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()]]
-- [[OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()]]
-- [[OrchestrateAsync_SkipsAICall_WhenBaseSummaryFitsSecondaryLimit()]]
+- [[CreateOrchestrator()]]
+- [[DefaultPromptOptions()]]
+- [[FeedOrchestratorTests()]]
+- [[foreach()]]
+- [[if()]]
+- [[ImageDerivationStep()]]
+- [[ImageGenerationStep()]]
+- [[new()]]
 - [[OrchestrateAsync_AppliesHashtagsIndependently_PerSender()]]
 - [[OrchestrateAsync_DerivesImagePromptFromRawBaseSummary_BeforeHashtags()]]
-- [[OrchestrateAsync_SharesImageBytes_AcrossSenders()]]
+- [[OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()]]
+- [[OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()]]
 - [[OrchestrateAsync_ReturnsNullEntry_WhenReSummarisationFails()]]
-- [[OrchestrateAsync_ThirdSender_ChecksAgainstPreviousSummary_AndReSummarisesFromFeedContent()]]
-- [[OrchestrateAsync_ThirdSender_ReusesSecondSummary_WhenSecondFitsAndThirdDoesNot()]]
-- [[OrchestrateAsync_ThirdSender_ReusesUpdatedPreviousSummary_WhenItFitsThirdLimit()]]
-- [[OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()]]
-- [[OrchestrateAsync_Should_ReturnNull_When_FeedUrlProviderReturnsEmptyList()]]
+- [[OrchestrateAsync_SharesImageBytes_AcrossSenders()]]
+- [[OrchestrateAsync_Should_ApplyHashtagsCorrectly()]]
+- [[OrchestrateAsync_Should_CallTagReplacementProvider_ExactlyOnce_WhenOrchestrationSucceeds()]]
+- [[OrchestrateAsync_Should_CreateMessageWithImage_WhenFeedsAreFound()]]
 
 ---
 

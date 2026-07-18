@@ -1,17 +1,16 @@
 # Community 74
 
-> 8 nodes · cohesion 0.46
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (7 connections)
-- **FeedOrchestrator.cs** (7 connections)
-- **foreach()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **Program.cs** (6 connections)
+- **Program.cs** (6 connections)
+- **Uri()** (2 connections)
 - **if()** (2 connections)
-- **AcquireFeedContentAsync()** (2 connections)
-- **FeedOrchestrator()** (2 connections)
-- **catch()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **BlobServiceClient()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

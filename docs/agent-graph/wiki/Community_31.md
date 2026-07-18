@@ -1,25 +1,26 @@
 # Community 31
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
-- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
-- **Platform_ReturnsDryRun()** (2 connections)
-- **DryRunSenderTests()** (2 connections)
-- **BuildSender()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
 - **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
-- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
-- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
-- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
 
 ## Relationships
 
-- [[Community 16]] (14 shared connections)
+- [[Community 37]] (12 shared connections)
 
 ## Audit Trail
 

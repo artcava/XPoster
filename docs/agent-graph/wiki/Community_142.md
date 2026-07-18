@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **AddHttpClients()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **AiServiceHelper.cs** (10 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 169]] (3 shared connections)
+- [[Community 73]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

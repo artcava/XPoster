@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **CreateValidJpegBytes()** (2 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **while()** (2 connections)
-- **var()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (7 shared connections)
+- [[Community 55]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

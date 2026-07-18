@@ -1,24 +1,23 @@
 # Community 84
 
-> 7 nodes · cohesion 0.29
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
-- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
-- **if()** (2 connections)
-- **CreateValidJpegBytes()** (2 connections)
-- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **TimeProviderTests** (2 connections)
 
 ## Relationships
 
-- [[Community 62]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

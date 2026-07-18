@@ -1,21 +1,21 @@
 # Community 141
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **Post.cs** (3 connections)
-- **Post.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **Post** (2 connections)
+- **PerplexityService.cs** (9 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **BuildChatPayload()** (2 connections)
+- **PerplexityService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 86]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

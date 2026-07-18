@@ -1,23 +1,24 @@
 # Community 23
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **PromptRoleTests.cs** (14 connections)
+- **PromptRoleTests.cs** (14 connections)
+- **PromptRole_ParseFromString_ReturnsCorrectMember()** (2 connections)
+- **PromptRole_HasExactlyThreeMembers()** (2 connections)
+- **PromptRole_BackingValue_IsStable()** (2 connections)
+- **PromptRole_ParseFromStringIgnoreCase_ReturnsCorrectMember()** (2 connections)
+- **PromptRole_DefinedMember_IsDefined()** (2 connections)
+- **PromptRole_ParseInvalidName_Throws()** (2 connections)
+- **PromptRole_TryParse_ValidName_ReturnsTrue()** (2 connections)
+- **PromptRole_TryParse_InvalidName_ReturnsFalse()** (2 connections)
+- **PromptRole_ToString_ReturnsName()** (2 connections)
+- **PromptRole_UndefinedValueNotPresentInMap_ThrowsKeyNotFound()** (2 connections)
+- **PromptRole_UsedAsDictionaryKey_LookupSucceeds()** (2 connections)
+- **PromptRoleTests** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

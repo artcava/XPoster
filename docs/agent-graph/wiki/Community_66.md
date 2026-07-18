@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService()** (2 connections)
-- **if()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **BlobUploadResult()** (2 connections)
-- **UploadAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
 
 ## Relationships
 

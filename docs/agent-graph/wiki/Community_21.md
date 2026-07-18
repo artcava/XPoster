@@ -1,23 +1,24 @@
 # Community 21
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPosterContainerPollingFunction.cs** (13 connections)
-- **XPoster** (2 connections)
-- **XPosterContainerPollingFunction()** (2 connections)
-- **catch()** (2 connections)
-- **switch()** (2 connections)
-- **Run()** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **ProcessContainerAsync()** (2 connections)
-- **HandleFinishedAsync()** (2 connections)
-- **PollPendingContainersAsync()** (2 connections)
-- **HandleTerminalFailureAsync()** (2 connections)
-- **TryDeleteBlobAsync()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
+- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
+- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

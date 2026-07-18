@@ -1,20 +1,19 @@
 # Community 42
 
-> 11 nodes · cohesion 0.35
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSender()** (2 connections)
-- **ValidPost()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **BuildSender()** (2 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **MetaPublishingService.cs** (9 connections)
+- **catch()** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **MetaPublishingService()** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **GetApiVersion()** (2 connections)
+- **PublishContainerAsync()** (2 connections)
 
 ## Relationships
 
@@ -22,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

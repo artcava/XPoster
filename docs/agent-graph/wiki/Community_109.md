@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITextToImageProvider.cs** (4 connections)
-- **ITextToImageProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITextToImageProvider** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
