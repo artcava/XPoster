@@ -11,6 +11,7 @@ public sealed class CredentialsStartupValidator : ICredentialsStartupValidator
     private readonly IOptions<XCredentials> _xOptions;
     private readonly IOptions<LinkedInCredentials> _linkedInOptions;
     private readonly IOptions<InstagramCredentials> _instagramOptions;
+    private readonly IOptions<FacebookCredentials> _facebookOptions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CredentialsStartupValidator"/> class with the specified options.
@@ -18,14 +19,17 @@ public sealed class CredentialsStartupValidator : ICredentialsStartupValidator
     /// <param name="xOptions">The options for XCredentials.</param>
     /// <param name="linkedInOptions">The options for LinkedInCredentials.</param>
     /// <param name="instagramOptions">The options for InstagramCredentials.</param>
+    /// <param name="facebookOptions">The options for FacebookCredentials.</param>
     public CredentialsStartupValidator(
         IOptions<XCredentials> xOptions,
         IOptions<LinkedInCredentials> linkedInOptions,
-        IOptions<InstagramCredentials> instagramOptions)
+        IOptions<InstagramCredentials> instagramOptions,
+        IOptions<FacebookCredentials> facebookOptions)
     {
         _xOptions = xOptions;
         _linkedInOptions = linkedInOptions;
         _instagramOptions = instagramOptions;
+        _facebookOptions = facebookOptions;
     }
 
     /// <summary>
@@ -39,6 +43,7 @@ public sealed class CredentialsStartupValidator : ICredentialsStartupValidator
         ValidateOptions("XCredentials", () => _xOptions.Value, failures);
         ValidateOptions("LinkedInCredentials", () => _linkedInOptions.Value, failures);
         ValidateOptions("InstagramCredentials", () => _instagramOptions.Value, failures);
+        ValidateOptions("FacebookCredentials", () => _facebookOptions.Value, failures);
 
         if (failures.Count > 0)
         {

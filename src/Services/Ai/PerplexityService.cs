@@ -30,82 +30,50 @@ public class PerplexityService : ITextToTextProvider
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
+    public async Task<string> GenerateTextAsync(
+        PromptRequest request,
+        CancellationToken cancellationToken = default)
     {
+        var text = request.InputText;
+        var maxLength = request.MaxOutputLength;
         int tries = 0;
-        while (text.Length > messageMaxLength && tries <= 2)
+        do
         {
-            tries++;
             var response = await _client.PostAsJsonAsync(
                 GetChatCompletionsEndpoint(),
-                BuildSummaryPayload(text, messageMaxLength),
+                BuildChatPayload(text, request),
                 cancellationToken);
-
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
-                response, "Perplexity", "summary generation", _logger, cancellationToken);
-
+                response, "Perplexity", "text generation", _logger, cancellationToken);
             if (!success) return string.Empty;
             text = content;
+            tries++;
         }
+        while (maxLength.HasValue && text.Length > maxLength.Value && tries <= 2);
         return text;
     }
 
-    /// <inheritdoc/>
-    public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
+    private object BuildChatPayload(string text, PromptRequest request)
     {
-        var response = await _client.PostAsJsonAsync(
-            GetChatCompletionsEndpoint(),
-            BuildImagePromptPayload(text),
-            cancellationToken);
-
-        var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
-            response, "Perplexity", "image prompt generation", _logger, cancellationToken);
-
-        return success ? content : string.Empty;
-    }
-
-    private string GetChatCompletionsEndpoint() =>
-        $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
-
-    private object BuildSummaryPayload(string text, int messageMaxLength)
-    {
-        var tokenDivisor = Math.Max(1, _options.SummaryMaxTokensPerChar);
-        var maxTokens = Math.Max(1, messageMaxLength / tokenDivisor);
-        var underCharacters = Math.Max(1, messageMaxLength - _options.SummarySafetyMarginChars);
-
-        var systemContent = _options.SummarySystemPromptTemplate
-            .Replace("{MaxChars}", underCharacters.ToString(), StringComparison.Ordinal);
-        var userContent = _options.SummaryUserPromptTemplate
-            .Replace("{Text}", text, StringComparison.Ordinal);
-
+        var systemContent = request.SystemPromptTemplate
+            .Replace("{MaxChars}", request.MaxOutputLength.ToString(), StringComparison.Ordinal);
+        var label = request.InputTextLabel ?? "{Text}";
+        var userContent = request.UserPromptTemplate
+            .Replace(label, text, StringComparison.Ordinal);
         return new
         {
-            model = _options.DeploymentName,
+            model = _options.TextModelName,
             messages = new[]
             {
                 new { role = "system", content = systemContent },
                 new { role = "user",   content = userContent   }
             },
-            max_tokens = maxTokens,
-            temperature = _options.SummaryTemperature
+            max_tokens = request.MaxTokenBudget,
+            temperature = request.Temperature
         };
     }
 
-    private object BuildImagePromptPayload(string summary)
-    {
-        var userContent = _options.ImagePromptUserTemplate
-            .Replace("{Summary}", summary, StringComparison.Ordinal);
+    private string GetChatCompletionsEndpoint() =>
+        $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
 
-        return new
-        {
-            model = _options.DeploymentName,
-            messages = new[]
-            {
-                new { role = "system", content = _options.ImagePromptSystemTemplate },
-                new { role = "user",   content = userContent                         }
-            },
-            max_tokens = _options.ImagePromptMaxTokens,
-            temperature = _options.ImagePromptTemperature
-        };
-    }
 }

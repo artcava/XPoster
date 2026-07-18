@@ -62,106 +62,194 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
 {
   "IsEncrypted": false,
   "Values": {
-
-    // ── Azure Functions Runtime ───────────────────────────────────────────────────────
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-
-    // ── Scheduler ────────────────────────────────────────────────
     "CronSchedule": "0 0 6,8,14,16 * * *",
     "ContainerPollingSchedule": "0 */2 * * * *",
-    "ForceHour": "",
-    "EnableDryRunSlot": "false",
-
-    // ── Feed URLs ────────────────────────────────────────────────
-    "FeedOptions__Urls__0": "https://example.com/feed/rss",
-    "FeedOptions__Urls__1": "https://another.example.com/rss",
-    // Add additional entries as FeedOptions__Urls__2, __3, etc.
-    // In Azure App Settings use the same flat key convention.
-    // At least one URL is required for FeedOrchestrator to produce content.
-
-    // ── Tag Replacements ─────────────────────────────────────────
-    // Optional. Maps plain words in the AI summary to hashtag equivalents.
-    // FeedOrchestrator replaces the first occurrence of each key (case-insensitive).
-    // An absent or empty section is valid — summaries pass through unchanged.
-    "TagReplacementOptions__Replacements__bitcoin": "#Bitcoin",
-    "TagReplacementOptions__Replacements__btc": "#BTC",
-    // Add further entries as TagReplacementOptions__Replacements__<word>.
-
-    // ── AI Provider Selector ──────────────────────────────────────────
     "AiProvider": "OpenAi",
 
-    // ── Key Vault ────────────────────────────────────────────────
+    // -----------------------------------------------------------------------
+    // Local development slot override.
+    // Set to a UTC hour (0-23) matching an entry in DefaultSlotProfileProvider
+    // to force that orchestrator slot without waiting for the real clock.
+    // Examples:
+    //   "ForceHour": "6"   → InSummaryFeed / FeedOrchestrator
+    //   "ForceHour": "8"   → XSummaryFeed  / FeedOrchestrator
+    //   "ForceHour": "14"  → InPowerLaw    / PowerLawOrchestrator
+    //   "ForceHour": "16"  → XPowerLaw     / PowerLawOrchestrator
+    // Remove or leave empty to use the real UTC clock (production behaviour).
+    // -----------------------------------------------------------------------
+    "ForceHour": "",
+
+    // -----------------------------------------------------------------------
+    // Dry-run testing (local integration testing without social platform publishing).
+    //
+    // To test the full pipeline — including Key Vault connectivity and AI provider
+    // output — without posting to X/Twitter, LinkedIn, or Instagram:
+    //
+    //   1. Set "EnableDryRunSlot": "true"  → registers DryRunSlotProfileProvider,
+    //      which appends a DryRunSend entry at hour 9 to the production schedule.
+    //   2. Set "ForceHour": "9"            → forces the clock to hour 9 so the
+    //      dry-run slot is selected at startup.
+    //   3. Set "AiProvider" to the provider under test: "OpenAi", "AzureFoundry",
+    //      "DeepSeekWithFal", or "Perplexity".
+    //   4. Ensure KEYVAULT_URI is set and `az login` has been run.
+    //   5. Run the function — orchestration executes normally but no post is published.
+    //
+    // The DryRunSender will:
+    //   - Probe configuration by checking that "XApiKey" is non-empty
+    //     (verifies that AddAzureKeyVault loaded secrets successfully)
+    //   - Log the post content (character count + full text) and image presence
+    //   - Return true without calling any social platform API
+    //
+    // NOTE: EnableDryRunSlot defaults to false. In production this key must be
+    // absent or set to "false" — no code changes or comments required.
+    // -----------------------------------------------------------------------
+    "EnableDryRunSlot": "false",
+
+    // -----------------------------------------------------------------------
+    // Azure Key Vault — all sender credentials are loaded via the
+    // AddAzureKeyVault Configuration Provider registered in Program.cs.
+    //
+    // Local development:
+    //   1. Run `az login` (or set AZURE_CLIENT_ID / AZURE_CLIENT_SECRET for
+    //      a service principal) so DefaultAzureCredential can authenticate.
+    //   2. Set KEYVAULT_URI to your vault URI below.
+    //   Secrets are read automatically at startup and bound to typed IOptions<T>.
+    //
+    // Azure deployment: Managed Identity handles authentication automatically.
+    //
+    // Required secrets in Key Vault (exact casing, matched to Options properties):
+    //   LinkedInAccessToken   — LinkedIn Bearer token         → LinkedInCredentials.LinkedInAccessToken
+    //   LinkedInOwnerCode     — LinkedIn person/owner ID      → LinkedInCredentials.LinkedInOwnerCode
+    //   LinkedInOrgId         — LinkedIn organization ID      → LinkedInCredentials.LinkedInOrgId (optional; org posts)
+    //   XApiKey               — X (Twitter) API key           → XCredentials.XApiKey
+    //   XApiSecret            — X (Twitter) API secret        → XCredentials.XApiSecret
+    //   XAccessToken          — X (Twitter) access token      → XCredentials.XAccessToken
+    //   XAccessTokenSecret    — X (Twitter) access token sec  → XCredentials.XAccessTokenSecret
+    //   InstagramAccessToken  — Instagram Graph API token     → InstagramCredentials.InstagramAccessToken
+    //   InstagramAccountId    — Instagram account ID          → InstagramCredentials.InstagramAccountId
+    //   FacebookAccessToken   — Facebook Graph API token      → FacebookCredentials.FacebookAccessToken
+    //   FacebookAccountId     — Facebook account ID           → FacebookCredentials.FacebookPageId
+    // -----------------------------------------------------------------------
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
-    // ══ AI — OpenAI (AiProvider = "OpenAi") ═════════════════════════════════════════════════
-    "OpenAI__ApiKey": "",
-    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
-    "OpenAI__ChatModel": "gpt-4.1-nano",
-    "OpenAI__SummaryTemperature": "0.5",
-    "OpenAI__SummaryMaxTokensPerChar": "5",
-    "OpenAI__SummarySafetyMarginChars": "50",
-    "OpenAI__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "OpenAI__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
-    "OpenAI__ImageModel": "gpt-image-1.5",
-    "OpenAI__ImageSize": "1024x1024",
-    "OpenAI__ImageCount": "1",
-    "OpenAI__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "OpenAI__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "OpenAI__ImagePromptMaxTokens": "60",
-    "OpenAI__ImagePromptTemperature": "0.7",
+    // -----------------------------------------------------------------------
+    // ── Azure Blob Storage & Instagram Polling ──
+    // -----------------------------------------------------------------------
+    "AZURE_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
+    "AZURE_STORAGE_CONTAINER_NAME": "xposter-images",
 
-    // ══ AI — Azure AI Foundry (AiProvider = "AzureFoundry") ════════════════════════════════════
+    // -----------------------------------------------------------------------
+    // AI Provider — connectivity and model capability settings only.
+    // Prompt templates and intent are now owned by each orchestrator slot
+    // via FeedSlotContexts (see below). Only keep here what the provider
+    // needs to make the HTTP call: endpoint, credentials, model name,
+    // and token-budget helpers that are provider-specific.
+    // -----------------------------------------------------------------------
+
+    "OpenAI__Endpoint": "https://api.openai.com/v1/chat/completions",
+    "OpenAI__ApiKey": "",
+    "OpenAI__TextModelName": "gpt-4.1-nano",
+    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
+    "OpenAI__ImageModelName": "gpt-image-1.5",
+
     "AzureFoundry__Endpoint": "",
     "AzureFoundry__ApiKey": "",
-    "AzureFoundry__DeploymentName": "",
-    "AzureFoundry__ImageDeploymentName": "",
-    "AzureFoundry__SummaryTemperature": "0.5",
-    "AzureFoundry__SummaryMaxTokensPerChar": "5",
-    "AzureFoundry__SummarySafetyMarginChars": "50",
-    "AzureFoundry__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "AzureFoundry__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "AzureFoundry__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "AzureFoundry__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "AzureFoundry__ImagePromptMaxTokens": "60",
-    "AzureFoundry__ImagePromptTemperature": "0.7",
+    "AzureFoundry__TextModelName": "",
+    "AzureFoundry__ImageModelName": "",
 
-    // ══ AI — DeepSeek (AiProvider = "DeepSeek", text-only) ══════════════════════════════
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "",
-    "DeepSeek__DeploymentName": "deepseek-chat",
-    "DeepSeek__SummaryTemperature": "0.5",
-    "DeepSeek__SummaryMaxTokensPerChar": "5",
-    "DeepSeek__SummarySafetyMarginChars": "50",
-    "DeepSeek__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "DeepSeek__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "DeepSeek__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "DeepSeek__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "DeepSeek__ImagePromptMaxTokens": "60",
-    "DeepSeek__ImagePromptTemperature": "0.7",
+    "DeepSeek__TextModelName": "deepseek-chat",
 
-    // ══ AI — fal.ai (AiProvider = "FalAi", image-only) ═══════════════════════════════
-    "FalAi__ApiKey": "",
-    "FalAi__ModelId": "fal-ai/flux/schnell",
-    "FalAi__ImageSize": "landscape_4_3",
-    "FalAi__NumInferenceSteps": "4",
-
-    // ══ AI — Perplexity (AiProvider = "Perplexity", text-only) ═══════════════════════════
     "Perplexity__Endpoint": "https://api.perplexity.ai",
     "Perplexity__ApiKey": "",
-    "Perplexity__DeploymentName": "sonar",
-    "Perplexity__SummaryTemperature": "0.5",
-    "Perplexity__SummaryMaxTokensPerChar": "5",
-    "Perplexity__SummarySafetyMarginChars": "50",
-    "Perplexity__SummarySystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "Perplexity__SummaryUserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "Perplexity__ImagePromptSystemTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "Perplexity__ImagePromptUserTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "Perplexity__ImagePromptMaxTokens": "60",
-    "Perplexity__ImagePromptTemperature": "0.7",
+    "Perplexity__TextModelName": "sonar",
 
-    // ── Observability ────────────────────────────────────────────────
+    "FalAi__Endpoint": "https://fal.run",
+    "FalAi__ApiKey": "",
+    "FalAi__ImageModelName": "fal-ai/flux/schnell",
+    "FalAi__NumInferenceSteps": "4",
+
+    // -----------------------------------------------------------------------
+    // Feed slot contexts — per-slot configuration for FeedOrchestrator.
+    //
+    // Each named key (Feed06, Feed08, …) maps to a FeedOrchestratorContext
+    // carrying the feed URLs and the ordered prompt steps for that slot.
+    // The key is referenced via OrchestratorContextKey in the corresponding
+    // ScheduledOrchestrationProfile entry.
+    //
+    // Steps array maps each PromptRole to its own settings block:
+    //   Steps__0  → Role = Summary               (text-to-text)
+    //   Steps__1  → Role = ImagePromptDerivation  (text-to-text)
+    //   Steps__2  → Role = ImageGeneration        (text-to-image)
+    //
+    // Note: MaxOutputLength for the Summary role is NOT set here — it is
+    // resolved at runtime from ISender.MessageMaxLength of the target sender.
+    // -----------------------------------------------------------------------
+
+    // -- Slot Feed06 (06:00 UTC) -------------------------------------------
+    "FeedSlotContexts__Feed06__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
+    "FeedSlotContexts__Feed06__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__Role": "Summary",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__Temperature": "0.5",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__MaxTokenBudget": "600",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__Temperature": "0.7",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__MaxTokenBudget": "300",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__Role": "ImageGeneration",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__SystemPromptTemplate": "",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageQuantity": "1",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageSize": "1024x1024",
+    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__InputTextLabel": "{Text}",
+
+    // -- Slot Feed08 (08:00 UTC) -------------------------------------------
+    "FeedSlotContexts__Feed08__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
+    "FeedSlotContexts__Feed08__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__Role": "Summary",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__Temperature": "0.5",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__MaxTokenBudget": "600",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__Temperature": "0.7",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__MaxTokenBudget": "300",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__Role": "ImageGeneration",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__SystemPromptTemplate": "",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__ImageQuantity": "1",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__ImageSize": "1024x1024",
+    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__InputTextLabel": "{Text}",
+
+    // -----------------------------------------------------------------------
+    // Tag replacement provider — word-to-hashtag map applied to generated summaries.
+    // Uses flat Azure Functions naming convention: TagReplacementOptions__Replacements__<word>.
+    // Keys are matched case-insensitively; only the first occurrence per word is replaced.
+    // Add or remove entries freely without code changes or redeployment.
+    // -----------------------------------------------------------------------
+    "TagReplacementOptions__Replacements__bitcoin": "#Bitcoin",
+    "TagReplacementOptions__Replacements__btc": "#BTC",
+    "TagReplacementOptions__Replacements__blockchain": "#Blockchain",
+    "TagReplacementOptions__Replacements__fed": "#FED",
+
     "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
@@ -261,23 +349,74 @@ When the base summary already fits within a secondary sender's character limit, 
 
 ---
 
-## Feed URLs
+## Feed Slot Contexts
 
-Feed URLs are resolved at runtime by `IFeedUrlProvider`. The default implementation, `ConfigurationFeedUrlProvider`, reads from the `FeedOptions` section bound via double-underscore notation.
+Each `FeedOrchestrator` slot carries its own URL list and ordered prompt pipeline, bound via `FeedSlotContexts` using double-underscore flat key notation. The context key (e.g. `Feed06`, `Feed08`) must match the `OrchestratorContextKey` defined in the corresponding `ScheduledOrchestrationProfile`.
 
-`FeedService` fetches each URL using the named HTTP client `"Feed"` registered in `HttpClientExtensions.AddHttpClients()`. The client is configured with a Polly resilience pipeline (per-attempt timeout → exponential-backoff retry → circuit breaker) whose parameters are driven by the `FeedOptions` resilience keys documented in the [Feed HTTP Client](#feed-http-client) section below.
+### Configuration structure
 
-| Variable | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `FeedOptions__Urls__0` | string | ✅ Yes (at least one) | — | First RSS/Atom feed URL consumed by `FeedOrchestrator`. |
-| `FeedOptions__Urls__1` | string | No | — | Second feed URL. Add further entries as `__2`, `__3`, etc. |
+```jsonc
+FeedSlotContexts__<ContextKey>_FeedUrls_0 → first RSS feed URL for this slot
+FeedSlotContexts__<ContextKey>_FeedUrls_1 → second RSS feed URL (optional)
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__Role
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__SystemPromptTemplate
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__UserPromptTemplate
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__Temperature
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__MaxTokenBudget
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__InputTextLabel
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__ImageQuantity (Step ImageGeneration only)
+FeedSlotContexts__<ContextKey>_PromptOptions_Steps__N__ImageSize (Step ImageGeneration only)
+```
 
-**Behaviour when the list is empty:** `FeedOrchestrator.OrchestrateAsync()` returns an empty collection (with `SendIt = false`) and emits a `LogWarning`. No AI call or sender invocation is made.
 
-**Azure App Settings:** use the same flat double-underscore convention — e.g. `FeedOptions__Urls__0` — exactly as shown. The .NET configuration binder maps sequential numeric suffixes to `List<string>` automatically.
+### `PromptRole` values
 
-**Extending the provider:** to load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register your implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`. See [`docs/extending-xposter.md`](extending-xposter.md) for the plugin convention.
+Each step in `Steps` carries a mandatory `Role` discriminator:
 
+| Role | Index convention | Description |
+|---|---|---|
+| `Summary` | `Steps__0` | Generates the primary text summary from raw feed content. `MaxOutputLength` is **not set here** — it is resolved at runtime from `ISender.MessageMaxLength`. |
+| `ImagePromptDerivation` | `Steps__1` | Derives the image-generation prompt from the summary. |
+| `ImageGeneration` | `Steps__2` | Generates the image. Only `ImageQuantity` and `ImageSize` are relevant here; prompt templates may be empty. |
+
+### `PromptStepOptions` fields
+
+| Setting | Type | Required | Description |
+|---|---|---|---|
+| `Role` | `PromptRole` | ✅ Yes | Step discriminator — must be unique within the `Steps` list. |
+| `SystemPromptTemplate` | string | ✅ Yes | System message template. Supports `{MaxChars}` for `Summary`, none for `ImageGeneration`. |
+| `UserPromptTemplate` | string | ✅ Yes | User message template. Supports `{Text}` (`Summary`), `{Summary}` (`ImagePromptDerivation`), `{Text}` (`ImageGeneration`). |
+| `Temperature` | double | No | Sampling temperature. Omit to use the provider default. |
+| `MaxTokenBudget` | int | No | Upper token budget for this step. Omit to use the provider default. |
+| `InputTextLabel` | string | No | Placeholder token used for input-text substitution in the templates (e.g. `{Text}`, `{Summary}`). |
+| `ImageQuantity` | int | No | Images to generate per call. Relevant for `ImageGeneration` steps only. |
+| `ImageSize` | string | No | Size preset (e.g. `1024x1024`). Relevant for `ImageGeneration` steps only. |
+
+### Minimal example — two feed slots
+
+```json
+"FeedSlotContexts__Feed06__FeedUrls__0": "https://example.com/rss",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__0__Role": "Summary",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. Keep summaries under {MaxChars} characters.",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__0__Temperature": "0.5",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__0__MaxTokenBudget": "600",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+
+"FeedSlotContexts__Feed06__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts. Create a concise, vivid prompt in English.",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__1__Temperature": "0.7",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__1__MaxTokenBudget": "300",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+
+"FeedSlotContexts__Feed06__PromptOptions__Steps__2__Role": "ImageGeneration",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__2__SystemPromptTemplate": "",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageQuantity": "1",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageSize": "1024x1024",
+"FeedSlotContexts__Feed06__PromptOptions__Steps__2__InputTextLabel": "{Text}"
+```
 ---
 
 ## Feed HTTP Client
@@ -322,6 +461,7 @@ TagReplacementOptions__Replacements__fed       →   #FED
 ## AI Provider Selector
 
 XPoster uses a **capability-based** AI provider model. Each `AiProvider` value is registered as a keyed service in the DI container, exposing one or both capability interfaces (`ITextToTextProvider`, `ITextToImageProvider`). `OrchestratorFactory` resolves both capabilities independently via `GetKeyedService<T>(profile.AiProvider)` — a `null` result means the capability is not available for that provider and the orchestrator degrades gracefully.
+Separation of concerns (v2): AI provider settings now cover only connectivity — endpoint, credentials, and model name. Prompt templates, temperature, token budget, and image parameters are owned by each orchestrator slot via FeedSlotContexts. This means the same provider can be used by multiple slots with different prompt strategies without any provider-level config change.
 
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -419,16 +559,14 @@ The Configuration Provider uses `DefaultAzureCredential` from `Azure.Identity`:
     "ContainerPollingSchedule": "0 */2 * * * *",
     "EnableDryRunSlot": "true",
     "ForceHour": "9",
-    "FeedOptions__Urls__0": "https://example.com/feed/rss",
     "AiProvider": "OpenAi",
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
     "OpenAI__ApiKey": "<your-openai-key>",
-    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
-    "OpenAI__ChatModel": "gpt-4.1-nano",
-    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
-    "OpenAI__ImageModel": "gpt-image-1.5",
+    "OpenAI__Endpoint": "https://api.openai.com/v1/",
+    "OpenAI__TextModelName": "gpt-4.1-nano",
+    "OpenAI__ImageModelName": "gpt-image-1.5",
     "OpenAI__ImageSize": "1024x1024",
-    "OpenAI__ImageCount": "1"
+    "FeedSlotContexts__Feed09": "Feed09"
   }
 }
 ```
@@ -480,31 +618,11 @@ Configuration bound from the `OpenAI` prefix using double-underscore notation.
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `OpenAI__ApiKey` | string | ✅ Yes | — | OpenAI platform API key. |
-| `OpenAI__ChatEndpoint` | string | No | `https://api.openai.com/v1/chat/completions` | Chat Completions API URL. |
-| `OpenAI__ChatModel` | string | No | `gpt-4.1-nano` | Model used for text summarisation and image prompt generation. |
-| `OpenAI__ImageEndpoint` | string | No | `https://api.openai.com/v1/images/generations` | Image Generations API URL. |
-| `OpenAI__ImageModel` | string | No | `gpt-image-1.5` | Model used for image generation. |
-| `OpenAI__ImageSize` | string | No | `1024x1024` | Output image dimensions. |
-| `OpenAI__ImageCount` | int | No | `1` | Number of images to generate per request. |
+| `OpenAI__Endpoint` | string | No | `https://api.openai.com/v1/` | Chat Completions API URL. |
+| `OpenAI__TextModelName` | string | No | `gpt-4.1-nano` | Model used for text summarisation and image prompt generation. |
+| `OpenAI__ImageModelName` | string | No | `gpt-image-1.5` | Model used for image generation. |
 
-### Summarisation Tuning
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| `OpenAI__SummaryTemperature` | double | `0.5` | Temperature for summary generation. |
-| `OpenAI__SummaryMaxTokensPerChar` | int | `5` | Divisor to convert a character budget to `max_tokens`. |
-| `OpenAI__SummarySafetyMarginChars` | int | `50` | Character margin subtracted from the platform character limit. |
-| `OpenAI__SummarySystemPromptTemplate` | string | *(see example)* | System prompt. Supports `{MaxChars}`. |
-| `OpenAI__SummaryUserPromptTemplate` | string | *(see example)* | User prompt. Supports `{Text}`. |
-
-### Image Prompt Tuning
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| `OpenAI__ImagePromptSystemTemplate` | string | *(see example)* | System prompt for image prompt generation. |
-| `OpenAI__ImagePromptUserTemplate` | string | *(see example)* | User prompt. Supports `{Summary}`. |
-| `OpenAI__ImagePromptMaxTokens` | int | `60` | Max tokens for image prompt generation. |
-| `OpenAI__ImagePromptTemperature` | double | `0.7` | Temperature for image prompt generation. |
+> Prompt templates, temperature, and token budget are now configured per slot in FeedSlotContexts (see [Feed Slot Contexts](#feed-slot-contexts)).
 
 > See [docs/integrations/setup-openai.md](integrations/setup-openai.md) for the full setup guide.
 
@@ -520,8 +638,8 @@ Configuration bound from the `AzureFoundry` prefix.
 |---|---|---|---|---|
 | `AzureFoundry__Endpoint` | string | ✅ Yes | — | Azure AI Foundry resource endpoint. |
 | `AzureFoundry__ApiKey` | string | ✅ Yes* | — | Resource key. *Omit when using Managed Identity. |
-| `AzureFoundry__DeploymentName` | string | ✅ Yes | — | Chat deployment name. |
-| `AzureFoundry__ImageDeploymentName` | string | ✅ Yes | — | Image generation deployment name. |
+| `AzureFoundry__TextModelName` | string | ✅ Yes | — | Chat deployment name. |
+| `AzureFoundry__ImageModelName` | string | ✅ Yes | — | Image generation deployment name. |
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block above, using the `AzureFoundry__` prefix.
 
@@ -539,7 +657,7 @@ Configuration bound from the `DeepSeek` prefix using double-underscore notation.
 |---|---|---|---|---|
 | `DeepSeek__ApiKey` | string | ✅ Yes | — | DeepSeek platform API key. |
 | `DeepSeek__Endpoint` | string | No | `https://api.deepseek.com` | DeepSeek API base URL. |
-| `DeepSeek__DeploymentName` | string | No | `deepseek-chat` | Model identifier. |
+| `DeepSeek__TextModelName` | string | No | `deepseek-chat` | Model identifier. |
 
 Summarisation and image prompt tuning settings follow the same structure as the OpenAI block, using the `DeepSeek__` prefix.
 
@@ -556,8 +674,8 @@ Configuration bound from the `FalAi` prefix using double-underscore notation.
 | Setting | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `FalAi__ApiKey` | string | ✅ Yes | — | fal.ai API key. |
-| `FalAi__ModelId` | string | No | `fal-ai/flux/schnell` | fal.ai model identifier. |
-| `FalAi__ImageSize` | string | No | `landscape_4_3` | Image output size preset. |
+| `FalAi__Endpoint ` | string | No | — | fal.ai API base URL. |
+| `FalAi__ImageModelName` | string | No | `fal-ai/flux/schnell` | fal.ai model identifier. |
 | `FalAi__NumInferenceSteps` | int | No | `4` | Number of diffusion steps. |
 
 > See [docs/integrations/setup-falai.md](integrations/setup-falai.md) for the full setup guide.
@@ -576,26 +694,7 @@ Configuration bound from the `Perplexity` prefix using double-underscore notatio
 |---|---|---|---|---|
 | `Perplexity__ApiKey` | string | ✅ Yes | — | Perplexity platform API key. Obtain from [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api). |
 | `Perplexity__Endpoint` | string | No | `https://api.perplexity.ai` | Perplexity API base URL. |
-| `Perplexity__DeploymentName` | string | No | `sonar` | Model identifier passed as `model` in each chat completions request. |
-
-### Summarisation Tuning
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| `Perplexity__SummaryTemperature` | double | `0.5` | Temperature for summary generation. |
-| `Perplexity__SummaryMaxTokensPerChar` | int | `5` | Divisor to convert a character budget to `max_tokens`. |
-| `Perplexity__SummarySafetyMarginChars` | int | `50` | Character margin subtracted from the platform character limit. |
-| `Perplexity__SummarySystemPromptTemplate` | string | *(see example)* | System prompt. Must contain `{MaxChars}`. |
-| `Perplexity__SummaryUserPromptTemplate` | string | *(see example)* | User prompt. Must contain `{Text}`. |
-
-### Image Prompt Tuning
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| `Perplexity__ImagePromptSystemTemplate` | string | *(see example)* | System prompt for image prompt generation. No required placeholders. |
-| `Perplexity__ImagePromptUserTemplate` | string | *(see example)* | User prompt. Must contain `{Summary}`. |
-| `Perplexity__ImagePromptMaxTokens` | int | `60` | Max tokens for image prompt generation. |
-| `Perplexity__ImagePromptTemperature` | double | `0.7` | Temperature for image prompt generation. |
+| `Perplexity__TextModelName` | string | No | `sonar` | Model identifier passed as `model` in each chat completions request. |
 
 > See [docs/integrations/setup-perplexity.md](integrations/setup-perplexity.md) for the full setup guide.
 

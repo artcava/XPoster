@@ -1,6 +1,5 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -96,9 +95,9 @@ builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 
-// IFeedUrlProvider registration — reads FeedOptions:Urls from app settings.
-builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection(FeedOptions.SectionName));
-builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
+builder.Services.AddKeyedSingleton<FeedOrchestratorContext>("Bitcoin", (sp, _) =>
+    builder.Configuration.GetSection("FeedSlotContexts:Bitcoin").Get<FeedOrchestratorContext>()!);
+
 
 // ITagReplacementProvider registration — reads TagReplacementOptions:Replacements from app settings.
 builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSection(TagReplacementOptions.SectionName));

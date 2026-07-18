@@ -30,39 +30,43 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetSummaryAsync(string text, int messageMaxLength, CancellationToken cancellationToken = default)
+    public async Task<string> GenerateTextAsync(
+        PromptRequest request,
+        CancellationToken cancellationToken = default)
     {
+        var text = request.InputText;
+        var maxLength = request.MaxOutputLength;
         int tries = 0;
-        while (text.Length > messageMaxLength && tries <= 2)
+        do
         {
-            tries++;
-            var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildSummaryPayload(text, messageMaxLength), cancellationToken);
+            var response = await _client.PostAsJsonAsync(
+                GetChatCompletionsEndpoint(),
+                BuildChatPayload(text, request),
+                cancellationToken);
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
-                response, "Azure Foundry", "summary generation", _logger, cancellationToken);
+                response, "Azure Foundry", "text generation", _logger, cancellationToken);
             if (!success) return string.Empty;
             text = content;
+            tries++;
         }
+        while (maxLength.HasValue && text.Length > maxLength.Value && tries <= 2);
         return text;
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetImagePromptAsync(string text, CancellationToken cancellationToken = default)
+    public async Task<byte[]> GenerateImageAsync(
+        ImagePromptRequest request,
+        CancellationToken cancellationToken = default)
     {
-        var response = await _client.PostAsJsonAsync(GetChatCompletionsEndpoint(), BuildImagePromptPayload(text), cancellationToken);
-        var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
-            response, "Azure Foundry", "image prompt generation", _logger, cancellationToken);
-        return success ? content : string.Empty;
-    }
-
-    /// <inheritdoc/>
-    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
-    {
+        var prompt = request.InputText;
         if (string.IsNullOrWhiteSpace(prompt))
         {
-            _logger.LogWarning("Azure Foundry GenerateImageAsync called with an empty or whitespace prompt.");
+            _logger.LogWarning("Azure Foundry GenerateImageAsync called with empty prompt.");
             return Array.Empty<byte>();
         }
-        var requestBody = new { model = _options.ImageDeploymentName, prompt, n = 1, size = "1024x1024" };
+        var size = request.ImageSize ?? "1024x1024";
+        var quantity = request.ImageQuantity ?? 1;
+        var requestBody = new { model = _options.ImageModelName, prompt, n = quantity, size };
         HttpResponseMessage response;
         try { response = await _client.PostAsJsonAsync(GetImageGenerationEndpoint(), requestBody, cancellationToken); }
         catch (HttpRequestException ex)
@@ -75,22 +79,25 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
             response, AiProvider.AzureFoundry, _client, _logger, allowedOrigin, cancellationToken);
     }
 
+    private object BuildChatPayload(string text, PromptRequest request)
+    {
+        var systemContent = request.SystemPromptTemplate
+            .Replace("{MaxChars}", request.MaxOutputLength.ToString(), StringComparison.Ordinal);
+        var label = request.InputTextLabel ?? "{Text}";
+        var userContent = request.UserPromptTemplate
+            .Replace(label, text, StringComparison.Ordinal);
+        return new
+        {
+            model = _options.TextModelName,
+            messages = new[]
+            {
+                new { role = "system", content = systemContent },
+                new { role = "user",   content = userContent   }
+            },
+            max_tokens = request.MaxTokenBudget,
+            temperature = request.Temperature
+        };
+    }
     private string GetChatCompletionsEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
     private string GetImageGenerationEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/images/generations";
-
-    private object BuildSummaryPayload(string text, int messageMaxLength)
-    {
-        var tokenDivisor = Math.Max(1, _options.SummaryMaxTokensPerChar);
-        var maxTokens = Math.Max(1, messageMaxLength / tokenDivisor);
-        var underCharacters = Math.Max(1, messageMaxLength - _options.SummarySafetyMarginChars);
-        var systemContent = _options.SummarySystemPromptTemplate.Replace("{MaxChars}", underCharacters.ToString(), StringComparison.Ordinal);
-        var userContent = _options.SummaryUserPromptTemplate.Replace("{Text}", text, StringComparison.Ordinal);
-        return new { model = _options.DeploymentName, messages = new[] { new { role = "system", content = systemContent }, new { role = "user", content = userContent } }, max_tokens = maxTokens, temperature = _options.SummaryTemperature };
-    }
-
-    private object BuildImagePromptPayload(string summary)
-    {
-        var userContent = _options.ImagePromptUserTemplate.Replace("{Summary}", summary, StringComparison.Ordinal);
-        return new { model = _options.DeploymentName, messages = new[] { new { role = "system", content = _options.ImagePromptSystemTemplate }, new { role = "user", content = userContent } }, max_tokens = _options.ImagePromptMaxTokens, temperature = _options.ImagePromptTemperature };
-    }
 }

@@ -9,9 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Prompt request value objects for orchestrator-owned intent** ([#223](https://github.com/artcava/XPoster/issues/223)): introduced `PromptRequest` and `ImagePromptRequest` records to carry prompt data from orchestrators to providers, making prompt intent a first-class concept decoupled from provider configuration.
+- **Role-keyed prompt options for `FeedOrchestrator`** ([#223](https://github.com/artcava/XPoster/issues/223)): added `PromptRole`, `PromptStepOptions`, and `FeedPromptOptions` to model an ordered collection of prompt steps (`Summary`, `ImagePromptDerivation`, `ImageGeneration`) resolved by the orchestrator for each phase of the feed pipeline.
+- **Slot-scoped `FeedOrchestratorContext`** ([#223](https://github.com/artcava/XPoster/issues/223)): new value object carrying `FeedUrls` and `FeedPromptOptions` per scheduled slot, enabling multiple `FeedOrchestrator` slots to run with independent feed sources and prompt configurations.
+- **`ScheduledOrchestrationProfile.OrchestratorContextKey`** ([#223](https://github.com/artcava/XPoster/issues/223)): added a logical context key used at runtime to resolve the appropriate `FeedOrchestratorContext` for each slot.
+
 ### Changed
+- **Prompt ownership aligned with architectural boundaries** ([#223](https://github.com/artcava/XPoster/issues/223)): prompt composition is now owned by orchestrators, while providers focus solely on execution and connectivity/capability settings.
+- **Execution-oriented provider contracts** ([#223](https://github.com/artcava/XPoster/issues/223)): text and image providers now accept dedicated request objects (`PromptRequest` / `ImagePromptRequest`) instead of reading prompt fields from provider options.
+- **`FeedOrchestrator` refactored for fan-out with slot context** ([#223](https://github.com/artcava/XPoster/issues/223)): the orchestrator uses role-keyed prompt steps, generates the base summary once for the widest sender, reuses the `Summary` step for re-summarisation of narrower senders, and shares a single image generation across all configured senders in the slot.
+- **Configuration migrated to `FeedSlotContexts__{key}` sections** ([#223](https://github.com/artcava/XPoster/issues/223)): feed URLs and prompt options are now defined per logical slot context, replacing the previous global configuration and enabling per-slot tuning.
+- **`OrchestratorFactory` updated to resolve keyed context** ([#223](https://github.com/artcava/XPoster/issues/223)): the factory now selects the correct `FeedOrchestratorContext` based on `OrchestratorContextKey` while preserving centralised orchestrator selection and existing reflection-based instantiation.
 - **upgraded .net version to 10 LTS from 8 LTS** ([[#169](https://github.com/artcava/XPoster/issues/169)]): also upgraded some library and revised all documentation
 - Substituted `MaskUrlTelemetryInitializer` with `MaskUrlTelemetryProcessor` to mask `access_token` in Facebook Graph API HTTP dependencies
+
+### Removed
+- **Prompt intent from provider options** ([#223](https://github.com/artcava/XPoster/issues/223)): prompt-related fields such as templates, temperature, output/token limits, and input labels have been removed from provider option models to avoid mixing orchestration behaviour into provider configuration.
+- **Global configuration assumption for `FeedOrchestrator`** ([#223](https://github.com/artcava/XPoster/issues/223)): the previous single shared feed URL list and prompt configuration for all `FeedOrchestrator` slots has been removed in favour of per-slot contexts.
 
 ---
 
