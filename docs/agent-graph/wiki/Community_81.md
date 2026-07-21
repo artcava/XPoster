@@ -1,20 +1,20 @@
 # Community 81
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **SaveAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
+- **catch()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 130]] (4 shared connections)
 
 ## Audit Trail
 

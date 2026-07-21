@@ -1,25 +1,25 @@
 # Community 36
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunctionTests.cs** (20 connections)
-- **XPoster.Tests** (2 connections)
-- **XPosterContainerPollingFunctionTests** (2 connections)
-- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
-- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
-- **CreateSut()** (2 connections)
-- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
-- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
-- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
-- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
-- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
-- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **PowerLawOrchestratorTests.cs** (11 connections)
+- **PowerLawOrchestratorTests.cs** (11 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **OrchestrateAsync_BroadcastsSamePost_ToAllSenders()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **new()** (2 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 61]] (9 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

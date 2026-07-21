@@ -1,22 +1,22 @@
 # Community 115
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest** (2 connections)
-- **XPoster.Models** (2 connections)
-- **ImagePromptRequest** (2 connections)
+- **OrchestratorFactory.cs** (10 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **if()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 86]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

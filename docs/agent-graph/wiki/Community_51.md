@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (8 shared connections)
+- [[Community 32]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

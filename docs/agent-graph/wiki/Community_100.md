@@ -1,23 +1,22 @@
 # Community 100
 
-> 6 nodes · cohesion 0.60
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **FacebookCredentialsValidator** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **FeedService.cs** (7 connections)
+- **XPoster.Services** (2 connections)
+- **Exception()** (2 connections)
+- **catch()** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 158]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

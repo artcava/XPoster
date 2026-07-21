@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
 - **if()** (2 connections)
-- **Process()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 

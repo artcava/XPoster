@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **BaseOrchestrator()** (2 connections)
-- **PostAsync()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **XSender.cs** (6 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 186]] (3 shared connections)
+- [[Community 161]] (3 shared connections)
 
 ## Audit Trail
 

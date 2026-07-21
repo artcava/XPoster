@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Providers** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
 
 ## Relationships
 

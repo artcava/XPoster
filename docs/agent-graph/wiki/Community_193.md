@@ -1,19 +1,19 @@
-# Community 191
+# Community 193
 
 > 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (4 connections)
+- **FalAiOptionsValidator.cs** (5 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 186]] (2 shared connections)
+- [[Community 137]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

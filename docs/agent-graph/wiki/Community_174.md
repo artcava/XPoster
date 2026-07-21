@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Contracts** (2 connections)
-- **ContainerStatus.cs** (2 connections)
-- **ContainerStatus.cs** (2 connections)
+- **FeedOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
+- **FeedOptions.cs** (2 connections)
 
 ## Relationships
 

@@ -1,15 +1,16 @@
 # Community 83
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **PublishContainerAsync()** (2 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **UpdateStatusAsync()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **IMetaPublishingService** (2 connections)
+- **GetPendingAsync()** (2 connections)
+- **IContainerStateStore** (2 connections)
+- **SaveAsync()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed** (2 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **FalAiOptionsExtensions.cs** (3 connections)
+- **AddFalAiOptions()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **FbSenderSendAsyncTests.cs** (9 connections)
-- **FbSenderSendAsyncTests.cs** (9 connections)
-- **SendAsync_WithCaptionLongerThanMax_StillPublishes_ReturnsTrue()** (2 connections)
-- **SendAsync_WithEmptyImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WithNullImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **BuildCreds()** (2 connections)
-- **BuildFactory()** (2 connections)
-- **FbSenderSendAsyncTests** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 

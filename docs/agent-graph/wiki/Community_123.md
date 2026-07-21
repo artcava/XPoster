@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **DefaultSlotProfileProvider.cs** (4 connections)
+- **GetProfiles()** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 - **XPoster.Providers** (2 connections)
-- **GetReplacements()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
 
 ## Relationships
 

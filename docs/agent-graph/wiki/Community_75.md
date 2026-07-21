@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
+- **Program.cs** (6 connections)
+- **Program.cs** (6 connections)
+- **Uri()** (2 connections)
+- **BlobServiceClient()** (2 connections)
 - **if()** (2 connections)
-- **foreach()** (2 connections)
-- **Apply()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **TagReplacementService()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
 
 ## Relationships
 

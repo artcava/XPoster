@@ -1,30 +1,30 @@
 # Community 31
 
-> 13 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_ImageModelNameWithAllowedSpecialChars_Succeeds()** (2 connections)
+- **Validate_ImageModelNameWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
 
 ## Relationships
 
-- [[Community 37]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

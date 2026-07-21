@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (4 connections)
-- **ITextToTextProvider.cs** (4 connections)
-- **GenerateTextAsync()** (2 connections)
-- **ITextToTextProvider** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **GetCryptoValue()** (2 connections)
+- **ICryptoService** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

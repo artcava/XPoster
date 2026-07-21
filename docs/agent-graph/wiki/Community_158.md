@@ -1,20 +1,20 @@
 # Community 158
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **SenderPlatform.cs** (2 connections)
-- **SenderPlatform.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **FeedService.cs** (7 connections)
+- **if()** (2 connections)
+- **FeedService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 100]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

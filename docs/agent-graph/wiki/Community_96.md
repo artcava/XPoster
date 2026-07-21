@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **SendAsync()** (2 connections)
-- **if()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

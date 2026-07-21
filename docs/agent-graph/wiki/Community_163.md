@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **InSender.cs** (11 connections)
+- **InSender()** (2 connections)
 - **if()** (2 connections)
-- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 140]] (3 shared connections)
+- [[Community 60]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

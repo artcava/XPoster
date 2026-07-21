@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (7 connections)
-- **DeepSeekOptionsValidatorTests.cs** (7 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
+- **FalAiImageService.cs** (7 connections)
+- **FalAiImageService.cs** (7 connections)
+- **GenerateImageAsync()** (2 connections)
+- **catch()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
 
 ## Relationships
 

@@ -7,12 +7,12 @@
 - **PollyIntegrationTestBase.cs** (8 connections)
 - **PollyIntegrationTestBase.cs** (8 connections)
 - **var()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **params()** (2 connections)
 - **HttpResponseMessage()** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **params()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 

@@ -1,28 +1,29 @@
 # Community 38
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
-- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AiProviderServiceCollectionExtensionsTests** (2 connections)
-- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
-- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **MessageMaxLength_Returns2800()** (2 connections)
+- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
+- **InSender()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Platform_ReturnsLinkedIn()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 30]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

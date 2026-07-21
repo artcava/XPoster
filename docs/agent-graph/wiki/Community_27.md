@@ -1,22 +1,23 @@
 # Community 27
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (12 connections)
-- **AzureFoundryService.cs** (12 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
 - **if()** (2 connections)
-- **while()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
+- **HandleFinishedAsync()** (2 connections)
+- **HandleTerminalFailureAsync()** (2 connections)
+- **foreach()** (2 connections)
 - **catch()** (2 connections)
-- **BuildChatPayload()** (2 connections)
-- **AzureFoundryService()** (2 connections)
+- **Run()** (2 connections)
+- **XPoster** (2 connections)
+- **switch()** (2 connections)
+- **TryDeleteBlobAsync()** (2 connections)
+- **XPosterContainerPollingFunction()** (2 connections)
+- **PollPendingContainersAsync()** (2 connections)
+- **ProcessContainerAsync()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

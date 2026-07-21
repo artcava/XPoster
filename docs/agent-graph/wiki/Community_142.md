@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **PerplexityService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- [[Community 73]] (6 shared connections)
+- [[Community 101]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

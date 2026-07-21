@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProviderTests.cs** (14 connections)
-- **DefaultSlotProfileProviderTests.cs** (14 connections)
-- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
-- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
-- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
-- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
-- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
-- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
-- **DefaultSlotProfileProviderTests** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **PromptRoleTests.cs** (14 connections)
+- **PromptRoleTests.cs** (14 connections)
+- **PromptRole_TryParse_InvalidName_ReturnsFalse()** (2 connections)
+- **PromptRole_TryParse_ValidName_ReturnsTrue()** (2 connections)
+- **PromptRole_UsedAsDictionaryKey_LookupSucceeds()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PromptRoleTests** (2 connections)
+- **PromptRole_UndefinedValueNotPresentInMap_ThrowsKeyNotFound()** (2 connections)
+- **PromptRole_ParseInvalidName_Throws()** (2 connections)
+- **PromptRole_ParseFromStringIgnoreCase_ReturnsCorrectMember()** (2 connections)
+- **PromptRole_ParseFromString_ReturnsCorrectMember()** (2 connections)
+- **PromptRole_DefinedMember_IsDefined()** (2 connections)
+- **PromptRole_BackingValue_IsStable()** (2 connections)
+- **PromptRole_HasExactlyThreeMembers()** (2 connections)
+- **PromptRole_ToString_ReturnsName()** (2 connections)
 
 ## Relationships
 

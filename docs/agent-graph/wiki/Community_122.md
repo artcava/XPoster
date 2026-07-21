@@ -1,22 +1,22 @@
 # Community 122
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (10 connections)
-- **CreateOrchestratorInstance()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **if()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 87]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

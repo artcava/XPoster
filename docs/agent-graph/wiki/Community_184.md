@@ -1,20 +1,20 @@
 # Community 184
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **PromptStepOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 55]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

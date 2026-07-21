@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **SendAsync()** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **ImagePromptRequest** (2 connections)
+- **XPoster.Models** (2 connections)
+- **PromptRequest** (2 connections)
 
 ## Relationships
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderExtensions.cs** (3 connections)
-- **AiProviderExtensions.cs** (3 connections)
-- **GetLabel()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **AddCredentials()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

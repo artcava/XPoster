@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ISlotProfileProvider** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

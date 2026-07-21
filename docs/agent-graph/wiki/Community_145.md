@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **Post.cs** (3 connections)
-- **Post.cs** (3 connections)
-- **Post** (2 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
+- **OpenAiOptionsExtensions.cs** (3 connections)
 - **XPoster.Models** (2 connections)
+- **AddOpenAiOptions()** (2 connections)
 
 ## Relationships
 
