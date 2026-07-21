@@ -411,17 +411,6 @@ tests/
 └── Services/         # OpenAiService, AzureFoundryService, DeepSeekService, FalAiImageService, PerplexityService…
 ```
 
-### AiServiceHelper Tests
-
-Unit tests for `AiServiceHelper.BuildChatPayload` live under `tests/Helpers/` and cover:
-
-- Correct `{MaxChars}` interpolation in the system message
-- Custom `InputTextLabel` substitution in the user message
-- `null` `InputTextLabel` falls back to `{Text}`
-- `model`, `max_tokens`, and `temperature` are forwarded correctly from the `PromptRequest`
-
-Service-level integration tests for each provider (`AzureFoundryService`, `OpenAiService`, `DeepSeekService`, `PerplexityService`) use a fake `HttpMessageHandler` to verify that the provider-specific `model` field and the `messages` array shape produced by `AiServiceHelper.BuildChatPayload` are forwarded correctly in the outbound HTTP request.
-
 ### Running Tests
 
 ```bash
@@ -473,7 +462,6 @@ Key monitoring capabilities at a glance:
 - [x] Instagram publishing
 - [x] Facebook publishing
 - [x] Test coverage gate at 80%
-- [x] Centralise `BuildChatPayload` in `AiServiceHelper` — eliminates duplication across all `ITextToTextProvider` implementations ([#244](https://github.com/artcava/XPoster/issues/244))
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
