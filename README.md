@@ -90,6 +90,14 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 The AI layer uses two capability interfaces — `ITextToTextProvider` (text summarisation + image prompt generation) and `ITextToImageProvider` (image generation) — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. Each `ScheduledOrchestrationProfile` carries independent `TextProvider` and `ImageProvider` fields, allowing different providers per capability within the same slot. `OrchestratorFactory` resolves each independently; a `null` field means the capability is not assigned for that slot and the orchestrator degrades gracefully.
 
+Shared AI utility logic is centralised in **`AiServiceHelper`**, which exposes the following static methods used by all `ITextToTextProvider` implementations:
+
+| Method | Description |
+|--------|-------------|
+| `BuildChatPayload(string text, PromptRequest request, string modelName)` | Builds the chat completion request payload — interpolates `{MaxChars}` in the system prompt, substitutes the input text label in the user prompt, and assembles the `model`, `messages`, `max_tokens`, and `temperature` fields. The `modelName` parameter is supplied by each provider from its own options, keeping provider-specific config out of the helper. |
+| `ParseChatCompletionResponseAsync(HttpResponseMessage response)` | Deserialises the chat completion HTTP response and extracts the generated text content. |
+| `ParseImageResponseAsync(HttpResponseMessage response)` | Deserialises the image generation HTTP response and extracts the image URL or base64 payload. |
+
 | Package | Version | Role |
 |---------|---------|------|
 | `Microsoft.Extensions.AI` | 10.7.0 | Provider-agnostic AI abstraction (chat + embeddings) |
@@ -395,13 +403,24 @@ The test suite uses **xUnit + Moq** with a unit-first approach. Tests are organi
 ```
 tests/
 ├── Contracts/        # AiProviderExtensions, BaseOrchestrator abstract contracts
-├── Helpers/          # shared HTTP mock helpers for resilience tests
+├── Helpers/          # shared HTTP mock helpers for resilience tests; AiServiceHelper unit tests
 ├── Orchestrators/    # FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory, ConfigurationTagReplacementProvider…
 ├── Integration/      # Polly resilience pipelines — not run in CI
 ├── Models/           # domain model invariants, options validators
 ├── SenderPlugins/    # XSender, InSender, IgSender, DryRunSender
 └── Services/         # OpenAiService, AzureFoundryService, DeepSeekService, FalAiImageService, PerplexityService…
 ```
+
+### AiServiceHelper Tests
+
+Unit tests for `AiServiceHelper.BuildChatPayload` live under `tests/Helpers/` and cover:
+
+- Correct `{MaxChars}` interpolation in the system message
+- Custom `InputTextLabel` substitution in the user message
+- `null` `InputTextLabel` falls back to `{Text}`
+- `model`, `max_tokens`, and `temperature` are forwarded correctly from the `PromptRequest`
+
+Service-level integration tests for each provider (`AzureFoundryService`, `OpenAiService`, `DeepSeekService`, `PerplexityService`) use a fake `HttpMessageHandler` to verify that the provider-specific `model` field and the `messages` array shape produced by `AiServiceHelper.BuildChatPayload` are forwarded correctly in the outbound HTTP request.
 
 ### Running Tests
 
@@ -454,6 +473,7 @@ Key monitoring capabilities at a glance:
 - [x] Instagram publishing
 - [x] Facebook publishing
 - [x] Test coverage gate at 80%
+- [x] Centralise `BuildChatPayload` in `AiServiceHelper` — eliminates duplication across all `ITextToTextProvider` implementations ([#244](https://github.com/artcava/XPoster/issues/244))
 
 ### 🎨 Phase 3: Admin Dashboard (TBD)
 - [ ] Web based UI
