@@ -1,4 +1,4 @@
-using XPoster.Contracts;
+using XPoster.Models;
 using XPoster.Services;
 
 namespace XPoster.Tests.Services;
@@ -32,8 +32,6 @@ public class AiServiceHelperChatPayloadTests
             InputText = string.Empty
         };
     }
-
-    private static dynamic GetPayload(object payload) => payload;
 
     private static string GetRole(object message)
     {
