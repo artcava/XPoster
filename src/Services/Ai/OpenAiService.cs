@@ -16,6 +16,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
     private readonly HttpClient _client;
     private readonly ILogger<OpenAiService> _logger;
     private readonly OpenAiOptions _options;
+
     /// <summary>
     /// Initialises a new instance of <see cref="OpenAiService"/>.
     /// </summary>
@@ -44,9 +45,10 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
         int tries = 0;
         do
         {
-            var payload = BuildChatPayload(text, request);
             var response = await _client.PostAsJsonAsync(
-                GetChatCompletionsEndpoint(), payload, cancellationToken);
+                GetChatCompletionsEndpoint(),
+                AiServiceHelper.BuildChatPayload(text, request, _options.TextModelName),
+                cancellationToken);
 
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
                 response, "OpenAI", "text generation", _logger, cancellationToken);
@@ -98,32 +100,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
             response, AiProvider.OpenAi, _client, _logger,
             allowedOrigin: null, cancellationToken);
     }
-    /// <summary>
-    /// Builds the payload for the OpenAI Chat Completions API request.
-    /// </summary>
-    /// <param name="text">The input text to include in the chat payload.</param>
-    /// <param name="request">The prompt request containing templates and settings.</param>
-    /// <returns>An object representing the payload for the OpenAI Chat Completions API request.</returns>
-    private object BuildChatPayload(string text, PromptRequest request)
-    {
-        var systemContent = request.SystemPromptTemplate
-            .Replace("{MaxChars}", request.MaxOutputLength.ToString(), StringComparison.Ordinal);
-        var label = request.InputTextLabel ?? "{Text}";
-        var userContent = request.UserPromptTemplate
-            .Replace(label, text, StringComparison.Ordinal);
 
-        return new
-        {
-            model = _options.TextModelName,
-            messages = new[]
-            {
-                new { role = "system", content = systemContent },
-                new { role = "user",   content = userContent   }
-            },
-            max_tokens = request.MaxTokenBudget,
-            temperature = request.Temperature
-        };
-    }
     private string GetChatCompletionsEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
     private string GetImageGenerationEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/images/generations";
 }

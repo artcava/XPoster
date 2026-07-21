@@ -7,11 +7,47 @@ using XPoster.Models;
 namespace XPoster.Services;
 
 /// <summary>
-/// Shared helper for parsing OpenAI-compatible HTTP responses.
-/// Centralises guard pipelines used by every AI provider implementation.
+/// Shared helper for parsing OpenAI-compatible HTTP responses and building
+/// shared chat completion payloads.
+/// Centralises guard pipelines and prompt-building logic used by every AI
+/// provider implementation.
 /// </summary>
 internal static class AiServiceHelper
 {
+    /// <summary>
+    /// Builds a shared OpenAI-compatible chat completion payload.
+    /// Interpolates <c>{MaxChars}</c> into <see cref="PromptRequest.SystemPromptTemplate"/>,
+    /// substitutes the input text label into <see cref="PromptRequest.UserPromptTemplate"/>
+    /// (falling back to <c>{Text}</c> when <see cref="PromptRequest.InputTextLabel"/> is <see langword="null"/>),
+    /// and returns an anonymous object with <c>model</c>, <c>messages</c>,
+    /// <c>max_tokens</c>, and <c>temperature</c>.
+    /// </summary>
+    /// <param name="text">The input text to embed in the user message.</param>
+    /// <param name="request">The prompt request containing templates and generation settings.</param>
+    /// <param name="modelName">The provider-specific model identifier (e.g. from <c>options.TextModelName</c>).</param>
+    /// <returns>An anonymous object suitable for serialisation as a chat completion request body.</returns>
+    internal static object BuildChatPayload(string text, PromptRequest request, string modelName)
+    {
+        var systemContent = request.SystemPromptTemplate
+            .Replace("{MaxChars}", request.MaxOutputLength.ToString(), StringComparison.Ordinal);
+
+        var label = request.InputTextLabel ?? "{Text}";
+        var userContent = request.UserPromptTemplate
+            .Replace(label, text, StringComparison.Ordinal);
+
+        return new
+        {
+            model = modelName,
+            messages = new[]
+            {
+                new { role = "system", content = systemContent },
+                new { role = "user",   content = userContent   }
+            },
+            max_tokens = request.MaxTokenBudget,
+            temperature = request.Temperature
+        };
+    }
+
     /// <summary>
     /// Parses an OpenAI-compatible chat completion HTTP response.
     /// </summary>

@@ -41,7 +41,7 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
         {
             var response = await _client.PostAsJsonAsync(
                 GetChatCompletionsEndpoint(),
-                BuildChatPayload(text, request),
+                AiServiceHelper.BuildChatPayload(text, request, _options.TextModelName),
                 cancellationToken);
             var (success, content) = await AiServiceHelper.ParseChatCompletionResponseAsync(
                 response, "Azure Foundry", "text generation", _logger, cancellationToken);
@@ -79,25 +79,6 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
             response, AiProvider.AzureFoundry, _client, _logger, allowedOrigin, cancellationToken);
     }
 
-    private object BuildChatPayload(string text, PromptRequest request)
-    {
-        var systemContent = request.SystemPromptTemplate
-            .Replace("{MaxChars}", request.MaxOutputLength.ToString(), StringComparison.Ordinal);
-        var label = request.InputTextLabel ?? "{Text}";
-        var userContent = request.UserPromptTemplate
-            .Replace(label, text, StringComparison.Ordinal);
-        return new
-        {
-            model = _options.TextModelName,
-            messages = new[]
-            {
-                new { role = "system", content = systemContent },
-                new { role = "user",   content = userContent   }
-            },
-            max_tokens = request.MaxTokenBudget,
-            temperature = request.Temperature
-        };
-    }
     private string GetChatCompletionsEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/chat/completions";
     private string GetImageGenerationEndpoint() => $"{_options.Endpoint.TrimEnd('/')}/images/generations";
 }
