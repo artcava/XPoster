@@ -104,13 +104,9 @@ builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSecti
 builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
 builder.Services.AddTransient<ITagReplacementService, TagReplacementService>();
 
-// AI provider options: each extension method owns its SectionName constant
-// and encapsulates Configure<T> + AddSingleton<IValidateOptions<T>> in one call.
-builder.Services.AddOpenAiOptions(builder.Configuration);
-builder.Services.AddAzureFoundryOptions(builder.Configuration);
-builder.Services.AddDeepSeekOptions(builder.Configuration);
-builder.Services.AddFalAiOptions(builder.Configuration);
-builder.Services.AddPerplexityOptions(builder.Configuration);
+// AI provider options: a single call binds and validates all AI provider sections
+// (OpenAI, AzureFoundry, DeepSeek, FalAi, Perplexity) via AddAiProviderOptions().
+builder.Services.AddAiProviderOptions(builder.Configuration);
 
 // Azure Blob Storage — BlobServiceClient registered as singleton per SDK best practice.
 // BlobStorageOptions binds AZURE_STORAGE_CONNECTION_STRING and AZURE_STORAGE_CONTAINER_NAME
