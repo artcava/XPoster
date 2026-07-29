@@ -1,20 +1,20 @@
-# Community 179
+# Community 196
 
 > 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **DispatchAsync()** (2 connections)
+- **InSender.cs** (11 connections)
+- **InSender()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 151]] (3 shared connections)
+- [[Community 66]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

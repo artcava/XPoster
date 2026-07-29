@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **RSSFeedTests.cs** (8 connections)
-- **RSSFeedTests.cs** (8 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **RSSFeedTests** (2 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **if()** (2 connections)
+- **TryGet()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **Supports()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **GetRequired()** (2 connections)
 
 ## Relationships
 

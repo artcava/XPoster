@@ -5,18 +5,18 @@
 ## Key Concepts
 
 - **FbSenderImageFlowTests.cs** (15 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
 - **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **FbSenderImageFlowTests** (2 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
 - **InvalidImageBytes()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **FbSenderImageFlowTests** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **BuildCreds()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (7 shared connections)
+- [[Community 84]] (7 shared connections)
 
 ## Audit Trail
 

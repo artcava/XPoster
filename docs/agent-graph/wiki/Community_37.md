@@ -1,25 +1,25 @@
 # Community 37
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **AzureFoundryService.cs** (11 connections)
-- **while()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **var()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **CreateSut()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
+- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
+- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
+- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
+- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
+- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XPosterContainerPollingFunctionTests** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 62]] (9 shared connections)
 
 ## Audit Trail
 

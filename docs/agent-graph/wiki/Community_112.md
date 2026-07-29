@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **ValidOptions()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetReplacements()** (2 connections)
 
 ## Relationships
 

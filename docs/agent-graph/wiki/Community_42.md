@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AiProviderServiceCollectionExtensionsTests** (2 connections)
-- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
-- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
 
 ## Relationships
 

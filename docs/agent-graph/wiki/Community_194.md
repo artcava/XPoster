@@ -1,14 +1,12 @@
-# Community 113
+# Community 194
 
-> 5 nodes · cohesion 0.70
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **SendAsync()** (2 connections)
+- **AiProvider.cs** (2 connections)
+- **AiProvider.cs** (2 connections)
 
 ## Relationships
 
@@ -16,7 +14,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

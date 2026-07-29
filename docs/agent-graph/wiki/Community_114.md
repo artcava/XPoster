@@ -1,22 +1,22 @@
 # Community 114
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider.cs** (4 connections)
-- **GetCurrentTime()** (2 connections)
-- **TimeProvider** (2 connections)
-- **XPoster.Providers** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **GenerateTextAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 147]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

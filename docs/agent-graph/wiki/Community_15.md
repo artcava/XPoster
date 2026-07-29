@@ -1,26 +1,27 @@
 # Community 15
 
-> 17 nodes · cohesion 0.23
+> 18 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **PromptStepOptionsTests.cs** (16 connections)
-- **PromptStepOptionsTests.cs** (16 connections)
+- **AiProviderOptionsAbstractionTests.cs** (17 connections)
+- **AiProviderOptionsAbstractionTests.cs** (17 connections)
+- **OpenAiOptions_ApiKeyAndEndpoint_AccessibleThroughAbstraction()** (2 connections)
+- **FalAiOptions_ModelCatalog_ExposesImageOnly()** (2 connections)
+- **ModelCatalog_EmptyModelName_NotExposedAsSupported()** (2 connections)
+- **FalAiOptions_NumInferenceSteps_RemainsOnConcreteClass()** (2 connections)
+- **ModelCatalog_UnsupportedCapability_GetRequired_Throws()** (2 connections)
+- **OpenAiOptions_ModelCatalog_ExposesTextAndImage()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **PromptStepOptions_SummaryStep_MaxOutputLength_IsNullByConvention()** (2 connections)
-- **PromptStepOptions_ValueEquality_DifferentRole_AreNotEqual()** (2 connections)
-- **PromptStepOptions_Temperature_AcceptsZeroAndOne()** (2 connections)
-- **PromptStepOptions_ValueEquality_SameValues_AreEqual()** (2 connections)
-- **PromptStepOptions_ValueEquality_DifferentOptionals_AreNotEqual()** (2 connections)
-- **PromptStepOptions_OptionalProperties_DefaultToNull()** (2 connections)
-- **PromptStepOptions_ImageGenerationStep_ImageProperties_AreIndependent()** (2 connections)
-- **PromptStepOptions_IsImmutable_AfterConstruction()** (2 connections)
-- **PromptStepOptions_OptionalProperties_AreSetCorrectly()** (2 connections)
-- **PromptStepOptions_NonImageSteps_ImageProperties_AreNull()** (2 connections)
-- **PromptStepOptionsTests** (2 connections)
-- **PromptStepOptions_WithExpression_PreservesUnchangedProperties()** (2 connections)
-- **PromptStepOptions_RequiredProperties_AreSetCorrectly()** (2 connections)
-- **PromptStepOptions_AllRoles_CanBeConstructed()** (2 connections)
+- **PerplexityOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **PerplexityOptions_ModelCatalog_ExposesTextOnly()** (2 connections)
+- **OpenAiOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **DeepSeekOptions_ModelCatalog_ExposesTextOnly()** (2 connections)
+- **AiProviderOptionsAbstractionTests** (2 connections)
+- **AzureFoundryOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **AzureFoundryOptions_ModelCatalog_ExposesTextAndImage()** (2 connections)
+- **DeepSeekOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **FalAiOptions_ImplementsIAiProviderOptions()** (2 connections)
 
 ## Relationships
 
@@ -28,7 +29,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 62 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

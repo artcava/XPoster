@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **PromptRole.cs** (2 connections)
+- **FeedOptions.cs** (2 connections)
 - **XPoster.Models** (2 connections)
-- **PromptRole.cs** (2 connections)
+- **FeedOptions.cs** (2 connections)
 
 ## Relationships
 

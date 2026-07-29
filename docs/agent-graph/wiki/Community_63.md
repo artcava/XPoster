@@ -1,25 +1,26 @@
 # Community 63
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
-- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
-- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
-- **AiProviderExtensionsTests** (2 connections)
-- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
+- **FbSenderResilienceTests** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 192]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

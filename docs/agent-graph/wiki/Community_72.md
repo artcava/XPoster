@@ -5,17 +5,17 @@
 ## Key Concepts
 
 - **AiServiceHelper.cs** (11 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
 - **ParseImageResponseAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
 - **LogAndReturnEmpty()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
 - **BuildChatPayload()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 144]] (4 shared connections)
+- [[Community 140]] (4 shared connections)
 
 ## Audit Trail
 

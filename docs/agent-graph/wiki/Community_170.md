@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
+- **BlobStorageOptions.cs** (2 connections)
 - **XPoster.Models** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
+- **BlobStorageOptions.cs** (2 connections)
 
 ## Relationships
 

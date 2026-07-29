@@ -1,28 +1,29 @@
 # Community 41
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
-- **MessageMaxLength_Returns2200()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **new()** (2 connections)
-- **Platform_ReturnsInstagram()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildSender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **AzureFoundryService.cs** (11 connections)
+- **AzureFoundryService.cs** (11 connections)
+- **AzureFoundryService()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **var()** (2 connections)
+- **while()** (2 connections)
+- **if()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

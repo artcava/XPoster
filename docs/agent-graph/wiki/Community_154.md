@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **BlobUploadResult()** (2 connections)
 
 ## Relationships
 

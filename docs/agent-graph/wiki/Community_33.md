@@ -1,29 +1,30 @@
 # Community 33
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
-- **DryRunSenderTests()** (2 connections)
-- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
-- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
-- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
-- **Platform_ReturnsDryRun()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
+- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
+- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
+- **Constructor_NullDictionary_Throws()** (2 connections)
+- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
+- **AiModelCatalogTests** (2 connections)
+- **Empty_SupportsNoModelClass()** (2 connections)
+- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
+- **GetRequired_Throws_WhenNotSupported()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (14 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **return()** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **GetCryptoValue()** (2 connections)
 - **catch()** (2 connections)
-- **if()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (7 shared connections)
+- [[Community 183]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

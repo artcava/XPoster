@@ -1,28 +1,29 @@
 # Community 39
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **ValidPost()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
+- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
+- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
+- **Platform_ReturnsDryRun()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
+- **DryRunSenderTests()** (2 connections)
 - **BuildSender()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **InSender()** (2 connections)
+- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
+- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 24]] (14 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

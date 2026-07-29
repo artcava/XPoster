@@ -1,20 +1,20 @@
 # Community 180
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **if()** (2 connections)
-- **IsTransientHttpFailure()** (2 connections)
+- **FacebookCredentials.cs** (2 connections)
+- **FacebookCredentials.cs** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 135]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,23 @@
 # Community 29
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
-- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
-- **BuildProvider()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **LocalOverrideTimeProviderTests** (2 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **XPosterContainerPollingFunction()** (2 connections)
+- **if()** (2 connections)
+- **PollPendingContainersAsync()** (2 connections)
+- **Run()** (2 connections)
+- **TryDeleteBlobAsync()** (2 connections)
+- **XPoster** (2 connections)
+- **switch()** (2 connections)
+- **ProcessContainerAsync()** (2 connections)
+- **HandleFinishedAsync()** (2 connections)
+- **foreach()** (2 connections)
+- **catch()** (2 connections)
+- **HandleTerminalFailureAsync()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

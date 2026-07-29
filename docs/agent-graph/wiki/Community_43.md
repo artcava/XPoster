@@ -1,19 +1,20 @@
 # Community 43
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **MetaPublishingService.cs** (9 connections)
-- **MetaPublishingService.cs** (9 connections)
-- **GetApiVersion()** (2 connections)
-- **catch()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **if()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **PublishContainerAsync()** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests** (2 connections)
+- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
+- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
+- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
+- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

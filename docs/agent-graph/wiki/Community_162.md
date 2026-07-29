@@ -1,12 +1,13 @@
 # Community 162
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **LinkedInCredentials.cs** (2 connections)
-- **LinkedInCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **DeepSeekOptionsExtensions.cs** (3 connections)
+- **AddDeepSeekOptions()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

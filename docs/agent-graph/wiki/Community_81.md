@@ -5,16 +5,16 @@
 ## Key Concepts
 
 - **CredentialsStartupValidator.cs** (10 connections)
-- **Validate()** (2 connections)
 - **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 - **CredentialsStartupValidator()** (2 connections)
-- **catch()** (2 connections)
-- **InvalidOperationException()** (2 connections)
 - **if()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (4 shared connections)
+- [[Community 152]] (4 shared connections)
 
 ## Audit Trail
 

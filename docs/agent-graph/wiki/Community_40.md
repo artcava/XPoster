@@ -1,28 +1,29 @@
 # Community 40
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **ConfigurationFeedUrlProvider()** (2 connections)
-- **ConfigurationFeedUrlProviderTests** (2 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
-- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **Platform_ReturnsLinkedIn()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
+- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
+- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
+- **MessageMaxLength_Returns2800()** (2 connections)
+- **InSender()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 31]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

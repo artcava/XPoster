@@ -1,22 +1,23 @@
 # Community 105
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **if()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **DeleteAsync()** (2 connections)
+- **IBlobStorageService** (2 connections)
+- **UploadAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 148]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

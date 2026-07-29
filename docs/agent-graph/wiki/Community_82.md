@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **SendAsync()** (2 connections)
-- **IgSender()** (2 connections)
-- **catch()** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
+- **XPoster** (2 connections)
 - **if()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **catch()** (2 connections)
+- **Run()** (2 connections)
 
 ## Relationships
 

@@ -1,27 +1,28 @@
 # Community 44
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **XFunctionTests.cs** (9 connections)
-- **XFunctionTests.cs** (9 connections)
-- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
-- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **XFunctionTests()** (2 connections)
-- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
-- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
-- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
-- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **new()** (2 connections)
+- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
+- **MessageMaxLength_Returns2200()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **BuildSender()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Platform_ReturnsInstagram()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 96]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

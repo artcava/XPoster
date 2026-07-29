@@ -1,22 +1,23 @@
 # Community 101
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **GenerateTextAsync()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **PublishContainerAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 142]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
