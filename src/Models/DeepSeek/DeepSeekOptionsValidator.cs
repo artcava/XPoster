@@ -12,11 +12,12 @@ public sealed class DeepSeekOptionsValidator : IValidateOptions<DeepSeekOptions>
     {
         var failures = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(options.Endpoint))
-            failures.Add($"{nameof(DeepSeekOptions.Endpoint)} is required.");
-
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(DeepSeekOptions.ApiKey)} is required.");
+        AiProviderValidationHelper.ValidateConnectivity(
+            options.ApiKey,
+            options.Endpoint,
+            failures,
+            nameof(DeepSeekOptions.ApiKey),
+            nameof(DeepSeekOptions.Endpoint));
 
         if (string.IsNullOrWhiteSpace(options.TextModelName))
             failures.Add($"{nameof(DeepSeekOptions.TextModelName)} is required.");

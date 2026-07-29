@@ -12,11 +12,12 @@ public sealed class PerplexityOptionsValidator : IValidateOptions<PerplexityOpti
     {
         var failures = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(options.Endpoint))
-            failures.Add($"{nameof(PerplexityOptions.Endpoint)} is required.");
-
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(PerplexityOptions.ApiKey)} is required.");
+        AiProviderValidationHelper.ValidateConnectivity(
+            options.ApiKey,
+            options.Endpoint,
+            failures,
+            nameof(PerplexityOptions.ApiKey),
+            nameof(PerplexityOptions.Endpoint));
 
         if (string.IsNullOrWhiteSpace(options.TextModelName))
             failures.Add($"{nameof(PerplexityOptions.TextModelName)} is required.");

@@ -14,11 +14,12 @@ public sealed class FalAiOptionsValidator : IValidateOptions<FalAiOptions>
     {
         var failures = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(options.Endpoint))
-            failures.Add($"{nameof(FalAiOptions.Endpoint)} is required.");
-
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(FalAiOptions.ApiKey)} is required.");
+        AiProviderValidationHelper.ValidateConnectivity(
+            options.ApiKey,
+            options.Endpoint,
+            failures,
+            nameof(FalAiOptions.ApiKey),
+            nameof(FalAiOptions.Endpoint));
 
         if (string.IsNullOrWhiteSpace(options.ImageModelName))
         {

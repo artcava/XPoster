@@ -1,3 +1,5 @@
+using XPoster.Contracts;
+
 namespace XPoster.Models;
 
 /// <summary>
@@ -5,7 +7,7 @@ namespace XPoster.Models;
 /// Contains only connectivity and model-capability settings.
 /// Prompt data is supplied at runtime via <see cref="PromptRequest"/> / <see cref="ImagePromptRequest"/>.
 /// </summary>
-public sealed class OpenAiOptions
+public sealed class OpenAiOptions : IAiProviderOptions
 {
     /// <summary>Gets or sets the OpenAI API key used for authentication.</summary>
     public string ApiKey { get; set; } = string.Empty;
@@ -18,4 +20,11 @@ public sealed class OpenAiOptions
 
     /// <summary>Gets or sets the model used for image generation requests.</summary>
     public string ImageModelName { get; set; } = "gpt-image-1.5";
+
+    /// <inheritdoc/>
+    public AiModelCatalog ModelCatalog => new(new Dictionary<AiModelClass, string>
+    {
+        [AiModelClass.Text] = TextModelName,
+        [AiModelClass.Image] = ImageModelName
+    });
 }

@@ -12,11 +12,12 @@ public sealed class AzureFoundryOptionsValidator : IValidateOptions<AzureFoundry
     {
         var failures = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(options.Endpoint))
-            failures.Add($"{nameof(AzureFoundryOptions.Endpoint)} is required.");
-
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(AzureFoundryOptions.ApiKey)} is required.");
+        AiProviderValidationHelper.ValidateConnectivity(
+            options.ApiKey,
+            options.Endpoint,
+            failures,
+            nameof(AzureFoundryOptions.ApiKey),
+            nameof(AzureFoundryOptions.Endpoint));
 
         if (string.IsNullOrWhiteSpace(options.TextModelName))
             failures.Add($"{nameof(AzureFoundryOptions.TextModelName)} is required.");
