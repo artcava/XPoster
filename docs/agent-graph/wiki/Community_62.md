@@ -5,18 +5,18 @@
 ## Key Concepts
 
 - **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
 - **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
-- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
-- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
 - **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
 - **PendingContainer()** (2 connections)
 - **CreateTimerInfo()** (2 connections)
-- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
 - **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
 
 ## Relationships
 
-- [[Community 38]] (11 shared connections)
+- [[Community 41]] (11 shared connections)
 
 ## Audit Trail
 

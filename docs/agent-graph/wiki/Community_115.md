@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (4 connections)
-- **ITextToTextProvider.cs** (4 connections)
-- **ITextToTextProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator.cs** (4 connections)
+- **PowerLawOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

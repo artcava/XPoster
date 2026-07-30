@@ -1,26 +1,26 @@
 # Community 64
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **FbSenderResilienceTests** (2 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeedTests** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
 
 ## Relationships
 
-- [[Community 171]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (11 connections)
-- **catch()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **Resolve()** (2 connections)
-- **return()** (2 connections)
-- **typeof()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **if()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
 
 ## Relationships
 
-- [[Community 133]] (5 shared connections)
+- [[Community 63]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

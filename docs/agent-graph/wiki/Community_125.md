@@ -1,22 +1,22 @@
 # Community 125
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITagReplacementProvider** (2 connections)
-- **GetReplacements()** (2 connections)
+- **OrchestratorFactory.cs** (11 connections)
+- **OrchestratorFactory()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **CreateOrchestratorInstance()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 80]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

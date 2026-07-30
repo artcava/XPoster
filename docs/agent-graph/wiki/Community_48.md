@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **MetaPublishingService.cs** (9 connections)
-- **MetaPublishingService.cs** (9 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **catch()** (2 connections)
-- **GetApiVersion()** (2 connections)
-- **if()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **PublishContainerAsync()** (2 connections)
+- **XFunctionTests.cs** (9 connections)
+- **XFunctionTests.cs** (9 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
 
 ## Relationships
 

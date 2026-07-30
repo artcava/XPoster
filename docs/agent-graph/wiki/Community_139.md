@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ImageTestData.cs** (4 connections)
-- **ImageTestData.cs** (4 connections)
-- **CreateValidJpeg()** (2 connections)
-- **CreateValidPng()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

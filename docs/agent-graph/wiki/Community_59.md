@@ -1,26 +1,26 @@
 # Community 59
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **for()** (2 connections)
-- **catch()** (2 connections)
-- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
+- **FbSenderResilienceTests** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 171]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

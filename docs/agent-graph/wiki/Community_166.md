@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Credentials** (2 connections)
-- **LinkedInCredentials.cs** (2 connections)
-- **LinkedInCredentials.cs** (2 connections)
+- **FeedOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
+- **FeedOptions.cs** (2 connections)
 
 ## Relationships
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **FeedPromptOptions.cs** (3 connections)
+- **FeedPromptOptions.cs** (3 connections)
+- **GetStep()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

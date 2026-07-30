@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterAiProviders()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
 
 ## Relationships
 

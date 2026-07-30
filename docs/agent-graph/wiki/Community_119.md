@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ISender** (2 connections)
-- **SendAsync()** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **CreateValidJpeg()** (2 connections)
+- **CreateValidPng()** (2 connections)
 
 ## Relationships
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 

@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **InSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

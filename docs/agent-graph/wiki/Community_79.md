@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **XPoster** (2 connections)
-- **XFunction()** (2 connections)
-- **Run()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
 
 ## Relationships
 

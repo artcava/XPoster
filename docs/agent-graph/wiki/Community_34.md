@@ -1,30 +1,30 @@
 # Community 34
 
-> 13 nodes · cohesion 0.29
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **Validate_ImageModelNameWithAllowedSpecialChars_Succeeds()** (2 connections)
-- **FalAiOptionsValidatorTests** (2 connections)
-- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
-- **Validate_MissingApiKey_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingModelId_Fails()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhitespaceApiKey_Fails()** (2 connections)
-- **Validate_WhitespaceModelId_Fails()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_ImageModelNameWithUnsafeCharacters_Fails()** (2 connections)
+- **FalAiImageServiceTests.cs** (24 connections)
+- **FalImageJson()** (2 connections)
+- **BuildService()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 35]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

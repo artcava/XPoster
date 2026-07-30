@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **if()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **Validate()** (2 connections)
 - **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 134]] (5 shared connections)
+- [[Community 149]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

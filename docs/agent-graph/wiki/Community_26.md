@@ -1,28 +1,28 @@
 # Community 26
 
-> 15 nodes · cohesion 0.13
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
+- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
+- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
+- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
 - **ConfigurationBuilder()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **new()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
-- **ValidPost()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
+- **AddAiProviderOptionsTests** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **BuildAllProvidersConfig()** (2 connections)
+- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

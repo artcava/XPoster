@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (14 connections)
-- **IgSenderResilienceTests.cs** (14 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **PostWithImage()** (2 connections)
-- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
-- **PostWithoutImage()** (2 connections)
-- **SendAsync_WhenBlobUploadFails_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()** (2 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **IgSender()** (2 connections)
-- **BuildSender()** (2 connections)
-- **new()** (2 connections)
-- **Uri()** (2 connections)
+- **PromptRoleTests.cs** (14 connections)
+- **PromptRoleTests.cs** (14 connections)
+- **PromptRole_UndefinedValueNotPresentInMap_ThrowsKeyNotFound()** (2 connections)
+- **PromptRole_ParseFromStringIgnoreCase_ReturnsCorrectMember()** (2 connections)
+- **PromptRole_ParseInvalidName_Throws()** (2 connections)
+- **PromptRole_TryParse_ValidName_ReturnsTrue()** (2 connections)
+- **PromptRole_ToString_ReturnsName()** (2 connections)
+- **PromptRole_TryParse_InvalidName_ReturnsFalse()** (2 connections)
+- **PromptRole_HasExactlyThreeMembers()** (2 connections)
+- **PromptRole_BackingValue_IsStable()** (2 connections)
+- **PromptRole_DefinedMember_IsDefined()** (2 connections)
+- **PromptRoleTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PromptRole_UsedAsDictionaryKey_LookupSucceeds()** (2 connections)
+- **PromptRole_ParseFromString_ReturnsCorrectMember()** (2 connections)
 
 ## Relationships
 

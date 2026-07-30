@@ -1,30 +1,30 @@
 # Community 31
 
-> 13 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **BuildSender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
+- **AiModelCatalogTests** (2 connections)
+- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
+- **Empty_SupportsNoModelClass()** (2 connections)
+- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
+- **Constructor_NullDictionary_Throws()** (2 connections)
+- **GetRequired_Throws_WhenNotSupported()** (2 connections)
+- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
+- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
 
 ## Relationships
 
-- [[Community 40]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

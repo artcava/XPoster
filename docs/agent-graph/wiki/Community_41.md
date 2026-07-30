@@ -4,26 +4,26 @@
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (24 connections)
-- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **MakeRequest()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
+- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **XPosterContainerPollingFunctionTests** (2 connections)
+- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
+- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
+- **CreateSut()** (2 connections)
+- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
+- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (12 shared connections)
+- [[Community 62]] (9 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,29 +1,29 @@
 # Community 37
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **PowerLawOrchestratorTests.cs** (11 connections)
-- **PowerLawOrchestratorTests.cs** (11 connections)
-- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
-- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **new()** (2 connections)
-- **PowerLawOrchestratorTests()** (2 connections)
-- **OrchestrateAsync_BroadcastsSamePost_ToAllSenders()** (2 connections)
-- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
-- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
-- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **Platform_ReturnsLinkedIn()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **InSender()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **MessageMaxLength_Returns2800()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 32]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (14 connections)
-- **ScheduledOrchestrationProfileTests.cs** (14 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **typeof()** (2 connections)
-- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
-- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
-- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests** (2 connections)
+- **Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()** (2 connections)
+- **Initialize_WhenTelemetryIsNotDependency_DoesNothing()** (2 connections)
+- **Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenHttpDependencyNotFacebook_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()** (2 connections)
+- **Initialize_WhenFacebookDataIsMalformedUrl_DataRemainsUnchanged()** (2 connections)
+- **Initialize_WhenDataIsEmpty_DoesNotThrow()** (2 connections)
+- **Initialize_WhenDependencyTypeIsNotHttp_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenDataIsNull_DoesThrow()** (2 connections)
+- **Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 

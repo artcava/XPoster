@@ -1,22 +1,22 @@
 # Community 133
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (11 connections)
-- **OrchestratorFactory()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **if()** (2 connections)
-- **CreateOrchestratorInstance()** (2 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **Resolve()** (2 connections)
+- **IOrchestratorFactory** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

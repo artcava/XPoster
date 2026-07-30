@@ -1,25 +1,25 @@
 # Community 77
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (13 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **OrchestrateAsync_Should_PassSenderMessageMaxLength_As_MaxOutputLength_In_SummaryRequest()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ContextHasNoFeedUrls()** (2 connections)
-- **OrchestrateAsync_TwoSlots_Should_UseDifferentFeedUrls_Independently()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **IsEnabled()** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **Dispose()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 98]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **AzureFoundryOptionsValidator.cs** (5 connections)
+- **AzureFoundryOptionsValidator.cs** (5 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **nameof()** (2 connections)
 
 ## Relationships
 

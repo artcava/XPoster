@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **AiModelCatalogTests.cs** (12 connections)
-- **AiModelCatalogTests.cs** (12 connections)
-- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
-- **Constructor_NullDictionary_Throws()** (2 connections)
-- **Empty_SupportsNoModelClass()** (2 connections)
-- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
-- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
-- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
-- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
-- **GetRequired_Throws_WhenNotSupported()** (2 connections)
-- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
-- **AiModelCatalogTests** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_ImageModelNameWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_ImageModelNameWithAllowedSpecialChars_Succeeds()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
 
 ## Relationships
 

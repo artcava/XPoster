@@ -1,21 +1,21 @@
 # Community 149
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **NoOrchestrator()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **foreach()** (2 connections)
+- **ValidateOptions()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 86]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

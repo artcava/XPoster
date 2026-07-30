@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **XSenderResilienceTests** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XSender()** (2 connections)
+- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
 
 ## Relationships
 

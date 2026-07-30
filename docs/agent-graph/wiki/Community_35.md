@@ -1,29 +1,29 @@
 # Community 35
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
-- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **ConfigurationTagReplacementProviderTests** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **FalAiImageServiceTests.cs** (24 connections)
+- **MakeRequest()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 34]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

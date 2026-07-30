@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **GetFeedsAsync()** (2 connections)
-- **IFeedService** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **ImagePromptRequest** (2 connections)
+- **PromptRequest** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

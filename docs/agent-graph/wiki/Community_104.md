@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **XPoster.Providers** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 
