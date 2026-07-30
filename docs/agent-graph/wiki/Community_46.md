@@ -1,19 +1,20 @@
 # Community 46
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (9 connections)
-- **XSenderResilienceTests.cs** (9 connections)
-- **XSenderResilienceTests** (2 connections)
-- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
-- **XSender()** (2 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **InSenderResilienceTests.cs** (10 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **ValidPost()** (2 connections)
+- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
+- **InSender()** (2 connections)
 - **BuildSender()** (2 connections)
-- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **InSenderResilienceTests** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

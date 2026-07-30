@@ -1,35 +1,35 @@
 # Community 6
 
-> 29 nodes · cohesion 0.14
+> 28 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **OptionsExtensionsTests.cs** (28 connections)
-- **OptionsExtensionsTests.cs** (28 connections)
+- **PerplexityServiceTests.cs** (27 connections)
+- **PerplexityServiceTests.cs** (27 connections)
+- **GenerateTextAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_ImagePromptRole_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_UsesCustomInputTextLabel_InUserPromptSubstitution()** (2 connections)
+- **GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **BuildSummaryRequest()** (2 connections)
+- **BuildService()** (2 connections)
+- **BuildImagePromptRequest()** (2 connections)
+- **GenerateTextAsync_ImagePromptRole_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
+- **foreach()** (2 connections)
+- **GenerateTextAsync_ImagePromptRole_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_ImagePromptRole_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenMaxOutputLengthIsNull_CallsApiOnce()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenInputTextLabelIsNull_FallsBackToDefaultLabel()** (2 connections)
+- **GenerateTextAsync_WhenFirstResponseStillTooLong_RetriesAndReturnsSecondResponse()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **GenerateTextAsync_WhenTextRemainsLongAfterMaxRetries_ReturnsLastApiContent()** (2 connections)
 - **new()** (2 connections)
-- **DeepSeekOptionsExtensionsTests** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **FalAiOptionsExtensionsTests** (2 connections)
-- **SectionName_IsDeepSeek()** (2 connections)
-- **OptionsExtensionsTests** (2 connections)
-- **SectionName_IsAzureFoundry()** (2 connections)
-- **PerplexityOptionsExtensionsTests** (2 connections)
-- **register()** (2 connections)
-- **AddDeepSeekOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddAzureFoundryOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddAzureFoundryOptions_RegistersValidator()** (2 connections)
-- **AddOpenAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddDeepSeekOptions_RegistersValidator()** (2 connections)
-- **AddFalAiOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddFalAiOptions_RegistersValidator()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **AddPerplexityOptions_BindsOptionsFromCorrectSection()** (2 connections)
-- **AddPerplexityOptions_RegistersValidator()** (2 connections)
-- **AzureFoundryOptionsExtensionsTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **SectionName_IsFalAi()** (2 connections)
-- **SectionName_IsPerplexity()** (2 connections)
-- *... and 4 more nodes in this community*
+- **MakeHandlerMock()** (2 connections)
+- **MakeSequentialHandlerMock()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- *... and 3 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 110 (100%)
+- EXTRACTED: 106 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

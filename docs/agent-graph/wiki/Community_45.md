@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **InSender()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **ValidPost()** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests** (2 connections)
+- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
+- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
+- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
 
 ## Relationships
 

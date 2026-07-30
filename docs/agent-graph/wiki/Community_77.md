@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (7 connections)
-- **DeepSeekOptionsValidatorTests.cs** (7 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **ValidOptions()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **PostTests** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
 
 ## Relationships
 

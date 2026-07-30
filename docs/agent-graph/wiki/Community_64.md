@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **catch()** (2 connections)
-- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
-- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **for()** (2 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeedTests** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
 
 ## Relationships
 

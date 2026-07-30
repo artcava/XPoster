@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddAiProviderOptions()** (2 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

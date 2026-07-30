@@ -1,20 +1,20 @@
 # Community 80
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
-- **foreach()** (2 connections)
-- **Apply()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **Validate()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
 - **if()** (2 connections)
-- **TagReplacementService()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 144]] (4 shared connections)
 
 ## Audit Trail
 

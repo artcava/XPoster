@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **FeedPromptOptions.cs** (3 connections)
-- **FeedPromptOptions.cs** (3 connections)
-- **GetStep()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **GetLabel()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

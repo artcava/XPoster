@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **XPoster.Credentials** (2 connections)
+- **if()** (2 connections)
+- **InstagramCredentialsValidator** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 

@@ -6,8 +6,8 @@
 
 - **ITextToTextProvider.cs** (4 connections)
 - **ITextToTextProvider.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
 - **ITextToTextProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
 - **GenerateTextAsync()** (2 connections)
 
 ## Relationships

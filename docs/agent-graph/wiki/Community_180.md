@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **FacebookCredentials.cs** (2 connections)
-- **FacebookCredentials.cs** (2 connections)
+- **XCredentials.cs** (2 connections)
+- **XCredentials.cs** (2 connections)
 - **XPoster.Credentials** (2 connections)
 
 ## Relationships

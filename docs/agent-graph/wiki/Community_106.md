@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TagReplacementServiceTests.cs** (5 connections)
-- **TagReplacementServiceTests.cs** (5 connections)
-- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
-- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
-- **Apply_Returns_Input_Unchanged_When_Text_Is_Empty_Or_Whitespace()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

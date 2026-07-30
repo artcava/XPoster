@@ -1,22 +1,23 @@
 # Community 108
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **ValidOptions()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests.cs** (13 connections)
+- **CreateOrchestrator()** (2 connections)
+- **BuildContext()** (2 connections)
+- **new()** (2 connections)
+- **SetupHappyPathProviders()** (2 connections)
+- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 78]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

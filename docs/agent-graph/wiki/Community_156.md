@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **foreach()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **XSender.cs** (6 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 175]] (3 shared connections)
+- [[Community 189]] (3 shared connections)
 
 ## Audit Trail
 

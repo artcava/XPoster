@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **ValidateConnectivity()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

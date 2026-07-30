@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **XPoster.Contracts** (2 connections)
 - **AiModelClass.cs** (2 connections)
+- **XPoster.Contracts** (2 connections)
 - **AiModelClass.cs** (2 connections)
 
 ## Relationships

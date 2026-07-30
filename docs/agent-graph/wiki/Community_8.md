@@ -1,35 +1,34 @@
 # Community 8
 
-> 26 nodes · cohesion 0.15
+> 25 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **FbSenderTests.cs** (25 connections)
-- **FbSenderTests.cs** (25 connections)
-- **SendAsync_TextOnly_WhenResponseHasNullId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenPhotoEndpointReturns503_ReturnsFalseAndDeletesBlob()** (2 connections)
-- **SendAsync_TextOnly_WhenResponseMissingId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **BuildSender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithNullBlobStorage_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WithCaptionExceedingMaxLength_TruncatesAndPublishes()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **return()** (2 connections)
-- **NormalizeImage_WithValidJpeg_ReturnsSameBytes()** (2 connections)
-- **Platform_ReturnsFacebook()** (2 connections)
-- **NormalizeImage_WithValidPng_ReturnsOriginalBytes()** (2 connections)
-- **MessageMaxLength_Returns3000()** (2 connections)
-- **FbSender()** (2 connections)
-- **FbSenderTests()** (2 connections)
-- **FbSender_ImplementsISender()** (2 connections)
-- **SendAsync_TextOnly_WhenResponseHasEmptyId_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullFactory_ThrowsArgumentNullException()** (2 connections)
-- **NormalizeImage_WithInvalidBytes_ReturnsNull()** (2 connections)
-- *... and 1 more nodes in this community*
+- **DeepSeekServiceTests.cs** (24 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **SummaryRequest()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **ImagePromptDerivationRequest()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **new()** (2 connections)
+- **GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsValidResponse_ReturnsContent()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsBadGateway_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmptyString()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **GenerateTextAsync_UsesSystemAndUserTemplatesFromRequest_NotFromOptions()** (2 connections)
+- **DeepSeekServiceTests** (2 connections)
+- **GenerateTextAsync_AppliesCustomInputTextLabel_InUserTemplate()** (2 connections)
+- **GenerateTextAsync_WhenNoMaxOutputLength_DoesNotRetryRegardlessOfLength()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ForImagePromptRole_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenUsedForImagePromptDerivation_ReturnsPrompt()** (2 connections)
+- **GenerateTextAsync_WhenCancellationRequested_ThrowsOperationCanceledException()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **GenerateTextAsync_WhenResponseFitsWithinMaxOutputLength_ReturnsSingleCallResult()** (2 connections)
+- **BuildService()** (2 connections)
 
 ## Relationships
 
@@ -37,7 +36,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 98 (100%)
+- EXTRACTED: 94 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

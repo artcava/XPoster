@@ -5,12 +5,12 @@
 ## Key Concepts
 
 - **XCredentialsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
 - **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 197]] (2 shared connections)
+- [[Community 194]] (2 shared connections)
 
 ## Audit Trail
 

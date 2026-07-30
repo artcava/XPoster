@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (3 connections)
-- **IAiProviderOptions.cs** (3 connections)
-- **IAiProviderOptions** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
 
 ## Relationships
 

@@ -1,24 +1,24 @@
 # Community 87
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **OrchestratorFactory.cs** (11 connections)
+- **return()** (2 connections)
+- **typeof()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **foreach()** (2 connections)
 - **catch()** (2 connections)
+- **Resolve()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 112]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

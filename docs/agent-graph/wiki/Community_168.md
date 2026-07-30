@@ -1,17 +1,16 @@
 # Community 168
 
-> 4 nodes · cohesion 0.83
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
+- **nameof()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 157]] (3 shared connections)
 
 ## Audit Trail
 

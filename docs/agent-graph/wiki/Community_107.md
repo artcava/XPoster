@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **XPoster.Providers** (2 connections)
-- **GetProfiles()** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **XPoster.Models** (2 connections)
+- **nameof()** (2 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 

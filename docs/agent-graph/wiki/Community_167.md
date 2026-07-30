@@ -1,17 +1,16 @@
 # Community 167
 
-> 4 nodes · cohesion 0.83
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **FeedOrchestratorContext.cs** (3 connections)
-- **FeedOrchestratorContext.cs** (3 connections)
-- **FeedOrchestratorContext** (2 connections)
-- **XPoster.Models** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **if()** (2 connections)
+- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 161]] (3 shared connections)
 
 ## Audit Trail
 

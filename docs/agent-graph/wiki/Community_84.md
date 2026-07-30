@@ -5,16 +5,16 @@
 ## Key Concepts
 
 - **FbSenderImageFlowTests.cs** (15 connections)
-- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **CreateValidJpegBytes()** (2 connections)
-- **if()** (2 connections)
-- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
 - **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
+- **if()** (2 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
 
 ## Relationships
 
-- [[Community 59]] (8 shared connections)
+- [[Community 60]] (8 shared connections)
 
 ## Audit Trail
 

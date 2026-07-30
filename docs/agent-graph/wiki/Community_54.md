@@ -1,18 +1,19 @@
 # Community 54
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **RSSFeedTests.cs** (8 connections)
-- **RSSFeedTests.cs** (8 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
+- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **RSSFeedTests** (2 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

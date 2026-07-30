@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **FeedOrchestrator.cs** (8 connections)
-- **FeedOrchestrator.cs** (8 connections)
-- **foreach()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **TryGet()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **Supports()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **GetRequired()** (2 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
-- **BuildPromptRequest()** (2 connections)
-- **AcquireFeedContentAsync()** (2 connections)
-- **FeedOrchestrator()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

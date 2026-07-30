@@ -1,13 +1,12 @@
 # Community 166
 
-> 4 nodes · cohesion 0.83
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **NoOrchestrator()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **InstagramCredentials.cs** (2 connections)
+- **InstagramCredentials.cs** (2 connections)
 
 ## Relationships
 
@@ -15,7 +14,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

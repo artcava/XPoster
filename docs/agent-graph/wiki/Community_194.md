@@ -1,16 +1,15 @@
 # Community 194
 
-> 3 nodes · cohesion 1.00
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **XPoster.Contracts** (2 connections)
-- **AiProvider.cs** (2 connections)
-- **AiProvider.cs** (2 connections)
+- **XCredentialsValidator.cs** (4 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 187]] (2 shared connections)
 
 ## Audit Trail
 

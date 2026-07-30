@@ -1,21 +1,22 @@
 # Community 140
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
-- **catch()** (2 connections)
+- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 72]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

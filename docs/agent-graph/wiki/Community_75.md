@@ -1,25 +1,25 @@
 # Community 75
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (13 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **OrchestrateAsync_Should_PassSenderMessageMaxLength_As_MaxOutputLength_In_SummaryRequest()** (2 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ContextHasNoFeedUrls()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **OrchestrateAsync_TwoSlots_Should_UseDifferentFeedUrls_Independently()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse** (2 connections)
+- **Choice** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **XPoster.Models** (2 connections)
+- **ImageData** (2 connections)
+- **Message** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

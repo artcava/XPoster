@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **GetCryptoValue()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **ValidateOptions()** (2 connections)
+- **foreach()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 183]] (3 shared connections)
+- [[Community 80]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

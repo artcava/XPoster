@@ -1,21 +1,21 @@
 # Community 152
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **foreach()** (2 connections)
-- **ValidateOptions()** (2 connections)
-- **resolve()** (2 connections)
+- **FeedPromptOptions.cs** (3 connections)
+- **FeedPromptOptions.cs** (3 connections)
+- **GetStep()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

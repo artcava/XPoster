@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **TestOrchestrator()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
-- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **BuildChatPayload()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 61]] (8 shared connections)
+- [[Community 153]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
