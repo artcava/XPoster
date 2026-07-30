@@ -14,21 +14,25 @@ public sealed class FalAiOptionsValidator : IValidateOptions<FalAiOptions>
     {
         var failures = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(FalAiOptions.ApiKey)} is required.");
+        AiProviderValidationHelper.ValidateConnectivity(
+            options.ApiKey,
+            options.Endpoint,
+            failures,
+            nameof(FalAiOptions.ApiKey),
+            nameof(FalAiOptions.Endpoint));
 
-        if (string.IsNullOrWhiteSpace(options.ModelId))
+        if (string.IsNullOrWhiteSpace(options.ImageModelName))
         {
-            failures.Add($"{nameof(FalAiOptions.ModelId)} is required.");
+            failures.Add($"{nameof(FalAiOptions.ImageModelName)} is required.");
         }
         else
         {
-            foreach (var ch in options.ModelId)
+            foreach (var ch in options.ImageModelName)
             {
                 if (!char.IsLetterOrDigit(ch) && !AllowedSpecialChars.Contains(ch))
                 {
                     failures.Add(
-                        $"{nameof(FalAiOptions.ModelId)} contains an invalid character '{ch}'. " +
+                        $"{nameof(FalAiOptions.ImageModelName)} contains an invalid character '{ch}'. " +
                         "Only alphanumeric characters, hyphens, underscores, dots, and forward slashes are allowed.");
                     break;
                 }

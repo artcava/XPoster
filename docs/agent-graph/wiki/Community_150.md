@@ -1,20 +1,21 @@
 # Community 150
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **XSender.cs** (6 connections)
+- **catch()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 176]] (2 shared connections)
+- [[Community 176]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

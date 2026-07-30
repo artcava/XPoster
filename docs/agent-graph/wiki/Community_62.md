@@ -1,26 +1,26 @@
 # Community 62
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **RSSFeedTests.cs** (8 connections)
-- **RSSFeedTests.cs** (8 connections)
-- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
-- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **RSSFeed_CanSetPublishDate()** (2 connections)
-- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
-- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **RSSFeedTests** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 41]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

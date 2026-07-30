@@ -74,12 +74,9 @@ az functionapp config appsettings set \
     "KEYVAULT_URI=https://<your-keyvault-name>.vault.azure.net/" \
     "AiProvider=OpenAi" \
     "OpenAI__ApiKey=<value>" \
-    "OpenAI__ChatEndpoint=https://api.openai.com/v1/chat/completions" \
-    "OpenAI__ChatModel=gpt-4.1-nano" \
-    "OpenAI__ImageEndpoint=https://api.openai.com/v1/images/generations" \
-    "OpenAI__ImageModel=gpt-image-1.5" \
-    "OpenAI__ImageSize=1024x1024" \
-    "OpenAI__ImageCount=1" \
+    "OpenAI__Endpoint=https://api.openai.com/v1/" \
+    "OpenAI__TextModelName=gpt-4.1-nano" \
+    "OpenAI__ImageModelName=gpt-image-1.5" \
     "CronSchedule=0 0 6,8,14,16 * * *"
 
 # 6. Deploy

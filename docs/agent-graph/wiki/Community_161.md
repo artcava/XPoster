@@ -1,16 +1,17 @@
 # Community 161
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XSender()** (2 connections)
-- **if()** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 131]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

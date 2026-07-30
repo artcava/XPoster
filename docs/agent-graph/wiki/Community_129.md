@@ -1,21 +1,22 @@
 # Community 129
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (10 connections)
-- **CreateOrchestrator()** (2 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 82]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

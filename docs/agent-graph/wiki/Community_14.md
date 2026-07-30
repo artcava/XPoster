@@ -1,34 +1,35 @@
 # Community 14
 
-> 17 nodes · cohesion 0.12
+> 18 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GetSummaryAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
-- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_RequestBodyContainsModelField()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
-- **GetSummaryAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenTextExceedsLimit_CallsApiAndReturnsTrimmedContent()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **if()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
+- **AiProviderOptionsAbstractionTests.cs** (17 connections)
+- **AiProviderOptionsAbstractionTests.cs** (17 connections)
+- **ModelCatalog_UnsupportedCapability_GetRequired_Throws()** (2 connections)
+- **FalAiOptions_ModelCatalog_ExposesImageOnly()** (2 connections)
+- **FalAiOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **ModelCatalog_EmptyModelName_NotExposedAsSupported()** (2 connections)
+- **FalAiOptions_NumInferenceSteps_RemainsOnConcreteClass()** (2 connections)
+- **DeepSeekOptions_ModelCatalog_ExposesTextOnly()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **OpenAiOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **PerplexityOptions_ModelCatalog_ExposesTextOnly()** (2 connections)
+- **OpenAiOptions_ModelCatalog_ExposesTextAndImage()** (2 connections)
+- **PerplexityOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **AzureFoundryOptions_ModelCatalog_ExposesTextAndImage()** (2 connections)
+- **AiProviderOptionsAbstractionTests** (2 connections)
+- **AzureFoundryOptions_ImplementsIAiProviderOptions()** (2 connections)
+- **OpenAiOptions_ApiKeyAndEndpoint_AccessibleThroughAbstraction()** (2 connections)
+- **DeepSeekOptions_ImplementsIAiProviderOptions()** (2 connections)
 
 ## Relationships
 
-- [[Community 9]] (18 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 67 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

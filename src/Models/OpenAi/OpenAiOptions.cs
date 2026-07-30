@@ -1,83 +1,33 @@
+using XPoster.Contracts;
+
 namespace XPoster.Models;
 
 /// <summary>
 /// Strongly-typed configuration for the OpenAI provider, bound from the <c>OpenAI</c> configuration section.
+/// Contains only connectivity and model-capability settings.
+/// Prompt data is supplied at runtime via <see cref="PromptRequest"/> / <see cref="ImagePromptRequest"/>.
 /// </summary>
-public sealed class OpenAiOptions
+public sealed class OpenAiOptions : IAiProviderOptions, IAiProviderSection
 {
+    /// <summary>App-settings section name: <c>OpenAI</c>.</summary>
+    public static string SectionName => "OpenAI";
+
     /// <summary>Gets or sets the OpenAI API key used for authentication.</summary>
     public string ApiKey { get; set; } = string.Empty;
 
-    // ── Chat / Completions ────────────────────────────────────────────────────
-
     /// <summary>Gets or sets the Chat Completions API endpoint.</summary>
-    public string ChatEndpoint { get; set; } = "https://api.openai.com/v1/chat/completions";
+    public string Endpoint { get; set; } = "https://api.openai.com/v1/";
 
     /// <summary>Gets or sets the model used for chat/completion requests.</summary>
-    public string ChatModel { get; set; } = "gpt-4.1-nano";
-
-    /// <summary>Gets or sets the temperature used when generating summaries.</summary>
-    public double SummaryTemperature { get; set; } = 0.5;
-
-    /// <summary>
-    /// Gets or sets the divisor used to convert a character budget into a <c>max_tokens</c> value.
-    /// </summary>
-    public int SummaryMaxTokensPerChar { get; set; } = 5;
-
-    /// <summary>
-    /// Gets or sets the safety margin (in characters) subtracted from the character budget.
-    /// </summary>
-    public int SummarySafetyMarginChars { get; set; } = 50;
-
-    // ── Image Generation ──────────────────────────────────────────────────────
-
-    /// <summary>Gets or sets the Image Generations API endpoint.</summary>
-    public string ImageEndpoint { get; set; } = "https://api.openai.com/v1/images/generations";
+    public string TextModelName { get; set; } = "gpt-4.1-nano";
 
     /// <summary>Gets or sets the model used for image generation requests.</summary>
-    public string ImageModel { get; set; } = "gpt-image-1.5";
+    public string ImageModelName { get; set; } = "gpt-image-1.5";
 
-    /// <summary>Gets or sets the output image size (e.g. <c>1024x1024</c>).</summary>
-    public string ImageSize { get; set; } = "1024x1024";
-
-    /// <summary>Gets or sets the number of images to generate per request.</summary>
-    public int ImageCount { get; set; } = 1;
-
-    // ── Prompt Templates ──────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Gets or sets the system prompt template for text summarisation.
-    /// Supports placeholder <c>{MaxChars}</c>.
-    /// </summary>
-    public string SummarySystemPromptTemplate { get; set; } =
-        "You are an assistant that summarizes text concisely. " +
-        "It's very important that you keep summaries under {MaxChars} characters.";
-
-    /// <summary>
-    /// Gets or sets the user prompt template for text summarisation.
-    /// Supports placeholder <c>{Text}</c>.
-    /// </summary>
-    public string SummaryUserPromptTemplate { get; set; } =
-        "Summarize this text in a few sentences. text: {Text}";
-
-    /// <summary>
-    /// Gets or sets the system prompt template for image prompt generation.
-    /// </summary>
-    public string ImagePromptSystemTemplate { get; set; } =
-        "You are an assistant that generates image prompts for an AI image generation model based on text summaries. " +
-        "Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), " +
-        "and avoids text, signs, or words in the image. Respect content policy for generating images.";
-
-    /// <summary>
-    /// Gets or sets the user prompt template for image prompt generation.
-    /// Supports placeholder <c>{Summary}</c>.
-    /// </summary>
-    public string ImagePromptUserTemplate { get; set; } =
-        "Generate an image prompt based on this summary: {Summary}";
-
-    /// <summary>Gets or sets the max tokens for image prompt generation requests.</summary>
-    public int ImagePromptMaxTokens { get; set; } = 60;
-
-    /// <summary>Gets or sets the temperature for image prompt generation requests.</summary>
-    public double ImagePromptTemperature { get; set; } = 0.7;
+    /// <inheritdoc/>
+    public AiModelCatalog ModelCatalog => new(new Dictionary<AiModelClass, string>
+    {
+        [AiModelClass.Text] = TextModelName,
+        [AiModelClass.Image] = ImageModelName
+    });
 }

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **XPoster.Services** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
+- **OrchestratorFactory.cs** (11 connections)
+- **typeof()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **return()** (2 connections)
+- **Resolve()** (2 connections)
+- **catch()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 143]] (4 shared connections)
+- [[Community 125]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

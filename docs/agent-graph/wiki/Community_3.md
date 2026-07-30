@@ -1,43 +1,43 @@
 # Community 3
 
-> 32 nodes · cohesion 0.06
+> 36 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **return()** (2 connections)
-- **Parse_Returns429_ReturnsEmpty()** (2 connections)
-- **Parse_UnsupportedProvider_LogsError()** (2 connections)
-- **Parse_UnsupportedProvider_ReturnsEmpty()** (2 connections)
-- **Parse_OpenAi_ValidB64_ReturnsBytes()** (2 connections)
-- **Parse_OpenAi_EmptyDataArray_ReturnsEmpty()** (2 connections)
-- **Parse_OpenAi_MissingDataProperty_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_ReturnsBytes()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_DownloadThrows_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_NullAllowedOrigin_SkipsOriginCheckAndDownloads()** (2 connections)
-- **Parse_OpenAi_EmptyB64Value_ReturnsEmpty()** (2 connections)
-- **Parse_MalformedJson_ReturnsEmpty()** (2 connections)
-- **Parse_NonSuccessStatus_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_UrlFallback_DownloadThrows_LogsError()** (2 connections)
-- **Parse_AzureFoundry_MissingBothB64AndUrl_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_MissingDataProperty_ReturnsEmpty()** (2 connections)
-- **Parse_FalAi_DownloadThrows_ReturnsEmpty()** (2 connections)
-- **Parse_AzureFoundry_ValidB64_ReturnsBytes()** (2 connections)
-- **Parse_FalAi_DownloadThrows_LogsError()** (2 connections)
-- **static()** (2 connections)
+- **OpenAiServiceTests.cs** (35 connections)
+- **OpenAiServiceTests.cs** (35 connections)
 - **XPoster.Tests.Services** (2 connections)
-- **AiServiceHelperImageTests** (2 connections)
-- **Parse_FalAi_MissingImagesProperty_ReturnsEmpty()** (2 connections)
-- **Parse_FalAi_EmptyImagesArray_ReturnsEmpty()** (2 connections)
-- *... and 7 more nodes in this community*
+- **OpenAiService()** (2 connections)
+- **OpenAiServiceTests** (2 connections)
+- **GenerateTextAsync_UsesSystemPromptTemplateFromRequest()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyArrayWithoutCallingApi()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateTextAsync_ReplacesInputTextLabelInUserPromptTemplate()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmpty()** (2 connections)
+- **GenerateTextAsync_WhenOutputFitsWithinMaxOutputLength_ReturnsSingleCallResult()** (2 connections)
+- **GenerateTextAsync_WhenNoMaxOutputLength_DoesNotRetry()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmpty()** (2 connections)
+- **GenerateTextAsync_WhenApiReturns200_ReturnsTrimmedContent()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionThrown_LogsError()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionThrown_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenApiReturns200_ReturnsDecodedBytes()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **GenerateImageAsync_UsesQuantityAndSizeFromRequest()** (2 connections)
+- *... and 11 more nodes in this community*
 
 ## Relationships
 
-- [[Community 94]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 99 (100%)
+- EXTRACTED: 138 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

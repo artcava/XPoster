@@ -1,30 +1,32 @@
 # Community 26
 
-> 13 nodes · cohesion 0.15
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **BuildSender()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
+- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
+- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
+- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **AddAiProviderOptionsTests** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **BuildAllProvidersConfig()** (2 connections)
+- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,28 +1,28 @@
 # Community 42
 
-> 11 nodes · cohesion 0.35
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSender()** (2 connections)
-- **ValidPost()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **BuildSender()** (2 connections)
+- **OrchestratorFactoryTests.cs** (32 connections)
+- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
+- **Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **typeof()** (2 connections)
+- **new()** (2 connections)
+- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 9]] (21 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 52 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
 
 ## Relationships
 
-- [[Community 178]] (2 shared connections)
+- [[Community 59]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

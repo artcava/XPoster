@@ -1,24 +1,26 @@
 # Community 18
 
-> 15 nodes · cohesion 0.26
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **BlobStorageServiceTests.cs** (14 connections)
-- **BlobStorageServiceTests.cs** (14 connections)
-- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
-- **CreateSut()** (2 connections)
-- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
-- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
-- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
-- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **PromptStepOptionsTests.cs** (16 connections)
+- **PromptStepOptionsTests.cs** (16 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PromptStepOptions_ValueEquality_DifferentOptionals_AreNotEqual()** (2 connections)
+- **PromptStepOptionsTests** (2 connections)
+- **PromptStepOptions_ValueEquality_DifferentRole_AreNotEqual()** (2 connections)
+- **PromptStepOptions_WithExpression_PreservesUnchangedProperties()** (2 connections)
+- **PromptStepOptions_ValueEquality_SameValues_AreEqual()** (2 connections)
+- **PromptStepOptions_AllRoles_CanBeConstructed()** (2 connections)
+- **PromptStepOptions_NonImageSteps_ImageProperties_AreNull()** (2 connections)
+- **PromptStepOptions_SummaryStep_MaxOutputLength_IsNullByConvention()** (2 connections)
+- **PromptStepOptions_OptionalProperties_AreSetCorrectly()** (2 connections)
+- **PromptStepOptions_RequiredProperties_AreSetCorrectly()** (2 connections)
+- **PromptStepOptions_OptionalProperties_DefaultToNull()** (2 connections)
+- **PromptStepOptions_Temperature_AcceptsZeroAndOne()** (2 connections)
+- **PromptStepOptions_ImageGenerationStep_ImageProperties_AreIndependent()** (2 connections)
+- **PromptStepOptions_IsImmutable_AfterConstruction()** (2 connections)
 
 ## Relationships
 
@@ -26,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **Validate()** (2 connections)
-- **ICredentialsStartupValidator** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 

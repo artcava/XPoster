@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (14 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **BuildChatPayload()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
 - **XPoster.Services** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (7 shared connections)
+- [[Community 162]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

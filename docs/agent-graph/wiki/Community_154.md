@@ -1,12 +1,13 @@
 # Community 154
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **InstagramCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **InstagramCredentials.cs** (2 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddAiProviderOptions()** (2 connections)
 
 ## Relationships
 
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

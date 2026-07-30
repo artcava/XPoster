@@ -1,12 +1,13 @@
 # Community 156
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XPoster.Contracts** (2 connections)
-- **SenderPlatform.cs** (2 connections)
-- **SenderPlatform.cs** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
 
 ## Relationships
 
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

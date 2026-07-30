@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (6 connections)
-- **FalAiImageService.cs** (6 connections)
-- **catch()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **if()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
 
 ## Relationships
 

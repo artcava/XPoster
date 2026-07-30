@@ -1,20 +1,21 @@
 # Community 149
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **if()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **foreach()** (2 connections)
+- **ValidateOptions()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 146]] (3 shared connections)
+- [[Community 86]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

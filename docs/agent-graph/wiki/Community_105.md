@@ -1,22 +1,23 @@
 # Community 105
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IFeedUrlProvider.cs** (4 connections)
-- **IFeedUrlProvider.cs** (4 connections)
-- **IFeedUrlProvider** (2 connections)
-- **GetFeedUrls()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **for()** (2 connections)
+- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 144]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

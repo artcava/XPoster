@@ -1,6 +1,5 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -56,11 +55,8 @@ builder.Services.AddHttpClients();
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();
 
-builder.Services.AddTransient<XSender>();
-builder.Services.AddTransient<InSender>();
-builder.Services.AddTransient<IgSender>();
-builder.Services.AddTransient<FbSender>();
-builder.Services.AddTransient<DryRunSender>();
+// Register sender plugins.
+builder.Services.AddXPosterSenderPlugins();
 
 // ITimeProvider registration:
 //   Development + ForceHour set  → LocalOverrideTimeProvider (pins clock to the configured UTC hour)
@@ -96,22 +92,18 @@ builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 
-// IFeedUrlProvider registration — reads FeedOptions:Urls from app settings.
-builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection(FeedOptions.SectionName));
-builder.Services.AddSingleton<IFeedUrlProvider, ConfigurationFeedUrlProvider>();
+builder.Services.AddKeyedSingleton<FeedOrchestratorContext>("Bitcoin", (sp, _) =>
+    builder.Configuration.GetSection("FeedSlotContexts:Bitcoin").Get<FeedOrchestratorContext>()!);
+
 
 // ITagReplacementProvider registration — reads TagReplacementOptions:Replacements from app settings.
 builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSection(TagReplacementOptions.SectionName));
 builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();
 builder.Services.AddTransient<ITagReplacementService, TagReplacementService>();
 
-// AI provider options: each extension method owns its SectionName constant
-// and encapsulates Configure<T> + AddSingleton<IValidateOptions<T>> in one call.
-builder.Services.AddOpenAiOptions(builder.Configuration);
-builder.Services.AddAzureFoundryOptions(builder.Configuration);
-builder.Services.AddDeepSeekOptions(builder.Configuration);
-builder.Services.AddFalAiOptions(builder.Configuration);
-builder.Services.AddPerplexityOptions(builder.Configuration);
+// AI provider options: a single call binds and validates all AI provider sections
+// (OpenAI, AzureFoundry, DeepSeek, FalAi, Perplexity) via AddAiProviderOptions().
+builder.Services.AddAiProviderOptions(builder.Configuration);
 
 // Azure Blob Storage — BlobServiceClient registered as singleton per SDK best practice.
 // BlobStorageOptions binds AZURE_STORAGE_CONNECTION_STRING and AZURE_STORAGE_CONTAINER_NAME

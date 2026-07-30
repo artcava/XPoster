@@ -1,22 +1,24 @@
 # Community 24
 
-> 13 nodes · cohesion 0.29
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **OpenAiService.cs** (12 connections)
-- **OpenAiService.cs** (12 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **GetPromptForImage()** (2 connections)
-- **GetSummary()** (2 connections)
-- **OpenAiService()** (2 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests** (2 connections)
+- **Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()** (2 connections)
+- **Initialize_WhenTelemetryIsNotDependency_DoesNothing()** (2 connections)
+- **Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenHttpDependencyNotFacebook_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()** (2 connections)
+- **Initialize_WhenFacebookDataIsMalformedUrl_DataRemainsUnchanged()** (2 connections)
+- **Initialize_WhenDataIsEmpty_DoesNotThrow()** (2 connections)
+- **Initialize_WhenDependencyTypeIsNotHttp_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenDataIsNull_DoesThrow()** (2 connections)
+- **Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
 
 ## Relationships
 
@@ -24,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

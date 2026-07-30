@@ -1,21 +1,21 @@
 # Community 143
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (10 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
+- **PendingContainer.cs** (3 connections)
+- **PendingContainer.cs** (3 connections)
+- **PendingContainer()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 80]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

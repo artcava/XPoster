@@ -12,23 +12,18 @@ public sealed class AzureFoundryOptionsValidator : IValidateOptions<AzureFoundry
     {
         var failures = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(options.Endpoint))
-            failures.Add($"{nameof(AzureFoundryOptions.Endpoint)} is required.");
+        AiProviderValidationHelper.ValidateConnectivity(
+            options.ApiKey,
+            options.Endpoint,
+            failures,
+            nameof(AzureFoundryOptions.ApiKey),
+            nameof(AzureFoundryOptions.Endpoint));
 
-        if (string.IsNullOrWhiteSpace(options.ApiKey))
-            failures.Add($"{nameof(AzureFoundryOptions.ApiKey)} is required.");
+        if (string.IsNullOrWhiteSpace(options.TextModelName))
+            failures.Add($"{nameof(AzureFoundryOptions.TextModelName)} is required.");
 
-        if (string.IsNullOrWhiteSpace(options.DeploymentName))
-            failures.Add($"{nameof(AzureFoundryOptions.DeploymentName)} is required.");
-
-        if (!options.SummarySystemPromptTemplate.Contains("{MaxChars}", StringComparison.Ordinal))
-            failures.Add($"{nameof(AzureFoundryOptions.SummarySystemPromptTemplate)} must contain the {{MaxChars}} placeholder.");
-
-        if (!options.SummaryUserPromptTemplate.Contains("{Text}", StringComparison.Ordinal))
-            failures.Add($"{nameof(AzureFoundryOptions.SummaryUserPromptTemplate)} must contain the {{Text}} placeholder.");
-
-        if (!options.ImagePromptUserTemplate.Contains("{Summary}", StringComparison.Ordinal))
-            failures.Add($"{nameof(AzureFoundryOptions.ImagePromptUserTemplate)} must contain the {{Summary}} placeholder.");
+        if (string.IsNullOrWhiteSpace(options.ImageModelName))
+            failures.Add($"{nameof(AzureFoundryOptions.ImageModelName)} is required.");
 
         return failures.Count > 0
             ? ValidateOptionsResult.Fail(failures)

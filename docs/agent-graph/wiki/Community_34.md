@@ -1,29 +1,30 @@
 # Community 34
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **PerplexityService.cs** (11 connections)
-- **PerplexityService.cs** (11 connections)
-- **PerplexityService()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **GetSummaryAsync()** (2 connections)
-- **GetImagePromptAsync()** (2 connections)
-- **BuildImagePromptPayload()** (2 connections)
-- **BuildSummaryPayload()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **if()** (2 connections)
+- **FalAiImageServiceTests.cs** (24 connections)
+- **FalImageJson()** (2 connections)
+- **BuildService()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 35]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

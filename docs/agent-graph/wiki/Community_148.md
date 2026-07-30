@@ -1,20 +1,21 @@
 # Community 148
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **CryptoService()** (2 connections)
-- **if()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **while()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 145]] (3 shared connections)
+- [[Community 131]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,24 @@
 # Community 27
 
-> 13 nodes · cohesion 0.29
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests.cs** (12 connections)
-- **FalAiOptionsValidatorTests** (2 connections)
-- **Validate_MissingModelId_Fails()** (2 connections)
+- **ScheduledOrchestrationProfileTests.cs** (14 connections)
+- **ScheduledOrchestrationProfileTests.cs** (14 connections)
+- **ScheduledOrchestrationProfileTests** (2 connections)
+- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
+- **typeof()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_ModelIdWithUnsafeCharacters_Fails()** (2 connections)
-- **Validate_ModelIdWithAllowedSpecialChars_Succeeds()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_WhitespaceModelId_Fails()** (2 connections)
-- **Validate_WhitespaceApiKey_Fails()** (2 connections)
-- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
-- **Validate_MissingApiKey_Fails()** (2 connections)
+- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
+- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
+- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
+- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
+- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
+- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
+- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
+- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
+- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
 
 ## Relationships
 
@@ -24,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

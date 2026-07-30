@@ -1,13 +1,12 @@
 # OpenAiServiceTests.cs
 
-> God node · 33 connections
+> God node · 35 connections
 
-**Community:** [[Community 2]]
+**Community:** [[Community 3]]
 
 ## Connections by Relation
 
 ### contains
-- [[OpenAiServiceTests.cs]]
 - [[XPoster.Tests.Services]]
 - [[OpenAiServiceTests]]
 - [[BuildService()]]
@@ -15,18 +14,19 @@
 - [[MakeHandler()]]
 - [[MakeHandlerMock()]]
 - [[ChatCompletionJson()]]
-- [[GetSummaryAsync_WhenTextAlreadyShort_ReturnsTextUnchanged()]]
-- [[GetSummaryAsync_WhenApiReturns200_ReturnsTrimmedContent()]]
-- [[GetSummaryAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()]]
-- [[GetSummaryAsync_WhenApiReturnsError_ReturnsEmpty()]]
-- [[GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
-- [[GetSummaryAsync_WhenChoicesIsNull_ReturnsEmpty()]]
-- [[GetSummaryAsync_WhenSummaryAlwaysTooLong_StopsAfterThreeAttempts()]]
-- [[GetImagePromptAsync_WhenApiReturns200_ReturnsTrimmedContent()]]
-- [[GetImagePromptAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()]]
-- [[GetImagePromptAsync_WhenApiReturnsTooManyRequests_LogsInformation()]]
-- [[GetImagePromptAsync_WhenApiReturnsError_ReturnsEmpty()]]
-- [[GetImagePromptAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
+- [[BuildPromptRequest()]]
+- [[new()]]
+- [[BuildImagePromptRequest()]]
+- [[GenerateTextAsync_WhenApiReturns200_ReturnsTrimmedContent()]]
+- [[GenerateTextAsync_WhenOutputFitsWithinMaxOutputLength_ReturnsSingleCallResult()]]
+- [[GenerateTextAsync_WhenResponseAlwaysExceedsMaxOutputLength_StopsAfterThreeAttempts()]]
+- [[GenerateTextAsync_WhenNoMaxOutputLength_DoesNotRetry()]]
+- [[GenerateTextAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()]]
+- [[GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmpty()]]
+- [[GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
+- [[GenerateTextAsync_WhenChoicesIsNull_ReturnsEmpty()]]
+- [[GenerateTextAsync_UsesSystemPromptTemplateFromRequest()]]
+- [[HttpResponseMessage()]]
 
 ---
 

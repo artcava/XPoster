@@ -23,7 +23,7 @@ public class FalAiImageServiceTests
         var options = Options.Create(opts ?? new FalAiOptions
         {
             ApiKey = "fake-api-key",
-            ModelId = "fal-ai/flux/schnell"
+            ImageModelName = "fal-ai/flux/schnell"
         });
 
         return new FalAiImageService(factory.Object, options, loggerMock.Object);
@@ -47,12 +47,19 @@ public class FalAiImageServiceTests
     private static string FalImageJson(string imageUrl) =>
         $"{{\"images\":[{{\"url\":\"{imageUrl}\"}}]}}";
 
+    private static ImagePromptRequest MakeRequest(string inputText) => new()
+    {
+        InputText = inputText,
+        SystemPromptTemplate = "You are an image generation assistant.",
+        UserPromptTemplate = "{Text}"
+    };
+
     [Fact]
     public async Task GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{}").Object, out _);
 
-        var result = await svc.GenerateImageAsync(string.Empty);
+        var result = await svc.GenerateImageAsync(MakeRequest(string.Empty));
 
         Assert.Empty(result);
     }
@@ -62,7 +69,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("   ");
+        var result = await svc.GenerateImageAsync(MakeRequest("   "));
 
         Assert.Empty(result);
     }
@@ -72,7 +79,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -82,7 +89,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.TooManyRequests, "{}").Object, out var loggerMock);
 
-        await svc.GenerateImageAsync("a prompt");
+        await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         loggerMock.Verify(
             x => x.Log(
@@ -101,7 +108,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.InternalServerError, "{}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -111,7 +118,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "NOT-JSON").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -121,7 +128,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"images\":[]}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -131,7 +138,7 @@ public class FalAiImageServiceTests
     {
         var svc = BuildService(MakeHandlerMock(HttpStatusCode.OK, "{\"other\":\"value\"}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -142,7 +149,7 @@ public class FalAiImageServiceTests
         var svc = BuildService(
             MakeHandlerMock(HttpStatusCode.OK, "{\"images\":[{\"width\":512}]}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -153,7 +160,7 @@ public class FalAiImageServiceTests
         var svc = BuildService(
             MakeHandlerMock(HttpStatusCode.OK, "{\"images\":[{\"url\":\"\"}]}").Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -181,9 +188,45 @@ public class FalAiImageServiceTests
 
         var svc = BuildService(handlerMock.Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Equal(expectedBytes, result);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_RequestUsesImageQuantityFromRequest()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        HttpRequestMessage? capturedRequest = null;
+        string? capturedBody = null;
+
+        handlerMock.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .Callback<HttpRequestMessage, CancellationToken>(async (req, _) =>
+            {
+                capturedRequest = req;
+                capturedBody = await req.Content!.ReadAsStringAsync();
+            })
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.TooManyRequests));
+
+        var svc = BuildService(handlerMock.Object, out _);
+        var request = new ImagePromptRequest
+        {
+            InputText = "a prompt",
+            SystemPromptTemplate = "sys",
+            UserPromptTemplate = "{Text}",
+            ImageQuantity = 3,
+            ImageSize = "512x512"
+        };
+
+        await svc.GenerateImageAsync(request);
+
+        Assert.NotNull(capturedBody);
+        Assert.Contains("\"num_images\":3", capturedBody);
+        Assert.Contains("\"image_size\":\"512x512\"", capturedBody);
     }
 
     [Fact]
@@ -205,7 +248,7 @@ public class FalAiImageServiceTests
 
         var svc = BuildService(handlerMock.Object, out _);
 
-        var result = await svc.GenerateImageAsync("a prompt");
+        var result = await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.Empty(result);
     }
@@ -229,7 +272,7 @@ public class FalAiImageServiceTests
 
         var svc = BuildService(handlerMock.Object, out var loggerMock);
 
-        await svc.GenerateImageAsync("a prompt");
+        await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         // Message is now emitted by AiServiceHelper.ExtractFalAiBytesAsync
         loggerMock.Verify(
@@ -248,7 +291,7 @@ public class FalAiImageServiceTests
     [Fact]
     public async Task GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()
     {
-        var opts = new FalAiOptions { ApiKey = "key", ModelId = "fal-ai/model with space" };
+        var opts = new FalAiOptions { ApiKey = "key", ImageModelName = "fal-ai/model with space" };
 
         HttpRequestMessage? capturedRequest = null;
         var handlerMock = new Mock<HttpMessageHandler>();
@@ -262,7 +305,7 @@ public class FalAiImageServiceTests
 
         var svc = BuildService(handlerMock.Object, out _, opts);
 
-        await svc.GenerateImageAsync("a prompt");
+        await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.NotNull(capturedRequest);
         var path = capturedRequest!.RequestUri!.AbsolutePath;
@@ -285,7 +328,7 @@ public class FalAiImageServiceTests
 
         var svc = BuildService(handlerMock.Object, out _);
 
-        await svc.GenerateImageAsync("a prompt");
+        await svc.GenerateImageAsync(MakeRequest("a prompt"));
 
         Assert.NotNull(capturedRequest);
         var path = capturedRequest!.RequestUri!.AbsolutePath;

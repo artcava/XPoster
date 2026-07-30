@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IOrchestratorFactory** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **CreateValidJpeg()** (2 connections)
+- **CreateValidPng()** (2 connections)
 
 ## Relationships
 

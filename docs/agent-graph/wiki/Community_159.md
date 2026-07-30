@@ -1,12 +1,13 @@
 # Community 159
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **PerplexityOptions.cs** (2 connections)
-- **PerplexityOptions.cs** (2 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **GetLabel()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

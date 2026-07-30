@@ -1,19 +1,20 @@
 # Community 177
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (4 connections)
+- **BaseOrchestrator.cs** (6 connections)
 - **if()** (2 connections)
+- **DispatchAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 170]] (2 shared connections)
+- [[Community 151]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

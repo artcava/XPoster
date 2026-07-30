@@ -1,20 +1,21 @@
 # Community 39
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **CredentialsStartupValidator.cs** (10 connections)
-- **resolve()** (2 connections)
-- **Validate()** (2 connections)
-- **ValidateOptions()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **foreach()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **catch()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **if()** (2 connections)
+- **PowerLawOrchestratorTests.cs** (11 connections)
+- **PowerLawOrchestratorTests.cs** (11 connections)
+- **PowerLawOrchestratorTests()** (2 connections)
+- **CreateOrchestrator()** (2 connections)
+- **new()** (2 connections)
+- **GenerateAsync_Should_CalculateCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **GenerateAsync_Should_HandleNegativeOrZeroCryptoValue()** (2 connections)
+- **GenerateAsync_Should_CreateCorrectMessage_WithActualValue()** (2 connections)
+- **GenerateAsync_Should_HandleCryptoServiceFailure_Gracefully()** (2 connections)
+- **OrchestrateAsync_BroadcastsSamePost_ToAllSenders()** (2 connections)
+- **GenerateAsync_Should_ReturnNull_When_DateIsBeforeGenesis()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
 
 ## Relationships
 
@@ -22,7 +23,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

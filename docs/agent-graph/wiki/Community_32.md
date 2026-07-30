@@ -1,29 +1,30 @@
 # Community 32
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
 - **InSenderTests.cs** (24 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **InSender()** (2 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **MessageMaxLength_Returns2800()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **Platform_ReturnsLinkedIn()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
+- **BuildSender()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 26]] (12 shared connections)
+- [[Community 37]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,17 +1,18 @@
 # Community 65
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **IsEnabled()** (2 connections)
-- **Dispose()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CaptureLogger()** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **params()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
 - **XPoster.Tests.Integration** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

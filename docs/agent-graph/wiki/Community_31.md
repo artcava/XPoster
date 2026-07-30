@@ -1,29 +1,30 @@
 # Community 31
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (22 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
-- **BuildService()** (2 connections)
-- **FalImageJson()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageServiceTests** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
+- **AiModelCatalogTests** (2 connections)
+- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
+- **Empty_SupportsNoModelClass()** (2 connections)
+- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
+- **Constructor_NullDictionary_Throws()** (2 connections)
+- **GetRequired_Throws_WhenNotSupported()** (2 connections)
+- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
+- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 44 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

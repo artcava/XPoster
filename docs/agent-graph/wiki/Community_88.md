@@ -1,23 +1,24 @@
 # Community 88
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **IgSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **IContainerStateStore.cs** (6 connections)
+- **GetPendingAsync()** (2 connections)
+- **IContainerStateStore** (2 connections)
+- **SaveAsync()** (2 connections)
+- **UpdateStatusAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 40]] (10 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

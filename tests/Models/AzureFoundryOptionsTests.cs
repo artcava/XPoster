@@ -17,34 +17,8 @@ public class AzureFoundryOptionsTests
 
         Assert.Equal(string.Empty, options.Endpoint);
         Assert.Equal(string.Empty, options.ApiKey);
-        Assert.Equal(string.Empty, options.DeploymentName);
-        Assert.Equal(string.Empty, options.ImageDeploymentName);
-        Assert.Equal(0.5, options.SummaryTemperature);
-        Assert.Equal(5, options.SummaryMaxTokensPerChar);
-        Assert.Equal(50, options.SummarySafetyMarginChars);
-        Assert.Equal(60, options.ImagePromptMaxTokens);
-        Assert.Equal(0.7, options.ImagePromptTemperature);
-    }
-
-    [Fact]
-    public void AzureFoundryOptions_SummarySystemPromptTemplate_ContainsMaxCharsPlaceholder()
-    {
-        var options = new AzureFoundryOptions();
-        Assert.Contains("{MaxChars}", options.SummarySystemPromptTemplate);
-    }
-
-    [Fact]
-    public void AzureFoundryOptions_SummaryUserPromptTemplate_ContainsTextPlaceholder()
-    {
-        var options = new AzureFoundryOptions();
-        Assert.Contains("{Text}", options.SummaryUserPromptTemplate);
-    }
-
-    [Fact]
-    public void AzureFoundryOptions_ImagePromptUserTemplate_ContainsSummaryPlaceholder()
-    {
-        var options = new AzureFoundryOptions();
-        Assert.Contains("{Summary}", options.ImagePromptUserTemplate);
+        Assert.Equal(string.Empty, options.TextModelName);
+        Assert.Equal(string.Empty, options.ImageModelName);
     }
 
     /// <summary>

@@ -1,28 +1,29 @@
 # Community 38
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
-- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
-- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **ConfigurationFeedUrlProviderTests** (2 connections)
-- **ConfigurationFeedUrlProvider()** (2 connections)
-- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
+- **Platform_ReturnsDryRun()** (2 connections)
+- **DryRunSenderTests()** (2 connections)
+- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
+- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
+- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
+- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
+- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 25]] (14 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

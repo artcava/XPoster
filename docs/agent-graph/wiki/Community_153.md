@@ -1,16 +1,17 @@
 # Community 153
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **DispatchAsync()** (2 connections)
-- **if()** (2 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **AddCredentials()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 142]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

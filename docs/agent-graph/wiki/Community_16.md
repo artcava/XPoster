@@ -1,32 +1,34 @@
 # Community 16
 
-> 15 nodes · cohesion 0.13
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **new()** (2 connections)
-- **ValidPost()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
-- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **MetaPublishingServiceTests.cs** (16 connections)
+- **MetaPublishingServiceTests.cs** (16 connections)
+- **GetContainerStatusAsync_WhenNotFound_ThrowsHttpRequestException()** (2 connections)
+- **CreateSut()** (2 connections)
+- **GetContainerStatusAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
+- **PublishContainerAsync_WithWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
+- **PublishContainerAsync_WhenIdIsNull_ReturnsEmptyString()** (2 connections)
+- **PublishContainerAsync_WhenRateLimited_Throws()** (2 connections)
+- **PublishContainerAsync_WhenResponseBodyIsNull_ThrowsJsonException()** (2 connections)
+- **PublishContainerAsync_WhenOk_ReturnsPublishId()** (2 connections)
+- **PublishContainerAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
+- **GetContainerStatusAsync_WhenResponseBodyIsEmpty_ThrowsJsonException()** (2 connections)
+- **GetContainerStatusAsync_WhenStatusInNestedField_ReturnsCode()** (2 connections)
+- **GetContainerStatusAsync_WithEmptyCreationId_ThrowsArgumentException()** (2 connections)
+- **MetaPublishingService()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetContainerStatusAsync_WhenOk_ReturnsStatusCode()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

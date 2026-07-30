@@ -125,13 +125,27 @@ public class TikTokSender : ISender
 }
 ```
 
-> `MessageMaxLenght` must reflect the platform's actual character limit. `FeedOrchestrator` uses this value as the target length for AI summarisation; an incorrect value leads to content that is too long or wastes character budget.
+> `MessageMaxLenght` must reflect the platform's actual character limit. The orchestrator reads this value from each resolved sender at runtime to determine the target length for AI summarisation. An incorrect value leads to content that is too long or wastes character budget.
 
 ### Step 3 — Register in DI
 
 ```csharp
-// src/Program.cs
-builder.Services.AddTransient<TikTokSender>();
+// src/Extensions/SenderPluginsServiceCollectionExtensions.cs
+public static class SenderPluginsServiceCollectionExtensions
+{
+    /// <summary>
+    /// Registers all sender plugin implementations
+    /// </summary>
+    public static IServiceCollection AddXPosterSenderPlugins(this IServiceCollection services)
+    {
+        // other sender plugin...
+
+        // TikTok sender plugin
+        services.AddKeyedTransient<ISender, TikTokSender>(SenderPlatform.TikTok);
+
+        return services;
+    }
+}
 ```
 
 ### Step 4 — Add the secrets to Key Vault
@@ -169,16 +183,27 @@ public enum SenderPlatform
 
 ### Step 6 — Wire in OrchestratorFactory
 
-`OrchestratorFactory.Resolve()` resolves the concrete sender list through a private `ResolveSender` helper that maps each `SenderPlatform` value to the class retrieved from the DI container. Add one arm to the switch expression inside `ResolveSender()`:
+`OrchestratorFactory.Resolve()` resolves the concrete sender list through a private `ResolveSender` helper that maps each `SenderPlatform` value to the keyed registration retrieved from the DI container. No update needed here:
 
 ```csharp
 // src/Orchestrators/OrchestratorFactory.cs — ResolveSender helper
-private ISender? ResolveSender(SenderPlatform platform) => platform switch
+private ISender? ResolveSender(SenderPlatform platform)
 {
-    // existing arms ...
-    SenderPlatform.TikTok => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
-    _ => null
-};
+    try
+    {
+        var sender = _serviceProvider.GetKeyedService<ISender>(platform);
+        if (sender == null)
+        {
+            _log.LogWarning("No sender registered for platform {Platform}", platform);
+        }
+        return sender;
+    }
+    catch (Exception ex)
+    {
+        _log.LogError(ex, "Error resolving sender for platform {Platform}", platform);
+        return null;
+    }
+}
 ```
 
 The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender()` for each entry, and passes the resulting `IReadOnlyList<ISender>` to the orchestrator constructor. One enum value maps to one switch arm and one sender class — independent of how many senders are configured per slot.
@@ -187,28 +212,34 @@ The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender(
 
 ### Step 7 — Add a ScheduledOrchestrationProfile entry
 
-The production schedule is owned by `DefaultSlotProfileProvider` (`src/Orchestrators/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the UTC hour, sender platform list, orchestrator type, and (optionally) the AI providers for that slot:
+The production schedule is owned by `DefaultSlotProfileProvider` (`src/Providers/DefaultSlotProfileProvider.cs`). Add the new profile to its `GetProfiles()` return list, specifying the orchestrator context key, UTC hour, sender platform list, orchestrator type, and (optionally) the AI providers for that slot:
 
 ```csharp
-// src/Orchestrators/DefaultSlotProfileProvider.cs
-public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
-[
+// src/Providers/DefaultSlotProfileProvider.cs
+private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
+{
     // existing profiles ...
     new ScheduledOrchestrationProfile(
+        orchestratorContextKey: "TikTok Topic",
         hour: 20,
         senderPlatforms: new[] { SenderPlatform.TikTok },
         orchestratorType: typeof(FeedOrchestrator),
         textProvider: AiProvider.OpenAi,
         imageProvider: AiProvider.OpenAi),
-];
+}.AsReadOnly();
 ```
 
-To publish to multiple platforms in the same slot, list all target senders. Each `*Orchestrator` reorder in **descending `MessageMaxLength` order** (widest first).
+#### `orchestratorContextKey`
+
+`orchestratorContextKey` is a nullable `string?` that carries an optional semantic label for the slot — typically the topic or feed theme used by the orchestrator to scope content retrieval or prompt generation (e.g. `"Bitcoin"`, `"PowerLaw"`). When `null`, the orchestrator applies no topic scoping. The value is passed through to the orchestrator at runtime and is not interpreted by `OrchestratorFactory`.
+
+To publish to multiple platforms in the same slot, list all target senders in any order — **the orchestrator sorts them internally by `MessageMaxLength` (descending) at runtime**:
 
 ```csharp
 new ScheduledOrchestrationProfile(
+    orchestratorContextKey: "TikTok Topic",
     hour: 20,
-    senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.TikTok },  // LinkedIn wider (2 800) → first
+    senderPlatforms: new[] { SenderPlatform.TikTok, SenderPlatform.LinkedIn },  // order is irrelevant
     orchestratorType: typeof(FeedOrchestrator),
     textProvider: AiProvider.OpenAi,
     imageProvider: AiProvider.OpenAi),
@@ -249,36 +280,63 @@ public class QuoteOrchestrator : BaseOrchestrator
             return new Dictionary<SenderPlatform, Post?>();
         }
 
-        // // Broadcast strategy: Content must be re-summarised to fit each platform's character limit...
-        // var orderedSenders = senders.OrderByDescending(s => s.MessageMaxLenght).ToList();
-        // var primarySender  = orderedSenders[0];
-        // var quote = await textProvider.GetSummaryAsync("Generate a motivational tech quote.", primarySender.MessageMaxLenght, ct);
-        // if (string.IsNullOrWhiteSpace(rawBaseSummary))
-        // {
-        //     _logger.LogError("Quote generation failed for primary sender {Platform}.", primarySender.Platform);
-        //     _sendIt = false;
-        //     return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
-        // }
+        // Build the PromptRequest value object — the orchestrator owns prompt intent.
+        var request = new PromptRequest
+        {
+            InputText           = "Generate a motivational tech quote.",
+            SystemPromptTemplate = "<your system prompt template>",
+            UserPromptTemplate   = "<your user prompt template>",
+            MaxOutputLength      = _senders.Max(s => s.MessageMaxLenght),
+        };
 
-        // var result         = new Dictionary<SenderPlatform, Post?>();
-        // var previousSummary = rawBaseSummary;
-        // foreach (var sender in orderedSenders)
-        // {
-        //     // ...
-        //     result[sender.Platform] = new Post { Content = content, Image = imageBytes };
-        // }
+        var quote = await _textProvider.GenerateTextAsync(request, ct);
+
+        if (string.IsNullOrWhiteSpace(quote))
+        {
+            SendIt = false;
+            return new Dictionary<SenderPlatform, Post?>();
+        }
 
         byte[]? image = null;
         if (_imageProvider is not null)
-            image = await _imageProvider.GenerateImageAsync(quote, ct);
+        {
+            var imageRequest = new ImagePromptRequest
+            {
+                InputText            = quote,
+                SystemPromptTemplate = "<your image system prompt>",
+                UserPromptTemplate   = "<your image user prompt>",
+            };
+            image = await _imageProvider.GenerateImageAsync(imageRequest, ct);
+        }
 
         // Broadcast strategy: same post to every configured sender
         var post = new Post { Content = quote, Image = image };
         SendIt = true;
-        return senders.ToDictionary(s => s.Platform, _ => (Post?)post);
+        return _senders.ToDictionary(s => s.Platform, _ => (Post?)post);
     }
 }
 ```
+
+#### Prompt value objects
+
+All prompt data is transported via **value objects** constructed by the orchestrator and passed to the provider interfaces:
+
+| Type | Used by | Purpose |
+|---|---|---|
+| `PromptRequest` | `ITextToTextProvider.GenerateTextAsync` | Carries input text, system/user prompt templates, temperature, max output length, max token budget, and optional input text label |
+| `ImagePromptRequest` | `ITextToImageProvider.GenerateImageAsync` | Extends `PromptRequest` with `ImageQuantity` and `ImageSize` for image generation parameters |
+
+The orchestrator is responsible for constructing these objects; the provider is responsible only for executing them. This ensures that **prompt intent stays in the orchestration layer** and never leaks into provider implementations.
+
+`PromptStepOptions` (from `FeedPromptOptions` configuration) maps to `PromptRequest`/`ImagePromptRequest` at runtime: for the `Summary` role, `MaxOutputLength` is resolved from `ISender.MessageMaxLenght` rather than from configuration — all other fields are read directly from the corresponding `PromptStepOptions` entry.
+
+The `PromptRole` enum identifies each step in the orchestration flow:
+
+| Value | Step |
+|---|---|
+| `Summary` | Generates the primary text summary from raw feed content |
+| `ImagePromptDerivation` | Derives the image-generation prompt from the summary text |
+| `ImageGeneration` | Generates the image from the derived prompt |
 
 #### Broadcast vs. per-sender content adaptation
 
@@ -289,7 +347,7 @@ Choose the strategy that fits the orchestrator's purpose:
 | **Broadcast** | Same content works on every target platform | `PowerLawOrchestrator` — deterministic text, no AI, broadcast identical `Post` to all senders |
 | **Per-sender adaptation** | Content must be re-summarised to fit each platform's character limit | `FeedOrchestrator` — AI base summary at primary sender's limit, AI re-summarise for each secondary sender |
 
-For a **per-sender adaptation** pattern, iterate `senders` and call `textProvider.GetSummaryAsync` independently per sender when the base summary exceeds the sender's `MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
+For a **per-sender adaptation** pattern, the orchestrator sorts senders internally by `MessageMaxLength` descending (widest limit first) and iterates them in that order. For each sender, call `_textProvider.GenerateTextAsync` with a new `PromptRequest` whose `MaxOutputLength` is set to `sender.MessageMaxLenght`. See `FeedOrchestrator.OrchestrateAsync()` for the canonical implementation.
 
 > **`OrchestrateAsync` invariant**: return an **empty dictionary** with `SendIt = false` — not throw — when content cannot be produced. `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
 
@@ -299,19 +357,20 @@ For a **per-sender adaptation** pattern, iterate `senders` and call `textProvide
 
 ### Step 2 — Add a ScheduledOrchestrationProfile entry
 
-Reference the new orchestrator type and the target `SenderPlatforms` list in `DefaultSlotProfileProvider.GetProfiles()`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
+Reference the new orchestrator type and the target `SenderPlatforms` list in `DefaultSlotProfileProvider`. `CreateOrchestratorInstance` in `OrchestratorFactory` resolves constructor parameters automatically via reflection:
 
 ```csharp
-// src/Orchestrators/DefaultSlotProfileProvider.cs
-public IReadOnlyList<ScheduledOrchestrationProfile> GetProfiles() =>
-[
+// src/Providers/DefaultSlotProfileProvider.cs
+private static readonly IReadOnlyList<ScheduledOrchestrationProfile> _profiles = new List<ScheduledOrchestrationProfile>
+{
     // existing profiles ...
     new ScheduledOrchestrationProfile(
+        orchestratorContextKey: null,
         hour: 10,
         senderPlatforms: new[] { SenderPlatform.X },
         orchestratorType: typeof(QuoteOrchestrator),
         textProvider: AiProvider.Perplexity),
-];
+}.AsReadOnly();
 ```
 
 No other change to `OrchestratorFactory` is required. The factory receives the updated profile list via `ISlotProfileProvider` at runtime without any code modification.
@@ -355,25 +414,28 @@ public enum AiProvider
 
 ### Step 2 — Implement the Capability Interface(s)
 
+Provider methods receive typed value objects (`PromptRequest` / `ImagePromptRequest`) constructed by the orchestrator. Providers must not impose any prompt-shaping logic; they must execute the request as supplied.
+
 **Text + Image provider** (e.g. Anthropic supports both):
 
 ```csharp
 // src/Services/Ai/AnthropicService.cs
 public class AnthropicService : ITextToTextProvider, ITextToImageProvider
 {
-    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default)
+    public async Task<string> GenerateTextAsync(PromptRequest request, CancellationToken cancellationToken = default)
     {
-        // Call Anthropic Messages API for summarisation
+        // Use request.SystemPromptTemplate, request.UserPromptTemplate,
+        // request.InputText, request.Temperature, request.MaxOutputLength, etc.
+        // Call Anthropic Messages API for text generation.
+        return generatedText;
     }
 
-    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default)
+    public async Task<byte[]> GenerateImageAsync(ImagePromptRequest request, CancellationToken cancellationToken = default)
     {
-        // Call Anthropic Messages API for prompt generation
-    }
-
-    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default)
-    {
-        // Call Anthropic image generation API
+        // Use request.SystemPromptTemplate, request.UserPromptTemplate,
+        // request.InputText, request.ImageQuantity, request.ImageSize, etc.
+        // Call Anthropic image generation API.
+        return imageBytes;
     }
 }
 ```
@@ -384,8 +446,10 @@ public class AnthropicService : ITextToTextProvider, ITextToImageProvider
 // src/Services/Ai/MyTextOnlyService.cs
 public class MyTextOnlyService : ITextToTextProvider
 {
-    public async Task<string> GetSummaryAsync(string text, int maxLength, CancellationToken ct = default) { ... }
-    public async Task<string> GetImagePromptAsync(string text, CancellationToken ct = default) { ... }
+    public async Task<string> GenerateTextAsync(PromptRequest request, CancellationToken cancellationToken = default)
+    {
+        // Execute the text-to-text step using request fields.
+    }
     // No GenerateImageAsync — ITextToImageProvider is not implemented.
     // Slots using this provider will receive null for imageProvider — intentional.
 }
@@ -397,8 +461,11 @@ public class MyTextOnlyService : ITextToTextProvider
 // src/Services/Ai/MyImageOnlyService.cs
 public class MyImageOnlyService : ITextToImageProvider
 {
-    public async Task<byte[]> GenerateImageAsync(string prompt, CancellationToken ct = default) { ... }
-    // No text methods — ITextToTextProvider is not implemented.
+    public async Task<byte[]> GenerateImageAsync(ImagePromptRequest request, CancellationToken cancellationToken = default)
+    {
+        // Execute the image generation step using request fields.
+    }
+    // No GenerateTextAsync — ITextToTextProvider is not implemented.
     // Slots using this provider will receive null for textProvider — intentional.
 }
 ```
@@ -425,46 +492,39 @@ builder.Services.AddKeyedTransient<ITextToImageProvider, MyImageOnlyService>(AiP
 
 No switch expression, no factory class, and no `_supportedProviders` set to maintain. The keyed DI registration is the single source of truth for capability availability.
 
-### Step 4 — Add an `*OptionsExtensions.cs` file
+### Step 4 — Add an `*Options.cs` file
 
-Every AI provider **must** ship an `*OptionsExtensions.cs` file alongside its `*Options.cs` and `*OptionsValidator.cs` in `src/Models/<ProviderName>/`. This file is the single source of truth for the configuration section key and encapsulates both the binding and the startup-validation registration in one method call.
-
+Every AI provider **must** ship an `*Options.cs` file alongside its `*OptionsValidator.cs` in `src/Models/<ProviderName>/`. 
 ```
 src/Models/
   Anthropic/
     AnthropicOptions.cs
     AnthropicOptionsValidator.cs
-    AnthropicOptionsExtensions.cs   ← required
 ```
 
-The file must follow this exact shape:
+This file is the single source of truth for the configuration section key and encapsulates both the binding and the startup-validation registration in one extension-method.
 
 ```csharp
-// src/Models/Anthropic/AnthropicOptionsExtensions.cs
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-
-namespace XPoster.Models;
-
-/// <summary>
-/// Extension methods for registering <see cref="AnthropicOptions"/> binding and validation.
-/// </summary>
-public static class AnthropicOptionsExtensions
+// src/Extensions/AiProviderOptionsCompositionExtensions.cs
+public static class AiProviderOptionsCompositionExtensions
 {
-    /// <summary>App-settings section name: <c>Anthropic</c>.</summary>
-    public const string SectionName = "Anthropic";
-
     /// <summary>
-    /// Binds the <c>Anthropic</c> configuration section to <see cref="AnthropicOptions"/>
-    /// and registers <see cref="AnthropicOptionsValidator"/> for startup validation.
+    /// Binds and validates all AI provider option sections
+    /// (<c>OpenAI</c>, <c>AzureFoundry</c>, <c>DeepSeek</c>, <c>FalAi</c>, <c>Perplexity</c>)
+    /// in one call.  This is the only entrypoint <c>Program.cs</c> needs for AI option wiring.
     /// </summary>
-    public static IServiceCollection AddAnthropicOptions(
+    /// <param name="services">The service collection to configure.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <returns>The same <see cref="IServiceCollection"/> for chaining.</returns>
+    public static IServiceCollection AddAiProviderOptions(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<AnthropicOptions>(configuration.GetSection(SectionName));
+        // existing configurations ...
+
+        services.Configure<AnthropicOptions>(configuration.GetSection(AnthropicOptions.SectionName));
         services.AddSingleton<IValidateOptions<AnthropicOptions>, AnthropicOptionsValidator>();
+
         return services;
     }
 }
@@ -472,12 +532,8 @@ public static class AnthropicOptionsExtensions
 
 Key rules for this file:
 
-- `SectionName` lives on the **extension class**, not on `AnthropicOptions`. The Options DTO must remain a pure data model with no infrastructure concerns.
-- The method encapsulates **both** `Configure<T>` and `AddSingleton<IValidateOptions<T>>`. Never register them separately in `Program.cs`.
-- `Program.cs` must call only `builder.Services.AddAnthropicOptions(builder.Configuration)` — never raw `Configure<T>(configuration.GetSection("..."))` literals for AI providers.
-- Add the corresponding `appsettings.json` / `local.settings.json` section using `SectionName` as the key.
-
-> This pattern mirrors `HttpClientExtensions.AddHttpClients()` already present in the codebase and is consistent with the approach used by ASP.NET Core, the Azure SDK, and `Microsoft.Extensions` libraries throughout the .NET ecosystem.
+- `SectionName` lives on the `IAiProviderSection` interface, not on `AnthropicOptions`.
+- Add the corresponding `appsettings.json` / `local.settings.json` section using `SectionName` as the section prefix (`Anthropic__Endpoint`).
 
 ---
 
@@ -487,15 +543,18 @@ All extensions must respect the following invariants to integrate correctly with
 
 - **Senders must be stateless.** Do not cache authentication tokens in instance fields; inject them via `IOptions<TCredentials>` (bound at startup from Key Vault via the Configuration Provider). The DI container manages lifetime.
 - **`SendAsync` must return `false`, not throw, on non-fatal platform errors.** Throwing from a sender propagates the exception to `XFunction` and prevents App Insights from recording a clean skip.
-- **`MessageMaxLenght` must be accurate.** `FeedOrchestrator` relies on this value to size AI summarisation calls. An incorrect value causes content that is either silently truncated at the platform layer or wastes character budget on secondary re-summarisation.
+- **`MessageMaxLenght` must be accurate.** The orchestrator reads this value from each resolved sender to size AI summarisation calls and to determine the processing order of senders (widest limit first). An incorrect value causes content that is either silently truncated at the platform layer or wastes character budget on secondary re-summarisation.
 - **`OrchestrateAsync` must return an empty dictionary with `SendIt = false`, not throw, when no content can be produced.** `XFunction` treats an empty result as a graceful skip; an exception is treated as a pipeline failure.
 - **`OrchestrateAsync` returns one entry per configured sender.** The dictionary key is `SenderPlatform`; a `null` value signals content generation failure for that specific sender. `BaseOrchestrator.PostAsync` skips null entries with a warning log and returns `false` for the overall slot.
 - **Orchestrators must implement `SupportedPlatforms`.** The property must include every `SenderPlatform` value the orchestrator has been validated against, and always include `SenderPlatform.DryRun`. `NoOrchestrator` is the only valid exception (empty list).
 - **Orchestrators must be idempotent where possible.** Avoid side effects beyond returning a dictionary of posts. In particular, do not call `ISender.SendAsync` from inside an orchestrator — that responsibility belongs to `BaseOrchestrator.PostAsync`, which dispatches all senders in parallel via `Task.WhenAll`.
 - **Orchestrators must handle null capability providers explicitly.** `ITextToTextProvider?` and `ITextToImageProvider?` are injected as nullable. Check before use and degrade gracefully: return a text-only post when `imageProvider` is null, return an empty dictionary early when `textProvider` is null and text generation is required.
+- **Orchestrators own prompt intent.** Construct `PromptRequest` and `ImagePromptRequest` value objects in the orchestrator and pass them to the provider interfaces. Do not embed raw prompt strings or generation parameters inside provider implementations.
 - **AI provider services must implement only the capability interfaces they actually support.** Do not implement `ITextToImageProvider` on a text-only provider as a no-op or a `NotSupportedException` stub — leave the interface unimplemented and omit the keyed DI registration. The `null`-resolution contract is the canonical signal for "capability not available".
 - **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
-- **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **Every new AI provider must include an `*Options.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **`ScheduledOrchestrationProfile` always requires `orchestratorContextKey` as the first constructor argument.** Pass `null` when no topic scoping is needed. Never omit the parameter — it is positional and the compiler will reject a call that skips it.
+- **The order of `senderPlatforms` in `ScheduledOrchestrationProfile` does not matter.** The orchestrator sorts senders internally by `MessageMaxLength` descending at runtime — no manual ordering is required or expected at the profile level.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.

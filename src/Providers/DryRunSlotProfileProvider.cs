@@ -37,12 +37,14 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
         var profiles = new List<ScheduledOrchestrationProfile>(_inner.GetProfiles())
         {
             new ScheduledOrchestrationProfile(
-                9,
-                new[] { SenderPlatform.DryRun },
-                typeof(FeedOrchestrator),
-                textProvider:  AiProvider.OpenAi,
+                orchestratorContextKey: "Bitcoin",
+                hour: 9,
+                senderPlatforms: new[] { SenderPlatform.DryRun },
+                orchestratorType: typeof(FeedOrchestrator),
+                textProvider: AiProvider.OpenAi,
                 imageProvider: AiProvider.OpenAi)
         };
+
         return profiles.AsReadOnly();
     }
 }

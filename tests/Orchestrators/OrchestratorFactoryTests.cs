@@ -28,11 +28,14 @@ public class OrchestratorFactoryTests
     // ---------------------------------------------------------------------------
 
     private static ScheduledOrchestrationProfile FeedProfile(
+        string context,
         int hour,
         IReadOnlyList<SenderPlatform>? platforms = null,
         AiProvider? text = AiProvider.OpenAi,
         AiProvider? image = AiProvider.OpenAi) =>
-        new(hour,
+        new(
+            context,
+            hour,
             platforms ?? new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             typeof(FeedOrchestrator),
             textProvider: text,
@@ -41,7 +44,7 @@ public class OrchestratorFactoryTests
     private static ScheduledOrchestrationProfile PowerLawProfile(
         int hour,
         SenderPlatform platform = SenderPlatform.LinkedIn) =>
-        new(hour,
+        new(null, hour,
             new List<SenderPlatform> { platform }.AsReadOnly(),
             typeof(PowerLawOrchestrator));
 
@@ -67,6 +70,7 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             arbitraryHour,
             new List<SenderPlatform> { platform }.AsReadOnly(),
             expectedType,
@@ -102,45 +106,61 @@ public class OrchestratorFactoryTests
     [Fact]
     public void Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()
     {
-        var factory = CreateFactoryWithProfiles(10, FeedProfile(10,
+        var factory = CreateFactoryWithProfiles(10, FeedProfile("Bitcoin", 10,
             new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly()));
 
         factory.Resolve();
 
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.LinkedIn), Times.Once);
     }
 
     [Fact]
     public void Resolve_Should_ResolveXSender_WhenProfileUsesX()
     {
-        var factory = CreateFactoryWithProfiles(11, FeedProfile(11,
+        var factory = CreateFactoryWithProfiles(11, FeedProfile("Bitcoin", 11,
             new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly()));
 
         factory.Resolve();
 
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.X), Times.Once);
     }
 
     [Fact]
     public void Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()
     {
-        var factory = CreateFactoryWithProfiles(12, FeedProfile(12,
+        var factory = CreateFactoryWithProfiles(12, FeedProfile("Bitcoin", 12,
             new List<SenderPlatform> { SenderPlatform.Instagram }.AsReadOnly()));
 
         factory.Resolve();
 
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(IgSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Instagram), Times.Once);
+    }
+
+    [Fact]
+    public void Resolve_Should_ResolveFbSender_WhenProfileUsesFacebook()
+    {
+        var factory = CreateFactoryWithProfiles(12, FeedProfile("Bitcoin", 12,
+            new List<SenderPlatform> { SenderPlatform.Facebook }.AsReadOnly()));
+
+        factory.Resolve();
+
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Facebook), Times.Once);
     }
 
     [Fact]
     public void Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()
     {
-        var factory = CreateFactoryWithProfiles(10, FeedProfile(10,
+        var factory = CreateFactoryWithProfiles(10, FeedProfile("Bitcoin", 10,
             new List<SenderPlatform> { SenderPlatform.DryRun }.AsReadOnly()));
 
         factory.Resolve();
 
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(DryRunSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.DryRun), Times.Once);
     }
 
     [Fact]
@@ -151,7 +171,8 @@ public class OrchestratorFactoryTests
         var orchestrator = factory.Resolve();
 
         Assert.IsType<PowerLawOrchestrator>(orchestrator);
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.LinkedIn), Times.Once);
     }
 
     [Fact]
@@ -162,7 +183,33 @@ public class OrchestratorFactoryTests
         var orchestrator = factory.Resolve();
 
         Assert.IsType<PowerLawOrchestrator>(orchestrator);
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.X), Times.Once);
+    }
+
+
+    [Fact]
+    public void Resolve_Should_ResolveIgSender_ForPowerLawOrchestrator()
+    {
+        var factory = CreateFactoryWithProfiles(16, PowerLawProfile(16, SenderPlatform.Instagram));
+
+        var orchestrator = factory.Resolve();
+
+        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Instagram), Times.Once);
+    }
+
+    [Fact]
+    public void Resolve_Should_ResolveFbSender_ForPowerLawOrchestrator()
+    {
+        var factory = CreateFactoryWithProfiles(16, PowerLawProfile(16, SenderPlatform.Facebook));
+
+        var orchestrator = factory.Resolve();
+
+        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Facebook), Times.Once);
     }
 
     // ---------------------------------------------------------------------------
@@ -174,6 +221,7 @@ public class OrchestratorFactoryTests
     {
         const int hour = 8;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             hour,
             new List<SenderPlatform>
             {
@@ -188,9 +236,10 @@ public class OrchestratorFactoryTests
         var factory = CreateFactoryWithProfiles(hour, profile);
         factory.Resolve();
 
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(InSender)), Times.Once);
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(XSender)), Times.Once);
-        _mockServiceProvider.Verify(sp => sp.GetService(typeof(IgSender)), Times.Once);
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.LinkedIn), Times.Once);
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.X), Times.Once);
+        keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Instagram), Times.Once);
     }
 
     // ---------------------------------------------------------------------------
@@ -201,7 +250,7 @@ public class OrchestratorFactoryTests
     public void Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()
     {
         const int arbitraryHour = 10;
-        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile(arbitraryHour));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile("Bitcoin", arbitraryHour));
         factory.Resolve();
 
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
@@ -214,7 +263,7 @@ public class OrchestratorFactoryTests
     public void Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()
     {
         const int arbitraryHour = 10;
-        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile(arbitraryHour));
+        var factory = CreateFactoryWithProfiles(arbitraryHour, FeedProfile("Bitcoin", arbitraryHour));
         factory.Resolve();
 
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
@@ -228,6 +277,7 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             arbitraryHour,
             new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             typeof(FeedOrchestrator),
@@ -263,6 +313,7 @@ public class OrchestratorFactoryTests
     {
         const int arbitraryHour = 10;
         var profile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             arbitraryHour,
             new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
             typeof(FeedOrchestrator),
@@ -284,6 +335,7 @@ public class OrchestratorFactoryTests
     public void DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()
     {
         var innerProfile = new ScheduledOrchestrationProfile(
+            "Bitcoin",
             6,
             new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
             typeof(FeedOrchestrator),
@@ -316,7 +368,7 @@ public class OrchestratorFactoryTests
     [Fact]
     public void FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()
     {
-        var factory = CreateFactoryWithProfiles(10, FeedProfile(10));
+        var factory = CreateFactoryWithProfiles(10, FeedProfile("Bitcoin", 10));
         var orchestrator = Assert.IsType<FeedOrchestrator>(factory.Resolve());
 
         Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);
@@ -379,6 +431,7 @@ public class OrchestratorFactoryTests
         var mockXSender = new Mock<ISender>();
         var mockInSender = new Mock<ISender>();
         var mockIgSender = new Mock<ISender>();
+        var mockFbSender = new Mock<ISender>();
         var mockDryRunSender = new Mock<ISender>();
 
         var mockCryptoService = new Mock<ICryptoService>();
@@ -391,11 +444,6 @@ public class OrchestratorFactoryTests
         var mockLoggerFeed = new Mock<ILogger<FeedOrchestrator>>();
         var mockLoggerNo = new Mock<ILogger<NoOrchestrator>>();
 
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(XSender))).Returns(mockXSender.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(InSender))).Returns(mockInSender.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(IgSender))).Returns(mockIgSender.Object);
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(DryRunSender))).Returns(mockDryRunSender.Object);
-
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<PowerLawOrchestrator>))).Returns(mockLoggerPowerLaw.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedOrchestrator>))).Returns(mockLoggerFeed.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<NoOrchestrator>))).Returns(mockLoggerNo.Object);
@@ -406,10 +454,32 @@ public class OrchestratorFactoryTests
 
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.X))
+            .Returns(mockXSender.Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.LinkedIn))
+            .Returns(mockInSender.Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Instagram))
+            .Returns(mockIgSender.Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.DryRun))
+            .Returns(mockDryRunSender.Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Facebook))
+            .Returns(mockFbSender.Object);
+
+        keyedProvider
             .Setup(sp => sp.GetKeyedService(typeof(ITextToTextProvider), It.IsAny<object>()))
             .Returns(mockTextProvider.Object);
         keyedProvider
             .Setup(sp => sp.GetKeyedService(typeof(ITextToImageProvider), It.IsAny<object>()))
             .Returns(mockImageProvider.Object);
+
+        // *** FIX: registrazione del FeedOrchestratorContext keyed ***
+        var mockFeedContext = new Mock<FeedOrchestratorContext>();
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(FeedOrchestratorContext), It.IsAny<object>()))
+            .Returns(mockFeedContext.Object);
     }
 }

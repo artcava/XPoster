@@ -1,29 +1,30 @@
 # Community 33
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunctionTests.cs** (20 connections)
-- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
-- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
-- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
-- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
-- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
-- **CreateSut()** (2 connections)
-- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
-- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
-- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
-- **XPosterContainerPollingFunctionTests** (2 connections)
-- **XPoster.Tests** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
 
 ## Relationships
 
-- [[Community 55]] (9 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

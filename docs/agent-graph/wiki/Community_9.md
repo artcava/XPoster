@@ -1,36 +1,39 @@
 # Community 9
 
-> 19 nodes · cohesion 0.11
+> 22 nodes · cohesion 0.09
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (35 connections)
-- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
-- **GenerateImageAsync_RequestBodyContainsModelField()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenPromptIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **BuildService()** (2 connections)
-- **AzureFoundryServiceTests** (2 connections)
-- **GetSummaryAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
-- **GetImagePromptAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GetSummaryAsync_PostsToFoundryChatCompletionsEndpoint()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
-- **GetImagePromptAsync_WhenApiReturnsValidResponse_ReturnsPrompt()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
+- **OrchestratorFactoryTests.cs** (32 connections)
+- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
+- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
+- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **PowerLawProfile()** (2 connections)
+- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
+- **FeedProfile()** (2 connections)
+- **PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()** (2 connections)
+- **Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent()** (2 connections)
+- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()** (2 connections)
+- **Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()** (2 connections)
+- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()** (2 connections)
+- **Resolve_Should_ResolveFbSender_WhenProfileUsesFacebook()** (2 connections)
+- **Resolve_Should_ResolveIgSender_ForPowerLawOrchestrator()** (2 connections)
+- **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
+- **Resolve_Should_ResolveFbSender_ForPowerLawOrchestrator()** (2 connections)
+- **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 14]] (17 shared connections)
+- [[Community 42]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 71 (100%)
+- EXTRACTED: 74 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,18 +1,19 @@
 # Community 54
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **DeepSeekOptionsValidatorTests.cs** (8 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
-- **Validate_MissingPlaceholders_Fails()** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
 - **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

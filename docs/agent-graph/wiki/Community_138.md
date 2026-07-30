@@ -1,13 +1,14 @@
 # Community 138
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **PerplexityOptionsExtensions.cs** (3 connections)
-- **PerplexityOptionsExtensions.cs** (3 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **ImagePromptRequest** (2 connections)
+- **PromptRequest** (2 connections)
 - **XPoster.Models** (2 connections)
-- **AddPerplexityOptions()** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

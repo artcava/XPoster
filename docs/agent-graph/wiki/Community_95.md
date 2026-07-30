@@ -6,10 +6,10 @@
 
 - **IBlobStorageService.cs** (5 connections)
 - **IBlobStorageService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
 - **IBlobStorageService** (2 connections)
-- **UploadAsync()** (2 connections)
 - **DeleteAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **UploadAsync()** (2 connections)
 
 ## Relationships
 

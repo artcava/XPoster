@@ -1,30 +1,34 @@
 # Community 8
 
-> 21 nodes · cohesion 0.19
+> 25 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **XSenderTests.cs** (20 connections)
-- **XSenderTests.cs** (20 connections)
-- **MessageMaxLength_Returns250()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WithImageAndTwitterContextThrows_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenTwitterContextThrows_ReturnsFalse()** (2 connections)
-- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithBlankContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XSender_ImplementsISender()** (2 connections)
-- **XSenderTests()** (2 connections)
-- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
-- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
-- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **Platform_ReturnsX()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **GenerateTextAsync_WhenApiReturnsValidResponse_ReturnsContent()** (2 connections)
+- **GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsBadGateway_ReturnsEmptyString()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **GenerateTextAsync_WhenUsedForImagePromptDerivation_ReturnsPrompt()** (2 connections)
+- **ImagePromptDerivationRequest()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateTextAsync_WhenResponseFitsWithinMaxOutputLength_ReturnsSingleCallResult()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ForImagePromptRole_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenNoMaxOutputLength_DoesNotRetryRegardlessOfLength()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_UsesSystemAndUserTemplatesFromRequest_NotFromOptions()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **DeepSeekServiceTests** (2 connections)
+- **GenerateTextAsync_AppliesCustomInputTextLabel_InUserTemplate()** (2 connections)
+- **GenerateTextAsync_WhenCancellationRequested_ThrowsOperationCanceledException()** (2 connections)
+- **new()** (2 connections)
+- **BuildService()** (2 connections)
+- **SummaryRequest()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
 
 ## Relationships
 
@@ -32,7 +36,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (100%)
+- EXTRACTED: 94 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

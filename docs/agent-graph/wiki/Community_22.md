@@ -1,23 +1,24 @@
 # Community 22
 
-> 14 nodes · cohesion 0.27
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **PerplexityOptionsValidatorTests.cs** (13 connections)
-- **Validate_WhenDeploymentNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WhenImagePromptSystemTemplateHasNoPlaceholder_ReturnsSuccess()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **Validate_WhenSummarySystemPromptMissingMaxChars_ReturnsFailed()** (2 connections)
-- **Validate_WhenImagePromptUserTemplateMissingSummary_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **Validate_WhenSummaryUserPromptMissingText_ReturnsFailed()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **IgSenderResilienceTests.cs** (14 connections)
+- **IgSenderResilienceTests.cs** (14 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBlobUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **PostWithoutImage()** (2 connections)
+- **IgSender()** (2 connections)
+- **BuildSender()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **new()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **Uri()** (2 connections)
 
 ## Relationships
 
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

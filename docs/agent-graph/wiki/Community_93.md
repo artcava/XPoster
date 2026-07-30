@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
 
 ## Relationships
 
