@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`ScheduledOrchestrationProfile.OrchestratorContextKey`** ([#223](https://github.com/artcava/XPoster/issues/223)): added a logical context key used at runtime to resolve the appropriate `FeedOrchestratorContext` for each slot.
 
 ### Changed
+- **`SenderPlugin`** DI optimized with Keyed registration
+- **`AiProviderOptions`** optimized in a single Extension method
 - **`BuildChatPayload` centralized in `AiServiceHelper`** ([#244](https://github.com/artcava/XPoster/issues/244)): eliminated identical private `BuildChatPayload` implementations across `AzureFoundryService`, `OpenAiService`, `DeepSeekService`, and `PerplexityService`; a single `internal static object BuildChatPayload(string text, PromptRequest request, string modelName)` method now lives in `AiServiceHelper`, with each provider delegating to it and passing its provider-specific model name.
 - **Prompt ownership aligned with architectural boundaries** ([#223](https://github.com/artcava/XPoster/issues/223)): prompt composition is now owned by orchestrators, while providers focus solely on execution and connectivity/capability settings.
 - **Execution-oriented provider contracts** ([#223](https://github.com/artcava/XPoster/issues/223)): text and image providers now accept dedicated request objects (`PromptRequest` / `ImagePromptRequest`) instead of reading prompt fields from provider options.

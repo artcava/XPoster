@@ -148,10 +148,9 @@ The file below mirrors [`src/local.settings.json.example`](../src/local.settings
     // and token-budget helpers that are provider-specific.
     // -----------------------------------------------------------------------
 
-    "OpenAI__Endpoint": "https://api.openai.com/v1/chat/completions",
+    "OpenAI__Endpoint": "https://api.openai.com/v1/",
     "OpenAI__ApiKey": "",
     "OpenAI__TextModelName": "gpt-4.1-nano",
-    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
     "OpenAI__ImageModelName": "gpt-image-1.5",
 
     "AzureFoundry__Endpoint": "",
