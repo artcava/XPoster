@@ -1,26 +1,26 @@
 # Community 55
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **FbSenderResilienceTests** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
+- **HttpClientExtensionsTests.cs** (8 connections)
+- **HttpClientExtensionsTests.cs** (8 connections)
+- **foreach()** (2 connections)
+- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
+- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
+- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **HttpClientExtensionsTests** (2 connections)
 
 ## Relationships
 
-- [[Community 182]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

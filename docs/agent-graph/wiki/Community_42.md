@@ -1,28 +1,28 @@
 # Community 42
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildSender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **new()** (2 connections)
-- **MessageMaxLength_Returns2200()** (2 connections)
-- **Platform_ReturnsInstagram()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **ConfigurationFeedUrlProviderTests.cs** (10 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationFeedUrlProviderTests** (2 connections)
+- **ConfigurationFeedUrlProvider()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsPropertyIsNull()** (2 connections)
+- **GetFeedUrls_Should_ReturnReadOnlyList()** (2 connections)
+- **GetFeedUrls_Should_ReturnUrlsInOrder_When_MultipleUrlsConfigured()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetFeedUrls_Should_ReturnConfiguredUrls_When_OptionsContainsUrls()** (2 connections)
+- **GetFeedUrls_Should_ReturnEmptyList_When_UrlsListIsEmpty()** (2 connections)
 
 ## Relationships
 
-- [[Community 97]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

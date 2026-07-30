@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **UploadAsync()** (2 connections)
+- **IBlobStorageService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **DeleteAsync()** (2 connections)
 
 ## Relationships
 

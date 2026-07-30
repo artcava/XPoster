@@ -1,25 +1,25 @@
 # Community 76
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **BuildChatPayload()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
+- **InSenderSendAsyncTests.cs** (7 connections)
+- **InSenderSendAsyncTests.cs** (7 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **InSenderSendAsyncTests()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 153]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

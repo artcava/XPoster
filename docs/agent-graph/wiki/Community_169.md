@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **DispatchAsync()** (2 connections)
-- **if()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **BuildFactory()** (2 connections)
+- **params()** (2 connections)
 
 ## Relationships
 
-- [[Community 158]] (3 shared connections)
+- [[Community 153]] (3 shared connections)
 
 ## Audit Trail
 

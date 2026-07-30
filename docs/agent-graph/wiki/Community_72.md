@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidatorTests.cs** (7 connections)
-- **DeepSeekOptionsValidatorTests.cs** (7 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **DeepSeekOptionsValidatorTests** (2 connections)
-- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **Dispose()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **IsEnabled()** (2 connections)
 
 ## Relationships
 

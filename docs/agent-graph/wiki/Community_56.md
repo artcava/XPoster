@@ -1,26 +1,26 @@
 # Community 56
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **using()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **catch()** (2 connections)
-- **Exception()** (2 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **PollyIntegrationTestBase.cs** (8 connections)
+- **var()** (2 connections)
+- **BuildProviderWithHandler()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **BuildDelayedHandler()** (2 connections)
+- **params()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
-- [[Community 184]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

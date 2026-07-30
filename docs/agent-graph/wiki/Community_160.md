@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **AddAiProviderOptions()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 

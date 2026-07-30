@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XSender()** (2 connections)
-- **if()** (2 connections)
+- **XCredentialsValidator.cs** (4 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 156]] (3 shared connections)
+- [[Community 194]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

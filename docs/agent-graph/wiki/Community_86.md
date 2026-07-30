@@ -1,24 +1,24 @@
 # Community 86
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **Program.cs** (6 connections)
-- **Program.cs** (6 connections)
-- **if()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **Uri()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **BlobServiceClient()** (2 connections)
+- **OpenAiService.cs** (11 connections)
+- **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 134]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

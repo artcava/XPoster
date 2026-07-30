@@ -1,23 +1,23 @@
 # Community 108
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (13 connections)
-- **CreateOrchestrator()** (2 connections)
-- **BuildContext()** (2 connections)
-- **new()** (2 connections)
-- **SetupHappyPathProviders()** (2 connections)
-- **FeedOrchestratorFeedUrlProviderTests()** (2 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **InstagramCredentialsValidator** (2 connections)
 
 ## Relationships
 
-- [[Community 78]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

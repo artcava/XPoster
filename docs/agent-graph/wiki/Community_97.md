@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **IgSender_ImplementsISender()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **var()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **HttpClient()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
+- **JsonResponse()** (2 connections)
 
 ## Relationships
 
-- [[Community 42]] (10 shared connections)
+- [[Community 4]] (31 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

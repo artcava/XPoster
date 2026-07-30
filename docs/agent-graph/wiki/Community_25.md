@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **BlobStorageServiceTests.cs** (14 connections)
-- **BlobStorageServiceTests.cs** (14 connections)
-- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
-- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
-- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
-- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
-- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **CreateSut()** (2 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
+- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
+- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
+- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
 
 ## Relationships
 

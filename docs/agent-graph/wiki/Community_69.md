@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
-- **BlobUploadResult()** (2 connections)
-- **UploadAsync()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
-- **BlobStorageService()** (2 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse.cs** (7 connections)
+- **ImageData** (2 connections)
+- **Message** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **XPoster.Models** (2 connections)
+- **AIResponse** (2 connections)
+- **Choice** (2 connections)
 
 ## Relationships
 

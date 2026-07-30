@@ -1,28 +1,28 @@
 # Community 26
 
-> 15 nodes · cohesion 0.26
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (14 connections)
-- **ScheduledOrchestrationProfileTests.cs** (14 connections)
-- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **typeof()** (2 connections)
-- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
+- **DryRunSenderTests.cs** (26 connections)
+- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
+- **DryRunSender_ImplementsISender()** (2 connections)
+- **new()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
+- **ValidPost()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
+- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 36]] (12 shared connections)
 
 ## Audit Trail
 

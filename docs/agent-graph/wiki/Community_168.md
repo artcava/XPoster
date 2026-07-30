@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **nameof()** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **IsTransientHttpFailure()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships

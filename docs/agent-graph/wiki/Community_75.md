@@ -1,25 +1,25 @@
 # Community 75
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AIResponse.cs** (7 connections)
-- **AIResponse.cs** (7 connections)
-- **AIResponse** (2 connections)
-- **Choice** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **XPoster.Models** (2 connections)
-- **ImageData** (2 connections)
-- **Message** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **BuildChatPayload()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 164]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,26 +1,26 @@
 # Community 65
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AiModelCatalog.cs** (8 connections)
-- **AiModelCatalog.cs** (8 connections)
-- **TryGet()** (2 connections)
-- **AiModelCatalog()** (2 connections)
-- **Supports()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **GetRequired()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
+- **InvalidImageBytes()** (2 connections)
+- **FbSenderImageFlowTests** (2 connections)
+- **BuildCreds()** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 81]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

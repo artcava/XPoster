@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **CreateValidJpeg()** (2 connections)
+- **CreateValidPng()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 

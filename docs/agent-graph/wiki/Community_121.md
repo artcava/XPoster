@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderSection** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiProviderOptions** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 

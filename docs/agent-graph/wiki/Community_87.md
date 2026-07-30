@@ -1,24 +1,24 @@
 # Community 87
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (11 connections)
-- **return()** (2 connections)
-- **typeof()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **foreach()** (2 connections)
-- **catch()** (2 connections)
-- **Resolve()** (2 connections)
+- **Program.cs** (6 connections)
+- **Program.cs** (6 connections)
+- **BlobServiceClient()** (2 connections)
+- **DryRunSlotProfileProvider()** (2 connections)
+- **if()** (2 connections)
+- **Uri()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
 
 ## Relationships
 
-- [[Community 112]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

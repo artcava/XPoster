@@ -1,28 +1,28 @@
 # Community 44
 
-> 11 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (32 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()** (2 connections)
-- **typeof()** (2 connections)
-- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **new()** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
+- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
+- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
+- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
+- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **AiProviderServiceCollectionExtensionsTests** (2 connections)
+- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
+- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
+- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
 
 ## Relationships
 
-- [[Community 9]] (21 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 52 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

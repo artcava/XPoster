@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
+- **PerplexityService.cs** (8 connections)
+- **if()** (2 connections)
 - **var()** (2 connections)
 - **XPoster.Services** (2 connections)
 - **GenerateTextAsync()** (2 connections)
-- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 151]] (4 shared connections)
+- [[Community 146]] (4 shared connections)
 
 ## Audit Trail
 
