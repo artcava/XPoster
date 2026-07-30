@@ -130,8 +130,22 @@ public class TikTokSender : ISender
 ### Step 3 — Register in DI
 
 ```csharp
-// src/Program.cs
-builder.Services.AddTransient<TikTokSender>();
+// src/Extensions/SenderPluginsServiceCollectionExtensions.cs
+public static class SenderPluginsServiceCollectionExtensions
+{
+    /// <summary>
+    /// Registers all sender plugin implementations
+    /// </summary>
+    public static IServiceCollection AddXPosterSenderPlugins(this IServiceCollection services)
+    {
+        // other sender plugin...
+
+        // TikTok sender plugin
+        services.AddKeyedTransient<ISender, TikTokSender>(SenderPlatform.TikTok);
+
+        return services;
+    }
+}
 ```
 
 ### Step 4 — Add the secrets to Key Vault
@@ -169,16 +183,27 @@ public enum SenderPlatform
 
 ### Step 6 — Wire in OrchestratorFactory
 
-`OrchestratorFactory.Resolve()` resolves the concrete sender list through a private `ResolveSender` helper that maps each `SenderPlatform` value to the class retrieved from the DI container. Add one arm to the switch expression inside `ResolveSender()`:
+`OrchestratorFactory.Resolve()` resolves the concrete sender list through a private `ResolveSender` helper that maps each `SenderPlatform` value to the keyed registration retrieved from the DI container. No update needed here:
 
 ```csharp
 // src/Orchestrators/OrchestratorFactory.cs — ResolveSender helper
-private ISender? ResolveSender(SenderPlatform platform) => platform switch
+private ISender? ResolveSender(SenderPlatform platform)
 {
-    // existing arms ...
-    SenderPlatform.TikTok => _serviceProvider.GetService(typeof(TikTokSender)) as ISender,
-    _ => null
-};
+    try
+    {
+        var sender = _serviceProvider.GetKeyedService<ISender>(platform);
+        if (sender == null)
+        {
+            _log.LogWarning("No sender registered for platform {Platform}", platform);
+        }
+        return sender;
+    }
+    catch (Exception ex)
+    {
+        _log.LogError(ex, "Error resolving sender for platform {Platform}", platform);
+        return null;
+    }
+}
 ```
 
 The `Resolve()` method iterates `profile.SenderPlatforms`, calls `ResolveSender()` for each entry, and passes the resulting `IReadOnlyList<ISender>` to the orchestrator constructor. One enum value maps to one switch arm and one sender class — independent of how many senders are configured per slot.
@@ -467,46 +492,39 @@ builder.Services.AddKeyedTransient<ITextToImageProvider, MyImageOnlyService>(AiP
 
 No switch expression, no factory class, and no `_supportedProviders` set to maintain. The keyed DI registration is the single source of truth for capability availability.
 
-### Step 4 — Add an `*OptionsExtensions.cs` file
+### Step 4 — Add an `*Options.cs` file
 
-Every AI provider **must** ship an `*OptionsExtensions.cs` file alongside its `*Options.cs` and `*OptionsValidator.cs` in `src/Models/<ProviderName>/`. This file is the single source of truth for the configuration section key and encapsulates both the binding and the startup-validation registration in one method call.
-
+Every AI provider **must** ship an `*Options.cs` file alongside its `*OptionsValidator.cs` in `src/Models/<ProviderName>/`. 
 ```
 src/Models/
   Anthropic/
     AnthropicOptions.cs
     AnthropicOptionsValidator.cs
-    AnthropicOptionsExtensions.cs   ← required
 ```
 
-The file must follow this exact shape:
+This file is the single source of truth for the configuration section key and encapsulates both the binding and the startup-validation registration in one extension-method.
 
 ```csharp
-// src/Models/Anthropic/AnthropicOptionsExtensions.cs
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-
-namespace XPoster.Models;
-
-/// <summary>
-/// Extension methods for registering <see cref="AnthropicOptions"/> binding and validation.
-/// </summary>
-public static class AnthropicOptionsExtensions
+// src/Extensions/AiProviderOptionsCompositionExtensions.cs
+public static class AiProviderOptionsCompositionExtensions
 {
-    /// <summary>App-settings section name: <c>Anthropic</c>.</summary>
-    public const string SectionName = "Anthropic";
-
     /// <summary>
-    /// Binds the <c>Anthropic</c> configuration section to <see cref="AnthropicOptions"/>
-    /// and registers <see cref="AnthropicOptionsValidator"/> for startup validation.
+    /// Binds and validates all AI provider option sections
+    /// (<c>OpenAI</c>, <c>AzureFoundry</c>, <c>DeepSeek</c>, <c>FalAi</c>, <c>Perplexity</c>)
+    /// in one call.  This is the only entrypoint <c>Program.cs</c> needs for AI option wiring.
     /// </summary>
-    public static IServiceCollection AddAnthropicOptions(
+    /// <param name="services">The service collection to configure.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <returns>The same <see cref="IServiceCollection"/> for chaining.</returns>
+    public static IServiceCollection AddAiProviderOptions(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<AnthropicOptions>(configuration.GetSection(SectionName));
+        // existing configurations ...
+
+        services.Configure<AnthropicOptions>(configuration.GetSection(AnthropicOptions.SectionName));
         services.AddSingleton<IValidateOptions<AnthropicOptions>, AnthropicOptionsValidator>();
+
         return services;
     }
 }
@@ -514,12 +532,8 @@ public static class AnthropicOptionsExtensions
 
 Key rules for this file:
 
-- `SectionName` lives on the **extension class**, not on `AnthropicOptions`. The Options DTO must remain a pure data model with no infrastructure concerns.
-- The method encapsulates **both** `Configure<T>` and `AddSingleton<IValidateOptions<T>>`. Never register them separately in `Program.cs`.
-- `Program.cs` must call only `builder.Services.AddAnthropicOptions(builder.Configuration)` — never raw `Configure<T>(configuration.GetSection("..."))` literals for AI providers.
-- Add the corresponding `appsettings.json` / `local.settings.json` section using `SectionName` as the key.
-
-> This pattern mirrors `HttpClientExtensions.AddHttpClients()` already present in the codebase and is consistent with the approach used by ASP.NET Core, the Azure SDK, and `Microsoft.Extensions` libraries throughout the .NET ecosystem.
+- `SectionName` lives on the `IAiProviderSection` interface, not on `AnthropicOptions`.
+- Add the corresponding `appsettings.json` / `local.settings.json` section using `SectionName` as the section prefix (`Anthropic__Endpoint`).
 
 ---
 
@@ -540,7 +554,7 @@ All extensions must respect the following invariants to integrate correctly with
 - **Keyed AI provider registrations live exclusively in `AddXPosterAiProviders()`.** Never add `AddKeyedTransient<ITextToTextProvider, ...>` or `AddKeyedTransient<ITextToImageProvider, ...>` calls outside that method.
 - **All external HTTP calls must go through `IHttpClientFactory`.** This ensures connection pooling, Polly resilience pipelines (retry, circuit breaker, attempt timeout), and consistent timeout configuration across the entire codebase. Creating `new HttpClient()` inline is prohibited.
 - **Every new sender must include a `*CredentialsExtensions.cs` file** in `src/Credentials/`, declaring `SectionName` on the credentials DTO and the `Add*Credentials(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for sender credentials.
-- **Every new AI provider must include an `*OptionsExtensions.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
+- **Every new AI provider must include an `*Options.cs` file** in its `src/Models/<ProviderName>/` folder, declaring `SectionName` and the `Add*Options(IServiceCollection, IConfiguration)` extension method. `Program.cs` must use only the extension method — never raw `Configure<T>` + `GetSection("...")` literals for AI provider options.
 - **`ScheduledOrchestrationProfile` always requires `orchestratorContextKey` as the first constructor argument.** Pass `null` when no topic scoping is needed. Never omit the parameter — it is positional and the compiler will reject a call that skips it.
 - **The order of `senderPlatforms` in `ScheduledOrchestrationProfile` does not matter.** The orchestrator sorts senders internally by `MessageMaxLength` descending at runtime — no manual ordering is required or expected at the profile level.
 - See [architecture.md](architecture.md) for full ADRs and design pattern rationale.
