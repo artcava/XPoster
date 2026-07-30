@@ -5,8 +5,10 @@ namespace XPoster.Models;
 /// <summary>
 /// Strongly-typed configuration for the DeepSeek provider, bound from the <c>DeepSeek</c> section.
 /// </summary>
-public sealed class DeepSeekOptions : IAiProviderOptions
+public sealed class DeepSeekOptions : IAiProviderOptions, IAiProviderSection
 {
+    /// <summary>App-settings section name: <c>DeepSeek</c>.</summary>
+    public static string SectionName => "DeepSeek";
     /// <summary>Gets or sets the DeepSeek endpoint base URL (for example, <c>https://api.deepseek.com</c>).</summary>
     public string Endpoint { get; set; } = "https://api.deepseek.com";
 

@@ -5,8 +5,10 @@ namespace XPoster.Models;
 /// <summary>
 /// Strongly-typed configuration for the Azure AI Foundry provider, bound from the <c>AzureFoundry</c> section.
 /// </summary>
-public sealed class AzureFoundryOptions : IAiProviderOptions
+public sealed class AzureFoundryOptions : IAiProviderOptions, IAiProviderSection
 {
+    /// <summary>App-settings section name: <c>AzureFoundry</c>.</summary>
+    public static string SectionName => "AzureFoundry";
     /// <summary>Gets or sets the Foundry endpoint base URL (for example, <c>https://resource-name.services.ai.azure.com/openai/v1</c>).</summary>
     public string Endpoint { get; set; } = string.Empty;
 

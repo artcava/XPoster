@@ -5,8 +5,10 @@ namespace XPoster.Models;
 /// <summary>
 /// Strongly-typed configuration for the Perplexity provider, bound from the <c>Perplexity</c> section.
 /// </summary>
-public sealed class PerplexityOptions : IAiProviderOptions
+public sealed class PerplexityOptions : IAiProviderOptions, IAiProviderSection
 {
+    /// <summary>App-settings section name: <c>Perplexity</c>.</summary>
+    public static string SectionName => "Perplexity";
     /// <summary>Gets or sets the Perplexity endpoint base URL (for example, <c>https://api.perplexity.ai</c>).</summary>
     public string Endpoint { get; set; } = "https://api.perplexity.ai";
 

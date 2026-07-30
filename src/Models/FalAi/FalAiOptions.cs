@@ -5,8 +5,10 @@ namespace XPoster.Models;
 /// <summary>
 /// Strongly-typed configuration for the Fal.ai provider, bound from the <c>FalAi</c> section.
 /// </summary>
-public sealed class FalAiOptions : IAiProviderOptions
+public sealed class FalAiOptions : IAiProviderOptions, IAiProviderSection
 {
+    /// <summary>App-settings section name: <c>FalAi</c>.</summary>
+    public static string SectionName => "FalAi";
     /// <summary>Gets or sets the endpoint URL for the Fal.ai API.</summary>
     public string Endpoint { get; set; } = "https://fal.run";
     /// <summary>Gets or sets the API key used for authentication.</summary>

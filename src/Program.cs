@@ -55,11 +55,8 @@ builder.Services.AddHttpClients();
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();
 
-builder.Services.AddTransient<XSender>();
-builder.Services.AddTransient<InSender>();
-builder.Services.AddTransient<IgSender>();
-builder.Services.AddTransient<FbSender>();
-builder.Services.AddTransient<DryRunSender>();
+// Register sender plugins.
+builder.Services.AddXPosterSenderPlugins();
 
 // ITimeProvider registration:
 //   Development + ForceHour set  → LocalOverrideTimeProvider (pins clock to the configured UTC hour)

@@ -22,3 +22,12 @@ public interface IAiProviderOptions
     /// </summary>
     AiModelCatalog ModelCatalog { get; }
 }
+
+/// <summary>
+/// Shared abstraction for all AI provider option classes that are bound from a configuration section.
+/// </summary>
+public interface IAiProviderSection
+{
+    /// <summary>App-settings section name: <c>IAiProviderSection</c>.</summary>
+    static abstract string SectionName { get; }
+}
