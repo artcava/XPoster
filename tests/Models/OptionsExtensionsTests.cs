@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using XPoster.Extensions;
 using XPoster.Models;
 
 namespace XPoster.Tests.Models;
@@ -41,7 +42,7 @@ public class OptionsExtensionsTests
         [Fact]
         public void SectionName_IsOpenAI()
         {
-            Assert.Equal("OpenAI", OpenAiOptionsExtensions.SectionName);
+            Assert.Equal("OpenAI", OpenAiOptions.SectionName);
         }
 
         [Fact]
@@ -49,11 +50,11 @@ public class OptionsExtensionsTests
         {
             // OpenAiOptionsValidator does not enforce ApiKey as required;
             // all prompt templates already ship with valid placeholder defaults.
-            var config = BuildConfig(OpenAiOptionsExtensions.SectionName,
+            var config = BuildConfig(OpenAiOptions.SectionName,
                 new() { ["ApiKey"] = "test-key" });
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddOpenAiOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<OpenAiOptions>>().Value;
             Assert.Equal("test-key", options.ApiKey);
@@ -62,10 +63,10 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddOpenAiOptions_RegistersValidator()
         {
-            var config = BuildConfig(OpenAiOptionsExtensions.SectionName, new());
+            var config = BuildConfig(OpenAiOptions.SectionName, new());
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddOpenAiOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var validator = provider.GetService<IValidateOptions<OpenAiOptions>>();
             Assert.NotNull(validator);
@@ -80,14 +81,14 @@ public class OptionsExtensionsTests
         [Fact]
         public void SectionName_IsAzureFoundry()
         {
-            Assert.Equal("AzureFoundry", AzureFoundryOptionsExtensions.SectionName);
+            Assert.Equal("AzureFoundry", AzureFoundryOptions.SectionName);
         }
 
         [Fact]
         public void AddAzureFoundryOptions_BindsOptionsFromCorrectSection()
         {
             // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
-            var config = BuildConfig(AzureFoundryOptionsExtensions.SectionName, new()
+            var config = BuildConfig(AzureFoundryOptions.SectionName, new()
             {
                 ["Endpoint"] = "https://myfoundry.openai.azure.com",
                 ["ApiKey"] = "az-key",
@@ -96,7 +97,7 @@ public class OptionsExtensionsTests
             });
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddAzureFoundryOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<AzureFoundryOptions>>().Value;
             Assert.Equal("az-key", options.ApiKey);
@@ -106,10 +107,10 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddAzureFoundryOptions_RegistersValidator()
         {
-            var config = BuildConfig(AzureFoundryOptionsExtensions.SectionName, new());
+            var config = BuildConfig(AzureFoundryOptions.SectionName, new());
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddAzureFoundryOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var validator = provider.GetService<IValidateOptions<AzureFoundryOptions>>();
             Assert.NotNull(validator);
@@ -124,14 +125,14 @@ public class OptionsExtensionsTests
         [Fact]
         public void SectionName_IsDeepSeek()
         {
-            Assert.Equal("DeepSeek", DeepSeekOptionsExtensions.SectionName);
+            Assert.Equal("DeepSeek", DeepSeekOptions.SectionName);
         }
 
         [Fact]
         public void AddDeepSeekOptions_BindsOptionsFromCorrectSection()
         {
             // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
-            var config = BuildConfig(DeepSeekOptionsExtensions.SectionName, new()
+            var config = BuildConfig(DeepSeekOptions.SectionName, new()
             {
                 ["Endpoint"] = "https://api.deepseek.com",
                 ["ApiKey"] = "ds-key",
@@ -139,7 +140,7 @@ public class OptionsExtensionsTests
             });
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddDeepSeekOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<DeepSeekOptions>>().Value;
             Assert.Equal("ds-key", options.ApiKey);
@@ -149,10 +150,10 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddDeepSeekOptions_RegistersValidator()
         {
-            var config = BuildConfig(DeepSeekOptionsExtensions.SectionName, new());
+            var config = BuildConfig(DeepSeekOptions.SectionName, new());
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddDeepSeekOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var validator = provider.GetService<IValidateOptions<DeepSeekOptions>>();
             Assert.NotNull(validator);
@@ -167,21 +168,21 @@ public class OptionsExtensionsTests
         [Fact]
         public void SectionName_IsFalAi()
         {
-            Assert.Equal("FalAi", FalAiOptionsExtensions.SectionName);
+            Assert.Equal("FalAi", FalAiOptions.SectionName);
         }
 
         [Fact]
         public void AddFalAiOptions_BindsOptionsFromCorrectSection()
         {
             // Validator requires ApiKey and ModelId to be non-empty.
-            var config = BuildConfig(FalAiOptionsExtensions.SectionName, new()
+            var config = BuildConfig(FalAiOptions.SectionName, new()
             {
                 ["ApiKey"] = "fal-key",
                 ["ImageModelName"] = "fal-ai/flux/schnell",
             });
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddFalAiOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<FalAiOptions>>().Value;
             Assert.Equal("fal-key", options.ApiKey);
@@ -191,10 +192,10 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddFalAiOptions_RegistersValidator()
         {
-            var config = BuildConfig(FalAiOptionsExtensions.SectionName, new());
+            var config = BuildConfig(FalAiOptions.SectionName, new());
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddFalAiOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var validator = provider.GetService<IValidateOptions<FalAiOptions>>();
             Assert.NotNull(validator);
@@ -209,14 +210,14 @@ public class OptionsExtensionsTests
         [Fact]
         public void SectionName_IsPerplexity()
         {
-            Assert.Equal("Perplexity", PerplexityOptionsExtensions.SectionName);
+            Assert.Equal("Perplexity", PerplexityOptions.SectionName);
         }
 
         [Fact]
         public void AddPerplexityOptions_BindsOptionsFromCorrectSection()
         {
             // Validator requires Endpoint, ApiKey and DeploymentName to be non-empty.
-            var config = BuildConfig(PerplexityOptionsExtensions.SectionName, new()
+            var config = BuildConfig(PerplexityOptions.SectionName, new()
             {
                 ["Endpoint"] = "https://api.perplexity.ai",
                 ["ApiKey"] = "px-key",
@@ -224,7 +225,7 @@ public class OptionsExtensionsTests
             });
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddPerplexityOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var options = provider.GetRequiredService<IOptions<PerplexityOptions>>().Value;
             Assert.Equal("px-key", options.ApiKey);
@@ -234,10 +235,10 @@ public class OptionsExtensionsTests
         [Fact]
         public void AddPerplexityOptions_RegistersValidator()
         {
-            var config = BuildConfig(PerplexityOptionsExtensions.SectionName, new());
+            var config = BuildConfig(PerplexityOptions.SectionName, new());
 
             using var provider = BuildProvider(config,
-                (svc, cfg) => svc.AddPerplexityOptions(cfg));
+                (svc, cfg) => svc.AddAiProviderOptions(cfg));
 
             var validator = provider.GetService<IValidateOptions<PerplexityOptions>>();
             Assert.NotNull(validator);

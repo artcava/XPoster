@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using XPoster.Models;
 
 namespace XPoster.Extensions;
@@ -21,11 +22,21 @@ public static class AiProviderOptionsCompositionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddOpenAiOptions(configuration);
-        services.AddAzureFoundryOptions(configuration);
-        services.AddDeepSeekOptions(configuration);
-        services.AddFalAiOptions(configuration);
-        services.AddPerplexityOptions(configuration);
+        services.Configure<OpenAiOptions>(configuration.GetSection(OpenAiOptions.SectionName));
+        services.AddSingleton<IValidateOptions<OpenAiOptions>, OpenAiOptionsValidator>();
+
+        services.Configure<AzureFoundryOptions>(configuration.GetSection(AzureFoundryOptions.SectionName));
+        services.AddSingleton<IValidateOptions<AzureFoundryOptions>, AzureFoundryOptionsValidator>();
+
+        services.Configure<DeepSeekOptions>(configuration.GetSection(DeepSeekOptions.SectionName));
+        services.AddSingleton<IValidateOptions<DeepSeekOptions>, DeepSeekOptionsValidator>();
+
+        services.Configure<FalAiOptions>(configuration.GetSection(FalAiOptions.SectionName));
+        services.AddSingleton<IValidateOptions<FalAiOptions>, FalAiOptionsValidator>();
+
+        services.Configure<PerplexityOptions>(configuration.GetSection(PerplexityOptions.SectionName));
+        services.AddSingleton<IValidateOptions<PerplexityOptions>, PerplexityOptionsValidator>();
+
         return services;
     }
 }

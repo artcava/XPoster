@@ -120,15 +120,23 @@ public class OrchestratorFactory : IOrchestratorFactory
         return context;
     }
 
-    private ISender? ResolveSender(SenderPlatform platform) => platform switch
+    private ISender? ResolveSender(SenderPlatform platform)
     {
-        SenderPlatform.X => _serviceProvider.GetService(typeof(XSender)) as ISender,
-        SenderPlatform.LinkedIn => _serviceProvider.GetService(typeof(InSender)) as ISender,
-        SenderPlatform.Instagram => _serviceProvider.GetService(typeof(IgSender)) as ISender,
-        SenderPlatform.Facebook => _serviceProvider.GetService(typeof(FbSender)) as ISender,
-        SenderPlatform.DryRun => _serviceProvider.GetService(typeof(DryRunSender)) as ISender,
-        _ => null
-    };
+        try
+        {
+            var sender = _serviceProvider.GetKeyedService<ISender>(platform);
+            if (sender == null)
+            {
+                _log.LogWarning("No sender registered for platform {Platform}", platform);
+            }
+            return sender;
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "Error resolving sender for platform {Platform}", platform);
+            return null;
+        }
+    }
 
     private BaseOrchestrator CreateOrchestratorInstance(
         Type orchestratorType,

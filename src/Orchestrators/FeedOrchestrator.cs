@@ -1,5 +1,4 @@
 using System.Text;
-using Microsoft.Extensions.Logging;
 using XPoster.Contracts;
 using XPoster.Models;
 
