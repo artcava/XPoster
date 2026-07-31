@@ -45,7 +45,7 @@ namespace XPoster.Workflows.Abstractions;
 public record WorkflowNodeInput(
     IWorkflowContext Context,
     IReadOnlyDictionary<string, object> Parameters,
-    IReadOnlyList<ISenderPlugin> Senders);
+    IReadOnlyList<ISender> Senders);
 
 public record WorkflowNodeResult(
     bool Success,
@@ -224,7 +224,7 @@ public record WorkflowExecutionResult(
 
 public interface IWorkflowEngine
 {
-    Task<WorkflowExecutionResult> ExecuteAsync(WorkflowDefinition definition, IReadOnlyList<ISenderPlugin> senders, CancellationToken ct);
+    Task<WorkflowExecutionResult> ExecuteAsync(WorkflowDefinition definition, IReadOnlyList<ISender> senders, CancellationToken ct);
 }
 
 public class WorkflowExecutionEngine : IWorkflowEngine
@@ -238,7 +238,7 @@ public class WorkflowExecutionEngine : IWorkflowEngine
         _logger = logger;
     }
 
-    public async Task<WorkflowExecutionResult> ExecuteAsync(WorkflowDefinition definition, IReadOnlyList<ISenderPlugin> senders, CancellationToken ct)
+    public async Task<WorkflowExecutionResult> ExecuteAsync(WorkflowDefinition definition, IReadOnlyList<ISender> senders, CancellationToken ct)
     {
         var context = new WorkflowContext { SlotKey = definition.SlotKey };
         var nodeMap = definition.Nodes.ToDictionary(n => n.Id);
