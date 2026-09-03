@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
 - **if()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **Validate()** (2 connections)
-- **catch()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 149]] (4 shared connections)
+- [[Community 62]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

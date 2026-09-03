@@ -1,21 +1,21 @@
 # Community 162
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **return()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

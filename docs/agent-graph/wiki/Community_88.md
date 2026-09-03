@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **GetPendingAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **SaveAsync()** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **IgSender.cs** (6 connections)
+- **IgSender.cs** (6 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
+- **IgSender()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,20 @@
 # Community 188
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **CryptoService()** (2 connections)
-- **if()** (2 connections)
+- **XCredentials.cs** (2 connections)
+- **XCredentials.cs** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 164]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

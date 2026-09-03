@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **AiProviderValidationHelper.cs** (4 connections)
-- **AiProviderValidationHelper.cs** (4 connections)
-- **ValidateConnectivity()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **if()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **PublishContainerAsync()** (2 connections)
-- **IMetaPublishingService** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator** (2 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

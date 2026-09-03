@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions** (2 connections)
-- **IAiProviderSection** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **ImageTestData.cs** (4 connections)
+- **ImageTestData.cs** (4 connections)
+- **CreateValidJpeg()** (2 connections)
+- **CreateValidPng()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 
 ## Relationships
 

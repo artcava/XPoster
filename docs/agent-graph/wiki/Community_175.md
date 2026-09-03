@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **SenderPlatform.cs** (2 connections)
-- **SenderPlatform.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **XPoster.Models** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
+- **AzureFoundryOptions.cs** (2 connections)
 
 ## Relationships
 

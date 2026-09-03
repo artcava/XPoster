@@ -12,8 +12,8 @@
             [XPoster]XPoster.GeneratedFunctionMetadataProvider,
             [XPoster]XPoster.WorkerExtensionStartupCodeExecutor,
             [XPoster]XPoster.WorkerHostBuilderFunctionMetadataProviderExtension,
-            [XPoster]XPoster.HttpClientExtensions,
-            [XPoster]Program
+            [XPoster]XPoster.Extensions.HttpClientExtensions,
+            [XPoster]XPoster.Program
           </Exclude>
         </Configuration>
       </DataCollector>

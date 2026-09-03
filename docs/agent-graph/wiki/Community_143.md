@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer()** (2 connections)
+- **FeedPromptOptions.cs** (3 connections)
+- **FeedPromptOptions.cs** (3 connections)
+- **GetStep()** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships

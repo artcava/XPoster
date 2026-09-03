@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **nameof()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService** (2 connections)
+- **DeleteAsync()** (2 connections)
+- **UploadAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

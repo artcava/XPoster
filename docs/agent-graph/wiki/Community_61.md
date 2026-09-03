@@ -1,26 +1,26 @@
 # Community 61
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **foreach()** (2 connections)
-- **HttpClientExtensionsTests** (2 connections)
-- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
-- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
-- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 36]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
