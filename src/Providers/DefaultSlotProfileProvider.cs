@@ -11,8 +11,8 @@ namespace XPoster.Providers;
 /// <para>
 /// Slots are defined as follows (UTC hours):
 /// <list type="table">
-///   <item><term>06:00</term><description>Fan-out: FeedOrchestrator → LinkedIn (primary), X, Instagram.</description></item>
-///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn, X.</description></item>
+///   <item><term>06:00</term><description>Fan-out: WorkflowOrchestrator → LinkedIn (primary), X, Instagram, Facebook.</description></item>
+///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn, X, Facebook.</description></item>
 /// </list>
 /// </para>
 /// <para>
@@ -29,7 +29,7 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
             orchestratorContextKey: "Bitcoin",
             hour: 6,
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Instagram, SenderPlatform.Facebook },
-            orchestratorType: typeof(FeedOrchestrator),
+            orchestratorType: typeof(WorkflowOrchestrator),
             textProvider: AiProvider.OpenAi,
             imageProvider: AiProvider.AzureFoundry),
 

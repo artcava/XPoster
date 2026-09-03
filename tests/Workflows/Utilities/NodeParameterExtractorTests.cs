@@ -78,6 +78,50 @@ public class NodeParameterExtractorTests
     }
 
     [Fact]
+    public void GetParameter_JsonArrayString_ToList()
+    {
+        var params_ = new Dictionary<string, object>
+        {
+            { "k", "[\"https://a.xml\",\"https://b.xml\"]" }
+        };
+        var result = NodeParameterExtractor.GetParameter<List<string>>(params_, "k");
+        Assert.NotNull(result);
+        Assert.Equal(2, result!.Count);
+        Assert.Equal("https://b.xml", result[1]);
+    }
+
+    [Fact]
+    public void GetParameter_JsonObjectString_ToDictionary()
+    {
+        var params_ = new Dictionary<string, object> { { "k", "{\"a\":\"1\"}" } };
+        var result = NodeParameterExtractor.GetParameter<Dictionary<string, string>>(params_, "k");
+        Assert.NotNull(result);
+        Assert.Equal("1", result!["a"]);
+    }
+
+    [Fact]
+    public void GetParameter_PlainString_StillConverts()
+    {
+        var params_ = new Dictionary<string, object> { { "k", "hello" } };
+        Assert.Equal("hello", NodeParameterExtractor.GetParameter<string>(params_, "k"));
+    }
+
+    [Fact]
+    public void GetParameter_MalformedJson_ForList_ReturnsEmptyOrNull()
+    {
+        var params_ = new Dictionary<string, object> { { "k", "[broken" } };
+        var result = NodeParameterExtractor.GetParameter<List<string>>(params_, "k");
+        Assert.True(result == null || result.Count == 0);
+    }
+
+    [Fact]
+    public void GetParameter_MalformedJsonArrayString_FallsBackToString()
+    {
+        var params_ = new Dictionary<string, object> { { "k", "[broken" } };
+        Assert.Equal("[broken", NodeParameterExtractor.GetParameter<string>(params_, "k"));
+    }
+
+    [Fact]
     public void GetParameter_ConversionFailure_ReturnsDefault()
     {
         var params_ = new Dictionary<string, object> { { "k", "not_a_number" } };

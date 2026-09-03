@@ -96,10 +96,6 @@ builder.Services.AddWorkflows(builder.Configuration);
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
 
-builder.Services.AddKeyedSingleton<FeedOrchestratorContext>("Bitcoin", (sp, _) =>
-    builder.Configuration.GetSection("FeedSlotContexts:Bitcoin").Get<FeedOrchestratorContext>()!);
-
-
 // ITagReplacementProvider registration — reads TagReplacementOptions:Replacements from app settings.
 builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSection(TagReplacementOptions.SectionName));
 builder.Services.AddSingleton<ITagReplacementProvider, ConfigurationTagReplacementProvider>();

@@ -40,7 +40,7 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
                 orchestratorContextKey: "Bitcoin",
                 hour: 9,
                 senderPlatforms: new[] { SenderPlatform.DryRun },
-                orchestratorType: typeof(FeedOrchestrator),
+                orchestratorType: typeof(WorkflowOrchestrator),
                 textProvider: AiProvider.OpenAi,
                 imageProvider: AiProvider.OpenAi)
         };
