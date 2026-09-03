@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XPoster.Contracts;
 using XPoster.Models;
 using XPoster.SenderPlugins;
+using XPoster.Workflows.Engine;
 
 namespace XPoster.Orchestrators;
 
@@ -20,6 +21,7 @@ public class OrchestratorFactory : IOrchestratorFactory
     private readonly ILogger<OrchestratorFactory> _log;
     private readonly ITimeProvider _timeProvider;
     private readonly ISlotProfileProvider _slotProfileProvider;
+    private readonly IWorkflowEngine _workflowEngine;
 
     /// <summary>
     /// Initialises a new instance of <see cref="OrchestratorFactory"/>.
@@ -28,16 +30,19 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// <param name="log">Factory logger.</param>
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="slotProfileProvider">Provider that supplies the scheduled orchestration profiles.</param>
+    /// <param name="workflowEngine">Workflow DAG engine used by <see cref="WorkflowOrchestrator"/> slots.</param>
     public OrchestratorFactory(
         IServiceProvider serviceProvider,
         ILogger<OrchestratorFactory> log,
         ITimeProvider timeProvider,
-        ISlotProfileProvider slotProfileProvider)
+        ISlotProfileProvider slotProfileProvider,
+        IWorkflowEngine workflowEngine)
     {
         _serviceProvider = serviceProvider;
         _log = log;
         _timeProvider = timeProvider;
         _slotProfileProvider = slotProfileProvider;
+        _workflowEngine = workflowEngine;
     }
 
     /// <summary>
@@ -81,6 +86,11 @@ public class OrchestratorFactory : IOrchestratorFactory
             profile.ImageProvider?.ToString() ?? "none",
             profile.OrchestratorContextKey ?? "none");
 
+        if (profile.OrchestratorType == typeof(WorkflowOrchestrator))
+        {
+            return ResolveWorkflowOrchestrator(profile, senders);
+        }
+
         ITextToTextProvider? textProvider = profile.TextProvider.HasValue
             ? _serviceProvider.GetKeyedService<ITextToTextProvider>(profile.TextProvider.Value)
             : null;
@@ -97,6 +107,42 @@ public class OrchestratorFactory : IOrchestratorFactory
             textProvider,
             imageProvider,
             feedOrchestratorContext);
+    }
+
+    private BaseOrchestrator ResolveWorkflowOrchestrator(
+        ScheduledOrchestrationProfile profile,
+        IReadOnlyList<ISender> senders)
+    {
+        if (string.IsNullOrWhiteSpace(profile.OrchestratorContextKey))
+        {
+            _log.LogWarning(
+                "Slot at hour {Hour} uses {OrchestratorType} but does not define {ContextKey}. Using {NoOrchestrator}.",
+                profile.Hour,
+                nameof(WorkflowOrchestrator),
+                nameof(ScheduledOrchestrationProfile.OrchestratorContextKey),
+                nameof(NoOrchestrator));
+            return CreateEmptyNoOrchestrator();
+        }
+
+        var workflowDefinition = _serviceProvider.GetKeyedService<WorkflowDefinition>(profile.OrchestratorContextKey);
+        if (workflowDefinition is null)
+        {
+            _log.LogWarning(
+                "No {WorkflowDefinition} is registered for key '{ContextKey}'. Using {NoOrchestrator}.",
+                nameof(WorkflowDefinition),
+                profile.OrchestratorContextKey,
+                nameof(NoOrchestrator));
+            return CreateEmptyNoOrchestrator();
+        }
+
+        var logger = _serviceProvider.GetRequiredService<ILogger<WorkflowOrchestrator>>();
+        return new WorkflowOrchestrator(senders, logger, _workflowEngine, workflowDefinition);
+    }
+
+    private BaseOrchestrator CreateEmptyNoOrchestrator()
+    {
+        var logger = _serviceProvider.GetRequiredService<ILogger<NoOrchestrator>>();
+        return new NoOrchestrator(logger);
     }
 
     private FeedOrchestratorContext? ResolveFeedOrchestratorContext(ScheduledOrchestrationProfile profile)
