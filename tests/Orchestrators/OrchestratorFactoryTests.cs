@@ -6,6 +6,7 @@ using XPoster.Models;
 using XPoster.Orchestrators;
 using XPoster.Providers;
 using XPoster.SenderPlugins;
+using XPoster.Workflows.Engine;
 
 namespace XPoster.Tests.Orchestrators;
 
@@ -97,6 +98,56 @@ public class OrchestratorFactoryTests
         var factory = CreateFactory(mockProfileProvider.Object);
 
         Assert.IsType<NoOrchestrator>(factory.Resolve());
+    }
+
+    // ---------------------------------------------------------------------------
+    // WorkflowOrchestrator routing
+    // ---------------------------------------------------------------------------
+
+    [Fact]
+    public void Resolve_Should_ReturnWorkflowOrchestrator_WhenProfileUsesWorkflowOrchestrator()
+    {
+        const int hour = 9;
+        var profile = new ScheduledOrchestrationProfile(
+            "Workflow:Bitcoin",
+            hour,
+            new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
+            typeof(WorkflowOrchestrator));
+
+        var mockDefinition = new WorkflowDefinition("Bitcoin", new List<WorkflowNodeDefinition>());
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(WorkflowDefinition), "Workflow:Bitcoin"))
+            .Returns(mockDefinition);
+        _mockServiceProvider
+            .Setup(sp => sp.GetService(typeof(ILogger<WorkflowOrchestrator>)))
+            .Returns(new Mock<ILogger<WorkflowOrchestrator>>().Object);
+
+        var factory = CreateFactoryWithProfiles(hour, profile);
+        var orchestrator = factory.Resolve();
+
+        Assert.IsType<WorkflowOrchestrator>(orchestrator);
+    }
+
+    [Fact]
+    public void Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()
+    {
+        const int hour = 9;
+        var profile = new ScheduledOrchestrationProfile(
+            "Workflow:Missing",
+            hour,
+            new List<SenderPlatform> { SenderPlatform.X }.AsReadOnly(),
+            typeof(WorkflowOrchestrator));
+
+        var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(WorkflowDefinition), "Workflow:Missing"))
+            .Returns((object?)null);
+
+        var factory = CreateFactoryWithProfiles(hour, profile);
+        var orchestrator = factory.Resolve();
+
+        Assert.IsType<NoOrchestrator>(orchestrator);
     }
 
     // ---------------------------------------------------------------------------
@@ -424,7 +475,7 @@ public class OrchestratorFactoryTests
     }
 
     private OrchestratorFactory CreateFactory(ISlotProfileProvider profileProvider) =>
-        new(_mockServiceProvider.Object, _mockLogger.Object, _mockTimeProvider.Object, profileProvider);
+        new(_mockServiceProvider.Object, _mockLogger.Object, _mockTimeProvider.Object, profileProvider, new Mock<IWorkflowEngine>().Object);
 
     private void SetupMocksForOrchestratorFactory()
     {

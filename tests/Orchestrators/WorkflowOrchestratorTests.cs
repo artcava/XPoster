@@ -1,0 +1,103 @@
+using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
+using XPoster.Contracts;
+using XPoster.Models;
+using XPoster.Orchestrators;
+using XPoster.Workflows.Engine;
+using XPoster.Workflows.Models;
+
+namespace XPoster.Tests.Orchestrators;
+
+public class WorkflowOrchestratorTests
+{
+    private static WorkflowDefinition MakeDefinition() =>
+        new("Bitcoin", new List<WorkflowNodeDefinition>
+        {
+            new("fetch", "FetchRss", new Dictionary<string, object>(), null, new List<string>())
+        });
+
+    private static (WorkflowOrchestrator orchestrator, Mock<IWorkflowEngine> engineMock, WorkflowDefinition definition) CreateOrchestrator(
+        WorkflowExecutionResult executionResult)
+    {
+        var definition = MakeDefinition();
+        var engineMock = new Mock<IWorkflowEngine>();
+        engineMock
+            .Setup(e => e.ExecuteAsync(definition, It.IsAny<IReadOnlyList<ISender>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(executionResult);
+
+        var senders = new List<ISender>
+        {
+            new Mock<ISender>().Object
+        }.AsReadOnly();
+
+        var orchestrator = new WorkflowOrchestrator(
+            senders,
+            NullLogger<WorkflowOrchestrator>.Instance,
+            engineMock.Object,
+            definition);
+
+        return (orchestrator, engineMock, definition);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_ReturnsPostMap_OnSuccess()
+    {
+        var post = new Post { Content = "hello" };
+        var context = new WorkflowContext { SlotKey = "Bitcoin" };
+        context.SetData(WorkflowContextKeys.SendResults, new Dictionary<SenderPlatform, Post?>
+        {
+            [SenderPlatform.X] = post
+        });
+
+        var (orchestrator, engineMock, definition) = CreateOrchestrator(
+            new WorkflowExecutionResult(true, context, null));
+
+        var result = await orchestrator.OrchestrateAsync(CancellationToken.None);
+
+        Assert.True(result.ContainsKey(SenderPlatform.X));
+        Assert.Same(post, result[SenderPlatform.X]);
+        engineMock.Verify(e => e.ExecuteAsync(definition, It.IsAny<IReadOnlyList<ISender>>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_ReturnsEmptyDictionary_OnFailure()
+    {
+        var context = new WorkflowContext { SlotKey = "Bitcoin" };
+        var (orchestrator, engineMock, definition) = CreateOrchestrator(
+            new WorkflowExecutionResult(false, context, "boom"));
+
+        var result = await orchestrator.OrchestrateAsync(CancellationToken.None);
+
+        Assert.Empty(result);
+        Assert.False(orchestrator.SendIt);
+        engineMock.Verify(e => e.ExecuteAsync(definition, It.IsAny<IReadOnlyList<ISender>>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OrchestrateAsync_ReturnsEmptyDictionary_WhenSendResultsMissing()
+    {
+        var context = new WorkflowContext { SlotKey = "Bitcoin" };
+        var (orchestrator, _, _) = CreateOrchestrator(
+            new WorkflowExecutionResult(true, context, null));
+
+        var result = await orchestrator.OrchestrateAsync(CancellationToken.None);
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void Properties_AreConfigured()
+    {
+        var (orchestrator, _, _) = CreateOrchestrator(
+            new WorkflowExecutionResult(true, new WorkflowContext { SlotKey = "Bitcoin" }, null));
+
+        Assert.Equal("WorkflowOrchestrator", orchestrator.Name);
+        Assert.True(orchestrator.SendIt);
+        Assert.True(orchestrator.ProduceImage);
+        Assert.DoesNotContain(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.Facebook, orchestrator.SupportedPlatforms);
+    }
+}

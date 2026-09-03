@@ -13,6 +13,7 @@ using XPoster.Orchestrators;
 using XPoster.Providers;
 using XPoster.SenderPlugins;
 using XPoster.Services;
+using XPoster.Workflows.Configuration;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -88,6 +89,9 @@ else
     builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
 
 builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
+
+// Register the workflow engine, keyed adapter nodes, and slot workflow definitions.
+builder.Services.AddWorkflows(builder.Configuration);
 
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
