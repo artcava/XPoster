@@ -12,13 +12,12 @@
     // Set to a UTC hour (0-23) matching an entry in DefaultSlotProfileProvider
     // to force that orchestrator slot without waiting for the real clock.
     // Examples:
-    //   "ForceHour": "6"   → InSummaryFeed / FeedOrchestrator
-    //   "ForceHour": "8"   → XSummaryFeed  / FeedOrchestrator
-    //   "ForceHour": "14"  → InPowerLaw    / PowerLawOrchestrator
-    //   "ForceHour": "16"  → XPowerLaw     / PowerLawOrchestrator
+    //   "ForceHour": "6"   → Bitcoin   / WorkflowOrchestrator (5-node DAG)
+    //   "ForceHour": "9"   → DryRun    / WorkflowOrchestrator (when EnableDryRunSlot=true)
+    //   "ForceHour": "14"  → Bitcoin   / PowerLawOrchestrator
     // Remove or leave empty to use the real UTC clock (production behaviour).
     // -----------------------------------------------------------------------
-    "ForceHour": "",
+    "ForceHour": "9",
 
     // -----------------------------------------------------------------------
     // Dry-run testing (local integration testing without social platform publishing).
@@ -29,7 +28,7 @@
     //   1. Set "EnableDryRunSlot": "true"  → registers DryRunSlotProfileProvider,
     //      which appends a DryRunSend entry at hour 9 to the production schedule.
     //   2. Set "ForceHour": "9"            → forces the clock to hour 9 so the
-    //      dry-run slot is selected at startup.
+    //      dry-run slot is selected at startup (runs the WorkflowOrchestrator).
     //   3. Set "AiProvider" to the provider under test: "OpenAi", "AzureFoundry",
     //      "DeepSeekWithFal", or "Perplexity".
     //   4. Ensure KEYVAULT_URI is set and `az login` has been run.
@@ -44,7 +43,7 @@
     // NOTE: EnableDryRunSlot defaults to false. In production this key must be
     // absent or set to "false" — no code changes or comments required.
     // -----------------------------------------------------------------------
-    "EnableDryRunSlot": "false",
+    "EnableDryRunSlot": "true",
 
     // -----------------------------------------------------------------------
     // Azure Key Vault — all sender credentials are loaded via the
@@ -81,10 +80,10 @@
 
     // -----------------------------------------------------------------------
     // AI Provider — connectivity and model capability settings only.
-    // Prompt templates and intent are now owned by each orchestrator slot
-    // via FeedSlotContexts (see below). Only keep here what the provider
-    // needs to make the HTTP call: endpoint, credentials, model name,
-    // and token-budget helpers that are provider-specific.
+    // Prompt templates and intent are now owned by each workflow slot via
+    // the PromptSteps + Workflows configuration (see below). Only keep here
+    // what the provider needs to make the HTTP call: endpoint, credentials,
+    // model name, and token-budget helpers that are provider-specific.
     // -----------------------------------------------------------------------
 
     "OpenAI__Endpoint": "https://api.openai.com/v1/",
@@ -111,71 +110,116 @@
     "FalAi__NumInferenceSteps": "4",
 
     // -----------------------------------------------------------------------
-    // Feed slot contexts — per-slot configuration for FeedOrchestrator.
+    // Prompt steps — prompt configuration for the workflow engine.
     //
-    // Each named key (Feed06, Feed08, …) maps to a FeedOrchestratorContext
-    // carrying the feed URLs and the ordered prompt steps for that slot.
-    // The key is referenced via OrchestratorContextKey in the corresponding
-    // ScheduledOrchestrationProfile entry.
-    //
-    // Steps array maps each PromptRole to its own settings block:
-    //   Steps__0  → Role = Summary               (text-to-text)
-    //   Steps__1  → Role = ImagePromptDerivation  (text-to-text)
-    //   Steps__2  → Role = ImageGeneration        (text-to-image)
-    //
-    // Note: MaxOutputLength for the Summary role is NOT set here — it is
-    // resolved at runtime from ISender.MessageMaxLength of the target sender.
+    // IStepOptionsResolver (ConfigurationStepOptionsResolver) resolves each
+    // step by its StepId from the PromptSteps section. A workflow node
+    // references a step via its "StepId" parameter, e.g. "Feed.Summary".
     // -----------------------------------------------------------------------
 
-    // -- Slot Feed06 (06:00 UTC) -------------------------------------------
-    "FeedSlotContexts__Feed06__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
-    "FeedSlotContexts__Feed06__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+    "PromptSteps__Feed.Summary__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "PromptSteps__Feed.Summary__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "PromptSteps__Feed.Summary__Temperature": "0.5",
+    "PromptSteps__Feed.Summary__MaxTokenBudget": "600",
+    "PromptSteps__Feed.Summary__InputTextLabel": "{Text}",
 
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__Role": "Summary",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__Temperature": "0.5",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__MaxTokenBudget": "600",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+    "PromptSteps__Feed.ImagePromptDerivation__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "PromptSteps__Feed.ImagePromptDerivation__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "PromptSteps__Feed.ImagePromptDerivation__Temperature": "0.7",
+    "PromptSteps__Feed.ImagePromptDerivation__MaxTokenBudget": "300",
+    "PromptSteps__Feed.ImagePromptDerivation__InputTextLabel": "{Summary}",
 
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__Temperature": "0.7",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__MaxTokenBudget": "300",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+    "PromptSteps__Feed.ImageGeneration__SystemPromptTemplate": "",
+    "PromptSteps__Feed.ImageGeneration__UserPromptTemplate": "{Text}",
+    "PromptSteps__Feed.ImageGeneration__ImageQuantity": "1",
+    "PromptSteps__Feed.ImageGeneration__ImageSize": "1024x1024",
+    "PromptSteps__Feed.ImageGeneration__InputTextLabel": "{Text}",
 
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__Role": "ImageGeneration",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__SystemPromptTemplate": "",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageQuantity": "1",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__ImageSize": "1024x1024",
-    "FeedSlotContexts__Feed06__PromptOptions__Steps__2__InputTextLabel": "{Text}",
+    // -----------------------------------------------------------------------
+    // Workflows — per-slot workflow DAGs for the workflow engine.
+    //
+    // AddWorkflows registers each slot's WorkflowDefinition as a keyed
+    // singleton, keyed by slot key (e.g. "Bitcoin"). The OrchestratorFactory
+    // resolves it via OrchestratorContextKey when the slot's OrchestratorType
+    // is WorkflowOrchestrator.
+    //
+    // Each node has: Id (unique), Type (a keyed IWorkflowNode resolution key),
+    // Parameters (node-specific), OutputKey (context key storing the output),
+    // NextNodeIds (edges of the DAG).
+    //
+    // Bitcoin slot — 5-node pipeline: fetch-rss → generate-summary →
+    // generate-image-prompt → generate-image → fan-out-send.
+    // -----------------------------------------------------------------------
 
-    // -- Slot Feed08 (08:00 UTC) -------------------------------------------
-    "FeedSlotContexts__Feed08__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
-    "FeedSlotContexts__Feed08__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+    "Workflows__Bitcoin__Nodes__0__Id": "fetch-rss",
+    "Workflows__Bitcoin__Nodes__0__Type": "FetchRss",
+    // RSS URLs are passed as a JSON-array string; NodeParameterExtractor
+    // deserializes it into the node's List<string> Urls parameter.
+    "Workflows__Bitcoin__Nodes__0__Parameters__Urls": "[\"https://cointelegraph.com/rss/tag/bitcoin\",\"https://www.coindesk.com/arc/outboundfeeds/rss\"]",
+    "Workflows__Bitcoin__Nodes__0__OutputKey": "sourceContent",
+    "Workflows__Bitcoin__Nodes__0__NextNodeIds__0": "generate-summary",
 
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__Role": "Summary",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__Temperature": "0.5",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__MaxTokenBudget": "600",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+    "Workflows__Bitcoin__Nodes__1__Id": "generate-summary",
+    "Workflows__Bitcoin__Nodes__1__Type": "AiText",
+    "Workflows__Bitcoin__Nodes__1__Parameters__Provider": "OpenAi",
+    "Workflows__Bitcoin__Nodes__1__Parameters__StepId": "Feed.Summary",
+    "Workflows__Bitcoin__Nodes__1__Parameters__InputKey": "sourceContent",
+    "Workflows__Bitcoin__Nodes__1__OutputKey": "baseSummary",
+    "Workflows__Bitcoin__Nodes__1__NextNodeIds__0": "generate-image-prompt",
 
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__Temperature": "0.7",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__MaxTokenBudget": "300",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+    "Workflows__Bitcoin__Nodes__2__Id": "generate-image-prompt",
+    "Workflows__Bitcoin__Nodes__2__Type": "AiText",
+    "Workflows__Bitcoin__Nodes__2__Parameters__Provider": "OpenAi",
+    "Workflows__Bitcoin__Nodes__2__Parameters__StepId": "Feed.ImagePromptDerivation",
+    "Workflows__Bitcoin__Nodes__2__Parameters__InputKey": "baseSummary",
+    "Workflows__Bitcoin__Nodes__2__OutputKey": "imagePrompt",
+    "Workflows__Bitcoin__Nodes__2__NextNodeIds__0": "generate-image",
 
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__Role": "ImageGeneration",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__SystemPromptTemplate": "",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__ImageQuantity": "1",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__ImageSize": "1024x1024",
-    "FeedSlotContexts__Feed08__PromptOptions__Steps__2__InputTextLabel": "{Text}",
+    "Workflows__Bitcoin__Nodes__3__Id": "generate-image",
+    "Workflows__Bitcoin__Nodes__3__Type": "AiImage",
+    "Workflows__Bitcoin__Nodes__3__Parameters__Provider": "FalAi",
+    "Workflows__Bitcoin__Nodes__3__Parameters__StepId": "Feed.ImageGeneration",
+    "Workflows__Bitcoin__Nodes__3__Parameters__InputKey": "imagePrompt",
+    "Workflows__Bitcoin__Nodes__3__OutputKey": "attachedMedia",
+    "Workflows__Bitcoin__Nodes__3__NextNodeIds__0": "fan-out-send",
+
+    "Workflows__Bitcoin__Nodes__4__Id": "fan-out-send",
+    "Workflows__Bitcoin__Nodes__4__Type": "FanOutSend",
+    "Workflows__Bitcoin__Nodes__4__Parameters__TextKey": "baseSummary",
+    "Workflows__Bitcoin__Nodes__4__Parameters__FallbackSourceKey": "sourceContent",
+    "Workflows__Bitcoin__Nodes__4__Parameters__MediaKey": "attachedMedia",
+
+    // -----------------------------------------------------------------------
+    // Legacy Feed slot context — deprecated, now unused by the workflow engine.
+    //
+    // The Bitcoin slot has been migrated to the workflow pipeline above
+    // (PromptSteps + Workflows). This FeedSlotContexts__Bitcoin section is
+    // retained temporarily for backward compatibility but is no longer read
+    // by Production/DefaultSlotProfileProvider. It can be removed safely.
+    // -----------------------------------------------------------------------
+    "FeedSlotContexts__Bitcoin__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
+    "FeedSlotContexts__Bitcoin__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__Role": "Summary",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__Temperature": "0.5",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__MaxTokenBudget": "600",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__Temperature": "0.7",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__MaxTokenBudget": "300",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
+
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__Role": "ImageGeneration",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__SystemPromptTemplate": "",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__ImageQuantity": "1",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__ImageSize": "1024x1024",
+    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__InputTextLabel": "{Text}",
 
     // -----------------------------------------------------------------------
     // Tag replacement provider — word-to-hashtag map applied to generated summaries.

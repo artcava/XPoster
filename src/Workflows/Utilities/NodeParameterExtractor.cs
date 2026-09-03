@@ -32,6 +32,19 @@ public static class NodeParameterExtractor
             return deserialized ?? defaultValue;
         }
 
+        if (val is string str && IsJsonLike(str))
+        {
+            try
+            {
+                var deserializedJson = JsonSerializer.Deserialize<T>(str);
+                return deserializedJson ?? defaultValue;
+            }
+            catch (JsonException)
+            {
+                // Fall through to ChangeType for plain string values.
+            }
+        }
+
         try
         {
             return (T)Convert.ChangeType(val, typeof(T));
@@ -40,5 +53,14 @@ public static class NodeParameterExtractor
         {
             return defaultValue;
         }
+    }
+
+    private static bool IsJsonLike(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+        var trimmed = value.AsSpan().TrimStart();
+        return trimmed.Length > 0 &&
+            (trimmed[0] == '[' || trimmed[0] == '{' || trimmed[0] == '"' || trimmed[0] == 't' || trimmed[0] == 'f' || trimmed[0] == 'n');
     }
 }

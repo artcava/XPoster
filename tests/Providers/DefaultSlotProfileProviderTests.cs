@@ -47,21 +47,21 @@ public class DefaultSlotProfileProviderTests
     }
 
     // ---------------------------------------------------------------------------
-    // Fan-out slot at hour 6: FeedOrchestrator with LinkedIn + X
+    // Fan-out slot at hour 6: WorkflowOrchestrator with LinkedIn + X + Instagram + Facebook
     // ---------------------------------------------------------------------------
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveTextProviderConfigured()
+    public void WorkflowOrchestratorSlot_Should_HaveTextProviderConfigured()
     {
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
-        Assert.Equal(typeof(FeedOrchestrator), profile.OrchestratorType);
+        Assert.Equal(typeof(WorkflowOrchestrator), profile.OrchestratorType);
         Assert.NotNull(profile.TextProvider);
         Assert.NotEqual(AiProvider.None, profile.TextProvider);
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveImageProviderConfigured()
+    public void WorkflowOrchestratorSlot_Should_HaveImageProviderConfigured()
     {
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
@@ -70,7 +70,7 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()
+    public void WorkflowOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()
     {
         // OpenAi for text, AzureFoundry for image — must be stored independently
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
@@ -81,7 +81,7 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_ContainLinkedInAndX()
+    public void WorkflowOrchestratorSlot_Should_ContainLinkedInAndX()
     {
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
@@ -90,10 +90,10 @@ public class DefaultSlotProfileProviderTests
     }
 
     [Fact]
-    public void FeedOrchestratorSlot_Should_HaveAtLeastOneSender()
+    public void WorkflowOrchestratorSlot_Should_HaveAtLeastOneSender()
     {
         // Declaration order in SenderPlatforms is not significant:
-        // FeedOrchestrator re-orders senders internally by descending MessageMaxLength at runtime.
+        // WorkflowOrchestrator re-orders senders internally by descending MessageMaxLength at runtime.
         var profile = _provider.GetProfiles().Single(p => p.Hour == 6);
 
         Assert.NotEmpty(profile.SenderPlatforms);
@@ -144,7 +144,7 @@ public class DefaultSlotProfileProviderTests
         var dryRunSlot = dryRunProvider.GetProfiles()
             .Single(p => p.SenderPlatforms.Contains(SenderPlatform.DryRun));
 
-        Assert.Equal(typeof(FeedOrchestrator), dryRunSlot.OrchestratorType);
+        Assert.Equal(typeof(WorkflowOrchestrator), dryRunSlot.OrchestratorType);
         Assert.NotNull(dryRunSlot.TextProvider);
         Assert.NotNull(dryRunSlot.ImageProvider);
     }
