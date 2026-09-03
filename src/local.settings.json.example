@@ -46,6 +46,25 @@
     "EnableDryRunSlot": "true",
 
     // -----------------------------------------------------------------------
+    // Dry-run multi-sender fan-out — optional, for local testing of the FanOut
+    // re-summarisation path without publishing anywhere.
+    //
+    // When the DryRunSenders section is present, the dry-run slot resolves ONE
+    // DryRunSender per entry (each with its own MaxLength). FanOutSendNode then
+    // orders senders by descending MessageMaxLength and resumes over-long text
+    // (via the FallbackSourceKey + AiText re-summarisation branch) for senders
+    // whose limit is exceeded.
+    //
+    // Below: sender 0 is unlimited (int.MaxValue) and serves as the primary;
+    // sender 1 has a 100-char limit, forcing a re-summarised variant.
+    //
+    // Remove/empty this section (or omit it) to fall back to a single unlimited
+    // dry-run sender (the original behaviour).
+    // -----------------------------------------------------------------------
+    "DryRunSenders__0__MaxLength": "2147483647",
+    "DryRunSenders__1__MaxLength": "100",
+
+    // -----------------------------------------------------------------------
     // Azure Key Vault — all sender credentials are loaded via the
     // AddAzureKeyVault Configuration Provider registered in Program.cs.
     //

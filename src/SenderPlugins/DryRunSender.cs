@@ -17,22 +17,35 @@ public class DryRunSender : ISender
     private readonly ILogger<DryRunSender> _logger;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="DryRunSender"/>.
+    /// Initialises a new instance of <see cref="DryRunSender"/> with the default unlimited length.
     /// </summary>
     /// <param name="configuration">The application configuration used to probe credential availability.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
     /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
     public DryRunSender(IConfiguration configuration, ILogger<DryRunSender> logger)
+        : this(configuration, logger, int.MaxValue)
+    {
+    }
+
+    /// <summary>
+    /// Initialises a new instance of <see cref="DryRunSender"/> with a specific maximum post length.
+    /// </summary>
+    /// <param name="configuration">The application configuration used to probe credential availability.</param>
+    /// <param name="logger">The logger for diagnostic output.</param>
+    /// <param name="messageMaxLength">The maximum number of characters allowed for a post on this sender.</param>
+    /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
+    public DryRunSender(IConfiguration configuration, ILogger<DryRunSender> logger, int messageMaxLength)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        MessageMaxLength = messageMaxLength;
     }
 
     /// <inheritdoc/>
     public SenderPlatform Platform => SenderPlatform.DryRun;
 
-    /// <summary>Gets the maximum number of characters allowed per post (no real limit; returns <see cref="int.MaxValue"/>).</summary>
-    public int MessageMaxLength => int.MaxValue;
+    /// <summary>Gets the maximum number of characters allowed per post. Defaults to <see cref="int.MaxValue"/> (unlimited).</summary>
+    public int MessageMaxLength { get; }
 
     /// <summary>
     /// Probes configuration for a known credential, logs the post content and image presence,

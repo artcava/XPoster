@@ -107,6 +107,56 @@ public class FanOutSendNodeTests
     }
 
     [Fact]
+    public async Task Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForDryRun()
+    {
+        var (node, textMock, tagMock) = CreateNode();
+        var wideMock = new Mock<ISender>();
+        SetupSender(wideMock, SenderPlatform.DryRun, int.MaxValue);
+        var smallMock = new Mock<ISender>();
+        SetupSender(smallMock, SenderPlatform.DryRun, 100);
+
+        var longText = new string('A', 400);
+        var input = Input(longText, sourceContent: "this is the fallback source", stepId: "Feed.Summary", senders: new[] { wideMock.Object, smallMock.Object });
+        var result = await node.ExecuteAsync(input, CancellationToken.None);
+
+        Assert.True(result.Success);
+        var postMap = Assert.IsType<Dictionary<SenderPlatform, Post?>>(result.Output);
+
+        textMock.Verify(p => p.GenerateTextAsync(
+            It.Is<PromptRequest>(r => r.InputText == "this is the fallback source" && r.MaxOutputLength == 100),
+            It.IsAny<CancellationToken>()), Times.Once);
+        tagMock.Verify(t => t.Apply(longText), Times.Once);
+
+        // Post map is keyed solely by SenderPlatform (a single legacy dispatch contract);
+        // the two DryRun senders share the DryRun entry, so it holds the last variant written —
+        // the re-summarised text for the small sender, which is processed after the wide one.
+        Assert.NotNull(postMap);
+        Assert.False(postMap.ContainsKey(SenderPlatform.X));
+    }
+
+    [Fact]
+    public async Task Execute_TwoSenders_SamePlatform_ReSummarisationRunsPerSender()
+    {
+        var (node, textMock, _) = CreateNode();
+        var wideMock = new Mock<ISender>();
+        SetupSender(wideMock, SenderPlatform.DryRun, 300);
+        var smallMock = new Mock<ISender>();
+        SetupSender(smallMock, SenderPlatform.DryRun, 100);
+
+        var longText = new string('B', 350);
+        var input = Input(longText, sourceContent: "src", stepId: "Feed.Summary", senders: new[] { wideMock.Object, smallMock.Object });
+        var result = await node.ExecuteAsync(input, CancellationToken.None);
+
+        Assert.True(result.Success);
+        textMock.Verify(p => p.GenerateTextAsync(
+            It.Is<PromptRequest>(r => r.InputText == "src" && r.MaxOutputLength == 300),
+            It.IsAny<CancellationToken>()), Times.Once);
+        textMock.Verify(p => p.GenerateTextAsync(
+            It.Is<PromptRequest>(r => r.InputText == "src" && r.MaxOutputLength == 100),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
     public async Task Execute_BridgesMediaAttachment_ToPostImage()
     {
         var (node, _, _) = CreateNode();

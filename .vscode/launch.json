@@ -12,7 +12,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "func: host start",
-      "program": "${workspaceFolder}/src/bin/Debug/net8.0/XPoster.dll",
+      "program": "${workspaceFolder}/src/bin/Debug/net10.0/XPoster.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src",
       "stopAtEntry": false,

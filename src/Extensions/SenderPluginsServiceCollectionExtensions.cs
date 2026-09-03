@@ -35,6 +35,8 @@ public static class SenderPluginsServiceCollectionExtensions
         services.AddKeyedTransient<ISender, FbSender>(SenderPlatform.Facebook);
         // DryRun sender plugin
         services.AddKeyedTransient<ISender, DryRunSender>(SenderPlatform.DryRun);
+        // DryRun sender source — resolves the ordered set of no-op senders for the dry-run slot.
+        services.AddSingleton<IDryRunSenderSource, DryRunSenderSource>();
 
         return services;
     }
