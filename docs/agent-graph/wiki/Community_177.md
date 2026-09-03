@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **if()** (2 connections)
-- **DispatchAsync()** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
 
 ## Relationships
 
-- [[Community 151]] (3 shared connections)
+- [[Community 57]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

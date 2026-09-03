@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **foreach()** (2 connections)
-- **ValidateOptions()** (2 connections)
-- **resolve()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **for()** (2 connections)
+- **StringContent()** (2 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (6 shared connections)
+- [[Community 130]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

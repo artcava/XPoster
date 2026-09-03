@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **PublishContainerAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
 
 ## Relationships
 

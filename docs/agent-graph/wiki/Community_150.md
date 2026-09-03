@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **catch()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **AddHttpClients()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- [[Community 176]] (3 shared connections)
+- [[Community 174]] (3 shared connections)
 
 ## Audit Trail
 

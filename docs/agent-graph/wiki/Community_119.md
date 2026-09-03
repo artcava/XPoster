@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ImageTestData.cs** (4 connections)
-- **ImageTestData.cs** (4 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **CreateValidJpeg()** (2 connections)
-- **CreateValidPng()** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
 
 ## Relationships
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (14 connections)
-- **ScheduledOrchestrationProfileTests.cs** (14 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
-- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
-- **typeof()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_SetImageProvider_And_NullTextProvider_WhenOnlyImageProviderSupplied()** (2 connections)
-- **Constructor_Should_SetBothProvidersToNull_WhenNeitherSupplied()** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **Constructor_Should_SetTextProvider_And_NullImageProvider_WhenOnlyTextProviderSupplied()** (2 connections)
-- **Constructor_Should_SetAllFields_WhenBothProvidersSupplied()** (2 connections)
-- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
-- **Constructor_Should_AllowDifferentProvidersPerCapability_SplitProviderSlot()** (2 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **DefaultSlotProfileProviderTests.cs** (14 connections)
+- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
+- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
+- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
+- **DefaultSlotProfileProviderTests** (2 connections)
+- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
+- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
 
 ## Relationships
 

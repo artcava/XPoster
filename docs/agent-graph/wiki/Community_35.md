@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (24 connections)
-- **MakeRequest()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **InSender()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **Platform_ReturnsLinkedIn()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
+- **MessageMaxLength_Returns2800()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
 
 ## Relationships
 
-- [[Community 34]] (12 shared connections)
+- [[Community 30]] (12 shared connections)
 
 ## Audit Trail
 

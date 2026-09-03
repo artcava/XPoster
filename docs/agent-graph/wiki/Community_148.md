@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **while()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 131]] (4 shared connections)
+- [[Community 181]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **DefaultSlotProfileProviderTests.cs** (14 connections)
-- **DefaultSlotProfileProviderTests.cs** (14 connections)
-- **PowerLawSlot_Should_HaveNullTextAndImageProvider()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **PowerLawSlot_Should_ContainLinkedInAndX()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveImageProviderConfigured()** (2 connections)
-- **GetProfiles_Should_ReturnWellFormedProfiles()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveTextProviderConfigured()** (2 connections)
-- **GetProfiles_Should_HaveUniqueHours()** (2 connections)
-- **GetProfiles_Should_NotContainDryRunSlot()** (2 connections)
-- **DefaultSlotProfileProviderTests** (2 connections)
-- **FeedOrchestratorSlot_Should_ContainLinkedInAndX()** (2 connections)
-- **DryRunSlotProfileProvider_DryRunSlot_Should_HaveBothProvidersConfigured()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveDistinctTextAndImageProviders()** (2 connections)
-- **FeedOrchestratorSlot_Should_HaveAtLeastOneSender()** (2 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptionsTests** (2 connections)
+- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
+- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
+- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
+- **BuildAllProvidersConfig()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
 
 ## Relationships
 

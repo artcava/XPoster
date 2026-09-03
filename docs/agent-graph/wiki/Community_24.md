@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
-- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
-- **MaskUrlTelemetryProcessorTests** (2 connections)
-- **Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()** (2 connections)
-- **Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()** (2 connections)
-- **Initialize_WhenTelemetryIsNotDependency_DoesNothing()** (2 connections)
-- **Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()** (2 connections)
-- **Initialize_WhenHttpDependencyNotFacebook_DoesNotModifyData()** (2 connections)
-- **Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()** (2 connections)
-- **Initialize_WhenFacebookDataIsMalformedUrl_DataRemainsUnchanged()** (2 connections)
-- **Initialize_WhenDataIsEmpty_DoesNotThrow()** (2 connections)
-- **Initialize_WhenDependencyTypeIsNotHttp_DoesNotModifyData()** (2 connections)
-- **Initialize_WhenDataIsNull_DoesThrow()** (2 connections)
-- **Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **IgSenderResilienceTests.cs** (14 connections)
+- **IgSenderResilienceTests.cs** (14 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()** (2 connections)
+- **Uri()** (2 connections)
+- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
+- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBlobUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **PostWithImage()** (2 connections)
+- **new()** (2 connections)
+- **BuildSender()** (2 connections)
+- **IgSenderResilienceTests** (2 connections)
+- **IgSender()** (2 connections)
+- **PostWithoutImage()** (2 connections)
 
 ## Relationships
 

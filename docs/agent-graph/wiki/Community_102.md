@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **StringContent()** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
 
 ## Relationships
 

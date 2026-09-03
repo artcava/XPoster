@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **params()** (2 connections)
-- **BuildFactory()** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **IsTransientHttpFailure()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 147]] (3 shared connections)
+- [[Community 150]] (3 shared connections)
 
 ## Audit Trail
 

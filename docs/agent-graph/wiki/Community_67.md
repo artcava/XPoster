@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **CryptoServiceTests.cs** (8 connections)
-- **CryptoServiceTests.cs** (8 connections)
-- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
-- **MakeService()** (2 connections)
-- **CryptoServiceTests** (2 connections)
-- **CryptoService()** (2 connections)
-- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **Supports()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **TryGet()** (2 connections)
+- **GetRequired()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

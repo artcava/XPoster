@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **GetCryptoValue()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
+- **Validate()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 188]] (3 shared connections)
+- [[Community 172]] (3 shared connections)
 
 ## Audit Trail
 

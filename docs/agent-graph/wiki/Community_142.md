@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **FeedPromptOptions.cs** (3 connections)
-- **FeedPromptOptions.cs** (3 connections)
-- **GetStep()** (2 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed** (2 connections)
 - **XPoster.Models** (2 connections)
 
 ## Relationships
