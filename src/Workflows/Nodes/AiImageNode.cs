@@ -31,15 +31,15 @@ public sealed class AiImageNode : IWorkflowNode
     /// <inheritdoc />
     public async Task<WorkflowNodeResult> ExecuteAsync(WorkflowNodeInput input, CancellationToken ct)
     {
-        var providerName = NodeParameterExtractor.GetParameter<string>(input.Parameters, "Provider", "OpenAi");
+        var provider = NodeParameterExtractor.GetProvider(input.Parameters);
         var stepId = NodeParameterExtractor.GetParameter<string>(input.Parameters, "StepId");
         var inputKey = NodeParameterExtractor.GetParameter<string>(input.Parameters, "InputKey");
 
         var promptText = input.Context.GetData<string>(inputKey);
         var stepOptions = _stepOptionsResolver.Resolve(stepId);
 
-        var imageProvider = _serviceProvider.GetKeyedService<ITextToImageProvider>(providerName)
-            ?? throw new InvalidOperationException($"ITextToImageProvider for '{providerName}' is not registered.");
+        var imageProvider = _serviceProvider.GetKeyedService<ITextToImageProvider>(provider)
+            ?? throw new InvalidOperationException($"ITextToImageProvider for '{provider}' is not registered.");
 
         var request = new ImagePromptRequest
         {

@@ -32,7 +32,7 @@ public class FanOutSendNodeTests
         tagMock.Setup(t => t.Apply(It.IsAny<string>())).Returns((string s) => s);
 
         var services = new ServiceCollection();
-        services.AddKeyedTransient<ITextToTextProvider>("OpenAi", (_, _) => textMock.Object);
+        services.AddKeyedTransient<ITextToTextProvider>(AiProvider.OpenAi, (_, _) => textMock.Object);
         var provider = services.BuildServiceProvider();
 
         return (new FanOutSendNode(provider, stepResolverMock.Object, tagMock.Object), textMock, tagMock);

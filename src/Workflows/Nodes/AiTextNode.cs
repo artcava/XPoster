@@ -29,15 +29,15 @@ public sealed class AiTextNode : IWorkflowNode
     /// <inheritdoc />
     public async Task<WorkflowNodeResult> ExecuteAsync(WorkflowNodeInput input, CancellationToken ct)
     {
-        var providerName = NodeParameterExtractor.GetParameter<string>(input.Parameters, "Provider", "OpenAi");
+        var provider = NodeParameterExtractor.GetProvider(input.Parameters);
         var stepId = NodeParameterExtractor.GetParameter<string>(input.Parameters, "StepId");
         var inputKey = NodeParameterExtractor.GetParameter<string>(input.Parameters, "InputKey");
 
         var inputText = input.Context.GetData<string>(inputKey);
         var stepOptions = _stepOptionsResolver.Resolve(stepId);
 
-        var textProvider = _serviceProvider.GetKeyedService<ITextToTextProvider>(providerName)
-            ?? throw new InvalidOperationException($"ITextToTextProvider for '{providerName}' is not registered.");
+        var textProvider = _serviceProvider.GetKeyedService<ITextToTextProvider>(provider)
+            ?? throw new InvalidOperationException($"ITextToTextProvider for '{provider}' is not registered.");
 
         var request = new PromptRequest
         {

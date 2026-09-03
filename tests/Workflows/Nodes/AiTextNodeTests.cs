@@ -34,7 +34,9 @@ public class AiTextNodeTests
         stepResolverMock.Setup(s => s.Resolve(It.IsAny<string>())).Returns(stepOptions);
 
         var services = new ServiceCollection();
-        services.AddKeyedTransient<ITextToTextProvider>(registeredKey ?? providerName, (_, _) => providerMock.Object);
+        services.AddKeyedTransient<ITextToTextProvider>(
+            Enum.Parse<AiProvider>(registeredKey ?? providerName, ignoreCase: true),
+            (_, _) => providerMock.Object);
         var provider = services.BuildServiceProvider();
 
         return (new AiTextNode(provider, stepResolverMock.Object), providerMock);
@@ -65,12 +67,21 @@ public class AiTextNodeTests
     }
 
     [Fact]
-    public async Task Execute_Throws_WhenProviderNotRegistered()
+    public async Task Execute_Throws_WhenProviderNameIsUnknown()
     {
-        var (node, _) = CreateNode(providerName: "Unknown", registeredKey: "Other");
+        var (node, _) = CreateNode(registeredKey: "OpenAi");
         var input = Input("Unknown", "Feed.Summary", "sourceContent", "input");
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => node.ExecuteAsync(input, CancellationToken.None));
         Assert.Contains("Unknown", ex.Message);
+    }
+
+    [Fact]
+    public async Task Execute_Throws_WhenValidProviderNotRegistered()
+    {
+        var (node, _) = CreateNode(registeredKey: "OpenAi");
+        var input = Input("Perplexity", "Feed.Summary", "sourceContent", "input");
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => node.ExecuteAsync(input, CancellationToken.None));
+        Assert.Contains("not registered", ex.Message);
     }
 
     [Fact]
@@ -89,7 +100,7 @@ public class AiTextNodeTests
         });
 
         var services = new ServiceCollection();
-        services.AddKeyedTransient<ITextToTextProvider>("OpenAi", (_, _) => providerMock.Object);
+        services.AddKeyedTransient<ITextToTextProvider>(AiProvider.OpenAi, (_, _) => providerMock.Object);
         var sp = services.BuildServiceProvider();
 
         var node = new AiTextNode(sp, stepResolverMock.Object);

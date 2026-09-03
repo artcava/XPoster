@@ -14,6 +14,7 @@ public class AiImageNodeTests
 {
     private static (AiImageNode node, Mock<ITextToImageProvider> providerMock) CreateNode(
         string providerName = "FalAi",
+        string? registeredProvider = null,
         byte[]? imageBytes = null)
     {
         var providerMock = new Mock<ITextToImageProvider>();
@@ -35,7 +36,9 @@ public class AiImageNodeTests
         stepResolverMock.Setup(s => s.Resolve(It.IsAny<string>())).Returns(stepOptions);
 
         var services = new ServiceCollection();
-        services.AddKeyedTransient<ITextToImageProvider>(providerName, (_, _) => providerMock.Object);
+        services.AddKeyedTransient<ITextToImageProvider>(
+            Enum.Parse<AiProvider>(registeredProvider ?? providerName, ignoreCase: true),
+            (_, _) => providerMock.Object);
         var provider = services.BuildServiceProvider();
 
         return (new AiImageNode(provider, stepResolverMock.Object), providerMock);
@@ -91,12 +94,21 @@ public class AiImageNodeTests
     }
 
     [Fact]
-    public async Task Execute_Throws_WhenProviderNotRegistered()
+    public async Task Execute_Throws_WhenProviderNameIsUnknown()
     {
-        var (node, _) = CreateNode(providerName: "Other");
+        var (node, _) = CreateNode(registeredProvider: "FalAi");
         var input = Input("NonExistent", "Feed.ImageGeneration", "imagePrompt", "p");
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => node.ExecuteAsync(input, CancellationToken.None));
         Assert.Contains("NonExistent", ex.Message);
+    }
+
+    [Fact]
+    public async Task Execute_Throws_WhenValidProviderNotRegistered()
+    {
+        var (node, _) = CreateNode(registeredProvider: "FalAi");
+        var input = Input("DeepSeek", "Feed.ImageGeneration", "imagePrompt", "p");
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => node.ExecuteAsync(input, CancellationToken.None));
+        Assert.Contains("not registered", ex.Message);
     }
 
     [Fact]

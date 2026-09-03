@@ -1,4 +1,5 @@
 using System.Text.Json;
+using XPoster.Contracts;
 
 namespace XPoster.Workflows.Utilities;
 
@@ -53,6 +54,27 @@ public static class NodeParameterExtractor
         {
             return defaultValue;
         }
+    }
+
+    /// <summary>
+    /// Retrieves the <c>Provider</c> parameter and parses it into an <see cref="AiProvider"/>.
+    /// </summary>
+    /// <param name="parameters">The node parameter dictionary.</param>
+    /// <param name="defaultProvider">Provider used when the key is missing.</param>
+    /// <returns>The resolved provider, or <paramref name="defaultProvider"/> when the key is absent.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the provider name is empty or not a known <see cref="AiProvider"/>.</exception>
+    public static AiProvider GetProvider(
+        IReadOnlyDictionary<string, object> parameters,
+        AiProvider defaultProvider = AiProvider.OpenAi)
+    {
+        var providerName = GetParameter<string>(parameters, "Provider", defaultProvider.ToString());
+        if (string.IsNullOrWhiteSpace(providerName))
+            throw new InvalidOperationException("Provider name is required to resolve an AI provider.");
+
+        if (!Enum.TryParse<AiProvider>(providerName, ignoreCase: true, out var provider))
+            throw new InvalidOperationException($"Unknown AI provider '{providerName}'.");
+
+        return provider;
     }
 
     private static bool IsJsonLike(string value)

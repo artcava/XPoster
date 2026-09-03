@@ -1,4 +1,5 @@
 using System.Text.Json;
+using XPoster.Contracts;
 using XPoster.Workflows.Utilities;
 
 namespace XPoster.Tests.Workflows.Utilities;
@@ -135,5 +136,40 @@ public class NodeParameterExtractorTests
         var params_ = new Dictionary<string, object>();
         var result = NodeParameterExtractor.GetParameter<int>(params_, "k", 77);
         Assert.Equal(77, result);
+    }
+
+    [Fact]
+    public void GetProvider_MissingParameter_ReturnsDefaultProvider()
+    {
+        var params_ = new Dictionary<string, object>();
+        Assert.Equal(AiProvider.OpenAi, NodeParameterExtractor.GetProvider(params_));
+    }
+
+    [Fact]
+    public void GetProvider_ParsesValidName_CaseInsensitive()
+    {
+        var params_ = new Dictionary<string, object> { { "Provider", "azurefoundry" } };
+        Assert.Equal(AiProvider.AzureFoundry, NodeParameterExtractor.GetProvider(params_));
+    }
+
+    [Fact]
+    public void GetProvider_UsesProvidedDefault_WhenMissing()
+    {
+        var params_ = new Dictionary<string, object>();
+        Assert.Equal(AiProvider.FalAi, NodeParameterExtractor.GetProvider(params_, AiProvider.FalAi));
+    }
+
+    [Fact]
+    public void GetProvider_Throws_WhenEmptyName()
+    {
+        var params_ = new Dictionary<string, object> { { "Provider", "" } };
+        Assert.Throws<InvalidOperationException>(() => NodeParameterExtractor.GetProvider(params_));
+    }
+
+    [Fact]
+    public void GetProvider_Throws_WhenUnknownName()
+    {
+        var params_ = new Dictionary<string, object> { { "Provider", "Unknown" } };
+        Assert.Throws<InvalidOperationException>(() => NodeParameterExtractor.GetProvider(params_));
     }
 }

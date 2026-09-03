@@ -41,7 +41,6 @@ public sealed class FanOutSendNode : IWorkflowNode
         var fallbackSourceKey = NodeParameterExtractor.GetParameter<string?>(input.Parameters, "FallbackSourceKey", null);
         var mediaKey = NodeParameterExtractor.GetParameter<string?>(input.Parameters, "MediaKey", null);
         var stepId = NodeParameterExtractor.GetParameter<string?>(input.Parameters, "StepId", null);
-        var providerName = NodeParameterExtractor.GetParameter<string>(input.Parameters, "Provider", "OpenAi");
 
         var primaryText = input.Context.GetData<string>(textKey);
 
@@ -67,7 +66,8 @@ public sealed class FanOutSendNode : IWorkflowNode
             else if (!string.IsNullOrEmpty(sourceContent) && !string.IsNullOrEmpty(stepId))
             {
                 var stepOptions = _stepOptionsResolver.Resolve(stepId);
-                var textProvider = _serviceProvider.GetKeyedService<ITextToTextProvider>(providerName);
+                var provider = NodeParameterExtractor.GetProvider(input.Parameters);
+                var textProvider = _serviceProvider.GetKeyedService<ITextToTextProvider>(provider);
 
                 if (textProvider != null)
                 {
