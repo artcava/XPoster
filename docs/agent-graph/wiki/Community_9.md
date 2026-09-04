@@ -1,39 +1,42 @@
 # Community 9
 
-> 22 nodes · cohesion 0.09
+> 25 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (32 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveXSender_WhenProfileUsesX()** (2 connections)
-- **Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile()** (2 connections)
-- **Resolve_Should_ResolveInSender_WhenProfileUsesLinkedIn()** (2 connections)
-- **Resolve_Should_ResolveFbSender_WhenProfileUsesFacebook()** (2 connections)
-- **Resolve_Should_ResolveIgSender_WhenProfileUsesInstagram()** (2 connections)
-- **Resolve_Should_ResolveIgSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveDryRunSender_WhenProfileUsesDryRun()** (2 connections)
-- **Resolve_Should_RequestDifferentKeys_WhenTextAndImageProvidersAreDifferent()** (2 connections)
-- **Resolve_Should_RequestTextProviderKey_WhenProfileSpecifiesTextProvider()** (2 connections)
-- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
-- **PowerLawProfile()** (2 connections)
-- **DefaultSlotProfileProvider_Should_NotContainDryRunProfile()** (2 connections)
-- **PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()** (2 connections)
-- **FeedProfile()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_ResolveFbSender_ForPowerLawOrchestrator()** (2 connections)
-- **Resolve_Should_NotRequestImageProvider_WhenProfileHasNoImageProvider()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **DeepSeekServiceTests.cs** (24 connections)
+- **DeepSeekService()** (2 connections)
+- **BuildService()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **GenerateTextAsync_WhenCancellationRequested_ThrowsOperationCanceledException()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ForImagePromptRole_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsBadGateway_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_AppliesCustomInputTextLabel_InUserTemplate()** (2 connections)
+- **GenerateTextAsync_UsesSystemAndUserTemplatesFromRequest_NotFromOptions()** (2 connections)
+- **GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
+- **new()** (2 connections)
+- **SummaryRequest()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **ImagePromptDerivationRequest()** (2 connections)
+- **GenerateTextAsync_WhenResponseFitsWithinMaxOutputLength_ReturnsSingleCallResult()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **GenerateTextAsync_WhenUsedForImagePromptDerivation_ReturnsPrompt()** (2 connections)
+- **DeepSeekServiceTests** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsValidResponse_ReturnsContent()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmptyString()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GenerateTextAsync_WhenNoMaxOutputLength_DoesNotRetryRegardlessOfLength()** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 74 (100%)
+- EXTRACTED: 94 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **BuildChatPayload()** (2 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **foreach()** (2 connections)
+- **static()** (2 connections)
+- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
+- **FetchRssNodeTests** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 155]] (4 shared connections)
+- [[Community 126]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (5 connections)
-- **OpenAiOptionsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **nameof()** (2 connections)
+- **DeepSeekOptionsValidator.cs** (5 connections)
+- **DeepSeekOptionsValidator.cs** (5 connections)
 - **Validate()** (2 connections)
+- **if()** (2 connections)
+- **nameof()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

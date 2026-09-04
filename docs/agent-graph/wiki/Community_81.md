@@ -1,24 +1,25 @@
 # Community 81
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (11 connections)
-- **foreach()** (2 connections)
-- **catch()** (2 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **return()** (2 connections)
-- **typeof()** (2 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
 
 ## Relationships
 
-- [[Community 127]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

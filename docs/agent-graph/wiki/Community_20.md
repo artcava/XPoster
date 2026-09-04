@@ -1,24 +1,25 @@
 # Community 20
 
-> 15 nodes · cohesion 0.26
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **BlobStorageServiceTests.cs** (14 connections)
-- **BlobStorageServiceTests.cs** (14 connections)
-- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
-- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
-- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
-- **CreateSut()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
-- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **BuildConfiguration()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoWorkflowKey()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_SkipUnknownSenders_ButKeepValidOnes()** (2 connections)
+- **new()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WhenNoValidSendersRemain()** (2 connections)
+- **GetProfiles_Should_MapEachSlotToWorkflowOrchestrator()** (2 connections)
+- **GetProfiles_Should_ReturnEmpty_WhenNoScheduleConfigured()** (2 connections)
+- **GetProfiles_Should_OrderSlotsByHour()** (2 connections)
+- **GetProfiles_Should_ParseSenderPlatforms()** (2 connections)
+- **CreateProvider()** (2 connections)
+- **ConfigurationSlotProfileProviderTests** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoSenders()** (2 connections)
 
 ## Relationships
 
@@ -26,7 +27,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

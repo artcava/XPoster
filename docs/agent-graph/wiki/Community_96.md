@@ -1,15 +1,16 @@
 # Community 96
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **TagReplacementServiceTests.cs** (5 connections)
-- **TagReplacementServiceTests.cs** (5 connections)
-- **Apply_Returns_Input_Unchanged_When_Text_Is_Empty_Or_Whitespace()** (2 connections)
-- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
-- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **AiTextNode.cs** (6 connections)
+- **AiTextNode.cs** (6 connections)
+- **if()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **AiTextNode()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

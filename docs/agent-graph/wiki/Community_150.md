@@ -1,21 +1,22 @@
 # Community 150
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **AddHttpClients()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
 
 ## Relationships
 
-- [[Community 174]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

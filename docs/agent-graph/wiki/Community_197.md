@@ -1,19 +1,21 @@
 # Community 197
 
-> 2 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
-- **if()** (2 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **NoOrchestrator.cs** (3 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **NoOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 187]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

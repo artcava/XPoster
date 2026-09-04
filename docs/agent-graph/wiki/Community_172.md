@@ -1,20 +1,21 @@
 # Community 172
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **nameof()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **var()** (2 connections)
+- **SetupSender()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 164]] (3 shared connections)
+- [[Community 30]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

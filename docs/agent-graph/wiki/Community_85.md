@@ -1,16 +1,17 @@
 # Community 85
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **Program.cs** (6 connections)
-- **Program.cs** (6 connections)
-- **if()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **Uri()** (2 connections)
-- **BlobServiceClient()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLogger()** (2 connections)
+- **Dispose()** (2 connections)
+- **IsEnabled()** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

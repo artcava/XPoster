@@ -1,29 +1,29 @@
 # Community 40
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **SendAsync_WhenProbeKeyMissing_LogsError()** (2 connections)
-- **Platform_ReturnsDryRun()** (2 connections)
-- **SendAsync_WhenKeyWhitespace_ReturnsFalse()** (2 connections)
-- **SendAsync_DoesNotCallAnyOutboundSocialApi()** (2 connections)
-- **BuildSender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **DryRunSenderTests()** (2 connections)
-- **MessageMaxLength_ReturnsIntMaxValue()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_LogsPostContent()** (2 connections)
-- **SendAsync_WithNullPost_LogsWarning()** (2 connections)
-- **SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()** (2 connections)
+- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
+- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
+- **if()** (2 connections)
+- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
+- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
+- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
+- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
+- **Resolve_Throws_WhenStepMissing()** (2 connections)
+- **XPoster.Tests.Workflows.Services** (2 connections)
+- **ConfigurationStepOptionsResolverTests** (2 connections)
+- **BuildConfig()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 22]] (14 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

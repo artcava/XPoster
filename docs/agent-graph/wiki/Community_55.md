@@ -1,18 +1,19 @@
 # Community 55
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **var()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **params()** (2 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **XSenderResilienceTests.cs** (9 connections)
+- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XSender()** (2 connections)
+- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSenderResilienceTests** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

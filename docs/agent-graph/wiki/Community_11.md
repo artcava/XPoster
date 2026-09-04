@@ -1,28 +1,30 @@
 # Community 11
 
-> 19 nodes · cohesion 0.20
+> 21 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **FeedPromptOptionsTests.cs** (18 connections)
-- **FeedPromptOptionsTests.cs** (18 connections)
-- **GetStep_DuplicateRole_ThrowsInvalidOperationException()** (2 connections)
-- **FeedPromptOptions_ValueEquality_DifferentSteps_AreNotEqual()** (2 connections)
-- **FeedPromptOptions_ValueEquality_SameSteps_AreEqual()** (2 connections)
-- **FeedPromptOptionsTests** (2 connections)
-- **FeedPromptOptions_WithExpression_PreservesStepsReference()** (2 connections)
-- **MakeStep()** (2 connections)
-- **GetStep_ExistingRole_ReturnsCorrectStep()** (2 connections)
-- **GetStep_MissingRole_ThrowsInvalidOperationException()** (2 connections)
-- **GetStep_ReturnsStepWithExpectedTemplates()** (2 connections)
-- **MakeFullOptions()** (2 connections)
-- **FeedPromptOptions_ValueEquality_DifferentStepCount_AreNotEqual()** (2 connections)
-- **FeedPromptOptions_Steps_AreSetCorrectly()** (2 connections)
-- **FeedPromptOptions_IsImmutable_AfterConstruction()** (2 connections)
-- **FeedPromptOptions_Steps_PreservesOrder()** (2 connections)
-- **FeedPromptOptions_Steps_CanBeASingleStep()** (2 connections)
-- **GetStep_EmptySteps_ThrowsInvalidOperationException()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **XSenderTests.cs** (20 connections)
+- **XSenderTests.cs** (20 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhitespaceContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithImageAndTwitterContextThrows_ReturnsFalse()** (2 connections)
+- **SendAsync_WithBlankContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **Platform_ReturnsX()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **MessageMaxLength_Returns250()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_ValidTextPost_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_NullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_PostWithImage_CatchesTwitterException_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesTwitterAndReturnsFalse()** (2 connections)
+- **XSender_ImplementsISender()** (2 connections)
+- **XSenderTests()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_EmptyContent_ReturnsFalse()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **SendAsync_WhenTwitterContextThrows_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
@@ -30,7 +32,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 70 (100%)
+- EXTRACTED: 78 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **PromptRoleTests.cs** (14 connections)
-- **PromptRoleTests.cs** (14 connections)
-- **PromptRole_ParseInvalidName_Throws()** (2 connections)
-- **PromptRole_ParseFromString_ReturnsCorrectMember()** (2 connections)
-- **PromptRole_HasExactlyThreeMembers()** (2 connections)
-- **PromptRole_DefinedMember_IsDefined()** (2 connections)
-- **PromptRole_ParseFromStringIgnoreCase_ReturnsCorrectMember()** (2 connections)
-- **PromptRole_BackingValue_IsStable()** (2 connections)
-- **PromptRole_TryParse_InvalidName_ReturnsFalse()** (2 connections)
-- **PromptRole_TryParse_ValidName_ReturnsTrue()** (2 connections)
-- **PromptRole_UsedAsDictionaryKey_LookupSucceeds()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **PromptRoleTests** (2 connections)
-- **PromptRole_UndefinedValueNotPresentInMap_ThrowsKeyNotFound()** (2 connections)
-- **PromptRole_ToString_ReturnsName()** (2 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **MaskUrlTelemetryProcessorTests.cs** (14 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **Initialize_WhenDependencyTypeIsNotHttp_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenDataIsNull_DoesThrow()** (2 connections)
+- **Initialize_WhenAccessTokenAlreadyMasked_DoesNotDoubleEncode()** (2 connections)
+- **Initialize_WhenDataIsEmpty_DoesNotThrow()** (2 connections)
+- **Initialize_WhenTelemetryIsNotDependency_DoesNothing()** (2 connections)
+- **Initialize_WhenFacebookUrlHasAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenHttpDependencyNotFacebook_DoesNotModifyData()** (2 connections)
+- **Initialize_WhenFacebookUrlHasOnlyAccessToken_TokenIsMasked()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoQueryString_DataUnchanged()** (2 connections)
+- **Initialize_WhenFacebookUrlHasNoAccessToken_DataUnchanged()** (2 connections)
+- **MaskUrlTelemetryProcessorTests** (2 connections)
+- **Initialize_WhenFacebookDataIsMalformedUrl_DataRemainsUnchanged()** (2 connections)
 
 ## Relationships
 

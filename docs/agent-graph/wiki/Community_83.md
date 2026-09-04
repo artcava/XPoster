@@ -1,16 +1,17 @@
 # Community 83
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **Apply()** (2 connections)
-- **foreach()** (2 connections)
+- **FanOutSendNode.cs** (7 connections)
+- **FanOutSendNode.cs** (7 connections)
+- **ExecuteAsync()** (2 connections)
 - **if()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **FanOutSendNode()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

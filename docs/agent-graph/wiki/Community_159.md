@@ -1,13 +1,14 @@
 # Community 159
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **Post.cs** (3 connections)
-- **Post.cs** (3 connections)
-- **Post** (2 connections)
-- **XPoster.Models** (2 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **ExecuteAsync()** (2 connections)
+- **IWorkflowNode** (2 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

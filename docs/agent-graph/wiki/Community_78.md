@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **FeedOrchestratorFeedUrlProviderTests.cs** (13 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_And_DisableSendIt_When_ContextHasNoFeedUrls()** (2 connections)
-- **OrchestrateAsync_Should_PassSenderMessageMaxLength_As_MaxOutputLength_In_SummaryRequest()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_For_Each_Url()** (2 connections)
-- **OrchestrateAsync_Should_CallGetFeedsAsync_With_Correct_Urls()** (2 connections)
-- **OrchestrateAsync_Should_AggregateFeeds_From_All_Urls()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **OrchestrateAsync_TwoSlots_Should_UseDifferentFeedUrls_Independently()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **new()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **WorkflowProfile()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 107]] (6 shared connections)
+- [[Community 38]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

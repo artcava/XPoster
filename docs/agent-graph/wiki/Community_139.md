@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (4 connections)
-- **ITextToTextProvider.cs** (4 connections)
-- **GenerateTextAsync()** (2 connections)
-- **ITextToTextProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Providers** (2 connections)
+- **TimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 

@@ -1,26 +1,26 @@
 # Community 58
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
-- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
-- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
-- **foreach()** (2 connections)
-- **HttpClientExtensionsTests** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
+- **InSender.cs** (11 connections)
+- **generatePayLoad()** (2 connections)
+- **Exception()** (2 connections)
+- **catch()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **using()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **InvalidOperationException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 214]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

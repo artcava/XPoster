@@ -1,35 +1,35 @@
 # Community 2
 
-> 41 nodes · cohesion 0.10
+> 36 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **AzureFoundryServiceTests.cs** (40 connections)
-- **AzureFoundryServiceTests.cs** (40 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **if()** (2 connections)
-- **GenerateTextAsync_WhenUsedAsImagePromptDerivationStep_ReturnsContent()** (2 connections)
-- **GenerateTextAsync_WhenUsedAsImagePromptDerivationStep_AndChoicesNull_ReturnsEmptyString()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **GenerateTextAsync_RequestBodyContainsSystemAndUserMessagesFromRequest()** (2 connections)
-- **GenerateTextAsync_RequestBodyContainsTemperatureAndMaxTokensFromRequest()** (2 connections)
-- **GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()** (2 connections)
-- **GenerateTextAsync_PostsToChatCompletionsEndpoint()** (2 connections)
-- **GenerateImageAsync_WhenInputTextIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
-- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
-- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GenerateImageAsync_RequestBodyContainsModelFromOptions()** (2 connections)
-- **ChatCompletionJson()** (2 connections)
-- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
-- **BuildService()** (2 connections)
-- **BuildImagePromptRequest()** (2 connections)
+- **OpenAiServiceTests.cs** (35 connections)
+- **OpenAiServiceTests.cs** (35 connections)
 - **BuildPromptRequest()** (2 connections)
+- **BuildImagePromptRequest()** (2 connections)
+- **GenerateTextAsync_UsesSystemPromptTemplateFromRequest()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsWhitespace_ReturnsEmptyArrayWithoutCallingApi()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateTextAsync_ReplacesInputTextLabelInUserPromptTemplate()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **OpenAiService()** (2 connections)
+- **OpenAiServiceTests** (2 connections)
+- **new()** (2 connections)
+- **MakeHandler()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsInternalServerError_ReturnsEmpty()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()** (2 connections)
+- **GenerateTextAsync_WhenApiReturnsTooManyRequests_ReturnsEmpty()** (2 connections)
+- **GenerateImageAsync_WhenApiReturns200_ReturnsDecodedBytes()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **GenerateImageAsync_UsesQuantityAndSizeFromRequest()** (2 connections)
+- **GenerateImageAsync_WhenPromptIsEmpty_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionThrown_LogsError()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionThrown_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyArray()** (2 connections)
 - **GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()** (2 connections)
-- *... and 16 more nodes in this community*
+- *... and 11 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 158 (100%)
+- EXTRACTED: 138 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

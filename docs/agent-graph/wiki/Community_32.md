@@ -1,30 +1,30 @@
 # Community 32
 
-> 13 nodes · cohesion 0.29
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
-- **BuildProvider()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
-- **LocalOverrideTimeProviderTests** (2 connections)
-- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **Input()** (2 connections)
+- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **if()** (2 connections)
+- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
+- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
+- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
+- **static()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **AiImageNodeTests** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 125]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

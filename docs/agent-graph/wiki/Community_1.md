@@ -1,35 +1,35 @@
 # Community 1
 
-> 43 nodes · cohesion 0.09
+> 41 nodes · cohesion 0.10
 
 ## Key Concepts
 
-- **FeedOrchestratorTests.cs** (42 connections)
-- **FeedOrchestratorTests.cs** (42 connections)
-- **OrchestrateAsync_ReturnsNullEntry_WhenReSummarisationFails()** (2 connections)
-- **OrchestrateAsync_GeneratesBaseSummaryAtPrimaryMaxLength()** (2 connections)
-- **OrchestrateAsync_ReSummarisesViaAI_WhenBaseSummaryExceedsSecondaryLimit()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SummaryGenerationFails()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_SenderIsNull()** (2 connections)
-- **OrchestrateAsync_Should_CallTagReplacementProvider_ExactlyOnce_WhenOrchestrationSucceeds()** (2 connections)
-- **OrchestrateAsync_SharesImageBytes_AcrossSenders()** (2 connections)
-- **OrchestrateAsync_Should_ApplyHashtagsCorrectly()** (2 connections)
-- **OrchestrateAsync_Should_PassNullMaxTokenBudget_ToPromptRequest()** (2 connections)
-- **OrchestrateAsync_Should_PassNullInputTextLabel_ToPromptRequest()** (2 connections)
-- **OrchestrateAsync_Should_ReturnNull_When_NoFeedsFound()** (2 connections)
-- **OrchestrateAsync_Should_ReturnEmpty_When_ContextFeedUrlsIsEmpty()** (2 connections)
-- **SummaryStep()** (2 connections)
-- **OrchestrateAsync_TwoSlots_ReceiveIndependentFeedUrlsAndPrompts()** (2 connections)
-- **OrchestrateAsync_UsesFeedUrls_FromInjectedContext()** (2 connections)
-- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_ImagePromptDerivationReturnsWhitespace()** (2 connections)
-- **OrchestrateAsync_Should_UseSummaryAsPrompt_When_ImagePromptDerivationReturnsEmpty()** (2 connections)
-- **ImageGenerationStep()** (2 connections)
-- **ImageDerivationStep()** (2 connections)
-- **OrchestrateAsync_ThirdSender_ReusesSecondSummary_WhenSecondFitsAndThirdDoesNot()** (2 connections)
-- **OrchestrateAsync_ThirdSender_ChecksAgainstPreviousSummary_AndReSummarisesFromFeedContent()** (2 connections)
-- **CreateOrchestrator()** (2 connections)
-- **CreateMultiSenderOrchestrator()** (2 connections)
-- *... and 18 more nodes in this community*
+- **AzureFoundryServiceTests.cs** (40 connections)
+- **AzureFoundryServiceTests.cs** (40 connections)
+- **GenerateImageAsync_RequestBodyContainsSizeAndQuantityFromRequest()** (2 connections)
+- **GenerateImageAsync_RequestBodyContainsModelFromOptions()** (2 connections)
+- **GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()** (2 connections)
+- **GenerateImageAsync_WhenInputTextIsEmpty_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
+- **GenerateImageAsync_WhenInputTextIsEmpty_LogsWarning()** (2 connections)
+- **GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()** (2 connections)
+- **GenerateTextAsync_RequestBodyContainsTemperatureAndMaxTokensFromRequest()** (2 connections)
+- **GenerateTextAsync_RequestBodyContainsSystemAndUserMessagesFromRequest()** (2 connections)
+- **GenerateTextAsync_PostsToChatCompletionsEndpoint()** (2 connections)
+- **GenerateImageAsync_WhenInputTextIsWhitespace_ReturnsEmptyByteArrayWithoutCallingApi()** (2 connections)
+- **GenerateImageAsync_WhenResponseBodyIsMalformedJson_ReturnsEmptyByteArray()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **if()** (2 connections)
+- **ChatCompletionJson()** (2 connections)
+- **BuildService()** (2 connections)
+- **BuildPromptRequest()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()** (2 connections)
+- **GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()** (2 connections)
+- **GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()** (2 connections)
+- **GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()** (2 connections)
+- **GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()** (2 connections)
+- *... and 16 more nodes in this community*
 
 ## Relationships
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 166 (100%)
+- EXTRACTED: 158 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

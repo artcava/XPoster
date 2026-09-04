@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **if()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **DryRunSender()** (2 connections)
 
 ## Relationships
 

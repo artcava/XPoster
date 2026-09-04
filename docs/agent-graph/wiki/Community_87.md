@@ -1,24 +1,24 @@
 # Community 87
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **foreach()** (2 connections)
+- **AddWorkflows()** (2 connections)
+- **if()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

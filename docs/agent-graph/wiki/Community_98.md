@@ -1,23 +1,24 @@
 # Community 98
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **for()** (2 connections)
-- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 153]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

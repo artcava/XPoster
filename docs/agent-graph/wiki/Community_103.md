@@ -1,23 +1,23 @@
 # Community 103
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **OrchestratorFactory()** (2 connections)
+- **ResolveWorkflowOrchestrator()** (2 connections)
+- **nameof()** (2 connections)
+- **CreateEmptyNoOrchestrator()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 88]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

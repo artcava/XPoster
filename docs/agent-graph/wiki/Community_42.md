@@ -1,28 +1,29 @@
 # Community 42
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildSender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **MessageMaxLength_Returns2200()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **new()** (2 connections)
-- **Platform_ReturnsInstagram()** (2 connections)
-- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **foreach()** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 100]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

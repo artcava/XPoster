@@ -1,24 +1,24 @@
 # Community 88
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **ResolveSenders()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **WorkflowOrchestrator()** (2 connections)
 - **catch()** (2 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **NoOrchestrator()** (2 connections)
+- **Resolve()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 103]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

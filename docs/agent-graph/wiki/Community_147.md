@@ -1,21 +1,22 @@
 # Community 147
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 185]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

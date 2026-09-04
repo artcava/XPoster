@@ -1,25 +1,25 @@
 # Community 72
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **CreateLogger()** (2 connections)
-- **Dispose()** (2 connections)
-- **IsEnabled()** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CaptureLogger()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
+- **CreateNode()** (2 connections)
+- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **new()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 121]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

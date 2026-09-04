@@ -1,16 +1,17 @@
 # Community 181
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
 
 ## Relationships
 
-- [[Community 148]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

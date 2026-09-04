@@ -1,20 +1,21 @@
 # Community 177
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
+- **foreach()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (8 shared connections)
+- [[Community 208]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

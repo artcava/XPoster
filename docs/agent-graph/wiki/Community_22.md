@@ -1,32 +1,33 @@
 # Community 22
 
-> 15 nodes · cohesion 0.13
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **DryRunSenderTests.cs** (26 connections)
-- **DryRunSender()** (2 connections)
-- **Constructor_WithNullConfiguration_ThrowsArgumentNullException()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **DryRunSender_ImplementsISender()** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **ValidPost()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **new()** (2 connections)
-- **SendAsync_WhenProbeKeyPresent_ReturnsTrue()** (2 connections)
-- **SendAsync_WithImageBytes_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenKeyMissing_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()** (2 connections)
-- **SendAsync_WhenProbeKeyMissing_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
+- **InMemoryContainerStateStoreTests.cs** (15 connections)
+- **InMemoryContainerStateStoreTests.cs** (15 connections)
+- **SaveAsync_WithNullBlobName_ThrowsArgumentNullException()** (2 connections)
+- **GetPendingAsync_WhenStoreIsEmpty_ReturnsEmptyList()** (2 connections)
+- **InMemoryContainerStateStoreTests** (2 connections)
+- **SaveAsync_WithEmptyOrWhitespaceBlobName_ThrowsArgumentException()** (2 connections)
+- **SaveAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
+- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
+- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
+- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
+- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
+- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **GetPendingAsync_ReturnsOnlyPendingEntries()** (2 connections)
+- **SaveAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 40]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

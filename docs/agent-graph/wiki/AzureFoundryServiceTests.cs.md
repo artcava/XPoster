@@ -2,31 +2,31 @@
 
 > God node · 40 connections
 
-**Community:** [[Community 2]]
+**Community:** [[Community 1]]
 
 ## Connections by Relation
 
 ### contains
-- [[XPoster.Tests.Services]]
-- [[AzureFoundryServiceTests]]
-- [[BuildService()]]
+- [[AzureFoundryServiceTests.cs]]
 - [[AzureFoundryService()]]
-- [[MakeHandlerMock()]]
-- [[ChatCompletionJson()]]
-- [[BuildPromptRequest()]]
+- [[AzureFoundryServiceTests]]
 - [[BuildImagePromptRequest()]]
-- [[GenerateTextAsync_WhenApiReturnsValidResponse_ReturnsContent()]]
-- [[GenerateTextAsync_PostsToChatCompletionsEndpoint()]]
-- [[GenerateTextAsync_RequestBodyContainsModelFromOptions()]]
-- [[HttpResponseMessage()]]
-- [[GenerateTextAsync_RequestBodyContainsSystemAndUserMessagesFromRequest()]]
-- [[GenerateTextAsync_RequestBodyContainsTemperatureAndMaxTokensFromRequest()]]
-- [[GenerateTextAsync_WhenApiReturns429_ReturnsEmptyString()]]
-- [[GenerateTextAsync_WhenApiReturnsNonSuccess_ReturnsEmptyString()]]
-- [[GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmptyString()]]
-- [[GenerateTextAsync_WhenChoicesIsNull_ReturnsEmptyString()]]
-- [[GenerateTextAsync_WhenUsedAsImagePromptDerivationStep_ReturnsContent()]]
-- [[GenerateTextAsync_WhenUsedAsImagePromptDerivationStep_AndChoicesEmpty_ReturnsEmptyString()]]
+- [[BuildPromptRequest()]]
+- [[BuildService()]]
+- [[ChatCompletionJson()]]
+- [[GenerateImageAsync_PostsToFoundryImagesGenerationsEndpoint()]]
+- [[GenerateImageAsync_RequestBodyContainsModelFromOptions()]]
+- [[GenerateImageAsync_RequestBodyContainsSizeAndQuantityFromRequest()]]
+- [[GenerateImageAsync_WhenApiReturnsNonSuccess_ReturnsEmptyByteArray()]]
+- [[GenerateImageAsync_WhenApiReturnsTooManyRequests_LogsWarning()]]
+- [[GenerateImageAsync_WhenApiReturnsTooManyRequests_ReturnsEmptyByteArray()]]
+- [[GenerateImageAsync_WhenApiReturnsValidResponse_ReturnsByteArray()]]
+- [[GenerateImageAsync_WhenB64JsonAbsentAndUrlPresent_DownloadsFromUrl()]]
+- [[GenerateImageAsync_WhenB64JsonIsNull_ReturnsEmptyByteArray()]]
+- [[GenerateImageAsync_WhenDataArrayIsEmpty_ReturnsEmptyByteArray()]]
+- [[GenerateImageAsync_WhenFallbackUrlIsFromDifferentOrigin_LogsWarning()]]
+- [[GenerateImageAsync_WhenHttpRequestExceptionOnPost_LogsError()]]
+- [[GenerateImageAsync_WhenHttpRequestExceptionOnPost_ReturnsEmptyByteArray()]]
 
 ---
 

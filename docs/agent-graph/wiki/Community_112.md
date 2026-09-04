@@ -1,22 +1,23 @@
 # Community 112
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **GetCurrentTime()** (2 connections)
-- **ITimeProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **var()** (2 connections)
+- **Execute_ReturnsGeneratedText()** (2 connections)
+- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 70]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

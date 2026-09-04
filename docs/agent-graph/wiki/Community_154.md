@@ -1,21 +1,22 @@
 # Community 154
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **while()** (2 connections)
-- **DeepSeekService()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
-- [[Community 118]] (4 shared connections)
+- [[Community 169]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

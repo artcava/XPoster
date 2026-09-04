@@ -1,20 +1,21 @@
 # Community 179
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **FeedService()** (2 connections)
-- **if()** (2 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowDefinition()** (2 connections)
 
 ## Relationships
 
-- [[Community 138]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,15 +1,16 @@
 # Community 90
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator** (2 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **catch()** (2 connections)
+- **XFunction()** (2 connections)
+- **Run()** (2 connections)
+- **XPoster** (2 connections)
 - **if()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

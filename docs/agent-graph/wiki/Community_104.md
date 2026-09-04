@@ -6,10 +6,10 @@
 
 - **AzureFoundryOptionsValidator.cs** (5 connections)
 - **AzureFoundryOptionsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **nameof()** (2 connections)
-- **if()** (2 connections)
 - **XPoster.Models** (2 connections)
+- **if()** (2 connections)
+- **nameof()** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 

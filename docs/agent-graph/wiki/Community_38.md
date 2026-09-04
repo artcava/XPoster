@@ -4,26 +4,26 @@
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (24 connections)
-- **FalAiImageService()** (2 connections)
-- **MakeRequest()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
+- **foreach()** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
+- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
+- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
+- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **typeof()** (2 connections)
 
 ## Relationships
 
-- [[Community 31]] (12 shared connections)
+- [[Community 78]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 41 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

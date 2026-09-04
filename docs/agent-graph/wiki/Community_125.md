@@ -1,22 +1,23 @@
 # Community 125
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **Process()** (2 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
-- **if()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **var()** (2 connections)
+- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
+- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
+- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 32]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

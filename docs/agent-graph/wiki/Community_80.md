@@ -1,16 +1,17 @@
 # Community 80
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
-- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **AzureFoundryOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse.cs** (7 connections)
+- **AIResponse** (2 connections)
+- **Choice** (2 connections)
+- **Message** (2 connections)
+- **XPoster.Models** (2 connections)
+- **OpenAIImageResponse** (2 connections)
+- **ImageData** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

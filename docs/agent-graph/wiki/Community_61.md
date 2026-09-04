@@ -1,26 +1,26 @@
 # Community 61
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunctionTests.cs** (20 connections)
-- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
-- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
-- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
-- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
-- **PendingContainer()** (2 connections)
-- **CreateTimerInfo()** (2 connections)
-- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
-- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
+- **AcquireCryptoValueNodeTests()** (2 connections)
+- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

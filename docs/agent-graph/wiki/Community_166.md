@@ -1,12 +1,13 @@
 # Community 166
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **AiModelClass.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **AiModelClass.cs** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **BlobUploadResult()** (2 connections)
 
 ## Relationships
 
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

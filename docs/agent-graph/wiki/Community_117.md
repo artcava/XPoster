@@ -1,22 +1,23 @@
 # Community 117
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **ICryptoService.cs** (4 connections)
-- **ICryptoService.cs** (4 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ICryptoService** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **GetProvider()** (2 connections)
+- **IsJsonLike()** (2 connections)
+- **return()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 216]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

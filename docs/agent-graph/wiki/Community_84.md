@@ -1,16 +1,17 @@
 # Community 84
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **XPoster.Contracts** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **SaveAsync()** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
+- **FetchRssNode.cs** (7 connections)
+- **FetchRssNode.cs** (7 connections)
+- **ExecuteAsync()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **foreach()** (2 connections)
+- **FetchRssNode()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

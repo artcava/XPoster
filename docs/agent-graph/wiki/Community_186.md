@@ -1,16 +1,17 @@
 # Community 186
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **if()** (2 connections)
-- **DispatchAsync()** (2 connections)
+- **DryRunShortLengthSender.cs** (3 connections)
+- **DryRunShortLengthSender.cs** (3 connections)
+- **DryRunShortLengthSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 161]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

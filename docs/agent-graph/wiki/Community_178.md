@@ -1,12 +1,13 @@
 # Community 178
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FacebookCredentials.cs** (2 connections)
-- **FacebookCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **MediaAttachment.cs** (3 connections)
+- **MediaAttachment.cs** (3 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **MediaAttachment()** (2 connections)
 
 ## Relationships
 
@@ -14,7 +15,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

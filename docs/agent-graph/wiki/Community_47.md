@@ -1,27 +1,28 @@
 # Community 47
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **FbSender.cs** (9 connections)
-- **FbSender.cs** (9 connections)
-- **if()** (2 connections)
-- **PublishTextOnlyAsync()** (2 connections)
-- **PublishPhotoAsync()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **HandleResponseAsync()** (2 connections)
-- **catch()** (2 connections)
-- **FbSender()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **BuildSender()** (2 connections)
+- **MessageMaxLength_Returns2200()** (2 connections)
+- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **new()** (2 connections)
+- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Platform_ReturnsInstagram()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **BuildCreds()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 108]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

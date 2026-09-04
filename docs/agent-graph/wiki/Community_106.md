@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **BlobServiceClient()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **if()** (2 connections)
+- **Uri()** (2 connections)
 
 ## Relationships
 

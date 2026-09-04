@@ -1,13 +1,14 @@
 # Community 146
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddAiProviderOptions()** (2 connections)
+- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **XPoster.Providers** (2 connections)
+- **GetReplacements()** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

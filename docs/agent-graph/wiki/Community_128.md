@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **AiProviderValidationHelper.cs** (4 connections)
-- **AiProviderValidationHelper.cs** (4 connections)
-- **if()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **ValidateConnectivity()** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITextToImageProvider** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 

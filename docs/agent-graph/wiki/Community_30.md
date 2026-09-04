@@ -1,30 +1,31 @@
 # Community 30
 
-> 13 nodes · cohesion 0.15
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **BuildSender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **return()** (2 connections)
+- **Execute_StoresSendResultsInContext()** (2 connections)
+- **Input()** (2 connections)
+- **FanOutSendNodeTests** (2 connections)
+- **Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForWideSender()** (2 connections)
+- **Execute_TwoSenders_DistinctPlatforms_ReSummarisationRunsPerSender()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_AppliesTagReplacements()** (2 connections)
+- **Execute_BridgesMediaAttachment_ToPostImage()** (2 connections)
+- **Execute_LongText_WithFallback_Resummarises()** (2 connections)
+- **static()** (2 connections)
+- **Execute_ShortText_NoResummary()** (2 connections)
 
 ## Relationships
 
-- [[Community 35]] (12 shared connections)
+- [[Community 172]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 43 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

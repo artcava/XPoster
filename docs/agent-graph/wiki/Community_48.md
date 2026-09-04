@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **IgSenderSendAsyncTests.cs** (9 connections)
+- **IgSenderSendAsyncTests.cs** (9 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyImageArray_ReturnsFalse()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WithCaptionExceedingMaxLength_TruncatesCaption()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSenderSendAsyncTests** (2 connections)
 
 ## Relationships
 

@@ -1,14 +1,15 @@
 # Community 124
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **ExecuteAsync()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **AcquireCryptoValueNode()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,22 @@
 # Community 149
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **for()** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (4 shared connections)
+- [[Community 184]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

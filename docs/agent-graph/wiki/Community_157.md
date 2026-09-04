@@ -1,21 +1,22 @@
 # Community 157
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ICryptoService** (2 connections)
+- **GetCryptoValue()** (2 connections)
 
 ## Relationships
 
-- [[Community 173]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

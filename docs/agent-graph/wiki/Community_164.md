@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **Validate()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **PostAsync()** (2 connections)
+- **BaseOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 172]] (3 shared connections)
+- [[Community 219]] (3 shared connections)
 
 ## Audit Trail
 

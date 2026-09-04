@@ -1,20 +1,21 @@
 # Community 193
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **AiProvider.cs** (2 connections)
-- **AiProvider.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 211]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

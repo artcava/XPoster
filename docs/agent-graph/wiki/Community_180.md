@@ -1,20 +1,21 @@
 # Community 180
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ContainerStatus.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ContainerStatus.cs** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **catch()** (2 connections)
+- **StringContent()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 100]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

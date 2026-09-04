@@ -1,25 +1,25 @@
 # Community 70
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FalAiImageService.cs** (7 connections)
-- **FalAiImageService.cs** (7 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **if()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
+- **return()** (2 connections)
+- **static()** (2 connections)
+- **AiTextNodeTests** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 112]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,17 +1,18 @@
 # Community 151
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **PerplexityService()** (2 connections)
-- **while()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor()** (2 connections)
+- **if()** (2 connections)
+- **Process()** (2 connections)
 
 ## Relationships
 
-- [[Community 133]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

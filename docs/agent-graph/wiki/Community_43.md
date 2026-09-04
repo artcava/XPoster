@@ -1,28 +1,29 @@
 # Community 43
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (32 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **new()** (2 connections)
-- **typeof()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()** (2 connections)
+- **FalAiImageServiceTests.cs** (24 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
+- **MakeRequest()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
 
 ## Relationships
 
-- [[Community 9]] (21 shared connections)
+- [[Community 36]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 52 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

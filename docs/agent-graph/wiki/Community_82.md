@@ -1,24 +1,25 @@
 # Community 82
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **XPoster.Credentials** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **BuildChatPayload()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
 
 ## Relationships
 
-- [[Community 156]] (4 shared connections)
+- [[Community 182]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **ITagReplacementProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **Resolve()** (2 connections)
 
 ## Relationships
 

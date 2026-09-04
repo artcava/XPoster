@@ -1,22 +1,23 @@
 # Community 118
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **GenerateTextAsync()** (2 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **BuildPowerLawPostNode()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 - **if()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 
-- [[Community 154]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
