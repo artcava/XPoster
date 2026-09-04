@@ -1,21 +1,21 @@
 # Community 167
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
+- **MediaAttachment.cs** (3 connections)
+- **MediaAttachment.cs** (3 connections)
+- **MediaAttachment()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 210]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

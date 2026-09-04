@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **MetaPublishingService.cs** (9 connections)
-- **MetaPublishingService.cs** (9 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **GetApiVersion()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **HttpRequestException()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
 
 ## Relationships
 

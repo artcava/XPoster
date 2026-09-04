@@ -1,20 +1,20 @@
 # Community 90
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
 - **catch()** (2 connections)
-- **XFunction()** (2 connections)
-- **Run()** (2 connections)
-- **XPoster** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
 - **if()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 180]] (4 shared connections)
 
 ## Audit Trail
 

@@ -4,27 +4,27 @@
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (24 connections)
-- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
-- **BuildService()** (2 connections)
-- **FalAiImageServiceTests** (2 connections)
-- **FalImageJson()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
-- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
-- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **static()** (2 connections)
+- **if()** (2 connections)
+- **Input()** (2 connections)
+- **return()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
+- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
+- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
+- **AiImageNodeTests** (2 connections)
+- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (12 shared connections)
+- [[Community 102]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

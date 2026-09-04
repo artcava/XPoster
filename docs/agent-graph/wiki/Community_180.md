@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **catch()** (2 connections)
-- **StringContent()** (2 connections)
-- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **foreach()** (2 connections)
+- **resolve()** (2 connections)
+- **ValidateOptions()** (2 connections)
 
 ## Relationships
 
-- [[Community 100]] (5 shared connections)
+- [[Community 90]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

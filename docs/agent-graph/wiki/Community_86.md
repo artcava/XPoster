@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **WorkflowContext.cs** (7 connections)
-- **WorkflowContext.cs** (7 connections)
-- **KeyNotFoundException()** (2 connections)
-- **if()** (2 connections)
-- **HasData()** (2 connections)
-- **WorkflowContext** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **SetData()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

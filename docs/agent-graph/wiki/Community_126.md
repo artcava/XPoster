@@ -1,23 +1,23 @@
 # Community 126
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **var()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator** (2 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

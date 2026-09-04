@@ -1,21 +1,21 @@
 # Community 161
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **while()** (2 connections)
+- **PerplexityService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 145]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

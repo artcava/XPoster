@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **BuildCreds()** (2 connections)
-- **BuildFactory()** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **if()** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (8 shared connections)
+- [[Community 179]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

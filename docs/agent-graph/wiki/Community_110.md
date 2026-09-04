@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
+- **AiTextNodeTests.cs** (13 connections)
 - **var()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
+- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_ReturnsGeneratedText()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
 
 ## Relationships
 
-- [[Community 3]] (31 shared connections)
+- [[Community 70]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

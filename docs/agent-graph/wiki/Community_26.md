@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (14 connections)
-- **IgSenderResilienceTests.cs** (14 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **Uri()** (2 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **IgSender()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
-- **new()** (2 connections)
-- **PostWithImage()** (2 connections)
-- **SendAsync_WhenBlobUploadFails_ReturnsFalse()** (2 connections)
-- **PostWithoutImage()** (2 connections)
-- **SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **AddAiProviderOptionsTests.cs** (14 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptionsTests** (2 connections)
+- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
+- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
+- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
+- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
+- **BuildAllProvidersConfig()** (2 connections)
 
 ## Relationships
 

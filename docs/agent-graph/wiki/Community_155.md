@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **ToDefinition()** (2 connections)
-- **WorkflowDefinition()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator.cs** (4 connections)
+- **IOrchestrator** (2 connections)
+- **PostAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **if()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **DryRunSender()** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService** (2 connections)
+- **UploadAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **DeleteAsync()** (2 connections)
 
 ## Relationships
 

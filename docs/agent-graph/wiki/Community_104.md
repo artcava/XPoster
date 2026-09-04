@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (5 connections)
-- **AzureFoundryOptionsValidator.cs** (5 connections)
-- **XPoster.Models** (2 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **foreach()** (2 connections)
+- **HasCycle()** (2 connections)
 - **if()** (2 connections)
-- **nameof()** (2 connections)
-- **Validate()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
 
 ## Relationships
 

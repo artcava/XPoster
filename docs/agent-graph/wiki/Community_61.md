@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **AcquireCryptoValueNodeTests.cs** (8 connections)
-- **AcquireCryptoValueNodeTests.cs** (8 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
-- **AcquireCryptoValueNodeTests()** (2 connections)
-- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
+- **MakeService()** (2 connections)
+- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **CryptoService()** (2 connections)
+- **CryptoServiceTests** (2 connections)
+- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
 
 ## Relationships
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver.cs** (4 connections)
-- **XPoster.Workflows.Services** (2 connections)
-- **Resolve()** (2 connections)
-- **IStepOptionsResolver** (2 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ICredentialsStartupValidator** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 

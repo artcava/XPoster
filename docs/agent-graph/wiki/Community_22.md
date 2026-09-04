@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **SaveAsync_WithNullBlobName_ThrowsArgumentNullException()** (2 connections)
-- **GetPendingAsync_WhenStoreIsEmpty_ReturnsEmptyList()** (2 connections)
-- **InMemoryContainerStateStoreTests** (2 connections)
-- **SaveAsync_WithEmptyOrWhitespaceBlobName_ThrowsArgumentException()** (2 connections)
-- **SaveAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
-- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
-- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
-- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
-- **GetPendingAsync_ReturnsOnlyPendingEntries()** (2 connections)
-- **SaveAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **GetProfiles_Should_SkipUnknownSenders_ButKeepValidOnes()** (2 connections)
+- **GetProfiles_Should_ReturnEmpty_WhenNoScheduleConfigured()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WhenNoValidSendersRemain()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoWorkflowKey()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoSenders()** (2 connections)
+- **BuildConfiguration()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_ParseSenderPlatforms()** (2 connections)
+- **CreateProvider()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **ConfigurationSlotProfileProviderTests** (2 connections)
+- **GetProfiles_Should_MapEachSlotToWorkflowOrchestrator()** (2 connections)
+- **GetProfiles_Should_OrderSlotsByHour()** (2 connections)
+- **new()** (2 connections)
 
 ## Relationships
 

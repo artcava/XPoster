@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Workflows.Models** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
+- **DeepSeekOptions.cs** (2 connections)
+- **DeepSeekOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

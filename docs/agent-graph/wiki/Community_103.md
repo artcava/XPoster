@@ -1,23 +1,23 @@
 # Community 103
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (12 connections)
-- **OrchestratorFactory()** (2 connections)
-- **ResolveWorkflowOrchestrator()** (2 connections)
-- **nameof()** (2 connections)
-- **CreateEmptyNoOrchestrator()** (2 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
 - **if()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **InstagramCredentialsValidator** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 88]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

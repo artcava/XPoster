@@ -1,21 +1,21 @@
 # Community 196
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed** (2 connections)
-- **XPoster.Models** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **XPoster.Providers** (2 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 222]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

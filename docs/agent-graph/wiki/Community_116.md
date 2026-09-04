@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **StringContent()** (2 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **DeepSeekOptionsValidator.cs** (5 connections)
+- **DeepSeekOptionsValidator.cs** (5 connections)
+- **nameof()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

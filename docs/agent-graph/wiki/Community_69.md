@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **AiModelCatalog.cs** (8 connections)
-- **AiModelCatalog.cs** (8 connections)
-- **Supports()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **TryGet()** (2 connections)
-- **if()** (2 connections)
-- **AiModelCatalog()** (2 connections)
-- **GetRequired()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **Input()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
+- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
+- **AcquireCryptoValueNodeTests()** (2 connections)
+- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
 
 ## Relationships
 

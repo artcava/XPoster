@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolver.cs** (4 connections)
-- **ConfigurationStepOptionsResolver.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **ConfigurationStepOptionsResolver()** (2 connections)
-- **XPoster.Workflows.Services** (2 connections)
+- **WorkflowOrchestrator.cs** (4 connections)
+- **WorkflowOrchestrator.cs** (4 connections)
+- **if()** (2 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 

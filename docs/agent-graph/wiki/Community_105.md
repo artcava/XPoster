@@ -1,23 +1,23 @@
 # Community 105
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (5 connections)
-- **DeepSeekOptionsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **nameof()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **var()** (2 connections)
+- **Input()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
+- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 77]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

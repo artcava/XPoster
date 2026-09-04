@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **SupportedPlatforms_IsEmpty()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **Build()** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **NoOrchestratorTests** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
 
 ## Relationships
 

@@ -1,22 +1,22 @@
 # Community 141
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **Exception()** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Workflows.Services** (2 connections)
+- **IStepOptionsResolver** (2 connections)
 
 ## Relationships
 
-- [[Community 226]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

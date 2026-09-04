@@ -1,25 +1,25 @@
 # Community 80
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AIResponse.cs** (7 connections)
-- **AIResponse.cs** (7 connections)
-- **AIResponse** (2 connections)
-- **Choice** (2 connections)
-- **Message** (2 connections)
-- **XPoster.Models** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **ImageData** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **new()** (2 connections)
+- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
+- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **CreateNode()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 108]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

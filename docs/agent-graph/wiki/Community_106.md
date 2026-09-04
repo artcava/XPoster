@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **BlobServiceClient()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
+- **AzureFoundryOptionsValidator.cs** (5 connections)
+- **AzureFoundryOptionsValidator.cs** (5 connections)
+- **nameof()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 - **if()** (2 connections)
-- **Uri()** (2 connections)
 
 ## Relationships
 

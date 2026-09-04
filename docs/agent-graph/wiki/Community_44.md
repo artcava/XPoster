@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AiProviderServiceCollectionExtensionsTests** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
-- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
+- **ScheduledOrchestrationProfileTests.cs** (10 connections)
+- **ScheduledOrchestrationProfileTests.cs** (10 connections)
+- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **typeof()** (2 connections)
+- **Constructor_Should_SetAllFields()** (2 connections)
+- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
+- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
+- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
+- **ScheduledOrchestrationProfileTests** (2 connections)
+- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
 
 ## Relationships
 

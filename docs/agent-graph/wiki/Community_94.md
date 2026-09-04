@@ -5,16 +5,16 @@
 ## Key Concepts
 
 - **OpenAiService.cs** (11 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
 - **GenerateImageAsync()** (2 connections)
 - **catch()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
 - **GenerateTextAsync()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 129]] (5 shared connections)
+- [[Community 139]] (5 shared connections)
 
 ## Audit Trail
 

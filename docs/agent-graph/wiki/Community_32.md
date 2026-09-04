@@ -4,27 +4,27 @@
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **Input()** (2 connections)
-- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **if()** (2 connections)
-- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
-- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
-- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
-- **static()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **AiImageNodeTests** (2 connections)
-- **return()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
 
 ## Relationships
 
-- [[Community 125]] (6 shared connections)
+- [[Community 37]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

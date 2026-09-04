@@ -1,20 +1,20 @@
 # Community 214
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **if()** (2 connections)
-- **InSender()** (2 connections)
+- **PromptStepOptions.cs** (2 connections)
+- **PromptStepOptions.cs** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 58]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
-- **if()** (2 connections)
-- **Process()** (2 connections)
+- **WorkflowDefinitionOptions.cs** (4 connections)
+- **WorkflowDefinitionOptions.cs** (4 connections)
+- **WorkflowDefinition()** (2 connections)
+- **ToDefinition()** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
 
 ## Relationships
 

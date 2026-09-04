@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **AddAiProviderOptionsTests.cs** (14 connections)
-- **AddAiProviderOptionsTests.cs** (14 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
-- **AddAiProviderOptionsTests** (2 connections)
-- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
-- **BuildAllProvidersConfig()** (2 connections)
-- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
-- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **BlobStorageServiceTests** (2 connections)
+- **BlobStorageService()** (2 connections)
+- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
+- **CreateSut()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
+- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
+- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
+- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
+- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
+- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
+- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
 
 ## Relationships
 

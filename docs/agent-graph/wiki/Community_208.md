@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **nameof()** (2 connections)
+- **CryptoService.cs** (6 connections)
 - **if()** (2 connections)
+- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 177]] (3 shared connections)
+- [[Community 176]] (3 shared connections)
 
 ## Audit Trail
 

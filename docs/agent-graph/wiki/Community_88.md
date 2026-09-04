@@ -5,16 +5,16 @@
 ## Key Concepts
 
 - **OrchestratorFactory.cs** (12 connections)
-- **ResolveSenders()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
 - **WorkflowOrchestrator()** (2 connections)
-- **catch()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 - **NoOrchestrator()** (2 connections)
+- **catch()** (2 connections)
+- **ResolveSenders()** (2 connections)
 - **Resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (6 shared connections)
+- [[Community 123]] (6 shared connections)
 
 ## Audit Trail
 

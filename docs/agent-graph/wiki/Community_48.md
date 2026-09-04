@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **IgSenderSendAsyncTests.cs** (9 connections)
-- **IgSenderSendAsyncTests.cs** (9 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **FbSenderSendAsyncTests.cs** (9 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WithEmptyImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **SendAsync_WithNullImage_PublishesTextOnly_ReturnsTrue()** (2 connections)
+- **SendAsync_WithCaptionLongerThanMax_StillPublishes_ReturnsTrue()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **FbSenderSendAsyncTests** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyImageArray_ReturnsFalse()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WithCaptionExceedingMaxLength_TruncatesCaption()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderSendAsyncTests** (2 connections)
 
 ## Relationships
 

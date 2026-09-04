@@ -1,31 +1,31 @@
 # Community 29
 
-> 14 nodes · cohesion 0.27
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **ModelsTests.cs** (13 connections)
-- **ModelsTests.cs** (13 connections)
-- **AIResponse_CanBeCreated_WithChoices()** (2 connections)
-- **Message_CanBeCreated_WithContent()** (2 connections)
-- **Post_CanHold_ImageBytes()** (2 connections)
-- **ModelsTests** (2 connections)
-- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
-- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
-- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
-- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
-- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Choice_CanBeCreated_WithMessage()** (2 connections)
-- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **Execute_LongText_WithFallback_Resummarises()** (2 connections)
+- **Execute_BridgesMediaAttachment_ToPostImage()** (2 connections)
+- **Execute_AppliesTagReplacements()** (2 connections)
+- **Execute_ShortText_NoResummary()** (2 connections)
+- **static()** (2 connections)
+- **Execute_TwoSenders_DistinctPlatforms_ReSummarisationRunsPerSender()** (2 connections)
+- **return()** (2 connections)
+- **Input()** (2 connections)
+- **FanOutSendNodeTests** (2 connections)
+- **Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForWideSender()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_StoresSendResultsInContext()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 181]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 43 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
