@@ -2,7 +2,7 @@
 
 [![Azure Functions](https://img.shields.io/badge/Azure%20Functions-v4-0062AD?logo=azurefunctions&logoColor=white)](https://azure.microsoft.com/en-us/services/functions/)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![C#](https://img.shields.io/badge/C%23-12.0-239120?logo=csharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![C#](https://img.shields.io/badge/C%23-14.0-239120?logo=csharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-412991?logo=openai&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-services/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deployment](https://img.shields.io/badge/Deployed-Azure-blue)](https://xposterfunction.azurewebsites.net/)
@@ -10,7 +10,7 @@
 
 > **AI-Powered Social Media Automation Platform**
 > 
-> XPoster is an Azure Function that automates content publishing across multiple social media platforms (Twitter/X, LinkedIn, Instagram) using artificial intelligence for content generation and curation.
+> XPoster is an Azure Function that automates content publishing across multiple social media platforms (Twitter/X, LinkedIn, Instagram, Facebook) using artificial intelligence for content generation and curation.
 
 ---
 
@@ -38,7 +38,7 @@
 - **AI-Powered Summarization**: Intelligent RSS feed summaries via a configurable AI model of your choice
 - **Image Generation**: Automatic contextual image creation using any supported image generation model
 - **Smart Hashtags**: Automatic keyword-to-hashtag conversion driven by a configurable replacement map (`TagReplacementOptions`) — no redeployment required to change the hashtag set
-- **Multi-Strategy**: Support for different content orchestration algorithms
+- **Multi-Strategy**: Config-driven content workflows (DAG nodes) — e.g. RSS news summarisation, Bitcoin Power Law posts — scheduled per hour with no code change
 - **Provider Agnostic**: The AI provider (e.g. OpenAI, Azure AI Foundry) and the specific model are selected by the operator through configuration — no code change required to swap models
 
 ### 🌐 Multi-Platform Publishing
@@ -64,7 +64,7 @@
 
 ## Architecture
 
-XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects a content strategy based on the current time, generates a social media post (optionally using AI), and publishes it to one or more platforms via pluggable sender components.
+XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects a workflow for the current hour from the configuration-driven schedule, executes its node DAG (optionally using AI), and publishes the resulting posts to one or more platforms via pluggable sender components.
 
 > 📐 For the full architectural rationale, component responsibilities, design patterns (Strategy, Factory, Plugin), ADRs, extension contracts, and the end-to-end Mermaid sequence diagram, see **[docs/architecture.md](docs/architecture.md)**.
 
@@ -80,7 +80,7 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 |---------|---------|------|
 | **.NET** | 10.0 | Target framework (isolated worker model) |
 | **Azure Functions** | v4 | Serverless compute host |
-| **C#** | 12 | Programming language |
+| **C#** | 14 | Programming language |
 | `Microsoft.Azure.Functions.Worker` | 2.52.0 | Isolated worker SDK |
 | `Microsoft.Azure.Functions.Worker.Sdk` | 2.0.7 | Build-time analyzer |
 | `Microsoft.Azure.Functions.Worker.Extensions.Timer` | 4.3.1 | Timer trigger support |
@@ -88,15 +88,15 @@ XPoster is a **serverless, event-driven pipeline** that runs on a timer, selects
 
 ### AI & ML
 
-The AI layer uses two capability interfaces — `ITextToTextProvider` (text summarisation + image prompt generation) and `ITextToImageProvider` (image generation) — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. Each `ScheduledOrchestrationProfile` carries independent `TextProvider` and `ImageProvider` fields, allowing different providers per capability within the same slot. `OrchestratorFactory` resolves each independently; a `null` field means the capability is not assigned for that slot and the orchestrator degrades gracefully.
+The AI layer uses two capability interfaces — `ITextToTextProvider` (text summarisation + image prompt generation) and `ITextToImageProvider` (image generation) — registered as **keyed services** in the DI container, keyed by `AiProvider` enum value. Providers are selected at **workflow-node level**: each `AiText` / `AiImage` node names its provider via the `Provider` parameter, so a single workflow can mix different providers per step (e.g. DeepSeek for text, FalAi for image) — entirely through configuration. Node inputs/outputs are wired via explicit keyed references in the config; the keyed service falls back to `null` when a capability is unsupported and the node degrades gracefully (e.g. `AiImage` with `Required: false` publishes a text-only post).
 
-Shared AI utility logic is centralised in **`AiServiceHelper`**, which exposes the following static methods used by all `ITextToTextProvider` implementations:
+Shared AI utility logic is centralised in **`AiServiceHelper`**, which exposes the following static methods used by all AI provider implementations:
 
 | Method | Description |
 |--------|-------------|
 | `BuildChatPayload(string text, PromptRequest request, string modelName)` | Builds the chat completion request payload — interpolates `{MaxChars}` in the system prompt, substitutes the input text label in the user prompt, and assembles the `model`, `messages`, `max_tokens`, and `temperature` fields. The `modelName` parameter is supplied by each provider from its own options, keeping provider-specific config out of the helper. |
-| `ParseChatCompletionResponseAsync(HttpResponseMessage response)` | Deserialises the chat completion HTTP response and extracts the generated text content. |
-| `ParseImageResponseAsync(HttpResponseMessage response)` | Deserialises the image generation HTTP response and extracts the image URL or base64 payload. |
+| `ParseChatCompletionResponseAsync(HttpResponseMessage response, string providerName, string operationName, ILogger logger, CancellationToken ct)` | Deserialises the chat completion HTTP response and extracts the generated text content, returning `(bool Success, string Content)`. |
+| `ParseImageResponseAsync(HttpResponseMessage response, AiProvider provider, HttpClient httpClient, ILogger logger, string? allowedOrigin, CancellationToken ct)` | Deserialises the image generation HTTP response, extracts the image bytes (base64 payload or downloaded URL, with origin validation), and returns `byte[]`. |
 
 | Package | Version | Role |
 |---------|---------|------|
@@ -111,9 +111,9 @@ Shared AI utility logic is centralised in **`AiServiceHelper`**, which exposes t
 |---|---|---|---|
 | `OpenAi` | ✅ `OpenAiService` | ✅ `OpenAiService` | Full text + image |
 | `AzureFoundry` | ✅ `AzureFoundryService` | ✅ `AzureFoundryService` | Full text + image |
-| `DeepSeek` | ✅ `DeepSeekService` | ❌ | Text only — posts published without image |
-| `Perplexity` | ✅ `PerplexityService` | ❌ | Text only — posts published without image |
-| `FalAi` | ❌ | ✅ `FalAiImageService` | Image only — only valid for orchestrators that handle null `textProvider` |
+| `DeepSeek` | ✅ `DeepSeekService` | ❌ | Text only — workflows without an image node publish text-only posts |
+| `Perplexity` | ✅ `PerplexityService` | ❌ | Text only — workflows without an image node publish text-only posts |
+| `FalAi` | ❌ | ✅ `FalAiImageService` | Image only — valid in `AiImage` nodes; the workflow must not require text output, or the text node must be optional (`Required: false`) |
 
 ### Social Media APIs
 
@@ -121,7 +121,7 @@ Shared AI utility logic is centralised in **`AiServiceHelper`**, which exposes t
 |---------------|---------|----------|
 | `LinqToTwitter` | 6.15.0 | Twitter/X — OAuth 1.0a wrapper |
 | LinkedIn REST API | v2 | LinkedIn — direct HTTP calls via `IHttpClientFactory` |
-| Instagram Graph API | v21+ | Instagram — direct HTTP calls (in development) |
+| Graph API (Meta) | v23.0 | Instagram + Facebook — direct HTTP calls; async container flow for Instagram |
 
 ### Monitoring & Observability
 
@@ -216,9 +216,9 @@ All configuration is driven by environment variables — there is no application
 - **Locally**: copy [`src/local.settings.json.example`](src/local.settings.json.example) to `src/local.settings.json` and fill in your values.
 - **On Azure**: add the same variables as Application Settings (**Azure Portal → Function App → Configuration**).
 
-Platform OAuth credentials (Twitter/X, LinkedIn, Instagram) are **not** stored as environment variables. They are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing. `DefaultAzureCredential` picks up your `az login` session locally and the Function App's Managed Identity in production.
+Platform OAuth credentials (Twitter/X, LinkedIn, Instagram, Facebook) are **not** stored as environment variables. They are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing. `DefaultAzureCredential` picks up your `az login` session locally and the Function App's Managed Identity in production.
 
-> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, `TagReplacementOptions` hashtag map, slot profile fan-out examples, and a step-by-step `DryRunSender` local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
+> 📖 Full reference — variable names, types, defaults, allowed values, Key Vault secret names, `TagReplacementOptions` hashtag map, workflow and schedule (`Workflows__*` / `Schedule__N`) examples, and a dry-run local-testing guide: **[docs/configuration.md](docs/configuration.md)**.
 
 ---
 
@@ -295,7 +295,7 @@ public async Task<HttpResponseData> RunHttp(
 
 ### Schedule Configuration
 
-The execution frequency is configurable via the `CronSchedule` environment variable:
+The **timer firing frequency** is configurable via the `CronSchedule` environment variable; a second timer (`ContainerPollingSchedule`) handles Instagram async container publication.
 
 **Format**: 6-field cron expression: `{second} {minute} {hour} {day} {month} {dayOfWeek}`
 
@@ -305,7 +305,7 @@ The execution frequency is configurable via the `CronSchedule` environment varia
 // local.settings.json
 {
   "Values": {
-    "CronSchedule": "0 0 6,8,14,16 * * *"
+    "CronSchedule": "0 50 * * * *"
   }
 }
 ```
@@ -315,14 +315,16 @@ The execution frequency is configurable via the `CronSchedule` environment varia
 az functionapp config appsettings set \
   --name xposterfunction \
   --resource-group XPosterRG \
-  --settings "CronSchedule=0 0 6,8,14,16 * * *"
+  --settings "CronSchedule=0 50 * * * *"
 ```
+
+The function fires according to the cron expression, but **which workflow runs at a given UTC hour is decided by the `Schedule` configuration section** (`Schedule__N__Hour`, `Schedule__N__Workflow`, `Schedule__N__Senders__M`). If no slot matches the current hour, `NoOrchestrator` is used.
 
 ### Cron Expression Examples
 
 | Schedule | Cron Expression | Description |
 |----------|-----------------|-------------|
-| **Default** | `0 0 6,8,14,16 * * *` | Production slots: 6, 8, 14, 16 UTC |
+| **Default** | `0 50 * * * *` | Every hour at minute 50; `Schedule__N` decides the workflow per hour |
 | **Hourly** | `0 0 * * * *` | Every hour on the hour |
 | **Every 4 hours** | `0 0 */4 * * *` | Every 4 hours |
 | **Business Hours** | `0 0 9,12,15,18 * * 1-5` | 9, 12, 15, 18 (Mon-Fri) |
@@ -330,30 +332,54 @@ az functionapp config appsettings set \
 | **Daily** | `0 0 9 * * *` | Every day at 9:00 |
 | **Quick Test** | `*/30 * * * * *` | Every 30 seconds (dev only) |
 
-### Time-based Strategy (ISlotProfileProvider)
+### Config-driven Slot Selection (`Schedule` / `Workflows`)
 
-The production schedule is defined in `DefaultSlotProfileProvider`, which returns the fixed profiles below. Each slot declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` — `null` means the capability is not assigned for that slot. The `SenderPlatforms` column lists all platforms targeted in a single slot; content is generated once and fanned out in parallel.
+The schedule is read from the `Schedule` configuration section by `ConfigurationSlotProfileProvider` (the single `ISlotProfileProvider`), which maps every entry to a `WorkflowOrchestrator`. Production slots are defined entirely via app settings:
 
-| UTC Hour | `SenderPlatforms` | Orchestrator | `TextProvider` | `ImageProvider` |
-|----------|-------------------|--------------|----------------|-----------------|
-| 6 | `LinkedIn`, `X`, `Instagram`, `Facebook` | `FeedOrchestrator` | `OpenAi` | `AzureFoundry` |
-| 14 | `LinkedIn`, `X`, `Facebook` | `PowerLawOrchestrator` | `null` | `null` |
+```json
+// local.settings.json — production schedule
+{
+  "Values": {
+    "CronSchedule": "0 50 * * * *",
+    "Schedule__0__Hour": "6",
+    "Schedule__0__Workflow": "Bitcoin",
+    "Schedule__0__Senders__0": "LinkedIn",
+    "Schedule__0__Senders__1": "X",
+    "Schedule__0__Senders__2": "Facebook",
+    "Schedule__0__Senders__3": "Instagram",
 
-> ℹ️ The fan-out slot at hour 6 generates the base summary and image **once** (sized for Facebook's 3 000-char limit), then re-summarises only when needed for LinkedIn (2 800), Instagram (2 200) and X (280 chars). LinkedIn receives the same content as Facebook when the base fits, and so on. This reduces AI and image credit consumption compared to four separate scheduled slots.
+    "Schedule__1__Hour": "14",
+    "Schedule__1__Workflow": "PowerLaw",
+    "Schedule__1__Senders__0": "LinkedIn",
+    "Schedule__1__Senders__1": "X",
+    "Schedule__1__Senders__2": "Facebook"
+  }
+}
+```
 
-> ℹ️ `PowerLawOrchestrator` slot at 14 do not require AI providers — they compute a deterministic post from crypto price data and do not call `ITextToTextProvider` or `ITextToImageProvider`.
+| UTC Hour | `Workflow` | `Senders` | Content |
+|----------|-----------|-----------|---------|
+| 6 | `Bitcoin` | `LinkedIn`, `X`, `Facebook`, `Instagram` | RSS news summarisation + AI image |
+| 14 | `PowerLaw` | `LinkedIn`, `X`, `Facebook` | Deterministic post from crypto price data |
 
-`OrchestratorFactory` no longer owns a static list of profiles. It receives an `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the schedule a swappable dependency rather than embedded logic.
+> ℹ️ The fan-out slot at hour 6 generates the base summary and image **once** (sized for Facebook's 3 000-char limit), then re-summarises only when needed for LinkedIn (2 800), Instagram (2 200) and X (250 chars). This reduces AI and image credit consumption compared to separate slots.
+
+> ℹ️ The `PowerLaw` slot at hour 14 does not require AI providers — its DAG (`AcquireCryptoValue → BuildPowerLawPost → FanOutSend`) computes a deterministic post from crypto price data and never calls `ITextToTextProvider` or `ITextToImageProvider`.
+
+Workflows themselves are declared in the `Workflows` configuration section as node DAGs (e.g. `Workflows__Bitcoin__Nodes__N__Type` = `FetchRss` → `AiText` → `AiImage` → `FanOutSend`). `OrchestratorFactory` receives `ISlotProfileProvider` via constructor injection and calls `GetProfiles()` at resolution time — making the whole schedule a swappable, config-driven dependency rather than embedded logic.
 
 ### Dry-Run Testing (Local)
 
-To run the full pipeline locally without publishing to any social platform, activate the `DryRunSlotProfileProvider` via two environment variables — **no code changes required**:
+To run the full pipeline locally without publishing to any social platform, add a dry-run slot using the dry-run senders — **no code changes required**:
 
 ```json
 // local.settings.json
 {
   "Values": {
-    "EnableDryRunSlot": "true",
+    "Schedule__2__Hour": "9",
+    "Schedule__2__Workflow": "PowerLaw",
+    "Schedule__2__Senders__0": "DryRunMaxLength",
+    "Schedule__2__Senders__1": "DryRunShortLength",
     "ForceHour": "9"
   }
 }
@@ -361,12 +387,12 @@ To run the full pipeline locally without publishing to any social platform, acti
 
 | Key | Value | Effect |
 |-----|-------|--------|
-| `EnableDryRunSlot` | `true` | Registers `DryRunSlotProfileProvider` in DI, which decorates `DefaultSlotProfileProvider` and appends a `DryRun` entry at hour 9 |
-| `ForceHour` | `9` | Overrides the UTC clock so `OrchestratorFactory` selects the dry-run slot at startup |
+| `Schedule__2__…` | dry-run slot | Registers an ordinary `Schedule` entry whose senders are the dry-run variants of `SenderPlatform` |
+| `ForceHour` | `9` | Overrides the UTC clock (development only) so the dry-run slot is selected regardless of wall-clock time |
 
-`DryRunSender` runs the full orchestration pipeline — RSS fetch, AI summarisation, tag replacement, image generation — but **never publishes to any social platform**.
+`DryRunMaxLength` (unlimited length) and `DryRunShortLength` (250 chars) are `SenderPlatform` values backed by `DryRunSender` implementations: they run the full orchestration pipeline — RSS fetch, AI summarisation, tag replacement, image generation — but **never publish to any social platform**, logging the post content instead.
 
-> ⚠️ `EnableDryRunSlot` defaults to `false`. In production this key must be absent or explicitly set to `"false"`. Hour 9 is **never** part of the production schedule.
+> ⚠️ `ForceHour` is honoured only in the `Development` environment. In production the dry-run senders must never appear in the `Schedule__N__Senders__M` lists.
 
 ---
 
@@ -385,12 +411,12 @@ XPoster is designed with explicit extension points that allow new capabilities t
 
 | Extension point | How to extend | Rationale |
 |---|---|---|
-| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI, add a value to `SenderPlatform`, add the platform to a `ScheduledOrchestrationProfile`'s `SenderPlatforms` list | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on orchestrators or scheduling |
-| **Content Orchestrators** (`BaseOrchestrator`) | Subclass `BaseOrchestrator`, override `OrchestrateAsync()` returning `IReadOnlyDictionary<SenderPlatform, Post?>`, implement `SupportedPlatforms`, add a `ScheduledOrchestrationProfile` entry | The Strategy pattern in `OrchestratorFactory` decouples content logic from scheduling, making it safe to introduce new content strategies independently |
-| **AI Providers** (`ITextToTextProvider` / `ITextToImageProvider`) | Implement the relevant capability interface(s), register as keyed services in `AddXPosterAiProviders()`, add an `AiProvider` enum value | Providers expose only the capabilities they support; `null` resolution is the canonical signal for "capability not available" — no switch expressions or factory classes to modify |
-| **Feed URL Providers** (`IFeedUrlProvider`) | Implement `IFeedUrlProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationFeedUrlProvider` | Feed URLs are a swappable dependency; sourcing them from a database or remote config requires zero changes to `FeedService` or any orchestrator |
-| **Tag Replacement Providers** (`ITagReplacementProvider`) | Implement `ITagReplacementProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationTagReplacementProvider` | The hashtag map is externalised from orchestrator code; changing, adding, or removing replacements requires only a configuration update — no redeployment |
-| **Scheduling profiles** (`ISlotProfileProvider`) | Implement `ISlotProfileProvider` (or subclass `DryRunSlotProfileProvider` as a decorator) and register it in `Program.cs` | The schedule is a swappable dependency injected into `OrchestratorFactory` — operators can alter or extend the slot list without touching factory or orchestrator code |
+| **Sender Plugins** (`ISender`) | Implement `ISender`, register in DI keyed by a new `SenderPlatform` enum value, list the platform name in a schedule slot's `Senders` (`Schedule__N__Senders__M`) | Platform-specific code is fully isolated behind a single interface, so adding a new social network has zero impact on workflows or scheduling |
+| **Workflow Nodes** (`IWorkflowNode`) | Implement `IWorkflowNode`, register as a keyed transient in `AddWorkflows()`, reference the node `Type` in the `Workflows__*` section as a DAG step with `NextNodeIds` | The DAG engine decouples content logic from scheduling; new content strategies are configured workflows, not new orchestrator classes |
+| **AI Providers** (`ITextToTextProvider` / `ITextToImageProvider`) | Implement the relevant capability interface(s), register as keyed services in `AddXPosterAiProviders()`, add an `AiProvider` enum value, assign the provider name in an `AiText` / `AiImage` node | Providers expose only the capabilities they support; `null` resolution is the canonical signal for "capability not available" — no switch expressions or factory classes to modify |
+| **Feed Sources** (`FetchRss` node) | Provide the RSS URLs as the `Urls` node parameter or author a new node that supplies feed content | Feed URLs are a per-workflow concern; sourcing them from a database or remote config requires only a new/updated node — no changes to `FeedService` or the engine |
+| **Tag Replacement Providers** (`ITagReplacementProvider`) | Implement `ITagReplacementProvider`, register as `Singleton` in `Program.cs` replacing `ConfigurationTagReplacementProvider` | The hashtag map is externalised from node code; changing, adding, or removing replacements requires only a configuration update — no redeployment |
+| **Scheduling profiles** (`ISlotProfileProvider`) | Implement `ISlotProfileProvider` and register it in `Program.cs` (default: `ConfigurationSlotProfileProvider`) | The schedule is a swappable dependency injected into `OrchestratorFactory` — operators alter the slot list via the `Schedule__N` configuration section without touching factory or node code |
 
 > 📖 For step-by-step implementation guides, code contracts, design constraints, and worked examples for each extension point, see **[docs/extending-xposter.md](docs/extending-xposter.md)**.
 
@@ -402,13 +428,16 @@ The test suite uses **xUnit + Moq** with a unit-first approach. Tests are organi
 
 ```
 tests/
-├── Contracts/        # AiProviderExtensions, BaseOrchestrator abstract contracts
-├── Helpers/          # shared HTTP mock helpers for resilience tests; AiServiceHelper unit tests
-├── Orchestrators/    # FeedOrchestrator, PowerLawOrchestrator, OrchestratorFactory, ConfigurationTagReplacementProvider…
+├── XFunctionTests.cs, XPosterContainerPollingFunctionTests.cs   # function entry points
+├── Contracts/        # AiProviderExtensions, enum contracts
+├── Helpers/          # shared HTTP mock helpers and image fixtures for resilience tests
+├── Orchestrators/    # WorkflowOrchestrator, OrchestratorFactory, BaseOrchestrator, NoOrchestrator
 ├── Integration/      # Polly resilience pipelines — not run in CI
 ├── Models/           # domain model invariants, options validators
-├── SenderPlugins/    # XSender, InSender, IgSender, DryRunSender
-└── Services/         # OpenAiService, AzureFoundryService, DeepSeekService, FalAiImageService, PerplexityService…
+├── Providers/        # ConfigurationSlotProfileProvider, ConfigurationTagReplacementProvider, time providers
+├── SenderPlugins/    # per-platform subfolders: X, Linkedin, Instagram, Facebook; DryRunSender variants
+├── Services/         # AI services (OpenAi, AzureFoundry, DeepSeek, FalAiImageService, Perplexity, AiServiceHelper), FeedService, CryptoService…
+└── Workflows/        # Engine, Nodes, Configuration, Services, Utilities, Models
 ```
 
 ### Running Tests
@@ -435,7 +464,7 @@ Key monitoring capabilities at a glance:
 - **Execution tracking**: every `XPosterFunction` invocation appears as a `request` in Application Insights
 - **Dependency tracing**: outbound HTTP calls to AI providers, social media APIs, and `cryptoprices.cc` are captured as `dependencies`
 - **Structured logging**: all `ILogger<T>` calls flow to the `traces` table with full custom dimensions
-- **Fan-out observability**: per-sender publish outcomes and partial failures are logged independently by `BaseOrchestrator.PostAsync` with structured `customDimensions.platform` and `customDimensions.succeeded` fields
+- **Fan-out observability**: per-sender publish outcomes and partial failures are logged independently by `BaseOrchestrator.PostAsync` with structured `Sender` and `Result` fields
 - **Alerting**: recommended rules cover consecutive errors, high latency, token budget, function downtime, and fan-out partial failures
 
 > 📖 Full setup (resource creation, connection string, `Program.cs` wiring, KQL queries, alert rules, Bicep IaC, and live debugging): **[docs/monitoring.md](docs/monitoring.md)**.
@@ -457,7 +486,9 @@ Key monitoring capabilities at a glance:
 - [x] Configuration externalization
 - [x] AI provider expansion
 - [x] Retry & resilience for external HTTP calls 
-- [x] `FeedOrchestrator` explicit pipeline + tag replacement externalization 
+- [x] Tag replacement externalization — `TagReplacementOptions` hashtag map, no redeployment
+- [x] Workflow DAG orchestration (ADR-006) — legacy `FeedOrchestrator`/`PowerLawOrchestrator` superseded by config-driven `Workflows__*`
+- [x] Config-driven scheduling (`Schedule__N` / `Workflows__*`, `ConfigurationSlotProfileProvider`) — ADR-006 
 - [x] Multi-platform fan-out: single slot publishes to multiple platforms in parallel, AI generated once 
 - [x] Instagram publishing
 - [x] Facebook publishing
