@@ -199,6 +199,9 @@
     "Workflows__Bitcoin__Nodes__3__Parameters__Provider": "FalAi",
     "Workflows__Bitcoin__Nodes__3__Parameters__StepId": "Feed.ImageGeneration",
     "Workflows__Bitcoin__Nodes__3__Parameters__InputKey": "imagePrompt",
+    // Required controls AiImage failure handling (default false = soft failure,
+    // publish without image; true = hard failure, block the workflow when no image).
+    "Workflows__Bitcoin__Nodes__3__Parameters__Required": "false",
     "Workflows__Bitcoin__Nodes__3__OutputKey": "attachedMedia",
     "Workflows__Bitcoin__Nodes__3__NextNodeIds__0": "fan-out-send",
 

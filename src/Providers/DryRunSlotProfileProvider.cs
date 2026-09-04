@@ -37,7 +37,7 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
         var profiles = new List<ScheduledOrchestrationProfile>(_inner.GetProfiles())
         {
             new ScheduledOrchestrationProfile(
-                orchestratorContextKey: "Bitcoin",
+                orchestratorContextKey: "PowerLaw", // "Bitcoin"
                 hour: 9,
                 senderPlatforms: new[] { SenderPlatform.DryRun },
                 orchestratorType: typeof(WorkflowOrchestrator),

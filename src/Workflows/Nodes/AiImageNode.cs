@@ -11,7 +11,9 @@ namespace XPoster.Workflows.Nodes;
 /// <summary>
 /// Generates an image using a dynamically-resolved AI provider.
 /// Adapter for keyed <see cref="ITextToImageProvider"/>.
-/// On failure returns <c>Output=null</c> (soft failure) so the workflow can continue without an image.
+/// Failure behaviour depends on the <c>Required</c> node parameter:
+/// when <c>true</c> a failed/empty image is a hard failure (blocking the workflow);
+/// when <c>false</c> (default) it is a soft failure (workflow continues without an image).
 /// </summary>
 public sealed class AiImageNode : IWorkflowNode
 {
@@ -34,6 +36,7 @@ public sealed class AiImageNode : IWorkflowNode
         var provider = NodeParameterExtractor.GetProvider(input.Parameters);
         var stepId = NodeParameterExtractor.GetParameter<string>(input.Parameters, "StepId");
         var inputKey = NodeParameterExtractor.GetParameter<string>(input.Parameters, "InputKey");
+        var required = NodeParameterExtractor.GetParameter<bool>(input.Parameters, "Required", false);
 
         var promptText = input.Context.GetData<string>(inputKey);
         var stepOptions = _stepOptionsResolver.Resolve(stepId);
@@ -56,7 +59,10 @@ public sealed class AiImageNode : IWorkflowNode
 
         if (imageBytes == null || imageBytes.Length == 0)
         {
-            return new WorkflowNodeResult(true, null, "Image generation returned empty or failed content.");
+            const string error = "Image generation returned empty or failed content.";
+            return required
+                ? new WorkflowNodeResult(false, null, error)
+                : new WorkflowNodeResult(true, null, error);
         }
 
         var media = new MediaAttachment(

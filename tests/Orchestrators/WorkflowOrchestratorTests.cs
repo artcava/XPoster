@@ -13,7 +13,15 @@ public class WorkflowOrchestratorTests
     private static WorkflowDefinition MakeDefinition() =>
         new("Bitcoin", new List<WorkflowNodeDefinition>
         {
-            new("fetch", "FetchRss", new Dictionary<string, object>(), null, new List<string>())
+            new("fetch", "FetchRss", new Dictionary<string, object>(), null, new List<string>()),
+            new("image", "AiImage", new Dictionary<string, object>(), null, new List<string>())
+        });
+
+    private static WorkflowDefinition MakeDefinitionWithoutImage() =>
+        new("PowerLaw", new List<WorkflowNodeDefinition>
+        {
+            new("acquire", "AcquireCryptoValue", new Dictionary<string, object>(), null, new List<string>()),
+            new("build", "BuildPowerLawPost", new Dictionary<string, object>(), null, new List<string>())
         });
 
     private static (WorkflowOrchestrator orchestrator, Mock<IWorkflowEngine> engineMock, WorkflowDefinition definition) CreateOrchestrator(
@@ -100,5 +108,41 @@ public class WorkflowOrchestratorTests
         Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.Facebook, orchestrator.SupportedPlatforms);
+    }
+
+    [Fact]
+    public void ProduceImage_IsFalse_WhenWorkflowHasNoAiImageNode()
+    {
+        var definition = MakeDefinitionWithoutImage();
+        var engineMock = new Mock<IWorkflowEngine>();
+        engineMock
+            .Setup(e => e.ExecuteAsync(definition, It.IsAny<IReadOnlyList<ISender>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new WorkflowExecutionResult(true, new WorkflowContext { SlotKey = "PowerLaw" }, null));
+
+        var orchestrator = new WorkflowOrchestrator(
+            new List<ISender> { new Mock<ISender>().Object }.AsReadOnly(),
+            NullLogger<WorkflowOrchestrator>.Instance,
+            engineMock.Object,
+            definition);
+
+        Assert.False(orchestrator.ProduceImage);
+    }
+
+    [Fact]
+    public void ProduceImage_IsTrue_WhenWorkflowHasAiImageNode()
+    {
+        var (orchestrator, _, _) = CreateOrchestrator(
+            new WorkflowExecutionResult(true, new WorkflowContext { SlotKey = "Bitcoin" }, null));
+
+        Assert.True(orchestrator.ProduceImage);
+    }
+
+    [Fact]
+    public void ProduceImage_Set_ThrowsNotSupported()
+    {
+        var (orchestrator, _, _) = CreateOrchestrator(
+            new WorkflowExecutionResult(true, new WorkflowContext { SlotKey = "Bitcoin" }, null));
+
+        Assert.Throws<NotSupportedException>(() => orchestrator.ProduceImage = false);
     }
 }

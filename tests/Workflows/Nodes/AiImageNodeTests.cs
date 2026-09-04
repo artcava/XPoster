@@ -44,7 +44,7 @@ public class AiImageNodeTests
         return (new AiImageNode(provider, stepResolverMock.Object), providerMock);
     }
 
-    private static WorkflowNodeInput Input(string provider, string stepId, string inputKey, string prompt)
+    private static WorkflowNodeInput Input(string provider, string stepId, string inputKey, string prompt, bool? required = null)
     {
         var ctx = new WorkflowContext { SlotKey = "Test" };
         ctx.SetData(inputKey, prompt);
@@ -54,6 +54,7 @@ public class AiImageNodeTests
             ["StepId"] = stepId,
             ["InputKey"] = inputKey,
         };
+        if (required.HasValue) parameters["Required"] = required.Value;
         return new WorkflowNodeInput(ctx, parameters, Array.Empty<ISender>());
     }
 
@@ -87,6 +88,40 @@ public class AiImageNodeTests
     {
         var (node, _) = CreateNode(imageBytes: Array.Empty<byte>());
         var input = Input("FalAi", "Feed.ImageGeneration", "imagePrompt", "prompt");
+        var result = await node.ExecuteAsync(input, CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.Null(result.Output);
+    }
+
+    [Fact]
+    public async Task Execute_ReturnsFailure_WhenRequired_AndImageMissing()
+    {
+        var (node, _) = CreateNode(imageBytes: null);
+        var input = Input("FalAi", "Feed.ImageGeneration", "imagePrompt", "prompt", required: true);
+        var result = await node.ExecuteAsync(input, CancellationToken.None);
+
+        Assert.False(result.Success);
+        Assert.Null(result.Output);
+        Assert.NotNull(result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task Execute_ReturnsSuccess_WhenRequired_AndImageProduced()
+    {
+        var (node, _) = CreateNode(imageBytes: new byte[] { 0x89, 0x50, 0x4E, 0x47 });
+        var input = Input("FalAi", "Feed.ImageGeneration", "imagePrompt", "prompt", required: true);
+        var result = await node.ExecuteAsync(input, CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.IsType<MediaAttachment>(result.Output);
+    }
+
+    [Fact]
+    public async Task Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()
+    {
+        var (node, _) = CreateNode(imageBytes: null);
+        var input = Input("FalAi", "Feed.ImageGeneration", "imagePrompt", "prompt", required: false);
         var result = await node.ExecuteAsync(input, CancellationToken.None);
 
         Assert.True(result.Success);

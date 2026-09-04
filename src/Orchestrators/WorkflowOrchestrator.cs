@@ -30,7 +30,15 @@ public class WorkflowOrchestrator : BaseOrchestrator
     }
 
     /// <inheritdoc/>
-    public override bool ProduceImage { get; set; } = true;
+    /// <remarks>
+    /// Derived from the workflow DAG: an image is expected only when the workflow
+    /// contains an <c>AiImage</c> node. Not directly assignable.
+    /// </remarks>
+    public override bool ProduceImage
+    {
+        get => _workflowDefinition.Nodes.Any(n => n.Type == "AiImage");
+        set => throw new NotSupportedException("ProduceImage is derived from the workflow DAG and cannot be set directly.");
+    }
 
     /// <inheritdoc/>
     public override IReadOnlyList<SenderPlatform> SupportedPlatforms { get; } =
