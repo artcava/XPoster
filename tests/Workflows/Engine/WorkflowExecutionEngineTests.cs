@@ -11,19 +11,22 @@ namespace XPoster.Tests.Workflows.Engine;
 
 public class WorkflowExecutionEngineTests
 {
-    private sealed class StubNode : IWorkflowNode
+    private sealed class StubNode : ITerminalNode
     {
         public string NodeType { get; }
         public Func<IWorkflowContext, WorkflowNodeResult> Logic { get; }
+        private readonly Action<string> _onExecute;
 
-        public StubNode(string nodeType, Func<IWorkflowContext, WorkflowNodeResult>? logic = null)
+        public StubNode(string nodeType, Action<string> onExecute, Func<IWorkflowContext, WorkflowNodeResult>? logic = null)
         {
             NodeType = nodeType;
+            _onExecute = onExecute;
             Logic = logic ?? (_ => new WorkflowNodeResult(true, null, null));
         }
 
         public Task<WorkflowNodeResult> ExecuteAsync(WorkflowNodeInput input, CancellationToken ct)
         {
+            _onExecute(NodeType);
             var result = Logic(input.Context);
             ct.ThrowIfCancellationRequested();
             return Task.FromResult(result);
@@ -42,10 +45,7 @@ public class WorkflowExecutionEngineTests
             var capturedType = type;
             var capturedLogic = logic;
             services.AddKeyedTransient<IWorkflowNode>(capturedType, (_, _) =>
-            {
-                lock (order) order.Add(capturedType);
-                return new StubNode(capturedType, capturedLogic);
-            });
+                new StubNode(capturedType, t => { lock (order) order.Add(t); }, capturedLogic));
         }
 
         var provider = services.BuildServiceProvider();

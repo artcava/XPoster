@@ -38,6 +38,13 @@ public static class WorkflowServiceCollectionExtensions
                 continue;
 
             var definition = options.ToDefinition(slotKey);
+            var validationError = WorkflowDefinitionValidator.ValidateStructural(definition);
+            if (validationError != null)
+            {
+                throw new InvalidOperationException(
+                    $"Workflow '{slotKey}' is invalid: {validationError}");
+            }
+
             services.AddKeyedSingleton<WorkflowDefinition>(slotKey, definition);
         }
 

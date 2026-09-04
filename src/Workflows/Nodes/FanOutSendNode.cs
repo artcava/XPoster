@@ -14,7 +14,7 @@ namespace XPoster.Workflows.Nodes;
 /// is available, the node re-summarises the original source content for that sender.
 /// Bridges <see cref="MediaAttachment.Data"/> to the legacy <c>Post.Image</c> byte array.
 /// </summary>
-public sealed class FanOutSendNode : IWorkflowNode
+public sealed class FanOutSendNode : ITerminalNode
 {
     /// <inheritdoc />
     public string NodeType => "FanOutSend";

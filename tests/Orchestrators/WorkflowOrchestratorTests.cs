@@ -83,6 +83,7 @@ public class WorkflowOrchestratorTests
         var result = await orchestrator.OrchestrateAsync(CancellationToken.None);
 
         Assert.Empty(result);
+        Assert.False(orchestrator.SendIt);
     }
 
     [Fact]

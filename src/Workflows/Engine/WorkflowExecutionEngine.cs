@@ -34,11 +34,18 @@ public class WorkflowExecutionEngine : IWorkflowEngine
         var context = new WorkflowContext { SlotKey = definition.SlotKey };
         var nodeMap = definition.Nodes.ToDictionary(n => n.Id);
 
-        var validationError = ValidateDag(definition, nodeMap);
+        var validationError = WorkflowDefinitionValidator.ValidateStructural(definition);
         if (validationError != null)
         {
             _logger.LogError("Workflow '{SlotKey}' validation failed: {Error}", definition.SlotKey, validationError);
             return new WorkflowExecutionResult(false, context, validationError);
+        }
+
+        var contractError = WorkflowDefinitionValidator.ValidateTerminalNodeContract(definition, _serviceProvider);
+        if (contractError != null)
+        {
+            _logger.LogError("Workflow '{SlotKey}' contract validation failed: {Error}", definition.SlotKey, contractError);
+            return new WorkflowExecutionResult(false, context, contractError);
         }
 
         var inDegree = definition.Nodes.ToDictionary(n => n.Id, _ => 0);
@@ -98,55 +105,5 @@ public class WorkflowExecutionEngine : IWorkflowEngine
         }
 
         return new WorkflowExecutionResult(true, context, null);
-    }
-
-    /// <summary>
-    /// Validates the DAG for missing node references and cycles.
-    /// </summary>
-    /// <returns>An error message when invalid, or <c>null</c> when valid.</returns>
-    private static string? ValidateDag(WorkflowDefinition definition, Dictionary<string, WorkflowNodeDefinition> nodeMap)
-    {
-        if (definition.Nodes.Count == 0)
-            return null;
-
-        foreach (var node in definition.Nodes)
-        {
-            foreach (var nextId in node.NextNodeIds)
-            {
-                if (!nodeMap.ContainsKey(nextId))
-                    return $"Node '{node.Id}' references non-existent node '{nextId}'.";
-            }
-        }
-
-        var visited = new HashSet<string>();
-        var inStack = new HashSet<string>();
-
-        bool HasCycle(string nodeId)
-        {
-            if (inStack.Contains(nodeId)) return true;
-            if (visited.Contains(nodeId)) return false;
-
-            visited.Add(nodeId);
-            inStack.Add(nodeId);
-
-            if (nodeMap.TryGetValue(nodeId, out var nodeDef))
-            {
-                foreach (var nextId in nodeDef.NextNodeIds)
-                {
-                    if (HasCycle(nextId)) return true;
-                }
-            }
-
-            inStack.Remove(nodeId);
-            return false;
-        }
-
-        foreach (var nodeId in nodeMap.Keys)
-        {
-            if (HasCycle(nodeId))
-                return $"Cycle detected involving node '{nodeId}'.";
-        }
-
-        return null;
     }
 }

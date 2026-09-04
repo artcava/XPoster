@@ -80,11 +80,11 @@ public class WorkflowOrchestrator : BaseOrchestrator
             return postMap!.AsReadOnly();
         }
 
-        _logger.LogWarning(
-            "[WorkflowOrchestrator] Workflow '{SlotKey}' completed without {Key} in context.",
+        _logger.LogError(
+            "[WorkflowOrchestrator] Workflow '{SlotKey}' completed without {Key} in context. Nothing will be dispatched.",
             _workflowDefinition.SlotKey,
             WorkflowContextKeys.SendResults);
-
+        _sendIt = false;
         return new Dictionary<SenderPlatform, Post?>().AsReadOnly();
     }
 }
