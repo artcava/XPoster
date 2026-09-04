@@ -5,7 +5,6 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "CronSchedule": "0 0 6,8,14,16 * * *",
     "ContainerPollingSchedule": "0 */2 * * * *",
-    "AiProvider": "OpenAi",
 
     // -----------------------------------------------------------------------
     // Local development slot override.
@@ -13,7 +12,7 @@
     // to force that orchestrator slot without waiting for the real clock.
     // Examples:
     //   "ForceHour": "6"   → Bitcoin   / WorkflowOrchestrator (5-node DAG)
-    //   "ForceHour": "9"   → DryRun    / WorkflowOrchestrator (when EnableDryRunSlot=true)
+    //   "ForceHour": "9"   → DryRun  / WorkflowOrchestrator (a Schedule slot with dry-run senders)
     //   "ForceHour": "14"  → PowerLaw / WorkflowOrchestrator (3-node DAG)
     // Remove or leave empty to use the real UTC clock (production behaviour).
     // -----------------------------------------------------------------------
@@ -22,47 +21,39 @@
     // -----------------------------------------------------------------------
     // Dry-run testing (local integration testing without social platform publishing).
     //
-    // To test the full pipeline — including Key Vault connectivity and AI provider
-    // output — without posting to X/Twitter, LinkedIn, or Instagram:
+    // A dry-run slot is just an ordinary Schedule entry whose sender list contains
+    // one or both dry-run platforms ("DryRunMaxLength" and/or "DryRunShortLength").
+    // They log the post instead of publishing, so you can exercise the full
+    // workflow (RSS, AI providers, image, tag replacement) against real
+    // credentials without posting anywhere.
     //
-    //   1. Set "EnableDryRunSlot": "true"  → registers DryRunSlotProfileProvider,
-    //      which appends a DryRunSend entry at hour 9 to the production schedule.
-    //   2. Set "ForceHour": "9"            → forces the clock to hour 9 so the
-    //      dry-run slot is selected at startup (runs the WorkflowOrchestrator).
-    //   3. Set "AiProvider" to the provider under test: "OpenAi", "AzureFoundry",
-    //      "DeepSeekWithFal", or "Perplexity".
-    //   4. Ensure KEYVAULT_URI is set and `az login` has been run.
-    //   5. Run the function — orchestration executes normally but no post is published.
+    // To run a dry-run locally:
+    //   1. Add a Schedule slot with the dry-run senders you want, e.g.:
+    //        "Schedule__2__Hour":           "9",
+    //        "Schedule__2__Workflow":       "Bitcoin",
+    //        "Schedule__2__Senders__0":     "DryRunMaxLength",
+    //        "Schedule__2__Senders__1":     "DryRunShortLength",
+    //   2. Set "ForceHour": "9" so the dry-run slot is the only one selected at startup.
+    //   3. Run the function, then switch off / stop it when done.
     //
-    // The DryRunSender will:
-    //   - Probe configuration by checking that "XApiKey" is non-empty
-    //     (verifies that AddAzureKeyVault loaded secrets successfully)
-    //   - Log the post content (character count + full text) and image presence
-    //   - Return true without calling any social platform API
+    // The AI provider used is the one each workflow node declares via its
+    // Workflows__<key>__Nodes__N__Parameters__Provider setting.
     //
-    // NOTE: EnableDryRunSlot defaults to false. In production this key must be
-    // absent or set to "false" — no code changes or comments required.
+    // IMPORTANT — do NOT put a dry-run sender in production (Azure) app settings:
+    // they must exist only in your local local.settings.json. If absent, no
+    // dry-run sender is ever resolved and nothing is dry-run.
     // -----------------------------------------------------------------------
-    "EnableDryRunSlot": "true",
 
     // -----------------------------------------------------------------------
     // Dry-run multi-sender fan-out — optional, for local testing of the FanOut
     // re-summarisation path without publishing anywhere.
     //
-    // When the DryRunSenders section is present, the dry-run slot resolves ONE
-    // DryRunSender per entry (each with its own MaxLength). FanOutSendNode then
-    // orders senders by descending MessageMaxLength and resumes over-long text
-    // (via the FallbackSourceKey + AiText re-summarisation branch) for senders
-    // whose limit is exceeded.
-    //
-    // Below: sender 0 is unlimited (int.MaxValue) and serves as the primary;
-    // sender 1 has a 100-char limit, forcing a re-summarised variant.
-    //
-    // Remove/empty this section (or omit it) to fall back to a single unlimited
-    // dry-run sender (the original behaviour).
+    // Using both "DryRunMaxLength" (unlimited, int.MaxValue — serves as the
+    // primary sender) and "DryRunShortLength" (fixed 50-char limit) forces a
+    // re-summarised variant for the short sender. FanOutSendNode orders senders
+    // by descending MessageMaxLength and re-summarises over-long text (via the
+    // FallbackSourceKey + AiText branch) for senders whose limit is exceeded.
     // -----------------------------------------------------------------------
-    "DryRunSenders__0__MaxLength": "2147483647",
-    "DryRunSenders__1__MaxLength": "100",
 
     // -----------------------------------------------------------------------
     // Azure Key Vault — all sender credentials are loaded via the
@@ -209,6 +200,7 @@
     "Workflows__Bitcoin__Nodes__4__Type": "FanOutSend",
     "Workflows__Bitcoin__Nodes__4__Parameters__TextKey": "baseSummary",
     "Workflows__Bitcoin__Nodes__4__Parameters__FallbackSourceKey": "sourceContent",
+    "Workflows__Bitcoin__Nodes__4__Parameters__StepId": "Feed.Summary",
     "Workflows__Bitcoin__Nodes__4__Parameters__MediaKey": "attachedMedia",
 
     // -----------------------------------------------------------------------
@@ -267,7 +259,8 @@
     // "EnableDryRunSlot" to "true" and add its Schedule entry:
     //   "Schedule__2__Hour": "9",
     //   "Schedule__2__Workflow": "Bitcoin",
-    //   "Schedule__2__Senders__0": "DryRun",
+    //   "Schedule__2__Senders__0": "DryRunMaxLength", // MessageMaxLength = int.MaxLength
+    //   "Schedule__2__Senders__0": "DryRunShortLength", // MessageMaxLength = 100
 
     // -----------------------------------------------------------------------
     // Tag replacement provider — word-to-hashtag map applied to generated summaries.

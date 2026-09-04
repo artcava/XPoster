@@ -107,13 +107,13 @@ public class FanOutSendNodeTests
     }
 
     [Fact]
-    public async Task Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForDryRun()
+    public async Task Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForWideSender()
     {
         var (node, textMock, tagMock) = CreateNode();
         var wideMock = new Mock<ISender>();
-        SetupSender(wideMock, SenderPlatform.DryRun, int.MaxValue);
+        SetupSender(wideMock, SenderPlatform.DryRunMaxLength, int.MaxValue);
         var smallMock = new Mock<ISender>();
-        SetupSender(smallMock, SenderPlatform.DryRun, 100);
+        SetupSender(smallMock, SenderPlatform.DryRunShortLength, 50);
 
         var longText = new string('A', 400);
         var input = Input(longText, sourceContent: "this is the fallback source", stepId: "Feed.Summary", senders: new[] { wideMock.Object, smallMock.Object });
@@ -123,37 +123,40 @@ public class FanOutSendNodeTests
         var postMap = Assert.IsType<Dictionary<SenderPlatform, Post?>>(result.Output);
 
         textMock.Verify(p => p.GenerateTextAsync(
-            It.Is<PromptRequest>(r => r.InputText == "this is the fallback source" && r.MaxOutputLength == 100),
+            It.Is<PromptRequest>(r => r.InputText == "this is the fallback source" && r.MaxOutputLength == 50),
             It.IsAny<CancellationToken>()), Times.Once);
         tagMock.Verify(t => t.Apply(longText), Times.Once);
 
-        // Post map is keyed solely by SenderPlatform (a single legacy dispatch contract);
-        // the two DryRun senders share the DryRun entry, so it holds the last variant written —
-        // the re-summarised text for the small sender, which is processed after the wide one.
-        Assert.NotNull(postMap);
+        // Distinct platforms key distinct entries: the wide sender keeps the full text,
+        // the short sender holds the re-summarised variant.
+        Assert.Equal(longText, postMap[SenderPlatform.DryRunMaxLength]!.Content);
+        Assert.Equal("re-summarised", postMap[SenderPlatform.DryRunShortLength]!.Content);
         Assert.False(postMap.ContainsKey(SenderPlatform.X));
     }
 
     [Fact]
-    public async Task Execute_TwoSenders_SamePlatform_ReSummarisationRunsPerSender()
+    public async Task Execute_TwoSenders_DistinctPlatforms_ReSummarisationRunsPerSender()
     {
         var (node, textMock, _) = CreateNode();
         var wideMock = new Mock<ISender>();
-        SetupSender(wideMock, SenderPlatform.DryRun, 300);
+        SetupSender(wideMock, SenderPlatform.DryRunMaxLength, 300);
         var smallMock = new Mock<ISender>();
-        SetupSender(smallMock, SenderPlatform.DryRun, 100);
+        SetupSender(smallMock, SenderPlatform.DryRunShortLength, 50);
 
         var longText = new string('B', 350);
         var input = Input(longText, sourceContent: "src", stepId: "Feed.Summary", senders: new[] { wideMock.Object, smallMock.Object });
         var result = await node.ExecuteAsync(input, CancellationToken.None);
 
         Assert.True(result.Success);
+        var postMap = Assert.IsType<Dictionary<SenderPlatform, Post?>>(result.Output);
         textMock.Verify(p => p.GenerateTextAsync(
             It.Is<PromptRequest>(r => r.InputText == "src" && r.MaxOutputLength == 300),
             It.IsAny<CancellationToken>()), Times.Once);
         textMock.Verify(p => p.GenerateTextAsync(
-            It.Is<PromptRequest>(r => r.InputText == "src" && r.MaxOutputLength == 100),
+            It.Is<PromptRequest>(r => r.InputText == "src" && r.MaxOutputLength == 50),
             It.IsAny<CancellationToken>()), Times.Once);
+        Assert.True(postMap.ContainsKey(SenderPlatform.DryRunMaxLength));
+        Assert.True(postMap.ContainsKey(SenderPlatform.DryRunShortLength));
     }
 
     [Fact]

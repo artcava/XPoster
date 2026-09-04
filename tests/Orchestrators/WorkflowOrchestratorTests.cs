@@ -103,7 +103,8 @@ public class WorkflowOrchestratorTests
         Assert.Equal("WorkflowOrchestrator", orchestrator.Name);
         Assert.True(orchestrator.SendIt);
         Assert.True(orchestrator.ProduceImage);
-        Assert.DoesNotContain(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
+        Assert.DoesNotContain(SenderPlatform.DryRunMaxLength, orchestrator.SupportedPlatforms);
+        Assert.DoesNotContain(SenderPlatform.DryRunShortLength, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);

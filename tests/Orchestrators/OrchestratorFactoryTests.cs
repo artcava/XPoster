@@ -5,7 +5,6 @@ using XPoster.Contracts;
 using XPoster.Models;
 using XPoster.Orchestrators;
 using XPoster.Providers;
-using XPoster.SenderPlugins;
 using XPoster.Workflows.Engine;
 
 namespace XPoster.Tests.Orchestrators;
@@ -23,7 +22,6 @@ public class OrchestratorFactoryTests
     private readonly Mock<IServiceProvider> _mockServiceProvider;
     private readonly Mock<ILogger<OrchestratorFactory>> _mockLogger;
     private readonly Mock<ITimeProvider> _mockTimeProvider;
-    private readonly Mock<IDryRunSenderSource> _mockDryRunSenderSource;
 
     // ---------------------------------------------------------------------------
     // Helpers: profile builders
@@ -44,7 +42,6 @@ public class OrchestratorFactoryTests
         _mockServiceProvider = new Mock<IServiceProvider>();
         _mockLogger = new Mock<ILogger<OrchestratorFactory>>();
         _mockTimeProvider = new Mock<ITimeProvider>();
-        _mockDryRunSenderSource = new Mock<IDryRunSenderSource>();
 
         SetupMocksForOrchestratorFactory();
     }
@@ -56,7 +53,7 @@ public class OrchestratorFactoryTests
     [Theory]
     [InlineData(SenderPlatform.LinkedIn)]
     [InlineData(SenderPlatform.X)]
-    [InlineData(SenderPlatform.DryRun)]
+    [InlineData(SenderPlatform.DryRunMaxLength)]
     public void Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot(
         SenderPlatform platform)
     {
@@ -132,44 +129,6 @@ public class OrchestratorFactoryTests
     }
 
     // ---------------------------------------------------------------------------
-    // Dry-run sender routing
-    // ---------------------------------------------------------------------------
-
-    [Fact]
-    public void Resolve_ForDryRunProfile_ResolvesSendersFromTheDryRunSource()
-    {
-        const int hour = 9;
-        var profile = WorkflowProfile("Bitcoin", hour,
-            new List<SenderPlatform> { SenderPlatform.DryRun }.AsReadOnly());
-
-        _mockDryRunSenderSource
-            .Setup(s => s.Resolve())
-            .Returns(new List<ISender> { new Mock<ISender>().Object }.AsReadOnly());
-
-        var factory = CreateFactoryWithProfiles(hour, profile);
-
-        Assert.IsType<WorkflowOrchestrator>(factory.Resolve());
-        _mockDryRunSenderSource.Verify(s => s.Resolve(), Times.Once);
-    }
-
-    [Fact]
-    public void Resolve_ForDryRunProfile_WithSourceFailure_FallsBackToEmptySenders()
-    {
-        const int hour = 9;
-        var profile = WorkflowProfile("Bitcoin", hour,
-            new List<SenderPlatform> { SenderPlatform.DryRun }.AsReadOnly());
-
-        _mockDryRunSenderSource
-            .Setup(s => s.Resolve())
-            .Throws(new InvalidOperationException("boom"));
-
-        var factory = CreateFactoryWithProfiles(hour, profile);
-
-        Assert.IsType<WorkflowOrchestrator>(factory.Resolve());
-        _mockDryRunSenderSource.Verify(s => s.Resolve(), Times.Once);
-    }
-
-    // ---------------------------------------------------------------------------
     // Sender wiring
     // ---------------------------------------------------------------------------
 
@@ -178,6 +137,8 @@ public class OrchestratorFactoryTests
     [InlineData(SenderPlatform.X)]
     [InlineData(SenderPlatform.Instagram)]
     [InlineData(SenderPlatform.Facebook)]
+    [InlineData(SenderPlatform.DryRunMaxLength)]
+    [InlineData(SenderPlatform.DryRunShortLength)]
     public void Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform(SenderPlatform platform)
     {
         var factory = CreateFactoryWithProfiles(10, WorkflowProfile("Bitcoin", 10,
@@ -211,27 +172,6 @@ public class OrchestratorFactoryTests
     }
 
     // ---------------------------------------------------------------------------
-    // DryRunSlotProfileProvider decorator
-    // ---------------------------------------------------------------------------
-
-    [Fact]
-    public void DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()
-    {
-        var innerProfile = WorkflowProfile("Bitcoin", 6,
-            new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly());
-
-        var mockInner = new Mock<ISlotProfileProvider>();
-        mockInner.Setup(p => p.GetProfiles())
-            .Returns(new List<ScheduledOrchestrationProfile> { innerProfile });
-
-        var provider = new DryRunSlotProfileProvider(mockInner.Object);
-        var profiles = provider.GetProfiles();
-
-        Assert.Equal(2, profiles.Count);
-        Assert.Contains(profiles, p => p.SenderPlatforms.Contains(SenderPlatform.DryRun));
-    }
-
-    // ---------------------------------------------------------------------------
     // SupportedPlatforms contract
     // ---------------------------------------------------------------------------
 
@@ -247,7 +187,8 @@ public class OrchestratorFactoryTests
         Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.Facebook, orchestrator.SupportedPlatforms);
-        Assert.DoesNotContain(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
+        Assert.DoesNotContain(SenderPlatform.DryRunMaxLength, orchestrator.SupportedPlatforms);
+        Assert.DoesNotContain(SenderPlatform.DryRunShortLength, orchestrator.SupportedPlatforms);
     }
 
     [Fact]
@@ -283,7 +224,7 @@ public class OrchestratorFactoryTests
     }
 
     private OrchestratorFactory CreateFactory(ISlotProfileProvider profileProvider) =>
-        new(_mockServiceProvider.Object, _mockLogger.Object, _mockTimeProvider.Object, profileProvider, new Mock<IWorkflowEngine>().Object, _mockDryRunSenderSource.Object);
+        new(_mockServiceProvider.Object, _mockLogger.Object, _mockTimeProvider.Object, profileProvider, new Mock<IWorkflowEngine>().Object);
 
     private void SetupMocksForOrchestratorFactory()
     {
@@ -312,6 +253,12 @@ public class OrchestratorFactoryTests
         keyedProvider
             .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Facebook))
             .Returns(mockFbSender.Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.DryRunMaxLength))
+            .Returns(new Mock<ISender>().Object);
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.DryRunShortLength))
+            .Returns(new Mock<ISender>().Object);
 
         foreach (var workflowKey in new[] { "Bitcoin", "PowerLaw" })
         {
@@ -319,9 +266,5 @@ public class OrchestratorFactoryTests
                 .Setup(sp => sp.GetKeyedService(typeof(WorkflowDefinition), workflowKey))
                 .Returns(new WorkflowDefinition(workflowKey, new List<WorkflowNodeDefinition>()));
         }
-
-        _mockDryRunSenderSource
-            .Setup(s => s.Resolve())
-            .Returns(new List<ISender> { new Mock<ISender>().Object }.AsReadOnly());
     }
 }

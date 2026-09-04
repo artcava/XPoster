@@ -77,17 +77,11 @@ builder.Services.AddXPosterAiProviders();
 
 // ISlotProfileProvider registration — the orchestration schedule is fully config-driven
 // (the "Schedule" configuration section, see ConfigurationSlotProfileProvider).
-//   EnableDryRunSlot = true   → DryRunSlotProfileProvider decorates the config provider (local-only dry-run slot)
-//   All other environments     → ConfigurationSlotProfileProvider (production schedule)
-var enableDryRunRaw = builder.Configuration["EnableDryRunSlot"];
-var enableDryRun = bool.TryParse(enableDryRunRaw, out var parsed) && parsed;
-
+// A dry-run slot is just an ordinary Schedule entry with a DryRun sender; there is no
+// separate provider/decorator. DryRun must never be configured in production.
 builder.Services.AddSingleton<ConfigurationSlotProfileProvider>();
 builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
-{
-    var configProvider = sp.GetRequiredService<ConfigurationSlotProfileProvider>();
-    return enableDryRun ? new DryRunSlotProfileProvider(configProvider) : configProvider;
-});
+    sp.GetRequiredService<ConfigurationSlotProfileProvider>());
 
 builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 

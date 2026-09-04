@@ -22,7 +22,6 @@ public class OrchestratorFactory : IOrchestratorFactory
     private readonly ITimeProvider _timeProvider;
     private readonly ISlotProfileProvider _slotProfileProvider;
     private readonly IWorkflowEngine _workflowEngine;
-    private readonly IDryRunSenderSource _dryRunSenderSource;
 
     /// <summary>
     /// Initialises a new instance of <see cref="OrchestratorFactory"/>.
@@ -32,21 +31,18 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// <param name="timeProvider">Time provider used to determine current hour slot.</param>
     /// <param name="slotProfileProvider">Provider that supplies the scheduled orchestration profiles.</param>
     /// <param name="workflowEngine">Workflow DAG engine used by <see cref="WorkflowOrchestrator"/> slots.</param>
-    /// <param name="dryRunSenderSource">Source of the ordered dry-run senders for dry-run slots.</param>
     public OrchestratorFactory(
         IServiceProvider serviceProvider,
         ILogger<OrchestratorFactory> log,
         ITimeProvider timeProvider,
         ISlotProfileProvider slotProfileProvider,
-        IWorkflowEngine workflowEngine,
-        IDryRunSenderSource dryRunSenderSource)
+        IWorkflowEngine workflowEngine)
     {
         _serviceProvider = serviceProvider;
         _log = log;
         _timeProvider = timeProvider;
         _slotProfileProvider = slotProfileProvider;
         _workflowEngine = workflowEngine;
-        _dryRunSenderSource = dryRunSenderSource;
     }
 
     /// <summary>
@@ -122,22 +118,6 @@ public class OrchestratorFactory : IOrchestratorFactory
 
     private IEnumerable<ISender> ResolveSenders(SenderPlatform platform)
     {
-        // The dry-run slot can fan out to several no-op senders with distinct limits,
-        // configured under the DryRunSenders section. All other platforms resolve a
-        // single keyed sender.
-        if (platform == SenderPlatform.DryRun)
-        {
-            try
-            {
-                return _dryRunSenderSource.Resolve();
-            }
-            catch (Exception ex)
-            {
-                _log.LogError(ex, "Error resolving dry-run senders for platform {Platform}", platform);
-                return Array.Empty<ISender>();
-            }
-        }
-
         try
         {
             var sender = _serviceProvider.GetKeyedService<ISender>(platform);
