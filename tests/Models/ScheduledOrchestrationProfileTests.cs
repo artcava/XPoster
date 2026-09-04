@@ -69,7 +69,7 @@ public class ScheduledOrchestrationProfileTests
             orchestratorContextKey: null,
             hour: 14,
             senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
-            orchestratorType: typeof(PowerLawOrchestrator));
+            orchestratorType: typeof(WorkflowOrchestrator));
 
         Assert.Null(profile.TextProvider);
         Assert.Null(profile.ImageProvider);
@@ -150,7 +150,7 @@ public class ScheduledOrchestrationProfileTests
             orchestratorContextKey: null,
             hour: 14,
             senderPlatforms: new List<SenderPlatform> { SenderPlatform.LinkedIn }.AsReadOnly(),
-            orchestratorType: typeof(PowerLawOrchestrator));
+            orchestratorType: typeof(WorkflowOrchestrator));
 
         Assert.Null(profile.OrchestratorContextKey);
     }

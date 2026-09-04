@@ -105,6 +105,32 @@ public class WorkflowExecutionEngineTests
     }
 
     [Fact]
+    public async Task Execute_PowerLawChain_AcquireThenBuildThenFanOut_StoresOutputs()
+    {
+        // Mirrors the PowerLaw DAG: acquire-value → build-post → fan-out-send.
+        var (engine, order) = CreateEngine(new()
+        {
+            ["acquire"] = ctx => new(true, 65000m, null),
+            ["build"] = ctx => new(true, "Value of #BTC for the #powerlaw today would be: ...", null),
+            ["fanout"] = ctx => new(true, "sent", null),
+        });
+
+        var def = new WorkflowDefinition("PowerLaw", new List<WorkflowNodeDefinition>
+        {
+            new("acquire", "acquire", new(), OutputKey: "actual", NextNodeIds: new() { "build" }),
+            new("build", "build", new(), OutputKey: "post", NextNodeIds: new() { "fanout" }),
+            new("fanout", "fanout", new(), OutputKey: "send", NextNodeIds: new()),
+        });
+
+        var result = await engine.ExecuteAsync(def, EmptySenders(), CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.Equal(new[] { "acquire", "build", "fanout" }, order);
+        Assert.Equal(65000m, result.Context.GetData<decimal>("actual"));
+        Assert.Equal("Value of #BTC for the #powerlaw today would be: ...", result.Context.GetData<string>("post"));
+    }
+
+    [Fact]
     public async Task Execute_Diamond_ExecutesAllNodes_AndResolvesDependencies()
     {
         var (engine, order) = CreateEngine(new()

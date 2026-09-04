@@ -108,7 +108,8 @@ public class DefaultSlotProfileProviderTests
     {
         var profile = _provider.GetProfiles().Single(p => p.Hour == 14);
 
-        Assert.Equal(typeof(PowerLawOrchestrator), profile.OrchestratorType);
+        Assert.Equal(typeof(WorkflowOrchestrator), profile.OrchestratorType);
+        Assert.Equal("PowerLaw", profile.OrchestratorContextKey);
         Assert.Contains(SenderPlatform.LinkedIn, profile.SenderPlatforms);
         Assert.Contains(SenderPlatform.X, profile.SenderPlatforms);
     }

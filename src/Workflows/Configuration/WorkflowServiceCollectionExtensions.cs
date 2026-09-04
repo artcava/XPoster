@@ -28,6 +28,8 @@ public static class WorkflowServiceCollectionExtensions
         services.AddKeyedTransient<IWorkflowNode, AiTextNode>("AiText");
         services.AddKeyedTransient<IWorkflowNode, AiImageNode>("AiImage");
         services.AddKeyedTransient<IWorkflowNode, FanOutSendNode>("FanOutSend");
+        services.AddKeyedTransient<IWorkflowNode, AcquireCryptoValueNode>("AcquireCryptoValue");
+        services.AddKeyedTransient<IWorkflowNode, BuildPowerLawPostNode>("BuildPowerLawPost");
 
         var workflowsSection = configuration.GetSection("Workflows");
         foreach (var slotSection in workflowsSection.GetChildren())

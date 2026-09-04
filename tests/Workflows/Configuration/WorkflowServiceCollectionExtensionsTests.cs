@@ -29,6 +29,19 @@ public class WorkflowServiceCollectionExtensionsTests
                 ["Workflows:Other:Nodes:0:NextNodeIds:0"] = "fanout",
                 ["Workflows:Other:Nodes:1:Id"] = "fanout",
                 ["Workflows:Other:Nodes:1:Type"] = "FanOutSend",
+                ["Workflows:PowerLaw:Nodes:0:Id"] = "acquire",
+                ["Workflows:PowerLaw:Nodes:0:Type"] = "AcquireCryptoValue",
+                ["Workflows:PowerLaw:Nodes:0:Parameters:Symbol"] = "BTC",
+                ["Workflows:PowerLaw:Nodes:0:OutputKey"] = "actual",
+                ["Workflows:PowerLaw:Nodes:0:NextNodeIds:0"] = "build",
+                ["Workflows:PowerLaw:Nodes:1:Id"] = "build",
+                ["Workflows:PowerLaw:Nodes:1:Type"] = "BuildPowerLawPost",
+                ["Workflows:PowerLaw:Nodes:1:Parameters:ActualValueKey"] = "actual",
+                ["Workflows:PowerLaw:Nodes:1:OutputKey"] = "post",
+                ["Workflows:PowerLaw:Nodes:1:NextNodeIds:0"] = "fanout",
+                ["Workflows:PowerLaw:Nodes:2:Id"] = "fanout",
+                ["Workflows:PowerLaw:Nodes:2:Type"] = "FanOutSend",
+                ["Workflows:PowerLaw:Nodes:2:Parameters:TextKey"] = "post",
             })
             .Build();
     }
@@ -42,6 +55,8 @@ public class WorkflowServiceCollectionExtensionsTests
             .AddSingleton<IFeedService>(new Mock<IFeedService>().Object)
             .AddSingleton<ITagReplacementProvider>(new Mock<ITagReplacementProvider>().Object)
             .AddSingleton<ITagReplacementService>(new Mock<ITagReplacementService>().Object)
+            .AddSingleton<ICryptoService>(new Mock<ICryptoService>().Object)
+            .AddSingleton<ITimeProvider>(new Mock<ITimeProvider>().Object)
             .AddWorkflows(configuration)
             .BuildServiceProvider();
     }
@@ -65,6 +80,8 @@ public class WorkflowServiceCollectionExtensionsTests
     [InlineData("AiText", typeof(AiTextNode))]
     [InlineData("AiImage", typeof(AiImageNode))]
     [InlineData("FanOutSend", typeof(FanOutSendNode))]
+    [InlineData("AcquireCryptoValue", typeof(AcquireCryptoValueNode))]
+    [InlineData("BuildPowerLawPost", typeof(BuildPowerLawPostNode))]
     public void AddWorkflows_Registers_KeyedNodes(string key, Type nodeType)
     {
         var provider = BuildProvider();
@@ -86,6 +103,13 @@ public class WorkflowServiceCollectionExtensionsTests
         var other = provider.GetRequiredKeyedService<WorkflowDefinition>("Other");
         Assert.Equal("Other", other.SlotKey);
         Assert.Equal(2, other.Nodes.Count);
+
+        var powerLaw = provider.GetRequiredKeyedService<WorkflowDefinition>("PowerLaw");
+        Assert.Equal("PowerLaw", powerLaw.SlotKey);
+        Assert.Equal(3, powerLaw.Nodes.Count);
+        Assert.Equal("AcquireCryptoValue", powerLaw.Nodes[0].Type);
+        Assert.Equal("BuildPowerLawPost", powerLaw.Nodes[1].Type);
+        Assert.Equal("FanOutSend", powerLaw.Nodes[2].Type);
     }
 
     [Fact]

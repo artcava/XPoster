@@ -14,7 +14,7 @@
     // Examples:
     //   "ForceHour": "6"   → Bitcoin   / WorkflowOrchestrator (5-node DAG)
     //   "ForceHour": "9"   → DryRun    / WorkflowOrchestrator (when EnableDryRunSlot=true)
-    //   "ForceHour": "14"  → Bitcoin   / PowerLawOrchestrator
+    //   "ForceHour": "14"  → PowerLaw / WorkflowOrchestrator (3-node DAG)
     // Remove or leave empty to use the real UTC clock (production behaviour).
     // -----------------------------------------------------------------------
     "ForceHour": "9",
@@ -207,6 +207,33 @@
     "Workflows__Bitcoin__Nodes__4__Parameters__TextKey": "baseSummary",
     "Workflows__Bitcoin__Nodes__4__Parameters__FallbackSourceKey": "sourceContent",
     "Workflows__Bitcoin__Nodes__4__Parameters__MediaKey": "attachedMedia",
+
+    // -----------------------------------------------------------------------
+    // PowerLaw slot — 3-node deterministic pipeline (no AI, no image):
+    // acquire-value → build-post → fan-out-send.
+    //
+    // BuildPowerLawPostNode reads the acquired price from the context key given
+    // by its ActualValueKey parameter ("PowerLaw.ActualValue"), which is the
+    // OutputKey of the acquire node. The Symbol parameter is independent per
+    // node, so the workflow can target any crypto (e.g. "ETH") by changing it.
+    // -----------------------------------------------------------------------
+
+    "Workflows__PowerLaw__Nodes__0__Id": "acquire-value",
+    "Workflows__PowerLaw__Nodes__0__Type": "AcquireCryptoValue",
+    "Workflows__PowerLaw__Nodes__0__Parameters__Symbol": "BTC",
+    "Workflows__PowerLaw__Nodes__0__OutputKey": "PowerLaw.ActualValue",
+    "Workflows__PowerLaw__Nodes__0__NextNodeIds__0": "build-post",
+
+    "Workflows__PowerLaw__Nodes__1__Id": "build-post",
+    "Workflows__PowerLaw__Nodes__1__Type": "BuildPowerLawPost",
+    "Workflows__PowerLaw__Nodes__1__Parameters__Symbol": "BTC",
+    "Workflows__PowerLaw__Nodes__1__Parameters__ActualValueKey": "PowerLaw.ActualValue",
+    "Workflows__PowerLaw__Nodes__1__OutputKey": "PowerLaw.PostText",
+    "Workflows__PowerLaw__Nodes__1__NextNodeIds__0": "fan-out-send",
+
+    "Workflows__PowerLaw__Nodes__2__Id": "fan-out-send",
+    "Workflows__PowerLaw__Nodes__2__Type": "FanOutSend",
+    "Workflows__PowerLaw__Nodes__2__Parameters__TextKey": "PowerLaw.PostText",
 
     // -----------------------------------------------------------------------
     // Legacy Feed slot context — deprecated, now unused by the workflow engine.

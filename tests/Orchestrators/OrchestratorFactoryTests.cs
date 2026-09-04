@@ -46,9 +46,9 @@ public class OrchestratorFactoryTests
     private static ScheduledOrchestrationProfile PowerLawProfile(
         int hour,
         SenderPlatform platform = SenderPlatform.LinkedIn) =>
-        new(null, hour,
+        new("PowerLaw", hour,
             new List<SenderPlatform> { platform }.AsReadOnly(),
-            typeof(PowerLawOrchestrator));
+            typeof(WorkflowOrchestrator));
 
     public OrchestratorFactoryTests()
     {
@@ -66,8 +66,6 @@ public class OrchestratorFactoryTests
     [InlineData(typeof(FeedOrchestrator), SenderPlatform.LinkedIn)]
     [InlineData(typeof(FeedOrchestrator), SenderPlatform.X)]
     [InlineData(typeof(FeedOrchestrator), SenderPlatform.DryRun)]
-    [InlineData(typeof(PowerLawOrchestrator), SenderPlatform.LinkedIn)]
-    [InlineData(typeof(PowerLawOrchestrator), SenderPlatform.X)]
     public void Resolve_Should_ReturnCorrectOrchestratorType_ForGivenSenderProfile(
         Type expectedType, SenderPlatform platform)
     {
@@ -280,50 +278,50 @@ public class OrchestratorFactoryTests
     }
 
     [Fact]
-    public void Resolve_Should_ResolveLinkedInSender_ForPowerLawOrchestrator()
+    public void Resolve_Should_ResolveLinkedInSender_ForPowerLawSlot()
     {
         var factory = CreateFactoryWithProfiles(14, PowerLawProfile(14, SenderPlatform.LinkedIn));
 
         var orchestrator = factory.Resolve();
 
-        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        Assert.IsType<WorkflowOrchestrator>(orchestrator);
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.LinkedIn), Times.Once);
     }
 
     [Fact]
-    public void Resolve_Should_ResolveXSender_ForPowerLawOrchestrator()
+    public void Resolve_Should_ResolveXSender_ForPowerLawSlot()
     {
         var factory = CreateFactoryWithProfiles(16, PowerLawProfile(16, SenderPlatform.X));
 
         var orchestrator = factory.Resolve();
 
-        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        Assert.IsType<WorkflowOrchestrator>(orchestrator);
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.X), Times.Once);
     }
 
 
     [Fact]
-    public void Resolve_Should_ResolveIgSender_ForPowerLawOrchestrator()
+    public void Resolve_Should_ResolveIgSender_ForPowerLawSlot()
     {
         var factory = CreateFactoryWithProfiles(16, PowerLawProfile(16, SenderPlatform.Instagram));
 
         var orchestrator = factory.Resolve();
 
-        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        Assert.IsType<WorkflowOrchestrator>(orchestrator);
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Instagram), Times.Once);
     }
 
     [Fact]
-    public void Resolve_Should_ResolveFbSender_ForPowerLawOrchestrator()
+    public void Resolve_Should_ResolveFbSender_ForPowerLawSlot()
     {
         var factory = CreateFactoryWithProfiles(16, PowerLawProfile(16, SenderPlatform.Facebook));
 
         var orchestrator = factory.Resolve();
 
-        Assert.IsType<PowerLawOrchestrator>(orchestrator);
+        Assert.IsType<WorkflowOrchestrator>(orchestrator);
         var keyedProvider = _mockServiceProvider.As<IKeyedServiceProvider>();
         keyedProvider.Verify(sp => sp.GetKeyedService(typeof(ISender), SenderPlatform.Facebook), Times.Once);
     }
@@ -414,7 +412,7 @@ public class OrchestratorFactoryTests
     }
 
     [Fact]
-    public void Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()
+    public void Resolve_ForWorkflowProfile_DoesNotRequestTextProvider()
     {
         var factory = CreateFactoryWithProfiles(10, PowerLawProfile(10, SenderPlatform.LinkedIn));
         factory.Resolve();
@@ -494,15 +492,16 @@ public class OrchestratorFactoryTests
     }
 
     [Fact]
-    public void PowerLawOrchestrator_SupportedPlatforms_ContainsXAndLinkedIn()
+    public void WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()
     {
         var factory = CreateFactoryWithProfiles(14, PowerLawProfile(14));
-        var orchestrator = Assert.IsType<PowerLawOrchestrator>(factory.Resolve());
+        var orchestrator = Assert.IsType<WorkflowOrchestrator>(factory.Resolve());
 
         Assert.Contains(SenderPlatform.X, orchestrator.SupportedPlatforms);
         Assert.Contains(SenderPlatform.LinkedIn, orchestrator.SupportedPlatforms);
-        Assert.Contains(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
-        Assert.DoesNotContain(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.Instagram, orchestrator.SupportedPlatforms);
+        Assert.Contains(SenderPlatform.Facebook, orchestrator.SupportedPlatforms);
+        Assert.DoesNotContain(SenderPlatform.DryRun, orchestrator.SupportedPlatforms);
     }
 
     [Fact]
@@ -556,11 +555,11 @@ public class OrchestratorFactoryTests
         var mockTextProvider = new Mock<ITextToTextProvider>();
         var mockImageProvider = new Mock<ITextToImageProvider>();
 
-        var mockLoggerPowerLaw = new Mock<ILogger<PowerLawOrchestrator>>();
+        var mockLoggerPowerLaw = new Mock<ILogger<WorkflowOrchestrator>>();
         var mockLoggerFeed = new Mock<ILogger<FeedOrchestrator>>();
         var mockLoggerNo = new Mock<ILogger<NoOrchestrator>>();
 
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<PowerLawOrchestrator>))).Returns(mockLoggerPowerLaw.Object);
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<WorkflowOrchestrator>))).Returns(mockLoggerPowerLaw.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<FeedOrchestrator>))).Returns(mockLoggerFeed.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ILogger<NoOrchestrator>))).Returns(mockLoggerNo.Object);
 
@@ -597,6 +596,11 @@ public class OrchestratorFactoryTests
         keyedProvider
             .Setup(sp => sp.GetKeyedService(typeof(FeedOrchestratorContext), It.IsAny<object>()))
             .Returns(mockFeedContext.Object);
+
+        // PowerLaw slot is a WorkflowOrchestrator; register its workflow definition.
+        keyedProvider
+            .Setup(sp => sp.GetKeyedService(typeof(WorkflowDefinition), "PowerLaw"))
+            .Returns(new WorkflowDefinition("PowerLaw", new List<WorkflowNodeDefinition>()));
 
         _mockDryRunSenderSource
             .Setup(s => s.Resolve())

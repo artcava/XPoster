@@ -12,7 +12,7 @@ namespace XPoster.Providers;
 /// Slots are defined as follows (UTC hours):
 /// <list type="table">
 ///   <item><term>06:00</term><description>Fan-out: WorkflowOrchestrator → LinkedIn (primary), X, Instagram, Facebook.</description></item>
-///   <item><term>14:00</term><description>PowerLawOrchestrator → LinkedIn, X, Facebook.</description></item>
+///   <item><term>14:00</term><description>WorkflowOrchestrator (PowerLaw DAG) → LinkedIn, X, Facebook.</description></item>
 /// </list>
 /// </para>
 /// <para>
@@ -34,10 +34,10 @@ public sealed class DefaultSlotProfileProvider : ISlotProfileProvider
             imageProvider: AiProvider.AzureFoundry),
 
         new ScheduledOrchestrationProfile(
-            orchestratorContextKey: null,
+            orchestratorContextKey: "PowerLaw",
             hour: 14,
             senderPlatforms: new[] { SenderPlatform.LinkedIn, SenderPlatform.X, SenderPlatform.Facebook },
-            orchestratorType: typeof(PowerLawOrchestrator))
+            orchestratorType: typeof(WorkflowOrchestrator))
     }.AsReadOnly();
 
     /// <inheritdoc />
