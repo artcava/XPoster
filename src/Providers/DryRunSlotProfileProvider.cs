@@ -9,9 +9,9 @@ namespace XPoster.Providers;
 /// to the inner provider's schedule.
 /// </summary>
 /// <remarks>
-/// Register this in place of <see cref="DefaultSlotProfileProvider"/> when the
+/// Register this in place of <see cref="ConfigurationSlotProfileProvider"/> when the
 /// <c>EnableDryRunSlot</c> configuration key is <c>true</c> (e.g. in local.settings.json).
-/// This keeps the DryRun profile out of the production binary's hard-coded schedule
+/// This keeps the DryRun profile out of the production schedule
 /// and eliminates the need to comment/uncomment code when switching environments.
 /// </remarks>
 public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
@@ -40,9 +40,7 @@ public sealed class DryRunSlotProfileProvider : ISlotProfileProvider
                 orchestratorContextKey: "PowerLaw", // "Bitcoin"
                 hour: 9,
                 senderPlatforms: new[] { SenderPlatform.DryRun },
-                orchestratorType: typeof(WorkflowOrchestrator),
-                textProvider: AiProvider.OpenAi,
-                imageProvider: AiProvider.OpenAi)
+                orchestratorType: typeof(WorkflowOrchestrator))
         };
 
         return profiles.AsReadOnly();

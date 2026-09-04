@@ -54,8 +54,8 @@ public class OrchestratorFactory : IOrchestratorFactory
     /// Falls back to <see cref="NoOrchestrator"/> when no entry exists for the current hour.
     /// Senders are resolved from <c>profile.SenderPlatforms</c> in declaration order
     /// (descending <c>MessageMaxLength</c> convention); unresolvable platforms are skipped with a warning.
-    /// Text and image capability providers are resolved independently:
-    /// a null result for either interface means the capability is unavailable for this slot.
+    /// Every scheduled slot resolves as a <see cref="WorkflowOrchestrator"/> driven by its
+    /// <see cref="ScheduledOrchestrationProfile.OrchestratorContextKey"/>.
     /// </summary>
     /// <returns>A fully initialised <see cref="BaseOrchestrator"/> instance.</returns>
     public BaseOrchestrator Resolve()
@@ -66,12 +66,7 @@ public class OrchestratorFactory : IOrchestratorFactory
         if (profile == null)
         {
             _log.LogInformation("No slot profile for hour {Hour}, using NoOrchestrator", currentHour);
-            return CreateOrchestratorInstance(
-                typeof(NoOrchestrator),
-                new List<ISender>().AsReadOnly(),
-                null,
-                null,
-                null);
+            return CreateEmptyNoOrchestrator();
         }
 
         var senders = profile.SenderPlatforms
@@ -80,35 +75,13 @@ public class OrchestratorFactory : IOrchestratorFactory
             .AsReadOnly();
 
         _log.LogInformation(
-            "Creating orchestrator {OrchestratorType} for platforms [{SenderPlatforms}] at hour {Hour} with TextProvider={TextProvider} ImageProvider={ImageProvider} ContextKey={ContextKey}",
+            "Creating orchestrator {OrchestratorType} for platforms [{SenderPlatforms}] at hour {Hour} with ContextKey={ContextKey}",
             profile.OrchestratorType.Name,
             string.Join(", ", profile.SenderPlatforms),
             profile.Hour,
-            profile.TextProvider?.ToString() ?? "none",
-            profile.ImageProvider?.ToString() ?? "none",
             profile.OrchestratorContextKey ?? "none");
 
-        if (profile.OrchestratorType == typeof(WorkflowOrchestrator))
-        {
-            return ResolveWorkflowOrchestrator(profile, senders);
-        }
-
-        ITextToTextProvider? textProvider = profile.TextProvider.HasValue
-            ? _serviceProvider.GetKeyedService<ITextToTextProvider>(profile.TextProvider.Value)
-            : null;
-
-        ITextToImageProvider? imageProvider = profile.ImageProvider.HasValue
-            ? _serviceProvider.GetKeyedService<ITextToImageProvider>(profile.ImageProvider.Value)
-            : null;
-
-        FeedOrchestratorContext? feedOrchestratorContext = ResolveFeedOrchestratorContext(profile);
-
-        return CreateOrchestratorInstance(
-            profile.OrchestratorType,
-            senders,
-            textProvider,
-            imageProvider,
-            feedOrchestratorContext);
+        return ResolveWorkflowOrchestrator(profile, senders);
     }
 
     private BaseOrchestrator ResolveWorkflowOrchestrator(
@@ -147,27 +120,6 @@ public class OrchestratorFactory : IOrchestratorFactory
         return new NoOrchestrator(logger);
     }
 
-    private FeedOrchestratorContext? ResolveFeedOrchestratorContext(ScheduledOrchestrationProfile profile)
-    {
-        if (profile.OrchestratorType != typeof(FeedOrchestrator))
-            return null;
-
-        if (string.IsNullOrWhiteSpace(profile.OrchestratorContextKey))
-        {
-            throw new InvalidOperationException(
-                $"Slot at hour {profile.Hour} uses {nameof(FeedOrchestrator)} but does not define {nameof(ScheduledOrchestrationProfile.OrchestratorContextKey)}.");
-        }
-
-        var context = _serviceProvider.GetKeyedService<FeedOrchestratorContext>(profile.OrchestratorContextKey);
-        if (context is null)
-        {
-            throw new InvalidOperationException(
-                $"No {nameof(FeedOrchestratorContext)} is registered for key '{profile.OrchestratorContextKey}'.");
-        }
-
-        return context;
-    }
-
     private IEnumerable<ISender> ResolveSenders(SenderPlatform platform)
     {
         // The dry-run slot can fan out to several no-op senders with distinct limits,
@@ -200,45 +152,5 @@ public class OrchestratorFactory : IOrchestratorFactory
             _log.LogError(ex, "Error resolving sender for platform {Platform}", platform);
             return Array.Empty<ISender>();
         }
-    }
-
-    private BaseOrchestrator CreateOrchestratorInstance(
-        Type orchestratorType,
-        IReadOnlyList<ISender> senders,
-        ITextToTextProvider? textProvider,
-        ITextToImageProvider? imageProvider,
-        FeedOrchestratorContext? feedOrchestratorContext)
-    {
-        var loggerType = typeof(ILogger<>).MakeGenericType(orchestratorType);
-        var logger = _serviceProvider.GetRequiredService(loggerType);
-
-        var ctor = orchestratorType.GetConstructors()
-            .OrderByDescending(c => c.GetParameters().Length)
-            .FirstOrDefault();
-
-        var parameters = ctor?.GetParameters();
-        var args = new List<object?>();
-
-        if (parameters != null)
-        {
-            foreach (var param in parameters)
-            {
-                if (param.ParameterType == typeof(IReadOnlyList<ISender>))
-                    args.Add(senders);
-                else if (param.ParameterType == typeof(ITextToTextProvider))
-                    args.Add(textProvider);
-                else if (param.ParameterType == typeof(ITextToImageProvider))
-                    args.Add(imageProvider);
-                else if (param.ParameterType == typeof(FeedOrchestratorContext))
-                    args.Add(feedOrchestratorContext);
-                else if (param.ParameterType.IsGenericType &&
-                         param.ParameterType.GetGenericTypeDefinition() == typeof(ILogger<>))
-                    args.Add(logger);
-                else
-                    args.Add(_serviceProvider.GetService(param.ParameterType));
-            }
-        }
-
-        return (BaseOrchestrator)Activator.CreateInstance(orchestratorType, args.ToArray())!;
     }
 }

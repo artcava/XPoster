@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using XPoster.Contracts;
 using XPoster.Models;
 using XPoster.Workflows.Engine;

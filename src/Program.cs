@@ -11,7 +11,6 @@ using XPoster.Extensions;
 using XPoster.Models;
 using XPoster.Orchestrators;
 using XPoster.Providers;
-using XPoster.SenderPlugins;
 using XPoster.Services;
 using XPoster.Workflows.Configuration;
 
@@ -73,20 +72,22 @@ else
 // Register AI capability interfaces as keyed services by AiProvider.
 // Each key activates only the capabilities the provider actually supports.
 // Attempting to resolve an unsupported capability returns null via GetKeyedService —
-// this surfaces explicitly at the point of use inside FeedOrchestrator, not silently.
+// this surfaces explicitly at the point of use inside the workflow nodes, not silently.
 builder.Services.AddXPosterAiProviders();
 
-// ISlotProfileProvider registration:
-//   EnableDryRunSlot = true   → DryRunSlotProfileProvider
-//   All other environments     → DefaultSlotProfileProvider
+// ISlotProfileProvider registration — the orchestration schedule is fully config-driven
+// (the "Schedule" configuration section, see ConfigurationSlotProfileProvider).
+//   EnableDryRunSlot = true   → DryRunSlotProfileProvider decorates the config provider (local-only dry-run slot)
+//   All other environments     → ConfigurationSlotProfileProvider (production schedule)
 var enableDryRunRaw = builder.Configuration["EnableDryRunSlot"];
 var enableDryRun = bool.TryParse(enableDryRunRaw, out var parsed) && parsed;
 
-if (enableDryRun)
-    builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
-        new DryRunSlotProfileProvider(new DefaultSlotProfileProvider()));
-else
-    builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
+builder.Services.AddSingleton<ConfigurationSlotProfileProvider>();
+builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
+{
+    var configProvider = sp.GetRequiredService<ConfigurationSlotProfileProvider>();
+    return enableDryRun ? new DryRunSlotProfileProvider(configProvider) : configProvider;
+});
 
 builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 

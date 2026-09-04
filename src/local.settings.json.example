@@ -9,7 +9,7 @@
 
     // -----------------------------------------------------------------------
     // Local development slot override.
-    // Set to a UTC hour (0-23) matching an entry in DefaultSlotProfileProvider
+    // Set to a UTC hour (0-23) matching an entry in the Schedule configuration
     // to force that orchestrator slot without waiting for the real clock.
     // Examples:
     //   "ForceHour": "6"   → Bitcoin   / WorkflowOrchestrator (5-node DAG)
@@ -239,36 +239,35 @@
     "Workflows__PowerLaw__Nodes__2__Parameters__TextKey": "PowerLaw.PostText",
 
     // -----------------------------------------------------------------------
-    // Legacy Feed slot context — deprecated, now unused by the workflow engine.
+    // Schedule — config-driven orchestration slots (see ConfigurationSlotProfileProvider).
     //
-    // The Bitcoin slot has been migrated to the workflow pipeline above
-    // (PromptSteps + Workflows). This FeedSlotContexts__Bitcoin section is
-    // retained temporarily for backward compatibility but is no longer read
-    // by Production/DefaultSlotProfileProvider. It can be removed safely.
+    // Every slot maps to a WorkflowOrchestrator whose workflow key matches a
+    // WorkflowDefinition registered under Workflows__<Workflow>__*. This makes it
+    // possible to schedule any workflow at any hour with no code change or release.
+    //
+    // Flat Azure Functions naming convention (replicates cleanly into Environment
+    // settings on the Azure Function): Schedule__<index>__<field>.
+    //   Hour         : hour of day (0-23) when the slot is active.
+    //   Workflow     : workflow key (must match a Workflows__<key> section above).
+    //   Senders__N   : target sender platform name, e.g. "LinkedIn" or "X".
+    //
+    // The AI provider is NOT selected here — each workflow node chooses its own
+    // provider via Workflows__<key>__Nodes__N__Parameters__Provider (see the
+    // Bitcoin DAG below), so it can differ per node.
     // -----------------------------------------------------------------------
-    "FeedSlotContexts__Bitcoin__FeedUrls__0": "https://cointelegraph.com/rss/tag/bitcoin",
-    "FeedSlotContexts__Bitcoin__FeedUrls__1": "https://www.coindesk.com/arc/outboundfeeds/rss",
+    "Schedule__0__Hour": "6",
+    "Schedule__0__Workflow": "Bitcoin",
+    "Schedule__0__Senders__0": "LinkedIn",
 
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__Role": "Summary",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__SystemPromptTemplate": "You are an assistant that summarizes text concisely. It's very important that you keep summaries under {MaxChars} characters.",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__UserPromptTemplate": "Summarize this text in a few sentences. text: {Text}",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__Temperature": "0.5",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__MaxTokenBudget": "600",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__0__InputTextLabel": "{Text}",
+    "Schedule__1__Hour": "14",
+    "Schedule__1__Workflow": "PowerLaw",
+    "Schedule__1__Senders__0": "LinkedIn",
 
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__Role": "ImagePromptDerivation",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__SystemPromptTemplate": "You are an assistant that generates image prompts for an AI image generation model based on text summaries. Create a concise, vivid prompt in English that reflects the summary's content, includes a Bitcoin-related element (e.g., a coin), and avoids text, signs, or words in the image. Respect content policy for generating images.",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__UserPromptTemplate": "Generate an image prompt based on this summary: {Summary}",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__Temperature": "0.7",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__MaxTokenBudget": "300",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__1__InputTextLabel": "{Summary}",
-
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__Role": "ImageGeneration",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__SystemPromptTemplate": "",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__UserPromptTemplate": "{Text}",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__ImageQuantity": "1",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__ImageSize": "1024x1024",
-    "FeedSlotContexts__Bitcoin__PromptOptions__Steps__2__InputTextLabel": "{Text}",
+    // To add a local-only dry-run slot (logged outgoing, not published), set
+    // "EnableDryRunSlot" to "true" and add its Schedule entry:
+    //   "Schedule__2__Hour": "9",
+    //   "Schedule__2__Workflow": "Bitcoin",
+    //   "Schedule__2__Senders__0": "DryRun",
 
     // -----------------------------------------------------------------------
     // Tag replacement provider — word-to-hashtag map applied to generated summaries.

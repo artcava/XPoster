@@ -4,7 +4,6 @@ namespace XPoster.Workflows.Services;
 
 /// <summary>
 /// Resolves prompt configuration for a workflow step by step identifier.
-/// Replaces the legacy <c>FeedPromptOptions.GetStep(PromptRole)</c> lookup.
 /// </summary>
 public interface IStepOptionsResolver
 {

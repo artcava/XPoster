@@ -3,8 +3,6 @@ namespace XPoster.Workflows.Models;
 /// <summary>
 /// Prompt configuration for a single workflow step, resolved by <c>IStepOptionsResolver</c>
 /// from the <c>PromptSteps:{{StepId}}</c> configuration section.
-/// This is the workflow-layer record and is distinct from the deprecated
-/// <c>XPoster.Models.PromptStepOptions</c> (which requires a <c>PromptRole</c>).
 /// </summary>
 public sealed record PromptStepOptions
 {

@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using XPoster.Contracts;
 using XPoster.Workflows.Abstractions;
 using XPoster.Workflows.Models;
