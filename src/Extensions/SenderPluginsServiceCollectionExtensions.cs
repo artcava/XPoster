@@ -20,7 +20,8 @@ public static class SenderPluginsServiceCollectionExtensions
     ///   <item><term>LinkedIn</term><term>✓</term></item>
     ///   <item><term>Instagram</term><term>✓</term></item>
     ///   <item><term>Facebook</term><term>✓</term></item>
-    ///   <item><term>DryRun</term><term>✓</term></item>
+    ///   <item><term>DryRunMaxLength</term><term>✓</term></item>
+    ///   <item><term>DryRunShortLength</term><term>✓</term></item>
     /// </list>
     /// </remarks>
     public static IServiceCollection AddXPosterSenderPlugins(this IServiceCollection services)
@@ -33,8 +34,9 @@ public static class SenderPluginsServiceCollectionExtensions
         services.AddKeyedTransient<ISender, IgSender>(SenderPlatform.Instagram);
         // Facebook sender plugin
         services.AddKeyedTransient<ISender, FbSender>(SenderPlatform.Facebook);
-        // DryRun sender plugin
-        services.AddKeyedTransient<ISender, DryRunSender>(SenderPlatform.DryRun);
+        // Dry-run sender plugins (local integration testing only)
+        services.AddKeyedTransient<ISender, DryRunMaxLengthSender>(SenderPlatform.DryRunMaxLength);
+        services.AddKeyedTransient<ISender, DryRunShortLengthSender>(SenderPlatform.DryRunShortLength);
 
         return services;
     }

@@ -11,8 +11,8 @@ using XPoster.Extensions;
 using XPoster.Models;
 using XPoster.Orchestrators;
 using XPoster.Providers;
-using XPoster.SenderPlugins;
 using XPoster.Services;
+using XPoster.Workflows.Configuration;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -72,29 +72,24 @@ else
 // Register AI capability interfaces as keyed services by AiProvider.
 // Each key activates only the capabilities the provider actually supports.
 // Attempting to resolve an unsupported capability returns null via GetKeyedService —
-// this surfaces explicitly at the point of use inside FeedOrchestrator, not silently.
+// this surfaces explicitly at the point of use inside the workflow nodes, not silently.
 builder.Services.AddXPosterAiProviders();
 
-// ISlotProfileProvider registration:
-//   EnableDryRunSlot = true   → DryRunSlotProfileProvider
-//   All other environments     → DefaultSlotProfileProvider
-var enableDryRunRaw = builder.Configuration["EnableDryRunSlot"];
-var enableDryRun = bool.TryParse(enableDryRunRaw, out var parsed) && parsed;
-
-if (enableDryRun)
-    builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
-        new DryRunSlotProfileProvider(new DefaultSlotProfileProvider()));
-else
-    builder.Services.AddSingleton<ISlotProfileProvider, DefaultSlotProfileProvider>();
+// ISlotProfileProvider registration — the orchestration schedule is fully config-driven
+// (the "Schedule" configuration section, see ConfigurationSlotProfileProvider).
+// A dry-run slot is just an ordinary Schedule entry with a DryRun sender; there is no
+// separate provider/decorator. DryRun must never be configured in production.
+builder.Services.AddSingleton<ConfigurationSlotProfileProvider>();
+builder.Services.AddSingleton<ISlotProfileProvider>(sp =>
+    sp.GetRequiredService<ConfigurationSlotProfileProvider>());
 
 builder.Services.AddTransient<IOrchestratorFactory, OrchestratorFactory>();
 
+// Register the workflow engine, keyed adapter nodes, and slot workflow definitions.
+builder.Services.AddWorkflows(builder.Configuration);
+
 builder.Services.AddTransient<ICryptoService, CryptoService>();
 builder.Services.AddTransient<IFeedService, FeedService>();
-
-builder.Services.AddKeyedSingleton<FeedOrchestratorContext>("Bitcoin", (sp, _) =>
-    builder.Configuration.GetSection("FeedSlotContexts:Bitcoin").Get<FeedOrchestratorContext>()!);
-
 
 // ITagReplacementProvider registration — reads TagReplacementOptions:Replacements from app settings.
 builder.Services.Configure<TagReplacementOptions>(builder.Configuration.GetSection(TagReplacementOptions.SectionName));
