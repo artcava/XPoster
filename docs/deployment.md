@@ -62,7 +62,7 @@ az functionapp create \
   --resource-group XPosterRG \
   --consumption-plan-location westeurope \
   --runtime dotnet-isolated \
-  --runtime-version 8 \
+  --runtime-version 10 \
   --functions-version 4 \
   --storage-account xposterstorage
 
@@ -72,12 +72,11 @@ az functionapp config appsettings set \
   --resource-group XPosterRG \
   --settings \
     "KEYVAULT_URI=https://<your-keyvault-name>.vault.azure.net/" \
-    "AiProvider=OpenAi" \
     "OpenAI__ApiKey=<value>" \
     "OpenAI__Endpoint=https://api.openai.com/v1/" \
     "OpenAI__TextModelName=gpt-4.1-nano" \
     "OpenAI__ImageModelName=gpt-image-1.5" \
-    "CronSchedule=0 0 6,8,14,16 * * *"
+    "CronSchedule=0 50 * * * *"
 
 # 6. Deploy
 cd src
@@ -86,7 +85,9 @@ func azure functionapp publish xposterfunction
 
 > ⚠️ Sender credentials (Twitter/X, LinkedIn, Instagram, Facebook) are **not** set via App Settings — they are loaded from Azure Key Vault at application startup via the **Azure Key Vault Configuration Provider** (`AddAzureKeyVault` registered in `Program.cs`) and injected into senders through standard `IOptions` binding. See [Configuration Reference — Key Vault](configuration.md#key-vault) for the required secret names and role assignment.
 
-> ⚠️ **Never set `EnableDryRunSlot = true` or `ForceHour` in production App Settings.** These are local-development-only keys; see [Configuration Reference — Scheduler](configuration.md#scheduler) for details.
+> ⚠️ The posting behaviour is fully config-driven. In addition to the settings above, production App Settings must define the workflow DAGs (**`Workflows__*`**), the prompt steps (**`PromptSteps__*`**), and the schedule (**`Schedule__*`**) — mirroring the canonical block in `src/local.settings.json.example` (slot 0 → hour 6 `Bitcoin`, slot 1 → hour 14 `PowerLaw`). There is no global `AiProvider` setting: each AI node selects its own provider via `Workflows__<key>__Nodes__N__Parameters__Provider`. See [Configuration Reference — Workflows](configuration.md#workflows-node-dags) for the node catalogue.
+
+> ⚠️ **Never put dry-run senders (`DryRunMaxLength`, `DryRunShortLength`) or `ForceHour` in production App Settings.** Dry-run is a *schedule slot* whose senders are the dry-run platforms (they log the post instead of publishing); `ForceHour` only ever applies in the Development environment (`LocalOverrideTimeProvider`). See [Configuration Reference — Scheduler](configuration.md#scheduler) for details.
 
 ---
 
@@ -105,10 +106,11 @@ func azure functionapp publish xposterfunction
 ## Post-Deployment Checklist
 
 - [ ] All App Settings configured (see [Configuration Reference](configuration.md))
+- [ ] `Workflows__*`, `PromptSteps__*`, and `Schedule__*` sections present — they define what each UTC hour publishes
 - [ ] `KEYVAULT_URI` set and Function App Managed Identity granted **Key Vault Secrets User** role
 - [ ] Application Insights resource linked to the Function App
-- [ ] `CronSchedule` set correctly for production cadence (`0 0 6,8,14,16 * * *` by default)
-- [ ] `EnableDryRunSlot` **not** present in App Settings (or explicitly set to `false`)
+- [ ] `CronSchedule` set to fire hourly (`0 50 * * * *`) — the per-hour slot selection comes from `Schedule__*`, not the cron
+- [ ] No dry-run senders (`DryRunMaxLength` / `DryRunShortLength`) in the production `Schedule__*` slots
 - [ ] `ForceHour` **not** present in App Settings
 - [ ] Test manual trigger via Azure Portal → Functions → Test/Run
 - [ ] Verify first execution in Application Insights → Live Metrics
@@ -119,6 +121,6 @@ Assign a **System-assigned Managed Identity** to the Function App to authenticat
 
 1. Azure Portal → Function App → Identity → System assigned → **On**
 2. Azure Key Vault → Access control (IAM) → Add role assignment → **Key Vault Secrets User** → select the Function App identity
-3. (If using `AiProvider = AzureFoundry`) Azure AI Foundry resource → Access control (IAM) → Add role assignment → **Cognitive Services OpenAI User** → select the Function App identity; omit `AzureFoundry__ApiKey` from App Settings
+3. (If any workflow node uses `Provider: AzureFoundry`) Azure AI Foundry resource → Access control (IAM) → Add role assignment → **Cognitive Services OpenAI User** → select the Function App identity; omit `AzureFoundry__ApiKey` from App Settings
 
 The Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`) uses `DefaultAzureCredential`, which picks up the Managed Identity automatically in production — no code changes required.
