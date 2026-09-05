@@ -3,7 +3,7 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "CronSchedule": "0 0 6,8,14,16 * * *",
+    "CronSchedule": "0 50 * * * *",
     "ContainerPollingSchedule": "0 */2 * * * *",
 
     // -----------------------------------------------------------------------
@@ -30,7 +30,7 @@
     // To run a dry-run locally:
     //   1. Add a Schedule slot with the dry-run senders you want, e.g.:
     //        "Schedule__2__Hour":           "9",
-    //        "Schedule__2__Workflow":       "Bitcoin",
+    //        "Schedule__2__Workflow":       "PowerLaw",
     //        "Schedule__2__Senders__0":     "DryRunMaxLength",
     //        "Schedule__2__Senders__1":     "DryRunShortLength",
     //   2. Set "ForceHour": "9" so the dry-run slot is the only one selected at startup.
@@ -49,7 +49,7 @@
     // re-summarisation path without publishing anywhere.
     //
     // Using both "DryRunMaxLength" (unlimited, int.MaxValue — serves as the
-    // primary sender) and "DryRunShortLength" (fixed 50-char limit) forces a
+    // primary sender) and "DryRunShortLength" (fixed 250-char limit) forces a
     // re-summarised variant for the short sender. FanOutSendNode orders senders
     // by descending MessageMaxLength and re-summarises over-long text (via the
     // FallbackSourceKey + AiText branch) for senders whose limit is exceeded.
@@ -68,17 +68,23 @@
     // Azure deployment: Managed Identity handles authentication automatically.
     //
     // Required secrets in Key Vault (exact casing, matched to Options properties):
-    //   LinkedInAccessToken   — LinkedIn Bearer token         → LinkedInCredentials.LinkedInAccessToken
-    //   LinkedInOwnerCode     — LinkedIn person/owner ID      → LinkedInCredentials.LinkedInOwnerCode
-    //   LinkedInOrgId         — LinkedIn organization ID      → LinkedInCredentials.LinkedInOrgId (optional; org posts)
-    //   XApiKey               — X (Twitter) API key           → XCredentials.XApiKey
-    //   XApiSecret            — X (Twitter) API secret        → XCredentials.XApiSecret
-    //   XAccessToken          — X (Twitter) access token      → XCredentials.XAccessToken
-    //   XAccessTokenSecret    — X (Twitter) access token sec  → XCredentials.XAccessTokenSecret
-    //   InstagramAccessToken  — Instagram Graph API token     → InstagramCredentials.InstagramAccessToken
-    //   InstagramAccountId    — Instagram account ID          → InstagramCredentials.InstagramAccountId
-    //   FacebookAccessToken   — Facebook Graph API token      → FacebookCredentials.FacebookAccessToken
-    //   FacebookAccountId     — Facebook account ID           → FacebookCredentials.FacebookPageId
+    //   LinkedInCredentials--LinkedInAccessToken  → LinkedInCredentials.LinkedInAccessToken
+    //   LinkedInCredentials--LinkedInOwnerCode    → LinkedInCredentials.LinkedInOwnerCode
+    //   LinkedInCredentials--LinkedInOrgId        → LinkedInCredentials.LinkedInOrgId (optional; org posts)
+    //   XCredentials--XApiKey       → XCredentials.XApiKey
+    //   XCredentials--XApiSecret    → XCredentials.XApiSecret
+    //   XCredentials--XAccessToken  → XCredentials.XAccessToken
+    //   XCredentials--XAccessTokenSecret → XCredentials.XAccessTokenSecret
+    //   InstagramCredentials--InstagramAccessToken → InstagramCredentials.InstagramAccessToken
+    //   InstagramCredentials--InstagramAccountId   → InstagramCredentials.InstagramAccountId
+    //   FacebookCredentials--FacebookAccessToken   → FacebookCredentials.FacebookAccessToken
+    //   FacebookCredentials--FacebookPageId        → FacebookCredentials.FacebookPageId
+    //
+    // Dry-run probe: DryRunSender reads the TOP-LEVEL key "XApiKey" (any non-empty
+    // value) as a configuration-probe signal. For local dry-runs set "XApiKey"
+    // directly in local.settings.json; for dry-runs behind Key Vault keep a plain
+    // "XApiKey" secret (it maps to config key "XApiKey", distinct from
+    // "XCredentials--XApiKey" used by the real XSender).
     // -----------------------------------------------------------------------
     "KEYVAULT_URI": "https://<your-keyvault-name>.vault.azure.net/",
 
@@ -250,17 +256,22 @@
     "Schedule__0__Hour": "6",
     "Schedule__0__Workflow": "Bitcoin",
     "Schedule__0__Senders__0": "LinkedIn",
+    "Schedule__0__Senders__1": "X",
+    "Schedule__0__Senders__2": "Facebook",
+    "Schedule__0__Senders__3": "Instagram",
 
     "Schedule__1__Hour": "14",
     "Schedule__1__Workflow": "PowerLaw",
     "Schedule__1__Senders__0": "LinkedIn",
+    "Schedule__1__Senders__1": "X",
+    "Schedule__1__Senders__2": "Facebook",
 
     // To add a local-only dry-run slot (logged outgoing, not published), set
-    // "EnableDryRunSlot" to "true" and add its Schedule entry:
+    // "ForceHour" to the slot hour and add its Schedule entry:
     //   "Schedule__2__Hour": "9",
-    //   "Schedule__2__Workflow": "Bitcoin",
-    //   "Schedule__2__Senders__0": "DryRunMaxLength", // MessageMaxLength = int.MaxLength
-    //   "Schedule__2__Senders__0": "DryRunShortLength", // MessageMaxLength = 100
+    //   "Schedule__2__Workflow": "PowerLaw",
+    //   "Schedule__2__Senders__0": "DryRunMaxLength",   // MessageMaxLength = int.MaxValue
+    //   "Schedule__2__Senders__1": "DryRunShortLength", // MessageMaxLength = 250
 
     // -----------------------------------------------------------------------
     // Tag replacement provider — word-to-hashtag map applied to generated summaries.
