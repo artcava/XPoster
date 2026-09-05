@@ -19,68 +19,64 @@ This document explains the architectural decisions, component responsibilities, 
 
 ## 1. System Overview
 
-XPoster is a **serverless, event-driven pipeline** built on five structural pillars:
+XPoster is a **serverless, config-driven pipeline**. Content production is defined as a **workflow DAG of nodes** (ADR-006) scheduled against UTC hours; the schedule itself lives in configuration, not code.
 
-- **`XFunction`** — The Azure Timer Trigger entry point; it owns no business logic and drives the pipeline by calling `Resolve()` then `OrchestrateAsync()`
-- **`OrchestratorFactory`** — Maps the current UTC hour to a `ScheduledOrchestrationProfile` via `Resolve()`, selecting the right content strategy and **list of senders** for that slot (Strategy + Factory patterns)
-- **Orchestrators** — Each encapsulates a self-contained content-production algorithm and returns `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender; orchestrators depend exclusively on injected abstractions and are unaware of target platforms; prompt intent is encapsulated in PromptRequest / ImagePromptRequest value objects constructed by the orchestrator and passed to AI providers — providers never own prompt construction logic.
-- **Sender Plugins** — Each implement `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`; adding a new platform requires zero changes to existing components
-- **AI Providers** — This layer uses two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** in the DI container. Each `ScheduledOrchestrationProfile` declares `TextProvider` and `ImageProvider` independently as nullable `AiProvider?` values; `OrchestratorFactory` resolves each capability separately via `GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. A `null` value means the capability is not assigned for that slot; orchestrators degrade gracefully (text-only post or skip).
+Six structural pillars:
 
-Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing.
+- **`XFunction`** — The Azure Timer Trigger entry point (driven by `CronSchedule`); it owns no business logic. It calls `OrchestratorFactory.Resolve()`, checks `SendIt`, invokes `OrchestrateAsync()`, then dispatches via `PostAsync()`.
+- **`XPosterContainerPollingFunction`** — A second timer trigger (driven by `ContainerPollingSchedule`) that polls pending Instagram media containers and publishes them once Meta reports them as ready.
+- **`OrchestratorFactory`** — Maps the current UTC hour to a `ScheduledOrchestrationProfile` via an injected `ISlotProfileProvider`, resolves the slot's senders and its `WorkflowDefinition`, and constructs a `WorkflowOrchestrator` (Factory + Config-driven scheduling).
+- **Workflow engine + node DAGs** — Content production is a **directed acyclic graph of nodes** registered as keyed `IWorkflowNode` services. `WorkflowExecutionEngine` runs them in topological order; the terminal node (a `FanOutSend` implementing `ITerminalNode`) produces the `SenderPlatform → Post` map. Workflows and prompt steps are declared entirely in configuration (`Workflows__*`, `PromptSteps__*`) and bound at startup.
+- **Sender Plugins** — Each implements `ISender` to isolate all platform-specific API communication; dispatched in parallel via `BaseOrchestrator.PostAsync`. Adding a new platform requires zero changes to the workflow engine.
+- **AI Providers** — Two capability interfaces — `ITextToTextProvider` and `ITextToImageProvider` — registered as **keyed services** by `AiProvider`. Provider selection is a **per-node** decision: `AiText`/`AiImage` nodes resolve the capability via `GetKeyedService<T>(Provider)`. A missing capability fails loudly at node execution (`InvalidOperationException`), never silently.
+
+Sender OAuth credentials are loaded from **Azure Key Vault** at application startup via the Key Vault Configuration Provider registered in `Program.cs`. Secrets are merged into `IConfiguration` and injected into senders through `IOptions<TCredentials>` — no runtime Key Vault calls occur during post publishing. A startup `ICredentialsStartupValidator` fails fast if a credential section is missing entirely.
 
 ```
-┌────────────────────────────┐
-│   Azure Timer Trigger      │
-│        XFunction           │
-│   (configurable schedule)  │
-└───────────┬────────────────┘
+┌────────────────────────────────────────────┐
+│              Azure Timer Triggers          │
+│   XFunction (CronSchedule)                 │
+│   XPosterContainerPollingFunction (2-min)  │
+└───────────┬────────────────┬───────────────┘
+            │ (main pipeline)│ (Instagram containers)
+            ▼                ▼
+┌─────────────────────┐   ┌───────────────────────────────────┐
+│ OrchestratorFactory │   │ MetaPublishingService + BlobStorage│
+│  (ISlotProfileProvider) ◄─── ConfigurationSlotProfileProvider │
+└───────────┬─────────┘   └───────────────────────────────────┘
             │
             ▼
-┌────────────────────────────┐
-│   OrchestratorFactory      │ ◄─── Strategy Pattern
-│   (ISlotProfileProvider)   │
-└───────────┬────────────────┘
-            │
-    ┌───────┴────────┬─────────────────┐
-    ▼                ▼                 ▼
-┌──────────────┐   ┌──────────────┐   ┌──────────────┐
-│     Feed     │   │  PowerLaw    │   │      No      │
-│ Orchestrator │   │ Orchestrator │   │ Orchestrator │
-└─────┬────────┘   └─────┬────────┘   └──────────────┘
-      │                  │
-      └──────┬───────────┘
-             │
-             ▼
-    ┌────────────────────────────┐
-    │   Services                 │
-    ├────────────────────────────┤
-    │ • ITextToTextProvider      │ ◄─── Keyed by AiProvider (text capability)
-    │ • ITextToImageProvider     │ ◄─── Keyed by AiProvider (image capability)
-    │ • IFeedUrlProvider         │ ◄─── RSS feed URL list (config-backed)
-    │ • ITagReplacementProvider  │ ◄─── Hashtag map resolution (config-backed)
-    │ • FeedService              │ ◄─── RSS/Atom parser + resilient HTTP client
-    │ • CryptoService            │ ◄─── CryptoPrices HTTP client
-    └────────┬───────────────────┘
-             │
-             ▼
-    ┌───────────────────────────────────────────────────────────────────┐
-    │        BaseOrchestrator.PostAsync                                 │  ◄── Fan-out: Task.WhenAll per sender
-    └──┬────────┬───────────┬────────────┬──────────────┬───────────────┘
-       │        │           │            │              │
-       ▼        ▼           ▼            ▼              ▼
-  ┌─────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  ┌────────────┐
-  │ XSender │ │ InSender │ │ IgSender │ │ FbSender │  │ DryRunSend │
-  │ X/Twit. │ │ LinkedIn │ │Instagram │ │ Facebook │  │(local only)│
-  └─────────┘ └──────────┘ └──────────┘ └──────────┘  └────────────┘
+┌───────────────────────────────────────────┐
+│ WorkflowOrchestrator                      │
+│   → WorkflowExecutionEngine (topological) │
+└───────────┬───────────────────────────────┘
+            │  keyed IWorkflowNode by Type
+            ▼
+┌──────────────────────────────────────────────────────────────┐
+│  Node DAG (configuration-declared, e.g. Bitcoin slot)        │
+│   FetchRss → AiText(summary) → AiText(image prompt)          │
+│           → AiImage → FanOutSend (terminal)                  │
+│   PowerLaw slot: AcquireCryptoValue → BuildPowerLawPost      │
+│                → FanOutSend (terminal)                       │
+└───────────┬──────────────────────────────────────────────────┘
+            │  Workflow.SendResults (platform → post)
+            ▼
+┌──────────────────────────────────────────────────────────────┐
+│  BaseOrchestrator.PostAsync — parallel Task.WhenAll fan-out  │
+└──┬────────┬───────────┬────────────┬──────────────┬──────────┘
+   ▼        ▼           ▼            ▼              ▼
+┌───────┐ ┌────────┐ ┌──────────┐ ┌─────────┐  ┌──────────────────┐
+│XSender│ │InSender│ │IgSender  │ │FbSender │  │DryRunMaxLength / │
+│  X    │ │LinkedIn│ │Instagram │ │Facebook │  │DryRunShortLength │
+│ (250) │ │ (2800) │ │  (2200)  │ │ (3000)  │  │  (local only)    │
+└───────┘ └────────┘ └──────────┘ └─────────┘  └──────────────────┘
 ```
 
-**Key Vault credentials** are loaded into `IConfiguration` at application startup via the Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`). 
-Senders receive their credentials through standard `IOptions` binding — no Key Vault calls occur at post-publish time.
+**Key Vault credentials** are loaded into `IConfiguration` at application startup via the Azure Key Vault Configuration Provider (`AddAzureKeyVault` in `Program.cs`). Senders receive their credentials through standard `IOptions` binding — no Key Vault calls occur at post-publish time.
 
 **System boundaries:**
-- **Inbound**: Azure Timer Trigger (no external HTTP surface in production)
-- **Outbound**: Configured AI provider API, Twitter/X API, LinkedIn API, Instagram & Facebook Graph API, RSS feeds, Azure Blob Storage, Azure Key Vault (startup only)
+- **Inbound**: Azure Timer Triggers (no external HTTP surface in production)
+- **Outbound**: Configured AI provider APIs, Twitter/X API, LinkedIn API, Instagram & Facebook Graph API, RSS feeds, Azure Blob Storage, Azure Key Vault (startup only), cryptoprices.cc
 - **Observability**: Azure Application Insights
 
 ---
@@ -89,190 +85,194 @@ Senders receive their credentials through standard `IOptions` binding — no Key
 
 ### XFunction — Entry Point
 
-`XFunction` is the Azure Functions timer-triggered entry point. Its sole responsibility is to **drive the pipeline**: call `Resolve()` on the factory to obtain the correct orchestrator for the current time slot, invoke `OrchestrateAsync()`, and forward the resulting dictionary of posts to `PostAsync()` for parallel fan-out dispatch. It owns no business logic and depends exclusively on injected abstractions, keeping the trigger layer thin and testable.
+`XFunction` is the Azure Functions timer-triggered entry point (trigger: `%CronSchedule%`). Its sole responsibility is to **drive the pipeline**: call `Resolve()` on the factory to obtain the orchestrator for the current time slot, skip dispatch if `SendIt` is false, invoke `OrchestrateAsync()`, and forward the resulting dictionary of posts to `PostAsync()` for parallel fan-out dispatch. It owns no business logic, depends exclusively on injected abstractions, treats cancellation separately from unexpected errors, and re-throws unexpected exceptions so they surface in Azure Monitor.
 
-### OrchestratorFactory — Strategy Selector
+### OrchestratorFactory — Slot Resolver
 
-`OrchestratorFactory` maps the current hour of day to a `ScheduledOrchestrationProfile` supplied by an injected `ISlotProfileProvider`. Each profile carries five fields:
+`OrchestratorFactory.Resolve()` performs the following (see `src/Orchestrator/OrchestratorFactory.cs`):
+
+1. Reads the current UTC hour from `ITimeProvider` and calls `ISlotProfileProvider.GetProfiles()`.
+2. Matches the hour to a `ScheduledOrchestrationProfile`; **every profile resolves to `WorkflowOrchestrator`**.
+3. Resolves the slot's senders: for each `SenderPlatform` in the profile, `GetKeyedService<ISender>(platform)`; unresolvable platforms are skipped with a warning.
+4. Resolves the workflow definition via `GetKeyedService<WorkflowDefinition>(profile.OrchestratorContextKey)`.
+5. Constructs `new WorkflowOrchestrator(senders, logger, workflowEngine, definition)`.
+
+Fallbacks (each logs a warning and returns `NoOrchestrator`): no profile matches the current hour, the slot has no `OrchestratorContextKey`, or no `WorkflowDefinition` is registered for that key. The factory **does not** resolve AI capabilities — that moved to the workflow nodes.
+
+### ConfigurationSlotProfileProvider — Config-Driven Schedule
+
+`ConfigurationSlotProfileProvider` is the single `ISlotProfileProvider` registered in `Program.cs`. It reads the `Schedule` configuration section (`Schedule__N__Hour`, `Schedule__N__Workflow`, `Schedule__N__Senders__M`) and produces one `ScheduledOrchestrationProfile` per entry:
 
 | Field | Type | Purpose |
 |---|---|---|
 | `Hour` | `int` | Hour of day (0–23) when this slot is active |
-| `SenderPlatforms` | `IReadOnlyList<SenderPlatform>` | List of target platforms for this slot. Declaration order does not affect execution: `FeedOrchestrator` re-orders senders internally by descending `MessageMaxLength`; the widest sender drives base summary generation |
-| `OrchestratorType` | `Type` | The concrete `BaseOrchestrator` subclass to instantiate |
-| `TextProvider` | `AiProvider?` | Optional AI provider for text generation |
-| `ImageProvider` | `AiProvider?` | Optional AI provider for image generation; may differ from `TextProvider` |
+| `SenderPlatforms` | `IReadOnlyList<SenderPlatform>` | Target platforms for this slot (unknown names are skipped with a warning) |
+| `OrchestratorContextKey` | `string` | The workflow key — must match a registered `Workflows__<key>` definition |
+| `OrchestratorType` | `Type` | Always `typeof(WorkflowOrchestrator)` |
 
-At runtime, the factory calls `Resolve()` to match the current hour to a profile, independently resolves all **senders** (via the DI container, keyed by each `SenderPlatform` in `SenderPlatforms`) and the **AI capability services** (via `IServiceProvider.GetKeyedService<ITextToTextProvider>` and `GetKeyedService<ITextToImageProvider>` keyed by `profile.TextProvider`/`profile.ImageProvider`), then dynamically constructs the orchestrator using reflection (`CreateOrchestratorInstance`). The effective `AiProvider` can be overridden at deploy time via the `AiProvider` configuration key, without code changes.
+Slots without a workflow key or with no valid senders are skipped with a warning. Because the schedule is configuration, **adding or changing a slot (including dry-run slots) is a configuration change only** — there is no embedded production schedule in code.
 
-Both capability services are **optional**: not every `AiProvider` implements both interfaces. `GetKeyedService` returns `null` when the requested capability is not registered for the given key — this is intentional and surfaces explicitly at the point of use inside `FeedOrchestrator`, not silently.
+### WorkflowOrchestrator — DAG Bridge
 
-The **schedule itself is a dependency**, not a compile-time constant. In production, `DefaultSlotProfileProvider` supplies the canonical slots. For local dry-run testing, `DryRunSlotProfileProvider` decorates `DefaultSlotProfileProvider` and appends the dry-run slot at hour 9; it is activated by setting `EnableDryRunSlot = true` in app settings and registered in `Program.cs` via conditional DI. This means adding or switching the dry-run slot requires no changes to `OrchestratorFactory`.
+`WorkflowOrchestrator` (extends `BaseOrchestrator`) is the only concrete orchestrator. It bridges the DAG engine to the orchestrator contract:
 
-The factory enforces the invariant that every unscheduled hour resolves to `NoOrchestrator`, so `XFunction` never receives a null orchestrator.
+- **`Name`**: `"WorkflowOrchestrator"`.
+- **`ProduceImage`**: **derived** from the DAG — `true` when the workflow contains an `AiImage` node. Not assignable (`NotSupportedException`).
+- **`OrchestrateAsync()`**: executes the bound `WorkflowDefinition` via `IWorkflowEngine`, then extracts the `SenderPlatform → Post` map from `WorkflowContextKeys.SendResults`. On engine failure, or when the workflow completes without `SendResults`, it logs the error, sets `SendIt = false`, and returns an empty map — callers never crash.
+- The orchestrator does not know about feeds, AI, or crypto: those are node concerns.
 
-### Orchestrators — Content Strategies
+### Workflow Execution Engine
 
-Each orchestrator extends `BaseOrchestrator` and encapsulates a specific **content production algorithm**. `OrchestrateAsync()` returns an `IReadOnlyDictionary<SenderPlatform, Post?>` — one entry per configured sender, keyed by `SenderPlatform` for unambiguous nominal routing. A `null` value for a given key signals that content generation failed for that platform.
+`WorkflowExecutionEngine` (`IWorkflowEngine`) executes a `WorkflowDefinition`:
 
-> Complete list of Orchestrators can be found [here](/docs/Orchestrators/)
+- **Validation** (`WorkflowDefinitionValidator`): at registration time (throwing) and at execution time, checks for missing node references, cycles, and **exactly one** terminal node (empty `NextNodeIds`). At execution it also confirms the terminal node implements `ITerminalNode` (resolved through DI).
+- **Execution**: Kahn's algorithm — nodes with in-degree 0 are enqueued, executed, and their dependents' in-degree decreased. Each node is resolved as `GetKeyedService<IWorkflowNode>(Type)`; a missing key aborts the workflow.
+- **Context**: a thread-safe `WorkflowContext` (ConcurrentDictionary) carries data between nodes under `OutputKey` values. Cancellation is honoured between nodes; any failing node aborts the workflow with the node's error message.
+
+### Node Catalogue
+
+Every `Workflows__<Workflow>__Nodes__N__*` entry defines a node:
+
+| Field | Type | Description |
+|---|---|---|
+| `Id` | string | Unique node identifier within the workflow. |
+| `Type` | string | Keyed `IWorkflowNode` resolution key (registered by `AddWorkflows`). |
+| `Parameters__*` | string | Node-specific parameters (provider names, input/output keys, step ids). |
+| `OutputKey` | string | Context key under which the node's output is stored. |
+| `NextNodeIds__N` | string | DAG edges — empty only for the terminal node. |
+
+| `Type` | Node adapter | Parameters | Output |
+|---|---|---|---|
+| `FetchRss` | `FetchRssNode` | `Urls` — JSON-array string of RSS feed URLs | Concatenated feed content for a 24-hour window, pre-filtered by the tag-replacement keywords |
+| `AiText` | `AiTextNode` | `Provider` (default `OpenAi`), `StepId`, `InputKey` | Generated text; throws `InvalidOperationException` if the provider has no `ITextToTextProvider` |
+| `AiImage` | `AiImageNode` | `Provider`, `StepId`, `InputKey`, `Required` (default `false`) | `MediaAttachment`; missing image provider throws; a failed/empty image call is a soft-fail when `Required: false` |
+| `FanOutSend` | `FanOutSendNode` | `TextKey`, `FallbackSourceKey`, `StepId`, `MediaKey` | **Terminal** — writes the `SenderPlatform → Post` map to `Workflow.SendResults` |
+| `AcquireCryptoValue` | `AcquireCryptoValueNode` | `Symbol` (default `BTC`) | Current market price (decimal) |
+| `BuildPowerLawPost` | `BuildPowerLawPostNode` | `Symbol`, `ActualValueKey` | Deterministic Power Law fair-value post text |
+
+**Fan-out semantics** (`FanOutSendNode`): senders are processed in descending `MessageMaxLength` order. If the base text fits a sender's limit it is reused; otherwise the node re-summarises the `FallbackSourceKey` source with the `Feed.Summary` step capped at that sender's limit (truncating if no text provider); hashtag replacements (`ITagReplacementService`) are applied per sender. The image is shared across all senders.
+
+### Prompt Pipeline — `PromptSteps` and Step Options
+
+Prompt configuration is externalised to the `PromptSteps` section (`PromptSteps__<StepId>__*`), resolved at runtime by `IStepOptionsResolver`. `ConfigurationStepOptionsResolver` binds `PromptSteps:<StepId>` to a `PromptStepOptions` record (`SystemPromptTemplate`, `UserPromptTemplate`, `Temperature`, `MaxOutputLength`, `MaxTokenBudget`, `InputTextLabel`, `ImageQuantity`, `ImageSize`) and throws if the step id is missing.
+
+There is no `PromptRole` enum anymore — an `AiText` node can target **any** step. Only `FanOutSend`'s re-summarisation reuses the summary step id (`Feed.Summary`) with a per-sender `MaxOutputLength`.
+
+**`PromptRequest` / `ImagePromptRequest`** remain the value objects handed to providers. They are now built by the **nodes** (`AiTextNode`, `AiImageNode`, `FanOutSendNode`) from the step options plus the node's input data — providers still never own prompt-construction logic.
 
 ### BaseOrchestrator — Shared Scaffolding
 
-`BaseOrchestrator` provides the shared infrastructure for all concrete orchestrators:
+`BaseOrchestrator` provides shared infrastructure for the concrete orchestrators:
 
-- **`_senders`** (`IReadOnlyList<ISender>`): the list of senders configured for this slot, as re-ordered by `FeedOrchestrator` in descending `MessageMaxLength` order at runtime. The first entry after re-ordering is the **primary sender** (widest limit).
-- **`_sender`** (`ISender?`): computed property returning `_senders[0]` (primary sender) or `null` when the list is empty. Concrete orchestrators use this as the reference for base content generation.
-- **`PostAsync(IReadOnlyDictionary<SenderPlatform, Post?> posts)`**: dispatches each post to the sender whose `ISender.Platform` matches the dictionary key, in parallel via `Task.WhenAll`. A `null` post causes that sender to be skipped with a warning. A sender whose platform has no entry in the dictionary is also skipped with a warning. Returns `true` only if all dispatched senders succeed.
-- **`DispatchAsync`** (private): guards against null/empty content, logs the per-sender outcome (`"Sender {Sender} result: {Result}"`), and delegates to `ISender.SendAsync(post, ct)`.
+- **`_senders`** (`IReadOnlyList<ISender>`): the ordered sender list for the slot.
+- **`_sender`** (`ISender?`): `_senders[0]` or `null` when empty.
+- **`PostAsync(posts, ct)`**: skips when `SendIt` is false; dispatches each post to the sender matching its dictionary key, in parallel via `Task.WhenAll`. A `null` post or a sender without a map entry is skipped with a warning. Returns `true` only if all dispatched senders succeed.
+- **`DispatchAsync`** (private): guards null/empty content, logs a warning when `ProduceImage` is true but no image was produced, delegates to `ISender.SendAsync`, and logs `Sender {Sender} result: {Result}`.
+
+### NoOrchestrator
+
+A no-op slot: `SendIt = false`, `ProduceImage = false`, empty `SupportedPlatforms`, and an empty `OrchestrateAsync()` result. Returned by the factory for unscheduled hours, missing context keys, or missing workflow definitions.
 
 ### Services Layer — Shared Infrastructure
 
-Services are registered as singletons or transients in the DI container and are consumed by orchestrators and sender plugins:
+- **AiServiceHelper**: shared HTTP response parsing and HTTP 429 handling for all AI services.
+- **FeedService**: RSS parser with an in-memory 24-hour TTL cache, date/keyword filtering, using the named `"Feed"` `HttpClient` behind the Polly resilience pipeline. Consumed by `FetchRssNode`.
+- **CryptoService**: polls `https://cryptoprices.cc/{symbol}` for a live price; returns `0` on failure. Consumed by `AcquireCryptoValueNode`.
+- **TagReplacementService**: applies the word-to-hashtag map to the final text per sender.
+- **BlobStorageService**: uploads image bytes to Azure Blob Storage; returns a read-only SAS URL (backdated 5 minutes, valid 30 minutes) for the Instagram Graph API `image_url` parameter plus a blob name for later cleanup.
+- **MetaPublishingService**: Instagram Graph API container creation, publishing, and status polling; used by `IgSender` and `XPosterContainerPollingFunction`.
+- **IContainerStateStore / InMemoryContainerStateStore**: tracks pending Instagram containers; in-memory is fine for single-instance production (one post/day) — page the state to Table Storage for multi-instance scale.
 
-- **AiServiceHelper**: a shared utility class used internally by AI service implementations. It encapsulates HTTP response parsing logic and rate-limit (HTTP 429) handling, keeping individual service classes focused on their provider-specific contracts.
-- **BlobStorageService**: Uploads image bytes to Azure Blob Storage and returns a `BlobUploadResult` containing a time-limited SAS URL suitable for use as the `image_url` parameter of the Instagram Graph API (direct GET, no auth headers, no redirects) and the blob name for subsequent operations.
-The SAS URL is read-only, starts 5 minutes in the past to absorb clock skew between Azure and Meta servers, and expires 30 minutes from the time of upload.
-The blob container is created automatically on first use if it does not exist.
-- **CryptoService**: thin HTTP client that polls `cryptoprices.cc` to retrieve the current market price for a given cryptocurrency symbol. Returns `0` on failure to allow graceful degradation in orchestrators.
-- **FeedService**: RSS parser with in-memory caching (24-hour TTL) and keyword/date filtering. Uses the named `"Feed"` `HttpClient` created via `IHttpClientFactory`, backed by a Polly standard resilience pipeline (retry, circuit breaker, attempt timeout). This aligns `FeedService` with all other HTTP-consuming services in the codebase and eliminates the per-invocation socket allocation that `new HttpClient()` would cause on Azure Functions.
-- **TagReplacementService**: Applies tag replacements to the specified text using the replacements provided by the `ITagReplacementProvider`.
+### Providers
 
-List of Providers
-
-- **ConfigurationFeedUrlProvider**: (`IFeedUrlProvider`): provides the list of RSS feed URLs consumed by `FeedOrchestrator` resolved from the `FeedOptions` configuration section (bound via `FeedOptions__Urls__N` double-underscore notation). Registered as `Singleton`. To load URLs from a different source (database, Key Vault, remote config), implement `IFeedUrlProvider` and register the new implementation in `Program.cs` in place of `ConfigurationFeedUrlProvider`.
-- **ConfigurationTagReplacementProvider**: (`ITagReplacementProvider`): provides the word-to-hashtag replacement map consumed by `FeedOrchestrator` resolved from the `TagReplacementOptions:Replacements` configuration section (bound via `TagReplacementOptions__Replacements__<word>` double-underscore notation). Registered as `Singleton`. Matching is case-insensitive; only the first occurrence of each word per post is replaced. An empty or absent section is valid — the summary passes through unchanged. To source replacements from a different store (database, remote config), implement `ITagReplacementProvider` and swap the registration in `Program.cs`.
-- **DefaultSlotProfileProvider**: (`ISlotProfileProvider`): provides the list of SlotProfiles resolved by `OrchestratorFactory.Resolve()` matching SlotProfile Hour with `ITimeProvider.GetCurrentTime().Hour`.
-- **DryRunSlotProfileProvider**: (`ISlotProfileProvider`): provides the SlotProfile DryRun.
-- **LocalOverrideTimeProvider** (`ITimeProvider`): Development-only that returns a fixed UTC hour read from the `ForceHour` app setting.
-- **TimeProvider** (`ITimeProvider`): Returns real UTC hour.
-
-### Prompt Value Objects — `PromptRequest` and `ImagePromptRequest`
-
-Prompt intent is owned by the orchestrator and transported to AI providers via two immutable value objects:
-
-- **`PromptRequest`** — carries all data required for a text-to-text step: `InputText`, `SystemPromptTemplate`, `UserPromptTemplate`, and optional tuning parameters (`Temperature`, `MaxOutputLength`, `MaxTokenBudget`, `InputTextLabel`). Constructed by the orchestrator and passed directly to `ITextToTextProvider.GenerateTextAsync`.
-- **`ImagePromptRequest`** — extends `PromptRequest` with image-generation parameters (`ImageQuantity`, `ImageSize`). Constructed by the orchestrator and passed to `ITextToImageProvider.GenerateImageAsync`.
-
-This design keeps providers free from prompt-construction logic; they receive a fully-formed request and are responsible only for invoking the external API. Neither value object is provider-specific — the same `PromptRequest` instance is valid for any registered `ITextToTextProvider`.
-
-### Prompt Configuration — `FeedPromptOptions`, `PromptStepOptions`, `PromptRole`
-
-`FeedOrchestrator` slots are configured with an ordered, role-keyed collection of prompt step configurations via `FeedPromptOptions`:
-
-- **`PromptRole`** — discriminator enum with three values: `Summary`, `ImagePromptDerivation`, `ImageGeneration`.
-- **`PromptStepOptions`** — configuration record for a single step: `SystemPromptTemplate`, `UserPromptTemplate`, `Temperature`, `MaxOutputLength`, `MaxTokenBudget`, `InputTextLabel`, `ImageQuantity`, `ImageSize`. For the `Summary` step, `MaxOutputLength` is **not** set in configuration — it is resolved at runtime from `ISender.MessageMaxLength` of the target sender.
-- **`FeedPromptOptions`** — holds the ordered `IReadOnlyList<PromptStepOptions>` and exposes `GetStep(PromptRole)` for single-step lookup (throws `InvalidOperationException` if the role is absent or duplicated).
-
-Prompt content (templates, temperature, token budgets) is fully externalised to configuration — changing a prompt requires no code change.
-
-**AI Provider Services** — registered as **keyed services** by `AiProvider` via `AddXPosterAiProviders()` in `Program.cs`:
-
-| `AiProvider` key | Concrete service | `ITextToTextProvider` | `ITextToImageProvider` |
-|---|---|---|---|
-| `OpenAi` | `OpenAiService` | ✅ | ✅ |
-| `AzureFoundry` | `AzureFoundryService` | ✅ | ✅ |
-| `DeepSeek` | `DeepSeekService` | ✅ | ❌ — `GenerateImageAsync` throws `NotSupportedException` |
-| `Perplexity` | `PerplexityService` | ✅ | ❌ — method removed; misconfiguration surfaces at point of use |
-| `FalAi` | `FalAiImageService` | ❌ | ✅ |
-
-AI Providers that do not implement a capability have no keyed registration for the missing interface. `GetKeyedService` returns `null` for that capability — this is intentional. Attempting to use a text-only provider in an image-generating slot (or vice versa) surfaces explicitly inside `FeedOrchestrator`, not silently.
+- **ConfigurationSlotProfileProvider** (`ISlotProfileProvider`): config-driven schedule (see above). Registered as a singleton.
+- **ConfigurationTagReplacementProvider** (`ITagReplacementProvider`): reads `TagReplacementOptions:Replacements` (`TagReplacementOptions__Replacements__<word>`); case-insensitive, first occurrence only; empty/absent section is valid. Its keyword keys are also used by `FetchRssNode` to pre-filter feed items.
+- **TimeProvider** (`ITimeProvider`): real UTC time.
+- **LocalOverrideTimeProvider** (`ITimeProvider`): Development-only; returns the fixed UTC hour from the `ForceHour` app setting. Used only when `IsDevelopment()` and `ForceHour` is non-empty.
 
 ### HttpClientFactory — Named Clients
 
-All outbound HTTP integrations in XPoster use named clients registered via `IHttpClientFactory` in `HttpClientExtensions`. Each client is backed by a Polly standard resilience pipeline (retry on transient failures, circuit breaker, attempt timeout) configured with service-appropriate timeout values.
-Only `XSender` uses an OAuth library (`LinqToTwitter`) and is out of this pipeline.
+All outbound HTTP integrations use named clients from `HttpClientExtensions.AddHttpClients()`, each wrapped in a Polly `AddStandardResilienceHandler` pipeline (retry 3 × 2 s honouring `Retry-After`, circuit breaker 30 s break, HTTP 429/500/502/503/504 treated as retriable):
 
-| Named Client | Consumer | Attempt Timeout | Total Timeout |
-|---|---|---|---|
-| `"Feed"` | `FeedService` | 15 s | 60 s |
-| `"LinkedIn"` | `InSender` | *(per registration)* | *(per registration)* |
-| `"Instagram"` | `IgSender` | *(per registration)* | *(per registration)* |
-| `"Facebook"` | `FbSender` | *(per registration)* | *(per registration)* |
-| *(AI provider clients)* | `DeepSeekService`, `FalAiImageService`, `PerplexityService` | *(per registration)* | *(per registration)* |
+| Named Client | Consumer | Attempt / Total timeout |
+|---|---|---|
+| `"Feed"` | `FeedService` | 15 s / 60 s |
+| `"OpenAI"` | `OpenAiService` | 30 s / 180 s |
+| `"AzureFoundry"` | `AzureFoundryService` | 30 s / 180 s |
+| `"DeepSeek"` | `DeepSeekService` | 30 s / 180 s |
+| `"Perplexity"` | `PerplexityService` | 30 s / 180 s |
+| `"FalAi"` | `FalAiImageService` | 60 s / 300 s (slower image generation) |
+| `"LinkedIn"` | `InSender` | 30 s / 180 s |
+| `"Instagram"` | `IgSender` | 30 s / 180 s |
+| `"Facebook"` | `FbSender` | 30 s / 180 s |
 
-> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline is prohibited — it bypasses the resilience pipeline and risks socket exhaustion on Azure Functions.
+> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. `XSender` is the exception — it uses the `LinqToTwitter` OAuth library and is outside this pipeline. (Note: `CryptoService` creates an untyped client via `IHttpClientFactory.CreateClient()`.)
 
 ### Sender Plugins — Platform Abstraction
 
-Each sender implements `ISender`, which exposes `Task<bool> SendAsync(Post post, CancellationToken ct)`, `int MessageMaxLength`, and `SenderPlatform Platform`. Senders are **exclusively responsible for platform-specific serialisation and API communication**; they receive a fully-formed `Post` and return a success/failure signal. This contract guarantees that orchestrators never reference platform SDKs directly.
-
-Sender credentials (OAuth tokens, API keys) are loaded into `IConfiguration` at startup by the Azure Key Vault Configuration Provider and injected into senders through `IOptions` binding. No Key Vault calls occur at publish time.
+Each sender implements `ISender`: `Task<bool> SendAsync(Post post, CancellationToken ct)`, `int MessageMaxLength`, `SenderPlatform Platform`. Senders are **exclusively responsible** for platform-specific serialisation and API communication; they receive a fully-formed `Post` and return a success/failure signal. Credentials arrive via `IOptions<TCredentials>` bound from Key Vault at startup.
 
 **Current sender implementations:**
 
 | Sender | `SenderPlatform` value | `MessageMaxLength` | Target | Notes |
 |---|---|---|---|---|
-| `XSender` | `X` | 280 | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; credentials injected via `IOptions<XCredentials>` |
-| `InSender` | `LinkedIn` | 2 800 | LinkedIn API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<LinkedInCredentials>` |
-| `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<InstagramCredentials>` |
-| `FbSender` | `Facebook` | 3 000 | Facebook Graph API | Direct HTTP via `IHttpClientFactory`; credentials injected via `IOptions<FacebookCredentials>` |
-| `DryRunSender` | `DryRun` | `int.MaxValue` | **None** | **Local development and testing only.** Logs post content but makes **no outbound social API calls**. Always returns `true`. Activated via `EnableDryRunSlot = true`; must never be used in production. |
+| `XSender` | `X` | 250 | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; 250 chars leaves room for the firm footer |
+| `InSender` | `LinkedIn` | 2 800 | LinkedIn API | Direct HTTP via `IHttpClientFactory` |
+| `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Container flow via `MetaPublishingService` |
+| `FbSender` | `Facebook` | 3 000 | Facebook Graph API | Direct HTTP via `IHttpClientFactory` |
+| `DryRunMaxLengthSender` | `DryRunMaxLength` | `int.MaxValue` | **None** | Local-only; always the primary when present (widest limit) |
+| `DryRunShortLengthSender` | `DryRunShortLength` | 250 | **None** | Local-only; always re-summarised against 250 chars |
+
+`DryRunSender` (base class of the two dry-run senders) logs the post content and returns `true` without any outbound call — but first **probes configuration** for a non-empty top-level `XApiKey` and fails the run if it is missing. A dry-run is just an ordinary `Schedule` slot whose senders are dry-run platforms; there is no `EnableDryRunSlot` switching mechanism.
 
 ---
 
 ## 3. Design Patterns Used
 
-### Strategy Pattern — Content Orchestrators
-
-**What**: `IOrchestrator` defines the algorithm interface; `FeedOrchestrator`, `PowerLawOrchestrator`, and `NoOrchestrator` are concrete strategies. `XFunction` programs to the interface, not the implementation.
-
-**Why**: Content production algorithms change independently of the publishing pipeline. New strategies (e.g. a `QuoteOrchestrator` or `TrendingTopicOrchestrator`) can be introduced without touching `XFunction` or any other orchestrator. The alternative — a large `switch` block inside `XFunction` — would violate the Open/Closed Principle and make unit testing expensive.
-
-**Trade-off**: The pattern adds one interface and one class per strategy. For the expected number of strategies (< 10), this overhead is negligible compared to the isolation gained.
-
 ### Factory Pattern — Time-based Orchestrator Selection
 
-**What**: `OrchestratorFactory` centralises the construction and selection of `(IOrchestrator, IReadOnlyList<ISender>, ITextToTextProvider?, ITextToImageProvider?)` tuples. Its `Resolve()` method reads the current UTC hour, calls `ISlotProfileProvider.GetProfiles()` to obtain the active schedule, looks up the matching `ScheduledOrchestrationProfile`, resolves all senders from `profile.SenderPlatforms` via the DI container, and dynamically instantiates the orchestrator via `CreateOrchestratorInstance` (reflection-based constructor resolution), injecting the resolved sender list and capability providers.
+**What**: `OrchestratorFactory.Resolve()` reads the current UTC hour, asks `ISlotProfileProvider.GetProfiles()` for the schedule, matches the hour, resolves the slot's senders and its keyed `WorkflowDefinition`, and returns a fully constructed `WorkflowOrchestrator`.
 
-**Why**: Centralising selection logic in one class avoids scattering time-aware conditionals across the codebase. The typed `ScheduledOrchestrationProfile` with a `SenderPlatforms` list makes each slot self-documenting and supports multi-platform fan-out slots natively. The factory can be unit-tested in isolation using a mock `ISlotProfileProvider` with synthetic profiles, and the `ITimeProvider` abstraction makes schedule-based tests deterministic.
+**Why**: Centralising selection logic keeps time-aware conditionals out of the trigger. The factory can be unit-tested with a mock `ISlotProfileProvider`, and `ITimeProvider` makes schedule-based tests deterministic.
 
-**Trade-off**: The schedule is now an injected dependency (`ISlotProfileProvider`), which means schedule changes are controlled entirely via DI registration and app settings, with no changes required to `OrchestratorFactory` itself.
+**Trade-off**: The schedule is now a configuration concern (see ConfigurationSlotProfileProvider). The factory itself only ever constructs `WorkflowOrchestrator` or `NoOrchestrator`.
+
+### DAG Workflow Pattern — Content Production as Config
+
+**What**: A `WorkflowDefinition` is a slot-scoped DAG of `WorkflowNodeDefinition`s. Nodes are keyed `IWorkflowNode` adapters resolved from DI; the engine runs them topologically; a single `ITerminalNode` (`FanOutSend`) writes the dispatch map. Workflows and prompt steps are declared in `Workflows__*` and `PromptSteps__*` configuration.
+
+**Why**: Content algorithms become declarative. The *Bitcoin* feed pipeline (fetch → summarise → image prompt → image → fan-out), the *PowerLaw* deterministic pipeline (price → model → fan-out), and any future workflow are all configuration. The engine is orchestrator-agnostic and unit-testable.
+
+**Trade-off**: Complex branching is awkward in a declared DAG; node adapters carry the "glue" code. Node types are compiled-in (only their wiring is config).
 
 ### Plugin Pattern — Sender Architecture
 
-**What**: Platform senders implement a common `ISender` interface and are registered in the DI container as concrete types. `OrchestratorFactory` resolves all appropriate senders from the DI container by matching the `SenderPlatform` enum values in `profile.SenderPlatforms`.
+**What**: Platform senders implement a common `ISender` and are registered in the DI container as concrete types; `OrchestratorFactory` resolves them keyed by `SenderPlatform`.
 
-**Why**: The plugin approach means **adding a new platform requires zero changes to existing code** — only a new class, a DI registration, a new `SenderPlatform` enum value, and a profile entry. This directly supports the Roadmap's expansion goals (Threads, Mastodon, BlueSky, etc.).
+**Why**: Adding a new platform requires zero changes to existing components — only a new class, a DI registration, a new `SenderPlatform` value, and a slot referencing it.
 
 **Extensibility contract**: Any sender must:
-1. Implement `ISender` (including the `Platform` property for dictionary-keyed routing)
-2. Honour `MessageMaxLength` so orchestrators can apply the AI re-summarisation guard correctly
-3. Return `false` (not throw) on non-fatal platform errors, allowing `PostAsync` to continue dispatching other senders
+1. Implement `ISender` (including `Platform` for dictionary-keyed routing)
+2. Honour `MessageMaxLength` so `FanOutSendNode` can apply the AI re-summarisation guard correctly
+3. Return `false` (not throw) on non-fatal platform errors so `PostAsync` can continue dispatching other senders
 
-> ⚠️ **Special case — `DryRunSender`**: this sender satisfies the `ISender` contract but is explicitly excluded from production use. It serves as a reference implementation that demonstrates the minimal contract surface: null-guard on the incoming post, structured logging of the post payload, and `return true` with no outbound call. New sender authors can use it as a scaffold to verify DI wiring before implementing the real platform API.
+> ⚠️ **Special case — dry-run senders**: they satisfy `ISender` but are explicitly excluded from production use. They also serve as a DI scaffold that verifies the Key Vault Configuration Provider loaded secrets (via the `XApiKey` probe) before real platform credentials are put in place.
 
 ### Keyed Services Pattern — AI Capability Resolution
 
-**What**: `ITextToTextProvider` and `ITextToImageProvider` are registered as **keyed services** in the DI container, keyed by `AiProvider` enum value via `AddXPosterAiProviders()` in `Program.cs`. `OrchestratorFactory` resolves both capabilities independently using `IServiceProvider.GetKeyedService<T>(profile.TextProvider)` and `GetKeyedService<T>(profile.ImageProvider)`. Since not every provider implements both interfaces, resolution returns `null` for missing capabilities — this is intentional.
+**What**: `ITextToTextProvider` and `ITextToImageProvider` are registered as keyed services by `AiProvider` (`AddXPosterAiProviders()` in `Program.cs`). Each workflow node (`AiText` / `AiImage`) names the provider it wants in its `Parameters__Provider` and resolves `GetKeyedService<T>(provider)` at execution time.
 
-**Why**: Replacing the former `IAiService` monolithic interface and `AiServiceFactory` with capability-segregated interfaces means:
-- A provider that only generates text (`DeepSeek`, `Perplexity`) never needs to implement image generation
-- A provider that only generates images (`FalAi`) never needs to implement text operations
-- Adding a new provider requires implementing only the relevant capability interfaces and adding keyed DI registrations — no factory or orchestrator changes
-- Silent failures are eliminated: misconfiguring a text-only provider in an image-generating slot surfaces explicitly at the point of use inside `FeedOrchestrator`
-- `TextProvider` and `ImageProvider` can now be **different providers within the same slot** (e.g. DeepSeek for text + FalAi for image)
+**Why**: Providers are capability-segregated — a text-only provider (`DeepSeek`, `Perplexity`) never implements image generation and an image-only provider (`FalAi`) never implements text. A single workflow can mix providers per node (e.g. DeepSeek for the summary `AiText`, FalAi for `AiImage`). Missing capabilities fail loudly (`InvalidOperationException` at the node) rather than silently producing degraded output.
 
 ### Value Object Pattern — Prompt Requests
 
-**What**: `PromptRequest` and `ImagePromptRequest` are immutable `record` value objects that bundle all prompt-related data (input text, system/user prompt templates, tuning parameters) into a single parameter passed to `ITextToTextProvider.GenerateTextAsync` and `ITextToImageProvider.GenerateImageAsync`.
+**What**: `PromptRequest` and `ImagePromptRequest` are immutable `record` value objects bundling input text, templates, and tuning parameters. They are constructed by the workflow nodes from `PromptStepOptions` and passed to the provider capability methods.
 
-**Why**: Prior to this change, AI providers received individual string/int parameters, creating coupling between provider method signatures and prompt-construction decisions that belong exclusively to the orchestrator. Moving to value objects means:
-- Provider interfaces are stable regardless of how many prompt parameters are needed
-- Orchestrators own prompt intent entirely; providers are pure translation layers
-- Adding a new prompt parameter (e.g. `TopP`, `FrequencyPenalty`) requires changing only `PromptRequest` and the orchestrator that builds it — no provider interface changes
+**Why**: Provider interfaces stay stable regardless of prompt parameters; providers are pure translation layers. Adding a prompt parameter changes only the value object and the node that builds it.
 
-**Trade-off**: Callers must construct a `PromptRequest` before each provider call. For the current usage pattern (one call per prompt step), this is negligible overhead compared to the interface stability gained.
+### Config-Driven Scheduling
 
-**Capability map**:
-
-| `AiProvider` | `ITextToTextProvider` | `ITextToImageProvider` |
-|---|---|---|
-| `OpenAi` | ✅ `OpenAiService` | ✅ `OpenAiService` |
-| `AzureFoundry` | ✅ `AzureFoundryService` | ✅ `AzureFoundryService` |
-| `DeepSeek` | ✅ `DeepSeekService` | ❌ `null` |
-| `Perplexity` | ✅ `PerplexityService` | ❌ `null` |
-| `FalAi` | ❌ `null` | ✅ `FalAiImageService` |
+**What**: The orchestration schedule (`Schedule__*`), the workflow DAGs (`Workflows__*`), and prompt steps (`PromptSteps__*`) are all configuration. No code change or redeployment is needed to add a slot, change a workflow's node wiring, or swap prompt strategies.
 
 ---
 
@@ -287,42 +287,41 @@ Each ADR is maintained as a standalone document in [`docs/analysis/`](analysis/)
 | [ADR-003](analysis/ADR-003-plugin-pattern-senders.md) | Plugin Pattern for Senders | Accepted |
 | [ADR-004](analysis/ADR-004-provider-agnostic-ai.md) | Provider-Agnostic AI Integration | Accepted |
 | [ADR-005](analysis/ADR-005-capability-based-extension-points.md) | Capability-based Extension Points | Accepted |
+| [ADR-006](analysis/ADR-006-workflow-based-orchestration-architecture.md) | Workflow-Based Orchestration Architecture | Accepted |
 
 ---
 
 ## 5. Extension Points
 
-XPoster exposes three well-defined extension points. Each maps to a distinct abstraction in the codebase and can be implemented independently without modifying existing components. Full step-by-step instructions and code examples are in [extending-xposter.md](extending-xposter.md).
+XPoster exposes four well-defined extension points. Full step-by-step instructions and code examples are in [extending-xposter.md](extending-xposter.md).
+
+### Workflow DAGs (recommended for new content strategies)
+
+A new content strategy is a new `Workflows__<key>` section plus any needed `PromptSteps__<StepId>` entries. Registering is automatic: `AddWorkflows` binds each section into a keyed `WorkflowDefinition` (validating the DAG at startup) and any `Schedule__N__Workflow` can reference it. For new node types, implement `IWorkflowNode` (or `ITerminalNode` for a new terminal), add a keyed registration in `AddWorkflows`, and reference it by its `Type` key.
 
 ### Platform Senders
 
-A sender encapsulates everything needed to publish a `Post` to a specific social platform: authentication, payload serialisation, and error handling. The `ISender` interface is intentionally minimal — it receives a fully-formed post and returns a boolean outcome — so platform-specific complexity is completely isolated from the rest of the pipeline.
-
-Adding a new platform has no impact on existing senders, orchestrators, or the factory. The only touch points are a new implementing class, a DI registration, a new `SenderPlatform` enum value, and one entry in the `SenderPlatforms` list of the relevant `ScheduledOrchestrationProfile`. This directly supports the Roadmap goal of expanding to Threads, Mastodon, BlueSky, and other platforms.
-
-### Content Orchestrators
-
-An orchestrator encapsulates a complete content-production algorithm: what data to fetch, how to transform it, whether to invoke an AI service, and what shape the resulting posts take. Each orchestrator extends `BaseOrchestrator` and implements the `SupportedPlatforms` property to declare which `SenderPlatform` values it is compatible with. The orchestrator is selected at runtime based on the current time slot via `OrchestratorFactory.Resolve()`, so different algorithms can run at different hours without any conditional logic in `XFunction`.
-
-Because orchestrators receive their dependencies (sender list, AI capability providers, data services) via constructor injection, a new orchestrator is a self-contained unit that can be developed and tested in isolation. The factory instantiates it dynamically; the only required changes are implementing `SupportedPlatforms` on the new class and adding a `ScheduledOrchestrationProfile` entry with the desired `SenderPlatforms` list to the appropriate `ISlotProfileProvider` implementation — no changes to `OrchestratorFactory` itself.
+A sender encapsulates everything needed to publish a `Post` to a social platform: authentication, serialisation, and error handling. Adding a platform requires a new class, a DI registration, a `SenderPlatform` enum value, and a slot referencing it — no changes to the engine, orchestrator, or factory.
 
 ### AI Providers
 
-The AI layer is abstracted behind two capability interfaces: `ITextToTextProvider` (text summarisation and image prompt generation) and `ITextToImageProvider` (image generation from a text prompt). Both are registered as keyed services by `AiProvider` enum value.
+The AI layer is abstracted behind `ITextToTextProvider` / `ITextToImageProvider` keyed by `AiProvider`. Adding a provider:
+1. Implement one or both capability interfaces (methods accept `PromptRequest` / `ImagePromptRequest`; do not re-interpret prompt templates).
+2. Add the keyed registrations in `AddXPosterAiProviders()` in `Program.cs`.
+3. Add the new `AiProvider` enum value (explicit integer to avoid renumbering).
+4. Point workflow nodes at it via `Nodes__N__Parameters__Provider`.
 
-A provider can implement one or both interfaces depending on its capabilities. Adding a new provider requires:
-1. Implement ITextToTextProvider, ITextToImageProvider, or both. Provider methods accept PromptRequest / ImagePromptRequest — providers must not inspect or re-interpret prompt template fields beyond forwarding them to the external API; prompt intent is set by the orchestrator.
-2. Add the corresponding keyed registrations in `AddXPosterAiProviders()` in `Program.cs`
-3. Add the new `AiProvider` enum value
-4. Update `DefaultSlotProfileProvider` if the new provider should be active for a production slot (via `textProvider:` or `imageProvider:` named parameters)
+Provider connectivity is configured under `AiProvider__*` options (`AddAiProviderOptions` binds and validates all provider sections).
 
-No orchestrator, factory, or scheduling logic needs to change. Per-slot provider assignment is fully preserved, and `TextProvider` and `ImageProvider` can now point to different providers within the same slot.
+### Scheduling
+
+New slots are pure configuration: `Schedule__N__Hour` + `Schedule__N__Workflow` + `Schedule__N__Senders__M`. Hours without a slot resolve to `NoOrchestrator`.
 
 ---
 
 ## 6. Data Flow Diagram
 
-The following sequence diagram covers the end-to-end execution from Timer Trigger to post publication, including the fan-out dispatch to multiple senders.
+The following sequence diagram covers end-to-end execution from Timer Trigger to post publication, including a fan-out dispatch to multiple senders. It shows the Bitcoin workflow (5-node DAG) and the PowerLaw workflow (3-node DAG) as the two currently defined strategies.
 
 ```mermaid
 sequenceDiagram
@@ -331,15 +330,16 @@ sequenceDiagram
     participant Timer as Azure Timer Trigger
     participant Fn as XFunction
     participant Factory as OrchestratorFactory
-    participant ProfileProvider as ISlotProfileProvider
+    participant Provider as ConfigurationSlotProfileProvider
     participant SP as IServiceProvider
-    participant Orch as BaseOrchestrator<br/>(Feed / PowerLaw)
-    participant T2T as ITextToTextProvider<br/>(resolved by AiProvider)
-    participant T2I as ITextToImageProvider<br/>(resolved by AiProvider)
-    participant FeedUrl as IFeedUrlProvider
+    participant Orch as WorkflowOrchestrator
+    participant Engine as WorkflowExecutionEngine
+    participant T2T as ITextToTextProvider<br/>(keyed by AiProvider)
+    participant T2I as ITextToImageProvider<br/>(keyed by AiProvider)
+    participant StepR as IStepOptionsResolver<br/>(PromptSteps config)
     participant TagRepl as ITagReplacementProvider
-    participant Feed as FeedService<br/>(RSS + IHttpClientFactory)
-    participant Crypto as CryptoService<br/>(cryptoprices.cc)
+    participant Feed as FeedService
+    participant Crypto as CryptoService
     participant Sender1 as ISender (primary)<br/>(widest MessageMaxLength)
     participant SenderN as ISender (secondary N)<br/>(narrower MessageMaxLength)
     participant DryRun as DryRunSender<br/>(local testing only)
@@ -348,67 +348,79 @@ sequenceDiagram
     Note over Startup,KV: Application startup — runs once
     Startup->>KV: AddAzureKeyVault (Configuration Provider)
     KV-->>Startup: secrets merged into IConfiguration
-    Startup->>Startup: Register services, AddXPosterAiProviders() keyed registrations
+    Startup->>Startup: Register keyed IWorkflowNode + keyed WorkflowDefinition<br/>(AddWorkflows validates each DAG)
+    Startup->>Startup: AddXPosterAiProviders() keyed capability registrations
 
     Note over Timer,Platform: Per-trigger execution
-    Timer->>Fn: Trigger (cron schedule)
+    Timer->>Fn: Trigger (CronSchedule)
     Fn->>Factory: Resolve()
-    Factory->>ProfileProvider: GetProfiles()
-    ProfileProvider-->>Factory: List<ScheduledOrchestrationProfile>
-    Factory->>Factory: Match currentHour → ScheduledOrchestrationProfile
-    Factory->>SP: Resolve ISender for each SenderPlatform in profile.SenderPlatforms
+    Factory->>Provider: GetProfiles()
+    Provider-->>Factory: List<ScheduledOrchestrationProfile> (from Schedule config)
+    Factory->>Factory: Match currentHour → profile (Hour == UtcNow.Hour)
+    Factory->>SP: GetKeyedService<ISender> for each SenderPlatform
     SP-->>Factory: IReadOnlyList<ISender>
-    Factory->>SP: GetKeyedService<ITextToTextProvider>(profile.TextProvider)
-    SP-->>Factory: ITextToTextProvider? (null if provider is image-only)
-    Factory->>SP: GetKeyedService<ITextToImageProvider>(profile.ImageProvider)
-    SP-->>Factory: ITextToImageProvider? (null if provider is text-only)
-    Factory->>Factory: CreateOrchestratorInstance(type, senders, textProvider, imageProvider)
-    Factory-->>Fn: BaseOrchestrator instance
-
-    Fn->>Orch: OrchestrateAsync(ct)
-
-    alt FeedOrchestrator — fan-out pipeline
-        Note over Orch,TagRepl: Step 1 — Acquire feed content
-        Orch->>FeedUrl: GetFeedUrls()
-        FeedUrl-->>Orch: IReadOnlyList<string>
-        Orch->>TagRepl: GetReplacements() (keys used as feed keywords)
-        TagRepl-->>Orch: IReadOnlyDictionary<string,string>
-        Orch->>Feed: GetFeedsAsync(url, start, end, keywords, ct)
-        Feed-->>Orch: List<RSSFeed>
-        Note over Orch,T2T: Step 2 — Generate base summary (primary sender's limit)
-        Orch->>T2T: GenerateTextAsync(PromptRequest{InputText, Templates, MaxOutputLength=primary.MessageMaxLength}, ct)
-        T2T-->>Orch: rawBaseSummary
-        Note over Orch,T2I: Step 3 — Generate shared image (once for all senders)
-        Orch->>T2T: GenerateTextAsync(PromptRequest{InputText=rawBaseSummary, Templates=ImagePromptDerivation step}, ct)
-        T2T-->>Orch: imagePrompt (falls back to rawBaseSummary if empty)
-        Orch->>T2I: GenerateImageAsync(ImagePromptRequest{InputText=imagePrompt, ImageQuantity, ImageSize}, ct)
-        T2I-->>Orch: image bytes (null if provider absent or error)
-        Note over Orch,TagRepl: Step 4 — Fan-out loop (per sender, descending MaxLength)
-        loop For each sender in orderedSenders
-            alt previousSummary.Length <= sender.MessageMaxLength
-                Orch->>Orch: reuse previousSummary (no AI call)
-            else previousSummary exceeds sender limit
-                Orch->>T2T: GenerateTextAsync(PromptRequest{InputText, Templates, MaxOutputLength=sender.MessageMaxLength}, ct)
-                T2T-->>Orch: reSummarised (or empty → null entry)
-            end
-            Orch->>TagRepl: GetReplacements()
-            TagRepl-->>Orch: replacements map
-            Orch->>Orch: ApplyTagReplacements(summaryForSender)
-            Orch->>Orch: result[sender.Platform] = new Post { Content, Image = sharedImage }
-        end
-    else PowerLawOrchestrator
-        Orch->>Crypto: GetPriceAsync(symbol)
-        Crypto-->>Orch: current price
-        Orch->>Orch: Compute Power Law fair value
-        Orch->>Orch: result[platform] = same Post for all senders
+    Factory->>SP: GetKeyedService<WorkflowDefinition>(Workflow key)
+    SP-->>Factory: WorkflowDefinition (DAG)
+    Factory-->>Fn: WorkflowOrchestrator
+    alt no profile / no workflow key / no definition
+        Factory-->>Fn: NoOrchestrator (SendIt = false)
     end
 
+    Fn->>Orch: OrchestrateAsync(ct)
+    Orch->>Engine: ExecuteAsync(definition, senders, ct)
+    Engine->>Engine: Validate DAG (cycles, refs, one terminal, ITerminalNode)
+
+    alt Bitcoin workflow — feed + AI image pipeline
+        Note over Engine,Feed: Node 1 — FetchRss
+        Engine->>TagRepl: GetReplacements() (keys used as feed keywords)
+        Engine->>Feed: GetFeedsAsync(Urls, 24h window, keywords, ct)
+        Feed-->>Engine: feed content (→ context["sourceContent"])
+        Note over Engine,T2T: Node 2 — AiText: base summary
+        Engine->>StepR: Resolve("Feed.Summary")
+        Engine->>T2T: GenerateTextAsync(PromptRequest{InputText=sourceContent, Summary step}, ct)
+        T2T-->>Engine: baseSummary (→ context["baseSummary"])
+        Note over Engine,T2T: Node 3 — AiText: image prompt derivation
+        Engine->>StepR: Resolve("Feed.ImagePromptDerivation")
+        Engine->>T2T: GenerateTextAsync(PromptRequest{InputText=baseSummary}, ct)
+        T2T-->>Engine: imagePrompt (→ context["imagePrompt"])
+        Note over Engine,T2I: Node 4 — AiImage (Provider=FalAi, Required=false)
+        Engine->>StepR: Resolve("Feed.ImageGeneration")
+        Engine->>T2I: GenerateImageAsync(ImagePromptRequest{InputText=imagePrompt}, ct)
+        T2I-->>Engine: MediaAttachment (soft-fail when empty) (→ context["attachedMedia"])
+        Note over Engine,TagRepl: Node 5 — FanOutSend (terminal)
+        Engine->>Engine: Order senders by MessageMaxLength (descending)
+        loop For each sender
+            alt text fits sender limit
+                Engine->>Engine: reuse base text
+            else text exceeds limit + fallback available
+                Engine->>StepR: Resolve("Feed.Summary")
+                Engine->>T2T: GenerateTextAsync(MaxOutputLength = sender.MessageMaxLength)
+                T2T-->>Engine: per-sender re-summarised text
+            else
+                Engine->>Engine: truncate to sender.MessageMaxLength
+            end
+            Engine->>TagRepl: Apply tags on final text
+            Engine->>Engine: posts[sender.Platform] = Post{Content, Image}
+        end
+    else PowerLaw workflow — crypto + model
+        Note over Engine,Crypto: Node 1 — AcquireCryptoValue
+        Engine->>Crypto: GetCryptoValue("BTC")
+        Crypto-->>Engine: current price (→ context["PowerLaw.ActualValue"])
+        Note over Engine,Engine: Node 2 — BuildPowerLawPost
+        Engine->>Engine: fair value = 10⁻¹⁷ × days^5.83 (since genesis 2009-01-03)
+        Engine->>Engine: post text + signed % delta (→ context["PowerLaw.PostText"])
+        Note over Engine,TagRepl: Node 3 — FanOutSend (terminal)
+        Engine->>Engine: same Post fanned out to all senders
+    end
+
+    Engine-->>Orch: WorkflowExecutionResult(context with Workflow.SendResults)
+    Orch->>Orch: Extract SendResults (SenderPlatform → Post)
     Orch-->>Fn: IReadOnlyDictionary<SenderPlatform, Post?>
 
     Fn->>Orch: PostAsync(posts, ct)
     Note over Orch,Platform: Parallel fan-out via Task.WhenAll
 
-    alt Production senders (X / LinkedIn / Instagram)
+    alt Production senders (X / LinkedIn / Instagram / Facebook)
         par Dispatch to primary sender
             Orch->>Sender1: SendAsync(posts[primary.Platform], ct)
             Note over Sender1: Credentials already in IOptions<*Credentials><br/>— no Key Vault call at publish time
@@ -422,9 +434,9 @@ sequenceDiagram
             SenderN-->>Orch: bool result
         end
         Orch-->>Fn: true only if all senders succeed
-    else DryRunSender (local only, EnableDryRunSlot = true)
+    else DryRunSender (local only — a Schedule slot with dry-run senders)
         Fn->>DryRun: SendAsync(post)
-        DryRun->>DryRun: Log post content (no outbound call)
+        DryRun->>DryRun: Probe 'XApiKey' then log post content (no outbound call)
         DryRun-->>Fn: true
     end
 ```
