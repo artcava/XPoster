@@ -15,7 +15,17 @@ Welcome to the XPoster documentation. Use the links below to navigate to the rel
 ## Architecture & Extension
 
 - [Architecture](architecture.md) — component map, data flow, design decisions
-- [Extending XPoster](extending-xposter.md) — adding senders, orchestrators, AI providers, feed URL providers
+- [Extending XPoster](extending-xposter.md) — adding workflows, senders, and AI providers
+
+---
+
+## Orchestration & Scheduling
+
+- [Workflow-Based Orchestration (ADR-006)](analysis/ADR-006-workflow-based-orchestration-architecture.md) — the workflow DAG model, node catalogue, and config-driven scheduling
+- [Capability-Based Extension Points (ADR-005)](analysis/ADR-005-capability-based-extension-points.md) — AI capability interfaces and keyed DI
+- [Testing Strategy](../tests/README.md) — testing philosophy, mocking patterns, and coverage goals
+
+> The full ADR list is maintained in the [architecture document](architecture.md#4-architecture-decision-records-adrs).
 
 ---
 
@@ -40,13 +50,17 @@ Setup guides for each external service XPoster integrates with.
 
 ## AI Provider Capabilities
 
-| Provider | `AiProvider` value | Summarisation | Image Prompt | Image Generation |
-|---|---|---|---|---|
-| OpenAI | `OpenAi` | ✅ | ✅ | ✅ |
-| Azure AI Foundry | `AzureFoundry` | ✅ | ✅ | ✅ |
-| DeepSeek | `DeepSeek` | ✅ | ✅ | ❌ |
-| Perplexity | `Perplexity` | ✅ | ✅ | ❌ |
-| fal.ai | `FalAi` | ❌ | ❌ | ✅ |
+Each AI **node** names its provider via `Workflows__<key>__Nodes__N__Parameters__Provider`. Providers are keyed by `AiProvider` and expose only the capability interfaces they implement:
+
+| Provider | `AiProvider` value | Text (`AiText` nodes) | Image (`AiImage` nodes) |
+|---|---|---|---|
+| OpenAI | `OpenAi` | ✅ | ✅ |
+| Azure AI Foundry | `AzureFoundry` | ✅ | ✅ |
+| DeepSeek | `DeepSeek` | ✅ | ❌ (node throws) |
+| Perplexity | `Perplexity` | ✅ | ❌ (node throws) |
+| fal.ai | `FalAi` | ❌ (node throws) | ✅ |
+
+A single workflow can mix providers per node (e.g. DeepSeek for the summary `AiText`, fal.ai for the `AiImage`).
 
 ---
 
