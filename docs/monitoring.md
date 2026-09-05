@@ -300,7 +300,7 @@ resource feedCircuitBreakerAlert 'Microsoft.Insights/scheduledQueryRules@2022-06
 }
 ```
 
-> The resilience parameters that control when these events fire (retry count, circuit breaker thresholds, timeout) are configurable via `FeedOptions` app settings. See [configuration.md — Feed HTTP Client](configuration.md#feed-http-client) for the full reference.
+> These events are controlled by the Polly `AddStandardResilienceHandler` pipeline, whose parameters (attempt/total timeouts, retry count and base delay, circuit-breaker thresholds) are **hardcoded in `HttpClientExtensions.AddHttpClients()`** — there are no configuration knobs. See [configuration.md — Feed HTTP Client](configuration.md#feed-http-client) for the exact values per named client.
 
 ---
 

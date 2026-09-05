@@ -658,6 +658,8 @@ Any `Schedule` slot whose senders reference these platforms behaves as a dry-run
 - an app setting `"XApiKey": "<any-non-empty-value>"` in `local.settings.json` for local runs, or
 - a plain `XApiKey` secret in Key Vault (distinct from `XCredentials--XApiKey`, which feeds the live `XSender`).
 
+> ⚠️ **Startup credential validation still applies.** `ICredentialsStartupValidator.Validate()` runs unconditionally at application startup (`Program.cs`) and validates **all four** platform credentials sections (X, LinkedIn, Instagram, Facebook). A dry-run requires your Key Vault to contain those secrets — they are validated but never used while the dry-run senders are selected, and nothing is published.
+
 ### Minimal `local.settings.json` for dry-run
 
 ```jsonc
@@ -698,7 +700,7 @@ Any `Schedule` slot whose senders reference these platforms behaves as a dry-run
    ```bash
    cp src/local.settings.json.example src/local.settings.json
    ```
-   Fill in `KEYVAULT_URI`, `OpenAI__ApiKey`, the top-level `XApiKey` probe, and uncomment/keep the `Schedule__2` dry-run slot. RSS URLs come from the workflow(s) you schedule (`Workflows__<Workflow>__Nodes__0__Parameters__Urls`).
+   Fill in `KEYVAULT_URI`, `OpenAI__ApiKey`, and the top-level `XApiKey` probe; keep all four platform credential sections (X, LinkedIn, Instagram, Facebook) present in the Key Vault so the startup validator passes; and uncomment/keep the `Schedule__2` dry-run slot. RSS URLs come from the workflow(s) you schedule (`Workflows__<Workflow>__Nodes__0__Parameters__Urls`).
 
 3. **Start the function**
    ```bash
@@ -709,8 +711,7 @@ Any `Schedule` slot whose senders reference these platforms behaves as a dry-run
    ```
    [DryRun] Configuration probe succeeded ('XApiKey' is present, length=16)
    [DryRun] Post content (112 chars): "Value of #BTC for the #powerlaw today would be: 123456.78 #USD
-   +1.23%"
-   [DryRunSender] Dry run complete — no post published.
+   +1.23%" | Image: False
    ```
 
 5. **Cleanup** — ensure `Schedule__2` (dry-run senders) and `ForceHour` are not copied into production Azure App Settings or `src/local.settings.json.example`.
@@ -734,7 +735,7 @@ Configuration bound from the `OpenAI` prefix using double-underscore notation.
 
 > Prompt templates, temperature, and token budget live in `PromptSteps`, referenced by the workflow nodes through their `StepId` (see [Prompt Steps](#prompt-steps)). Provider settings configure connectivity only.
 
-> See [docs/integrations/setup-openai.md](integrations/setup-openai.md) for the full setup guide.
+> See [docs/integrations/AiProviders/setup-openai.md](integrations/AiProviders/setup-openai.md) for the full setup guide.
 
 ---
 
@@ -753,7 +754,7 @@ Configuration bound from the `AzureFoundry` prefix.
 
 The Azure AI Foundry endpoint is OpenAI-compatible; model names (deployment names) are configured above and referenced by the workflow nodes' `Provider: AzureFoundry`. Prompt templates and generation tuning come from `PromptSteps`.
 
-> See [docs/integrations/setup-azure-foundry.md](integrations/setup-azure-foundry.md) for the full setup guide.
+> See [docs/integrations/AiProviders/setup-azure-foundry.md](integrations/AiProviders/setup-azure-foundry.md) for the full setup guide.
 
 ---
 
@@ -771,7 +772,7 @@ Configuration bound from the `DeepSeek` prefix using double-underscore notation.
 
 The DeepSeek endpoint is OpenAI-compatible. Prompt templates and generation tuning come from `PromptSteps`; assign `Provider: DeepSeek` on the workflow's `AiText` nodes (never on an `AiImage` node).
 
-> See [docs/integrations/setup-deepseek.md](integrations/setup-deepseek.md) for the full setup guide.
+> See [docs/integrations/AiProviders/setup-deepseek.md](integrations/AiProviders/setup-deepseek.md) for the full setup guide.
 
 ---
 
@@ -788,7 +789,7 @@ Configuration bound from the `FalAi` prefix using double-underscore notation.
 | `FalAi__ImageModelName` | string | No | `fal-ai/flux/schnell` | fal.ai model identifier. |
 | `FalAi__NumInferenceSteps` | int | No | `4` | Number of diffusion steps. |
 
-> See [docs/integrations/setup-falai.md](integrations/setup-falai.md) for the full setup guide.
+> See [docs/integrations/AiProviders/setup-falai.md](integrations/AiProviders/setup-falai.md) for the full setup guide.
 
 ---
 
@@ -806,7 +807,7 @@ Configuration bound from the `Perplexity` prefix using double-underscore notatio
 | `Perplexity__Endpoint` | string | No | `https://api.perplexity.ai` | Perplexity API base URL. |
 | `Perplexity__TextModelName` | string | No | `sonar` | Model identifier passed as `model` in each chat completions request. |
 
-> See [docs/integrations/setup-perplexity.md](integrations/setup-perplexity.md) for the full setup guide.
+> See [docs/integrations/AiProviders/setup-perplexity.md](integrations/AiProviders/setup-perplexity.md) for the full setup guide.
 
 ---
 

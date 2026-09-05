@@ -1,6 +1,6 @@
 # OpenAI — Setup Guide
 
-This guide explains how to obtain OpenAI API credentials and configure XPoster to use `OpenAiService` as the `IAiService` provider.
+This guide explains how to obtain OpenAI API credentials and configure XPoster to use `OpenAiService` as the AI text and image provider (`ITextToTextProvider` + `ITextToImageProvider`, keyed by `AiProvider.OpenAi`).
 
 > **Provider capabilities:** Text (`ITextToTextProvider`) + Image generation (`ITextToImageProvider`)  
 > **`AiProvider` enum value:** `OpenAi`
@@ -40,8 +40,8 @@ Model availability depends on your account tier. Check [platform.openai.com/docs
 | Parameter | Value |
 |-----------|-------|
 | `OpenAI__ApiKey` | The secret key created in step 1 |
-| `OpenAI__ChatModel` | The chat model name (e.g. `gpt-4.1-nano`) |
-| `OpenAI__ImageModel` | The image model name (e.g. `gpt-image-1.5`) |
+| `OpenAI__TextModelName` | The chat model name (default `gpt-4.1-nano`) |
+| `OpenAI__ImageModelName` | The image model name (default `gpt-image-1.5`) |
 
 ## 5. Configure XPoster
 
@@ -50,18 +50,20 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 ```json
 {
   "Values": {
-    "AiProvider": "OpenAi",
     "OpenAI__ApiKey": "<your-openai-api-key>",
-    "OpenAI__ChatEndpoint": "https://api.openai.com/v1/chat/completions",
-    "OpenAI__ChatModel": "gpt-4.1-nano",
-    "OpenAI__ImageEndpoint": "https://api.openai.com/v1/images/generations",
-    "OpenAI__ImageModel": "gpt-image-1.5",
-    "OpenAI__ImageSize": "1024x1024"
+    "OpenAI__Endpoint": "https://api.openai.com/v1/",
+    "OpenAI__TextModelName": "gpt-4.1-nano",
+    "OpenAI__ImageModelName": "gpt-image-1.5"
   }
 }
 ```
 
-All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
+These settings configure **connectivity and models only**. There is no global `AiProvider`
+switch — each AI node selects its own provider: point an `AiText` node at OpenAI with
+`Workflows__<key>__Nodes__N__Parameters__Provider: "OpenAi"` (the default when omitted), and
+an `AiImage` node the same way. Prompt templates, temperature, and token budgets live in
+`PromptSteps__<StepId>__*`, referenced by the nodes' `StepId`. See `src/local.settings.json.example`
+for the full list.
 
 ## 6. Store Secrets Safely
 
@@ -79,7 +81,7 @@ For production environments:
 
 ### 404 Model Not Found
 
-- Verify the model name in `OpenAI__ChatModel` or `OpenAI__ImageModel` is correct and available on your account tier.
+- Verify the model name in `OpenAI__TextModelName` or `OpenAI__ImageModelName` is correct and available on your account tier.
 - Check [platform.openai.com/docs/models](https://platform.openai.com/docs/models) for availability.
 
 ### 429 Too Many Requests / Rate Limit
@@ -94,8 +96,6 @@ For production environments:
 
 ### Empty or Low-Quality Output
 
-- Verify that prompt templates include all required placeholders:
-  - `OpenAI__SummarySystemPromptTemplate` must include `{MaxChars}`
-  - `OpenAI__SummaryUserPromptTemplate` must include `{Text}`
-  - `OpenAI__ImagePromptUserTemplate` must include `{Summary}`
+- Verify that the `PromptSteps__<StepId>` entry referenced by the `AiText` node defines a `SystemPromptTemplate` containing `{MaxChars}` and a `UserPromptTemplate` containing the input label (`InputTextLabel`, default `{Text}`).
+- For image prompts, check the step used by the `AiImage` node.
 - Consider using a larger model for better output quality.

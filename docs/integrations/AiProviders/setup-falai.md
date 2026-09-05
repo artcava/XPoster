@@ -5,9 +5,10 @@ This guide explains how to obtain fal.ai API credentials and configure XPoster t
 > **Provider capabilities:** Image generation only (`ITextToImageProvider`)  
 > **`AiProvider` enum value:** `FalAi`
 
-> ℹ️ fal.ai does not support text generation. When `AiProvider = FalAi`, no
-> `ITextToTextProvider` is resolved. Use `FalAi` only when another orchestrator slot
-> handles text generation, or pair it with a text-capable provider in a separate slot.
+> ℹ️ fal.ai does not support text generation. Assign `Provider: FalAi` only on `AiImage` nodes
+> (`Workflows__<key>__Nodes__N__Parameters__Provider`); an `AiText` node pointing at it throws
+> `InvalidOperationException`. Pair `FalAi` (image) with a text-capable provider on the
+> workflow's `AiText` node (e.g. OpenAi or DeepSeek).
 
 ---
 
@@ -30,10 +31,10 @@ fal.ai uses pay-per-inference pricing:
 
 ## 3. Model Used by XPoster
 
-XPoster uses the **FLUX.1 Turbo** (`fal-ai/flux/schnell`) model via fal.ai for all image generation tasks. The model is configurable via `FalAi__ModelId`.
+XPoster uses the **FLUX.1 Turbo** (`fal-ai/flux/schnell`) model via fal.ai for all image generation tasks. The model is configurable via `FalAi__ImageModelName`.
 
-| Model | `FalAi__ModelId` | Notes |
-|-------|-----------------|-------|
+| Model | `FalAi__ImageModelName` | Notes |
+|-------|-------------------------|-------|
 | FLUX.1 Turbo | `fal-ai/flux/schnell` | Default — fast, high-quality, optimized for social media content |
 | FLUX.1 Dev | `fal-ai/flux/dev` | Higher quality, slower and more expensive |
 
@@ -42,7 +43,7 @@ XPoster uses the **FLUX.1 Turbo** (`fal-ai/flux/schnell`) model via fal.ai for a
 | Parameter | Value |
 |-----------|-------|
 | `FalAi__ApiKey` | The API key created in step 1 |
-| `FalAi__ModelId` | Model identifier (default: `fal-ai/flux/schnell`) |
+| `FalAi__ImageModelName` | Model identifier (default: `fal-ai/flux/schnell`) |
 
 ## 5. Configure XPoster
 
@@ -51,16 +52,19 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 ```json
 {
   "Values": {
-    "AiProvider": "FalAi",
     "FalAi__ApiKey": "<your-falai-api-key>",
-    "FalAi__ModelId": "fal-ai/flux/schnell",
-    "FalAi__ImageSize": "landscape_4_3",
+    "FalAi__ImageModelName": "fal-ai/flux/schnell",
     "FalAi__NumInferenceSteps": "4"
   }
 }
 ```
 
-All settings except `FalAi__ApiKey` have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
+These settings configure **connectivity and models only**. There is no global `AiProvider`
+switch — the provider is chosen per AI node via `Workflows__<key>__Nodes__N__Parameters__Provider:
+"FalAi"` (assign it on `AiImage` nodes only, as in the shipped `Bitcoin` workflow). Prompt
+templates, image size, and token budgets live in `PromptSteps__<StepId>__*` (the step used by
+the `AiImage` node carries its `ImageQuantity`/`ImageSize`). See `src/local.settings.json.example`
+for the full list.
 
 ## 6. Store Secrets Safely
 
@@ -73,11 +77,10 @@ For production environments:
 
 `FalAiImageService` implements `ITextToImageProvider` exclusively:
 
-| Operation | Interface | Routed to |
-|-----------|-----------|----------|
-| `GetSummaryAsync` | `ITextToTextProvider` | ❌ Not supported — `FalAi` has no text provider registration |
-| `GetImagePromptAsync` | `ITextToTextProvider` | ❌ Not supported — `FalAi` has no text provider registration |
-| `GenerateImageAsync` | `ITextToImageProvider` | `FalAiImageService` — FLUX.1 Turbo |
+| Capability | Interface | Routed to |
+|------------|-----------|----------|
+| Text generation (`AiText` nodes) | `ITextToTextProvider` | ❌ Not supported — `GetKeyedService<ITextToTextProvider>(FalAi)` is `null`; an `AiText` node throws |
+| Image generation (`AiImage` nodes) | `ITextToImageProvider` | `FalAiImageService` — FLUX.1 Turbo |
 
 ## 8. Troubleshooting
 
@@ -94,7 +97,7 @@ For production environments:
 
 - The image prompt may contain content that violates fal.ai's content policy.
 - Review the prompt in the Application Insights logs.
-- Adjust `FalAi`-related prompt templates on the text provider side to produce safer prompts if needed.
+- Adjust the `PromptSteps` step used by the `AiText` node that derives the prompt to produce safer prompts if needed.
 
 ### Slow or Timed-Out Generation
 
@@ -105,4 +108,4 @@ For production environments:
 ### Low Image Quality
 
 - Review the image prompt logged in Application Insights — the prompt is the main driver of quality.
-- Ensure the text provider's `ImagePromptUserTemplate` includes `{Summary}` and produces descriptive, specific prompts.
+- Ensure the `PromptSteps` step used by the `AiText` node that derives the image prompt produces descriptive, specific prompts.
