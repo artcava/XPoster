@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **IsTransientHttpFailure()** (2 connections)
 - **if()** (2 connections)
-- **DispatchAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 178]] (3 shared connections)
+- [[Community 171]] (3 shared connections)
 
 ## Audit Trail
 

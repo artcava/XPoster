@@ -1,31 +1,31 @@
 # Community 27
 
-> 14 nodes · cohesion 0.14
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **WorkflowOrchestratorTests.cs** (17 connections)
-- **Properties_AreConfigured()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyDictionary_WhenSendResultsMissing()** (2 connections)
-- **ProduceImage_Set_ThrowsNotSupported()** (2 connections)
-- **ProduceImage_IsTrue_WhenWorkflowHasAiImageNode()** (2 connections)
-- **ProduceImage_IsFalse_WhenWorkflowHasNoAiImageNode()** (2 connections)
-- **OrchestrateAsync_ReturnsPostMap_OnSuccess()** (2 connections)
-- **MakeDefinition()** (2 connections)
-- **MakeDefinitionWithoutImage()** (2 connections)
-- **static()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **WorkflowOrchestratorTests** (2 connections)
-- **return()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyDictionary_OnFailure()** (2 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **Run()** (2 connections)
+- **HandleFinishedAsync()** (2 connections)
+- **HandleTerminalFailureAsync()** (2 connections)
+- **if()** (2 connections)
+- **PollPendingContainersAsync()** (2 connections)
+- **ProcessContainerAsync()** (2 connections)
+- **XPoster** (2 connections)
+- **XPosterContainerPollingFunction()** (2 connections)
+- **foreach()** (2 connections)
+- **catch()** (2 connections)
+- **switch()** (2 connections)
+- **TryDeleteBlobAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 174]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 43 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

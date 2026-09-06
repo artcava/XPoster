@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode.cs** (4 connections)
-- **ExecuteAsync()** (2 connections)
-- **IWorkflowNode** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **ConfigurationStepOptionsResolver()** (2 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Workflows.Services** (2 connections)
 
 ## Relationships
 

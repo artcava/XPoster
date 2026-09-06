@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender.cs** (3 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **DryRunShortLengthSender()** (2 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **XPoster.Credentials** (2 connections)
+- **AddCredentials()** (2 connections)
 
 ## Relationships
 

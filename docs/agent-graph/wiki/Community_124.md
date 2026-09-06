@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **GetProvider()** (2 connections)
-- **catch()** (2 connections)
-- **IsJsonLike()** (2 connections)
-- **XPoster.Workflows.Utilities** (2 connections)
-- **return()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **var()** (2 connections)
+- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
+- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
 
 ## Relationships
 
-- [[Community 216]] (3 shared connections)
+- [[Community 35]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

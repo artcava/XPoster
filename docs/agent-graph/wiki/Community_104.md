@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidator.cs** (5 connections)
-- **WorkflowDefinitionValidator.cs** (5 connections)
-- **foreach()** (2 connections)
-- **HasCycle()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
 
 ## Relationships
 

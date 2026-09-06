@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode** (2 connections)
+- **WorkflowNodeInput.cs** (3 connections)
+- **WorkflowNodeInput.cs** (3 connections)
+- **WorkflowNodeInput()** (2 connections)
 - **XPoster.Workflows.Abstractions** (2 connections)
 
 ## Relationships

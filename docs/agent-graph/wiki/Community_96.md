@@ -1,20 +1,20 @@
 # Community 96
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
-- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **AzureFoundryOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **XPoster.Credentials** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 170]] (4 shared connections)
 
 ## Audit Trail
 

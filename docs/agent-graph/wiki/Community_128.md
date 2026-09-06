@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **Resolve()** (2 connections)
+- **WorkflowDefinitionOptions.cs** (4 connections)
+- **WorkflowDefinitionOptions.cs** (4 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
+- **WorkflowDefinition()** (2 connections)
+- **ToDefinition()** (2 connections)
 
 ## Relationships
 

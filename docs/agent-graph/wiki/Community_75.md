@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **BuildChatPayload()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **new()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
+- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **CreateNode()** (2 connections)
+- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
 
 ## Relationships
 
-- [[Community 169]] (4 shared connections)
+- [[Community 105]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **ExecuteAsync()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **Uri()** (2 connections)
+- **BlobServiceClient()** (2 connections)
 - **if()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
 
 ## Relationships
 

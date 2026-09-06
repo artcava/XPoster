@@ -1,19 +1,19 @@
 # Community 107
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TagReplacementServiceTests.cs** (5 connections)
-- **TagReplacementServiceTests.cs** (5 connections)
-- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
-- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **Apply_Returns_Input_Unchanged_When_Text_Is_Empty_Or_Whitespace()** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **return()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **catch()** (2 connections)
+- **GetProvider()** (2 connections)
+- **IsJsonLike()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 223]] (3 shared connections)
 
 ## Audit Trail
 

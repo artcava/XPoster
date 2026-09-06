@@ -1,25 +1,25 @@
 # Community 78
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FanOutSendNode.cs** (7 connections)
-- **FanOutSendNode.cs** (7 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **static()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **FetchRssNodeTests** (2 connections)
+- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
+- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
+- **return()** (2 connections)
 - **foreach()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **FanOutSendNode()** (2 connections)
-- **if()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 103]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

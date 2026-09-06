@@ -4,26 +4,26 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (19 connections)
-- **typeof()** (2 connections)
-- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
-- **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
-- **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **InSender()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
+- **MessageMaxLength_Returns2800()** (2 connections)
+- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
+- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
+- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
+- **Platform_ReturnsLinkedIn()** (2 connections)
+- **InSenderTests()** (2 connections)
+- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (8 shared connections)
+- [[Community 36]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 41 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

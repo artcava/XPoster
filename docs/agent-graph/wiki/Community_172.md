@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowNodeInput.cs** (3 connections)
-- **WorkflowNodeInput.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowDefinition()** (2 connections)
 
 ## Relationships
 

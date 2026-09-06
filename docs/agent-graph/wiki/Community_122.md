@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 - **if()** (2 connections)
-- **SendAsync()** (2 connections)
-- **DryRunSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **FacebookCredentialsValidator** (2 connections)
 
 ## Relationships
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **if()** (2 connections)
-- **Process()** (2 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITagReplacementProvider** (2 connections)
 
 ## Relationships
 

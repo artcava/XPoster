@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest** (2 connections)
-- **XPoster.Models** (2 connections)
-- **ImagePromptRequest** (2 connections)
+- **WorkflowOrchestrator.cs** (4 connections)
+- **WorkflowOrchestrator.cs** (4 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

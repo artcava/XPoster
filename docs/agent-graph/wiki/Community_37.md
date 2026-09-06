@@ -1,29 +1,29 @@
 # Community 37
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **MessageMaxLength_Returns2800()** (2 connections)
-- **Platform_ReturnsLinkedIn()** (2 connections)
-- **InSender()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **InSenderTests()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
+- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
+- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
+- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
+- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
+- **BuildConfig()** (2 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
+- **ConfigurationStepOptionsResolverTests** (2 connections)
+- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
+- **Resolve_Throws_WhenStepMissing()** (2 connections)
+- **XPoster.Tests.Workflows.Services** (2 connections)
+- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

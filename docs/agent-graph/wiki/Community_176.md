@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **catch()** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **WorkflowExecutionEngineTests.cs** (24 connections)
+- **var()** (2 connections)
+- **new()** (2 connections)
+- **StubNode()** (2 connections)
 
 ## Relationships
 
-- [[Community 208]] (3 shared connections)
+- [[Community 10]] (20 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

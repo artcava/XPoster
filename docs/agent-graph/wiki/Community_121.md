@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidator.cs** (5 connections)
-- **OpenAiOptionsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **nameof()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
 
 ## Relationships
 

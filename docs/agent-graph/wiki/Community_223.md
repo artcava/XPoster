@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
+- **NodeParameterExtractor.cs** (8 connections)
 - **if()** (2 connections)
-- **XSender()** (2 connections)
+- **InvalidOperationException()** (2 connections)
 
 ## Relationships
 
-- [[Community 171]] (3 shared connections)
+- [[Community 107]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

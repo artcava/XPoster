@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **var()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **Execute_UsesSymbol_ForPostTag()** (2 connections)
+- **BuildPowerLawPostNodeTests()** (2 connections)
+- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
+- **if()** (2 connections)
 - **Input()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (7 shared connections)
+- [[Community 75]] (7 shared connections)
 
 ## Audit Trail
 

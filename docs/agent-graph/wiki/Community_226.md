@@ -5,8 +5,8 @@
 ## Key Concepts
 
 - **XPoster.Models** (2 connections)
-- **FalAiOptions.cs** (2 connections)
-- **FalAiOptions.cs** (2 connections)
+- **DeepSeekOptions.cs** (2 connections)
+- **DeepSeekOptions.cs** (2 connections)
 
 ## Relationships
 

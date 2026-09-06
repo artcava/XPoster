@@ -1,25 +1,25 @@
 # Community 81
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (19 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **new()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **WorkflowProfile()** (2 connections)
-- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **AiProviderExtensionsTests** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 40]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

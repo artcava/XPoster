@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowExecutionEngineTests.cs** (24 connections)
-- **var()** (2 connections)
-- **new()** (2 connections)
-- **StubNode()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **ValidateOptions()** (2 connections)
+- **foreach()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 11]] (20 shared connections)
+- [[Community 96]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

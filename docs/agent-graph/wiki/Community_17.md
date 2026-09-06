@@ -6,6 +6,10 @@
 
 - **MetaPublishingServiceTests.cs** (16 connections)
 - **MetaPublishingServiceTests.cs** (16 connections)
+- **GetContainerStatusAsync_WhenOk_ReturnsStatusCode()** (2 connections)
+- **GetContainerStatusAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
+- **GetContainerStatusAsync_WhenNotFound_ThrowsHttpRequestException()** (2 connections)
+- **CreateSut()** (2 connections)
 - **PublishContainerAsync_WhenResponseBodyIsNull_ThrowsJsonException()** (2 connections)
 - **PublishContainerAsync_WithWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
 - **XPoster.Tests.Services** (2 connections)
@@ -14,13 +18,9 @@
 - **MetaPublishingService()** (2 connections)
 - **PublishContainerAsync_WhenIdIsNull_ReturnsEmptyString()** (2 connections)
 - **PublishContainerAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
-- **CreateSut()** (2 connections)
-- **GetContainerStatusAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
-- **GetContainerStatusAsync_WhenOk_ReturnsStatusCode()** (2 connections)
-- **GetContainerStatusAsync_WhenNotFound_ThrowsHttpRequestException()** (2 connections)
+- **GetContainerStatusAsync_WhenResponseBodyIsEmpty_ThrowsJsonException()** (2 connections)
 - **PublishContainerAsync_WhenRateLimited_Throws()** (2 connections)
 - **GetContainerStatusAsync_WhenStatusInNestedField_ReturnsCode()** (2 connections)
-- **GetContainerStatusAsync_WhenResponseBodyIsEmpty_ThrowsJsonException()** (2 connections)
 
 ## Relationships
 

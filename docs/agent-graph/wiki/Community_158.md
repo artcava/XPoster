@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowEngine.cs** (4 connections)
-- **IWorkflowEngine.cs** (4 connections)
-- **IWorkflowEngine** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **ExecuteAsync()** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest** (2 connections)
+- **XPoster.Models** (2 connections)
+- **ImagePromptRequest** (2 connections)
 
 ## Relationships
 

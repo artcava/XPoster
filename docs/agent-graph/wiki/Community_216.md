@@ -1,20 +1,20 @@
 # Community 216
 
-> 3 nodes · cohesion 0.67
+> 3 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **if()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
+- **OpenAiOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 124]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

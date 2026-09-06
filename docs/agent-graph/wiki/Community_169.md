@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **catch()** (2 connections)
-- **return()** (2 connections)
-- **if()** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (7 shared connections)
+- [[Community 204]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
