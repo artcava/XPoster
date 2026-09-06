@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **while()** (2 connections)
-- **DeepSeekService()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **PostAsync()** (2 connections)
+- **BaseOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 130]] (4 shared connections)
+- [[Community 215]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

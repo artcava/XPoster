@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **var()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **HttpClient()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **ResolveWorkflowOrchestrator()** (2 connections)
+- **if()** (2 connections)
+- **CreateEmptyNoOrchestrator()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **nameof()** (2 connections)
 
 ## Relationships
 
-- [[Community 3]] (31 shared connections)
+- [[Community 93]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidator.cs** (5 connections)
-- **AzureFoundryOptionsValidator.cs** (5 connections)
-- **nameof()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
 
 ## Relationships
 

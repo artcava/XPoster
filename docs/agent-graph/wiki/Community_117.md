@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **BlobServiceClient()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **Uri()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

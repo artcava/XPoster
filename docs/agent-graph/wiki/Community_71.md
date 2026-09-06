@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **FanOutSendNode.cs** (7 connections)
-- **FanOutSendNode.cs** (7 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **if()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **FanOutSendNode()** (2 connections)
-- **foreach()** (2 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **DeepSeekOptionsValidatorTests.cs** (7 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **DeepSeekOptionsValidatorTests** (2 connections)
+- **Validate_AccumulatesAllFailures_WhenMultipleRulesViolated()** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
 
 ## Relationships
 

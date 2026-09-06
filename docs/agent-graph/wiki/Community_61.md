@@ -1,26 +1,26 @@
 # Community 61
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AcquireCryptoValueNodeTests.cs** (8 connections)
-- **AcquireCryptoValueNodeTests.cs** (8 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
-- **AcquireCryptoValueNodeTests()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
-- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
+- **FbSenderResilienceTests** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 205]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

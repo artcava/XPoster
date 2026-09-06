@@ -1,23 +1,23 @@
 # Community 103
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **var()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **if()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **HasCycle()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 78]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 169
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **ConfigurationSlotProfileProvider.cs** (6 connections)
-- **ConfigurationSlotProfileProvider()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Providers** (2 connections)
+- **WorkflowNodeInput.cs** (3 connections)
+- **WorkflowNodeInput.cs** (3 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
 
 ## Relationships
 
-- [[Community 204]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

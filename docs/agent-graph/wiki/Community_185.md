@@ -1,21 +1,21 @@
 # Community 185
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
+- **MediaAttachment.cs** (3 connections)
+- **MediaAttachment.cs** (3 connections)
+- **MediaAttachment()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

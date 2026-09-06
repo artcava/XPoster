@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction.cs** (6 connections)
+- **XFunction()** (2 connections)
+- **XPoster** (2 connections)
+- **catch()** (2 connections)
+- **Run()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **AddWorkflows()** (2 connections)
-- **foreach()** (2 connections)
 
 ## Relationships
 

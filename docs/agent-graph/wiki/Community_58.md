@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
-- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **for()** (2 connections)
-- **catch()** (2 connections)
-- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **if()** (2 connections)
+- **GetRequired()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **Supports()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **TryGet()** (2 connections)
+- **InvalidOperationException()** (2 connections)
 
 ## Relationships
 

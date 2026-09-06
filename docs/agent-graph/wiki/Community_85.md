@@ -1,25 +1,25 @@
 # Community 85
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
+- **foreach()** (2 connections)
+- **return()** (2 connections)
+- **static()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **FetchRssNodeTests** (2 connections)
+- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 110]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

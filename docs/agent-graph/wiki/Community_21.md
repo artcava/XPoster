@@ -13,12 +13,12 @@
 - **GetProfiles_Should_ReturnEmpty_WhenNoScheduleConfigured()** (2 connections)
 - **GetProfiles_Should_MapEachSlotToWorkflowOrchestrator()** (2 connections)
 - **BuildConfiguration()** (2 connections)
+- **ConfigurationSlotProfileProviderTests** (2 connections)
 - **CreateProvider()** (2 connections)
 - **ConfigurationBuilder()** (2 connections)
-- **ConfigurationSlotProfileProviderTests** (2 connections)
 - **GetProfiles_Should_SkipUnknownSenders_ButKeepValidOnes()** (2 connections)
-- **new()** (2 connections)
 - **XPoster.Tests.Providers** (2 connections)
+- **new()** (2 connections)
 - **GetProfiles_Should_SkipSlot_WithNoWorkflowKey()** (2 connections)
 
 ## Relationships

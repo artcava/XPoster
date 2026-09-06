@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (5 connections)
-- **DeepSeekOptionsValidator.cs** (5 connections)
+- **OpenAiOptionsValidator.cs** (5 connections)
+- **OpenAiOptionsValidator.cs** (5 connections)
 - **if()** (2 connections)
 - **nameof()** (2 connections)
 - **Validate()** (2 connections)

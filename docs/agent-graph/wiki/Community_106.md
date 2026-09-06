@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **nameof()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **if()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
 
 ## Relationships
 

@@ -1,24 +1,24 @@
 # Community 93
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **if()** (2 connections)
-- **Run()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 - **catch()** (2 connections)
-- **XPoster** (2 connections)
-- **XFunction()** (2 connections)
+- **ResolveSenders()** (2 connections)
+- **Resolve()** (2 connections)
+- **NoOrchestrator()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 108]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
