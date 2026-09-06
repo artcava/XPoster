@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **GetReplacements()** (2 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **IWorkflowNode** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 

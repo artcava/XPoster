@@ -1,15 +1,16 @@
 # Community 94
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **DryRunSlotProfileProvider.cs** (5 connections)
-- **XPoster.Providers** (2 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **GetProfiles()** (2 connections)
-- **DryRunSlotProfileProvider()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

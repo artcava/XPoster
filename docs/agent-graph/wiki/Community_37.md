@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **AzureFoundryService.cs** (11 connections)
-- **GenerateImageAsync()** (2 connections)
-- **catch()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
+- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
+- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
+- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
+- **BuildConfig()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
-- **while()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **foreach()** (2 connections)
+- **ConfigurationStepOptionsResolverTests** (2 connections)
+- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
+- **Resolve_Throws_WhenStepMissing()** (2 connections)
+- **XPoster.Tests.Workflows.Services** (2 connections)
+- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
 
 ## Relationships
 

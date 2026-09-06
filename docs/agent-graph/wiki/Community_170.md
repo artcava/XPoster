@@ -1,20 +1,21 @@
 # Community 170
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DeepSeekOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **DeepSeekOptions.cs** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **ValidateOptions()** (2 connections)
+- **foreach()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 96]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

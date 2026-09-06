@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **ISender** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **SendAsync()** (2 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **IWorkflowEngine** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 

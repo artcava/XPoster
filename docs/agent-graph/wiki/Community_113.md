@@ -1,14 +1,15 @@
 # Community 113
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **PostAsync()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **AcquireCryptoValueNode()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

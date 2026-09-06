@@ -1,22 +1,23 @@
 # Community 116
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderSection** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiProviderOptions** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **IgSenderTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 45]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

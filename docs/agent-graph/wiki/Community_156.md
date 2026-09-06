@@ -1,21 +1,22 @@
 # Community 156
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **ValidateOptions()** (2 connections)
-- **resolve()** (2 connections)
-- **foreach()** (2 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 82]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

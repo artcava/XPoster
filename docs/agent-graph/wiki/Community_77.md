@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **TestOrchestrator()** (2 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
-- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **WorkflowProfile()** (2 connections)
+- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **new()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **CreateFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 60]] (8 shared connections)
+- [[Community 43]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

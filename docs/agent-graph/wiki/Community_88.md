@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **catch()** (2 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
 - **if()** (2 connections)
-- **IgSender()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **AddWorkflows()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 

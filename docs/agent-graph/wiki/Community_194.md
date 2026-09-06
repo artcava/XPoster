@@ -1,19 +1,21 @@
 # Community 194
 
-> 2 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
-- **if()** (2 connections)
+- **PendingContainer.cs** (3 connections)
+- **PendingContainer.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **PendingContainer()** (2 connections)
 
 ## Relationships
 
-- [[Community 190]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

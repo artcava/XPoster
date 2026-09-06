@@ -1,17 +1,18 @@
 # Community 154
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **while()** (2 connections)
-- **DeepSeekService()** (2 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **Resolve()** (2 connections)
+- **IStepOptionsResolver** (2 connections)
+- **XPoster.Workflows.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 118]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

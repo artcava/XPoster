@@ -4,8 +4,7 @@ namespace XPoster.Contracts;
 /// Provides the word-to-hashtag replacement map applied to generated summaries.
 /// </summary>
 /// <remarks>
-/// Decouples tag-replacement configuration from <see cref="XPoster.Orchestrators.FeedOrchestrator"/>,
-/// following the same pattern as <see cref="IFeedUrlProvider"/>.
+/// Decouples tag-replacement configuration from the workflow nodes that consume it.
 /// Swap implementations via DI without touching orchestrator logic.
 /// </remarks>
 public interface ITagReplacementProvider

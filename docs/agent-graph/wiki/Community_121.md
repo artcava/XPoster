@@ -1,22 +1,23 @@
 # Community 121
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
-- **if()** (2 connections)
-- **OpenAiService()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
 
 ## Relationships
 
-- [[Community 87]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

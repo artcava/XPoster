@@ -1,24 +1,25 @@
 # Community 80
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
-- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
-- **ValidOptions()** (2 connections)
-- **Validate_ValidOptions_Succeeds()** (2 connections)
-- **Validate_MissingRequiredProperties_Fails()** (2 connections)
-- **AzureFoundryOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **AiTextNodeTests** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **return()** (2 connections)
+- **static()** (2 connections)
+- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 101]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

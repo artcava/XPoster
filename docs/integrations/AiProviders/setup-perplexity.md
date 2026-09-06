@@ -6,9 +6,10 @@ prompt generation via the [Sonar Chat Completions API](https://docs.perplexity.a
 > **Provider capabilities:** Text only (`ITextToTextProvider`)  
 > **`AiProvider` enum value:** `Perplexity`
 
-> ⚠️ **Image generation is not supported.** When `AiProvider = Perplexity`, no
-> `ITextToImageProvider` is resolved and posts will be published **without an attached image**.
-> If image generation is required, switch to `OpenAi`, `AzureFoundry`, or `FalAi`.
+> ⚠️ **Image generation is not supported.** Assign `Provider: Perplexity` only on
+> `AiText` nodes (`Workflows__<key>__Nodes__N__Parameters__Provider`); an `AiImage` node pointing
+> at it throws `InvalidOperationException`. If image generation is required, use `OpenAi`,
+> `AzureFoundry`, or pair `Perplexity` (text) with `FalAi` (image) on separate nodes.
 
 ---
 
@@ -44,7 +45,7 @@ The default model is `sonar`. Available options at the time of writing:
 | `sonar-pro` | 200 k | Higher quality, higher cost |
 | `sonar-reasoning` | 127 k | Chain-of-thought, slower |
 
-Set `Perplexity__DeploymentName` to the model identifier you want to use.
+Set `Perplexity__TextModelName` to the model identifier you want to use.
 
 ---
 
@@ -55,15 +56,18 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 ```json
 {
   "Values": {
-    "AiProvider": "Perplexity",
     "Perplexity__ApiKey": "<your-perplexity-api-key>",
     "Perplexity__Endpoint": "https://api.perplexity.ai",
-    "Perplexity__DeploymentName": "sonar"
+    "Perplexity__TextModelName": "sonar"
   }
 }
 ```
 
-All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
+These settings configure **connectivity and models only**. There is no global `AiProvider`
+switch — the provider is chosen per AI node via `Workflows__<key>__Nodes__N__Parameters__Provider:
+"Perplexity"` (assign it on `AiText` nodes only). Prompt templates, temperature, and token budgets
+live in `PromptSteps__<StepId>__*`, referenced by the nodes' `StepId`. See
+`src/local.settings.json.example` for the full list.
 
 ---
 
@@ -82,24 +86,22 @@ store it in Key Vault and reference it via a Key Vault reference:
 
 ## 7. Verify the Integration
 
-Run a dry-run locally to confirm the provider is wired up correctly:
+Run a dry-run locally to confirm the provider is wired up correctly. Point an `AiText` node at
+Perplexity (e.g. `Workflows__Bitcoin__Nodes__1__Parameters__Provider: "Perplexity"`), then:
 
 ```bash
-# local.settings.json must have AiProvider = "Perplexity" and Perplexity__ApiKey set
 cd src && func start
 ```
 
-Expected log output on success:
+When a dry-run slot is selected, the dry-run probe and the post output appear in the logs
+(no `Image` is expected on a text-only workflow):
 
 ```
-[PerplexityService] Summary generated (312 chars)
-[PerplexityService] Image prompt generated
-[DryRunSender] Image attached: False
-[DryRunSender] Dry run complete — no post published.
+[DryRun] Configuration probe succeeded ('XApiKey' is present, length=…)
+[DryRun] Post content (… chars): "…" | Image: False
 ```
 
-> ℹ️ `Image attached: False` is expected — Perplexity implements `ITextToTextProvider` only
-> and is not registered as an `ITextToImageProvider`. The orchestrator publishes text-only posts.
+Nothing is published anywhere.
 
 ---
 
@@ -109,6 +111,6 @@ Expected log output on success:
 |---|---|---|
 | `401 Unauthorized` | Invalid or missing API key | Verify `Perplexity__ApiKey` is set correctly |
 | `402 Payment Required` | Insufficient credits | Add credits at perplexity.ai/settings/api |
-| `404 Not Found` | Wrong endpoint or model name | Check `Perplexity__Endpoint` and `Perplexity__DeploymentName` |
+| `404 Not Found` | Wrong endpoint or model name | Check `Perplexity__Endpoint` and `Perplexity__TextModelName` |
 | Summary always empty | `choices` array empty or API error | Check structured logs for `[Perplexity]` warning entries |
 | Posts published without image | Expected — Perplexity is `ITextToTextProvider` only | Use `OpenAi`, `AzureFoundry`, or `FalAi` if images are required |

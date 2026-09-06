@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **AIResponse.cs** (7 connections)
-- **AIResponse.cs** (7 connections)
-- **Choice** (2 connections)
-- **ImageData** (2 connections)
-- **OpenAIImageResponse** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Message** (2 connections)
-- **AIResponse** (2 connections)
+- **FetchRssNode.cs** (7 connections)
+- **FetchRssNode.cs** (7 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **foreach()** (2 connections)
+- **FetchRssNode()** (2 connections)
+- **if()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 

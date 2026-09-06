@@ -1,16 +1,17 @@
 # Community 174
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **IsTransientHttpFailure()** (2 connections)
-- **if()** (2 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddAiProviderOptions()** (2 connections)
 
 ## Relationships
 
-- [[Community 150]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

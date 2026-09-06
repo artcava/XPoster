@@ -1,14 +1,15 @@
 # Community 110
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **PowerLawOrchestrator.cs** (4 connections)
-- **PowerLawOrchestrator.cs** (4 connections)
-- **if()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **PowerLawOrchestrator()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **StringContent()** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

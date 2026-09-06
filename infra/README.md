@@ -43,9 +43,21 @@ az deployment group create \
 
 ## Secret naming convention
 
-| Secret name | Description |
-|---|---|
-| `LinkedInAccessToken` | LinkedIn OAuth access token (~60 days) |
-| `LinkedInClientId` | LinkedIn app Client ID |
-| `LinkedInClientSecret` | LinkedIn app Client Secret |
-| `{Platform}AccessToken` | Pattern for future platforms (e.g. `InstagramAccessToken`) |
+Secrets are bound to typed credentials DTOs via the Azure Key Vault Configuration Provider. Use the double-dash convention so a secret maps to the `SectionName:Property` configuration key expected by `IOptions<T>` (e.g. `LinkedInCredentials--LinkedInAccessToken` → `LinkedInCredentials:LinkedInAccessToken`).
+
+| Secret name | Bound configuration key | Description |
+|---|---|---|
+| `XCredentials--XApiKey` | `XCredentials:XApiKey` | Twitter/X API Key (Consumer Key) |
+| `XCredentials--XApiSecret` | `XCredentials:XApiSecret` | Twitter/X API Secret (Consumer Secret) |
+| `XCredentials--XAccessToken` | `XCredentials:XAccessToken` | Twitter/X User Access Token |
+| `XCredentials--XAccessTokenSecret` | `XCredentials:XAccessTokenSecret` | Twitter/X User Access Token Secret |
+| `LinkedInCredentials--LinkedInAccessToken` | `LinkedInCredentials:LinkedInAccessToken` | LinkedIn OAuth 2.0 access token (~60 days) |
+| `LinkedInCredentials--LinkedInOrgId` | `LinkedInCredentials:LinkedInOrgId` | LinkedIn organization ID (takes precedence) |
+| `LinkedInCredentials--LinkedInOwnerCode` | `LinkedInCredentials:LinkedInOwnerCode` | LinkedIn numeric person ID |
+| `InstagramCredentials--InstagramAccessToken` | `InstagramCredentials:InstagramAccessToken` | Instagram Graph API access token |
+| `InstagramCredentials--InstagramAccountId` | `InstagramCredentials:InstagramAccountId` | Instagram Business Account ID |
+| `FacebookCredentials--FacebookAccessToken` | `FacebookCredentials:FacebookAccessToken` | Facebook Graph API access token |
+| `FacebookCredentials--FacebookPageId` | `FacebookCredentials:FacebookPageId` | Facebook Page numeric ID |
+| `XApiKey` | `XApiKey` | Top-level probe used by `DryRunSender` (any non-empty value) |
+
+See [docs/configuration.md](../docs/configuration.md) for the authoritative secret reference.

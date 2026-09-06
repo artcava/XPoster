@@ -26,12 +26,22 @@ public class DryRunSenderTests
             .Build();
     }
 
-    private DryRunSender BuildSender(
+    private DryRunSender BuildMaxSender(
         string? apiKeyValue = "some-key",
         IConfiguration? config = null,
         ILogger<DryRunSender>? logger = null)
     {
-        return new DryRunSender(
+        return new DryRunMaxLengthSender(
+            config ?? BuildConfig(apiKeyValue),
+            logger ?? _mockLogger.Object);
+    }
+
+    private DryRunSender BuildShortSender(
+        string? apiKeyValue = "some-key",
+        IConfiguration? config = null,
+        ILogger<DryRunSender>? logger = null)
+    {
+        return new DryRunShortLengthSender(
             config ?? BuildConfig(apiKeyValue),
             logger ?? _mockLogger.Object);
     }
@@ -42,9 +52,39 @@ public class DryRunSenderTests
     #region Constructor Tests
 
     [Fact]
-    public void Platform_ReturnsDryRun()
+    public void MaxSender_Platform_IsDryRunMaxLength()
     {
-        Assert.Equal(SenderPlatform.DryRun, BuildSender().Platform);
+        Assert.Equal(SenderPlatform.DryRunMaxLength, BuildMaxSender().Platform);
+    }
+
+    [Fact]
+    public void ShortSender_Platform_IsDryRunShortLength()
+    {
+        Assert.Equal(SenderPlatform.DryRunShortLength, BuildShortSender().Platform);
+    }
+
+    [Fact]
+    public void MaxSender_MessageMaxLength_IsIntMaxValue()
+    {
+        Assert.Equal(int.MaxValue, BuildMaxSender().MessageMaxLength);
+    }
+
+    [Fact]
+    public void ShortSender_MessageMaxLength_IsFifty()
+    {
+        Assert.Equal(DryRunShortLengthSender.ShortLength, BuildShortSender().MessageMaxLength);
+    }
+
+    [Fact]
+    public void MaxSender_ImplementsISender()
+    {
+        Assert.IsAssignableFrom<ISender>(BuildMaxSender());
+    }
+
+    [Fact]
+    public void ShortSender_ImplementsISender()
+    {
+        Assert.IsAssignableFrom<ISender>(BuildShortSender());
     }
 
     [Fact]
@@ -53,7 +93,7 @@ public class DryRunSenderTests
         var logMock = new Mock<ILogger<DryRunSender>>();
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["XApiKey"]).Returns("present-key");
-        var sut = new DryRunSender(config.Object, logMock.Object);
+        var sut = BuildMaxSender(config: config.Object, logger: logMock.Object);
 
         var result = await sut.SendAsync(new Post
         {
@@ -67,7 +107,7 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()
     {
-        var sut = BuildSender("present");
+        var sut = BuildMaxSender("present");
         var result = await sut.SendAsync(new Post { Content = string.Empty, Image = null });
         Assert.True(result);
     }
@@ -75,39 +115,27 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WhenKeyMissing_ReturnsFalse()
     {
-        var sut = BuildSender(null);
+        var sut = BuildMaxSender(null);
         Assert.False(await sut.SendAsync(new Post { Content = "test" }));
     }
 
     [Fact]
     public async Task SendAsync_WhenKeyWhitespace_ReturnsFalse()
     {
-        var sut = BuildSender("   ");
+        var sut = BuildMaxSender("   ");
         Assert.False(await sut.SendAsync(new Post { Content = "test" }));
     }
 
     [Fact]
     public void Constructor_WithNullConfiguration_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new DryRunSender(null!, _mockLogger.Object));
+        Assert.Throws<ArgumentNullException>(() => new DryRunMaxLengthSender(null!, _mockLogger.Object));
     }
 
     [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new DryRunSender(BuildConfig(), null!));
-    }
-
-    [Fact]
-    public void DryRunSender_ImplementsISender()
-    {
-        Assert.IsAssignableFrom<ISender>(BuildSender());
-    }
-
-    [Fact]
-    public void MessageMaxLength_ReturnsIntMaxValue()
-    {
-        Assert.Equal(int.MaxValue, BuildSender().MessageMaxLength);
+        Assert.Throws<ArgumentNullException>(() => new DryRunMaxLengthSender(BuildConfig(), null!));
     }
 
     #endregion
@@ -117,14 +145,14 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WithNullPost_ReturnsFalse()
     {
-        var sut = BuildSender("present");
+        var sut = BuildMaxSender("present");
         Assert.False(await sut.SendAsync(null!));
     }
 
     [Fact]
     public async Task SendAsync_WithNullPost_LogsWarning()
     {
-        await BuildSender().SendAsync(null!);
+        await BuildMaxSender().SendAsync(null!);
 
         _mockLogger.Verify(
             x => x.Log(
@@ -143,13 +171,13 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WhenProbeKeyPresent_ReturnsTrue()
     {
-        Assert.True(await BuildSender("fake-api-key").SendAsync(ValidPost()));
+        Assert.True(await BuildMaxSender("fake-api-key").SendAsync(ValidPost()));
     }
 
     [Fact]
     public async Task SendAsync_WhenProbeKeyPresent_LogsPostContent()
     {
-        await BuildSender().SendAsync(ValidPost("Hello dry-run world"));
+        await BuildMaxSender().SendAsync(ValidPost("Hello dry-run world"));
 
         _mockLogger.Verify(
             x => x.Log(
@@ -166,7 +194,7 @@ public class DryRunSenderTests
     {
         var post = ValidPost();
         post.Image = new byte[] { 0x01, 0x02, 0x03 };
-        Assert.True(await BuildSender().SendAsync(post));
+        Assert.True(await BuildMaxSender().SendAsync(post));
     }
 
     [Fact]
@@ -174,7 +202,7 @@ public class DryRunSenderTests
     {
         // DryRunSender only reads IConfiguration — no HTTP client, no social API.
         // Simply verifying it returns true with a valid config is sufficient.
-        Assert.True(await BuildSender().SendAsync(ValidPost()));
+        Assert.True(await BuildMaxSender().SendAsync(ValidPost()));
     }
 
     #endregion
@@ -184,13 +212,13 @@ public class DryRunSenderTests
     [Fact]
     public async Task SendAsync_WhenProbeKeyMissing_ReturnsFalse()
     {
-        Assert.False(await BuildSender(null).SendAsync(ValidPost()));
+        Assert.False(await BuildMaxSender(null).SendAsync(ValidPost()));
     }
 
     [Fact]
     public async Task SendAsync_WhenProbeKeyMissing_LogsError()
     {
-        await BuildSender(null).SendAsync(ValidPost());
+        await BuildMaxSender(null).SendAsync(ValidPost());
 
         _mockLogger.Verify(
             x => x.Log(

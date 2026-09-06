@@ -1,16 +1,17 @@
 # Community 79
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **InMemoryContainerStateStore.cs** (6 connections)
-- **InMemoryContainerStateStore.cs** (6 connections)
-- **SaveAsync()** (2 connections)
-- **InMemoryContainerStateStore** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
+- **WorkflowContext.cs** (7 connections)
+- **WorkflowContext.cs** (7 connections)
+- **HasData()** (2 connections)
+- **WorkflowContext** (2 connections)
+- **SetData()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **KeyNotFoundException()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
@@ -18,7 +19,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

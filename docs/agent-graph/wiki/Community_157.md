@@ -1,21 +1,22 @@
 # Community 157
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 173]] (3 shared connections)
+- [[Community 188]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

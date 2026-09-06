@@ -13,6 +13,8 @@ public enum SenderPlatform
     Instagram,
     /// <summary>Posts to Facebook.</summary>
     Facebook,
-    /// <summary>Dry-run sender for local integration testing. Logs post output without publishing.</summary>
-    DryRun,
+    /// <summary>Dry-run sender with an unlimited post length, for local integration testing. Logs post output without publishing.</summary>
+    DryRunMaxLength,
+    /// <summary>Dry-run sender with a short fixed post length, for local integration testing. Logs post output without publishing.</summary>
+    DryRunShortLength,
 }

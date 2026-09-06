@@ -1,16 +1,17 @@
 # Community 172
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **nameof()** (2 connections)
-- **if()** (2 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowDefinition()** (2 connections)
 
 ## Relationships
 
-- [[Community 164]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

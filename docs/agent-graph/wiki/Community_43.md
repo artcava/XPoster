@@ -1,28 +1,29 @@
 # Community 43
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (32 connections)
-- **FeedOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **DryRunSlotProfileProvider_Should_AppendDryRunProfile_ToInnerProviderProfiles()** (2 connections)
-- **new()** (2 connections)
-- **typeof()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
 - **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **Resolve_Should_NotRequestTextProvider_WhenProfileHasNoTextProvider()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **Resolve_Should_RequestImageProviderKey_WhenProfileSpecifiesImageProvider()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
+- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
+- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **typeof()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 9]] (21 shared connections)
+- [[Community 77]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 52 (100%)
+- EXTRACTED: 41 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

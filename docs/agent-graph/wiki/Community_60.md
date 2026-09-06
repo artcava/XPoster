@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
+- **FbSenderResilienceTests** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (8 shared connections)
+- [[Community 222]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

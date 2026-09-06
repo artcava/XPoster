@@ -1,6 +1,5 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using XPoster.Models;

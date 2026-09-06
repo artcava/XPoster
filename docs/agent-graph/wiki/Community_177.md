@@ -1,20 +1,21 @@
 # Community 177
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

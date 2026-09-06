@@ -1,30 +1,32 @@
 # DryRunSenderTests.cs
 
-> God node · 19 connections
+> God node · 31 connections
 
-**Community:** [[Community 3]]
+**Community:** [[Community 4]]
 
 ## Connections by Relation
 
 ### contains
 - [[XPoster.Tests.SenderPlugins]]
 - [[DryRunSenderTests()]]
-- [[BuildSender()]]
+- [[BuildConfig()]]
+- [[ConfigurationBuilder()]]
+- [[BuildMaxSender()]]
+- [[DryRunMaxLengthSender()]]
+- [[BuildShortSender()]]
+- [[DryRunShortLengthSender()]]
 - [[ValidPost()]]
 - [[new()]]
-- [[Constructor_WithNullKeyVaultService_ThrowsArgumentNullException()]]
-- [[Constructor_WithNullLogger_ThrowsArgumentNullException()]]
-- [[DryRunSender_ImplementsISender()]]
-- [[MessageMaxLenght_ReturnsIntMaxValue()]]
-- [[SendAsync_WithNullPost_ReturnsFalse()]]
-- [[SendAsync_WithNullPost_LogsWarning()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_ReturnsTrue()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_ProbesXApiKey()]]
-- [[SendAsync_WhenKeyVaultProbeSucceeds_LogsPostContent()]]
-- [[SendAsync_WithImageBytes_LogsImagePresence()]]
-- [[SendAsync_DoesNotCallAnyOutboundSocialApi()]]
-- [[SendAsync_WhenKeyVaultProbeThrows_ReturnsFalse()]]
-- [[SendAsync_WhenKeyVaultProbeThrows_LogsError()]]
+- [[MaxSender_Platform_IsDryRunMaxLength()]]
+- [[ShortSender_Platform_IsDryRunShortLength()]]
+- [[MaxSender_MessageMaxLength_IsIntMaxValue()]]
+- [[ShortSender_MessageMaxLength_IsFifty()]]
+- [[MaxSender_ImplementsISender()]]
+- [[ShortSender_ImplementsISender()]]
+- [[SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()]]
+- [[SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()]]
+- [[SendAsync_WhenKeyMissing_ReturnsFalse()]]
+- [[SendAsync_WhenKeyWhitespace_ReturnsFalse()]]
 
 ---
 

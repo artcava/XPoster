@@ -1,13 +1,14 @@
 # Community 147
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **TimeProvider** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

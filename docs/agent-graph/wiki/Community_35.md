@@ -1,29 +1,30 @@
 # Community 35
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WithImageBytes_TriesHttpCall_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenNeitherOrgIdNorOwnerCodeSet_ReturnsFalse()** (2 connections)
-- **InSender()** (2 connections)
-- **InSenderTests()** (2 connections)
-- **Platform_ReturnsLinkedIn()** (2 connections)
-- **SendAsync_ValidPost_TriesLinkedInAndReturnsFalse()** (2 connections)
-- **SendAsync_WhenBothOrgIdAndOwnerAreAbsent_ThrowsAndReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WithOrgId_UsesOrganizationUrn()** (2 connections)
-- **MessageMaxLength_Returns2800()** (2 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **AiImageNodeTests** (2 connections)
+- **Input()** (2 connections)
+- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
+- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
+- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
+- **if()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **return()** (2 connections)
+- **static()** (2 connections)
 
 ## Relationships
 
-- [[Community 30]] (12 shared connections)
+- [[Community 124]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

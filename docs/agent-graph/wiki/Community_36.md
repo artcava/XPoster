@@ -1,29 +1,30 @@
 # Community 36
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunctionTests.cs** (20 connections)
-- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
-- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
-- **XPoster.Tests** (2 connections)
-- **XPosterContainerPollingFunctionTests** (2 connections)
-- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
-- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
-- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
-- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
-- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
-- **CreateSut()** (2 connections)
-- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
+- **InSenderTests.cs** (24 connections)
+- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
+- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
+- **InSender_ImplementsISender()** (2 connections)
+- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
+- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 61]] (9 shared connections)
+- [[Community 40]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

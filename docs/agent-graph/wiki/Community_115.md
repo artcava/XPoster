@@ -1,14 +1,15 @@
 # Community 115
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **Validate()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ICredentialsStartupValidator** (2 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **HasData()** (2 connections)
+- **IWorkflowContext** (2 connections)
+- **SetData()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 
@@ -16,7 +17,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

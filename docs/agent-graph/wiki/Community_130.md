@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **catch()** (2 connections)
-- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **var()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 149]] (4 shared connections)
+- [[Community 197]] (4 shared connections)
 
 ## Audit Trail
 

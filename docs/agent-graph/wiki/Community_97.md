@@ -1,23 +1,24 @@
 # Community 97
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
+- **OpenAiService.cs** (11 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **catch()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 - **var()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **HttpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **JsonResponse()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 4]] (31 shared connections)
+- [[Community 131]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

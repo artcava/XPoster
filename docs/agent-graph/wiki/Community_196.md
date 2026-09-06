@@ -1,20 +1,21 @@
 # Community 196
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **InSender()** (2 connections)
-- **if()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **BaseOrchestrator()** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 66]] (8 shared connections)
+- [[Community 206]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,25 +1,25 @@
 # Community 75
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests.cs** (7 connections)
-- **InSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithValidPost_CatchesNetworkException_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **new()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
+- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **CreateNode()** (2 connections)
+- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 105]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

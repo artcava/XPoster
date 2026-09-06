@@ -3,7 +3,6 @@ using Moq;
 using XPoster.Contracts;
 using XPoster.Credentials;
 using XPoster.SenderPlugins;
-using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 

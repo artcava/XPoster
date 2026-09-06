@@ -1,24 +1,25 @@
 # Community 21
 
-> 15 nodes · cohesion 0.26
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **AddAiProviderOptionsTests.cs** (14 connections)
-- **AddAiProviderOptionsTests.cs** (14 connections)
-- **AddAiProviderOptionsTests** (2 connections)
-- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
-- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
-- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
-- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
-- **BuildAllProvidersConfig()** (2 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **GetProfiles_Should_OrderSlotsByHour()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoSenders()** (2 connections)
+- **GetProfiles_Should_ParseSenderPlatforms()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WhenNoValidSendersRemain()** (2 connections)
+- **GetProfiles_Should_ReturnEmpty_WhenNoScheduleConfigured()** (2 connections)
+- **GetProfiles_Should_MapEachSlotToWorkflowOrchestrator()** (2 connections)
+- **BuildConfiguration()** (2 connections)
+- **CreateProvider()** (2 connections)
 - **ConfigurationBuilder()** (2 connections)
+- **ConfigurationSlotProfileProviderTests** (2 connections)
+- **GetProfiles_Should_SkipUnknownSenders_ButKeepValidOnes()** (2 connections)
+- **new()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoWorkflowKey()** (2 connections)
 
 ## Relationships
 
@@ -26,7 +27,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

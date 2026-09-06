@@ -87,7 +87,7 @@ The response will be:
 }
 ```
 
-Store the `access_token` value in Azure Key Vault with the secret name **`InstagramAccessToken`**.
+Store the `access_token` value in Azure Key Vault with the secret name **`InstagramCredentials--InstagramAccessToken`**.
 
 ---
 
@@ -130,7 +130,7 @@ The response will contain:
 }
 ```
 
-The `instagram_business_account.id` value is your Instagram Account ID. Store it in Azure Key Vault with the secret name **`InstagramAccountId`**.
+The `instagram_business_account.id` value is your Instagram Account ID. Store it in Azure Key Vault with the secret name **`InstagramCredentials--InstagramAccountId`**.
 
 ### Verify the connection
 
@@ -150,8 +150,8 @@ At the end of this setup, the following secrets must be stored in Azure Key Vaul
 
 | Key Vault Secret Name | Value | How to obtain |
 |---|---|---|
-| `InstagramAccessToken` | Long-lived User Access Token | Step 4 |
-| `InstagramAccountId` | Instagram Business Account numeric ID | Step 5b (`instagram_business_account.id`) |
+| `InstagramCredentials--InstagramAccessToken` | Long-lived User Access Token | Step 4 |
+| `InstagramCredentials--InstagramAccountId` | Instagram Business Account numeric ID | Step 5b (`instagram_business_account.id`) |
 
 > Never commit tokens to source control or expose them in logs. XPoster mask http calls with `ITelemetryInitializer`
 

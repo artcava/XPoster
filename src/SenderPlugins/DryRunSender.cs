@@ -8,8 +8,9 @@ namespace XPoster.SenderPlugins;
 /// A no-op sender designed for local integration testing.
 /// Verifies configuration connectivity by checking that a known credential (<c>XApiKey</c>) is non-empty,
 /// logs the orchestrated post output, and returns <c>true</c> without making any outbound call to a social platform.
+/// Concrete subclasses define the platform and each a fixed <see cref="MessageMaxLength"/>.
 /// </summary>
-public class DryRunSender : ISender
+public abstract class DryRunSender : ISender
 {
     private const string ProbeKey = "XApiKey";
 
@@ -17,22 +18,24 @@ public class DryRunSender : ISender
     private readonly ILogger<DryRunSender> _logger;
 
     /// <summary>
-    /// Initialises a new instance of <see cref="DryRunSender"/>.
+    /// Initialises a new instance of <see cref="DryRunSender"/> with a specific maximum post length.
     /// </summary>
     /// <param name="configuration">The application configuration used to probe credential availability.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
+    /// <param name="messageMaxLength">The maximum number of characters allowed for a post on this sender.</param>
     /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-    public DryRunSender(IConfiguration configuration, ILogger<DryRunSender> logger)
+    protected DryRunSender(IConfiguration configuration, ILogger<DryRunSender> logger, int messageMaxLength)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        MessageMaxLength = messageMaxLength;
     }
 
     /// <inheritdoc/>
-    public SenderPlatform Platform => SenderPlatform.DryRun;
+    public abstract SenderPlatform Platform { get; }
 
-    /// <summary>Gets the maximum number of characters allowed per post (no real limit; returns <see cref="int.MaxValue"/>).</summary>
-    public int MessageMaxLength => int.MaxValue;
+    /// <summary>Gets the maximum number of characters allowed per post.</summary>
+    public int MessageMaxLength { get; }
 
     /// <summary>
     /// Probes configuration for a known credential, logs the post content and image presence,

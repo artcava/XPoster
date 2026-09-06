@@ -1,32 +1,33 @@
 # Community 20
 
-> 15 nodes · cohesion 0.26
+> 16 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **BlobStorageServiceTests.cs** (14 connections)
-- **BlobStorageServiceTests.cs** (14 connections)
-- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
-- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
-- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
-- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
-- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
-- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
-- **CreateSut()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
-- **BlobStorageServiceTests** (2 connections)
-- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
-- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **MissingRef()** (2 connections)
+- **Linear()** (2 connections)
+- **Cyclic()** (2 connections)
+- **XPoster.Tests.Workflows.Engine** (2 connections)
+- **ValidateTerminalNodeContract_TerminalImplementsContract_ReturnsNull()** (2 connections)
+- **WorkflowDefinitionValidatorTests** (2 connections)
+- **ValidateTerminalNodeContract_UnresolvableTerminalType_ReturnsNull()** (2 connections)
+- **WorkflowDefinition()** (2 connections)
+- **ValidateStructural_ValidLinearDag_ReturnsNull()** (2 connections)
+- **ValidateStructural_Cycle_ReturnsError()** (2 connections)
+- **ValidateStructural_MissingNodeReference_ReturnsError()** (2 connections)
+- **ValidateStructural_EmptyNodes_ReturnsNull()** (2 connections)
+- **ValidateStructural_MultipleTerminalNodes_ReturnsError()** (2 connections)
+- **ValidateTerminalNodeContract_TerminalDoesNotImplementContract_ReturnsError()** (2 connections)
+- **TwoTerminals()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 182]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 49 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,28 +1,29 @@
 # Community 42
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_InitializesCorrectly()** (2 connections)
-- **BuildSender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **MessageMaxLength_Returns2200()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **new()** (2 connections)
-- **Platform_ReturnsInstagram()** (2 connections)
-- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenCancelledDuringForEach_StopsGracefully()** (2 connections)
+- **CreateSut()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_LogsError()** (2 connections)
+- **XPosterContainerPollingFunctionTests** (2 connections)
+- **RunAsync_WhenMultiplePendingContainers_ProcessesAll()** (2 connections)
+- **RunAsync_WhenStatusIsError_MarksFailedAndCleansUp()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **RunAsync_WhenStatusIsUnknown_LogsWarningAndSkips()** (2 connections)
+- **RunAsync_WhenNoPendingContainers_DoesNothing()** (2 connections)
+- **RunAsync_WhenUnexpectedExceptionThrown_LogsErrorAndRethrows()** (2 connections)
+- **RunAsync_WhenStatusIsInProgress_SkipsContainer()** (2 connections)
 
 ## Relationships
 
-- [[Community 100]] (6 shared connections)
+- [[Community 69]] (9 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

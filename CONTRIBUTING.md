@@ -245,27 +245,28 @@ When adding new files, place them in the folder that matches their responsibilit
 | Folder | Namespace | What belongs here |
 |---|---|---|
 | `src/Contracts/` | `XPoster.Contracts` | Interfaces (`I*.cs`), enums, extension methods |
-| `src/Abstraction/` | `XPoster.Abstraction` | Abstract base classes, shared profile records (`BaseOrchestrator`, `ScheduledOrchestrationProfile`) |
-| `src/Orchestrators/` | `XPoster.Orchestrators` | Concrete orchestrators, `OrchestratorFactory`, slot profile providers (`DefaultSlotProfileProvider`, `DryRunSlotProfileProvider`), config-backed providers (`ConfigurationFeedUrlProvider`, `ConfigurationTagReplacementProvider`) |
-| `src/Models/` | `XPoster.Models` | Domain models, provider options and validators (use provider subfolders: `AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`) |
-| `src/Credentials/` | `XPoster.Credentials` | Sender credentials DTOs, validators, and extension methods (`XCredentials`, `LinkedInCredentials`, `IgCredentials`…) |
-| `src/Services/` | `XPoster.Services` | Infrastructure services (`FeedService`, `CryptoService`, `TimeProvider`…) |
-| `src/Services/Ai/` | `XPoster.Services` | AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`…) |
+| `src/Orchestrators/` | `XPoster.Orchestrators` | Orchestrator bridge and scaffold (`WorkflowOrchestrator`, `BaseOrchestrator`, `NoOrchestrator`) and the resolver (`OrchestratorFactory`) |
+| `src/Workflows/` | `XPoster.Workflows` | The workflow DAG engine and its adapters: `Abstractions/` (`IWorkflowNode`, `ITerminalNode`, input/context contracts), `Engine/` (`WorkflowExecutionEngine`, `WorkflowDefinitionValidator`), `Models/` (context, node definitions, prompt step options), `Nodes/` (the built-in node adapters), `Services/` (step-options resolver), `Configuration/` (workflow DI registration), `Utilities/` (`NodeParameterExtractor`) |
+| `src/Providers/` | `XPoster.Providers` | Config/time providers (`ConfigurationSlotProfileProvider`, `ConfigurationTagReplacementProvider`, `TimeProvider`, `LocalOverrideTimeProvider`) |
+| `src/Models/` | `XPoster.Models` | Domain models, provider options and validators (use provider subfolders: `AzureFoundry/`, `DeepSeek/`, `FalAi/`, `OpenAi/`, `Perplexity/`) |
+| `src/Credentials/` | `XPoster.Credentials` | Sender credentials DTOs, validators, and extension methods (`XCredentials`, `LinkedInCredentials`, `InstagramCredentials`, `FacebookCredentials`…) |
+| `src/Services/` | `XPoster.Services` | Infrastructure services (`FeedService`, `CryptoService`, `TagReplacementService`, `BlobStorageService`, `MetaPublishingService`, `InMemoryContainerStateStore`…) |
+| `src/Services/AI/` | `XPoster.Services` | AI model integration services (`OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `PerplexityService`, `FalAiImageService`, `AiServiceHelper`…) |
 | `src/SenderPlugins/` | `XPoster.SenderPlugins` | Platform-specific sender implementations (`ISender`) |
-| `src/Extensions/` | `XPoster.Extensions` | Cross-cutting extension methods (e.g. `HttpClientExtensions`) |
+| `src/Extensions/` | `XPoster.Extensions` | Cross-cutting extension methods (e.g. `HttpClientExtensions`, `SenderPluginsServiceCollectionExtensions`, `AiProviderServiceCollectionExtensions`) |
 
-> 📐 For the full architectural rationale behind this layout, see [docs/architecture.md](docs/architecture.md). For step-by-step guides on adding new senders, orchestrators, or AI providers, see [docs/extending-xposter.md](docs/extending-xposter.md).
+> 📐 For the full architectural rationale behind this layout, see [docs/architecture.md](docs/architecture.md). For step-by-step guides on adding new senders, workflows, or AI providers, see [docs/extending-xposter.md](docs/extending-xposter.md).
 
 ### Commit Messages
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat: add Mastodon integration
-fix: resolve Twitter authentication timeout
-docs: update API documentation
-test: add FeedService unit tests
-refactor: simplify GeneratorFactory logic
+feat(senders): add Mastodon integration
+fix(x): resolve Twitter authentication timeout
+docs(architecture): align architecture with workflow orchestration
+test(workflows): add node adapter tests
+refactor(orchestrators): simplify factory resolution
 ```
 
 ## 🙋 Getting Help

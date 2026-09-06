@@ -1,21 +1,22 @@
 # Community 153
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **StringContent()** (2 connections)
-- **catch()** (2 connections)
-- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 98]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

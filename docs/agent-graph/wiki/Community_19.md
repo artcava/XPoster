@@ -1,25 +1,26 @@
 # Community 19
 
-> 16 nodes · cohesion 0.24
+> 17 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **InMemoryContainerStateStoreTests.cs** (15 connections)
-- **SaveAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **InMemoryContainerStateStoreTests** (2 connections)
-- **GetPendingAsync_WhenStoreIsEmpty_ReturnsEmptyList()** (2 connections)
-- **SaveAsync_WithEmptyOrWhitespaceBlobName_ThrowsArgumentException()** (2 connections)
-- **GetPendingAsync_ReturnsOnlyPendingEntries()** (2 connections)
-- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **SaveAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
-- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
-- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
-- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
-- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **SaveAsync_WithNullBlobName_ThrowsArgumentNullException()** (2 connections)
-- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **WorkflowServiceCollectionExtensionsTests.cs** (16 connections)
+- **WorkflowServiceCollectionExtensionsTests.cs** (16 connections)
+- **XPoster.Tests.Workflows.Configuration** (2 connections)
+- **AddWorkflows_WithNoTerminalNode_ThrowsInvalidOperationException()** (2 connections)
+- **AddWorkflows_Registers_StepOptionsResolver()** (2 connections)
+- **AddWorkflows_WithMultipleTerminalNodes_ThrowsInvalidOperationException()** (2 connections)
+- **AddWorkflows_Registers_WorkflowEngine()** (2 connections)
+- **AddWorkflows_Registers_WorkflowDefinitions_AsKeyedSingletons()** (2 connections)
+- **AddWorkflows_ConvertsParameters_ToObjectDictionary()** (2 connections)
+- **MakeConfiguration()** (2 connections)
+- **AddWorkflows_WithValidWorkflow_DoesNotThrow()** (2 connections)
+- **BuildProvider()** (2 connections)
+- **InMemory()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **WorkflowServiceCollectionExtensionsTests** (2 connections)
+- **AddWorkflows_Registers_KeyedNodes()** (2 connections)
+- **ServiceCollection()** (2 connections)
 
 ## Relationships
 
@@ -27,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 58 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
