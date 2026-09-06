@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+> All changes since `0.2.0` implement the **workflow-based DAG orchestration** ([ADR-006](docs/analysis/ADR-006-workflow-based-orchestration-architecture.md)), which replaces the legacy orchestrator classes with a config-driven, node-graph engine.
+
+### Added
+- **Workflow DAG core abstractions** (ADR-006): `WorkflowContext`, input/result contracts, `IWorkflowNode` / `ITerminalNode`, and `NodeParameterExtractor` for typed parameter binding.
+- **`WorkflowExecutionEngine` with definition validation** (ADR-006): executes node DAGs in topological order and validates definitions at startup, including enforcement of a single `ITerminalNode` per DAG.
+- **Adapter nodes** (ADR-006): `FetchRssNode`, `AiTextNode`, `AiImageNode`, `FanOutSendNode` wrapping the original single-responsibility behaviour as graph nodes.
+- **`WorkflowOrchestrator` bridge** (ADR-006): runs a `WorkflowDefinition` through the engine and dispatches results to the slot's senders; `OrchestratorFactory` now routes each scheduled slot to a `WorkflowOrchestrator` via the `AddWorkflows` DI registration.
+- **Config-driven scheduling** ([#270](https://github.com/artcava/XPoster/issues/270)): slots are declared in the `Schedule__N` section and reference workflow keys in `Workflows__*` with per-node `Parameters`; full matrix documented in `docs/configuration.md`.
+- **Multi-sender dry-run fan-out**: a single dry-run slot can fan out to several dry-run senders, driven entirely by configuration.
+- **`AiImage` blocking flag** (ADR-006): `Required` option on `AiImage` nodes so an image failure can either degrade gracefully to a text-only post or fail the run.
+
+### Changed
+- **Legacy orchestrators converted to workflow DAG nodes** (ADR-006): `PowerLawOrchestrator` logic rewritten as `BuildPowerLawPostNode` + `AcquireCryptoValueNode`; the Bitcoin/RSS slot migrated to `WorkflowOrchestrator`.
+- **AI provider resolution moved into workflow nodes** (ADR-006): providers are selected per node via the `Provider` parameter keyed by the `AiProvider` enum, allowing different providers to be mixed within a single workflow.
+- **`ISenderPlugin` renamed to `ISender`** (ADR-006).
+- **Dry-run sender split into `DryRunMaxLength` / `DryRunShortLength` platforms** and `IDryRunSenderSource` dropped (ADR-006).
+- **Configuration sample updated** (ADR-006): `src/local.settings.json.example` migrated to `Workflows__*` / `Schedule__N` / `PromptSteps__*` sections; `AzuriteConfig` removed.
+- **Documentation realigned with ADR-006**: architecture, configuration, deployment, getting-started, extending, monitoring, tests/README, CONTRIBUTING, sender/AI provider guides, and infra README all updated to the workflow-DAG model.
+
+### Removed
+- **Legacy `FeedOrchestrator`** ([#270](https://github.com/artcava/XPoster/issues/270), ADR-006): the feed pipeline is superseded by config-driven `Workflows__*` node graphs.
+- **Legacy `PowerLawOrchestrator`** (ADR-006): superseded by the PowerLaw workflow DAG nodes.
+- **`IDryRunSenderSource`** (ADR-006) and the `AzuriteConfig` section from the local settings sample.
+
 
 ## [0.2.0] - 2026-07-30
 

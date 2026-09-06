@@ -25,8 +25,8 @@ This guide explains how to provision Azure AI Foundry and configure XPoster to u
 5. Save both deployment names.
 
 Recommended mapping:
-- `AzureFoundry__DeploymentName` → chat deployment
-- `AzureFoundry__ImageDeploymentName` → image deployment
+- `AzureFoundry__TextModelName` → chat deployment
+- `AzureFoundry__ImageModelName` → image deployment
 
 ## 3. Retrieve Required Parameters
 
@@ -36,8 +36,8 @@ Collect these values from the Portal / Foundry Studio:
 |-----------|------------------|
 | `AzureFoundry__Endpoint` | Resource overview blade → Endpoint (use the `/openai/v1` base URL) |
 | `AzureFoundry__ApiKey` | Resource overview blade → Keys and Endpoint → Key 1 |
-| `AzureFoundry__DeploymentName` | Foundry Studio → Deployments → chat model name |
-| `AzureFoundry__ImageDeploymentName` | Foundry Studio → Deployments → image model name |
+| `AzureFoundry__TextModelName` | Foundry Studio → Deployments → chat model name |
+| `AzureFoundry__ImageModelName` | Foundry Studio → Deployments → image model name |
 
 ## 4. Configure XPoster
 
@@ -46,16 +46,19 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 ```json
 {
   "Values": {
-    "AiProvider": "AzureFoundry",
     "AzureFoundry__Endpoint": "https://<resource>.services.ai.azure.com/openai/v1",
     "AzureFoundry__ApiKey": "<secret>",
-    "AzureFoundry__DeploymentName": "<chat-deployment>",
-    "AzureFoundry__ImageDeploymentName": "<image-deployment>"
+    "AzureFoundry__TextModelName": "<chat-deployment>",
+    "AzureFoundry__ImageModelName": "<image-deployment>"
   }
 }
 ```
 
-All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
+These settings configure **connectivity and models only**. There is no global `AiProvider`
+switch — the provider is chosen per AI node via `Workflows__<key>__Nodes__N__Parameters__Provider:
+"AzureFoundry"` (assign it on both `AiText` and `AiImage` nodes, as Azure AI Foundry supports
+both). Prompt templates, temperature, and token budgets live in `PromptSteps__<StepId>__*`,
+referenced by the nodes' `StepId`. See `src/local.settings.json.example` for the full list.
 
 ## 5. Store Secrets Safely
 
@@ -65,17 +68,21 @@ For production environments:
 - Store secrets (`AzureFoundry__ApiKey`) in **Azure Key Vault** and reference them from App Settings.
 - Never commit secrets to source control. `local.settings.json` is in `.gitignore`.
 
-## 6. Switch Provider via `AiProvider`
+## 6. Selecting Providers Per Node
 
-XPoster selects the AI provider per orchestrator slot via the `AiProvider` setting. Available values:
+There is no global `AiProvider` setting. Each `AiText` / `AiImage` node names its provider via
+`Workflows__<key>__Nodes__N__Parameters__Provider`, and capability resolution is per node:
 
-| `AiProvider` value | Text provider | Image provider |
+| `Provider` value | Text provider | Image provider |
 |--------------------|---------------|----------------|
 | `OpenAi` | `OpenAiService` | `OpenAiService` |
 | `AzureFoundry` | `AzureFoundryService` | `AzureFoundryService` |
-| `DeepSeek` | `DeepSeekService` | ❌ none — posts published text-only |
-| `Perplexity` | `PerplexityService` | ❌ none — posts published text-only |
-| `FalAi` | ❌ none | `FalAiImageService` |
+| `DeepSeek` | `DeepSeekService` | ❌ none — an `AiImage` node throws |
+| `Perplexity` | `PerplexityService` | ❌ none — an `AiImage` node throws |
+| `FalAi` | ❌ none — an `AiText` node throws | `FalAiImageService` |
+
+A single workflow can mix providers per node (e.g. Azure AI Foundry for the summary `AiText`
+and the image `AiImage`, or DeepSeek for text with FalAi for the image).
 
 ## 7. Troubleshooting
 
@@ -85,7 +92,7 @@ XPoster selects the AI provider per orchestrator slot via the `AiProvider` setti
 
 ### 404 Deployment Not Found
 
-- Confirm `AzureFoundry__DeploymentName` and `AzureFoundry__ImageDeploymentName` match the exact names in Foundry Studio.
+- Confirm `AzureFoundry__TextModelName` and `AzureFoundry__ImageModelName` match the exact deployment names in Foundry Studio.
 - Check region and project alignment.
 
 ### 429 Too Many Requests
@@ -95,7 +102,5 @@ XPoster selects the AI provider per orchestrator slot via the `AiProvider` setti
 
 ### Empty Summary or Image Output
 
-- Verify that prompt templates include all required placeholders:
-  - `AzureFoundry__SummarySystemPromptTemplate` must include `{MaxChars}`
-  - `AzureFoundry__SummaryUserPromptTemplate` must include `{Text}`
-  - `AzureFoundry__ImagePromptUserTemplate` must include `{Summary}`
+- Verify that the `PromptSteps__<StepId>` entry referenced by the `AiText` node defines a `SystemPromptTemplate` containing `{MaxChars}` and a `UserPromptTemplate` containing the input label (`InputTextLabel`, default `{Text}`).
+- For image output, check the `PromptSteps` step referenced by the `AiImage` node.

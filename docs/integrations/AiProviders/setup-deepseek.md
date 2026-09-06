@@ -5,10 +5,10 @@ This guide explains how to obtain DeepSeek API credentials and configure XPoster
 > **Provider capabilities:** Text only (`ITextToTextProvider`)  
 > **`AiProvider` enum value:** `DeepSeek`
 
-> ℹ️ DeepSeek does not support image generation. When `AiProvider = DeepSeek`, no
-> `ITextToImageProvider` is resolved and posts are published **without an attached image**.
-> If image generation is required, use `OpenAi`, `AzureFoundry`, or pair `DeepSeek` with
-> `FalAi` by setting `AiProvider = FalAi` for the image slot.
+> ℹ️ DeepSeek does not support image generation. Assign `Provider: DeepSeek` only on
+> `AiText` nodes (`Workflows__<key>__Nodes__N__Parameters__Provider`); an `AiImage` node pointing
+> at it throws `InvalidOperationException`. If image generation is required, use `OpenAi`,
+> `AzureFoundry`, or pair `DeepSeek` (text) with `FalAi` (image) on separate nodes.
 
 ---
 
@@ -47,7 +47,7 @@ For XPoster's summarization tasks, `deepseek-chat` offers the best cost/quality 
 |-----------|-------|
 | `DeepSeek__Endpoint` | `https://api.deepseek.com` |
 | `DeepSeek__ApiKey` | The API key created in step 1 |
-| `DeepSeek__DeploymentName` | e.g. `deepseek-chat` |
+| `DeepSeek__TextModelName` | e.g. `deepseek-chat` |
 
 ## 5. Configure XPoster
 
@@ -56,15 +56,18 @@ Set these values in `src/local.settings.json` (local) or Azure App Settings (pro
 ```json
 {
   "Values": {
-    "AiProvider": "DeepSeek",
     "DeepSeek__Endpoint": "https://api.deepseek.com",
     "DeepSeek__ApiKey": "<your-deepseek-api-key>",
-    "DeepSeek__DeploymentName": "deepseek-chat"
+    "DeepSeek__TextModelName": "deepseek-chat"
   }
 }
 ```
 
-All other settings (`SummaryTemperature`, prompt templates, etc.) have sensible defaults and can be omitted if the defaults suit your use case. See `src/local.settings.json.example` for the full list.
+These settings configure **connectivity and models only**. There is no global `AiProvider`
+switch — the provider is chosen per AI node via `Workflows__<key>__Nodes__N__Parameters__Provider:
+"DeepSeek"` (assign it on `AiText` nodes only). Prompt templates, temperature, and token budgets
+live in `PromptSteps__<StepId>__*`, referenced by the nodes' `StepId`. See
+`src/local.settings.json.example` for the full list.
 
 ## 6. Store Secrets Safely
 
@@ -82,7 +85,7 @@ For production environments:
 
 ### 404 Model Not Found
 
-- Verify that `DeepSeek__DeploymentName` is a valid model identifier (e.g. `deepseek-chat`).
+- Verify that `DeepSeek__TextModelName` is a valid model identifier (e.g. `deepseek-chat`).
 - Check the [DeepSeek model list](https://platform.deepseek.com/api-docs) for supported names.
 
 ### 429 Too Many Requests
@@ -92,8 +95,5 @@ For production environments:
 
 ### Empty or Truncated Output
 
-- Verify that prompt templates include all required placeholders:
-  - `DeepSeek__SummarySystemPromptTemplate` must include `{MaxChars}`
-  - `DeepSeek__SummaryUserPromptTemplate` must include `{Text}`
-  - `DeepSeek__ImagePromptUserTemplate` must include `{Summary}`
-- Check `DeepSeek__DeploymentName` is not set to a reasoning model (`deepseek-reasoner`) when low latency is needed — reasoning models are slower and more expensive.
+- Verify that the `PromptSteps__<StepId>` entry referenced by the `AiText` node defines a `SystemPromptTemplate` containing `{MaxChars}` and a `UserPromptTemplate` containing the input label (`InputTextLabel`, default `{Text}`).
+- Check `DeepSeek__TextModelName` is not set to a reasoning model (`deepseek-reasoner`) when low latency is needed — reasoning models are slower and more expensive.

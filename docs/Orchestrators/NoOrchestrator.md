@@ -1,1 +1,0 @@
-- **NoOrchestrator**: a null-object implementation that returns an empty dictionary immediately, allowing the factory to represent "no posting" without null-checks in `XFunction`.

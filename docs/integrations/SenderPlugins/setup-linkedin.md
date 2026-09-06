@@ -8,17 +8,20 @@ XPoster publishes posts to LinkedIn using the Marketing API with OAuth 2.0 authe
 
 ## Required Configuration
 
-| App Setting | Description |
-|---|---|
-| `LinkedInAccessToken` | OAuth 2.0 access token |
-| `LinkedInAuthorId` | LinkedIn person URN (e.g. `urn:li:person:XXXXXXXX`) |
+Credentials are bound to `LinkedInCredentials` (`XPoster.Credentials`) via `IOptions<LinkedInCredentials>` and loaded from Azure Key Vault at startup. Use the double-dash secret naming convention so each secret maps to the matching configuration key:
+
+| Key Vault secret name | Configuration key | Description |
+|---|---|---|
+| `LinkedInCredentials--LinkedInAccessToken` | `LinkedInCredentials:LinkedInAccessToken` | OAuth 2.0 access token (mandatory) |
+| `LinkedInCredentials--LinkedInOrgId` | `LinkedInCredentials:LinkedInOrgId` | LinkedIn organization ID (used for org posts; takes precedence over the owner code) |
+| `LinkedInCredentials--LinkedInOwnerCode` | `LinkedInCredentials:LinkedInOwnerCode` | LinkedIn numeric person ID (used when the org ID is not set) |
 
 ## Steps
 
 1. Go to the [LinkedIn Developer Portal](https://www.linkedin.com/developers/) and create an app.
 2. Request the `w_member_social` permission scope.
 3. Complete the OAuth 2.0 authorization flow to obtain an access token.
-4. Copy the access token and your person URN into your Azure Functions app settings.
+4. Store the access token and your org/person ID in Azure Key Vault using the secret names above (or in `local.settings.json` with double-underscore keys, e.g. `LinkedInCredentials__LinkedInAccessToken`, for local development).
 
 ## Token Rotation
 
