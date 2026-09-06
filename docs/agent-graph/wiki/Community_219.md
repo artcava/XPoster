@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
 - **if()** (2 connections)
-- **InSender()** (2 connections)
+- **nameof()** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (8 shared connections)
+- [[Community 180]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

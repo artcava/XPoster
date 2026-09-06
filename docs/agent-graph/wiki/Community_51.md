@@ -6,14 +6,14 @@
 
 - **PerplexityOptionsValidatorTests.cs** (9 connections)
 - **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
 - **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
 - **PerplexityOptionsValidatorTests** (2 connections)
 - **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
 - **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
 - **ValidOptions()** (2 connections)
 - **XPoster.Tests.Models** (2 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
 
 ## Relationships
 

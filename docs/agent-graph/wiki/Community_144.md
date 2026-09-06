@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **WorkflowDefinition()** (2 connections)
-- **ToDefinition()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 

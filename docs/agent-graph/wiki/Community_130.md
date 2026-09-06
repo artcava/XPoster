@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **TimeProvider.cs** (4 connections)
-- **TimeProvider.cs** (4 connections)
-- **GetCurrentTime()** (2 connections)
-- **TimeProvider** (2 connections)
-- **XPoster.Providers** (2 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **if()** (2 connections)
+- **MaskUrlTelemetryProcessor()** (2 connections)
+- **Process()** (2 connections)
 
 ## Relationships
 

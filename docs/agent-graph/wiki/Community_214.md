@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **OpenAiOptions.cs** (2 connections)
-- **OpenAiOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
+- **AiModelClass.cs** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **AiModelClass.cs** (2 connections)
 
 ## Relationships
 

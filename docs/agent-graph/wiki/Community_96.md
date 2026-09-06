@@ -1,24 +1,24 @@
 # Community 96
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiTextNode.cs** (6 connections)
-- **AiTextNode.cs** (6 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **if()** (2 connections)
-- **AiTextNode()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **Resolve()** (2 connections)
+- **NoOrchestrator()** (2 connections)
+- **catch()** (2 connections)
+- **ResolveSenders()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 115]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

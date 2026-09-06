@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
+- **FalAiImageService.cs** (7 connections)
+- **FalAiImageService.cs** (7 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
 - **if()** (2 connections)
-- **UploadAsync()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **BlobUploadResult()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **catch()** (2 connections)
+- **FalAiImageService()** (2 connections)
 - **XPoster.Services** (2 connections)
 
 ## Relationships

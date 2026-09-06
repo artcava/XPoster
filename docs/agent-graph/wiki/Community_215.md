@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **DispatchAsync()** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **foreach()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 197]] (3 shared connections)
+- [[Community 190]] (3 shared connections)
 
 ## Audit Trail
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **InstagramCredentialsValidator** (2 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
+- **FacebookCredentialsValidator.cs** (5 connections)
 - **if()** (2 connections)
+- **Validate()** (2 connections)
+- **FacebookCredentialsValidator** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

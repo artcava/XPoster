@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **foreach()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 201]] (3 shared connections)
+- [[Community 215]] (3 shared connections)
 
 ## Audit Trail
 

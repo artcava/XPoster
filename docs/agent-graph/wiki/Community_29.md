@@ -1,31 +1,31 @@
 # Community 29
 
-> 14 nodes · cohesion 0.14
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **FanOutSendNodeTests.cs** (17 connections)
-- **Execute_StoresSendResultsInContext()** (2 connections)
-- **FanOutSendNodeTests** (2 connections)
-- **Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForWideSender()** (2 connections)
-- **Execute_TwoSenders_DistinctPlatforms_ReSummarisationRunsPerSender()** (2 connections)
-- **Input()** (2 connections)
-- **return()** (2 connections)
-- **Execute_ShortText_NoResummary()** (2 connections)
-- **Execute_LongText_WithFallback_Resummarises()** (2 connections)
-- **Execute_AppliesTagReplacements()** (2 connections)
-- **Execute_BridgesMediaAttachment_ToPostImage()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **static()** (2 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **XPosterContainerPollingFunction.cs** (13 connections)
+- **foreach()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster** (2 connections)
+- **XPosterContainerPollingFunction()** (2 connections)
+- **switch()** (2 connections)
+- **HandleTerminalFailureAsync()** (2 connections)
+- **Run()** (2 connections)
+- **ProcessContainerAsync()** (2 connections)
+- **PollPendingContainersAsync()** (2 connections)
+- **if()** (2 connections)
+- **TryDeleteBlobAsync()** (2 connections)
+- **HandleFinishedAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 173]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 43 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

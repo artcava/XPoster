@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
-- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
 - **foreach()** (2 connections)
-- **ConfigurationStepOptionsResolverTests** (2 connections)
-- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Tests.Workflows.Services** (2 connections)
-- **Resolve_Throws_WhenStepMissing()** (2 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 

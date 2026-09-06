@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidator.cs** (5 connections)
-- **WorkflowDefinitionValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **HasCycle()** (2 connections)
-- **foreach()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **AcquireCryptoValueNode()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 

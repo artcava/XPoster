@@ -1,25 +1,25 @@
 # Community 78
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **WorkflowContext.cs** (7 connections)
-- **WorkflowContext.cs** (7 connections)
-- **KeyNotFoundException()** (2 connections)
-- **SetData()** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **WorkflowContext** (2 connections)
-- **if()** (2 connections)
-- **HasData()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **new()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **WorkflowProfile()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 39]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

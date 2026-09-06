@@ -1,23 +1,23 @@
 # Community 126
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
-- **var()** (2 connections)
-- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
+- **PublishContainerAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 31]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

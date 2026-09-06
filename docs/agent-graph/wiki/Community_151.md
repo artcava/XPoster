@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider** (2 connections)
-- **GetReplacements()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **XPoster.Models** (2 connections)
+- **ValidateConnectivity()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

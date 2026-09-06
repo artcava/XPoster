@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITextToTextProvider.cs** (4 connections)
-- **ITextToTextProvider.cs** (4 connections)
-- **ITextToTextProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **XPoster.Workflows.Services** (2 connections)
+- **Resolve()** (2 connections)
+- **ConfigurationStepOptionsResolver()** (2 connections)
 
 ## Relationships
 

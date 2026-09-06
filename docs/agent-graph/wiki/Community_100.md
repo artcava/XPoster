@@ -1,23 +1,23 @@
 # Community 100
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **Input()** (2 connections)
-- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **ExecuteAsync()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 - **if()** (2 connections)
-- **Execute_UsesSymbol_ForPostTag()** (2 connections)
-- **BuildPowerLawPostNodeTests()** (2 connections)
+- **BuildPowerLawPostNode()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
