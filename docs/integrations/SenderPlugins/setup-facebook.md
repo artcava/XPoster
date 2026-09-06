@@ -81,7 +81,7 @@ The response will be:
 }
 ```
 
-Store the `access_token` value in Azure Key Vault with the secret name **`FacebookAccessToken`**.
+Store the `access_token` value in Azure Key Vault with the secret name **`FacebookCredentials--FacebookAccessToken`**.
 
 ---
 
@@ -120,7 +120,7 @@ The response will contain:
     }
 ```
 
-The `<this-is-your-page-id>` value is your Facebook Page ID. Store it in Azure Key Vault with the secret name **`FacebookPageId`**.
+The `<this-is-your-page-id>` value is your Facebook Page ID. Store it in Azure Key Vault with the secret name **`FacebookCredentials--FacebookPageId`**.
 
 ### Verify the connection
 
@@ -140,8 +140,8 @@ At the end of this setup, the following secrets must be stored in Azure Key Vaul
 
 | Key Vault Secret Name | Value | How to obtain |
 |---|---|---|
-| `FacebookAccessToken` | Long-lived User Access Token | Step 4 |
-| `FacebookAccountId` | Facebook Page numeric ID | Step 5 (`<this-is-your-page-id>`) |
+| `FacebookCredentials--FacebookAccessToken` | Long-lived User Access Token | Step 4 |
+| `FacebookCredentials--FacebookPageId` | Facebook Page numeric ID | Step 5 (`<this-is-your-page-id>`) |
 
 > Never commit tokens to source control or expose them in logs. XPoster mask http calls with `ITelemetryInitializer`
 
