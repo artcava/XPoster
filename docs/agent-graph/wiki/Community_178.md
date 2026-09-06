@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
+- **Validate()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 210]] (3 shared connections)
+- [[Community 220]] (3 shared connections)
 
 ## Audit Trail
 

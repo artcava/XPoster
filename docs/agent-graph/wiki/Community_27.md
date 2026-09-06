@@ -4,24 +4,24 @@
 
 ## Key Concepts
 
-- **FanOutSendNodeTests.cs** (17 connections)
-- **Execute_LongText_WithFallback_Resummarises()** (2 connections)
-- **Execute_AppliesTagReplacements()** (2 connections)
-- **Execute_BridgesMediaAttachment_ToPostImage()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **static()** (2 connections)
-- **Execute_TwoSenders_DistinctPlatforms_ReSummarisationRunsPerSender()** (2 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **MakeDefinition()** (2 connections)
+- **MakeDefinitionWithoutImage()** (2 connections)
+- **OrchestrateAsync_ReturnsPostMap_OnSuccess()** (2 connections)
+- **Properties_AreConfigured()** (2 connections)
+- **ProduceImage_IsFalse_WhenWorkflowHasNoAiImageNode()** (2 connections)
+- **ProduceImage_Set_ThrowsNotSupported()** (2 connections)
+- **ProduceImage_IsTrue_WhenWorkflowHasAiImageNode()** (2 connections)
 - **return()** (2 connections)
-- **Execute_TwoSenders_ResummarisesForSmallSenderAndKeepsVariantForWideSender()** (2 connections)
-- **FanOutSendNodeTests** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ShortText_NoResummary()** (2 connections)
-- **Execute_StoresSendResultsInContext()** (2 connections)
+- **WorkflowOrchestratorTests** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyDictionary_OnFailure()** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyDictionary_WhenSendResultsMissing()** (2 connections)
+- **static()** (2 connections)
 
 ## Relationships
 
-- [[Community 176]] (4 shared connections)
+- [[Community 166]] (4 shared connections)
 
 ## Audit Trail
 

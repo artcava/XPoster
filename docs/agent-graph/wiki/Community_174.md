@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **StringContent()** (2 connections)
-- **for()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **PostAsync()** (2 connections)
+- **BaseOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 128]] (4 shared connections)
+- [[Community 224]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

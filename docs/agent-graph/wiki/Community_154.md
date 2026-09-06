@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **IStepOptionsResolver** (2 connections)
-- **XPoster.Workflows.Services** (2 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor()** (2 connections)
+- **if()** (2 connections)
+- **Process()** (2 connections)
 
 ## Relationships
 

@@ -1,22 +1,22 @@
 # Community 142
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider.cs** (4 connections)
 - **GenerateTextAsync()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITextToTextProvider** (2 connections)
 
 ## Relationships
 
-- [[Community 171]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

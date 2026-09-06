@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **ContainerStatus.cs** (2 connections)
-- **ContainerStatus.cs** (2 connections)
+- **SenderPlatform.cs** (2 connections)
 - **XPoster.Contracts** (2 connections)
+- **SenderPlatform.cs** (2 connections)
 
 ## Relationships
 

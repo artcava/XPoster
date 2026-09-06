@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowOrchestrator.cs** (4 connections)
-- **WorkflowOrchestrator.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
-- **if()** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions** (2 connections)
+- **IAiProviderSection** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

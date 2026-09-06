@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **DefaultAzureCredential()** (2 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **nameof()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 - **if()** (2 connections)
-- **Uri()** (2 connections)
-- **BlobServiceClient()** (2 connections)
 
 ## Relationships
 

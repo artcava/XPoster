@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **var()** (2 connections)
 - **new()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **Node()** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (15 shared connections)
+- [[Community 27]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

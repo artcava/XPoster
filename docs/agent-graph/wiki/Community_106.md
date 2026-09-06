@@ -1,19 +1,19 @@
 # Community 106
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **GetProvider()** (2 connections)
-- **IsJsonLike()** (2 connections)
-- **return()** (2 connections)
-- **XPoster.Workflows.Utilities** (2 connections)
-- **catch()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 
-- [[Community 217]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

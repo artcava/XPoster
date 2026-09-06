@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **PostAsync()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **BaseOrchestrator()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **if()** (2 connections)
+- **SetupSender()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 202]] (3 shared connections)
+- [[Community 29]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

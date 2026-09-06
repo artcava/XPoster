@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **FacebookResiliencePipelineTests.cs** (8 connections)
-- **catch()** (2 connections)
-- **Polly_Facebook_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_Facebook_OnRetry_LogEntryIsEmitted()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Facebook_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **for()** (2 connections)
-- **Polly_Facebook_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Input()** (2 connections)
+- **AcquireCryptoValueNodeTests()** (2 connections)
+- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
 
 ## Relationships
 

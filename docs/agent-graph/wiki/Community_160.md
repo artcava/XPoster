@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions** (2 connections)
-- **IAiProviderSection** (2 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **ITagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **ITagReplacementProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

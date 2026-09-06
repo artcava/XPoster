@@ -1,23 +1,23 @@
 # Community 125
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
-- **var()** (2 connections)
-- **Input()** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

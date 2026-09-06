@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowNodeInput.cs** (3 connections)
-- **WorkflowNodeInput.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
+- **RSSFeed.cs** (3 connections)
+- **RSSFeed.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **RSSFeed** (2 connections)
 
 ## Relationships
 

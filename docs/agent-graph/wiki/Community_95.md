@@ -1,24 +1,24 @@
 # Community 95
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **InMemoryContainerStateStore.cs** (6 connections)
-- **InMemoryContainerStateStore.cs** (6 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **SaveAsync()** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **InMemoryContainerStateStore** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **Resolve()** (2 connections)
+- **ResolveSenders()** (2 connections)
+- **catch()** (2 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **NoOrchestrator()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 113]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

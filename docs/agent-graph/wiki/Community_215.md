@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **ConfigurationSlotProfileProvider.cs** (6 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **BuildFactory()** (2 connections)
+- **params()** (2 connections)
 
 ## Relationships
 
-- [[Community 190]] (3 shared connections)
+- [[Community 165]] (3 shared connections)
 
 ## Audit Trail
 

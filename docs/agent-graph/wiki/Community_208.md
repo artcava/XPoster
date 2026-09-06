@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Credentials** (2 connections)
-- **XCredentials.cs** (2 connections)
-- **XCredentials.cs** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **MediaType.cs** (2 connections)
+- **MediaType.cs** (2 connections)
 
 ## Relationships
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **foreach()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
 - **if()** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
+- **HasCycle()** (2 connections)
 
 ## Relationships
 

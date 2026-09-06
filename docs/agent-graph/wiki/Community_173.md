@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **var()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
+- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **Node()** (2 connections)
+- **new()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 226]] (3 shared connections)
+- [[Community 22]] (15 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
 - **GetProfiles()** (2 connections)
 - **XPoster.Providers** (2 connections)
-- **ConfigurationSlotProfileProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 215]] (3 shared connections)
+- [[Community 214]] (3 shared connections)
 
 ## Audit Trail
 

@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode.cs** (6 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **AiImageNode()** (2 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **InvalidOperationException()** (2 connections)
 - **if()** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
+- **AddWorkflows()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 

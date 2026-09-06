@@ -1,21 +1,21 @@
 # Community 175
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **WorkflowExecutionEngineTests.cs** (24 connections)
-- **new()** (2 connections)
-- **StubNode()** (2 connections)
-- **var()** (2 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 11]] (20 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

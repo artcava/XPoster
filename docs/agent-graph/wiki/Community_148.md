@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **GetFeedsAsync()** (2 connections)
-- **catch()** (2 connections)
-- **Exception()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **OpenAiService.cs** (11 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **if()** (2 connections)
+- **OpenAiService()** (2 connections)
 
 ## Relationships
 
-- [[Community 225]] (3 shared connections)
+- [[Community 94]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

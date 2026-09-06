@@ -1,20 +1,20 @@
 # Community 214
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **AiModelClass.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **AiModelClass.cs** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **foreach()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 190]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

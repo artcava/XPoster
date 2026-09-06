@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
-- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **HttpClientExtensionsTests** (2 connections)
-- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
-- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **GetRequired()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **TryGet()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **Supports()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

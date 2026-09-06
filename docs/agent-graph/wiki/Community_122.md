@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **Validate()** (2 connections)
-- **FacebookCredentialsValidator** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **SetData()** (2 connections)
+- **IWorkflowContext** (2 connections)
+- **HasData()** (2 connections)
 
 ## Relationships
 

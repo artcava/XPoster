@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
 - **foreach()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **ValidateOptions()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 219]] (3 shared connections)
+- [[Community 93]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
