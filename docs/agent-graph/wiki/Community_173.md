@@ -1,21 +1,21 @@
 # Community 173
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **AiProviderExtensions.cs** (3 connections)
-- **AiProviderExtensions.cs** (3 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetLabel()** (2 connections)
+- **ResilienceTestHelpers.cs** (6 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **var()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 226]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

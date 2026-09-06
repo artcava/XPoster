@@ -9,14 +9,14 @@
 - **BuildCreds()** (2 connections)
 - **HttpRequestException()** (2 connections)
 - **InvalidImageBytes()** (2 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
 - **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
 - **FbSenderImageFlowTests** (2 connections)
 
 ## Relationships
 
-- [[Community 95]] (7 shared connections)
+- [[Community 92]] (7 shared connections)
 
 ## Audit Trail
 

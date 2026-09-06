@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider** (2 connections)
 - **XPoster.Providers** (2 connections)
 - **GetCurrentTime()** (2 connections)
 

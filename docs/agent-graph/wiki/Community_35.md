@@ -1,30 +1,30 @@
 # Community 35
 
-> 13 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **AiImageNodeTests** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
-- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
-- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
-- **if()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **return()** (2 connections)
-- **static()** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_ImageModelNameWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_ImageModelNameWithAllowedSpecialChars_Succeeds()** (2 connections)
 
 ## Relationships
 
-- [[Community 124]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,23 @@
 # Community 113
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **AcquireCryptoValueNode()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **IgSender()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 47]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

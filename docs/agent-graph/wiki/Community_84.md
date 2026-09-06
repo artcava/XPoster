@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CaptureLoggerProvider.cs** (7 connections)
-- **CaptureLoggerProvider.cs** (7 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **CaptureLoggerProvider()** (2 connections)
-- **CaptureLogger()** (2 connections)
-- **CreateLogger()** (2 connections)
-- **Dispose()** (2 connections)
-- **IsEnabled()** (2 connections)
+- **WorkflowContext.cs** (7 connections)
+- **WorkflowContext.cs** (7 connections)
+- **WorkflowContext** (2 connections)
+- **SetData()** (2 connections)
+- **if()** (2 connections)
+- **HasData()** (2 connections)
+- **KeyNotFoundException()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,20 @@
 # Community 88
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
 - **if()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 - **InvalidOperationException()** (2 connections)
-- **AddWorkflows()** (2 connections)
-- **foreach()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 188]] (4 shared connections)
 
 ## Audit Trail
 

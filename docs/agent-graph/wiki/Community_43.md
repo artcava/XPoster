@@ -1,29 +1,29 @@
 # Community 43
 
-> 12 nodes · cohesion 0.17
+> 12 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (19 connections)
-- **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
-- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
-- **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
-- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **typeof()** (2 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
+- **ConfigurationTagReplacementProviderTests** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
+- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
 - **foreach()** (2 connections)
+- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
+- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
+- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 41 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

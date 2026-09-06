@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode.cs** (4 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **IWorkflowNode** (2 connections)
-- **ExecuteAsync()** (2 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 

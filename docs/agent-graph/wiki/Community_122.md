@@ -6,10 +6,10 @@
 
 - **FacebookCredentialsValidator.cs** (5 connections)
 - **FacebookCredentialsValidator.cs** (5 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
 - **if()** (2 connections)
+- **Validate()** (2 connections)
 - **FacebookCredentialsValidator** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

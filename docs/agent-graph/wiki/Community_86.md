@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
-- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
-- **BaseOrchestratorTests()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
-- **TestOrchestrator()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **return()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
+- **AiTextNodeTests** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **static()** (2 connections)
 
 ## Relationships
 
-- [[Community 57]] (8 shared connections)
+- [[Community 116]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

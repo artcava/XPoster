@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 

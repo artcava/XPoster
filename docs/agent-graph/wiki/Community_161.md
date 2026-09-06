@@ -1,21 +1,21 @@
 # Community 161
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **WorkflowNodeResult.cs** (3 connections)
-- **WorkflowNodeResult.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **new()** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 28]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

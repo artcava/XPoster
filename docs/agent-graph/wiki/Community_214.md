@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AiProvider.cs** (2 connections)
+- **AiModelClass.cs** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **AiProvider.cs** (2 connections)
+- **AiModelClass.cs** (2 connections)
 
 ## Relationships
 

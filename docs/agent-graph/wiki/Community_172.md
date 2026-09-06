@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowDefinition.cs** (3 connections)
-- **WorkflowDefinition.cs** (3 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **WorkflowDefinition()** (2 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetLabel()** (2 connections)
 
 ## Relationships
 

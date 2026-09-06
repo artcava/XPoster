@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **SendAsync()** (2 connections)
-- **ISender** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **XPoster.Models** (2 connections)
+- **ValidateConnectivity()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

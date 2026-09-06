@@ -1,25 +1,25 @@
 # Community 75
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **new()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
-- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **CreateNode()** (2 connections)
-- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests.cs** (7 connections)
+- **AiProviderExtensionsTests** (2 connections)
+- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
+- **XPoster.Tests.Contracts** (2 connections)
+- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
+- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
+- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

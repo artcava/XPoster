@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **while()** (2 connections)
+- **PerplexityService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 203]] (3 shared connections)
+- [[Community 142]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

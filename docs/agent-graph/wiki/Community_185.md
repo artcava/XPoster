@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **PostAsync()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **BaseOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 74]] (7 shared connections)
+- [[Community 202]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **XPoster.Credentials** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **Resolve()** (2 connections)
+- **NoOrchestrator()** (2 connections)
 - **catch()** (2 connections)
-- **if()** (2 connections)
-- **Validate()** (2 connections)
+- **ResolveSenders()** (2 connections)
 
 ## Relationships
 
-- [[Community 170]] (4 shared connections)
+- [[Community 115]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidator.cs** (5 connections)
-- **WorkflowDefinitionValidator.cs** (5 connections)
-- **HasCycle()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **DefaultAzureCredential()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **foreach()** (2 connections)
+- **Uri()** (2 connections)
+- **BlobServiceClient()** (2 connections)
 
 ## Relationships
 

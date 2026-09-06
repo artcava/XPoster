@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
-- **IgSenderTests()** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **Execute_ReturnsGeneratedText()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (10 shared connections)
+- [[Community 86]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,31 +1,31 @@
 # Community 30
 
-> 14 nodes · cohesion 0.14
+> 14 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **WorkflowOrchestratorTests.cs** (17 connections)
-- **static()** (2 connections)
-- **WorkflowOrchestratorTests** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **return()** (2 connections)
-- **OrchestrateAsync_ReturnsPostMap_OnSuccess()** (2 connections)
-- **Properties_AreConfigured()** (2 connections)
-- **ProduceImage_Set_ThrowsNotSupported()** (2 connections)
-- **ProduceImage_IsTrue_WhenWorkflowHasAiImageNode()** (2 connections)
-- **ProduceImage_IsFalse_WhenWorkflowHasNoAiImageNode()** (2 connections)
-- **MakeDefinitionWithoutImage()** (2 connections)
-- **MakeDefinition()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyDictionary_WhenSendResultsMissing()** (2 connections)
-- **OrchestrateAsync_ReturnsEmptyDictionary_OnFailure()** (2 connections)
+- **ModelsTests.cs** (13 connections)
+- **ModelsTests.cs** (13 connections)
+- **AIResponse_CanBeCreated_WithChoices()** (2 connections)
+- **Choice_CanBeCreated_WithMessage()** (2 connections)
+- **RSSFeed_PublishDate_DefaultsToMinValue()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Post_CanHold_ImageBytes()** (2 connections)
+- **ImageData_CanBeCreated_WithUrl()** (2 connections)
+- **Message_CanBeCreated_WithContent()** (2 connections)
+- **ModelsTests** (2 connections)
+- **OpenAIImageResponse_CanBeCreated_WithData()** (2 connections)
+- **Post_CanBeCreated_WithRequiredContent()** (2 connections)
+- **RSSFeed_CanBeCreated_WithAllProperties()** (2 connections)
+- **Post_Firm_ContainsExpectedHashtags()** (2 connections)
 
 ## Relationships
 
-- [[Community 166]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 43 (100%)
+- EXTRACTED: 50 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
