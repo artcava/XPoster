@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor.cs** (4 connections)
-- **MaskUrlTelemetryProcessor()** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
 - **if()** (2 connections)
-- **Process()** (2 connections)
+- **ValidateConnectivity()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

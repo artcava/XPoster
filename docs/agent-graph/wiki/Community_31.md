@@ -1,30 +1,30 @@
 # Community 31
 
-> 13 nodes · cohesion 0.29
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **AiModelCatalogTests.cs** (12 connections)
-- **AiModelCatalogTests.cs** (12 connections)
-- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
-- **AiModelCatalogTests** (2 connections)
-- **Constructor_NullDictionary_Throws()** (2 connections)
-- **Empty_SupportsNoModelClass()** (2 connections)
-- **GetRequired_Throws_WhenNotSupported()** (2 connections)
-- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
-- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
-- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
-- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **AiImageNodeTests** (2 connections)
+- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
+- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
+- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
+- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
+- **return()** (2 connections)
+- **Input()** (2 connections)
+- **static()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 106]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

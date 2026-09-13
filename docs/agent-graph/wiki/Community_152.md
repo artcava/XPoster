@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IFeedService.cs** (4 connections)
-- **IFeedService.cs** (4 connections)
-- **IFeedService** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **IWorkflowEngine** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 

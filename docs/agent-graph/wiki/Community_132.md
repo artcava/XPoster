@@ -1,22 +1,23 @@
 # Community 132
 
-> 5 nodes · cohesion 0.70
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **var()** (2 connections)
+- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 83]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

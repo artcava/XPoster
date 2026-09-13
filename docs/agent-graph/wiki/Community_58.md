@@ -1,26 +1,27 @@
 # Community 58
 
-> 9 nodes · cohesion 0.22
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **NoOrchestratorTests.cs** (9 connections)
+- **OrchestrateAsync_ReturnsEmptyList()** (2 connections)
+- **NoOrchestratorTests** (2 connections)
+- **Name_IsNoOrchestrator()** (2 connections)
+- **Build()** (2 connections)
+- **SendIt_Set_ThrowsNotImplementedException()** (2 connections)
+- **SupportedPlatforms_IsEmpty()** (2 connections)
 - **XPoster.Tests.Orchestrators** (2 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **SendIt_IsAlwaysFalse()** (2 connections)
 
 ## Relationships
 
-- [[Community 76]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

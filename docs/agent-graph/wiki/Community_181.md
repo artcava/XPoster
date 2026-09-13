@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **return()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **var()** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **new()** (2 connections)
 
 ## Relationships
 
-- [[Community 84]] (7 shared connections)
+- [[Community 29]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

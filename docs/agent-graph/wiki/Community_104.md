@@ -1,23 +1,24 @@
 # Community 104
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **if()** (2 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 66]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

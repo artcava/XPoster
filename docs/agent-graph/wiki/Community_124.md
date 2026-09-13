@@ -1,19 +1,19 @@
 # Community 124
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **GetProvider()** (2 connections)
-- **return()** (2 connections)
-- **XPoster.Workflows.Utilities** (2 connections)
-- **catch()** (2 connections)
-- **IsJsonLike()** (2 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **SetData()** (2 connections)
+- **HasData()** (2 connections)
+- **IWorkflowContext** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 217]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

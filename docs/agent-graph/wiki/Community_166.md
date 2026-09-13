@@ -1,21 +1,22 @@
 # Community 166
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **WorkflowOrchestratorTests.cs** (17 connections)
-- **var()** (2 connections)
-- **new()** (2 connections)
-- **WorkflowExecutionResult()** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **IAiProviderOptions** (2 connections)
+- **IAiProviderSection** (2 connections)
 
 ## Relationships
 
-- [[Community 27]] (13 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

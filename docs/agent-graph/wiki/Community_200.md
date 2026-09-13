@@ -1,16 +1,17 @@
 # Community 200
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **XSender.cs** (6 connections)
-- **if()** (2 connections)
-- **XSender()** (2 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowDefinition()** (2 connections)
 
 ## Relationships
 
-- [[Community 177]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

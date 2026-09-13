@@ -1,27 +1,28 @@
 # Community 50
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **PerplexityOptionsValidatorTests.cs** (9 connections)
-- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
-- **ValidOptions()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
-- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
-- **PerplexityOptionsValidatorTests** (2 connections)
-- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
-- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **MessageMaxLength_Returns2200()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **new()** (2 connections)
+- **Platform_ReturnsInstagram()** (2 connections)
+- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **BuildSender()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 125]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

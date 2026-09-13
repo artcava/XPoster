@@ -1,13 +1,14 @@
 # Community 167
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

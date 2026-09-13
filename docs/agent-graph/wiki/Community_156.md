@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowEngine.cs** (4 connections)
-- **IWorkflowEngine.cs** (4 connections)
-- **IWorkflowEngine** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **ExecuteAsync()** (2 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **IOrchestratorFactory.cs** (4 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **IOrchestratorFactory** (2 connections)
 
 ## Relationships
 

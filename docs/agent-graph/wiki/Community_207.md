@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AiModelClass.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **AiModelClass.cs** (2 connections)
+- **BlobStorageOptions.cs** (2 connections)
+- **BlobStorageOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

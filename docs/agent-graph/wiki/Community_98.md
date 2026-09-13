@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **UpdateStatusAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **SaveAsync()** (2 connections)
-- **GetPendingAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **InvalidOperationException()** (2 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
+- **AddWorkflows()** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
 
 ## Relationships
 

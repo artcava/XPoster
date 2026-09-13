@@ -1,21 +1,22 @@
 # Community 165
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (6 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator.cs** (4 connections)
+- **ICredentialsStartupValidator** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 
-- [[Community 215]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

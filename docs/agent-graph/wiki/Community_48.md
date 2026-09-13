@@ -1,19 +1,20 @@
 # Community 48
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **FbSender.cs** (9 connections)
-- **FbSender.cs** (9 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
-- **HandleResponseAsync()** (2 connections)
-- **PublishPhotoAsync()** (2 connections)
-- **PublishTextOnlyAsync()** (2 connections)
+- **XOAuth1Signer.cs** (10 connections)
+- **XOAuth1Signer.cs** (10 connections)
 - **if()** (2 connections)
-- **FbSender()** (2 connections)
+- **ComputeSignature()** (2 connections)
+- **ComputeSignatureBaseString()** (2 connections)
+- **foreach()** (2 connections)
+- **GetBaseUri()** (2 connections)
+- **BuildAuthorizationHeader()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **ParseQueryString()** (2 connections)
+- **PercentEncode()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

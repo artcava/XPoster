@@ -1,29 +1,30 @@
 # Community 37
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (24 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **MakeRequest()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
+- **XApiClientTests.cs** (17 connections)
+- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
+- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
+- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
+- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
+- **foreach()** (2 connections)
+- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XApiClientTests** (2 connections)
+- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
+- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
+- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
+- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
 
 ## Relationships
 
-- [[Community 33]] (12 shared connections)
+- [[Community 153]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 41 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

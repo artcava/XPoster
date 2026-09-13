@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **AcquireCryptoValueNode()** (2 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptionsTests.cs** (5 connections)
+- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
+- **DeepSeekOptionsTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
 
 ## Relationships
 

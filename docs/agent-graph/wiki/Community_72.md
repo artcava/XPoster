@@ -1,17 +1,18 @@
 # Community 72
 
-> 8 nodes · cohesion 0.46
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **while()** (2 connections)
 - **if()** (2 connections)
-- **UploadAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **BlobUploadResult()** (2 connections)
-- **BlobStorageService()** (2 connections)
-- **DeleteAsync()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **WorkflowExecutionEngine()** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
@@ -19,7 +20,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

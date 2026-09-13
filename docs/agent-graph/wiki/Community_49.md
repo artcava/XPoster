@@ -1,19 +1,20 @@
 # Community 49
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (9 connections)
-- **XSenderResilienceTests.cs** (9 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WhenMediaTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **XOAuth1SignerTests.cs** (10 connections)
+- **XOAuth1SignerTests.cs** (10 connections)
+- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
+- **XOAuth1SignerTests** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderResilienceTests** (2 connections)
-- **XSender()** (2 connections)
-- **SendAsync_WhenTextTweetFails_ReturnsFalseAndLogsError()** (2 connections)
+- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
+- **BuildCredentials()** (2 connections)
+- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
+- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **BuildPhotoParameters()** (2 connections)
+- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

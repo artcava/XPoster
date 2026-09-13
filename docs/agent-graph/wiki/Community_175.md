@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **DryRunMaxLengthSender.cs** (3 connections)
-- **DryRunMaxLengthSender.cs** (3 connections)
-- **DryRunMaxLengthSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **XPoster.Credentials** (2 connections)
+- **AddCredentials()** (2 connections)
 
 ## Relationships
 

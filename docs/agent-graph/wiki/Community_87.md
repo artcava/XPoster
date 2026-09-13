@@ -1,24 +1,25 @@
 # Community 87
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **CreateValidJpegBytes()** (2 connections)
-- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
-- **if()** (2 connections)
-- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **CreateFactory()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **WorkflowProfile()** (2 connections)
+- **new()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
 
 ## Relationships
 
-- [[Community 69]] (8 shared connections)
+- [[Community 45]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

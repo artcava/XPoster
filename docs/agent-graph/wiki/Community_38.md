@@ -1,29 +1,29 @@
 # Community 38
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **AzureFoundryService.cs** (11 connections)
+- **XApiClient.cs** (17 connections)
+- **UploadMediaAsync()** (2 connections)
+- **InitializeMediaAsync()** (2 connections)
+- **ArgumentException()** (2 connections)
+- **CreateTweetAsync()** (2 connections)
+- **HasErrorPayload()** (2 connections)
+- **BuildSignedRequest()** (2 connections)
+- **for()** (2 connections)
 - **catch()** (2 connections)
-- **AzureFoundryService()** (2 connections)
-- **while()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
-- **var()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **if()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **XApiException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **XApiClient()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 115]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 39 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,28 +1,29 @@
 # Community 45
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfileTests.cs** (10 connections)
-- **ScheduledOrchestrationProfileTests.cs** (10 connections)
-- **Constructor_Should_SetAllFields()** (2 connections)
-- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
-- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
-- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
-- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
-- **ScheduledOrchestrationProfileTests** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
 - **typeof()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
+- **foreach()** (2 connections)
+- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
+- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
+- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 87]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 41 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

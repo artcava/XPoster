@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IWorkflowContext.cs** (5 connections)
-- **IWorkflowContext.cs** (5 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **SetData()** (2 connections)
-- **IWorkflowContext** (2 connections)
-- **HasData()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 

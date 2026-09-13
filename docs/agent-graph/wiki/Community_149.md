@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
-- **WorkflowDefinition()** (2 connections)
-- **ToDefinition()** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **ImagePromptRequest** (2 connections)
+- **XPoster.Models** (2 connections)
+- **PromptRequest** (2 connections)
 
 ## Relationships
 

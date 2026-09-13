@@ -1,23 +1,24 @@
 # Community 101
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **Input()** (2 connections)
-- **var()** (2 connections)
-- **Execute_ReturnsGeneratedText()** (2 connections)
+- **AiImageNode.cs** (6 connections)
+- **AiImageNode.cs** (6 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **if()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **AiImageNode()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,23 +1,23 @@
 # Community 112
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **nameof()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
 - **if()** (2 connections)
+- **nameof()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **ResolveWorkflowOrchestrator()** (2 connections)
+- **CreateEmptyNoOrchestrator()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 90]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

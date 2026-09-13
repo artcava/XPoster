@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (12 connections)
-- **OrchestratorFactory()** (2 connections)
-- **if()** (2 connections)
-- **ResolveWorkflowOrchestrator()** (2 connections)
-- **nameof()** (2 connections)
-- **CreateEmptyNoOrchestrator()** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **IsJsonLike()** (2 connections)
+- **catch()** (2 connections)
+- **GetProvider()** (2 connections)
+- **return()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
 
 ## Relationships
 
-- [[Community 95]] (6 shared connections)
+- [[Community 231]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
