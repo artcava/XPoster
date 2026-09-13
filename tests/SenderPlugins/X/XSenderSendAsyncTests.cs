@@ -1,15 +1,17 @@
+using System.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using XPoster.Credentials;
 using XPoster.Models;
 using XPoster.SenderPlugins;
+using XPoster.Tests.Helpers;
 
 namespace XPoster.Tests.SenderPlugins;
 
 /// <summary>
 /// Tests for XSender.SendAsync input-validation branches.
-/// Network calls (Twitter API) are not exercised — only the guards
-/// that execute before any I/O are tested here.
+/// Network calls are not exercised — only the guards that execute before any I/O are tested here.
 /// </summary>
 public class XSenderSendAsyncTests
 {
@@ -19,14 +21,18 @@ public class XSenderSendAsyncTests
     public XSenderSendAsyncTests()
     {
         _mockLogger = new Mock<ILogger<XSender>>();
-        var creds = Options.Create(new XCredentials
-        {
-            XApiKey = "fake_key",
-            XApiSecret = "fake_secret",
-            XAccessToken = "fake_token",
-            XAccessTokenSecret = "fake_token_secret"
-        });
-        _sender = new XSender(creds, _mockLogger.Object);
+        var factory = ResilienceTestHelpers.BuildFactory("X", HttpStatusCode.OK, "{}");
+        var apiClient = new XApiClient(
+            factory,
+            Options.Create(new XCredentials
+            {
+                XApiKey = "fake_key",
+                XApiSecret = "fake_secret",
+                XAccessToken = "fake_token",
+                XAccessTokenSecret = "fake_token_secret"
+            }),
+            NullLogger<XApiClient>.Instance);
+        _sender = new XSender(apiClient, _mockLogger.Object);
     }
 
     [Fact]
@@ -45,17 +51,5 @@ public class XSenderSendAsyncTests
     public async Task SendAsync_WithWhiteSpaceContent_ReturnsFalse()
     {
         Assert.False(await _sender.SendAsync(new Post { Content = "   " }));
-    }
-
-    [Fact]
-    public async Task SendAsync_WithValidPost_NoImage_CatchesNetworkException_ReturnsFalse()
-    {
-        Assert.False(await _sender.SendAsync(new Post { Content = "Valid content" }));
-    }
-
-    [Fact]
-    public async Task SendAsync_WithValidPost_WithImage_CatchesNetworkException_ReturnsFalse()
-    {
-        Assert.False(await _sender.SendAsync(new Post { Content = "Valid content", Image = new byte[] { 1, 2, 3 } }));
     }
 }

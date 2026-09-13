@@ -30,6 +30,7 @@ public static class HttpClientExtensions
         services.AddResilientHttpClient("AzureFoundry", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("DeepSeek", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("Perplexity", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
+        services.AddResilientHttpClient("X", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("LinkedIn", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("Instagram", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("Facebook", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
