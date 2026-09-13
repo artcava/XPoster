@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FanOutSendNodeTests.cs** (17 connections)
+- **WorkflowExecutionEngineTests.cs** (24 connections)
+- **new()** (2 connections)
 - **var()** (2 connections)
-- **if()** (2 connections)
-- **SetupSender()** (2 connections)
+- **StubNode()** (2 connections)
 
 ## Relationships
 
-- [[Community 27]] (13 shared connections)
+- [[Community 11]] (20 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,15 +1,16 @@
 # Community 103
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **AcquireCryptoValueNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **XSenderSendAsyncTests.cs** (6 connections)
+- **XSenderSendAsyncTests.cs** (6 connections)
+- **XSenderSendAsyncTests()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,22 @@
 # Community 166
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **new()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **Node()** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **IAiProviderOptions** (2 connections)
+- **IAiProviderSection** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (15 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

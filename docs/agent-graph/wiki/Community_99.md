@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **foreach()** (2 connections)
-- **AddWorkflows()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **if()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
 
 ## Relationships
 

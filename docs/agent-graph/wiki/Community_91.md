@@ -1,24 +1,24 @@
 # Community 91
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **IgSender()** (2 connections)
+- **ResilienceTestHelpers.cs** (11 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **var()** (2 connections)
+- **StubHttpMessageHandler()** (2 connections)
 - **if()** (2 connections)
-- **catch()** (2 connections)
+- **CapturedRequest()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 140]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

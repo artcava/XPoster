@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile.cs** (3 connections)
-- **ScheduledOrchestrationProfile()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **WorkflowNodeInput.cs** (3 connections)
+- **WorkflowNodeInput.cs** (3 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
 
 ## Relationships
 

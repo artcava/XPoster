@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **ConfigurationSlotProfileProvider.cs** (6 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Providers** (2 connections)
-- **ConfigurationSlotProfileProvider()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **ValidateOptions()** (2 connections)
+- **foreach()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 215]] (3 shared connections)
+- [[Community 105]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

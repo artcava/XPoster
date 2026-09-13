@@ -1,23 +1,23 @@
 # Community 114
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **if()** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
+- **Execute_ReturnsGeneratedText()** (2 connections)
+- **Input()** (2 connections)
+- **var()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 85]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

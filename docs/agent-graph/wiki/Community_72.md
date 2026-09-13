@@ -1,25 +1,26 @@
 # Community 72
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
-- **new()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
-- **CreateNode()** (2 connections)
-- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **while()** (2 connections)
+- **if()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **WorkflowExecutionEngine()** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

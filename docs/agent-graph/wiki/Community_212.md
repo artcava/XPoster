@@ -1,20 +1,20 @@
 # Community 212
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XPoster.Contracts** (2 connections)
-- **AiProvider.cs** (2 connections)
-- **AiProvider.cs** (2 connections)
+- **FeedService.cs** (7 connections)
+- **if()** (2 connections)
+- **FeedService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 141]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

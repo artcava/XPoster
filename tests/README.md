@@ -488,18 +488,21 @@ public async Task SendAsync_WhenPostIsValid_ReturnsTrue()
     // Arrange
     var credentials = Options.Create(new XCredentials
     {
-        ApiKey    = "test-api-key",
-        ApiSecret = "test-api-secret",
-        // ... other required fields
+        XApiKey = "test-api-key",
+        XApiSecret = "test-api-secret",
+        XAccessToken = "test-access-token",
+        XAccessTokenSecret = "test-access-token-secret"
     });
+    var handler = ResilienceTestHelpers.BuildSequenceHandler(
+        (HttpStatusCode.OK, "{\"data\":{\"id\":\"123\"}}"));
+    var apiClient = new XApiClient(
+        ResilienceTestHelpers.BuildFactory("X", handler),
+        credentials,
+        NullLogger<XApiClient>.Instance);
     var mockLogger = new Mock<ILogger<XSender>>();
-    var mockClient = new Mock<IXApiClient>();
-    mockClient
-        .Setup(x => x.PostTweetAsync(It.IsAny<string>()))
-        .ReturnsAsync(true);
 
-    var sender = new XSender(credentials, mockClient.Object, mockLogger.Object);
-    var post   = new Post { Content = "Test post content" };
+    var sender = new XSender(apiClient, mockLogger.Object);
+    var post = new Post { Content = "Test post content" };
 
     // Act
     var result = await sender.SendAsync(post);

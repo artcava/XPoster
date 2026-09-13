@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **ITerminalNode.cs** (3 connections)
+- **ITerminalNode.cs** (3 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **ITerminalNode** (2 connections)
 
 ## Relationships
 

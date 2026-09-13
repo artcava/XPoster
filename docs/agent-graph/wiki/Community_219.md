@@ -5,12 +5,12 @@
 ## Key Concepts
 
 - **FalAiOptionsValidator.cs** (6 connections)
-- **if()** (2 connections)
 - **nameof()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 180]] (3 shared connections)
+- [[Community 196]] (3 shared connections)
 
 ## Audit Trail
 

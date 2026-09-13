@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **while()** (2 connections)
-- **PerplexityService()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **StringContent()** (2 connections)
+- **for()** (2 connections)
 
 ## Relationships
 
-- [[Community 142]] (4 shared connections)
+- [[Community 143]] (4 shared connections)
 
 ## Audit Trail
 

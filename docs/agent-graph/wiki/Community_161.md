@@ -1,21 +1,22 @@
 # Community 161
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **WorkflowOrchestratorTests.cs** (17 connections)
-- **new()** (2 connections)
-- **WorkflowExecutionResult()** (2 connections)
-- **var()** (2 connections)
+- **ITimeProvider.cs** (4 connections)
+- **ITimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITimeProvider** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (13 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

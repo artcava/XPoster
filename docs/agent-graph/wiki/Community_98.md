@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **WorkflowServiceCollectionExtensions.cs** (6 connections)
+- **InvalidOperationException()** (2 connections)
 - **if()** (2 connections)
-- **Apply()** (2 connections)
 - **foreach()** (2 connections)
-- **TagReplacementService()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **AddWorkflows()** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
 
 ## Relationships
 

@@ -1,26 +1,27 @@
 # Community 56
 
-> 9 nodes · cohesion 0.22
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **FbSenderImageFlowTests.cs** (15 connections)
-- **BuildFactory()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **InvalidImageBytes()** (2 connections)
-- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
-- **FbSenderImageFlowTests** (2 connections)
+- **XFunctionTests.cs** (9 connections)
+- **XFunctionTests.cs** (9 connections)
+- **Run_Should_LogError_When_PostAsync_ReturnsFalse()** (2 connections)
+- **Run_Should_DoNothing_When_GeneratorIsDisabled()** (2 connections)
+- **Run_Should_LogError_When_OrchestrateAsync_ReturnsEmptyDictionary()** (2 connections)
+- **Run_Should_GenerateAndSendMessage_When_GeneratorIsEnabled()** (2 connections)
+- **Run_Should_Rethrow_When_Factory_Throws()** (2 connections)
+- **XFunctionTests()** (2 connections)
+- **XPoster.Tests** (2 connections)
+- **Run_Should_LogWarning_AndNotRethrow_When_CancelledGracefully()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

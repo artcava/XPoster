@@ -1,19 +1,20 @@
 # Community 229
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
-- **if()** (2 connections)
+- **FbSenderResilienceTests.cs** (11 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
 
 ## Relationships
 
-- [[Community 203]] (2 shared connections)
+- [[Community 62]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

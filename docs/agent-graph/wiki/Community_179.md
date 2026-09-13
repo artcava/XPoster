@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
+- **MediaAttachment.cs** (3 connections)
+- **MediaAttachment.cs** (3 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **MediaAttachment()** (2 connections)
 
 ## Relationships
 

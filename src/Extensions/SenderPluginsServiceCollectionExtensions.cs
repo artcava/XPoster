@@ -27,6 +27,7 @@ public static class SenderPluginsServiceCollectionExtensions
     public static IServiceCollection AddXPosterSenderPlugins(this IServiceCollection services)
     {
         // X sender plugin
+        services.AddTransient<XApiClient>();
         services.AddKeyedTransient<ISender, XSender>(SenderPlatform.X);
         // LinkedIn sender plugin
         services.AddKeyedTransient<ISender, InSender>(SenderPlatform.LinkedIn);

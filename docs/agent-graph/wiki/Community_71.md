@@ -1,25 +1,26 @@
 # Community 71
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **foreach()** (2 connections)
-- **static()** (2 connections)
-- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
-- **FetchRssNodeTests** (2 connections)
-- **return()** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **if()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **GetRequired()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **Supports()** (2 connections)
+- **TryGet()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 125]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,33 +1,33 @@
 # Community 21
 
-> 16 nodes · cohesion 0.12
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **ValidateTerminalNodeContract_TerminalDoesNotImplementContract_ReturnsError()** (2 connections)
-- **ValidateStructural_EmptyNodes_ReturnsNull()** (2 connections)
-- **ValidateStructural_MissingNodeReference_ReturnsError()** (2 connections)
-- **ValidateStructural_ValidLinearDag_ReturnsNull()** (2 connections)
-- **ValidateStructural_MultipleTerminalNodes_ReturnsError()** (2 connections)
-- **TwoTerminals()** (2 connections)
-- **Cyclic()** (2 connections)
-- **MissingRef()** (2 connections)
-- **Linear()** (2 connections)
-- **ValidateTerminalNodeContract_UnresolvableTerminalType_ReturnsNull()** (2 connections)
-- **WorkflowDefinition()** (2 connections)
-- **XPoster.Tests.Workflows.Engine** (2 connections)
-- **WorkflowDefinitionValidatorTests** (2 connections)
-- **ValidateTerminalNodeContract_TerminalImplementsContract_ReturnsNull()** (2 connections)
-- **ValidateStructural_Cycle_ReturnsError()** (2 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **GetProfiles_Should_SkipSlot_WithNoWorkflowKey()** (2 connections)
+- **new()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoSenders()** (2 connections)
+- **GetProfiles_Should_SkipUnknownSenders_ButKeepValidOnes()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_SkipSlot_WhenNoValidSendersRemain()** (2 connections)
+- **GetProfiles_Should_MapEachSlotToWorkflowOrchestrator()** (2 connections)
+- **CreateProvider()** (2 connections)
+- **GetProfiles_Should_OrderSlotsByHour()** (2 connections)
+- **GetProfiles_Should_ReturnEmpty_WhenNoScheduleConfigured()** (2 connections)
+- **GetProfiles_Should_ParseSenderPlatforms()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **BuildConfiguration()** (2 connections)
+- **ConfigurationSlotProfileProviderTests** (2 connections)
 
 ## Relationships
 
-- [[Community 166]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 49 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

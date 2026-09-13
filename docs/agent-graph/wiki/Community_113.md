@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **IgSender_ImplementsISender()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **IgSender()** (2 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **IsJsonLike()** (2 connections)
+- **catch()** (2 connections)
+- **GetProvider()** (2 connections)
+- **return()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
 
 ## Relationships
 
-- [[Community 47]] (10 shared connections)
+- [[Community 231]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

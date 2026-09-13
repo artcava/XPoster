@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
-- **var()** (2 connections)
-- **Input()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 71]] (7 shared connections)
+- [[Community 50]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

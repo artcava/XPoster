@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **PostAsync()** (2 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **IWorkflowNode** (2 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 

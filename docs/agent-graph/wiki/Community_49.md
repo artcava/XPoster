@@ -1,19 +1,20 @@
 # Community 49
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **MetaPublishingService.cs** (9 connections)
-- **MetaPublishingService.cs** (9 connections)
-- **if()** (2 connections)
-- **HttpRequestException()** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **GetApiVersion()** (2 connections)
-- **catch()** (2 connections)
-- **PublishContainerAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **MetaPublishingService()** (2 connections)
+- **XOAuth1SignerTests.cs** (10 connections)
+- **XOAuth1SignerTests.cs** (10 connections)
+- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
+- **XOAuth1SignerTests** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
+- **BuildCredentials()** (2 connections)
+- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
+- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **BuildPhotoParameters()** (2 connections)
+- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
 
 ## Relationships
 
@@ -21,7 +22,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,23 @@
 # Community 128
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **InstagramResiliencePipelineTests.cs** (8 connections)
-- **catch()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
-- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **AzureFoundryOptionsTests.cs** (5 connections)
+- **AzureFoundryOptionsTests.cs** (5 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
 
 ## Relationships
 
-- [[Community 174]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

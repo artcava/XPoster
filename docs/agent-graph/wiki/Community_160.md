@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions** (2 connections)
-- **IAiProviderSection** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

@@ -1,24 +1,25 @@
 # Community 87
 
-> 7 nodes · cohesion 0.52
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **XFunction.cs** (6 connections)
-- **XFunction.cs** (6 connections)
-- **Run()** (2 connections)
-- **catch()** (2 connections)
-- **XFunction()** (2 connections)
-- **if()** (2 connections)
-- **XPoster** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **CreateFactory()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **WorkflowProfile()** (2 connections)
+- **new()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 45]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,18 +1,19 @@
 # Community 57
 
-> 9 nodes · cohesion 0.42
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
-- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **HttpClientExtensionsTests** (2 connections)
-- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
-- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **PerplexityOptionsValidatorTests.cs** (9 connections)
+- **Validate_WithValidOptions_ReturnsSuccess()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Validate_WhenTextModelNameIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WhenEndpointIsEmpty_ReturnsFailed()** (2 connections)
+- **PerplexityOptionsValidatorTests** (2 connections)
+- **Validate_WhenApiKeyIsEmpty_ReturnsFailed()** (2 connections)
+- **Validate_WithMultipleInvalidFields_ReturnsAllFailures()** (2 connections)
 
 ## Relationships
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (12 connections)
+- **XApiClient.cs** (17 connections)
+- **ThrowIfNotSuccess()** (2 connections)
+- **SignRequest()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
 - **if()** (2 connections)
-- **nameof()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **ResolveWorkflowOrchestrator()** (2 connections)
-- **CreateEmptyNoOrchestrator()** (2 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (6 shared connections)
+- [[Community 38]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

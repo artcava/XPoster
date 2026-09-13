@@ -1,28 +1,29 @@
 # Community 45
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AiProviderServiceCollectionExtensionsTests.cs** (10 connections)
-- **AddXPosterAiProviders_RegistersFalAi_AsImageOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersExpectedNumberOfKeyedServices()** (2 connections)
-- **AddXPosterAiProviders_RegistersDeepSeek_AsTextOnly()** (2 connections)
-- **AddXPosterAiProviders_RegistersAzureFoundry_AsTextAndImageProvider()** (2 connections)
-- **AddXPosterAiProviders_RegistersPerplexity_AsTextOnly()** (2 connections)
-- **AddXPosterAiProviders_ReturnsSameServiceCollection()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AiProviderServiceCollectionExtensionsTests** (2 connections)
-- **AddXPosterAiProviders_RegistersOpenAi_AsTextAndImageProvider()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
+- **typeof()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
+- **foreach()** (2 connections)
+- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
+- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
+- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 87]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 41 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

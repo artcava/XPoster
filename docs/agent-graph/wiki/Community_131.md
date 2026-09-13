@@ -1,22 +1,23 @@
 # Community 131
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
-- **OpenAiService()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
 - **if()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **BuildPowerLawPostNodeTests()** (2 connections)
+- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
+- **Execute_UsesSymbol_ForPostTag()** (2 connections)
+- **Input()** (2 connections)
 
 ## Relationships
 
-- [[Community 97]] (6 shared connections)
+- [[Community 77]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

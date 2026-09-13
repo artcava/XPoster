@@ -1,23 +1,23 @@
 # Community 116
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_ReturnsGeneratedText()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
-- **var()** (2 connections)
+- **OpenAiOptionsValidator.cs** (5 connections)
+- **OpenAiOptionsValidator.cs** (5 connections)
+- **nameof()** (2 connections)
+- **if()** (2 connections)
+- **Validate()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

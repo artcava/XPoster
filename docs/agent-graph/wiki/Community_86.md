@@ -1,25 +1,25 @@
 # Community 86
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **return()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
-- **AiTextNodeTests** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **static()** (2 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **CaptureLoggerProvider.cs** (7 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **CaptureLoggerProvider()** (2 connections)
+- **CaptureLogger()** (2 connections)
+- **CreateLogger()** (2 connections)
+- **Dispose()** (2 connections)
+- **IsEnabled()** (2 connections)
 
 ## Relationships
 
-- [[Community 116]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

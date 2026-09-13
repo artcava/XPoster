@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **foreach()** (2 connections)
-- **resolve()** (2 connections)
-- **ValidateOptions()** (2 connections)
+- **HttpClientExtensions.cs** (6 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
 
 ## Relationships
 
-- [[Community 88]] (6 shared connections)
+- [[Community 218]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

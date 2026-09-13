@@ -1,24 +1,25 @@
 # Community 88
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **if()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **PostTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 188]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode.cs** (4 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **IWorkflowNode** (2 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
