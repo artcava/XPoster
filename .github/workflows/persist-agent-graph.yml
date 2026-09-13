@@ -43,7 +43,7 @@ jobs:
       # protection rule on develop.
       # =========================
       - name: Checkout develop
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: develop
           fetch-depth: 0  # Full history gives graphify richer relationship context
