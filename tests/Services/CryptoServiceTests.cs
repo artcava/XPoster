@@ -15,7 +15,7 @@ public class CryptoServiceTests
 
         var client = new HttpClient(handlerMock.Object);
         var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-        httpClientFactoryMock.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
+        httpClientFactoryMock.Setup(f => f.CreateClient("CryptoPrices")).Returns(client);
 
         return new CryptoService(httpClientFactoryMock.Object, loggerMock.Object);
     }
