@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode.cs** (4 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **IWorkflowNode** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **ValidateConnectivity()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

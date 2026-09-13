@@ -4,26 +4,26 @@
 
 ## Key Concepts
 
-- **FalAiImageServiceTests.cs** (24 connections)
-- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **FalAiImageService()** (2 connections)
-- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
-- **MakeHandlerMock()** (2 connections)
-- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **MakeRequest()** (2 connections)
-- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **CreateTweetAsync()** (2 connections)
+- **BuildSignedRequest()** (2 connections)
+- **catch()** (2 connections)
+- **ArgumentException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **for()** (2 connections)
+- **HasErrorPayload()** (2 connections)
+- **XApiException()** (2 connections)
+- **UploadMediaAsync()** (2 connections)
+- **XApiClient()** (2 connections)
+- **InitializeMediaAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 33]] (12 shared connections)
+- [[Community 110]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 39 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

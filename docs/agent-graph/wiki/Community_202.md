@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **MediaAttachment.cs** (3 connections)
-- **MediaAttachment.cs** (3 connections)
-- **MediaAttachment()** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
 
 ## Relationships
 

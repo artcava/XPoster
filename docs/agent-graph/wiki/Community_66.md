@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (8 connections)
-- **XSenderResilienceTests.cs** (8 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XSenderResilienceTests** (2 connections)
-- **SendAsync_WhenTextTweetReturns402_ReturnsFalseAndLogsError()** (2 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeedTests.cs** (8 connections)
+- **RSSFeedTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **RSSFeed_DefaultPublishDateIsMinValue()** (2 connections)
+- **RSSFeed_RecordEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **RSSFeed_CanSetPublishDate()** (2 connections)
+- **RSSFeed_CanCreateWithRequiredProperties()** (2 connections)
+- **RSSFeed_RecordEquality_SameValues_AreEqual()** (2 connections)
 
 ## Relationships
 

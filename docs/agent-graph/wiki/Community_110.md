@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **JsonResponse()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
-- **var()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **FinalizeMediaAsync()** (2 connections)
+- **SignRequest()** (2 connections)
+- **if()** (2 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
+- **ThrowIfNotSuccess()** (2 connections)
 
 ## Relationships
 
-- [[Community 4]] (31 shared connections)
+- [[Community 43]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

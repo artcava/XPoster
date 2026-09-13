@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **while()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 88]] (7 shared connections)
+- [[Community 170]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

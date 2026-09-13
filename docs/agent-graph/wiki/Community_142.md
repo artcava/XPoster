@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **IWorkflowNode** (2 connections)
 
 ## Relationships
 

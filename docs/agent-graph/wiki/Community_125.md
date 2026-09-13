@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **FacebookCredentialsValidator.cs** (5 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 - **if()** (2 connections)
-- **FacebookCredentialsValidator** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **BuildPowerLawPostNode()** (2 connections)
 
 ## Relationships
 

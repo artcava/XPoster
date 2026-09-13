@@ -1,22 +1,22 @@
 # Community 160
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **if()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **OpenAiService()** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider** (2 connections)
+- **GetCurrentTime()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 102]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderSection** (2 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider.cs** (4 connections)
+- **ISlotProfileProvider** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **IAiProviderOptions** (2 connections)
+- **GetProfiles()** (2 connections)
 
 ## Relationships
 

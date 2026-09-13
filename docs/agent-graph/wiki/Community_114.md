@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **AzureFoundryOptionsTests.cs** (5 connections)
-- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
-- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **AzureFoundryOptionsTests** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 

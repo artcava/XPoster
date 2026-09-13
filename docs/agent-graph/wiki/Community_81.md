@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (19 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **WorkflowProfile()** (2 connections)
-- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **new()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **CreateFactory()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **BuildChatPayload()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (11 shared connections)
+- [[Community 180]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

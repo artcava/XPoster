@@ -1,24 +1,24 @@
 # Community 94
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IContainerStateStore.cs** (6 connections)
-- **IContainerStateStore.cs** (6 connections)
-- **GetPendingAsync()** (2 connections)
-- **IContainerStateStore** (2 connections)
-- **SaveAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **UpdateStatusAsync()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **ResolveSenders()** (2 connections)
+- **Resolve()** (2 connections)
+- **NoOrchestrator()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 131]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **SlotScheduleOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **SlotScheduleOptions.cs** (2 connections)
+- **WorkflowContextKeys.cs** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **WorkflowContextKeys.cs** (2 connections)
 
 ## Relationships
 

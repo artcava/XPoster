@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
-- **var()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ReturnsGeneratedText()** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **catch()** (2 connections)
+- **GetProvider()** (2 connections)
+- **IsJsonLike()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (7 shared connections)
+- [[Community 232]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

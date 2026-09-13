@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowOrchestrator.cs** (4 connections)
-- **WorkflowOrchestrator.cs** (4 connections)
-- **if()** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **Apply()** (2 connections)
+- **ITagReplacementService** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

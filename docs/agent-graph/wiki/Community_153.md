@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest.cs** (4 connections)
-- **ImagePromptRequest** (2 connections)
-- **PromptRequest** (2 connections)
-- **XPoster.Models** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions** (2 connections)
+- **IAiProviderSection** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

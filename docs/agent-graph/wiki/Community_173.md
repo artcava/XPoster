@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **new()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **Node()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **BaseOrchestrator()** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 21]] (15 shared connections)
+- [[Community 214]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

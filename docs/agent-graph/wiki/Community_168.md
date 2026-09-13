@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (17 connections)
-- **BuildApiClient()** (2 connections)
-- **OkJson()** (2 connections)
-- **if()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
+- **ResilienceTestHelpers.cs** (11 connections)
+- **BuildFactory()** (2 connections)
+- **SendAsync()** (2 connections)
+- **_responder()** (2 connections)
+- **params()** (2 connections)
 
 ## Relationships
 
-- [[Community 35]] (12 shared connections)
+- [[Community 105]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

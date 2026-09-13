@@ -1,20 +1,20 @@
 # Community 232
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **FacebookCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **FacebookCredentials.cs** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **InvalidOperationException()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 123]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

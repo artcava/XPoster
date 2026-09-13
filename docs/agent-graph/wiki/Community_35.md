@@ -1,30 +1,30 @@
 # Community 35
 
-> 13 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (17 connections)
-- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
-- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
-- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
-- **foreach()** (2 connections)
-- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
-- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
-- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XApiClientTests** (2 connections)
-- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_ImageModelNameWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_ImageModelNameWithAllowedSpecialChars_Succeeds()** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
 
 ## Relationships
 
-- [[Community 168]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 41 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

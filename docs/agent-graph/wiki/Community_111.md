@@ -1,23 +1,23 @@
 # Community 111
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **if()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
+- **XApiException.cs** (7 connections)
+- **catch()** (2 connections)
+- **foreach()** (2 connections)
+- **XApiException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **BuildMessage()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 236]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

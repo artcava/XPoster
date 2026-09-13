@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **Input()** (2 connections)
-- **if()** (2 connections)
-- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
-- **Execute_UsesSymbol_ForPostTag()** (2 connections)
-- **BuildPowerLawPostNodeTests()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **Polly_LinkedIn_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **for()** (2 connections)
+- **Polly_LinkedIn_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_LinkedIn_AttemptTimeout_CancelsSlowRequest()** (2 connections)
 
 ## Relationships
 
-- [[Community 86]] (7 shared connections)
+- [[Community 183]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

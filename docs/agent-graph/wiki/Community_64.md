@@ -1,26 +1,26 @@
 # Community 64
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AiModelCatalog.cs** (8 connections)
-- **AiModelCatalog.cs** (8 connections)
-- **if()** (2 connections)
-- **TryGet()** (2 connections)
+- **InSender.cs** (11 connections)
 - **InvalidOperationException()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Supports()** (2 connections)
-- **AiModelCatalog()** (2 connections)
-- **GetRequired()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **Exception()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 227]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

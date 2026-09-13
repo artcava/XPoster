@@ -1,23 +1,23 @@
 # Community 117
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
-- **XApiException()** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **if()** (2 connections)
+- **SendAsync()** (2 connections)
+- **DryRunSender()** (2 connections)
 - **XPoster.SenderPlugins** (2 connections)
-- **BuildMessage()** (2 connections)
-- **catch()** (2 connections)
-- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 236]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

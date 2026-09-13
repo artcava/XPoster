@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IWorkflowContext.cs** (5 connections)
-- **IWorkflowContext.cs** (5 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **HasData()** (2 connections)
-- **IWorkflowContext** (2 connections)
-- **SetData()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
+- **PublishContainerAsync()** (2 connections)
 
 ## Relationships
 
