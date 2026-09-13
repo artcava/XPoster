@@ -1,10 +1,8 @@
 # Twitter / X Setup
 
-> **TODO**: This page is a placeholder. Full setup documentation is pending.
-
 ## Overview
 
-XPoster publishes posts to Twitter / X using the API v2 with OAuth 1.0a authentication.
+XPoster publishes posts to Twitter / X using the API v2 (`POST /2/tweets`) with OAuth 1.0a authentication, and uploads images through the v1.1 chunked media-upload flow. Requests are signed by the first-party `XOAuth1Signer` (RFC 5849 HMAC-SHA1) and routed through the resilient named `"X"` client with the standard Polly pipeline.
 
 ## Required Configuration
 
@@ -24,7 +22,12 @@ Credentials are bound to `XCredentials` (`XPoster.Credentials`) via `IOptions<XC
 3. Generate OAuth 1.0a **Access Token** and **Access Token Secret** under the app's *Keys and Tokens* section.
 4. Store the four values in Azure Key Vault using the secret names above (or in `local.settings.json` with double-underscore keys, e.g. `XCredentials__XApiKey`, for local development).
 
+## Usage & Credits (Pay-per-Use)
+
+The X API moved to a **pay-per-use credit model**. Check your plan and balances on the **Usage & Billing / Credits** page of the [X Developer Portal](https://developer.twitter.com/en/portal/dashboard) and keep credits topped up ahead of scheduled posts. Posting a tweet consumes a small number of credits; each request is metered.
+
 ## Notes
 
 - Ensure the app has **Read and Write** permissions; Read-only apps cannot post.
-- Free tier API access may have posting limits; review your Twitter developer plan.
+- If publishing fails with `402 Payment Required` (`usage_cap_exceeded`), the developer account has exhausted its credits — add credits in the Developer Portal and wait for the next scheduled run.
+- Failure logs include the HTTP status and the parsed X error body (title, detail, label), so credit/limit issues are diagnosable from Application Insights alone.

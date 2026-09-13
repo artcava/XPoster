@@ -205,8 +205,9 @@ All outbound HTTP integrations use named clients from `HttpClientExtensions.AddH
 | `"LinkedIn"` | `InSender` | 30 s / 180 s |
 | `"Instagram"` | `IgSender` | 30 s / 180 s |
 | `"Facebook"` | `FbSender` | 30 s / 180 s |
+| `"X"` | `XApiClient` (`XSender`) | 30 s / 180 s |
 
-> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. `XSender` is the exception — it uses the `LinqToTwitter` OAuth library and is outside this pipeline. (Note: `CryptoService` creates an untyped client via `IHttpClientFactory.CreateClient()`.)
+> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. (Note: `CryptoService` creates an untyped client via `IHttpClientFactory.CreateClient()`.)
 
 ### Sender Plugins — Platform Abstraction
 
@@ -216,7 +217,7 @@ Each sender implements `ISender`: `Task<bool> SendAsync(Post post, CancellationT
 
 | Sender | `SenderPlatform` value | `MessageMaxLength` | Target | Notes |
 |---|---|---|---|---|
-| `XSender` | `X` | 250 | Twitter/X API | OAuth 1.0a via `LinqToTwitter`; 250 chars leaves room for the firm footer |
+| `XSender` | `X` | 250 | Twitter/X API | OAuth 1.0a (first-party signer) via named `"X"` resilient client; 250 chars leaves room for the firm footer |
 | `InSender` | `LinkedIn` | 2 800 | LinkedIn API | Direct HTTP via `IHttpClientFactory` |
 | `IgSender` | `Instagram` | 2 200 | Instagram Graph API | Container flow via `MetaPublishingService` |
 | `FbSender` | `Facebook` | 3 000 | Facebook Graph API | Direct HTTP via `IHttpClientFactory` |

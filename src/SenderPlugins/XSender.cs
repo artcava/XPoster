@@ -1,32 +1,28 @@
-using LinqToTwitter;
-using LinqToTwitter.OAuth;
-using Microsoft.Extensions.Options;
 using XPoster.Contracts;
-using XPoster.Credentials;
 using XPoster.Models;
 
 namespace XPoster.SenderPlugins;
 
 /// <summary>
-/// Publishes posts to X (Twitter) using the LinqToTwitter library with OAuth 1.0a single-user authentication.
-/// Credentials are resolved from <see cref="XCredentials"/> bound via the Azure Key Vault Configuration Provider.
-/// A <see cref="TwitterContext"/> is rebuilt per invocation.
+/// Publishes posts to X (Twitter) using direct HTTP calls signed with OAuth 1.0a.
+/// All outbound traffic is routed through <see cref="XApiClient"/>, which uses the
+/// resilient <c>"X"</c> named <see cref="HttpClient"/>.
 /// </summary>
 public class XSender : ISender
 {
-    private readonly XCredentials _creds;
+    private readonly XApiClient _apiClient;
     private readonly ILogger<XSender> _logger;
 
     /// <summary>
     /// Initialises a new instance of <see cref="XSender"/>.
     /// </summary>
-    /// <param name="credentials">Typed X credentials resolved from configuration.</param>
+    /// <param name="apiClient">The X API client used to publish tweets and upload media.</param>
     /// <param name="logger">The logger for diagnostic output.</param>
     /// <exception cref="ArgumentNullException">Thrown when any parameter is <c>null</c>.</exception>
-    public XSender(IOptions<XCredentials> credentials, ILogger<XSender> logger)
+    public XSender(XApiClient apiClient, ILogger<XSender> logger)
     {
-        ArgumentNullException.ThrowIfNull(credentials);
-        _creds = credentials.Value;
+        ArgumentNullException.ThrowIfNull(apiClient);
+        _apiClient = apiClient;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -47,7 +43,7 @@ public class XSender : ISender
     {
         if (post == null)
         {
-                    _logger.LogWarning("[XSender] Post is null. Skipping.");
+            _logger.LogWarning("[XSender] Post is null. Skipping.");
             return false;
         }
 
@@ -59,47 +55,31 @@ public class XSender : ISender
 
         try
         {
-            var auth = new SingleUserAuthorizer
-            {
-                CredentialStore = new SingleUserInMemoryCredentialStore
-                {
-                    ConsumerKey = _creds.XApiKey,
-                    ConsumerSecret = _creds.XApiSecret,
-                    AccessToken = _creds.XAccessToken,
-                    AccessTokenSecret = _creds.XAccessTokenSecret
-                }
-            };
-            using var twitterContext = new TwitterContext(auth);
-
             var postText = post.Content + Post.Firm;
-            var tweetId = string.Empty;
+            string tweetId;
 
-            if (post.Image != null && post.Image.Length > 0)
+            if (post.Image is { Length: > 0 })
             {
-                var media = await twitterContext.UploadMediaAsync(post.Image, "image/jpeg", "tweet_image", cancelToken: ct);
-
-                if (media == null) throw new Exception("[XSender] Error uploading media");
-
-                var imageTweet = await twitterContext.TweetMediaAsync(
-                    text: postText,
-                    mediaIds: new List<string> { media.MediaID.ToString() },
-                    cancelToken: ct
-                );
-                if (imageTweet == null) throw new Exception("[XSender] Error tweeting");
-
-                tweetId = imageTweet.ID;
+                var mediaId = await _apiClient.UploadMediaAsync(post.Image, "image/jpeg", ct);
+                tweetId = await _apiClient.CreateTweetAsync(postText, mediaId, ct);
             }
             else
             {
-                var tweet = await twitterContext.TweetAsync(postText, cancelToken: ct);
-
-                if (tweet == null) throw new Exception("[XSender] Error tweeting");
-
-                tweetId = tweet.ID;
+                tweetId = await _apiClient.CreateTweetAsync(postText, mediaId: null, ct);
             }
 
-            _logger.LogInformation("[XSender] Published tweet: (ID: {0})", tweetId);
+            _logger.LogInformation("[XSender] Published tweet: (ID: {TweetId})", tweetId);
             return true;
+        }
+        catch (XApiException ex)
+        {
+            _logger.LogError(
+                ex,
+                "[XSender] X API error — status {StatusCode}, label {Label}, detail {Detail}",
+                ex.StatusCode,
+                ex.ErrorInfo?.Label,
+                ex.ErrorInfo?.Detail);
+            return false;
         }
         catch (Exception ex)
         {

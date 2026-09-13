@@ -37,6 +37,9 @@ bld/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# Code coverage output (coverlet + reportgenerator)
+coverage/
+
 # NUNIT
 *.VisualState.xml
 TestResult.xml

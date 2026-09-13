@@ -119,7 +119,7 @@ Shared AI utility logic is centralised in **`AiServiceHelper`**, which exposes t
 
 | Library / API | Version | Platform |
 |---------------|---------|----------|
-| `LinqToTwitter` | 6.15.0 | Twitter/X — OAuth 1.0a wrapper |
+| X (Twitter) API v2 + v1.1 media upload | — | Twitter/X — OAuth 1.0a via first-party `HttpClient` client |
 | LinkedIn REST API | v2 | LinkedIn — direct HTTP calls via `IHttpClientFactory` |
 | Graph API (Meta) | v23.0 | Instagram + Facebook — direct HTTP calls; async container flow for Instagram |
 
@@ -532,7 +532,6 @@ Key monitoring capabilities at a glance:
 - [DeepSeek](https://www.deepseek.com/) - Cost-effective text generation
 - [fal.ai](https://fal.ai/) - FLUX.2 Turbo image generation
 - [Perplexity](https://www.perplexity.ai/) - Sonar text generation
-- [LinqToTwitter](https://github.com/JoeMayo/LinqToTwitter) - Twitter API wrapper
 - [SkiaSharp](https://github.com/mono/skiasharp) - Cross-platform 2D graphics API for .NET
 - [.NET Foundation](https://dotnetfoundation.org/) - Framework and community
 
