@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **ValidateOptions()** (2 connections)
-- **foreach()** (2 connections)
-- **resolve()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **PerplexityService()** (2 connections)
+- **while()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 102]] (6 shared connections)
+- [[Community 171]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

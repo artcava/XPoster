@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AiProviderServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterAiProviders()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **WorkflowNodeDefinition.cs** (3 connections)
+- **WorkflowNodeDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowNodeDefinition()** (2 connections)
 
 ## Relationships
 

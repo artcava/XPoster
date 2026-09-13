@@ -1,30 +1,31 @@
 # Community 32
 
-> 13 nodes · cohesion 0.15
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (17 connections)
-- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
-- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
-- **foreach()** (2 connections)
-- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
-- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
-- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
-- **XApiClientTests** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **MakeDefinitionWithoutImage()** (2 connections)
+- **MakeDefinition()** (2 connections)
+- **static()** (2 connections)
+- **WorkflowOrchestratorTests** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyDictionary_OnFailure()** (2 connections)
+- **ProduceImage_IsFalse_WhenWorkflowHasNoAiImageNode()** (2 connections)
+- **OrchestrateAsync_ReturnsPostMap_OnSuccess()** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyDictionary_WhenSendResultsMissing()** (2 connections)
+- **ProduceImage_IsTrue_WhenWorkflowHasAiImageNode()** (2 connections)
+- **ProduceImage_Set_ThrowsNotSupported()** (2 connections)
+- **return()** (2 connections)
+- **Properties_AreConfigured()** (2 connections)
 
 ## Relationships
 
-- [[Community 157]] (5 shared connections)
+- [[Community 184]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 41 (100%)
+- EXTRACTED: 43 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,20 +1,21 @@
 # Community 208
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 235]] (2 shared connections)
+- [[Community 243]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

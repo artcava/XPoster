@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **while()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
 - **GetChatCompletionsEndpoint()** (2 connections)
-- **PerplexityService()** (2 connections)
+- **while()** (2 connections)
+- **DeepSeekService()** (2 connections)
 
 ## Relationships
 
-- [[Community 136]] (4 shared connections)
+- [[Community 158]] (4 shared connections)
 
 ## Audit Trail
 

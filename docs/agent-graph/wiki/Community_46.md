@@ -1,28 +1,29 @@
 # Community 46
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSenderResilienceTests.cs** (10 connections)
-- **InSender()** (2 connections)
-- **BuildSender()** (2 connections)
-- **InSenderResilienceTests** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenLinkedInReturns429ThenSuccess_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenLinkedInReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **ValidPost()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenLinkedInReturns200_ReturnsTrue()** (2 connections)
+- **FalAiImageServiceTests.cs** (24 connections)
+- **MakeRequest()** (2 connections)
+- **MakeHandlerMock()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
+- **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
+- **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
+- **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 39]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

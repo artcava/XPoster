@@ -1,25 +1,25 @@
 # Community 75
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (19 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **CreateFactory()** (2 connections)
-- **new()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **WorkflowProfile()** (2 connections)
+- **FalAiImageService.cs** (7 connections)
+- **FalAiImageService.cs** (7 connections)
+- **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 42]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 157
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (17 connections)
-- **if()** (2 connections)
-- **OkJson()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
-- **BuildApiClient()** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **ITextToImageProvider** (2 connections)
+- **GenerateImageAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

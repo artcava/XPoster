@@ -1,25 +1,25 @@
 # Community 84
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
-- **FetchRssNodeTests** (2 connections)
-- **foreach()** (2 connections)
-- **return()** (2 connections)
-- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **static()** (2 connections)
+- **BlobStorageService.cs** (7 connections)
+- **BlobStorageService.cs** (7 connections)
+- **XPoster.Services** (2 connections)
+- **DeleteAsync()** (2 connections)
+- **UploadAsync()** (2 connections)
+- **BlobStorageService()** (2 connections)
+- **BlobUploadResult()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 127]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

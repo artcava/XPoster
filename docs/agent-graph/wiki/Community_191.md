@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
 
 ## Relationships
 

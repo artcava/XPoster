@@ -1,19 +1,19 @@
 # Community 135
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
+- **SendAsync()** (2 connections)
+- **IsBinaryMediaType()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **HttpResponseBodyLoggingHandler()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 221]] (3 shared connections)
 
 ## Audit Trail
 

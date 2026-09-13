@@ -5,15 +5,15 @@
 ## Key Concepts
 
 - **IgSenderTests.cs** (16 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **IgSender()** (2 connections)
 - **IgSenderTests()** (2 connections)
-- **IgSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 - **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 49]] (10 shared connections)
+- [[Community 51]] (10 shared connections)
 
 ## Audit Trail
 

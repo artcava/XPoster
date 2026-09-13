@@ -1,22 +1,23 @@
 # Community 136
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **var()** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **XPoster.SenderPlugins** (2 connections)
 - **if()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **SendAsync()** (2 connections)
+- **DryRunSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 205]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

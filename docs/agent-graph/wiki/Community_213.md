@@ -1,20 +1,21 @@
 # Community 213
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **resolve()** (2 connections)
+- **ValidateOptions()** (2 connections)
 - **foreach()** (2 connections)
-- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 189]] (3 shared connections)
+- [[Community 97]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

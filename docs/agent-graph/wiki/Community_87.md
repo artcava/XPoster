@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **AIResponse.cs** (7 connections)
-- **AIResponse.cs** (7 connections)
-- **AIResponse** (2 connections)
-- **Choice** (2 connections)
-- **Message** (2 connections)
-- **ImageData** (2 connections)
-- **XPoster.Models** (2 connections)
-- **OpenAIImageResponse** (2 connections)
+- **WorkflowContext.cs** (7 connections)
+- **WorkflowContext.cs** (7 connections)
+- **HasData()** (2 connections)
+- **SetData()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **KeyNotFoundException()** (2 connections)
+- **WorkflowContext** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

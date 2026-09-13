@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ImageTestData.cs** (4 connections)
-- **ImageTestData.cs** (4 connections)
-- **CreateValidJpeg()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **CreateValidPng()** (2 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **IStepOptionsResolver** (2 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Workflows.Services** (2 connections)
 
 ## Relationships
 

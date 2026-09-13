@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **XApiClient.cs** (17 connections)
-- **FinalizeMediaAsync()** (2 connections)
-- **SignRequest()** (2 connections)
-- **if()** (2 connections)
-- **AppendMediaSegmentsAsync()** (2 connections)
-- **ThrowIfNotSuccess()** (2 connections)
+- **XApiException.cs** (7 connections)
+- **BuildMessage()** (2 connections)
+- **XApiException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **catch()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 43]] (11 shared connections)
+- [[Community 247]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

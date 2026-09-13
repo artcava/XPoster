@@ -1,29 +1,30 @@
 # Community 39
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **ConfigurationStepOptionsResolverTests** (2 connections)
-- **BuildConfig()** (2 connections)
-- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
-- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
-- **XPoster.Tests.Workflows.Services** (2 connections)
-- **Resolve_Throws_WhenStepMissing()** (2 connections)
-- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
-- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
+- **FalAiImageServiceTests.cs** (24 connections)
+- **GenerateImageAsync_ValidResponse_ReturnsImageBytes()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_Returns429_ReturnsEmptyArray()** (2 connections)
+- **FalAiImageServiceTests** (2 connections)
+- **GenerateImageAsync_MissingUrlProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithUnsafeChars_PercentEncodesInRequestUri()** (2 connections)
+- **GenerateImageAsync_EmptyPrompt_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_EmptyImagesArray_ReturnsEmptyArray()** (2 connections)
+- **FalImageJson()** (2 connections)
+- **GenerateImageAsync_ReturnsNonSuccess_ReturnsEmptyArray()** (2 connections)
+- **BuildService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 46]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

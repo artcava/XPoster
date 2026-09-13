@@ -1,15 +1,16 @@
 # Community 106
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **nameof()** (2 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
+- **IgSender.cs** (6 connections)
+- **IgSender.cs** (6 connections)
 - **if()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **SendAsync()** (2 connections)
+- **IgSender()** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

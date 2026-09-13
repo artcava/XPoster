@@ -7,7 +7,6 @@
 ## Connections by Relation
 
 ### contains
-- [[OpenAiServiceTests.cs]]
 - [[XPoster.Tests.Services]]
 - [[OpenAiServiceTests]]
 - [[BuildService()]]
@@ -27,6 +26,7 @@
 - [[GenerateTextAsync_WhenChoicesArrayIsEmpty_ReturnsEmpty()]]
 - [[GenerateTextAsync_WhenChoicesIsNull_ReturnsEmpty()]]
 - [[GenerateTextAsync_UsesSystemPromptTemplateFromRequest()]]
+- [[HttpResponseMessage()]]
 
 ---
 

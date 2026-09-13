@@ -1,21 +1,21 @@
 # Community 201
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **WorkflowNodeInput.cs** (3 connections)
-- **WorkflowNodeInput.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
+- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
+- **var()** (2 connections)
+- **ResponseBodyLogging_402_LogsSanitizedBodyAtErrorWithHeaders()** (2 connections)
+- **ResponseBodyLogging_SuccessLogsBodyReadableByConsumer()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 174]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

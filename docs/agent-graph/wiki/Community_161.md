@@ -1,22 +1,22 @@
 # Community 161
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **LinkedInCredentialsValidator.cs** (4 connections)
-- **if()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **HttpClientExtensions.cs** (7 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpResponseBodyLogging()** (2 connections)
+- **AddHttpClients()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 235]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

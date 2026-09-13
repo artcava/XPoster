@@ -1,35 +1,36 @@
 # Community 12
 
-> 18 nodes · cohesion 0.22
+> 19 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **WorkflowContextTests.cs** (17 connections)
-- **WorkflowContextTests.cs** (17 connections)
-- **ConcurrentSetData_DoesNotThrow()** (2 connections)
-- **ConcurrentReadWrite_DoesNotThrow()** (2 connections)
-- **catch()** (2 connections)
-- **lock()** (2 connections)
-- **GetData_ThrowsOnTypeMismatch()** (2 connections)
-- **HasData_ReturnsFalse_WhenKeyMissing()** (2 connections)
-- **HasData_ReturnsTrue_WhenKeyExists()** (2 connections)
-- **WorkflowContextTests** (2 connections)
-- **XPoster.Tests.Workflows.Models** (2 connections)
-- **TryGetData_ReturnsFalse_WhenKeyMissing()** (2 connections)
-- **SetData_OverwritesExistingValue()** (2 connections)
-- **SlotKey_IsSetCorrectly()** (2 connections)
-- **TryGetData_ReturnsFalse_OnTypeMismatch()** (2 connections)
-- **GetData_ThrowsOnMissingKey()** (2 connections)
-- **SetData_AndGetData_RoundTrip()** (2 connections)
-- **TryGetData_ReturnsTrue_WhenKeyExists()** (2 connections)
+- **HttpResponseBodyLoggingHandlerTests.cs** (25 connections)
+- **HttpClient()** (2 connections)
+- **BinaryResponseHandler()** (2 connections)
+- **BuildClient()** (2 connections)
+- **FixedResponseHandler()** (2 connections)
+- **SendAsync_SanitizesSecretInBody()** (2 connections)
+- **StubResponse()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **SendAsync_OctetStreamResponse_LogsSummaryWithoutBody()** (2 connections)
+- **SendAsync_BodyLargerThanCap_LogsSummaryOnly()** (2 connections)
+- **SendAsync_ImageResponse_LogsSummaryWithoutBody()** (2 connections)
+- **SendAsync_CallerStillReadsBodyAfterLogging()** (2 connections)
+- **SendAsync_4xx_LogsResponseHeaders()** (2 connections)
+- **if()** (2 connections)
+- **LogWasCalled()** (2 connections)
+- **SendAsync_2xx_LogsAtDebugLevel()** (2 connections)
+- **HttpResponseBodyLoggingHandlerTests** (2 connections)
+- **SendAsync_SanitizesAccessTokenInUrl()** (2 connections)
+- **SendAsync_4xx5xx_LogsAtErrorLevel()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 93]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 61 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

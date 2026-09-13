@@ -1,15 +1,16 @@
 # Community 107
 
-> 6 nodes · cohesion 0.60
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **UploadAsync()** (2 connections)
+- **AiImageNode.cs** (6 connections)
+- **AiImageNode.cs** (6 connections)
+- **if()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **AiImageNode()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 
@@ -17,7 +18,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowExecutionEngineTests.cs** (24 connections)
-- **new()** (2 connections)
-- **StubNode()** (2 connections)
-- **var()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **BaseOrchestrator()** (2 connections)
+- **PostAsync()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 
 ## Relationships
 
-- [[Community 10]] (20 shared connections)
+- [[Community 217]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 198
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
+- **CryptoService.cs** (6 connections)
+- **catch()** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 227]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

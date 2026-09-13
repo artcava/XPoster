@@ -1,19 +1,20 @@
 # Community 235
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XCredentialsValidator.cs** (4 connections)
+- **HttpClientExtensions.cs** (7 connections)
+- **IsTransientHttpFailure()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 208]] (2 shared connections)
+- [[Community 161]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

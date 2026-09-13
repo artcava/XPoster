@@ -1,21 +1,22 @@
 # Community 173
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **BaseOrchestrator()** (2 connections)
-- **PostAsync()** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderSection** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **IAiProviderOptions** (2 connections)
 
 ## Relationships
 
-- [[Community 214]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

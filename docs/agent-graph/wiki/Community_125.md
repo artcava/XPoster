@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
+- **InstagramCredentialsValidator.cs** (5 connections)
 - **if()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
+- **InstagramCredentialsValidator** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 
 ## Relationships
 

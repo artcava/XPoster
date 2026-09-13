@@ -1,21 +1,22 @@
 # Community 174
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender.cs** (3 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **DryRunShortLengthSender()** (2 connections)
+- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
+- **ResponseBodyLogging_429Sequence_LogsEachRetryAttemptAndFinalSuccess()** (2 connections)
+- **return()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **static()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 201]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

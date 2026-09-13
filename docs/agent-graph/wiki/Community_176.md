@@ -1,21 +1,22 @@
 # Community 176
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **WorkflowNodeDefinition()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **TruncateUtf8()** (2 connections)
+- **FormatResponseHeaders()** (2 connections)
+- **if()** (2 connections)
+- **SanitizeAndTruncate()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 92]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

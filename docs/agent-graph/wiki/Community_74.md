@@ -1,21 +1,22 @@
 # Community 74
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **CreateNode()** (2 connections)
-- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
-- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
-- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **new()** (2 connections)
+- **InSender.cs** (11 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **SendAsync()** (2 connections)
+- **Exception()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **catch()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **using()** (2 connections)
 
 ## Relationships
 
-- [[Community 115]] (6 shared connections)
+- [[Community 218]] (3 shared connections)
 
 ## Audit Trail
 
