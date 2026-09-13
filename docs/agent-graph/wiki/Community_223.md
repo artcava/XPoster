@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
+- **BaseOrchestrator.cs** (6 connections)
 - **if()** (2 connections)
-- **CryptoService()** (2 connections)
+- **DispatchAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 183]] (3 shared connections)
+- [[Community 192]] (3 shared connections)
 
 ## Audit Trail
 

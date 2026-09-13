@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **ConfigurationTagReplacementProvider.cs** (4 connections)
-- **XPoster.Providers** (2 connections)
-- **GetReplacements()** (2 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

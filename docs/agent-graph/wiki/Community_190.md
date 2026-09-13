@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **ValidateOptions()** (2 connections)
-- **foreach()** (2 connections)
-- **resolve()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **catch()** (2 connections)
+- **if()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (6 shared connections)
+- [[Community 88]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

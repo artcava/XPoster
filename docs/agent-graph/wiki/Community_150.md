@@ -6,9 +6,9 @@
 
 - **IWorkflowNode.cs** (4 connections)
 - **IWorkflowNode.cs** (4 connections)
-- **IWorkflowNode** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
 - **ExecuteAsync()** (2 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **IWorkflowNode** (2 connections)
 
 ## Relationships
 

@@ -6,10 +6,10 @@
 
 - **IMetaPublishingService.cs** (5 connections)
 - **IMetaPublishingService.cs** (5 connections)
+- **PublishContainerAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 - **IMetaPublishingService** (2 connections)
 - **GetContainerStatusAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **PublishContainerAsync()** (2 connections)
 
 ## Relationships
 

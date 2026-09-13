@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **DeepSeekService.cs** (8 connections)
-- **GenerateTextAsync()** (2 connections)
+- **XApiClientTests.cs** (17 connections)
+- **BuildApiClient()** (2 connections)
+- **OkJson()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **var()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 185]] (4 shared connections)
+- [[Community 35]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

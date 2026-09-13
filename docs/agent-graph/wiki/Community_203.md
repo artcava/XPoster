@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **Post.cs** (3 connections)
-- **Post.cs** (3 connections)
-- **Post** (2 connections)
-- **XPoster.Models** (2 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **DryRunMaxLengthSender()** (2 connections)
 
 ## Relationships
 

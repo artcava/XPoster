@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IWorkflowContext.cs** (5 connections)
-- **IWorkflowContext.cs** (5 connections)
-- **SetData()** (2 connections)
-- **HasData()** (2 connections)
-- **IWorkflowContext** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
 
 ## Relationships
 

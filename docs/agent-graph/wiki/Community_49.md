@@ -7,14 +7,14 @@
 - **XOAuth1SignerTests.cs** (10 connections)
 - **XOAuth1SignerTests.cs** (10 connections)
 - **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
-- **XOAuth1SignerTests** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
-- **BuildCredentials()** (2 connections)
-- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
-- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **XOAuth1SignerTests** (2 connections)
 - **BuildPhotoParameters()** (2 connections)
+- **BuildCredentials()** (2 connections)
 - **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
+- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
+- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
 
 ## Relationships
 

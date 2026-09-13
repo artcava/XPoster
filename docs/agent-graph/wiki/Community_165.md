@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator.cs** (4 connections)
-- **ICredentialsStartupValidator** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **GetFeedsAsync()** (2 connections)
 - **XPoster.Contracts** (2 connections)
-- **Validate()** (2 connections)
+- **IFeedService** (2 connections)
 
 ## Relationships
 

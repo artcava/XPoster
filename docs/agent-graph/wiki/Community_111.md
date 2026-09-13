@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **PerplexityOptionsValidator.cs** (5 connections)
-- **PerplexityOptionsValidator.cs** (5 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
+- **BuildPowerLawPostNode.cs** (5 connections)
 - **if()** (2 connections)
-- **nameof()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **BuildPowerLawPostNode()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 
