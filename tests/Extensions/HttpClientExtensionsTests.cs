@@ -11,11 +11,13 @@ public class HttpClientExtensionsTests
         "AzureFoundry",
         "DeepSeek",
         "Perplexity",
+        "X",
         "LinkedIn",
         "Instagram",
         "Facebook",
         "FalAi",
-        "Feed"
+        "Feed",
+        "CryptoPrices"
     ];
 
     [Fact]
@@ -34,6 +36,7 @@ public class HttpClientExtensionsTests
         var services = new ServiceCollection();
 
         services.AddHttpClients();
+        services.AddHttpResponseBodyLogging();
         using var provider = services.BuildServiceProvider();
 
         var factory = provider.GetService<IHttpClientFactory>();
@@ -46,16 +49,19 @@ public class HttpClientExtensionsTests
     [InlineData("AzureFoundry")]
     [InlineData("DeepSeek")]
     [InlineData("Perplexity")]
+    [InlineData("X")]
     [InlineData("LinkedIn")]
     [InlineData("Instagram")]
     [InlineData("Facebook")]
     [InlineData("FalAi")]
     [InlineData("Feed")]
+    [InlineData("CryptoPrices")]
     public void AddHttpClients_RegistersExpectedNamedClients(string clientName)
     {
         var services = new ServiceCollection();
 
         services.AddHttpClients();
+        services.AddHttpResponseBodyLogging();
         using var provider = services.BuildServiceProvider();
 
         var factory = provider.GetRequiredService<IHttpClientFactory>();
@@ -70,6 +76,7 @@ public class HttpClientExtensionsTests
         var services = new ServiceCollection();
 
         services.AddHttpClients();
+        services.AddHttpResponseBodyLogging();
         using var provider = services.BuildServiceProvider();
 
         var factory = provider.GetRequiredService<IHttpClientFactory>();

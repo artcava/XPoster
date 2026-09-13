@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using XPoster.Services;
 
 namespace XPoster.Extensions;
 
@@ -47,6 +48,20 @@ public static class HttpClientExtensions
         return services;
     }
 
+    /// <summary>
+    /// Registers the response-body logging primitives (<see cref="HttpResponseBodyLoggingHandler" />,
+    /// <see cref="HttpResponseBodyLogger" />, <see cref="HttpResponseBodySanitizer" />) required by
+    /// every named client wired through <see cref="AddHttpClients" />.
+    ///</summary>
+    public static IServiceCollection AddHttpResponseBodyLogging(this IServiceCollection services)
+    {
+        services.AddSingleton<HttpResponseBodySanitizer>();
+        services.AddSingleton<HttpResponseBodyLogger>();
+        services.AddTransient<HttpResponseBodyLoggingHandler>();
+
+        return services;
+    }
+
     // ---------------------------------------------------------------------------
     // Private helpers
     // ---------------------------------------------------------------------------
@@ -67,6 +82,7 @@ public static class HttpClientExtensions
         int samplingDurationSeconds)
     {
         services.AddHttpClient(clientName)
+            .AddHttpMessageHandler<HttpResponseBodyLoggingHandler>()
             .AddStandardResilienceHandler(options =>
             {
                 options.Retry.ShouldHandle = args =>
