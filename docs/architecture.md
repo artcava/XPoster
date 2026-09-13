@@ -210,6 +210,8 @@ All outbound HTTP integrations use named clients from `HttpClientExtensions.AddH
 
 > **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. All AI, social, feed, and crypto services use named clients from this table.
 
+Every named client also registers `HttpResponseBodyLoggingHandler` **inside** the resilience pipeline, so the response body of each attempt is logged (2xx → Debug, 4xx/5xx → Error) with secrets redacted and bodies truncated at 4 KB. See [monitoring.md — Outbound Response-Body Logging](monitoring.md#8-outbound-response-body-logging).
+
 ### Sender Plugins — Platform Abstraction
 
 Each sender implements `ISender`: `Task<bool> SendAsync(Post post, CancellationToken ct)`, `int MessageMaxLength`, `SenderPlatform Platform`. Senders are **exclusively responsible** for platform-specific serialisation and API communication; they receive a fully-formed `Post` and return a success/failure signal. Credentials arrive via `IOptions<TCredentials>` bound from Key Vault at startup.

@@ -2,7 +2,7 @@
 
 KQL snippets to verify what happened inside a **workflow execution** (engine, nodes, orchestrator) *before* the dry-run senders fan out. Every message below is grepped from the actual source (`src/...`), so the filters match real structured logs in the `traces` table.
 
-> ⚠️ **Sampling.** `src/host.json` enables Application Insights adaptive sampling for every telemetry type except `Request`. `traces` can therefore be sampled (default ~5/s). For lossless verification of a single run, set `"samplingSettings": { "isEnabled": false }` temporarily.
+> ⚠️ **Sampling.** `src/host.json` enables Application Insights adaptive sampling for every telemetry type except `Request` and `Trace`. `traces` can therefore be sampled (default ~5/s). For lossless verification of a single run, set `"samplingSettings": { "isEnabled": false }` temporarily.
 
 ---
 
@@ -148,7 +148,44 @@ traces
 
 ---
 
-## 8. Provider / configuration diagnostics for the day
+## 8. Outbound HTTP response body logs
+
+Every named HTTP client now logs response bodies (via `HttpResponseBodyLoggingHandler`). 4xx/5xx responses are logged at **Error**; 2xx at **Debug** (requires `logLevel` Default ≤ Debug in `host.json`). Bodies are truncated at 4 KB and skipped entirely for binary content types. Sensitive fields (`access_token`, `api_key`, `Bearer <token>`, etc.) are redacted to `***`.
+
+The per-request opt-out header `X-XPoster-Skip-ResponseLog: true` suppresses body logging for a single call.
+
+### Response body logs for a given run
+
+```kql
+let runOpId = "00-<traceId>-<spanId>-01"; // replace with operation_Id from §2
+traces
+| where operation_Id == runOpId
+| where message has_any ("HTTP GET", "HTTP POST", "HTTP PUT", "HTTP PATCH", "HTTP DELETE")
+| project timestamp, severityLevel, message
+| order by timestamp asc
+```
+
+### Error response bodies (4xx/5xx) in the last 24 hours
+
+```kql
+traces
+| where timestamp > ago(24h)
+| where severityLevel == 2
+| where message has_any ("HTTP GET", "HTTP POST", "HTTP PUT", "HTTP PATCH", "HTTP DELETE")
+| project timestamp, message
+| order by timestamp desc
+```
+
+### Response body log patterns
+
+| Severity | Message pattern | Key data |
+|---|---|---|
+| Debug (2xx) | `HTTP {Method} {Url} {StatusCode} in {Elapsed}ms \| Body: {Summary}\| Size: {Bytes}B` | Full body or size |
+| Error (4xx/5xx) | `HTTP {Method} {Url} {StatusCode} in {Elapsed}ms \| Body: {Summary}\| Size: {Bytes}B \| Response headers: {Headers}` | Body + headers |
+
+---
+
+## 9. Provider / configuration diagnostics for the day
 
 ```kql
 traces
@@ -171,9 +208,9 @@ traces
 
 ---
 
-## 9. Reading the results
+## 10. Reading the results
 
 - **Queries 4+5 both populated, 7 shows `[DryRun] Configuration probe succeeded`** → the workflow completed and the dry-run senders validated config + post (no publish happens).
 - **5 has all 5 `Executing node` rows but 7 has no `[DryRun]` probe** → the terminal node `fan-out-send` likely failed: `Node 'fan-out-send' failed` or `[WorkflowOrchestrator] Workflow 'Bitcoin' completed without Workflow.SendResults in context` (query 6).
 - **4 matches but 5 is empty** → `OrchestratorFactory` resolved the slot but the engine never executed a node (check `XPoster Function started`/`ended` gap on query 3).
-- **4 empty** → the slot profile was not selected for that hour: wrong UTC hour, or a `[ConfigurationSlotProfileProvider]` warning about the slot (query 8).
+- **4 empty** → the slot profile was not selected for that hour: wrong UTC hour, or a `[ConfigurationSlotProfileProvider]` warning about the slot (query 9).

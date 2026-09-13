@@ -260,7 +260,7 @@ The KQL queries in §5 (**Feed fetch retries** and **Feed circuit breaker open e
 
 ### Alert rule: feed circuit breaker opened
 
-Add this alert alongside the existing rules in §8 to be notified when a feed circuit breaker opens:
+Add this alert alongside the existing rules in §9 to be notified when a feed circuit breaker opens:
 
 | Alert | KQL Signal | Threshold | Severity |
 |---|---|---|---|
@@ -304,7 +304,44 @@ resource feedCircuitBreakerAlert 'Microsoft.Insights/scheduledQueryRules@2022-06
 
 ---
 
-## 8. Setting Up Alerts
+## 8. Outbound Response-Body Logging
+
+Every named HTTP client (`OpenAI`, `AzureFoundry`, `DeepSeek`, `Perplexity`, `X`, `LinkedIn`, `Instagram`, `Facebook`, `FalAi`, `Feed`, `CryptoPrices`) logs the **response body** of every call through `HttpResponseBodyLoggingHandler`, registered inside the Polly resilience pipeline in `HttpClientExtensions.AddHttpClients()`.
+
+### Behavior
+
+- **2xx → Debug**, **4xx/5xx → Error** (Error also includes relevant response headers: `Content-Type`, `Content-Length`, `Retry-After`, `X-RateLimit-*`).
+- Body truncated at **4 KB**; skipped entirely for binary media types (image, video, audio, font, multipart, `application/octet-stream`, zip/gzip, PDF) and for responses with a known `Content-Length > 4 KB`.
+- Because the handler sits **inside** the resilience handler, every retry attempt is logged individually (attempts at Error level).
+- Secrets are redacted: `Bearer <token>`, `api_key`, `access_token`, `refresh_token`, `client_secret`, `session_token`, `token` (header/JSON/query-string) → `***`.
+- Per-request opt-out: send header `X-XPoster-Skip-ResponseLog: true` to suppress body logging for that call (e.g. large binary or consumer-handled payloads). The status line is still logged.
+- Logging never breaks the pipeline: any failure while reading or sanitizing the body is swallowed.
+
+### Structured log events
+
+| Event | Severity | Message pattern |
+|---|---|---|
+| 2xx response | Debug | `HTTP {Method} {Url} {StatusCode} in {Elapsed}ms \| Body: {Summary} \| Size: {Bytes}B` |
+| 4xx/5xx response | Error | `HTTP {Method} {Url} {StatusCode} in {Elapsed}ms \| Body: {Summary} \| Size: {Bytes}B \| Response headers: {Headers}` |
+
+> ⚠️ **Log level.** `src/host.json` sets the default level to `Information`, so **2xx bodies (Debug) are not written to Application Insights by default**. Enable them temporarily via `"logLevel": { "Default": "Debug" }` if you need to inspect successful payloads. 4xx/5xx (Error) are always captured.
+
+### Diagnosing a provider/API error
+
+When an upstream API rejects a call (e.g. HTTP 402 from X Api), the failure sequence is:
+
+1. `HTTP POST https://api.x.com/… 402 in <elapsed>ms | Body: {"title":"Payment Required",…}| Size: <bytes>B | Response headers: Content-Type: …` — Error, one row **per retry attempt**.
+2. The Polly retry policy then retries (429/5xx) or stops (402) according to the client's resilience options (hardcoded in `HttpClientExtensions.AddHttpClients()`) — see [configuration.md — Feed HTTP Client](configuration.md#feed-http-client) for the documented values.
+
+### Alert rule: persistent upstream 4xx/5xx
+
+| Alert | KQL Signal | Threshold | Severity |
+|---|---|---|---|
+| Upstream 4xx/5xx responses | `traces \| where severityLevel == 2 \| where message has "HTTP GET" or message has "HTTP POST"` | ≥ 3 in 1 h | Sev 3 – Informational |
+
+---
+
+## 9. Setting Up Alerts
 
 ### Step-by-Step: Create an Alert via Azure Portal
 
@@ -374,7 +411,7 @@ resource consecutiveErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-
 
 ---
 
-## 9. Live Debugging
+## 10. Live Debugging
 
 ### Live Metrics (Azure Portal)
 
