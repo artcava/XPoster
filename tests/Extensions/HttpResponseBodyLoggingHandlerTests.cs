@@ -62,7 +62,8 @@ public class HttpResponseBodyLoggingHandlerTests
         var state = invocation.Arguments[2];
         var exception = invocation.Arguments[3] as Exception;
         var formatter = (Delegate)invocation.Arguments[4];
-        return (level, (string)formatter.DynamicInvoke(state, exception));
+        var message = formatter.DynamicInvoke(state, exception) as string;
+        return (level, message ?? string.Empty);
     }
 
     private static bool LogWasCalled(Mock<ILogger<HttpResponseBodyLogger>> loggerMock) =>
