@@ -206,8 +206,9 @@ All outbound HTTP integrations use named clients from `HttpClientExtensions.AddH
 | `"Instagram"` | `IgSender` | 30 s / 180 s |
 | `"Facebook"` | `FbSender` | 30 s / 180 s |
 | `"X"` | `XApiClient` (`XSender`) | 30 s / 180 s |
+| `"CryptoPrices"` | `CryptoService` | 30 s / 180 s |
 
-> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. (Note: `CryptoService` creates an untyped client via `IHttpClientFactory.CreateClient()`.)
+> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. All AI, social, feed, and crypto services use named clients from this table.
 
 ### Sender Plugins — Platform Abstraction
 

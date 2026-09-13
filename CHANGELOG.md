@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **X sender rewritten with a first-party OAuth 1.0a client** ([#278](https://github.com/artcava/XPoster/issues/278)): `XSender` no longer depends on `LinqToTwitter`. `XOAuth1Signer` implements RFC 5849 HMAC-SHA1 signing, `XApiClient` publishes tweets via `POST /2/tweets` and images via the v1.1 chunked media-upload flow, and outbound traffic flows through the resilient named `"X"` client. X API error bodies are parsed (`title` / `detail` / `label` / `errors`) and logged with the HTTP status, so failures such as `402 usage_cap_exceeded` are diagnosable from logs alone.
+- **HTTP client drift remediated** ([#280](https://github.com/artcava/XPoster/issues/280)): `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, and `CryptoService` now use named resilient clients (`OpenAI`, `AzureFoundry`, `DeepSeek`, `FalAi`, and the new `CryptoPrices`) instead of anonymous `CreateClient()` calls, so every outbound call runs through the Polly pipeline.
 
 ### Removed
 - **`LinqToTwitter` dependency** ([#278](https://github.com/artcava/XPoster/issues/278)): replaced by the first-party OAuth 1.0a `HttpClient` client.

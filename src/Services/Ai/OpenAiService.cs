@@ -30,7 +30,7 @@ public class OpenAiService : ITextToTextProvider, ITextToImageProvider
     {
         _logger = logger;
         _options = options.Value;
-        _client = httpClientFactory.CreateClient();
+        _client = httpClientFactory.CreateClient("OpenAI");
         _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_options.ApiKey}");
     }
 

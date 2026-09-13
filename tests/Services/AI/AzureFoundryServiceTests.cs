@@ -16,7 +16,7 @@ public class AzureFoundryServiceTests
         loggerMock = new Mock<ILogger<AzureFoundryService>>();
         var factory = new Mock<IHttpClientFactory>();
         var client = new HttpClient(handler);
-        factory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
+        factory.Setup(f => f.CreateClient("AzureFoundry")).Returns(client);
 
         var options = Options.Create(opts ?? new AzureFoundryOptions
         {

@@ -25,7 +25,7 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
     {
         _logger = logger;
         _options = options.Value;
-        _client = httpClientFactory.CreateClient();
+        _client = httpClientFactory.CreateClient("AzureFoundry");
         _client.DefaultRequestHeaders.Add("api-key", _options.ApiKey);
     }
 

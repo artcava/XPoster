@@ -41,6 +41,9 @@ public static class HttpClientExtensions
         // Feed RSS client: moderate timeouts aligned with feed provider expectations.
         services.AddResilientHttpClient("Feed", attemptTimeoutSeconds: 15, totalRequestTimeoutSeconds: 60, samplingDurationSeconds: 35);
 
+        // Crypto price client: standard timeouts for live price lookups (cryptoprices.cc).
+        services.AddResilientHttpClient("CryptoPrices", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
+
         return services;
     }
 

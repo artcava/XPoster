@@ -18,7 +18,7 @@ public class DeepSeekServiceTests
     {
         loggerMock = new Mock<ILogger<DeepSeekService>>();
         var factory = new Mock<IHttpClientFactory>();
-        factory.Setup(f => f.CreateClient(It.IsAny<string>()))
+        factory.Setup(f => f.CreateClient("DeepSeek"))
                .Returns(new HttpClient(handler));
 
         // Only connectivity fields remain in DeepSeekOptions after issue-223.
