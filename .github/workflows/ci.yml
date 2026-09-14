@@ -53,7 +53,8 @@ jobs:
             /p:TreatWarningsAsErrors=false
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+        continue-on-error: true
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: build-artifacts
           path: |
@@ -131,7 +132,8 @@ jobs:
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v6
+        continue-on-error: true
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: coverage-report
           path: ./coverage/report
