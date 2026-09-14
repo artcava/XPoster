@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **GetProvider()** (2 connections)
-- **IsJsonLike()** (2 connections)
-- **return()** (2 connections)
-- **XPoster.Workflows.Utilities** (2 connections)
+- **XApiException.cs** (7 connections)
 - **catch()** (2 connections)
+- **foreach()** (2 connections)
+- **XApiException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **BuildMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 237]] (3 shared connections)
+- [[Community 246]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

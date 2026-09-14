@@ -1,23 +1,23 @@
 # Community 139
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **if()** (2 connections)
-- **BlobServiceClient()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
-- **Uri()** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **Input()** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
+- **Execute_ReturnsGeneratedText()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 85]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 161
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **XPoster.Providers** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
+- **XApiClientTests.cs** (17 connections)
+- **OkJson()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **if()** (2 connections)
+- **BuildApiClient()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 37]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

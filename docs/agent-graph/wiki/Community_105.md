@@ -1,24 +1,24 @@
 # Community 105
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **if()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **foreach()** (2 connections)
+- **HttpResponseBodyLogger()** (2 connections)
+- **IsEnabledFor()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **Log()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 158]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

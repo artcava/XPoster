@@ -1,22 +1,22 @@
 # Community 152
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ITagReplacementService.cs** (4 connections)
-- **ITagReplacementService.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **ITagReplacementService** (2 connections)
-- **Apply()** (2 connections)
+- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **static()** (2 connections)
+- **return()** (2 connections)
+- **ResponseBodyLogging_429Sequence_LogsEachRetryAttemptAndFinalSuccess()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 196]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

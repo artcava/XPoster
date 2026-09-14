@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **Exception()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GetFeedsAsync()** (2 connections)
+- **HttpClientExtensions.cs** (7 connections)
+- **AddHttpClients()** (2 connections)
+- **XPoster.Extensions** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpResponseBodyLogging()** (2 connections)
 
 ## Relationships
 

@@ -1,30 +1,30 @@
 # Community 38
 
-> 13 nodes · cohesion 0.29
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **XOAuth1SignerTests.cs** (12 connections)
-- **XOAuth1SignerTests.cs** (12 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
-- **BuildCredentials()** (2 connections)
-- **ExtractHeaderValue()** (2 connections)
-- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
-- **BuildPhotoParameters()** (2 connections)
-- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
-- **XOAuth1SignerTests** (2 connections)
-- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
-- **BuildAuthorizationHeader_MediaUploadInit_PercentEncodesOAuthValuesPerRfc5849()** (2 connections)
-- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
+- **if()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **return()** (2 connections)
+- **static()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_ReturnsSoftFailure_WhenRequiredFalse_AndImageMissing()** (2 connections)
+- **Execute_ReturnsMediaAttachment_OnSuccess()** (2 connections)
+- **Execute_ReturnsNullOutput_OnSoftFailure()** (2 connections)
+- **AiImageNodeTests** (2 connections)
+- **Execute_ReturnsFailure_WhenRequired_AndImageMissing()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 115]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

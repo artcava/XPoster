@@ -1,26 +1,26 @@
 # Community 62
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **BaseOrchestratorTests.cs** (16 connections)
-- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
-- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
-- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
-- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
-- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
-- **XPoster.Tests.Orchestrators** (2 connections)
-- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
-- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **WorkflowExecutionEngine()** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- [[Community 91]] (8 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,22 +1,22 @@
 # Community 156
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (7 connections)
-- **AddHttpResponseBodyLogging()** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions** (2 connections)
+- **IAiProviderSection** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 220]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
