@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - **`LinqToTwitter` dependency** ([#278](https://github.com/artcava/XPoster/issues/278)): replaced by the first-party OAuth 1.0a `HttpClient` client.
 
+### Fixed
+- **X media upload rejected with HTTP 400 "Bad Authentication data."** ([#286](https://github.com/artcava/XPoster/issues/286)): `XOAuth1Signer` now percent-encodes every OAuth 1.0a parameter value in the `Authorization` header per RFC 5849 §3.5.1. The Base64 HMAC-SHA1 `oauth_signature` frequently contains `+`, `/` and `=` characters, which `upload.twitter.com` (v1.1 media-upload INIT) strictly rejects with error code 215; `api.twitter.com` tolerated the unencoded header. All X requests now send an RFC-compliant header.
+
 ## [0.3.0] - 2026-09-06
 
 > All changes since `0.2.0` implement the **workflow-based DAG orchestration** ([ADR-006](docs/analysis/ADR-006-workflow-based-orchestration-architecture.md)), which replaces the legacy orchestrator classes with a config-driven, node-graph engine.
