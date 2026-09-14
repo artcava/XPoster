@@ -1,20 +1,21 @@
 # Community 211
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **AzureFoundryOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
+- **HttpResponseBodySanitizer.cs** (6 connections)
+- **foreach()** (2 connections)
+- **SanitizeUrl()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 222]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

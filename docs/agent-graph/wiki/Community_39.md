@@ -1,21 +1,22 @@
 # Community 39
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **ConfigurationStepOptionsResolverTests** (2 connections)
-- **BuildConfig()** (2 connections)
-- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
-- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
-- **Resolve_Throws_WhenStepMissing()** (2 connections)
-- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
-- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
-- **XPoster.Tests.Workflows.Services** (2 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
+- **AiModelCatalogTests** (2 connections)
+- **GetRequired_Throws_WhenNotSupported()** (2 connections)
+- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
+- **Constructor_NullDictionary_Throws()** (2 connections)
+- **Empty_SupportsNoModelClass()** (2 connections)
+- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
+- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
+- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

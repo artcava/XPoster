@@ -206,8 +206,11 @@ All outbound HTTP integrations use named clients from `HttpClientExtensions.AddH
 | `"Instagram"` | `IgSender` | 30 s / 180 s |
 | `"Facebook"` | `FbSender` | 30 s / 180 s |
 | `"X"` | `XApiClient` (`XSender`) | 30 s / 180 s |
+| `"CryptoPrices"` | `CryptoService` | 30 s / 180 s |
 
-> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. (Note: `CryptoService` creates an untyped client via `IHttpClientFactory.CreateClient()`.)
+> **Invariant**: every service that makes outbound HTTP calls must use a named client from this table. Creating `new HttpClient()` inline bypasses the resilience pipeline and risks socket exhaustion on Azure Functions. All AI, social, feed, and crypto services use named clients from this table.
+
+Every named client also registers `HttpResponseBodyLoggingHandler` **inside** the resilience pipeline, so the response body of each attempt is logged (2xx → Debug, 4xx/5xx → Error) with secrets redacted and bodies truncated at 4 KB. See [monitoring.md — Outbound Response-Body Logging](monitoring.md#8-outbound-response-body-logging).
 
 ### Sender Plugins — Platform Abstraction
 

@@ -1,22 +1,23 @@
 # Community 136
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
-- **OpenAiService()** (2 connections)
-- **if()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSender()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSenderTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 95]] (6 shared connections)
+- [[Community 52]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

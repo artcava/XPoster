@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowExecutionResult.cs** (3 connections)
-- **WorkflowExecutionResult.cs** (3 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **WorkflowDefinition.cs** (3 connections)
+- **WorkflowDefinition()** (2 connections)
 - **XPoster.Workflows.Engine** (2 connections)
-- **WorkflowExecutionResult()** (2 connections)
 
 ## Relationships
 

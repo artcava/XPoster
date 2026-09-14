@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **XOAuth1SignerTests.cs** (10 connections)
-- **XOAuth1SignerTests.cs** (10 connections)
-- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
-- **XOAuth1SignerTests** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
-- **BuildCredentials()** (2 connections)
-- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
-- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
-- **BuildPhotoParameters()** (2 connections)
-- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
+- **ScheduledOrchestrationProfileTests.cs** (10 connections)
+- **ScheduledOrchestrationProfileTests.cs** (10 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Constructor_Should_PreserveHour_ForBoundaryValues()** (2 connections)
+- **ScheduledOrchestrationProfileTests** (2 connections)
+- **typeof()** (2 connections)
+- **OrchestratorContextKey_Should_BeNull_WhenNotProvided()** (2 connections)
+- **TwoSlotsWithSameOrchestratorType_Should_CarryIndependentContextKeys()** (2 connections)
+- **Constructor_Should_SetAllFields()** (2 connections)
+- **Constructor_Should_PreserveOrderOfSenderPlatforms()** (2 connections)
+- **OrchestratorContextKey_Should_BeSet_WhenProvided()** (2 connections)
 
 ## Relationships
 

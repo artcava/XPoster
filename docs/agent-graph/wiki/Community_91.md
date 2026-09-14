@@ -1,24 +1,25 @@
 # Community 91
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **var()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
-- **if()** (2 connections)
-- **CapturedRequest()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
+- **TestOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 140]] (5 shared connections)
+- [[Community 62]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using XPoster.Services;
 
 namespace XPoster.Extensions;
 
@@ -41,6 +42,23 @@ public static class HttpClientExtensions
         // Feed RSS client: moderate timeouts aligned with feed provider expectations.
         services.AddResilientHttpClient("Feed", attemptTimeoutSeconds: 15, totalRequestTimeoutSeconds: 60, samplingDurationSeconds: 35);
 
+        // Crypto price client: standard timeouts for live price lookups (cryptoprices.cc).
+        services.AddResilientHttpClient("CryptoPrices", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers the response-body logging primitives (<see cref="HttpResponseBodyLoggingHandler" />,
+    /// <see cref="HttpResponseBodyLogger" />, <see cref="HttpResponseBodySanitizer" />) required by
+    /// every named client wired through <see cref="AddHttpClients" />.
+    ///</summary>
+    public static IServiceCollection AddHttpResponseBodyLogging(this IServiceCollection services)
+    {
+        services.AddSingleton<HttpResponseBodySanitizer>();
+        services.AddSingleton<HttpResponseBodyLogger>();
+        services.AddTransient<HttpResponseBodyLoggingHandler>();
+
         return services;
     }
 
@@ -64,6 +82,7 @@ public static class HttpClientExtensions
         int samplingDurationSeconds)
     {
         services.AddHttpClient(clientName)
+            .AddHttpMessageHandler<HttpResponseBodyLoggingHandler>()
             .AddStandardResilienceHandler(options =>
             {
                 options.Retry.ShouldHandle = args =>

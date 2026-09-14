@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **PerplexityService()** (2 connections)
-- **while()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **SetupSender()** (2 connections)
+- **var()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 139]] (4 shared connections)
+- [[Community 31]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

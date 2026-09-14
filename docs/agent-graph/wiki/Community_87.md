@@ -6,16 +6,16 @@
 
 - **OrchestratorFactoryTests.cs** (19 connections)
 - **CreateFactory()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
 - **WorkflowProfile()** (2 connections)
-- **new()** (2 connections)
 - **CreateFactoryWithProfiles()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
 - **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **new()** (2 connections)
 
 ## Relationships
 
-- [[Community 45]] (11 shared connections)
+- [[Community 41]] (11 shared connections)
 
 ## Audit Trail
 

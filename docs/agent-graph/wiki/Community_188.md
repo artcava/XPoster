@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (6 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
+- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **new()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **Node()** (2 connections)
 
 ## Relationships
 
-- [[Community 218]] (3 shared connections)
+- [[Community 23]] (15 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

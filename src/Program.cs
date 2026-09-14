@@ -51,6 +51,7 @@ builder.Configuration.AddAzureKeyVault(
 builder.Services.AddCredentials(builder.Configuration);
 
 builder.Services.AddHttpClients();
+builder.Services.AddHttpResponseBodyLogging();
 
 builder.Services.AddLogging();
 builder.Services.AddMemoryCache();

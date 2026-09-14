@@ -1,26 +1,27 @@
 # Community 17
 
-> 17 nodes · cohesion 0.23
+> 18 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **MetaPublishingServiceTests.cs** (16 connections)
-- **MetaPublishingServiceTests.cs** (16 connections)
-- **PublishContainerAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
-- **GetContainerStatusAsync_WhenResponseBodyIsEmpty_ThrowsJsonException()** (2 connections)
-- **GetContainerStatusAsync_WhenStatusInNestedField_ReturnsCode()** (2 connections)
-- **MetaPublishingService()** (2 connections)
-- **GetContainerStatusAsync_WithEmptyCreationId_ThrowsArgumentException()** (2 connections)
-- **GetContainerStatusAsync_WhenNotFound_ThrowsHttpRequestException()** (2 connections)
-- **GetContainerStatusAsync_WhenCancelled_ThrowsTaskCanceledException()** (2 connections)
-- **CreateSut()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
-- **PublishContainerAsync_WhenIdIsNull_ReturnsEmptyString()** (2 connections)
-- **PublishContainerAsync_WhenRateLimited_Throws()** (2 connections)
-- **PublishContainerAsync_WhenResponseBodyIsNull_ThrowsJsonException()** (2 connections)
-- **PublishContainerAsync_WithWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
-- **PublishContainerAsync_WhenOk_ReturnsPublishId()** (2 connections)
-- **GetContainerStatusAsync_WhenOk_ReturnsStatusCode()** (2 connections)
+- **IgSenderImageFlowTests.cs** (17 connections)
+- **IgSenderImageFlowTests.cs** (17 connections)
+- **NormalizeImage_WithValidJpeg_ReturnsSameBytes()** (2 connections)
+- **NormalizeImage_WhenCodecIsNull_ReturnsNull()** (2 connections)
+- **NormalizeImage_WhenJpegIsAlreadyValid_ReturnsOriginalBytes()** (2 connections)
+- **NormalizeImage_WhenPngDecodesToNull_ReturnsNull()** (2 connections)
+- **NormalizeImage_WithInvalidBytes_ReturnsNull()** (2 connections)
+- **IgSender()** (2 connections)
+- **BuildSender()** (2 connections)
+- **CreateMalformedPngBytes()** (2 connections)
+- **Uri()** (2 connections)
+- **return()** (2 connections)
+- **SendAsync_WhenJsonResponseMissingIdProperty_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenJsonResponseIdIsEmpty_ReturnsFalse()** (2 connections)
+- **SendAsync_WhenBlobUploadSucceeds_CreatesMediaContainerWithCorrectSasUrl()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **IgSenderImageFlowTests** (2 connections)
+- **NormalizeImage_WithValidPng_ReturnsJpegBytes()** (2 connections)
 
 ## Relationships
 
@@ -28,7 +29,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 62 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

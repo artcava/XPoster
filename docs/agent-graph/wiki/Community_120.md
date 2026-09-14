@@ -1,23 +1,23 @@
 # Community 120
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **AiClientsResiliencePipelineTests.cs** (5 connections)
-- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
-- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **StringContent()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **ThrowIfNotSuccess()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
+- **if()** (2 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
+- **SignRequest()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 48]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

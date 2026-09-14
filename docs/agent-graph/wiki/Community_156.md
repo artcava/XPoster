@@ -1,22 +1,22 @@
 # Community 156
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IOrchestratorFactory** (2 connections)
+- **HttpClientExtensions.cs** (7 connections)
+- **AddHttpResponseBodyLogging()** (2 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 220]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

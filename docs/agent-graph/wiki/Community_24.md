@@ -1,24 +1,25 @@
 # Community 24
 
-> 15 nodes · cohesion 0.26
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **AddAiProviderOptionsTests.cs** (14 connections)
-- **AddAiProviderOptionsTests.cs** (14 connections)
-- **BuildAllProvidersConfig()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **ConfigurationBuilder()** (2 connections)
-- **AddAiProviderOptions_BindsFalAiOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsAzureFoundryOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_BindsDeepSeekOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_ReturnsSameServiceCollection()** (2 connections)
-- **AddAiProviderOptions_BindsPerplexityOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptions_RegistersAllFiveOptionTypes()** (2 connections)
-- **AddAiProviderOptions_RegistersAllFiveValidators()** (2 connections)
-- **AddAiProviderOptions_DoesNotDuplicateValidatorRegistrations_WhenCalledOnce()** (2 connections)
-- **AddAiProviderOptions_BindsOpenAiOptions_FromCorrectSection()** (2 connections)
-- **AddAiProviderOptionsTests** (2 connections)
+- **InMemoryContainerStateStoreTests.cs** (15 connections)
+- **InMemoryContainerStateStoreTests.cs** (15 connections)
+- **SaveAsync_WithNullBlobName_ThrowsArgumentNullException()** (2 connections)
+- **GetPendingAsync_WhenStoreIsEmpty_ReturnsEmptyList()** (2 connections)
+- **SaveAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
+- **SaveAsync_WithEmptyOrWhitespaceBlobName_ThrowsArgumentException()** (2 connections)
+- **InMemoryContainerStateStoreTests** (2 connections)
+- **UpdateStatusAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **SaveAsync_WithNullCreationId_ThrowsArgumentNullException()** (2 connections)
+- **UpdateStatusAsync_WhenEntryDoesNotExist_AddsNonPendingEntryWithEmptyBlobName()** (2 connections)
+- **SaveAsync_WithValidInputs_StoresPendingEntry()** (2 connections)
+- **UpdateStatusAsync_CanMoveEntryBackToPending()** (2 connections)
+- **UpdateStatusAsync_WhenEntryExists_UpdatesStatusAndRemovesItFromPending()** (2 connections)
+- **GetPendingAsync_ReturnsOnlyPendingEntries()** (2 connections)
+- **UpdateStatusAsync_WithEmptyOrWhitespaceCreationId_ThrowsArgumentException()** (2 connections)
 
 ## Relationships
 
@@ -26,7 +27,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

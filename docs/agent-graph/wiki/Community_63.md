@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (8 connections)
-- **XSenderResilienceTests.cs** (8 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalseAndLogsError()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **BuildSender()** (2 connections)
-- **XSenderResilienceTests** (2 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_WhenTextTweetReturns402_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **CryptoServiceTests.cs** (8 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **MakeService()** (2 connections)
+- **GetCryptoValue_ReturnsZero_AndLogsError_OnException()** (2 connections)
+- **CryptoServiceTests** (2 connections)
+- **CryptoService()** (2 connections)
+- **GetCryptoValue_ReturnsZero_WhenResponseIsNotNumeric()** (2 connections)
+- **GetCryptoValue_ReturnsParsedValue_WhenNumericString()** (2 connections)
 
 ## Relationships
 

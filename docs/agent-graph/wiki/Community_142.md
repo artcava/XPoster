@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver.cs** (4 connections)
-- **XPoster.Workflows.Services** (2 connections)
-- **Resolve()** (2 connections)
-- **IStepOptionsResolver** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **IAiProviderOptions** (2 connections)
+- **IAiProviderSection** (2 connections)
 
 ## Relationships
 

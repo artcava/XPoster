@@ -1,26 +1,26 @@
 # Community 61
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **ResolveAuthorUrn()** (2 connections)
-- **using()** (2 connections)
-- **SendAsync()** (2 connections)
-- **catch()** (2 connections)
-- **Exception()** (2 connections)
-- **generatePayLoad()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **WorkflowExecutionEngine.cs** (8 connections)
+- **while()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **WorkflowExecutionEngine()** (2 connections)
+- **foreach()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 230]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

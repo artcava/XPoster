@@ -1,23 +1,24 @@
 # Community 106
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
+- **ResilienceTestHelpers.cs** (11 connections)
+- **if()** (2 connections)
+- **CapturedRequest()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
 - **var()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
-- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
+- **StubHttpMessageHandler()** (2 connections)
 
 ## Relationships
 
-- [[Community 31]] (12 shared connections)
+- [[Community 167]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -27,7 +27,7 @@ public class OpenAiServiceTests
         loggerMock = new Mock<ILogger<OpenAiService>>();
         var factory = new Mock<IHttpClientFactory>();
         var client = new HttpClient(handler);
-        factory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
+        factory.Setup(f => f.CreateClient("OpenAI")).Returns(client);
         var options = Options.Create(opts ?? new OpenAiOptions { ApiKey = "fake-key" });
         return new OpenAiService(factory.Object, options, loggerMock.Object);
     }

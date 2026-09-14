@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **XApiClient.cs** (17 connections)
-- **ThrowIfNotSuccess()** (2 connections)
-- **SignRequest()** (2 connections)
-- **FinalizeMediaAsync()** (2 connections)
-- **if()** (2 connections)
-- **AppendMediaSegmentsAsync()** (2 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **foreach()** (2 connections)
+- **HttpResponseBodyLoggingHandler()** (2 connections)
+- **IsBinaryMediaType()** (2 connections)
 
 ## Relationships
 
-- [[Community 38]] (11 shared connections)
+- [[Community 244]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

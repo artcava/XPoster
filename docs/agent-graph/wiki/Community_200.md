@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowDefinition.cs** (3 connections)
-- **WorkflowDefinition.cs** (3 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **WorkflowDefinition()** (2 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

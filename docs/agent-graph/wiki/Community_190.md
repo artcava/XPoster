@@ -6,12 +6,12 @@
 
 - **CredentialsStartupValidator.cs** (10 connections)
 - **ValidateOptions()** (2 connections)
-- **foreach()** (2 connections)
 - **resolve()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 105]] (6 shared connections)
+- [[Community 93]] (6 shared connections)
 
 ## Audit Trail
 

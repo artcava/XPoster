@@ -1,25 +1,26 @@
 # Community 73
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **BuildChatPayload()** (2 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **AcquireCryptoValueNodeTests.cs** (8 connections)
+- **Input()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
+- **AcquireCryptoValueNodeTests()** (2 connections)
+- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
+- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
 
 ## Relationships
 
-- [[Community 182]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

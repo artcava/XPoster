@@ -1,20 +1,21 @@
 # Community 212
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **FeedService.cs** (7 connections)
-- **if()** (2 connections)
-- **FeedService()** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **Polly_Instagram_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **StringContent()** (2 connections)
+- **for()** (2 connections)
 
 ## Relationships
 
-- [[Community 141]] (4 shared connections)
+- [[Community 154]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

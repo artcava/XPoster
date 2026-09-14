@@ -1,23 +1,23 @@
 # Community 122
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **AcquireCryptoValueNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
+- **BuildPowerLawPostNodeTests()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_UsesSymbol_ForPostTag()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 80]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

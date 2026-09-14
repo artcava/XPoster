@@ -18,7 +18,7 @@ public class FalAiImageServiceTests
         loggerMock = new Mock<ILogger<FalAiImageService>>();
         var factory = new Mock<IHttpClientFactory>();
         var client = new HttpClient(handler);
-        factory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
+        factory.Setup(f => f.CreateClient("FalAi")).Returns(client);
 
         var options = Options.Create(opts ?? new FalAiOptions
         {

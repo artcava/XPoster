@@ -27,7 +27,7 @@ public sealed class FalAiImageService : ITextToImageProvider
     {
         _options = options.Value ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _client = httpClientFactory.CreateClient();
+        _client = httpClientFactory.CreateClient("FalAi");
         _client.DefaultRequestHeaders.Add("Authorization", $"Key {_options.ApiKey}");
     }
 

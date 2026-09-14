@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowNodeResult.cs** (3 connections)
-- **WorkflowNodeResult.cs** (3 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **Post** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

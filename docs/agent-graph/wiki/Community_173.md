@@ -1,21 +1,22 @@
 # Community 173
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddAiProviderOptions()** (2 connections)
+- **XApiClientTests.cs** (17 connections)
+- **if()** (2 connections)
+- **OkJson()** (2 connections)
+- **BuildApiClient()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 37]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

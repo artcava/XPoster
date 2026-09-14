@@ -1,29 +1,30 @@
 # Community 38
 
-> 12 nodes · cohesion 0.17
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XApiClient.cs** (17 connections)
-- **UploadMediaAsync()** (2 connections)
-- **InitializeMediaAsync()** (2 connections)
-- **ArgumentException()** (2 connections)
-- **CreateTweetAsync()** (2 connections)
-- **HasErrorPayload()** (2 connections)
-- **BuildSignedRequest()** (2 connections)
-- **for()** (2 connections)
-- **catch()** (2 connections)
-- **XApiException()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **XApiClient()** (2 connections)
+- **XOAuth1SignerTests.cs** (12 connections)
+- **XOAuth1SignerTests.cs** (12 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
+- **BuildCredentials()** (2 connections)
+- **ExtractHeaderValue()** (2 connections)
+- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
+- **BuildPhotoParameters()** (2 connections)
+- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
+- **XOAuth1SignerTests** (2 connections)
+- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
+- **BuildAuthorizationHeader_MediaUploadInit_PercentEncodesOAuthValuesPerRfc5849()** (2 connections)
+- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
 
 ## Relationships
 
-- [[Community 115]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 39 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

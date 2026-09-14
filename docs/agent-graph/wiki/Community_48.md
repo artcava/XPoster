@@ -1,28 +1,29 @@
 # Community 48
 
-> 11 nodes · cohesion 0.35
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **XOAuth1Signer.cs** (10 connections)
-- **XOAuth1Signer.cs** (10 connections)
-- **if()** (2 connections)
-- **ComputeSignature()** (2 connections)
-- **ComputeSignatureBaseString()** (2 connections)
-- **foreach()** (2 connections)
-- **GetBaseUri()** (2 connections)
-- **BuildAuthorizationHeader()** (2 connections)
+- **XApiClient.cs** (17 connections)
 - **XPoster.SenderPlugins** (2 connections)
-- **ParseQueryString()** (2 connections)
-- **PercentEncode()** (2 connections)
+- **for()** (2 connections)
+- **CreateTweetAsync()** (2 connections)
+- **XApiException()** (2 connections)
+- **InitializeMediaAsync()** (2 connections)
+- **XApiClient()** (2 connections)
+- **HasErrorPayload()** (2 connections)
+- **UploadMediaAsync()** (2 connections)
+- **catch()** (2 connections)
+- **BuildSignedRequest()** (2 connections)
+- **ArgumentException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 120]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 39 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

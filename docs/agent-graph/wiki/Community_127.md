@@ -1,23 +1,23 @@
 # Community 127
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **if()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
+- **Input()** (2 connections)
+- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 79]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

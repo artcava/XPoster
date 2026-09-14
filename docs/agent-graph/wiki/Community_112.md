@@ -1,23 +1,23 @@
 # Community 112
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (12 connections)
-- **if()** (2 connections)
-- **nameof()** (2 connections)
-- **OrchestratorFactory()** (2 connections)
-- **ResolveWorkflowOrchestrator()** (2 connections)
-- **CreateEmptyNoOrchestrator()** (2 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **IWorkflowContext.cs** (5 connections)
+- **HasData()** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **SetData()** (2 connections)
+- **IWorkflowContext** (2 connections)
 
 ## Relationships
 
-- [[Community 90]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

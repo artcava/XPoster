@@ -17,7 +17,7 @@ public class CryptoService : ICryptoService
     /// <param name="logger">The logger for diagnostic output.</param>
     public CryptoService(IHttpClientFactory httpClientFactory, ILogger<CryptoService> logger)
     {
-        _client = httpClientFactory.CreateClient();
+        _client = httpClientFactory.CreateClient("CryptoPrices");
         _logger = logger;
     }
 

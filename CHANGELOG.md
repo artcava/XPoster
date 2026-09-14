@@ -9,11 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Outbound HTTP response-body logging** ([#279](https://github.com/artcava/XPoster/issues/279)): every named resilient HTTP client now logs the response body of each attempt through `HttpResponseBodyLoggingHandler` — 4xx/5xx at **Error** (with `Content-Type`, `Content-Length`, `Retry-After`, `X-RateLimit-*` headers), 2xx at **Debug**. Bodies are truncated at 4 KB, skipped for binary content types and payloads with known `Content-Length > 4 KB`, and redacted of secrets (`Bearer` tokens, `api_key`, `access_token`, `refresh_token`, `client_secret`, `session_token`, `token`). Because the handler sits inside the Polly pipeline, every retry attempt is logged individually. Per-request opt-out via the `X-XPoster-Skip-ResponseLog: true` request header.
+
 ### Changed
+- **Application Insights sampling excludes `Trace`** ([#279](https://github.com/artcava/XPoster/issues/279)): `host.json` `excludedTypes` is now `"Request,Trace"`, keeping trace traffic out of sampling so error/status logs remain lossless even at the default sampling rate.
 - **X sender rewritten with a first-party OAuth 1.0a client** ([#278](https://github.com/artcava/XPoster/issues/278)): `XSender` no longer depends on `LinqToTwitter`. `XOAuth1Signer` implements RFC 5849 HMAC-SHA1 signing, `XApiClient` publishes tweets via `POST /2/tweets` and images via the v1.1 chunked media-upload flow, and outbound traffic flows through the resilient named `"X"` client. X API error bodies are parsed (`title` / `detail` / `label` / `errors`) and logged with the HTTP status, so failures such as `402 usage_cap_exceeded` are diagnosable from logs alone.
+- **HTTP client drift remediated** ([#280](https://github.com/artcava/XPoster/issues/280)): `OpenAiService`, `AzureFoundryService`, `DeepSeekService`, `FalAiImageService`, and `CryptoService` now use named resilient clients (`OpenAI`, `AzureFoundry`, `DeepSeek`, `FalAi`, and the new `CryptoPrices`) instead of anonymous `CreateClient()` calls, so every outbound call runs through the Polly pipeline.
 
 ### Removed
 - **`LinqToTwitter` dependency** ([#278](https://github.com/artcava/XPoster/issues/278)): replaced by the first-party OAuth 1.0a `HttpClient` client.
+
+### Fixed
+- **X media upload rejected with HTTP 400 "Bad Authentication data."** ([#286](https://github.com/artcava/XPoster/issues/286)): `XOAuth1Signer` now percent-encodes every OAuth 1.0a parameter value in the `Authorization` header per RFC 5849 §3.5.1. The Base64 HMAC-SHA1 `oauth_signature` frequently contains `+`, `/` and `=` characters, which `upload.twitter.com` (v1.1 media-upload INIT) strictly rejects with error code 215; `api.twitter.com` tolerated the unencoded header. All X requests now send an RFC-compliant header.
 
 ## [0.3.0] - 2026-09-06
 

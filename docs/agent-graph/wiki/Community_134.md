@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsValidator.cs** (5 connections)
-- **DeepSeekOptionsValidator.cs** (5 connections)
-- **XPoster.Models** (2 connections)
-- **Validate()** (2 connections)
-- **nameof()** (2 connections)
-- **if()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **AcquireCryptoValueNode()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 

@@ -1,20 +1,21 @@
 # Community 206
 
-> 3 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **XPoster.Models** (2 connections)
-- **OpenAiOptions.cs** (2 connections)
-- **OpenAiOptions.cs** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **while()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **PerplexityService()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 146]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
