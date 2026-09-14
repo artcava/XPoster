@@ -56,7 +56,7 @@ public static class XOAuth1Signer
         oauthParams["oauth_signature"] = signature;
 
         var header = string.Join(", ", oauthParams.OrderBy(p => p.Key, StringComparer.Ordinal)
-            .Select(p => $"{p.Key}=\"{p.Value}\""));
+            .Select(p => $"{p.Key}=\"{PercentEncode(p.Value)}\""));
 
         return $"OAuth {header}";
     }
