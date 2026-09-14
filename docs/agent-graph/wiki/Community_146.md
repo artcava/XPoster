@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (17 connections)
-- **HttpResponseMessage()** (2 connections)
-- **BuildApiClient()** (2 connections)
-- **OkJson()** (2 connections)
+- **PerplexityService.cs** (8 connections)
 - **if()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **var()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 33]] (12 shared connections)
+- [[Community 206]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

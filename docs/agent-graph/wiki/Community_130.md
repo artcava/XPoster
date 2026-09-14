@@ -1,19 +1,19 @@
 # Community 130
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **return()** (2 connections)
-- **catch()** (2 connections)
-- **GetProvider()** (2 connections)
-- **IsJsonLike()** (2 connections)
-- **XPoster.Workflows.Utilities** (2 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **Validate()** (2 connections)
+- **nameof()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 239]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

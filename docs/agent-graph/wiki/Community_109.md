@@ -1,24 +1,24 @@
 # Community 109
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
+- **TagReplacementService.cs** (6 connections)
+- **TagReplacementService.cs** (6 connections)
+- **foreach()** (2 connections)
+- **Apply()** (2 connections)
+- **TagReplacementService()** (2 connections)
+- **XPoster.Services** (2 connections)
 - **if()** (2 connections)
-- **CapturedRequest()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
 
 ## Relationships
 
-- [[Community 142]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

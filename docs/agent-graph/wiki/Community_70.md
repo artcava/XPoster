@@ -1,26 +1,26 @@
 # Community 70
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **WorkflowExecutionEngine.cs** (8 connections)
-- **WorkflowExecutionEngine.cs** (8 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **while()** (2 connections)
-- **WorkflowExecutionResult()** (2 connections)
-- **WorkflowExecutionEngine()** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
+- **XPosterContainerPollingFunctionTests.cs** (20 connections)
+- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
+- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
+- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
+- **PendingContainer()** (2 connections)
+- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
+- **CreateTimerInfo()** (2 connections)
+- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 46]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

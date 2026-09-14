@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowDefinition.cs** (3 connections)
-- **WorkflowDefinition.cs** (3 connections)
-- **WorkflowDefinition()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile.cs** (3 connections)
+- **ScheduledOrchestrationProfile()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

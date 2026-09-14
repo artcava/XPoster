@@ -1,21 +1,22 @@
 # Community 40
 
-> 12 nodes · cohesion 0.32
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **ConfigurationStepOptionsResolverTests** (2 connections)
-- **BuildConfig()** (2 connections)
-- **XPoster.Tests.Workflows.Services** (2 connections)
-- **if()** (2 connections)
-- **Resolve_Throws_WhenStepMissing()** (2 connections)
-- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
-- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
-- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
-- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
-- **foreach()** (2 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **FalAiOptionsValidatorTests.cs** (12 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **Validate_ImageModelNameWithUnsafeCharacters_Fails()** (2 connections)
+- **Validate_WhitespaceModelId_Fails()** (2 connections)
+- **Validate_WhitespaceApiKey_Fails()** (2 connections)
+- **Validate_MissingModelId_Fails()** (2 connections)
+- **Validate_MissingApiKey_Fails()** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **Validate_BothRequiredFieldsMissing_ReportsBothFailures()** (2 connections)
+- **FalAiOptionsValidatorTests** (2 connections)
+- **Validate_ImageModelNameWithAllowedSpecialChars_Succeeds()** (2 connections)
 
 ## Relationships
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

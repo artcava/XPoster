@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ISlotProfileProvider.cs** (4 connections)
-- **ISlotProfileProvider.cs** (4 connections)
-- **GetProfiles()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **ISlotProfileProvider** (2 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **ExecuteAsync()** (2 connections)
+- **IWorkflowEngine** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
 
 ## Relationships
 

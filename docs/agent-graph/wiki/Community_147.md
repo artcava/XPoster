@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest.cs** (4 connections)
-- **XPoster.Models** (2 connections)
-- **ImagePromptRequest** (2 connections)
-- **PromptRequest** (2 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **MaskUrlTelemetryProcessor.cs** (4 connections)
+- **Process()** (2 connections)
+- **MaskUrlTelemetryProcessor()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

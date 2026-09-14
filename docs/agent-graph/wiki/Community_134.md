@@ -1,23 +1,23 @@
 # Community 134
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **XApiClient.cs** (17 connections)
-- **if()** (2 connections)
-- **FinalizeMediaAsync()** (2 connections)
-- **SignRequest()** (2 connections)
-- **ThrowIfNotSuccess()** (2 connections)
-- **AppendMediaSegmentsAsync()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **AcquireCryptoValueNode()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 47]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

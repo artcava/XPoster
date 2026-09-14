@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer.cs** (3 connections)
-- **XPoster.Models** (2 connections)
-- **PendingContainer()** (2 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
 
 ## Relationships
 

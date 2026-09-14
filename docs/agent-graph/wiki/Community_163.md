@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **ValidOptions()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **TimeProvider** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 

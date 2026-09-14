@@ -1,22 +1,22 @@
 # Community 155
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **LocalOverrideTimeProvider.cs** (4 connections)
-- **XPoster.Providers** (2 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **GetCurrentTime()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **FormatResponseHeaders()** (2 connections)
+- **SanitizeAndTruncate()** (2 connections)
+- **if()** (2 connections)
+- **TruncateUtf8()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 103]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

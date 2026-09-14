@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **CryptoService.cs** (6 connections)
-- **catch()** (2 connections)
-- **GetCryptoValue()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **XPoster.Providers** (2 connections)
+- **GetProfiles()** (2 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
 
 ## Relationships
 
-- [[Community 227]] (3 shared connections)
+- [[Community 216]] (3 shared connections)
 
 ## Audit Trail
 

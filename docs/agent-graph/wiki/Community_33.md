@@ -1,30 +1,30 @@
 # Community 33
 
-> 13 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (17 connections)
-- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
-- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
-- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
-- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
-- **foreach()** (2 connections)
-- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
-- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
-- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **XApiClientTests** (2 connections)
-- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **LocalOverrideTimeProviderTests.cs** (12 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
+- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **LocalOverrideTimeProviderTests** (2 connections)
+- **BuildProvider()** (2 connections)
+- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
 
 ## Relationships
 
-- [[Community 146]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 41 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

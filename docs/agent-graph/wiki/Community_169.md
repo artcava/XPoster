@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver** (2 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Workflows.Services** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **GetFeedsAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **IFeedService** (2 connections)
 
 ## Relationships
 

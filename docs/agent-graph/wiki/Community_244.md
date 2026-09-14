@@ -1,20 +1,20 @@
 # Community 244
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **PromptStepOptions.cs** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
+- **TryLogAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 115]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

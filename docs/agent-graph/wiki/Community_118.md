@@ -1,19 +1,19 @@
 # Community 118
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **GetProvider()** (2 connections)
+- **IsJsonLike()** (2 connections)
+- **return()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 237]] (3 shared connections)
 
 ## Audit Trail
 

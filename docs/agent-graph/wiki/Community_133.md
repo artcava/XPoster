@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
-- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
-- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **var()** (2 connections)
+- **XApiException.cs** (7 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **foreach()** (2 connections)
+- **BuildMessage()** (2 connections)
+- **catch()** (2 connections)
+- **XApiException()** (2 connections)
 
 ## Relationships
 
-- [[Community 34]] (12 shared connections)
+- [[Community 246]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

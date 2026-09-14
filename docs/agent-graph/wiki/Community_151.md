@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **XPoster.Contracts** (2 connections)
-- **IOrchestratorFactory** (2 connections)
-- **Resolve()** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **ValidateConnectivity()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

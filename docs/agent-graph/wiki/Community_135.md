@@ -1,19 +1,19 @@
 # Community 135
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingHandler.cs** (8 connections)
-- **SendAsync()** (2 connections)
-- **IsBinaryMediaType()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **HttpResponseBodyLoggingHandler()** (2 connections)
-- **foreach()** (2 connections)
+- **DeepSeekOptionsValidator.cs** (5 connections)
+- **DeepSeekOptionsValidator.cs** (5 connections)
+- **if()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
+- **nameof()** (2 connections)
 
 ## Relationships
 
-- [[Community 221]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowNodeResult.cs** (3 connections)
-- **WorkflowNodeResult.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
+- **AddAiProviderOptions()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 

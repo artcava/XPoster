@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **AcquireCryptoValueNode.cs** (5 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **AcquireCryptoValueNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService** (2 connections)
+- **DeleteAsync()** (2 connections)
+- **UploadAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

@@ -16,8 +16,8 @@
 - **if()** (2 connections)
 - **PollPendingContainersAsync()** (2 connections)
 - **HandleTerminalFailureAsync()** (2 connections)
-- **Run()** (2 connections)
 - **catch()** (2 connections)
+- **Run()** (2 connections)
 
 ## Relationships
 
