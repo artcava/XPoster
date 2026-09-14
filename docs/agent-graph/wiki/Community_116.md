@@ -1,23 +1,23 @@
 # Community 116
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **if()** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 50]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

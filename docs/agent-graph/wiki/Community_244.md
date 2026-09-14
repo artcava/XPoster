@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingHandler.cs** (8 connections)
-- **TryLogAsync()** (2 connections)
+- **CryptoService.cs** (6 connections)
 - **if()** (2 connections)
+- **CryptoService()** (2 connections)
 
 ## Relationships
 
-- [[Community 115]] (5 shared connections)
+- [[Community 192]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

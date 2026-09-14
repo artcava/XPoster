@@ -1,25 +1,25 @@
 # Community 87
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **OrchestratorFactoryTests.cs** (19 connections)
-- **CreateFactory()** (2 connections)
-- **WorkflowProfile()** (2 connections)
-- **CreateFactoryWithProfiles()** (2 connections)
-- **OrchestratorFactoryTests()** (2 connections)
-- **SetupMocksForOrchestratorFactory()** (2 connections)
-- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
-- **new()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **PostTests** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -7,13 +7,13 @@
 - **BuildPowerLawPostNodeTests.cs** (13 connections)
 - **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
 - **BuildPowerLawPostNodeTests()** (2 connections)
+- **if()** (2 connections)
 - **Input()** (2 connections)
 - **Execute_UsesSymbol_ForPostTag()** (2 connections)
-- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 80]] (7 shared connections)
+- [[Community 75]] (7 shared connections)
 
 ## Audit Trail
 

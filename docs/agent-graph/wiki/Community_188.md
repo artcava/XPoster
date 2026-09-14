@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **new()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **Node()** (2 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
+- **XPoster.Models** (2 connections)
+- **Validate()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (15 shared connections)
+- [[Community 234]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

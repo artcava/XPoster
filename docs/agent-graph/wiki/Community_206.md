@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **while()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **PerplexityService()** (2 connections)
+- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **Node()** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **new()** (2 connections)
 
 ## Relationships
 
-- [[Community 146]] (4 shared connections)
+- [[Community 23]] (15 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

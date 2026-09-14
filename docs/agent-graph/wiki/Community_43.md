@@ -1,29 +1,29 @@
 # Community 43
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **ConfigurationStepOptionsResolverTests.cs** (11 connections)
-- **Resolve_ReturnsStepOptions_WhenSectionExists()** (2 connections)
-- **Resolve_Throws_OnNullOrWhitespaceStepId()** (2 connections)
-- **Resolve_Throws_WhenStepMissing()** (2 connections)
-- **XPoster.Tests.Workflows.Services** (2 connections)
-- **Resolve_BindsImageProperties_WhenPresent()** (2 connections)
-- **BuildConfig()** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **ConfigurationStepOptionsResolverTests** (2 connections)
-- **Resolve_BindsMaxOutputLength_WhenPresent()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **for()** (2 connections)
+- **ArgumentException()** (2 connections)
+- **BuildSignedRequest()** (2 connections)
+- **catch()** (2 connections)
+- **CreateTweetAsync()** (2 connections)
+- **InitializeMediaAsync()** (2 connections)
+- **XApiClient()** (2 connections)
+- **UploadMediaAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **XApiException()** (2 connections)
+- **HasErrorPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 127]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 39 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

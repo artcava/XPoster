@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **FbSenderResilienceTests.cs** (11 connections)
-- **HttpResponseMessage()** (2 connections)
-- **SendAsync_WhenFacebookReturns503_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithId_ReturnsTrue()** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithEmptyId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenTextPublishReturns200WithoutId_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **FbSenderResilienceTests** (2 connections)
+- **InSender.cs** (11 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **using()** (2 connections)
+- **catch()** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **Exception()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **InvalidOperationException()** (2 connections)
 
 ## Relationships
 
-- [[Community 238]] (3 shared connections)
+- [[Community 236]] (3 shared connections)
 
 ## Audit Trail
 

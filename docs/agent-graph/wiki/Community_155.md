@@ -1,22 +1,22 @@
 # Community 155
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **FormatResponseHeaders()** (2 connections)
-- **SanitizeAndTruncate()** (2 connections)
-- **if()** (2 connections)
-- **TruncateUtf8()** (2 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **ITagReplacementService.cs** (4 connections)
+- **ITagReplacementService** (2 connections)
+- **Apply()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 103]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

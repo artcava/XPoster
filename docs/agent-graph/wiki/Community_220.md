@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (7 connections)
-- **IsTransientHttpFailure()** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
 - **if()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 156]] (4 shared connections)
+- [[Community 198]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

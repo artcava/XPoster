@@ -6,11 +6,11 @@
 
 - **WorkflowServiceCollectionExtensions.cs** (6 connections)
 - **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **AddWorkflows()** (2 connections)
+- **if()** (2 connections)
 - **foreach()** (2 connections)
 - **XPoster.Workflows.Configuration** (2 connections)
 - **InvalidOperationException()** (2 connections)
-- **if()** (2 connections)
+- **AddWorkflows()** (2 connections)
 
 ## Relationships
 

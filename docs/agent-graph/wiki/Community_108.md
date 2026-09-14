@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingHandlerTests.cs** (25 connections)
-- **static()** (2 connections)
+- **OpenAiService.cs** (11 connections)
+- **catch()** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 - **var()** (2 connections)
-- **SendAsync_OptOutHeader_LogsNothing()** (2 connections)
-- **SendAsync()** (2 connections)
-- **SendAsync_NotEnabled_SuccessNotLogged()** (2 connections)
-- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 12]] (18 shared connections)
+- [[Community 175]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 37 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
