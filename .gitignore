@@ -275,3 +275,10 @@ __pycache__/
 .azurite/
 __blobstorage__/*
 __azurite_*
+
+# Opencode sessions
+.sessions/
+
+# Opencode local configuration
+AGENTS.md
+.opencode/
