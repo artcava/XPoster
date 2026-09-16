@@ -1,22 +1,22 @@
 # Community 152
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **static()** (2 connections)
-- **return()** (2 connections)
-- **ResponseBodyLogging_429Sequence_LogsEachRetryAttemptAndFinalSuccess()** (2 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **LinkedInCredentialsValidator.cs** (4 connections)
+- **Validate()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 196]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

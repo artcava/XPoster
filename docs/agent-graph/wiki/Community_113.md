@@ -1,19 +1,19 @@
 # Community 113
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **catch()** (2 connections)
+- **IsJsonLike()** (2 connections)
+- **return()** (2 connections)
+- **GetProvider()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 233]] (3 shared connections)
 
 ## Audit Trail
 

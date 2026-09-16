@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **IMetaPublishingService** (2 connections)
-- **PublishContainerAsync()** (2 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **HasCycle()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **if()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 

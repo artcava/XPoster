@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
+- **DryRunShortLengthSender.cs** (3 connections)
+- **DryRunShortLengthSender.cs** (3 connections)
+- **DryRunShortLengthSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 

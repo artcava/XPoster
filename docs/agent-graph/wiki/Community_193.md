@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **HttpResponseBodySanitizer.cs** (6 connections)
-- **XPoster.Services** (2 connections)
-- **foreach()** (2 connections)
-- **SanitizeUrl()** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 241]] (3 shared connections)
+- [[Community 218]] (3 shared connections)
 
 ## Audit Trail
 

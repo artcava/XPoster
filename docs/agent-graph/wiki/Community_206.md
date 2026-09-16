@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **Node()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **new()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **DeepSeekService()** (2 connections)
+- **while()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (15 shared connections)
+- [[Community 155]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

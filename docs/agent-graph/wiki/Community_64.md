@@ -1,26 +1,26 @@
 # Community 64
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **XSenderResilienceTests.cs** (8 connections)
-- **XSenderResilienceTests.cs** (8 connections)
-- **XSenderResilienceTests** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenTextTweetReturns402_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
-- **BuildSender()** (2 connections)
-- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **InSender.cs** (11 connections)
+- **Exception()** (2 connections)
+- **using()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **generatePayLoad()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **ResolveAuthorUrn()** (2 connections)
+- **SendAsync()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 228]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

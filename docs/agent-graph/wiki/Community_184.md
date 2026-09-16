@@ -1,21 +1,21 @@
 # Community 184
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FanOutSendNodeTests.cs** (17 connections)
-- **SetupSender()** (2 connections)
-- **var()** (2 connections)
-- **if()** (2 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetLabel()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (13 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

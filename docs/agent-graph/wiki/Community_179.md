@@ -1,13 +1,14 @@
 # Community 179
 
-> 4 nodes · cohesion 0.83
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **WorkflowExecutionResult.cs** (3 connections)
-- **WorkflowExecutionResult.cs** (3 connections)
-- **WorkflowExecutionResult()** (2 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **IWorkflowEngine.cs** (4 connections)
+- **ExecuteAsync()** (2 connections)
 - **XPoster.Workflows.Engine** (2 connections)
+- **IWorkflowEngine** (2 connections)
 
 ## Relationships
 
@@ -15,7 +16,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

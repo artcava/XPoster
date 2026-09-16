@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
+- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
 - **Input()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
-- **Execute_ReturnsGeneratedText()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
 - **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 85]] (7 shared connections)
+- [[Community 76]] (7 shared connections)
 
 ## Audit Trail
 

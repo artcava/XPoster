@@ -1,22 +1,22 @@
 # Community 172
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **ImageTestData.cs** (4 connections)
-- **ImageTestData.cs** (4 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **CreateValidPng()** (2 connections)
-- **CreateValidJpeg()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **FormatResponseHeaders()** (2 connections)
+- **TruncateUtf8()** (2 connections)
+- **if()** (2 connections)
+- **SanitizeAndTruncate()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 99]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

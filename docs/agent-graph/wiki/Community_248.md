@@ -1,20 +1,19 @@
-# Community 228
+# Community 248
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **InSender.cs** (11 connections)
-- **InSender()** (2 connections)
+- **XCredentialsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 64]] (8 shared connections)
+- [[Community 222]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

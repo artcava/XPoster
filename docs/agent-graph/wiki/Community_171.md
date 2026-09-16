@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
-- **SendAsync()** (2 connections)
-- **_responder()** (2 connections)
+- **FeedService.cs** (7 connections)
+- **catch()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **Exception()** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (6 shared connections)
+- [[Community 226]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

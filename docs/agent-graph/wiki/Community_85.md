@@ -1,25 +1,25 @@
 # Community 85
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
-- **AiTextNodeTests** (2 connections)
-- **static()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **return()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **PostTests** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
 
 ## Relationships
 
-- [[Community 139]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

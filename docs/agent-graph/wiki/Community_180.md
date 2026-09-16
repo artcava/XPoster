@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **ValidateOptions()** (2 connections)
-- **resolve()** (2 connections)
-- **foreach()** (2 connections)
+- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **Node()** (2 connections)
+- **new()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 100]] (6 shared connections)
+- [[Community 23]] (15 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

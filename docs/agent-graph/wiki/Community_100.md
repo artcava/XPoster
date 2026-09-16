@@ -1,20 +1,20 @@
 # Community 100
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **catch()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **XSender.cs** (6 connections)
+- **XSender.cs** (6 connections)
+- **XSender()** (2 connections)
+- **SendAsync()** (2 connections)
 - **if()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 180]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

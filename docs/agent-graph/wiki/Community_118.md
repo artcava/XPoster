@@ -1,23 +1,23 @@
 # Community 118
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
-- **catch()** (2 connections)
-- **foreach()** (2 connections)
-- **XApiException()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **BuildMessage()** (2 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **PerplexityOptionsValidator.cs** (5 connections)
+- **XPoster.Models** (2 connections)
+- **nameof()** (2 connections)
+- **Validate()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 246]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
