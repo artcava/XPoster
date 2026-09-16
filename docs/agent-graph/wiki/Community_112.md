@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **BlobServiceClient()** (2 connections)
+- **if()** (2 connections)
+- **Uri()** (2 connections)
 
 ## Relationships
 

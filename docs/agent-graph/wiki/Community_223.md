@@ -4,8 +4,8 @@
 
 ## Key Concepts
 
-- **XCredentials.cs** (2 connections)
-- **XCredentials.cs** (2 connections)
+- **InstagramCredentials.cs** (2 connections)
+- **InstagramCredentials.cs** (2 connections)
 - **XPoster.Credentials** (2 connections)
 
 ## Relationships

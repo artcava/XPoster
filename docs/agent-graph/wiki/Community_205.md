@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **FalAiOptionsValidator.cs** (6 connections)
-- **foreach()** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **var()** (2 connections)
+- **if()** (2 connections)
+- **SetupSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 232]] (3 shared connections)
+- [[Community 30]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

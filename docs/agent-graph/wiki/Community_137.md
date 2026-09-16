@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
-- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **var()** (2 connections)
-- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
+- **if()** (2 connections)
+- **SignRequest()** (2 connections)
+- **ThrowIfNotSuccess()** (2 connections)
 
 ## Relationships
 
-- [[Community 37]] (12 shared connections)
+- [[Community 41]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

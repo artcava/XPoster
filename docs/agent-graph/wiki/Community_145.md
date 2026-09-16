@@ -1,22 +1,22 @@
 # Community 145
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
-- **SendAsync()** (2 connections)
-- **_responder()** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetFeedsAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 96]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

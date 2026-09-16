@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
-- **Input()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **var()** (2 connections)
+- **XApiException.cs** (7 connections)
+- **catch()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **foreach()** (2 connections)
+- **XApiException()** (2 connections)
+- **BuildMessage()** (2 connections)
 
 ## Relationships
 
-- [[Community 76]] (7 shared connections)
+- [[Community 247]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

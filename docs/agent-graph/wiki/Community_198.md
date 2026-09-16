@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **HttpResponseBodySanitizer.cs** (6 connections)
-- **foreach()** (2 connections)
-- **SanitizeUrl()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- [[Community 217]] (3 shared connections)
+- [[Community 172]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

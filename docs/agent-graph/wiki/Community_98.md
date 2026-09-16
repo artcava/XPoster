@@ -1,20 +1,20 @@
 # Community 98
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **catch()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **XPoster.Credentials** (2 connections)
+- **Validate()** (2 connections)
 - **if()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
+- **CredentialsStartupValidator()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 181]] (4 shared connections)
 
 ## Audit Trail
 

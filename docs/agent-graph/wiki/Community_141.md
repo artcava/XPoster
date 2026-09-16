@@ -1,22 +1,22 @@
 # Community 141
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderOptions.cs** (4 connections)
-- **IAiProviderSection** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IAiProviderOptions** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **FormatResponseHeaders()** (2 connections)
+- **if()** (2 connections)
+- **TruncateUtf8()** (2 connections)
+- **SanitizeAndTruncate()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 104]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

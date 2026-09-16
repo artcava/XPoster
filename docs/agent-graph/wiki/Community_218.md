@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **ConfigurationSlotProfileProvider.cs** (6 connections)
-- **foreach()** (2 connections)
+- **FeedService.cs** (7 connections)
+- **FeedService()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 193]] (3 shared connections)
+- [[Community 162]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

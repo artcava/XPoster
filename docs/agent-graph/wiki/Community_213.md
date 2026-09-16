@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **WorkflowExecutionResult.cs** (3 connections)
+- **WorkflowExecutionResult.cs** (3 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
 
 ## Relationships
 

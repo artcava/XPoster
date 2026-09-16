@@ -1,23 +1,23 @@
 # Community 123
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TagReplacementServiceTests.cs** (5 connections)
-- **TagReplacementServiceTests.cs** (5 connections)
-- **Apply_Returns_Input_Unchanged_When_Text_Is_Empty_Or_Whitespace()** (2 connections)
-- **Apply_Does_Not_Replace_Words_Already_Prefixed_With_Hashtag()** (2 connections)
-- **Apply_Replaces_Only_First_Occurrence_For_Each_Word()** (2 connections)
-- **XPoster.Tests.Services** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
+- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
+- **var()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 39]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

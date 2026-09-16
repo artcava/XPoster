@@ -1,25 +1,25 @@
 # Community 81
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FetchRssNode.cs** (7 connections)
-- **FetchRssNode.cs** (7 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **FetchRssNode()** (2 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **BuildChatPayload()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 194]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

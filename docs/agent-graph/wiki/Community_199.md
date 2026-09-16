@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **ITerminalNode** (2 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **CredentialsExtensions.cs** (3 connections)
+- **AddCredentials()** (2 connections)
+- **XPoster.Credentials** (2 connections)
 
 ## Relationships
 

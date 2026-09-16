@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IWorkflowEngine.cs** (4 connections)
-- **IWorkflowEngine.cs** (4 connections)
+- **IWorkflowNode.cs** (4 connections)
+- **IWorkflowNode.cs** (4 connections)
 - **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **IWorkflowEngine** (2 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **IWorkflowNode** (2 connections)
 
 ## Relationships
 

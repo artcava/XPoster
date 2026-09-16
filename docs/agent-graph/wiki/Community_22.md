@@ -9,17 +9,17 @@
 - **SanitizeUrl_MasksAccessTokenQuery()** (2 connections)
 - **SanitizeUrl_NoQuery_ReturnsAsIs()** (2 connections)
 - **XPoster.Tests.Extensions** (2 connections)
-- **Sanitize_MasksBearerTokenInHeader()** (2 connections)
-- **HttpResponseBodySanitizerTests** (2 connections)
-- **Sanitize_LeavesCleanTextUnchanged()** (2 connections)
 - **Sanitize_MasksApiKeyHeaderWithColon()** (2 connections)
+- **HttpResponseBodySanitizerTests** (2 connections)
 - **Sanitize_MasksAccessTokenJsonField()** (2 connections)
+- **Sanitize_LeavesCleanTextUnchanged()** (2 connections)
 - **SanitizeUrl_LeavesNonSensitiveQueryUntouched()** (2 connections)
 - **Sanitize_MasksJsonApiKey()** (2 connections)
-- **SanitizeUrl_CaseInsensitiveKeys()** (2 connections)
-- **Sanitize_MasksRefreshTokenField()** (2 connections)
 - **Sanitize_ReturnsEmptyForNullOrEmpty()** (2 connections)
 - **Sanitize_MasksBearerTokenInJson()** (2 connections)
+- **Sanitize_MasksRefreshTokenField()** (2 connections)
+- **SanitizeUrl_CaseInsensitiveKeys()** (2 connections)
+- **Sanitize_MasksBearerTokenInHeader()** (2 connections)
 
 ## Relationships
 

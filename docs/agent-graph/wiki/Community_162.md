@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **var()** (2 connections)
+- **FeedService.cs** (7 connections)
 - **XPoster.Services** (2 connections)
-- **if()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
+- **GetFeedsAsync()** (2 connections)
+- **Exception()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 196]] (4 shared connections)
+- [[Community 218]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

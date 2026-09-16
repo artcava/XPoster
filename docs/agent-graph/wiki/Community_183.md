@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 

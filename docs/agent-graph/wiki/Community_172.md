@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **FormatResponseHeaders()** (2 connections)
-- **TruncateUtf8()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
 - **if()** (2 connections)
-- **SanitizeAndTruncate()** (2 connections)
+- **var()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 99]] (6 shared connections)
+- [[Community 198]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

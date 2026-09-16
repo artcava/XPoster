@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
+- **DryRunSender.cs** (5 connections)
+- **DryRunSender.cs** (5 connections)
+- **XPoster.SenderPlugins** (2 connections)
 - **if()** (2 connections)
+- **DryRunSender()** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 

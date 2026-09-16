@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **MakeNoOpClient()** (2 connections)
-- **var()** (2 connections)
-- **HttpClient()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
+- **if()** (2 connections)
+- **Input()** (2 connections)
+- **BuildPowerLawPostNodeTests()** (2 connections)
+- **Execute_UsesSymbol_ForPostTag()** (2 connections)
 
 ## Relationships
 
-- [[Community 4]] (31 shared connections)
+- [[Community 86]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

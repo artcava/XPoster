@@ -1,23 +1,23 @@
 # Community 130
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
-- **XApiException()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **foreach()** (2 connections)
-- **BuildMessage()** (2 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **AcquireCryptoValueNode.cs** (5 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **ExecuteAsync()** (2 connections)
+- **AcquireCryptoValueNode()** (2 connections)
 
 ## Relationships
 
-- [[Community 247]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

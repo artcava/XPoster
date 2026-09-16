@@ -1,24 +1,24 @@
 # Community 104
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **XSenderSendAsyncTests.cs** (6 connections)
-- **XSenderSendAsyncTests.cs** (6 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
-- **XSenderSendAsyncTests()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **foreach()** (2 connections)
+- **HttpResponseBodyLogger()** (2 connections)
+- **IsEnabledFor()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **Log()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 141]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

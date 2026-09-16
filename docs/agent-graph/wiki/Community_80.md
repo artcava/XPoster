@@ -6,12 +6,12 @@
 
 - **WorkflowContext.cs** (7 connections)
 - **WorkflowContext.cs** (7 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **SetData()** (2 connections)
+- **WorkflowContext** (2 connections)
 - **HasData()** (2 connections)
+- **SetData()** (2 connections)
 - **if()** (2 connections)
 - **KeyNotFoundException()** (2 connections)
-- **WorkflowContext** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 

@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **DryRunMaxLengthSender.cs** (3 connections)
-- **DryRunMaxLengthSender.cs** (3 connections)
-- **DryRunMaxLengthSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **ITerminalNode.cs** (3 connections)
+- **ITerminalNode.cs** (3 connections)
+- **XPoster.Workflows.Abstractions** (2 connections)
+- **ITerminalNode** (2 connections)
 
 ## Relationships
 

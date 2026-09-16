@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **XOAuth1SignerTests.cs** (12 connections)
-- **XOAuth1SignerTests.cs** (12 connections)
-- **BuildPhotoParameters()** (2 connections)
-- **XOAuth1SignerTests** (2 connections)
-- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
-- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
-- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
-- **ExtractHeaderValue()** (2 connections)
-- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
-- **BuildAuthorizationHeader_MediaUploadInit_PercentEncodesOAuthValuesPerRfc5849()** (2 connections)
-- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **BuildCredentials()** (2 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **AiModelCatalogTests.cs** (12 connections)
+- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
+- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
+- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
+- **Empty_SupportsNoModelClass()** (2 connections)
+- **AiModelCatalogTests** (2 connections)
+- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
+- **Constructor_NullDictionary_Throws()** (2 connections)
+- **GetRequired_Throws_WhenNotSupported()** (2 connections)
+- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
 
 ## Relationships
 

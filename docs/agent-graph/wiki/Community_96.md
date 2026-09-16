@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **CapturedRequest()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
-- **var()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **if()** (2 connections)
+- **AzureFoundryService.cs** (11 connections)
+- **GenerateImageAsync()** (2 connections)
+- **while()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateTextAsync()** (2 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **AzureFoundryService()** (2 connections)
 
 ## Relationships
 
-- [[Community 145]] (5 shared connections)
+- [[Community 163]] (5 shared connections)
 
 ## Audit Trail
 

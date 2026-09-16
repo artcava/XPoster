@@ -1,25 +1,25 @@
 # Community 76
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **foreach()** (2 connections)
-- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
-- **FetchRssNodeTests** (2 connections)
-- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
-- **static()** (2 connections)
-- **return()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **FalAiImageService.cs** (7 connections)
+- **FalAiImageService.cs** (7 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **if()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **catch()** (2 connections)
+- **FalAiImageService()** (2 connections)
 
 ## Relationships
 
-- [[Community 139]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
