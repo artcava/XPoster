@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Polly.Timeout;
 using XPoster.Contracts;
 using XPoster.Models;
 
@@ -204,6 +205,11 @@ internal static class AiServiceHelper
         catch (HttpRequestException ex)
         {
             logger.LogError(ex, "{Provider} failed to download image from fallback URL {ImageUrl}.", provider, imageUrl);
+            return Array.Empty<byte>();
+        }
+        catch (TimeoutRejectedException ex)
+        {
+            logger.LogError(ex, "{Provider} timed out downloading image from fallback URL {ImageUrl}.", provider, imageUrl);
             return Array.Empty<byte>();
         }
     }
