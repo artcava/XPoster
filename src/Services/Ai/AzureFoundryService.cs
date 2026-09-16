@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
+using Polly.Timeout;
 using XPoster.Contracts;
 using XPoster.Models;
 
@@ -72,6 +73,11 @@ public sealed class AzureFoundryService : ITextToTextProvider, ITextToImageProvi
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "Azure Foundry image generation HTTP request failed.");
+            return Array.Empty<byte>();
+        }
+        catch (TimeoutRejectedException ex)
+        {
+            _logger.LogError(ex, "Azure Foundry image generation timed out.");
             return Array.Empty<byte>();
         }
         var allowedOrigin = new Uri(_options.Endpoint.TrimEnd('/')).GetLeftPart(UriPartial.Authority);

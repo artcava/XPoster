@@ -28,7 +28,9 @@ public static class HttpClientExtensions
     {
         // Standard options shared by all AI and social clients except FalAi.
         services.AddResilientHttpClient("OpenAI", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
-        services.AddResilientHttpClient("AzureFoundry", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
+        // AzureFoundry image generation (gpt-image) commonly exceeds 30s per attempt,
+        // so it needs the wider image-generation timeouts used by FalAi.
+        services.AddResilientHttpClient("AzureFoundry", attemptTimeoutSeconds: 60, totalRequestTimeoutSeconds: 300, samplingDurationSeconds: 130);
         services.AddResilientHttpClient("DeepSeek", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("Perplexity", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
         services.AddResilientHttpClient("X", attemptTimeoutSeconds: 30, totalRequestTimeoutSeconds: 180, samplingDurationSeconds: 70);
