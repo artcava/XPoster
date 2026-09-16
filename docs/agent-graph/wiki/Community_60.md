@@ -1,27 +1,26 @@
 # Community 60
 
-> 10 nodes · cohesion 0.38
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **FbSender.cs** (9 connections)
-- **FbSender.cs** (9 connections)
-- **PublishPhotoAsync()** (2 connections)
-- **PublishTextOnlyAsync()** (2 connections)
-- **SendAsync()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **HandleResponseAsync()** (2 connections)
-- **FbSender()** (2 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
+- **InvalidImageBytes()** (2 connections)
+- **FbSenderImageFlowTests** (2 connections)
+- **HttpRequestException()** (2 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 106]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 34 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

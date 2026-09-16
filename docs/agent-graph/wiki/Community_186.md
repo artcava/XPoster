@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **XPoster.Credentials** (2 connections)
-- **AddCredentials()** (2 connections)
+- **WorkflowNodeDefinition.cs** (3 connections)
+- **WorkflowNodeDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowNodeDefinition()** (2 connections)
 
 ## Relationships
 

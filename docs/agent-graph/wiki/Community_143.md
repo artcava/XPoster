@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **ToDefinition()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
-- **WorkflowDefinition()** (2 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **OpenAiOptionsValidatorTests.cs** (4 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **ValidOptions()** (2 connections)
+- **OpenAiOptionsValidatorTests** (2 connections)
 
 ## Relationships
 

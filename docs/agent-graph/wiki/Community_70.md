@@ -1,26 +1,26 @@
 # Community 70
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **AcquireCryptoValueNodeTests.cs** (8 connections)
-- **AcquireCryptoValueNodeTests.cs** (8 connections)
-- **Input()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_UsesDefaultSymbol_WhenNotProvided()** (2 connections)
-- **Execute_ReturnsCryptoValue_WhenSymbolParameterProvided()** (2 connections)
-- **AcquireCryptoValueNodeTests()** (2 connections)
-- **Execute_ReturnsZero_WhenCryptoServiceReturnsZero()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **PostAsync_DoesNotLogWarning_When_ProduceImage_IsTrue_And_Image_IsPresent()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsWhiteSpace()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderListIsEmpty()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **PostAsync_ReturnsFalse_WhenOneSenderFails()** (2 connections)
+- **PostAsync_ReturnsTrue_When_AllConditionsMet()** (2 connections)
+- **PostAsync_ReturnsFalse_When_SendIt_IsFalse()** (2 connections)
+- **PostAsync_SkipsNullPost_ReturnsFalse()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 77]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

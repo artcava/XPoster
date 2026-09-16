@@ -1,24 +1,24 @@
 # Community 99
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **TagReplacementService.cs** (6 connections)
-- **TagReplacementService.cs** (6 connections)
-- **foreach()** (2 connections)
-- **if()** (2 connections)
-- **TagReplacementService()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
 - **XPoster.Services** (2 connections)
-- **Apply()** (2 connections)
+- **Log()** (2 connections)
+- **IsEnabledFor()** (2 connections)
+- **HttpResponseBodyLogger()** (2 connections)
+- **foreach()** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 172]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

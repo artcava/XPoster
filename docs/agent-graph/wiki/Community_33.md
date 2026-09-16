@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProviderTests.cs** (12 connections)
-- **LocalOverrideTimeProvider()** (2 connections)
-- **LocalOverrideTimeProviderTests** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsUtcKind()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsOutOfRange_WrapsViaDateTimeOverflow()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsAbsent_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsValid_ReturnsForcedHour()** (2 connections)
-- **Constructor_AlwaysEmitsDevOverrideWarning()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsEmpty_FallsBackToUtcHour()** (2 connections)
-- **GetCurrentTime_WhenForceHourIsNonNumeric_FallsBackToUtcHour()** (2 connections)
-- **BuildProvider()** (2 connections)
+- **XOAuth1SignerTests.cs** (12 connections)
+- **XOAuth1SignerTests.cs** (12 connections)
+- **BuildPhotoParameters()** (2 connections)
+- **XOAuth1SignerTests** (2 connections)
+- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
+- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
+- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
+- **ExtractHeaderValue()** (2 connections)
+- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
+- **BuildAuthorizationHeader_MediaUploadInit_PercentEncodesOAuthValuesPerRfc5849()** (2 connections)
+- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **BuildCredentials()** (2 connections)
 
 ## Relationships
 

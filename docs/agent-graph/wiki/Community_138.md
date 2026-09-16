@@ -1,23 +1,23 @@
 # Community 138
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **var()** (2 connections)
-- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService.cs** (5 connections)
+- **IBlobStorageService** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **DeleteAsync()** (2 connections)
+- **UploadAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 83]] (7 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

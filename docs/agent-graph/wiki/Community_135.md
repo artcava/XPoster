@@ -1,19 +1,19 @@
 # Community 135
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingHandler.cs** (8 connections)
-- **XPoster.Services** (2 connections)
-- **SendAsync()** (2 connections)
-- **HttpResponseBodyLoggingHandler()** (2 connections)
-- **IsBinaryMediaType()** (2 connections)
-- **foreach()** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **XPoster.Contracts** (2 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
 
 ## Relationships
 
-- [[Community 228]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 

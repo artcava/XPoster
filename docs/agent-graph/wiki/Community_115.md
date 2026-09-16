@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiImageNodeTests.cs** (18 connections)
-- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
-- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
-- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **var()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
+- **Execute_UsesSymbol_ForPostTag()** (2 connections)
+- **Input()** (2 connections)
+- **if()** (2 connections)
+- **BuildPowerLawPostNodeTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 38]] (12 shared connections)
+- [[Community 79]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

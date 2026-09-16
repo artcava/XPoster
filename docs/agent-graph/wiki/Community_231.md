@@ -5,8 +5,8 @@
 ## Key Concepts
 
 - **XPoster.Models** (2 connections)
-- **BlobStorageOptions.cs** (2 connections)
-- **BlobStorageOptions.cs** (2 connections)
+- **SlotScheduleOptions.cs** (2 connections)
+- **SlotScheduleOptions.cs** (2 connections)
 
 ## Relationships
 

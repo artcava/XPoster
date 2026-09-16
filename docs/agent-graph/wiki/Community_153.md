@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementProvider.cs** (4 connections)
-- **ITagReplacementProvider.cs** (4 connections)
-- **GetReplacements()** (2 connections)
-- **ITagReplacementProvider** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest** (2 connections)
+- **ImagePromptRequest** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

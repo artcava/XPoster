@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
-- **ResponseBodyLogging_402_LogsSanitizedBodyAtErrorWithHeaders()** (2 connections)
-- **ResponseBodyLogging_SuccessLogsBodyReadableByConsumer()** (2 connections)
-- **var()** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **while()** (2 connections)
+- **PerplexityService()** (2 connections)
 
 ## Relationships
 
-- [[Community 152]] (4 shared connections)
+- [[Community 162]] (4 shared connections)
 
 ## Audit Trail
 

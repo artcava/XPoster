@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer.cs** (3 connections)
-- **PendingContainer()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 

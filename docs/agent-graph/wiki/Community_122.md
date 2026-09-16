@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **Execute_DateBeforeGenesis_ReturnsFailure()** (2 connections)
-- **BuildPowerLawPostNodeTests()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **ThrowIfNotSuccess()** (2 connections)
+- **SignRequest()** (2 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
 - **if()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_UsesSymbol_ForPostTag()** (2 connections)
 
 ## Relationships
 
-- [[Community 75]] (7 shared connections)
+- [[Community 41]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

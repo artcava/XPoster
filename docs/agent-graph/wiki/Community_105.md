@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **foreach()** (2 connections)
-- **HttpResponseBodyLogger()** (2 connections)
-- **IsEnabledFor()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **Log()** (2 connections)
+- **HttpResponseBodyLoggingHandlerTests.cs** (25 connections)
+- **SendAsync()** (2 connections)
+- **SendAsync_NotEnabled_SuccessNotLogged()** (2 connections)
+- **SendAsync_OptOutHeader_LogsNothing()** (2 connections)
+- **static()** (2 connections)
+- **return()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 158]] (5 shared connections)
+- [[Community 12]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 37 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ConfigurationStepOptionsResolver.cs** (4 connections)
-- **ConfigurationStepOptionsResolver.cs** (4 connections)
-- **XPoster.Workflows.Services** (2 connections)
-- **ConfigurationStepOptionsResolver()** (2 connections)
-- **Resolve()** (2 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider.cs** (4 connections)
+- **TimeProvider** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **GetCurrentTime()** (2 connections)
 
 ## Relationships
 
