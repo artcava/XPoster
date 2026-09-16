@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **foreach()** (2 connections)
-- **HttpResponseBodyLogger()** (2 connections)
-- **IsEnabledFor()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **Log()** (2 connections)
+- **ResilienceTestHelpers.cs** (11 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **StubHttpMessageHandler()** (2 connections)
+- **CapturedRequest()** (2 connections)
+- **BuildSequenceHandler()** (2 connections)
 
 ## Relationships
 
-- [[Community 141]] (5 shared connections)
+- [[Community 167]] (5 shared connections)
 
 ## Audit Trail
 

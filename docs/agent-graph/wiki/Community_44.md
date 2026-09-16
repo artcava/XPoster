@@ -8,18 +8,18 @@
 - **GenerateImageAsync_MalformedJson_ReturnsEmptyArray()** (2 connections)
 - **FalAiImageService()** (2 connections)
 - **GenerateImageAsync_EmptyUrlProperty_ReturnsEmptyArray()** (2 connections)
-- **MakeRequest()** (2 connections)
-- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
 - **MakeHandlerMock()** (2 connections)
+- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_ModelIdWithMultipleSegments_PreservesSlashesInUri()** (2 connections)
 - **GenerateImageAsync_WhitespacePrompt_ReturnsEmptyArray()** (2 connections)
 - **GenerateImageAsync_Returns429_LogsWarning()** (2 connections)
-- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
 - **GenerateImageAsync_WhenImageDownloadFails_HttpRequestException_LogsError()** (2 connections)
-- **GenerateImageAsync_MissingImagesProperty_ReturnsEmptyArray()** (2 connections)
+- **GenerateImageAsync_RequestUsesImageQuantityFromRequest()** (2 connections)
+- **MakeRequest()** (2 connections)
 
 ## Relationships
 
-- [[Community 36]] (12 shared connections)
+- [[Community 38]] (12 shared connections)
 
 ## Audit Trail
 

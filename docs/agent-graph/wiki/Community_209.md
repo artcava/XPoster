@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **WorkflowOrchestratorTests.cs** (17 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **SetupSender()** (2 connections)
+- **if()** (2 connections)
 - **var()** (2 connections)
-- **new()** (2 connections)
-- **WorkflowExecutionResult()** (2 connections)
 
 ## Relationships
 
-- [[Community 29]] (13 shared connections)
+- [[Community 30]] (13 shared connections)
 
 ## Audit Trail
 

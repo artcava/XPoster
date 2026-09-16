@@ -1,22 +1,22 @@
 # Community 170
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (7 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **AddHttpResponseBodyLogging()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **IStepOptionsResolver.cs** (4 connections)
+- **XPoster.Workflows.Services** (2 connections)
+- **Resolve()** (2 connections)
+- **IStepOptionsResolver** (2 connections)
 
 ## Relationships
 
-- [[Community 222]] (3 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

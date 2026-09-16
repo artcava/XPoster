@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowExecutionEngineTests.cs** (24 connections)
-- **var()** (2 connections)
-- **StubNode()** (2 connections)
-- **new()** (2 connections)
+- **LinkedInResiliencePipelineTests.cs** (9 connections)
+- **StringContent()** (2 connections)
+- **catch()** (2 connections)
+- **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 
 ## Relationships
 
-- [[Community 11]] (20 shared connections)
+- [[Community 119]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

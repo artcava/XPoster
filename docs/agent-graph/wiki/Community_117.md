@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IWorkflowContext.cs** (5 connections)
-- **IWorkflowContext.cs** (5 connections)
-- **XPoster.Workflows.Models** (2 connections)
-- **HasData()** (2 connections)
-- **IWorkflowContext** (2 connections)
-- **SetData()** (2 connections)
+- **Program.cs** (5 connections)
+- **Program.cs** (5 connections)
+- **Uri()** (2 connections)
+- **DefaultAzureCredential()** (2 connections)
+- **BlobServiceClient()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

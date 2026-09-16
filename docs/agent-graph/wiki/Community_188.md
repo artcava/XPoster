@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult.cs** (3 connections)
-- **BlobUploadResult()** (2 connections)
-- **XPoster.Models** (2 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender.cs** (3 connections)
+- **DryRunMaxLengthSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 

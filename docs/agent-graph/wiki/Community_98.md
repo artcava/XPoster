@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **CredentialsStartupValidator.cs** (10 connections)
-- **catch()** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
-- **if()** (2 connections)
-- **CredentialsStartupValidator()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **foreach()** (2 connections)
+- **HttpResponseBodyLogger()** (2 connections)
+- **IsEnabledFor()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **Log()** (2 connections)
 
 ## Relationships
 
-- [[Community 181]] (4 shared connections)
+- [[Community 179]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

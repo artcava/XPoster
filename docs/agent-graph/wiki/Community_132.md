@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (12 connections)
-- **OrchestratorFactory()** (2 connections)
-- **ResolveWorkflowOrchestrator()** (2 connections)
-- **CreateEmptyNoOrchestrator()** (2 connections)
-- **nameof()** (2 connections)
-- **if()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **IgSender()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 108]] (6 shared connections)
+- [[Community 49]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

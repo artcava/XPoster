@@ -5,17 +5,17 @@
 ## Key Concepts
 
 - **BuildPowerLawPostNodeTests.cs** (13 connections)
-- **CreateNode()** (2 connections)
-- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
-- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
-- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
 - **XPoster.Tests.Workflows.Nodes** (2 connections)
 - **WorkflowNodeInput()** (2 connections)
 - **new()** (2 connections)
+- **CreateNode()** (2 connections)
+- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
+- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
 
 ## Relationships
 
-- [[Community 126]] (6 shared connections)
+- [[Community 110]] (6 shared connections)
 
 ## Audit Trail
 

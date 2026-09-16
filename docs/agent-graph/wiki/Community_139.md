@@ -1,23 +1,23 @@
 # Community 139
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
-- **catch()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **foreach()** (2 connections)
-- **XApiException()** (2 connections)
-- **BuildMessage()** (2 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **AiClientsResiliencePipelineTests.cs** (5 connections)
+- **Polly_AiClient_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **Polly_AiClient_AttemptTimeout_CancelsSlowRequest()** (2 connections)
+- **StringContent()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
 
 ## Relationships
 
-- [[Community 247]] (2 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

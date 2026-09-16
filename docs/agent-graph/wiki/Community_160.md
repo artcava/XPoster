@@ -1,22 +1,22 @@
 # Community 160
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **WorkflowOrchestrator.cs** (4 connections)
-- **WorkflowOrchestrator.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **if()** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
+- **HttpClientExtensions.cs** (7 connections)
+- **AddResilientHttpClient()** (2 connections)
+- **AddHttpResponseBodyLogging()** (2 connections)
+- **AddHttpClients()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 245]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

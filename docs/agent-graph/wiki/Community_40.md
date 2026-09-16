@@ -4,27 +4,27 @@
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **BuildSender()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **BuildCreds()** (2 connections)
+- **XApiClientTests.cs** (17 connections)
+- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
+- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
+- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
+- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
+- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
+- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
+- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
+- **XApiClientTests** (2 connections)
+- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
+- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 47]] (12 shared connections)
+- [[Community 164]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 41 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

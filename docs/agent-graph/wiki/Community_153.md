@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ISender.cs** (4 connections)
-- **ISender.cs** (4 connections)
-- **SendAsync()** (2 connections)
-- **ISender** (2 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider.cs** (4 connections)
+- **ITextToTextProvider** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 - **XPoster.Contracts** (2 connections)
 
 ## Relationships

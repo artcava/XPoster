@@ -1,25 +1,25 @@
 # Community 85
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **FanOutSendNode.cs** (7 connections)
-- **FanOutSendNode.cs** (7 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **foreach()** (2 connections)
-- **FanOutSendNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **if()** (2 connections)
+- **OrchestratorFactoryTests.cs** (19 connections)
+- **SetupMocksForOrchestratorFactory()** (2 connections)
+- **WorkflowOrchestrator_SupportedPlatforms_ContainsAllExpectedPlatforms()** (2 connections)
+- **WorkflowProfile()** (2 connections)
+- **CreateFactory()** (2 connections)
+- **new()** (2 connections)
+- **CreateFactoryWithProfiles()** (2 connections)
+- **OrchestratorFactoryTests()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 47]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

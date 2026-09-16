@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **catch()** (2 connections)
-- **if()** (2 connections)
-- **return()** (2 connections)
+- **CredentialsStartupValidator.cs** (10 connections)
+- **ValidateOptions()** (2 connections)
+- **foreach()** (2 connections)
+- **resolve()** (2 connections)
 
 ## Relationships
 
-- [[Community 81]] (7 shared connections)
+- [[Community 99]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 196
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DryRunMaxLengthSender.cs** (3 connections)
-- **DryRunMaxLengthSender.cs** (3 connections)
-- **DryRunMaxLengthSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **WorkflowExecutionResult()** (2 connections)
+- **new()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 32]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

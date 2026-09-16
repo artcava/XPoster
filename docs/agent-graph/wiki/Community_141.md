@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **FormatResponseHeaders()** (2 connections)
+- **AzureFoundryService.cs** (11 connections)
+- **catch()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **var()** (2 connections)
 - **if()** (2 connections)
-- **TruncateUtf8()** (2 connections)
-- **SanitizeAndTruncate()** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (6 shared connections)
+- [[Community 97]] (6 shared connections)
 
 ## Audit Trail
 

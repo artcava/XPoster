@@ -1,26 +1,26 @@
 # Community 67
 
-> 9 nodes · cohesion 0.42
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **HttpClientExtensionsTests.cs** (8 connections)
-- **AddHttpClients_RegistersIHttpClientFactory()** (2 connections)
-- **foreach()** (2 connections)
-- **AddHttpClients_ReturnsSameServiceCollection()** (2 connections)
-- **HttpClientExtensionsTests** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **AddHttpClients_RegistersExpectedNamedClients()** (2 connections)
-- **AddHttpClients_CanCreateAllExpectedNamedClients()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **SendAsync_WhenImageNormalizationFails_FallsBackToTextOnly()** (2 connections)
+- **SendAsync_WhenPhotoPublishThrows_FallsBackToTextOnly()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **FbSenderImageFlowTests** (2 connections)
+- **BuildFactory()** (2 connections)
+- **BuildCreds()** (2 connections)
+- **InvalidImageBytes()** (2 connections)
+- **HttpRequestException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 105]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

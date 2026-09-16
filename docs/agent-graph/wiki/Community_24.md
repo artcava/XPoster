@@ -1,33 +1,33 @@
 # Community 24
 
-> 16 nodes · cohesion 0.12
+> 16 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **ValidateTerminalNodeContract_TerminalDoesNotImplementContract_ReturnsError()** (2 connections)
-- **ValidateStructural_EmptyNodes_ReturnsNull()** (2 connections)
-- **ValidateStructural_MissingNodeReference_ReturnsError()** (2 connections)
-- **ValidateStructural_ValidLinearDag_ReturnsNull()** (2 connections)
-- **ValidateStructural_MultipleTerminalNodes_ReturnsError()** (2 connections)
-- **MissingRef()** (2 connections)
-- **Cyclic()** (2 connections)
-- **Linear()** (2 connections)
-- **ValidateTerminalNodeContract_UnresolvableTerminalType_ReturnsNull()** (2 connections)
-- **WorkflowDefinition()** (2 connections)
-- **WorkflowDefinitionValidatorTests** (2 connections)
-- **XPoster.Tests.Workflows.Engine** (2 connections)
-- **ValidateStructural_Cycle_ReturnsError()** (2 connections)
-- **TwoTerminals()** (2 connections)
-- **ValidateTerminalNodeContract_TerminalImplementsContract_ReturnsNull()** (2 connections)
+- **HttpResponseBodySanitizerTests.cs** (15 connections)
+- **HttpResponseBodySanitizerTests.cs** (15 connections)
+- **Sanitize_LeavesCleanTextUnchanged()** (2 connections)
+- **HttpResponseBodySanitizerTests** (2 connections)
+- **Sanitize_MasksRefreshTokenField()** (2 connections)
+- **Sanitize_MasksApiKeyHeaderWithColon()** (2 connections)
+- **Sanitize_MasksBearerTokenInHeader()** (2 connections)
+- **Sanitize_MasksBearerTokenInJson()** (2 connections)
+- **Sanitize_MasksJsonApiKey()** (2 connections)
+- **XPoster.Tests.Extensions** (2 connections)
+- **SanitizeUrl_CaseInsensitiveKeys()** (2 connections)
+- **SanitizeUrl_LeavesNonSensitiveQueryUntouched()** (2 connections)
+- **SanitizeUrl_MasksAccessTokenQuery()** (2 connections)
+- **SanitizeUrl_NoQuery_ReturnsAsIs()** (2 connections)
+- **Sanitize_MasksAccessTokenJsonField()** (2 connections)
+- **Sanitize_ReturnsEmptyForNullOrEmpty()** (2 connections)
 
 ## Relationships
 
-- [[Community 215]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 49 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

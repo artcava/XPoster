@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingHandler.cs** (8 connections)
-- **IsBinaryMediaType()** (2 connections)
-- **SendAsync()** (2 connections)
-- **HttpResponseBodyLoggingHandler()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **AiServiceHelperImageTests.cs** (37 connections)
+- **var()** (2 connections)
+- **MakeNoOpClient()** (2 connections)
+- **MakeDownloadClient()** (2 connections)
+- **JsonResponse()** (2 connections)
+- **HttpClient()** (2 connections)
 
 ## Relationships
 
-- [[Community 242]] (3 shared connections)
+- [[Community 3]] (31 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

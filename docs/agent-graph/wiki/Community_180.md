@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
+- **BlobUploadResult.cs** (3 connections)
 - **XPoster.Models** (2 connections)
-- **RSSFeed** (2 connections)
+- **BlobUploadResult()** (2 connections)
 
 ## Relationships
 

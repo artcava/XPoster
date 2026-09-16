@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **ITerminalNode** (2 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **AiProviderExtensions.cs** (3 connections)
+- **GetLabel()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

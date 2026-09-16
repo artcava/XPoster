@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition.cs** (3 connections)
-- **WorkflowNodeDefinition()** (2 connections)
-- **XPoster.Workflows.Engine** (2 connections)
+- **Post.cs** (3 connections)
+- **Post.cs** (3 connections)
+- **XPoster.Models** (2 connections)
+- **Post** (2 connections)
 
 ## Relationships
 

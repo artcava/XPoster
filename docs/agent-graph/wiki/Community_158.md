@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest.cs** (4 connections)
-- **ImagePromptRequest** (2 connections)
-- **PromptRequest** (2 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
+- **AiProviderValidationHelper.cs** (4 connections)
 - **XPoster.Models** (2 connections)
+- **ValidateConnectivity()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 

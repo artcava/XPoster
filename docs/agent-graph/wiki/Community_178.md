@@ -1,22 +1,22 @@
 # Community 178
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **WorkflowDefinitionOptions.cs** (4 connections)
-- **ToDefinition()** (2 connections)
-- **WorkflowDefinition()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **var()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **if()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 199]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

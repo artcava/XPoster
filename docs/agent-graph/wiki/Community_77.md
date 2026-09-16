@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
-- **static()** (2 connections)
-- **AiTextNodeTests** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **return()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **BaseOrchestratorTests.cs** (16 connections)
+- **TestOrchestrator()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Content_IsEmpty()** (2 connections)
+- **PostAsync_ReturnsFalse_WhenSenderPlatformNotInDictionary()** (2 connections)
+- **PostAsync_ReturnsFalse_When_Sender_ReturnsFalse()** (2 connections)
+- **PostAsync_DispatchesEachPostToAlignedSender()** (2 connections)
+- **PostAsync_LogsWarning_When_ProduceImage_IsTrue_And_Image_IsNull()** (2 connections)
+- **BaseOrchestratorTests()** (2 connections)
 
 ## Relationships
 
-- [[Community 121]] (6 shared connections)
+- [[Community 61]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -9,10 +9,10 @@
 - **SendAsync_WithNoImage_ReturnsFalse()** (2 connections)
 - **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **IgSenderSendAsyncTests** (2 connections)
-- **BuildSender()** (2 connections)
 - **SendAsync_WithCaptionExceedingMaxLength_TruncatesCaption()** (2 connections)
+- **IgSenderSendAsyncTests** (2 connections)
 - **IgSender()** (2 connections)
+- **BuildSender()** (2 connections)
 - **SendAsync_WithEmptyImageArray_ReturnsFalse()** (2 connections)
 
 ## Relationships
