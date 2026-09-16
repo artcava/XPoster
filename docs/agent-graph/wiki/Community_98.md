@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OrchestratorFactory.cs** (12 connections)
-- **Resolve()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **ResolveSenders()** (2 connections)
-- **NoOrchestrator()** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **foreach()** (2 connections)
+- **HttpResponseBodyLogger()** (2 connections)
+- **IsEnabledFor()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **while()** (2 connections)
+- **Log()** (2 connections)
 
 ## Relationships
 
-- [[Community 123]] (6 shared connections)
+- [[Community 179]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

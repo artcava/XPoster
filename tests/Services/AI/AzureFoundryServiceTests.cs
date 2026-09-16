@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
+using Polly.Timeout;
 using XPoster.Models;
 using XPoster.Services;
 
@@ -679,6 +680,49 @@ public class AzureFoundryServiceTests
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Azure Foundry image generation HTTP request failed")),
                 It.IsAny<HttpRequestException>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_WhenTimeoutRejectedExceptionOnPost_ReturnsEmptyByteArray()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new TimeoutRejectedException("The operation didn't complete within the allowed timeout."));
+
+        var svc = BuildService(handler.Object, out _);
+
+        var result = await svc.GenerateImageAsync(BuildImagePromptRequest("image prompt"));
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_WhenTimeoutRejectedExceptionOnPost_LogsError()
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        handler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ThrowsAsync(new TimeoutRejectedException("The operation didn't complete within the allowed timeout."));
+
+        var svc = BuildService(handler.Object, out var loggerMock);
+
+        await svc.GenerateImageAsync(BuildImagePromptRequest("image prompt"));
+
+        loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Azure Foundry image generation timed out")),
+                It.IsAny<TimeoutRejectedException>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowOrchestrator.cs** (4 connections)
-- **WorkflowOrchestrator.cs** (4 connections)
-- **XPoster.Orchestrators** (2 connections)
-- **if()** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
+- **IFeedService.cs** (4 connections)
+- **IFeedService.cs** (4 connections)
+- **GetFeedsAsync()** (2 connections)
+- **XPoster.Contracts** (2 connections)
+- **IFeedService** (2 connections)
 
 ## Relationships
 

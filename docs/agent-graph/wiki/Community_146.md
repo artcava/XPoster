@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider.cs** (4 connections)
-- **ITimeProvider** (2 connections)
-- **GetCurrentTime()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **WorkflowDefinitionOptions.cs** (4 connections)
+- **WorkflowDefinitionOptions.cs** (4 connections)
+- **ToDefinition()** (2 connections)
+- **WorkflowDefinition()** (2 connections)
+- **XPoster.Workflows.Configuration** (2 connections)
 
 ## Relationships
 

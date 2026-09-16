@@ -1,19 +1,20 @@
 # Community 246
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
 - **if()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 118]] (5 shared connections)
+- [[Community 182]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 9 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

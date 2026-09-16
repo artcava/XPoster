@@ -1,25 +1,25 @@
 # Community 79
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **AiProviderExtensionsTests.cs** (7 connections)
-- **AiProviderExtensionsTests** (2 connections)
-- **GetLabel_DescriptionDiffersFromEnumName()** (2 connections)
-- **GetLabel_KnownProvider_ReturnsDescriptionAttributeValue()** (2 connections)
-- **GetLabel_UnknownProvider_ReturnsFallbackToString()** (2 connections)
-- **XPoster.Tests.Contracts** (2 connections)
-- **GetLabel_DescriptionMatchesEnumName()** (2 connections)
+- **AiTextNodeTests.cs** (13 connections)
+- **return()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **AiTextNodeTests** (2 connections)
+- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
+- **static()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 137]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **ITagReplacementService.cs** (4 connections)
-- **ITagReplacementService.cs** (4 connections)
-- **ITagReplacementService** (2 connections)
-- **Apply()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **LocalOverrideTimeProvider.cs** (4 connections)
+- **GetCurrentTime()** (2 connections)
+- **XPoster.Providers** (2 connections)
+- **LocalOverrideTimeProvider()** (2 connections)
 
 ## Relationships
 

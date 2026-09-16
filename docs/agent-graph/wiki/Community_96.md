@@ -6,10 +6,10 @@
 
 - **HttpResponseBodyLoggingHandlerTests.cs** (25 connections)
 - **return()** (2 connections)
-- **static()** (2 connections)
 - **SendAsync_OptOutHeader_LogsNothing()** (2 connections)
-- **SendAsync_NotEnabled_SuccessNotLogged()** (2 connections)
+- **static()** (2 connections)
 - **SendAsync()** (2 connections)
+- **SendAsync_NotEnabled_SuccessNotLogged()** (2 connections)
 - **var()** (2 connections)
 
 ## Relationships

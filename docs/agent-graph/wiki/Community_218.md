@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (7 connections)
-- **IsTransientHttpFailure()** (2 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
 - **if()** (2 connections)
+- **TryLogAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 159]] (4 shared connections)
+- [[Community 111]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

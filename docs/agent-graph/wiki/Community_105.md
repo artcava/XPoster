@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **foreach()** (2 connections)
-- **HttpResponseBodyLogger()** (2 connections)
-- **IsEnabledFor()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **Log()** (2 connections)
+- **FbSenderImageFlowTests.cs** (15 connections)
+- **SendAsync_WhenDeleteFails_AfterSuccessfulPhotoPublish_ReturnsTrue()** (2 connections)
+- **if()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **CreateValidJpegBytes()** (2 connections)
+- **SendAsync_WhenUploadThrows_FallsBackToTextOnly()** (2 connections)
+- **SendAsync_WithSupportedImage_UploadsPublishesPhotoAndDeletesBlob()** (2 connections)
 
 ## Relationships
 
-- [[Community 158]] (5 shared connections)
+- [[Community 67]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

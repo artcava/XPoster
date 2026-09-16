@@ -520,7 +520,7 @@ Workflows are validated at startup by `WorkflowDefinitionValidator`: references 
 | Circuit breaker | Break duration 30 s; sampling duration 35 s |
 | Metrics | Treated as retriable/breaking: network exceptions plus HTTP `429`, `500`, `502`, `503`, `504` |
 
-The same helper registers resilient clients for every AI provider and social sender (`LinkedIn`, `Instagram`, `Facebook`). Image/feed providers use wider timeouts: FalAi 60 s attempts / 300 s total; Feed 15 s attempts / 60 s total. The X client signs requests independently and is not created through `AddHttpClients`.
+The same helper registers resilient clients for every AI provider and social sender (`LinkedIn`, `Instagram`, `Facebook`). Image/feed providers use wider timeouts: AzureFoundry and FalAi 60 s attempts / 300 s total; Feed 15 s attempts / 60 s total. The X client signs requests independently and is not created through `AddHttpClients`.
 
 ---
 

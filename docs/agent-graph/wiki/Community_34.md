@@ -1,30 +1,30 @@
 # Community 34
 
-> 13 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **InSenderTests.cs** (24 connections)
-- **SendAsync_WithImage_WhenRegisterUploadFails_ReturnsFalse()** (2 connections)
-- **InSender_ImplementsISender()** (2 connections)
-- **SendAsync_WhenOrgIdIsSet_UsesOrganizationUrn()** (2 connections)
-- **SendAsync_TextOnly_WhenPostCreationFails_ReturnsFalse()** (2 connections)
-- **SendAsync_TextOnly_WithPersonCode_UsesPersonUrn()** (2 connections)
-- **SendAsync_WhenOrgIdIsAbsentAndOwnerIsSet_UsesPersonUrn()** (2 connections)
-- **BuildSender()** (2 connections)
-- **BuildCreds()** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XOAuth1SignerTests.cs** (12 connections)
+- **XOAuth1SignerTests.cs** (12 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
+- **ComputeSignature_PhotoExample_ReturnsExpectedBase64()** (2 connections)
+- **ComputeSignatureBaseString_PhotoExample_ReturnsExpectedBaseString()** (2 connections)
+- **ExtractHeaderValue()** (2 connections)
+- **PercentEncode_InputValue_ReturnsExpectedEncoding()** (2 connections)
+- **XOAuth1SignerTests** (2 connections)
+- **BuildCredentials()** (2 connections)
+- **BuildAuthorizationHeader_PhotoExample_ContainsOAuthParameters()** (2 connections)
+- **BuildAuthorizationHeader_MediaUploadInit_PercentEncodesOAuthValuesPerRfc5849()** (2 connections)
+- **BuildAuthorizationHeader_PostToTweetsEndpoint_SignsOAuthOnlyParameters()** (2 connections)
+- **BuildPhotoParameters()** (2 connections)
 
 ## Relationships
 
-- [[Community 47]] (12 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

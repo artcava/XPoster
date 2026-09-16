@@ -1,23 +1,23 @@
 # Community 113
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **TimeProviderTests.cs** (5 connections)
-- **TimeProviderTests.cs** (5 connections)
-- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **TimeProviderTests** (2 connections)
-- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **AiImageNodeTests.cs** (18 connections)
+- **Execute_ReturnsNullOutput_OnEmptyArray()** (2 connections)
+- **Execute_PassesStepOptionsToImagePromptRequest()** (2 connections)
+- **Execute_ReturnsSuccess_WhenRequired_AndImageProduced()** (2 connections)
+- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 36]] (12 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

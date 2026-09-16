@@ -198,7 +198,7 @@ All outbound HTTP integrations use named clients from `HttpClientExtensions.AddH
 |---|---|---|
 | `"Feed"` | `FeedService` | 15 s / 60 s |
 | `"OpenAI"` | `OpenAiService` | 30 s / 180 s |
-| `"AzureFoundry"` | `AzureFoundryService` | 30 s / 180 s |
+| `"AzureFoundry"` | `AzureFoundryService` | 60 s / 300 s (slower image generation) |
 | `"DeepSeek"` | `DeepSeekService` | 30 s / 180 s |
 | `"Perplexity"` | `PerplexityService` | 30 s / 180 s |
 | `"FalAi"` | `FalAiImageService` | 60 s / 300 s (slower image generation) |

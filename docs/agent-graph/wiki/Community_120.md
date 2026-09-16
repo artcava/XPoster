@@ -1,23 +1,23 @@
 # Community 120
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IMetaPublishingService.cs** (5 connections)
-- **IMetaPublishingService.cs** (5 connections)
-- **XPoster.Contracts** (2 connections)
-- **GetContainerStatusAsync()** (2 connections)
-- **IMetaPublishingService** (2 connections)
-- **PublishContainerAsync()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
+- **SignRequest()** (2 connections)
+- **ThrowIfNotSuccess()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 43]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

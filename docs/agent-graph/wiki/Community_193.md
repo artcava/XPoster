@@ -4,14 +4,14 @@
 
 ## Key Concepts
 
-- **HttpResponseBodySanitizer.cs** (6 connections)
+- **CryptoService.cs** (6 connections)
+- **catch()** (2 connections)
+- **GetCryptoValue()** (2 connections)
 - **XPoster.Services** (2 connections)
-- **foreach()** (2 connections)
-- **SanitizeUrl()** (2 connections)
 
 ## Relationships
 
-- [[Community 241]] (3 shared connections)
+- [[Community 216]] (3 shared connections)
 
 ## Audit Trail
 

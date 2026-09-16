@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **JsonResponse()** (2 connections)
+- **FetchRssNodeTests.cs** (13 connections)
+- **Execute_ConcatenatesMultipleFeeds()** (2 connections)
+- **Execute_CallsFeedServiceForMultipleUrls()** (2 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **Input()** (2 connections)
 - **var()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
 
 ## Relationships
 
-- [[Community 3]] (31 shared connections)
+- [[Community 89]] (7 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

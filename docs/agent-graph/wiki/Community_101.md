@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **WorkflowServiceCollectionExtensions.cs** (6 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Workflows.Configuration** (2 connections)
-- **InvalidOperationException()** (2 connections)
-- **AddWorkflows()** (2 connections)
+- **XSenderSendAsyncTests.cs** (6 connections)
+- **XSenderSendAsyncTests.cs** (6 connections)
+- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
+- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSenderSendAsyncTests()** (2 connections)
 
 ## Relationships
 

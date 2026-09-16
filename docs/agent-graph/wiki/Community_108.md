@@ -4,21 +4,21 @@
 
 ## Key Concepts
 
-- **OpenAiService.cs** (11 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **NoOrchestrator()** (2 connections)
+- **Resolve()** (2 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **ResolveSenders()** (2 connections)
 - **catch()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **while()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **GenerateTextAsync()** (2 connections)
-- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 175]] (5 shared connections)
+- [[Community 131]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

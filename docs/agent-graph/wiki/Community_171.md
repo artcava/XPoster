@@ -1,22 +1,22 @@
 # Community 171
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **BuildFactory()** (2 connections)
-- **params()** (2 connections)
-- **SendAsync()** (2 connections)
-- **_responder()** (2 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **ConfigurationStepOptionsResolver()** (2 connections)
+- **Resolve()** (2 connections)
+- **XPoster.Workflows.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

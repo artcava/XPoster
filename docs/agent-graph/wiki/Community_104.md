@@ -5,16 +5,16 @@
 ## Key Concepts
 
 - **ResilienceTestHelpers.cs** (11 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **XPoster.Tests.Helpers** (2 connections)
+- **StubHttpMessageHandler()** (2 connections)
 - **CapturedRequest()** (2 connections)
 - **BuildSequenceHandler()** (2 connections)
-- **XPoster.Tests.Helpers** (2 connections)
-- **if()** (2 connections)
-- **StubHttpMessageHandler()** (2 connections)
-- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 171]] (5 shared connections)
+- [[Community 167]] (5 shared connections)
 
 ## Audit Trail
 

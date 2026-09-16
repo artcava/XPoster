@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **ITerminalNode.cs** (3 connections)
-- **ITerminalNode.cs** (3 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult.cs** (3 connections)
+- **WorkflowNodeResult()** (2 connections)
 - **XPoster.Workflows.Abstractions** (2 connections)
-- **ITerminalNode** (2 connections)
 
 ## Relationships
 

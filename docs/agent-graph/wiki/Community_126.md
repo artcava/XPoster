@@ -1,19 +1,19 @@
 # Community 126
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **if()** (2 connections)
-- **InstagramCredentialsValidator** (2 connections)
-- **Validate()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **return()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **catch()** (2 connections)
+- **GetProvider()** (2 connections)
+- **IsJsonLike()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 239]] (3 shared connections)
 
 ## Audit Trail
 

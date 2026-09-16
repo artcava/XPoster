@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **XPoster.Extensions** (2 connections)
-- **AddAiProviderOptions()** (2 connections)
+- **DryRunShortLengthSender.cs** (3 connections)
+- **DryRunShortLengthSender.cs** (3 connections)
+- **DryRunShortLengthSender()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 

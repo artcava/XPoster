@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **IWorkflowContext.cs** (5 connections)
-- **IWorkflowContext.cs** (5 connections)
-- **SetData()** (2 connections)
-- **IWorkflowContext** (2 connections)
-- **HasData()** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
+- **AzureFoundryOptionsTests.cs** (5 connections)
+- **AzureFoundryOptionsTests.cs** (5 connections)
+- **AzureFoundryOptionsTests** (2 connections)
+- **AzureFoundryOptions_Defaults_AreCorrect()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **AzureFoundryOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
 
 ## Relationships
 
