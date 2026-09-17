@@ -2,7 +2,7 @@
 
 ## Overview
 
-XPoster publishes posts to Twitter / X using the API v2 (`POST /2/tweets`) with OAuth 1.0a authentication, and uploads images through the v1.1 chunked media-upload flow. Requests are signed by the first-party `XOAuth1Signer` (RFC 5849 HMAC-SHA1) and routed through the resilient named `"X"` client with the standard Polly pipeline.
+XPoster publishes posts to Twitter / X using the API v2 (`POST /2/tweets`) with OAuth 1.0a authentication, and uploads images through the v1.1 chunked media-upload flow (INIT → APPEND → FINALIZE). Requests are signed by the first-party `XOAuth1Signer` (RFC 5849 HMAC-SHA1) and routed through the resilient named `"X"` client with the standard Polly pipeline. Media chunks are posted as `media` parts in a `multipart/form-data` body (required by the APPEND command), and the `media_type` sent to INIT is detected from the actual image bytes (JPEG, PNG, GIF, WebP) rather than hardcoded.
 
 ## Required Configuration
 
@@ -31,3 +31,4 @@ The X API moved to a **pay-per-use credit model**. Check your plan and balances 
 - Ensure the app has **Read and Write** permissions; Read-only apps cannot post.
 - If publishing fails with `402 Payment Required` (`usage_cap_exceeded`), the developer account has exhausted its credits — add credits in the Developer Portal and wait for the next scheduled run.
 - Failure logs include the HTTP status and the parsed X error body (title, detail, label), so credit/limit issues are diagnosable from Application Insights alone.
+- If an attached image's format cannot be detected, `XSender` logs a warning and falls back to a text-only tweet instead of failing the run.

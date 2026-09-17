@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 using Moq;
 using Moq.Protected;
 
@@ -83,7 +84,7 @@ internal static class ResilienceTestHelpers
 internal sealed class StubHttpMessageHandler : HttpMessageHandler
 {
     /// <summary>Captures a single request observed by the handler.</summary>
-    public sealed record CapturedRequest(HttpRequestMessage Message, string? Body);
+    public sealed record CapturedRequest(HttpRequestMessage Message, string? Body, byte[]? BodyBytes = null);
 
     private readonly Func<HttpRequestMessage, HttpResponseMessage> _responder;
     private readonly List<CapturedRequest> _requests = new();
@@ -100,12 +101,14 @@ internal sealed class StubHttpMessageHandler : HttpMessageHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         string? body = null;
+        byte[]? bodyBytes = null;
         if (request.Content is not null)
         {
-            body = await request.Content.ReadAsStringAsync(cancellationToken);
+            bodyBytes = await request.Content.ReadAsByteArrayAsync(cancellationToken);
+            body = Encoding.UTF8.GetString(bodyBytes);
         }
 
-        _requests.Add(new CapturedRequest(request, body));
+        _requests.Add(new CapturedRequest(request, body, bodyBytes));
         return _responder(request);
     }
 }

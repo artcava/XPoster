@@ -197,7 +197,7 @@ public class XSenderTests
         var result = await BuildSender(handler).SendAsync(new Post
         {
             Content = "Hello",
-            Image = new byte[] { 1, 2, 3 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.False(result);
@@ -277,7 +277,7 @@ public class XSenderTests
         var result = await BuildSender(handler).SendAsync(new Post
         {
             Content = "Hello",
-            Image = new byte[] { 1, 2, 3 }
+            Image = ImageTestData.CreateValidJpeg()
         });
 
         Assert.True(result);
@@ -286,6 +286,98 @@ public class XSenderTests
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Published tweet")),
+                It.IsAny<Exception?>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task SendAsync_PngImagePost_PublishesTweetWithImagePngMediaType()
+    {
+        var handler = new StubHttpMessageHandler(request =>
+        {
+            var query = request.RequestUri!.Query;
+            if (query.Contains("command=INIT"))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        "{\"media_id\":123,\"media_id_string\":\"123\"}",
+                        System.Text.Encoding.UTF8,
+                        "application/json")
+                };
+            }
+
+            if (query.Contains("command=APPEND"))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+
+            if (query.Contains("command=FINALIZE"))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        "{\"media_id\":123,\"media_id_string\":\"123\"}",
+                        System.Text.Encoding.UTF8,
+                        "application/json")
+                };
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(
+                    "{\"data\":{\"id\":\"12345\"}}",
+                    System.Text.Encoding.UTF8,
+                    "application/json")
+            };
+        });
+
+        var result = await BuildSender(handler).SendAsync(new Post
+        {
+            Content = "Hello",
+            Image = ImageTestData.CreateValidPng()
+        });
+
+        Assert.True(result);
+        var initQuery = handler.Requests[0].Message.RequestUri!.Query;
+        Assert.Contains("command=INIT", initQuery);
+        Assert.Contains("media_type=image%2Fpng", initQuery);
+    }
+
+    [Fact]
+    public async Task SendAsync_WhenImageFormatCannotBeDetected_FallsBackToTextOnly()
+    {
+        var handler = new StubHttpMessageHandler(request =>
+        {
+            if (request.RequestUri!.Query.Contains("command=INIT"))
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(
+                    "{\"data\":{\"id\":\"12345\"}}",
+                    System.Text.Encoding.UTF8,
+                    "application/json")
+            };
+        });
+
+        var result = await BuildSender(handler).SendAsync(new Post
+        {
+            Content = "Hello",
+            Image = new byte[] { 1, 2, 3 }
+        });
+
+        Assert.True(result);
+        var request = Assert.Single(handler.Requests);
+        Assert.EndsWith("/2/tweets", request.Message.RequestUri!.AbsoluteUri);
+        _mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) => v.ToString()!.Contains("Unable to detect image format")),
                 It.IsAny<Exception?>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
