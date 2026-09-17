@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingHandler.cs** (8 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
 - **if()** (2 connections)
-- **TryLogAsync()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- [[Community 111]] (5 shared connections)
+- [[Community 195]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

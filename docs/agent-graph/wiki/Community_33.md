@@ -1,30 +1,31 @@
 # Community 33
 
-> 13 nodes · cohesion 0.29
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **AiModelCatalogTests.cs** (12 connections)
-- **AiModelCatalogTests.cs** (12 connections)
-- **TryGet_ReturnsTrueAndPopulatesModelName_WhenSupported()** (2 connections)
-- **Supports_ReturnsFalseForMissingModelClass()** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
-- **GetRequired_Throws_WhenNotSupported()** (2 connections)
-- **Supports_ReturnsTrueForRegisteredModelClass()** (2 connections)
-- **TryGet_ReturnsFalseAndNullModelName_WhenNotSupported()** (2 connections)
-- **GetRequired_ReturnsModelName_WhenSupported()** (2 connections)
-- **Constructor_NullDictionary_Throws()** (2 connections)
-- **AiModelCatalogTests** (2 connections)
-- **Empty_SupportsNoModelClass()** (2 connections)
-- **Constructor_ExcludesNullOrWhitespaceEntries()** (2 connections)
+- **WorkflowOrchestratorTests.cs** (17 connections)
+- **return()** (2 connections)
+- **OrchestrateAsync_ReturnsPostMap_OnSuccess()** (2 connections)
+- **Properties_AreConfigured()** (2 connections)
+- **ProduceImage_Set_ThrowsNotSupported()** (2 connections)
+- **ProduceImage_IsTrue_WhenWorkflowHasAiImageNode()** (2 connections)
+- **ProduceImage_IsFalse_WhenWorkflowHasNoAiImageNode()** (2 connections)
+- **static()** (2 connections)
+- **XPoster.Tests.Orchestrators** (2 connections)
+- **WorkflowOrchestratorTests** (2 connections)
+- **MakeDefinition()** (2 connections)
+- **MakeDefinitionWithoutImage()** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyDictionary_WhenSendResultsMissing()** (2 connections)
+- **OrchestrateAsync_ReturnsEmptyDictionary_OnFailure()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 196]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 43 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

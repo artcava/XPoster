@@ -1,25 +1,25 @@
 # Community 84
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AiServiceHelper.cs** (11 connections)
-- **BuildChatPayload()** (2 connections)
-- **ExtractAzureFoundryBytesAsync()** (2 connections)
-- **LogAndReturnEmpty()** (2 connections)
-- **ParseImageResponseAsync()** (2 connections)
-- **ExtractFalAiBytesAsync()** (2 connections)
-- **ExtractOpenAiBytes()** (2 connections)
+- **FalAiImageService.cs** (7 connections)
+- **FalAiImageService.cs** (7 connections)
+- **GetImageGenerationEndpoint()** (2 connections)
+- **if()** (2 connections)
 - **XPoster.Services** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **FalAiImageService()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 198]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

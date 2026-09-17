@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **WorkflowOrchestrator.cs** (4 connections)
-- **WorkflowOrchestrator.cs** (4 connections)
-- **if()** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **GetCryptoValue()** (2 connections)
+- **ICryptoService** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

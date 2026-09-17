@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_ReturnsGeneratedText()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **Input()** (2 connections)
-- **var()** (2 connections)
-- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
+- **OrchestratorFactory.cs** (12 connections)
+- **nameof()** (2 connections)
+- **OrchestratorFactory()** (2 connections)
+- **if()** (2 connections)
+- **CreateEmptyNoOrchestrator()** (2 connections)
+- **ResolveWorkflowOrchestrator()** (2 connections)
 
 ## Relationships
 
-- [[Community 79]] (7 shared connections)
+- [[Community 101]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

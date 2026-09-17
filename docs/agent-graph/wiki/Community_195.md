@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowDefinitionValidatorTests.cs** (19 connections)
-- **ExecuteAsync()** (2 connections)
-- **new()** (2 connections)
-- **Node()** (2 connections)
+- **ConfigurationSlotProfileProvider.cs** (6 connections)
+- **ConfigurationSlotProfileProvider()** (2 connections)
+- **GetProfiles()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
-- [[Community 23]] (15 shared connections)
+- [[Community 218]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

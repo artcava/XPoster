@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
 - **if()** (2 connections)
-- **InvalidOperationException()** (2 connections)
+- **TryLogAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 126]] (5 shared connections)
+- [[Community 121]] (5 shared connections)
 
 ## Audit Trail
 

@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **foreach()** (2 connections)
-- **HttpResponseBodyLogger()** (2 connections)
-- **IsEnabledFor()** (2 connections)
+- **OpenAiService.cs** (11 connections)
+- **GenerateImageAsync()** (2 connections)
+- **catch()** (2 connections)
+- **var()** (2 connections)
 - **XPoster.Services** (2 connections)
 - **while()** (2 connections)
-- **Log()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 179]] (5 shared connections)
+- [[Community 142]] (5 shared connections)
 
 ## Audit Trail
 

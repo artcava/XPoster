@@ -1,21 +1,21 @@
 # Community 192
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **XPoster.Credentials** (2 connections)
-- **AddCredentials()** (2 connections)
+- **HttpResponseBodySanitizer.cs** (6 connections)
+- **XPoster.Services** (2 connections)
+- **SanitizeUrl()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 225]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

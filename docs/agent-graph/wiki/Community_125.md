@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **BuildPowerLawPostNode.cs** (5 connections)
-- **if()** (2 connections)
-- **BuildPowerLawPostNode()** (2 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **IMetaPublishingService.cs** (5 connections)
+- **GetContainerStatusAsync()** (2 connections)
+- **PublishContainerAsync()** (2 connections)
+- **IMetaPublishingService** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 

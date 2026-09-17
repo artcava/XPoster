@@ -6,11 +6,6 @@
 
 - **PromptRequestTests.cs** (16 connections)
 - **PromptRequestTests.cs** (16 connections)
-- **PromptRequest_OptionalProperties_DefaultToNull()** (2 connections)
-- **PromptRequest_ValueEquality_SameValues_AreEqual()** (2 connections)
-- **PromptRequest_RequiredProperties_AreSetCorrectly()** (2 connections)
-- **PromptRequest_ValueEquality_DifferentValues_AreNotEqual()** (2 connections)
-- **PromptRequest_Temperature_AcceptsZeroAndOne()** (2 connections)
 - **ImagePromptRequest_ImageProperties_AreSetCorrectly()** (2 connections)
 - **ImagePromptRequest_BaseProperties_AreAccessible()** (2 connections)
 - **PromptRequest_IsImmutable_AfterConstruction()** (2 connections)
@@ -19,8 +14,13 @@
 - **ImagePromptRequest_ValueEquality_SameValues_AreEqual()** (2 connections)
 - **ImagePromptRequest_IsImmutable_AfterConstruction()** (2 connections)
 - **PromptRequestTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **PromptRequest_RequiredProperties_AreSetCorrectly()** (2 connections)
+- **PromptRequest_ValueEquality_SameValues_AreEqual()** (2 connections)
+- **PromptRequest_Temperature_AcceptsZeroAndOne()** (2 connections)
+- **PromptRequest_ValueEquality_DifferentValues_AreNotEqual()** (2 connections)
+- **PromptRequest_OptionalProperties_DefaultToNull()** (2 connections)
 - **PromptRequest_OptionalProperties_AreSetCorrectly()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

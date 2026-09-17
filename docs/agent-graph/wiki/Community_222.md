@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AzureFoundryOptions.cs** (2 connections)
-- **XPoster.Models** (2 connections)
-- **AzureFoundryOptions.cs** (2 connections)
+- **MediaType.cs** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
+- **MediaType.cs** (2 connections)
 
 ## Relationships
 

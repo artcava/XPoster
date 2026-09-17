@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **return()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **AiTextNodeTests** (2 connections)
-- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
-- **static()** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
+- **AiServiceHelper.cs** (11 connections)
+- **ParseImageResponseAsync()** (2 connections)
+- **ExtractAzureFoundryBytesAsync()** (2 connections)
+- **ExtractFalAiBytesAsync()** (2 connections)
+- **ExtractOpenAiBytes()** (2 connections)
+- **BuildChatPayload()** (2 connections)
+- **LogAndReturnEmpty()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- [[Community 137]] (6 shared connections)
+- [[Community 197]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

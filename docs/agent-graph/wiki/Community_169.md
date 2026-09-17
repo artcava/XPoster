@@ -1,22 +1,22 @@
 # Community 169
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **static()** (2 connections)
-- **return()** (2 connections)
-- **ResponseBodyLogging_429Sequence_LogsEachRetryAttemptAndFinalSuccess()** (2 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **ITextToImageProvider.cs** (4 connections)
+- **XPoster.Contracts** (2 connections)
+- **GenerateImageAsync()** (2 connections)
+- **ITextToImageProvider** (2 connections)
 
 ## Relationships
 
-- [[Community 212]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

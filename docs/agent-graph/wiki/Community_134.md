@@ -1,23 +1,23 @@
 # Community 134
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator.cs** (5 connections)
-- **InstagramCredentialsValidator** (2 connections)
-- **XPoster.Credentials** (2 connections)
-- **Validate()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **ThrowIfNotSuccess()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
 - **if()** (2 connections)
+- **SignRequest()** (2 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 43]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

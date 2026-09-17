@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **catch()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **var()** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **GenerateTextAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
 - **if()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- [[Community 97]] (6 shared connections)
+- [[Community 199]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

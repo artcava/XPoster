@@ -27,6 +27,19 @@ public class XApiClientTests
     private static HttpResponseMessage OkJson(string body)
         => new(HttpStatusCode.OK) { Content = new StringContent(body, Encoding.UTF8, "application/json") };
 
+    private static bool ContainsSequence(byte[] haystack, byte[] needle)
+    {
+        for (var i = 0; i <= haystack.Length - needle.Length; i++)
+        {
+            if (haystack.AsSpan(i, needle.Length).SequenceEqual(needle))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     [Fact]
     public async Task CreateTweetAsync_WithText_ReturnsTweetId()
     {
@@ -128,6 +141,14 @@ public class XApiClientTests
         Assert.Contains("command=APPEND", appendQuery);
         Assert.Contains("segment_index=0", appendQuery);
 
+        Assert.NotNull(handler.Requests[1].Body);
+        Assert.StartsWith("--", handler.Requests[1].Body);
+        Assert.Contains("form-data", handler.Requests[1].Body);
+        Assert.Contains("media", handler.Requests[1].Body);
+        Assert.Contains("application/octet-stream", handler.Requests[1].Body);
+        Assert.NotNull(handler.Requests[1].BodyBytes);
+        Assert.True(ContainsSequence(handler.Requests[1].BodyBytes!, image));
+
         var finalizeQuery = handler.Requests[2].Message.RequestUri!.Query;
         Assert.Contains("command=FINALIZE", finalizeQuery);
 
@@ -168,6 +189,13 @@ public class XApiClientTests
         Assert.Contains("segment_index=0", handler.Requests[1].Message.RequestUri!.Query);
         Assert.Contains("segment_index=1", handler.Requests[2].Message.RequestUri!.Query);
         Assert.Contains("command=FINALIZE", handler.Requests[3].Message.RequestUri!.Query);
+
+        Assert.StartsWith("--", handler.Requests[1].Body);
+        Assert.StartsWith("--", handler.Requests[2].Body);
+        Assert.NotNull(handler.Requests[1].BodyBytes);
+        Assert.NotNull(handler.Requests[2].BodyBytes);
+        Assert.True(ContainsSequence(handler.Requests[1].BodyBytes!, image[..XApiClient.MediaSegmentMaxBytes]));
+        Assert.True(ContainsSequence(handler.Requests[2].BodyBytes!, image[^1..]));
     }
 
     [Fact]

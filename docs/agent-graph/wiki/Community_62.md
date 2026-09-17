@@ -1,26 +1,26 @@
 # Community 62
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **XPosterContainerPollingFunctionTests.cs** (20 connections)
-- **RunAsync_WhenUpdateStatusThrows_PropagatesException()** (2 connections)
-- **RunAsync_WhenPublishFails_MarksFailedAndCleansUp()** (2 connections)
-- **RunAsync_WhenStatusIsFinished_PublishesAndCleansUp()** (2 connections)
-- **RunAsync_WhenStatusIsExpired_MarksFailedAndCleansUp()** (2 connections)
-- **CreateTimerInfo()** (2 connections)
-- **PendingContainer()** (2 connections)
-- **RunAsync_WhenBlobDeleteFails_StillUpdatesStatus()** (2 connections)
-- **RunAsync_WhenCancelled_StopsGracefully()** (2 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **AiModelCatalog.cs** (8 connections)
+- **if()** (2 connections)
+- **InvalidOperationException()** (2 connections)
+- **TryGet()** (2 connections)
+- **XPoster.Models** (2 connections)
+- **Supports()** (2 connections)
+- **AiModelCatalog()** (2 connections)
+- **GetRequired()** (2 connections)
 
 ## Relationships
 
-- [[Community 41]] (11 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
