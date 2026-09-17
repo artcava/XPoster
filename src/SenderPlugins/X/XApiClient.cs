@@ -122,6 +122,8 @@ public sealed class XApiClient
 
     /// <summary>
     /// Uploads the media bytes in chunks of <see cref="MediaSegmentMaxBytes"/> or smaller.
+    /// Each chunk is sent as a <c>media</c> part in a <c>multipart/form-data</c> body, as
+    /// required by the v1.1 media-upload APPEND command.
     /// </summary>
     private async Task AppendMediaSegmentsAsync(byte[] media, string mediaId, CancellationToken ct)
     {
@@ -141,10 +143,11 @@ public sealed class XApiClient
             };
 
             using var request = BuildSignedRequest(parameters);
-            request.Content = new ByteArrayContent(chunk)
+            var mediaPart = new ByteArrayContent(chunk)
             {
                 Headers = { ContentType = new MediaTypeHeaderValue("application/octet-stream") }
             };
+            request.Content = new MultipartFormDataContent { { mediaPart, "media", "media" } };
 
             using var response = await _httpClient.SendAsync(request, ct);
             var body = await response.Content.ReadAsStringAsync(ct);

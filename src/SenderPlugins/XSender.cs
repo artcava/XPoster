@@ -1,3 +1,4 @@
+using SkiaSharp;
 using XPoster.Contracts;
 using XPoster.Models;
 
@@ -60,8 +61,17 @@ public class XSender : ISender
 
             if (post.Image is { Length: > 0 })
             {
-                var mediaId = await _apiClient.UploadMediaAsync(post.Image, "image/jpeg", ct);
-                tweetId = await _apiClient.CreateTweetAsync(postText, mediaId, ct);
+                var mediaType = DetectImageMediaType(post.Image);
+                if (mediaType is null)
+                {
+                    _logger.LogWarning("[XSender] Unable to detect image format. Publishing text-only.");
+                    tweetId = await _apiClient.CreateTweetAsync(postText, mediaId: null, ct);
+                }
+                else
+                {
+                    var mediaId = await _apiClient.UploadMediaAsync(post.Image, mediaType, ct);
+                    tweetId = await _apiClient.CreateTweetAsync(postText, mediaId, ct);
+                }
             }
             else
             {
@@ -85,6 +95,32 @@ public class XSender : ISender
         {
             _logger.LogError(ex, "[XSender] {Message}", ex.Message);
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Detects the MIME type of the given image bytes using its encoded format. Returns
+    /// <c>null</c> when the format cannot be identified or is not supported by the
+    /// v1.1 media-upload INIT command (JPEG, PNG, GIF, WebP are supported).
+    /// </summary>
+    private string? DetectImageMediaType(byte[] imageBytes)
+    {
+        try
+        {
+            using var codec = SKCodec.Create(new SKMemoryStream(imageBytes));
+            return codec?.EncodedFormat switch
+            {
+                SKEncodedImageFormat.Jpeg => "image/jpeg",
+                SKEncodedImageFormat.Png => "image/png",
+                SKEncodedImageFormat.Gif => "image/gif",
+                SKEncodedImageFormat.Webp => "image/webp",
+                _ => null
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "[XSender] Failed to detect image format.");
+            return null;
         }
     }
 }
