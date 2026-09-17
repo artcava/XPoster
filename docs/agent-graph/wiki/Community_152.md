@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestratorFactory.cs** (4 connections)
-- **IOrchestratorFactory.cs** (4 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **IOrchestratorFactory** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **ImagePromptRequest** (2 connections)
+- **PromptRequest** (2 connections)
+- **XPoster.Models** (2 connections)
 
 ## Relationships
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
-- **ResponseBodyLogging_402_LogsSanitizedBodyAtErrorWithHeaders()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
 - **var()** (2 connections)
-- **ResponseBodyLogging_SuccessLogsBodyReadableByConsumer()** (2 connections)
+- **if()** (2 connections)
+- **SetupSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 169]] (4 shared connections)
+- [[Community 30]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

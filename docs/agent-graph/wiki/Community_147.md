@@ -1,22 +1,22 @@
 # Community 147
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **PromptRequest.cs** (4 connections)
-- **PromptRequest.cs** (4 connections)
-- **ImagePromptRequest** (2 connections)
-- **PromptRequest** (2 connections)
-- **XPoster.Models** (2 connections)
+- **PerplexityService.cs** (8 connections)
+- **XPoster.Services** (2 connections)
+- **var()** (2 connections)
+- **if()** (2 connections)
+- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 200]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

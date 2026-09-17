@@ -1,21 +1,21 @@
 # Community 183
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **XSenderTests.cs** (22 connections)
+- **HttpResponseMessage()** (2 connections)
+- **if()** (2 connections)
+- **BuildSender()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 11]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

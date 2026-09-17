@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **LinkedInResiliencePipelineTests.cs** (9 connections)
-- **StringContent()** (2 connections)
 - **catch()** (2 connections)
+- **StringContent()** (2 connections)
 - **Polly_LinkedIn_OnRetry_LogEntryIsEmitted()** (2 connections)
 
 ## Relationships
 
-- [[Community 119]] (5 shared connections)
+- [[Community 118]] (5 shared connections)
 
 ## Audit Trail
 

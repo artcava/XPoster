@@ -1,24 +1,24 @@
 # Community 97
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **GenerateImageAsync()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
-- **GetImageGenerationEndpoint()** (2 connections)
-- **AzureFoundryService()** (2 connections)
+- **AiTextNode.cs** (6 connections)
+- **AiTextNode.cs** (6 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
+- **AiTextNode()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **if()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 141]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

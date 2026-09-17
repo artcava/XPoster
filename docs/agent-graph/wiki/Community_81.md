@@ -1,25 +1,25 @@
 # Community 81
 
-> 8 nodes · cohesion 0.46
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService.cs** (7 connections)
-- **BlobStorageService()** (2 connections)
-- **if()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **BlobUploadResult()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **UploadAsync()** (2 connections)
+- **BuildPowerLawPostNodeTests.cs** (13 connections)
+- **WorkflowNodeInput()** (2 connections)
+- **new()** (2 connections)
+- **XPoster.Tests.Workflows.Nodes** (2 connections)
+- **Execute_ComputesFairValueAndAppendsDelta_WhenActualPositive()** (2 connections)
+- **Execute_CalculatesCorrectPowerLawValue_ForFixedDate()** (2 connections)
+- **CreateNode()** (2 connections)
+- **Execute_OmitsDelta_WhenActualValueZeroOrMissing()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 123]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

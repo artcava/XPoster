@@ -1,21 +1,21 @@
 # Community 215
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **WorkflowExecutionResult.cs** (3 connections)
-- **WorkflowExecutionResult.cs** (3 connections)
-- **XPoster.Workflows.Engine** (2 connections)
-- **WorkflowExecutionResult()** (2 connections)
+- **BaseOrchestrator.cs** (6 connections)
+- **XPoster.Orchestrators** (2 connections)
+- **BaseOrchestrator()** (2 connections)
+- **PostAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 236]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

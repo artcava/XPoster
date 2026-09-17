@@ -1,25 +1,25 @@
 # Community 89
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **FetchRssNodeTests.cs** (13 connections)
-- **Execute_ReturnsFailure_WhenNoContentRetrieved()** (2 connections)
-- **Execute_ReturnsFailure_WhenNoUrlsProvided()** (2 connections)
-- **foreach()** (2 connections)
-- **FetchRssNodeTests** (2 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **static()** (2 connections)
-- **return()** (2 connections)
+- **PostTests.cs** (7 connections)
+- **PostTests.cs** (7 connections)
+- **Post_DefaultImageIsNull()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
+- **PostTests** (2 connections)
+- **Post_EmptyContent_IsAllowed()** (2 connections)
+- **Post_CanSetAndGetAllProperties()** (2 connections)
+- **Firm_IsNotNullOrEmpty()** (2 connections)
 
 ## Relationships
 
-- [[Community 112]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **XPoster.Workflows.Models** (2 connections)
-- **MediaType.cs** (2 connections)
-- **MediaType.cs** (2 connections)
+- **PerplexityOptions.cs** (2 connections)
+- **XPoster.Models** (2 connections)
+- **PerplexityOptions.cs** (2 connections)
 
 ## Relationships
 

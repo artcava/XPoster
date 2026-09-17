@@ -1,22 +1,22 @@
 # Community 177
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **PerplexityService.cs** (8 connections)
-- **var()** (2 connections)
-- **XPoster.Services** (2 connections)
+- **WorkflowOrchestrator.cs** (4 connections)
+- **WorkflowOrchestrator.cs** (4 connections)
+- **WorkflowOrchestrator()** (2 connections)
+- **XPoster.Orchestrators** (2 connections)
 - **if()** (2 connections)
-- **GenerateTextAsync()** (2 connections)
 
 ## Relationships
 
-- [[Community 200]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

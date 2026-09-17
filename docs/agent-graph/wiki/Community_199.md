@@ -5,13 +5,13 @@
 ## Key Concepts
 
 - **DeepSeekService.cs** (8 connections)
-- **while()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
 - **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- [[Community 178]] (4 shared connections)
+- [[Community 141]] (4 shared connections)
 
 ## Audit Trail
 

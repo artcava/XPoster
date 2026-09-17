@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IOrchestrator.cs** (4 connections)
-- **IOrchestrator.cs** (4 connections)
-- **PostAsync()** (2 connections)
-- **IOrchestrator** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **ConfigurationStepOptionsResolver.cs** (4 connections)
+- **Resolve()** (2 connections)
+- **ConfigurationStepOptionsResolver()** (2 connections)
+- **XPoster.Workflows.Services** (2 connections)
 
 ## Relationships
 

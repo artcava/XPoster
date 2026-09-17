@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **LinkedInCredentials.cs** (2 connections)
-- **LinkedInCredentials.cs** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **PromptStepOptions.cs** (2 connections)
+- **PromptStepOptions.cs** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 

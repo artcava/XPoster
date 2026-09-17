@@ -1,24 +1,24 @@
 # Community 107
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode.cs** (6 connections)
-- **ExecuteAsync()** (2 connections)
-- **XPoster.Workflows.Nodes** (2 connections)
-- **WorkflowNodeResult()** (2 connections)
-- **if()** (2 connections)
-- **AiImageNode()** (2 connections)
+- **HttpResponseBodyLoggingHandlerTests.cs** (25 connections)
+- **var()** (2 connections)
+- **static()** (2 connections)
+- **return()** (2 connections)
+- **SendAsync_NotEnabled_SuccessNotLogged()** (2 connections)
+- **SendAsync_OptOutHeader_LogsNothing()** (2 connections)
+- **SendAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 12]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 37 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

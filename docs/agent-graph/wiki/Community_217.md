@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpResponseBodySanitizer.cs** (6 connections)
-- **Sanitize()** (2 connections)
+- **HttpClientExtensions.cs** (7 connections)
 - **if()** (2 connections)
+- **IsTransientHttpFailure()** (2 connections)
 
 ## Relationships
 
-- [[Community 185]] (3 shared connections)
+- [[Community 173]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
