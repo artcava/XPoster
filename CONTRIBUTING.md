@@ -58,7 +58,7 @@ All branches must follow this pattern:
 - `fix/` - Bug fixes (e.g., `fix/twitter-timeout`)
 - `hotfix/` - Critical fixes for production (e.g., `hotfix/security-patch`)
 - `docs/` - Documentation updates (e.g., `docs/api-guide`)
-- `refactor/` - Code refactoring (e.g., `refactor/generator-factory`)
+- `refactor/` - Code refactoring (e.g., `refactor/orchestrator-selection`)
 - `test/` - Test additions/updates (e.g., `test/feed-service`)
 
 ## 🔀 Pull Request Process

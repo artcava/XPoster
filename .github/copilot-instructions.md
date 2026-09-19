@@ -6,10 +6,10 @@ Generate code changes that preserve XPoster architecture, runtime behavior, and 
 ## Project Type And Runtime
 - This repository is an Azure Functions app using .NET isolated worker.
 - Treat this project as serverless orchestration.
-- Keep guidance aligned with .NET 8 and Azure Functions v4 unless explicitly requested otherwise.
+- Keep guidance aligned with .NET 10 and Azure Functions v4 unless explicitly requested otherwise.
 
 ## Architecture Rules
-- Keep function entrypoints thin: orchestration belongs in function classes, business logic belongs in generators/services/senders.
+- Keep function entrypoints thin: orchestration belongs in function classes, business logic belongs in orchestrators, workflow nodes, services, and sender plugins.
 - Preserve current Strategy + Factory + Plugin model.
 - Prefer extending existing abstractions over adding parallel patterns.
 
@@ -34,18 +34,18 @@ Generate code changes that preserve XPoster architecture, runtime behavior, and 
 ## Logging And Monitoring
 - Use structured logs with meaningful context fields.
 - Keep Application Insights/telemetry compatibility intact.
-- Ensure logs are useful for diagnosing schedule, generator selection, publish outcome, and error paths.
+- Ensure logs are useful for diagnosing schedule, orchestrator selection, publish outcome, and error paths.
 - Prefer clear operational signals over verbose noise.
 
 ## Sender Plugin Conventions
 - Platform-specific publishing logic belongs in sender plugins implementing shared sender contracts.
-- Preserve sender boundary: generators produce content, senders publish content.
+- Preserve sender boundary: workflow nodes produce content, senders publish content.
 - Keep sender-specific constraints (message length, payload shape, API requirements) encapsulated in the sender layer.
 
-## Generator And Factory Conventions
-- Generator selection logic remains centralized in factory mapping.
+## Orchestrator And Factory Conventions
+- Orchestrator selection logic remains centralized in factory mapping.
 - Any scheduling or slot behavior change should be reflected in corresponding tests.
-- Keep generators focused on content production flow, not infrastructure wiring concerns.
+- Keep workflow nodes focused on content production flow, not infrastructure wiring concerns.
 
 ## .NET And C# Conventions
 - Keep nullable reference types enabled and address nullability intentionally.
@@ -59,7 +59,7 @@ Generate code changes that preserve XPoster architecture, runtime behavior, and 
 - Prefer focused Arrange/Act/Assert tests.
 - Prioritize tests for:
   - function orchestration success/failure paths
-  - generator selection and schedule mapping
+  - orchestrator selection and schedule mapping
   - sender behavior under success and failure conditions
   - service-level edge cases for external API responses
 
