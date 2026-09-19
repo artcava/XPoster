@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-09-19
+
 ### Added
 - **Outbound HTTP response-body logging** ([#279](https://github.com/artcava/XPoster/issues/279)): every named resilient HTTP client now logs the response body of each attempt through `HttpResponseBodyLoggingHandler` — 4xx/5xx at **Error** (with `Content-Type`, `Content-Length`, `Retry-After`, `X-RateLimit-*` headers), 2xx at **Debug**. Bodies are truncated at 4 KB, skipped for binary content types and payloads with known `Content-Length > 4 KB`, and redacted of secrets (`Bearer` tokens, `api_key`, `access_token`, `refresh_token`, `client_secret`, `session_token`, `token`). Because the handler sits inside the Polly pipeline, every retry attempt is logged individually. Per-request opt-out via the `X-XPoster-Skip-ResponseLog: true` request header.
 
@@ -404,7 +406,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <!-- Links -->
-[Unreleased]: https://github.com/artcava/XPoster/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/artcava/XPoster/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/artcava/XPoster/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/artcava/XPoster/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/artcava/XPoster/compare/v0.1.9...v0.2.0
 [0.1.9]: https://github.com/artcava/XPoster/compare/v0.1.8...v0.1.9
