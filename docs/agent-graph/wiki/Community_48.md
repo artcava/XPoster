@@ -8,13 +8,13 @@
 - **XOAuth1Signer.cs** (10 connections)
 - **XPoster.SenderPlugins** (2 connections)
 - **PercentEncode()** (2 connections)
-- **ParseQueryString()** (2 connections)
-- **BuildAuthorizationHeader()** (2 connections)
-- **ComputeSignatureBaseString()** (2 connections)
-- **GetBaseUri()** (2 connections)
 - **if()** (2 connections)
+- **BuildAuthorizationHeader()** (2 connections)
+- **GetBaseUri()** (2 connections)
+- **ComputeSignatureBaseString()** (2 connections)
 - **foreach()** (2 connections)
 - **ComputeSignature()** (2 connections)
+- **ParseQueryString()** (2 connections)
 
 ## Relationships
 

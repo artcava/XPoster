@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DryRunSender.cs** (5 connections)
-- **DryRunSender.cs** (5 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **SendAsync()** (2 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
+- **WorkflowDefinitionValidator.cs** (5 connections)
 - **if()** (2 connections)
-- **DryRunSender()** (2 connections)
+- **HasCycle()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Workflows.Engine** (2 connections)
 
 ## Relationships
 

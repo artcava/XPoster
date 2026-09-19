@@ -4,16 +4,16 @@
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
+- **XCredentialsValidator.cs** (4 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 132]] (5 shared connections)
+- [[Community 241]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 9 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,21 +1,21 @@
 # Community 205
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **FanOutSendNodeTests.cs** (17 connections)
-- **if()** (2 connections)
-- **var()** (2 connections)
-- **SetupSender()** (2 connections)
+- **WorkflowNodeDefinition.cs** (3 connections)
+- **WorkflowNodeDefinition.cs** (3 connections)
+- **XPoster.Workflows.Engine** (2 connections)
+- **WorkflowNodeDefinition()** (2 connections)
 
 ## Relationships
 
-- [[Community 32]] (13 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

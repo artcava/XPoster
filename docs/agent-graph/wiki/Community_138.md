@@ -1,23 +1,23 @@
 # Community 138
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IWorkflowContext.cs** (5 connections)
-- **IWorkflowContext.cs** (5 connections)
-- **HasData()** (2 connections)
-- **IWorkflowContext** (2 connections)
-- **SetData()** (2 connections)
-- **XPoster.Workflows.Models** (2 connections)
+- **XApiException.cs** (7 connections)
+- **BuildMessage()** (2 connections)
+- **catch()** (2 connections)
+- **foreach()** (2 connections)
+- **XApiException()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 248]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

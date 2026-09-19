@@ -4,19 +4,19 @@
 
 ## Key Concepts
 
-- **HttpClientExtensions.cs** (7 connections)
-- **AddResilientHttpClient()** (2 connections)
-- **AddHttpResponseBodyLogging()** (2 connections)
-- **AddHttpClients()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **XApiClientTests.cs** (19 connections)
+- **BuildApiClient()** (2 connections)
+- **HttpResponseMessage()** (2 connections)
+- **if()** (2 connections)
+- **OkJson()** (2 connections)
 
 ## Relationships
 
-- [[Community 224]] (3 shared connections)
+- [[Community 26]] (14 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

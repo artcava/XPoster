@@ -1,21 +1,21 @@
 # Community 196
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator.cs** (3 connections)
-- **NoOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **HttpResponseBodySanitizer.cs** (6 connections)
+- **foreach()** (2 connections)
+- **SanitizeUrl()** (2 connections)
+- **XPoster.Services** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 218]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

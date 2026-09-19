@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiServiceHelperImageTests.cs** (37 connections)
-- **var()** (2 connections)
-- **JsonResponse()** (2 connections)
-- **MakeNoOpClient()** (2 connections)
-- **MakeDownloadClient()** (2 connections)
-- **HttpClient()** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
+- **catch()** (2 connections)
+- **IsJsonLike()** (2 connections)
+- **GetProvider()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- [[Community 3]] (31 shared connections)
+- [[Community 220]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

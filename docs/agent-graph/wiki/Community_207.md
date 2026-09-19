@@ -1,21 +1,21 @@
 # Community 207
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **CredentialsExtensions.cs** (3 connections)
-- **CredentialsExtensions.cs** (3 connections)
-- **AddCredentials()** (2 connections)
-- **XPoster.Credentials** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
+- **while()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 147]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

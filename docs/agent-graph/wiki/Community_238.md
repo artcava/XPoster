@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **BaseOrchestrator.cs** (6 connections)
-- **DispatchAsync()** (2 connections)
+- **InSender.cs** (11 connections)
 - **if()** (2 connections)
+- **InSender()** (2 connections)
 
 ## Relationships
 
-- [[Community 215]] (3 shared connections)
+- [[Community 68]] (8 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

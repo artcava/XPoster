@@ -1,20 +1,20 @@
 # Community 236
 
-> 3 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **XPoster.Workflows.Models** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
-- **PromptStepOptions.cs** (2 connections)
+- **HttpClientExtensions.cs** (7 connections)
+- **IsTransientHttpFailure()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 171]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

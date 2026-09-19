@@ -1,22 +1,22 @@
 # Community 153
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (19 connections)
-- **BuildApiClient()** (2 connections)
-- **OkJson()** (2 connections)
-- **if()** (2 connections)
-- **HttpResponseMessage()** (2 connections)
+- **PromptRequest.cs** (4 connections)
+- **PromptRequest.cs** (4 connections)
+- **XPoster.Models** (2 connections)
+- **PromptRequest** (2 connections)
+- **ImagePromptRequest** (2 connections)
 
 ## Relationships
 
-- [[Community 28]] (14 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

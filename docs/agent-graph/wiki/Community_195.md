@@ -4,10 +4,10 @@
 
 ## Key Concepts
 
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
-- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **AiProviderServiceCollectionExtensions.cs** (3 connections)
+- **AiProviderServiceCollectionExtensions.cs** (3 connections)
+- **AddXPosterAiProviders()** (2 connections)
 - **XPoster.Extensions** (2 connections)
-- **AddXPosterSenderPlugins()** (2 connections)
 
 ## Relationships
 

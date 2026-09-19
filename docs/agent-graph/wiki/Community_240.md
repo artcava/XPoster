@@ -4,9 +4,9 @@
 
 ## Key Concepts
 
-- **AiModelClass.cs** (2 connections)
-- **XPoster.Contracts** (2 connections)
-- **AiModelClass.cs** (2 connections)
+- **WorkflowContextKeys.cs** (2 connections)
+- **WorkflowContextKeys.cs** (2 connections)
+- **XPoster.Workflows.Models** (2 connections)
 
 ## Relationships
 

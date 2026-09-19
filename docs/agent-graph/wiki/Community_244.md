@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **HttpResponseBodySanitizer.cs** (6 connections)
-- **Sanitize()** (2 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
+- **TryLogAsync()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 184]] (3 shared connections)
+- [[Community 112]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

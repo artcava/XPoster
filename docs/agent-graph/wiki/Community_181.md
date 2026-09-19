@@ -1,21 +1,21 @@
 # Community 181
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender.cs** (3 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **DryRunShortLengthSender()** (2 connections)
+- **WorkflowDefinitionValidatorTests.cs** (19 connections)
+- **Node()** (2 connections)
+- **new()** (2 connections)
+- **ExecuteAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 22]] (15 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

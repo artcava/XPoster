@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **IgSenderTests.cs** (16 connections)
-- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
-- **IgSender()** (2 connections)
-- **IgSenderTests()** (2 connections)
-- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
-- **IgSender_ImplementsISender()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **AppendMediaSegmentsAsync()** (2 connections)
+- **if()** (2 connections)
+- **ThrowIfNotSuccess()** (2 connections)
+- **FinalizeMediaAsync()** (2 connections)
+- **SignRequest()** (2 connections)
 
 ## Relationships
 
-- [[Community 52]] (10 shared connections)
+- [[Community 41]] (11 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

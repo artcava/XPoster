@@ -1,19 +1,19 @@
 # Community 112
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Program.cs** (5 connections)
-- **Program.cs** (5 connections)
-- **BlobServiceClient()** (2 connections)
-- **Uri()** (2 connections)
-- **if()** (2 connections)
-- **DefaultAzureCredential()** (2 connections)
+- **HttpResponseBodyLoggingHandler.cs** (8 connections)
+- **IsBinaryMediaType()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.Services** (2 connections)
+- **HttpResponseBodyLoggingHandler()** (2 connections)
+- **foreach()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 244]] (3 shared connections)
 
 ## Audit Trail
 

@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **var()** (2 connections)
-- **if()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **catch()** (2 connections)
+- **ResilienceTestHelpers.cs** (11 connections)
+- **_responder()** (2 connections)
+- **SendAsync()** (2 connections)
+- **params()** (2 connections)
+- **BuildFactory()** (2 connections)
 
 ## Relationships
 
-- [[Community 104]] (6 shared connections)
+- [[Community 100]] (6 shared connections)
 
 ## Audit Trail
 

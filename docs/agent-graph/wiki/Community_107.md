@@ -4,13 +4,13 @@
 
 ## Key Concepts
 
-- **XSenderSendAsyncTests.cs** (6 connections)
-- **XSenderSendAsyncTests.cs** (6 connections)
-- **XSenderSendAsyncTests()** (2 connections)
-- **SendAsync_WithEmptyContent_ReturnsFalse()** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **SendAsync_WithNullPost_ReturnsFalse()** (2 connections)
-- **SendAsync_WithWhiteSpaceContent_ReturnsFalse()** (2 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **AzureFoundryOptionsValidatorTests.cs** (6 connections)
+- **Validate_MissingRequiredProperties_Fails()** (2 connections)
+- **AzureFoundryOptionsValidatorTests** (2 connections)
+- **Validate_ValidOptions_Succeeds()** (2 connections)
+- **ValidOptions()** (2 connections)
+- **XPoster.Tests.Models** (2 connections)
 
 ## Relationships
 

@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **ResilienceTestHelpers.cs** (11 connections)
-- **SendAsync()** (2 connections)
-- **_responder()** (2 connections)
-- **params()** (2 connections)
-- **BuildFactory()** (2 connections)
+- **HttpResponseBodyLogger.cs** (11 connections)
+- **TruncateUtf8()** (2 connections)
+- **SanitizeAndTruncate()** (2 connections)
+- **if()** (2 connections)
+- **FormatResponseHeaders()** (2 connections)
 
 ## Relationships
 
-- [[Community 92]] (6 shared connections)
+- [[Community 108]] (6 shared connections)
 
 ## Audit Trail
 

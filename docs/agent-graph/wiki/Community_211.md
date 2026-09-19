@@ -1,21 +1,21 @@
 # Community 211
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed.cs** (3 connections)
-- **RSSFeed** (2 connections)
-- **XPoster.Models** (2 connections)
+- **WorkflowExecutionEngineTests.cs** (24 connections)
+- **new()** (2 connections)
+- **StubNode()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 10]] (20 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 30 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **XApiException.cs** (7 connections)
-- **foreach()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **XApiException()** (2 connections)
-- **BuildMessage()** (2 connections)
-- **catch()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **IgSender()** (2 connections)
+- **IgSender_ImplementsISender()** (2 connections)
+- **IgSenderTests()** (2 connections)
+- **Constructor_WithNullBlobStorageService_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullCredentials_ThrowsArgumentNullException()** (2 connections)
 
 ## Relationships
 
-- [[Community 249]] (2 shared connections)
+- [[Community 51]] (10 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

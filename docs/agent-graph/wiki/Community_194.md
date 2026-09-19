@@ -1,21 +1,21 @@
 # Community 194
 
-> 4 nodes · cohesion 0.50
+> 4 nodes · cohesion 0.83
 
 ## Key Concepts
 
-- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
-- **ResponseBodyLogging_402_LogsSanitizedBodyAtErrorWithHeaders()** (2 connections)
-- **ResponseBodyLogging_SuccessLogsBodyReadableByConsumer()** (2 connections)
-- **var()** (2 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **SenderPluginsServiceCollectionExtensions.cs** (3 connections)
+- **AddXPosterSenderPlugins()** (2 connections)
+- **XPoster.Extensions** (2 connections)
 
 ## Relationships
 
-- [[Community 156]] (4 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

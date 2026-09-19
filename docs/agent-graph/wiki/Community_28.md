@@ -1,32 +1,32 @@
 # Community 28
 
-> 15 nodes · cohesion 0.13
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **XApiClientTests.cs** (19 connections)
-- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
-- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
-- **ContainsSequence()** (2 connections)
-- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
-- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
-- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
-- **foreach()** (2 connections)
-- **for()** (2 connections)
-- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
-- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
-- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
-- **XApiClientTests** (2 connections)
-- **XPoster.Tests.SenderPlugins** (2 connections)
-- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **BlobStorageServiceTests.cs** (14 connections)
+- **Constructor_WhenContainerNameIsEmpty_UsesDefaultName()** (2 connections)
+- **BlobStorageServiceTests** (2 connections)
+- **BlobStorageService()** (2 connections)
+- **CreateSut()** (2 connections)
+- **UploadAsync_WhenStorageThrows_PropagatesException()** (2 connections)
+- **DeleteAsync_WithEmptyBlobName_ThrowsArgumentException()** (2 connections)
+- **UploadAsync_WhenContainerDoesNotExist_CreatesItAndUploads()** (2 connections)
+- **DeleteAsync_WithNullBlobName_ThrowsArgumentException()** (2 connections)
+- **UploadAsync_SasUriExpiry_IsApproximately30Minutes()** (2 connections)
+- **UploadAsync_WhenBlobClientSucceeds_ReturnsSasUri()** (2 connections)
+- **XPoster.Tests.Services** (2 connections)
+- **DeleteAsync_WhenBlobDoesNotExist_LogsDebugAndDoesNotThrow()** (2 connections)
+- **DeleteAsync_WhenBlobExists_DeletesSuccessfully()** (2 connections)
 
 ## Relationships
 
-- [[Community 153]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 47 (100%)
+- EXTRACTED: 54 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

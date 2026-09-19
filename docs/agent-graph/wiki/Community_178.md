@@ -1,22 +1,22 @@
 # Community 178
 
-> 5 nodes · cohesion 0.70
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **WorkflowOrchestrator.cs** (4 connections)
-- **WorkflowOrchestrator.cs** (4 connections)
-- **if()** (2 connections)
-- **WorkflowOrchestrator()** (2 connections)
-- **XPoster.Orchestrators** (2 connections)
+- **InstagramResiliencePipelineTests.cs** (8 connections)
+- **Polly_Instagram_CircuitBreaker_OpensAfterConsecutiveFailures()** (2 connections)
+- **Polly_Instagram_RetriesOn429_AndEventuallySucceeds()** (2 connections)
+- **XPoster.Tests.Integration** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 199]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
