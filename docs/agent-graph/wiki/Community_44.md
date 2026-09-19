@@ -1,29 +1,29 @@
 # Community 44
 
-> 12 nodes · cohesion 0.32
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProviderTests.cs** (11 connections)
-- **ConfigurationTagReplacementProvider()** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsIsEmpty()** (2 connections)
-- **ConfigurationTagReplacementProviderTests** (2 connections)
-- **foreach()** (2 connections)
-- **GetReplacements_Should_ReturnConfiguredReplacements_When_OptionsContainsEntries()** (2 connections)
-- **GetReplacements_Should_PreserveAllEntries_When_MultipleReplacementsConfigured()** (2 connections)
-- **Constructor_Should_Throw_When_OptionsIsNull()** (2 connections)
-- **GetReplacements_Should_ReturnReadOnlyDictionary()** (2 connections)
-- **XPoster.Tests.Providers** (2 connections)
-- **GetReplacements_Should_ReturnEmptyDictionary_When_ReplacementsPropertyIsNull()** (2 connections)
+- **XApiClient.cs** (17 connections)
+- **HasErrorPayload()** (2 connections)
+- **for()** (2 connections)
+- **catch()** (2 connections)
+- **CreateTweetAsync()** (2 connections)
+- **ArgumentException()** (2 connections)
+- **BuildSignedRequest()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **UploadMediaAsync()** (2 connections)
+- **XApiException()** (2 connections)
+- **XApiClient()** (2 connections)
+- **InitializeMediaAsync()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 134]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 42 (100%)
+- EXTRACTED: 39 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,25 +1,25 @@
 # Community 83
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.46
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **XPoster.Tests.Workflows.Nodes** (2 connections)
-- **Execute_ReturnsFailure_WhenProviderReturnsEmpty()** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
-- **Execute_Throws_WhenProviderNameIsUnknown()** (2 connections)
-- **return()** (2 connections)
-- **static()** (2 connections)
-- **AiTextNodeTests** (2 connections)
+- **FanOutSendNode.cs** (7 connections)
+- **FanOutSendNode.cs** (7 connections)
+- **ExecuteAsync()** (2 connections)
+- **FanOutSendNode()** (2 connections)
+- **if()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
+- **foreach()** (2 connections)
+- **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships
 
-- [[Community 132]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

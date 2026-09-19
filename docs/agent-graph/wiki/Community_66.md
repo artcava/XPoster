@@ -4,15 +4,15 @@
 
 ## Key Concepts
 
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **PollyIntegrationTestBase.cs** (8 connections)
-- **HttpResponseMessage()** (2 connections)
-- **BuildDelayedHandler()** (2 connections)
-- **BuildSequenceHandler()** (2 connections)
-- **BuildProviderWithHandler()** (2 connections)
-- **XPoster.Tests.Integration** (2 connections)
-- **params()** (2 connections)
-- **var()** (2 connections)
+- **XSenderResilienceTests.cs** (8 connections)
+- **XSenderResilienceTests.cs** (8 connections)
+- **SendAsync_WhenPostIsNull_ReturnsFalseAndLogsWarning()** (2 connections)
+- **SendAsync_WhenHttpRequestExceptionThrown_ReturnsFalseAndLogsError()** (2 connections)
+- **BuildSender()** (2 connections)
+- **SendAsync_WhenContentIsBlank_ReturnsFalseAndLogsWarning()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **XSenderResilienceTests** (2 connections)
+- **SendAsync_WhenTextTweetReturns402_ReturnsFalseAndLogsError()** (2 connections)
 
 ## Relationships
 

@@ -1,24 +1,24 @@
 # Community 93
 
-> 7 nodes · cohesion 0.52
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **IgSender.cs** (6 connections)
-- **IgSender.cs** (6 connections)
-- **if()** (2 connections)
-- **IgSender()** (2 connections)
-- **catch()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **HttpResponseBodyLoggingHandlerTests.cs** (25 connections)
+- **var()** (2 connections)
 - **SendAsync()** (2 connections)
+- **SendAsync_OptOutHeader_LogsNothing()** (2 connections)
+- **SendAsync_NotEnabled_SuccessNotLogged()** (2 connections)
+- **static()** (2 connections)
+- **return()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 11]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 37 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **AiImageNode.cs** (6 connections)
-- **AiImageNode.cs** (6 connections)
-- **WorkflowNodeResult()** (2 connections)
+- **AiTextNode.cs** (6 connections)
+- **AiTextNode.cs** (6 connections)
 - **if()** (2 connections)
-- **AiImageNode()** (2 connections)
 - **ExecuteAsync()** (2 connections)
+- **AiTextNode()** (2 connections)
+- **WorkflowNodeResult()** (2 connections)
 - **XPoster.Workflows.Nodes** (2 connections)
 
 ## Relationships

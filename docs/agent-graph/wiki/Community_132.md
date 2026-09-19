@@ -4,20 +4,20 @@
 
 ## Key Concepts
 
-- **AiTextNodeTests.cs** (13 connections)
-- **Execute_PassesStepOptionsToPromptRequest()** (2 connections)
-- **Execute_Throws_WhenValidProviderNotRegistered()** (2 connections)
-- **var()** (2 connections)
-- **Input()** (2 connections)
-- **Execute_ReturnsGeneratedText()** (2 connections)
+- **XApiException.cs** (7 connections)
+- **foreach()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
+- **XApiException()** (2 connections)
+- **BuildMessage()** (2 connections)
+- **catch()** (2 connections)
 
 ## Relationships
 
-- [[Community 83]] (7 shared connections)
+- [[Community 249]] (2 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

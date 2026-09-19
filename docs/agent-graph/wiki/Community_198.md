@@ -1,21 +1,21 @@
 # Community 198
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender.cs** (3 connections)
-- **DryRunShortLengthSender()** (2 connections)
-- **XPoster.SenderPlugins** (2 connections)
+- **DeepSeekService.cs** (8 connections)
+- **while()** (2 connections)
+- **DeepSeekService()** (2 connections)
+- **GetChatCompletionsEndpoint()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 148]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,32 +1,32 @@
 # Community 28
 
-> 15 nodes · cohesion 0.26
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **IgSenderResilienceTests.cs** (14 connections)
-- **IgSenderResilienceTests.cs** (14 connections)
-- **IgSenderResilienceTests** (2 connections)
-- **BuildSender()** (2 connections)
-- **IgSender()** (2 connections)
+- **XApiClientTests.cs** (19 connections)
+- **CreateTweetAsync_WithText_ReturnsTweetId()** (2 connections)
+- **CreateTweetAsync_WithMediaId_SerializesMediaIdsInPayload()** (2 connections)
+- **ContainsSequence()** (2 connections)
+- **CreateTweetAsync_WhenApiReturns402_ThrowsXApiExceptionWithParsedDetails()** (2 connections)
+- **CreateTweetAsync_WhenBodyCarriesErrorsArray_ThrowsXApiException()** (2 connections)
+- **UploadMediaAsync_WhenAppendRejected_ThrowsXApiException()** (2 connections)
+- **foreach()** (2 connections)
+- **for()** (2 connections)
+- **UploadMediaAsync_LargeImage_SplitsIntoMultipleSegments()** (2 connections)
+- **UploadMediaAsync_SmallImage_UsesInitAppendFinalizeFlow()** (2 connections)
+- **UploadMediaAsync_EmptyMedia_ThrowsArgumentException()** (2 connections)
+- **XApiClientTests** (2 connections)
 - **XPoster.Tests.SenderPlugins** (2 connections)
-- **Uri()** (2 connections)
-- **SendAsync_WhenNoImage_ReturnsFalseWithoutCallingApi()** (2 connections)
-- **SendAsync_WhenHttpClientThrows_ReturnsFalse()** (2 connections)
-- **PostWithoutImage()** (2 connections)
-- **SendAsync_WhenImageUploadNotImplemented_ReturnsFalseAndLogsError()** (2 connections)
-- **PostWithImage()** (2 connections)
-- **SendAsync_WhenBlobUploadCancelled_ReturnsFalseAndLogsError()** (2 connections)
-- **SendAsync_WhenBlobUploadFails_ReturnsFalse()** (2 connections)
-- **new()** (2 connections)
+- **UploadMediaAsync_WhenInitRejected_ThrowsXApiException()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 153]] (5 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

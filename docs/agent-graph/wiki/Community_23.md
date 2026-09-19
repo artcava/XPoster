@@ -4,22 +4,22 @@
 
 ## Key Concepts
 
-- **HttpResponseBodySanitizerTests.cs** (15 connections)
-- **HttpResponseBodySanitizerTests.cs** (15 connections)
-- **SanitizeUrl_NoQuery_ReturnsAsIs()** (2 connections)
-- **Sanitize_ReturnsEmptyForNullOrEmpty()** (2 connections)
-- **SanitizeUrl_MasksAccessTokenQuery()** (2 connections)
-- **SanitizeUrl_LeavesNonSensitiveQueryUntouched()** (2 connections)
-- **SanitizeUrl_CaseInsensitiveKeys()** (2 connections)
-- **Sanitize_MasksJsonApiKey()** (2 connections)
-- **Sanitize_MasksAccessTokenJsonField()** (2 connections)
-- **Sanitize_MasksApiKeyHeaderWithColon()** (2 connections)
-- **Sanitize_MasksBearerTokenInJson()** (2 connections)
-- **Sanitize_MasksBearerTokenInHeader()** (2 connections)
-- **XPoster.Tests.Extensions** (2 connections)
-- **Sanitize_MasksRefreshTokenField()** (2 connections)
-- **Sanitize_LeavesCleanTextUnchanged()** (2 connections)
-- **HttpResponseBodySanitizerTests** (2 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **ConfigurationSlotProfileProviderTests.cs** (15 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoWorkflowKey()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WhenNoValidSendersRemain()** (2 connections)
+- **GetProfiles_Should_SkipSlot_WithNoSenders()** (2 connections)
+- **GetProfiles_Should_SkipUnknownSenders_ButKeepValidOnes()** (2 connections)
+- **new()** (2 connections)
+- **BuildConfiguration()** (2 connections)
+- **GetProfiles_Should_ParseSenderPlatforms()** (2 connections)
+- **ConfigurationSlotProfileProviderTests** (2 connections)
+- **CreateProvider()** (2 connections)
+- **GetProfiles_Should_OrderSlotsByHour()** (2 connections)
+- **GetProfiles_Should_MapEachSlotToWorkflowOrchestrator()** (2 connections)
+- **ConfigurationBuilder()** (2 connections)
+- **GetProfiles_Should_ReturnEmpty_WhenNoScheduleConfigured()** (2 connections)
 
 ## Relationships
 

@@ -4,18 +4,18 @@
 
 ## Key Concepts
 
-- **WorkflowExecutionEngineTests.cs** (24 connections)
-- **StubNode()** (2 connections)
-- **new()** (2 connections)
-- **var()** (2 connections)
+- **XSenderTests.cs** (22 connections)
+- **HttpResponseMessage()** (2 connections)
+- **BuildSender()** (2 connections)
+- **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 10]] (20 shared connections)
+- [[Community 12]] (18 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

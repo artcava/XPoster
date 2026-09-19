@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **OpenAiOptionsValidatorTests.cs** (4 connections)
-- **ValidOptions()** (2 connections)
-- **OpenAiOptionsValidatorTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService.cs** (4 connections)
+- **ICryptoService** (2 connections)
+- **GetCryptoValue()** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
