@@ -2,31 +2,31 @@
 
 > God node · 31 connections
 
-**Community:** [[Community 3]]
+**Community:** [[Community 4]]
 
 ## Connections by Relation
 
 ### contains
-- [[XPoster.Tests.SenderPlugins]]
-- [[DryRunSenderTests()]]
+- [[DryRunSenderTests.cs]]
 - [[BuildConfig()]]
-- [[ConfigurationBuilder()]]
 - [[BuildMaxSender()]]
-- [[DryRunMaxLengthSender()]]
 - [[BuildShortSender()]]
+- [[ConfigurationBuilder()]]
+- [[Constructor_WithNullConfiguration_ThrowsArgumentNullException()]]
+- [[Constructor_WithNullLogger_ThrowsArgumentNullException()]]
+- [[DryRunMaxLengthSender()]]
+- [[DryRunSenderTests()]]
 - [[DryRunShortLengthSender()]]
-- [[ValidPost()]]
-- [[new()]]
-- [[MaxSender_Platform_IsDryRunMaxLength()]]
-- [[ShortSender_Platform_IsDryRunShortLength()]]
-- [[MaxSender_MessageMaxLength_IsIntMaxValue()]]
-- [[ShortSender_MessageMaxLength_IsFifty()]]
 - [[MaxSender_ImplementsISender()]]
-- [[ShortSender_ImplementsISender()]]
-- [[SendAsync_WithImageAttached_ReturnsTrueAndLogsImagePresent()]]
-- [[SendAsync_WithNullContent_StillReturnsTrueWhenKeyPresent()]]
+- [[MaxSender_MessageMaxLength_IsIntMaxValue()]]
+- [[MaxSender_Platform_IsDryRunMaxLength()]]
+- [[new()]]
+- [[SendAsync_DoesNotCallAnyOutboundSocialApi()]]
 - [[SendAsync_WhenKeyMissing_ReturnsFalse()]]
 - [[SendAsync_WhenKeyWhitespace_ReturnsFalse()]]
+- [[SendAsync_WhenProbeKeyMissing_LogsError()]]
+- [[SendAsync_WhenProbeKeyMissing_ReturnsFalse()]]
+- [[SendAsync_WhenProbeKeyPresent_LogsPostContent()]]
 
 ---
 

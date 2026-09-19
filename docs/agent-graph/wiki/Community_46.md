@@ -5,21 +5,21 @@
 ## Key Concepts
 
 - **OrchestratorFactoryTests.cs** (19 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
-- **foreach()** (2 connections)
-- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
-- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
-- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
-- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
-- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
 - **Resolve_Should_ReturnWorkflowOrchestrator_WhenWorkflowDefinitionIsRegistered()** (2 connections)
 - **typeof()** (2 connections)
 - **XPoster.Tests.Orchestrators** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenWorkflowDefinitionMissing()** (2 connections)
+- **foreach()** (2 connections)
+- **Resolve_Should_ReturnNoOrchestrator_WhenNoProfileMatchesCurrentHour()** (2 connections)
+- **NoOrchestrator_SupportedPlatforms_IsEmpty()** (2 connections)
+- **Resolve_Should_ResolveKeyedSender_ForEachSupportedPlatform()** (2 connections)
+- **Resolve_Should_ResolveAllSenders_ForMultiPlatformProfile()** (2 connections)
+- **Resolve_ForMissingContextKey_ReturnsNoOrchestrator()** (2 connections)
 - **Resolve_Should_ReturnWorkflowOrchestrator_ForAnyConfiguredSlot()** (2 connections)
 
 ## Relationships
 
-- [[Community 77]] (8 shared connections)
+- [[Community 78]] (8 shared connections)
 
 ## Audit Trail
 

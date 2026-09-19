@@ -4,17 +4,17 @@
 
 ## Key Concepts
 
-- **NodeParameterExtractor.cs** (8 connections)
-- **InvalidOperationException()** (2 connections)
+- **FalAiOptionsValidator.cs** (6 connections)
+- **nameof()** (2 connections)
 - **if()** (2 connections)
 
 ## Relationships
 
-- [[Community 116]] (5 shared connections)
+- [[Community 191]] (3 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

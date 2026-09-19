@@ -5,8 +5,8 @@
 ## Key Concepts
 
 - **XPoster.Models** (2 connections)
-- **SlotScheduleOptions.cs** (2 connections)
-- **SlotScheduleOptions.cs** (2 connections)
+- **PerplexityOptions.cs** (2 connections)
+- **PerplexityOptions.cs** (2 connections)
 
 ## Relationships
 

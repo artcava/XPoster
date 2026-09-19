@@ -1,21 +1,21 @@
 # Community 205
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **WorkflowNodeInput.cs** (3 connections)
-- **WorkflowNodeInput.cs** (3 connections)
-- **XPoster.Workflows.Abstractions** (2 connections)
-- **WorkflowNodeInput()** (2 connections)
+- **FanOutSendNodeTests.cs** (17 connections)
+- **if()** (2 connections)
+- **var()** (2 connections)
+- **SetupSender()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 32]] (13 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

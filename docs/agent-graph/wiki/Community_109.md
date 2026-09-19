@@ -1,24 +1,24 @@
 # Community 109
 
-> 7 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.52
 
 ## Key Concepts
 
-- **HttpResponseBodyLogger.cs** (11 connections)
-- **IsEnabledFor()** (2 connections)
-- **HttpResponseBodyLogger()** (2 connections)
-- **foreach()** (2 connections)
-- **XPoster.Services** (2 connections)
-- **while()** (2 connections)
-- **Log()** (2 connections)
+- **IgSender.cs** (6 connections)
+- **IgSender.cs** (6 connections)
+- **if()** (2 connections)
+- **catch()** (2 connections)
+- **IgSender()** (2 connections)
+- **SendAsync()** (2 connections)
+- **XPoster.SenderPlugins** (2 connections)
 
 ## Relationships
 
-- [[Community 170]] (5 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

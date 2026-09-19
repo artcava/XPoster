@@ -1,19 +1,19 @@
 # Community 136
 
-> 6 nodes · cohesion 0.60
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService.cs** (5 connections)
-- **IBlobStorageService** (2 connections)
-- **UploadAsync()** (2 connections)
-- **DeleteAsync()** (2 connections)
-- **XPoster.Contracts** (2 connections)
+- **NodeParameterExtractor.cs** (8 connections)
+- **catch()** (2 connections)
+- **IsJsonLike()** (2 connections)
+- **return()** (2 connections)
+- **GetProvider()** (2 connections)
+- **XPoster.Workflows.Utilities** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 217]] (3 shared connections)
 
 ## Audit Trail
 

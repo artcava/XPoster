@@ -1,21 +1,21 @@
 # Community 194
 
-> 4 nodes · cohesion 0.83
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **AiProviderOptionsCompositionExtensions.cs** (3 connections)
-- **AddAiProviderOptions()** (2 connections)
-- **XPoster.Extensions** (2 connections)
+- **HttpResponseBodyLoggingPipelineTests.cs** (8 connections)
+- **ResponseBodyLogging_402_LogsSanitizedBodyAtErrorWithHeaders()** (2 connections)
+- **ResponseBodyLogging_SuccessLogsBodyReadableByConsumer()** (2 connections)
+- **var()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 156]] (4 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

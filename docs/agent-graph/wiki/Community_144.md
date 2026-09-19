@@ -1,22 +1,22 @@
 # Community 144
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.70
 
 ## Key Concepts
 
-- **AzureFoundryService.cs** (11 connections)
-- **var()** (2 connections)
-- **GetChatCompletionsEndpoint()** (2 connections)
-- **if()** (2 connections)
-- **catch()** (2 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderOptions.cs** (4 connections)
+- **IAiProviderSection** (2 connections)
+- **IAiProviderOptions** (2 connections)
+- **XPoster.Contracts** (2 connections)
 
 ## Relationships
 
-- [[Community 99]] (6 shared connections)
+- No strong cross-community connections detected
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

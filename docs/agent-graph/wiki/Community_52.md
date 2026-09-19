@@ -1,28 +1,28 @@
 # Community 52
 
-> 11 nodes · cohesion 0.35
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **XOAuth1Signer.cs** (10 connections)
-- **XOAuth1Signer.cs** (10 connections)
-- **XPoster.SenderPlugins** (2 connections)
-- **PercentEncode()** (2 connections)
-- **BuildAuthorizationHeader()** (2 connections)
-- **ComputeSignature()** (2 connections)
-- **ComputeSignatureBaseString()** (2 connections)
-- **GetBaseUri()** (2 connections)
-- **if()** (2 connections)
-- **foreach()** (2 connections)
-- **ParseQueryString()** (2 connections)
+- **IgSenderTests.cs** (16 connections)
+- **BuildSender()** (2 connections)
+- **MessageMaxLength_Returns2200()** (2 connections)
+- **Constructor_WithNullHttpClientFactory_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_InitializesCorrectly()** (2 connections)
+- **new()** (2 connections)
+- **Constructor_WithNullContainerStateStore_ThrowsArgumentNullException()** (2 connections)
+- **Constructor_WithNullLogger_ThrowsArgumentNullException()** (2 connections)
+- **Platform_ReturnsInstagram()** (2 connections)
+- **XPoster.Tests.SenderPlugins** (2 connections)
+- **BuildCreds()** (2 connections)
 
 ## Relationships
 
-- No strong cross-community connections detected
+- [[Community 139]] (6 shared connections)
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

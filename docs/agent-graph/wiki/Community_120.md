@@ -4,12 +4,12 @@
 
 ## Key Concepts
 
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptionsTests.cs** (5 connections)
-- **DeepSeekOptions_DoesNotExpose_ApiVersionProperty()** (2 connections)
-- **DeepSeekOptions_Defaults_AreCorrect()** (2 connections)
-- **DeepSeekOptionsTests** (2 connections)
-- **XPoster.Tests.Models** (2 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **TimeProviderTests.cs** (5 connections)
+- **XPoster.Tests.Providers** (2 connections)
+- **TimeProviderTests** (2 connections)
+- **GetCurrentTime_ReturnsUtcTime()** (2 connections)
+- **GetCurrentTime_ReturnsCurrentDateTime()** (2 connections)
 
 ## Relationships
 

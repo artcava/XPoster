@@ -4,11 +4,11 @@
 
 ## Key Concepts
 
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver.cs** (4 connections)
-- **IStepOptionsResolver** (2 connections)
-- **Resolve()** (2 connections)
-- **XPoster.Workflows.Services** (2 connections)
+- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **ConfigurationTagReplacementProvider.cs** (4 connections)
+- **GetReplacements()** (2 connections)
+- **ConfigurationTagReplacementProvider()** (2 connections)
+- **XPoster.Providers** (2 connections)
 
 ## Relationships
 
